@@ -109,7 +109,14 @@ int main() {
         // Device 2 (CS=15): Encoder signals (filtered for clean angle)
         {2, 2, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "ENCODER_SIN", 0.0f}, // Encoder sine
         {2, 1, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "ENCODER_COS", 0.0f},  // Encoder cosine
+    
+        // //phase v
+        // {1, 1, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "NEW2", 0.0f},
+        // //phase u
+        // {1, 2, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "NEW3", 0.0f},
 
+
+        
         
     };
 
@@ -123,8 +130,41 @@ int main() {
         .name = "I_DC_MAIN",
         .zero_offset_volts = 0.410f
 };
+
+ChannelConfig u_current {
+        .device_index = 1,
+        .channel = 1,
+        .type = SensorType::BIPOLAR_CURRENT,
+        .scale = -1204.8193f,    
+        .offset = 0.0f,         
+        .low_pass_factor = 1.0f,  
+        .name = "I_PH_U",
+        .zero_offset_volts = 0.410f
+};
+// ChannelConfig v_current {
+//         .device_index = 1,
+//         .channel = 2,
+//         .type = SensorType::BIPOLAR_CURRENT,
+//         .scale = -1204.8193f,   
+//         .offset = 0.0f,           
+//         .low_pass_factor = 1.0f,
+//         .name = "I_PH_V",
+//         .zero_offset_volts = 0.0f
+// };
+// ChannelConfig w_current {
+//         .device_index = 1,
+//         .channel = 0,
+//         .type = SensorType::BIPOLAR_CURRENT,
+//         .scale = 1,
+//         .offset = 0.0f,
+//         .low_pass_factor = 1.0f,
+//         .name = "I_PH_W",
+//         .zero_offset_volts = 0.0f
+// };
     measurements->addChannels(channel_map);
     measurements->addChannel(dc_main_current);
+    measurements->addChannel(u_current);
+    // measurements->addChannel(v_current);
     
     // Initial update to populate values
     measurements->update();
@@ -134,16 +174,19 @@ int main() {
     sleep_ms(100);
     // measurements->calibrateCurrentSensors();
     float sum = 0.0f;
+    float i_u_sum = 0.0f;
 const int N = 200;
 
 for (int i = 0; i < N; i++) {
     measurements->update();                 // get fresh ADC values
     sum += measurements->readRawVoltage("I_DC_MAIN");
+    i_u_sum += measurements->readRawVoltage("I_PH_U");
     sleep_ms(2);
 }
 
-float zero = sum / N;
-measurements->setZeroOffsetVolts("I_DC_MAIN", zero);
+
+measurements->setZeroOffsetVolts("I_DC_MAIN",  sum / N);
+measurements->setZeroOffsetVolts("I_PH_U", i_u_sum / N);
     printf("Current sensor calibration complete.\n\n");
 
     // Optional: decide whether to start enabled from core0.
@@ -153,20 +196,26 @@ measurements->setZeroOffsetVolts("I_DC_MAIN", zero);
 
     absolute_time_t last_print = get_absolute_time();
     absolute_time_t last_telemetry = get_absolute_time();
-
+    unsigned long updateCounter = 0;
     while (true) {
         // ---- Measurements (core0) ----
         measurements->update();
+        updateCounter += 1;
 
         // ---- Serial commands (core0) ----
         serial_proc.poll();
 
         // ---- Telemetry output (every 500ms) ----
-       if (absolute_time_diff_us(last_telemetry, get_absolute_time()) > 1600000) {
+       if (absolute_time_diff_us(last_telemetry, get_absolute_time()) > 1000000) {
     float v_dc = measurements->read("V_DC_BUS");
     float v_u  = measurements->read("V_PH_U");
     float v_v  = measurements->read("V_PH_V");
     float v_w  = measurements->read("V_PH_W");
+
+    float i_u  = measurements->read("I_PH_U");
+    // float i_v  = measurements->read("I_PH_V");
+    // float v_w  = measurements->read("I_DC_W");
+    
 
     float i_dc_main = measurements->read("I_DC_MAIN");   // <-- main current (A)
 
@@ -176,14 +225,18 @@ measurements->setZeroOffsetVolts("I_DC_MAIN", zero);
     printf("\r\n=== Telemetry ===\r\n");
     printf("DC Bus: %6.1fV | I_DC_MAIN: %7.1fA | V_U: %5.1fV | V_V: %5.1fV | V_W: %5.1fV\r\n",
            v_dc, i_dc_main, v_u, v_v, v_w);
+    printf("I_PH_U: %7.1fA\r\n",
+          i_u);
     printf("SIN: %5.5fV | COS: %5.5fV | Rotor: %6.1f°\r\n", enc_sin, enc_cos, rotor_pos);
-
+    printf("Sensor sample rate: %luKHz\r\n", updateCounter / 1000);
+    updateCounter = 0;
+        // measurements->printChannels();
     last_telemetry = get_absolute_time();
 }
 
 
         // ---- Status print using core1 snapshot (every 500ms) ----
-        if (absolute_time_diff_us(last_print, get_absolute_time()) > 1600000) {
+        if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {
             RtStatus st{};
             const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
 
@@ -214,6 +267,6 @@ measurements->setZeroOffsetVolts("I_DC_MAIN", zero);
             last_print = get_absolute_time();
         }
 
-        sleep_ms(1);
+        // sleep_ms(1);
     }
-}
+}   
