@@ -1,0 +1,137 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "IPB017N10N5ATMA1"
+   (description "N-Channel 100 V 180A (Tc) 375W (Tc) Surface Mount PG-TO263-7")
+   (family "TRX")
+   (package "IPB017N10N5ATMA1")
+   (attribute "Datasheet Link" "https://www.digikey.com/en/products/detail/infineon-technologies/IPB017N10N5ATMA1/5213937?msockid=3bdc366bbe0663d83c1223c0bf3662a6")
+   (attribute "Geometry.Height" "4.82mm")
+   (attribute "Mouser Part Number" "726-IPB017N10N5ATMA1")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Infineon-Technologies/IPB017N10N5ATMA1?qs=3Bi3m9r5MQZXrupZoiX5%252BA%3D%3D")
+   (attribute "Manufacturer_Name" "Infineon")
+   (attribute "Manufacturer_Part_Number" "IPB017N10N5ATMA1")
+   (gate
+    (symbol "IPB017N10N5ATMA1")
+    (pin "GATE" 1 PS)
+    (pin "SOURCE_1" 2 PS)
+    (pin "SOURCE_2" 3 PS)
+    (pin "DRAIN" 4 PS)
+    (pin "SOURCE_3" 5 PS)
+    (pin "SOURCE_4" 6 PS)
+    (pin "SOURCE_5" 7 PS)
+   )
+  )
+  (symbol "IPB017N10N5ATMA1"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 1200 100) (pt 1200 -600) (pt 200 -600) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1400 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -400) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -500) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "IPB017N10N5ATMA1"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -5.027 6.35)
+      (pt 5.027 6.35)
+      (pt 5.027 -2.63)
+      (pt -5.027 -2.63)
+      (pt -5.027 6.35))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -6.4 8.5)
+      (pt 6.4 8.5)
+      (pt 6.4 -9.65)
+      (pt -6.4 -9.65)
+      (pt -6.4 8.5))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -5.027 -2.2)
+      (pt -5.027 -2.63)
+      (pt 5.027 -2.63)
+      (pt 5.027 -2.2))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -3.81 -9.2)
+      (arc (pt -3.810 -9.200) (pt -3.860 -9.200) (pt -3.760 -9.100) (start 180.0) (sweep -90.0))
+      (pt -3.81 -9.1)
+      (arc (pt -3.810 -9.100) (pt -3.860 -9.200) (pt -3.760 -9.100) (start 180.0) (sweep 90.0))
+      (pt -3.81 -9.2))))
+   (leg 1 (pt -3.810 -6.350) (padstack 0))
+   (leg 2 (pt -2.540 -6.350) (padstack 0))
+   (leg 3 (pt -1.270 -6.350) (padstack 0))
+   (leg 4 (pt 0.000 2.800) (padstack 4))
+   (leg 5 (pt 1.270 -6.350) (padstack 0))
+   (leg 6 (pt 2.540 -6.350) (padstack 0))
+   (leg 7 (pt 3.810 -6.350) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 0.800 4.600 0 0 90.000))
+   )
+   (padstack 4
+    (plated false)
+    (pad (layer TCOP) (rectf 9.400 10.800 0 0 0.000))
+   )
+   (model "IPB017N10N5ATMA1.stp"
+    (euler 90 0 0)
+    (offset 0 1.100000023841858 0.12999999523162842)
+   )
+  )
+ )
+)

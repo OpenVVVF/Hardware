@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--/317465/1553794/2.50/7/3/MOSFET (N-Channel)/-->
+<!DOCTYPE curve SYSTEM "eagle.dtd">
+<eagle version="7.7.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="no" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<description>&lt;N-Channel 100 V 180A (Tc) 375W (Tc) Surface Mount PG-TO263-7&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by SamacSys&lt;/author&gt;</description>
+<packages>
+<package name="IPB017N10N5ATMA1">
+<description>&lt;b&gt;D&sup2;-PAK 7pin&lt;/b&gt;&lt;br&gt;
+</description>
+<smd name="1" x="-3.810" y="-6.350" dx="4.600" dy="0.800" layer="1" rot="R90"/>
+<smd name="2" x="-2.540" y="-6.350" dx="4.600" dy="0.800" layer="1" rot="R90"/>
+<smd name="3" x="-1.270" y="-6.350" dx="4.600" dy="0.800" layer="1" rot="R90"/>
+<smd name="4" x="0.000" y="2.800" dx="10.800" dy="9.400" layer="1" rot="R0"/>
+<smd name="5" x="1.270" y="-6.350" dx="4.600" dy="0.800" layer="1" rot="R90"/>
+<smd name="6" x="2.540" y="-6.350" dx="4.600" dy="0.800" layer="1" rot="R90"/>
+<smd name="7" x="3.810" y="-6.350" dx="4.600" dy="0.800" layer="1" rot="R90"/>
+<text x="0.000" y="-0.575" align="center" size="1.27" layer="25" rot="R0" >&gt;NAME</text>
+<text x="0.000" y="-0.575" align="center" size="1.27" layer="27" rot="R0" >&gt;VALUE</text>
+<wire x1="-5.027" y1="6.35" x2="5.027" y2="6.35" width="0.1" layer="51"/>
+<wire x1="5.027" y1="6.35" x2="5.027" y2="-2.63" width="0.1" layer="51"/>
+<wire x1="5.027" y1="-2.63" x2="-5.027" y2="-2.63" width="0.1" layer="51"/>
+<wire x1="-5.027" y1="-2.63" x2="-5.027" y2="6.35" width="0.1" layer="51"/>
+<wire x1="-6.4" y1="8.5" x2="6.4" y2="8.5" width="0.1" layer="51"/>
+<wire x1="6.4" y1="8.5" x2="6.4" y2="-9.65" width="0.1" layer="51"/>
+<wire x1="6.4" y1="-9.65" x2="-6.4" y2="-9.65" width="0.1" layer="51"/>
+<wire x1="-6.4" y1="-9.65" x2="-6.4" y2="8.5" width="0.1" layer="51"/>
+<wire x1="-5.027" y1="-2.2" x2="-5.027" y2="-2.63" width="0.2" layer="21"/>
+<wire x1="-5.027" y1="-2.63" x2="5.027" y2="-2.63" width="0.2" layer="21"/>
+<wire x1="5.027" y1="-2.63" x2="5.027" y2="-2.2" width="0.2" layer="21"/>
+<wire x1="-3.81" y1="-9.2" x2="-3.81" y2="-9.2" width="0.1" layer="21"/>
+<wire x1="-3.810" y1="-9.200" x2="-3.810" y2="-9.100" width="0.1" layer="21" curve="180.0"/>
+<wire x1="-3.81" y1="-9.1" x2="-3.81" y2="-9.1" width="0.1" layer="21"/>
+<wire x1="-3.810" y1="-9.100" x2="-3.810" y2="-9.200" width="0.1" layer="21" curve="180.0"/>
+</package>
+</packages>
+<symbols>
+<symbol name="IPB017N10N5ATMA1">
+<wire x1="5.08" y1="2.54" x2="30.48" y2="2.54" width="0.254" layer="94"/>
+<wire x1="30.48" y1="-15.24" x2="30.48" y2="2.54" width="0.254" layer="94"/>
+<wire x1="30.48" y1="-15.24" x2="5.08" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="5.08" y1="2.54" x2="5.08" y2="-15.24" width="0.254" layer="94"/>
+<text x="31.75" y="7.62" align="center-left" size="1.778" layer="95">&gt;NAME</text>
+<text x="31.75" y="5.08" align="center-left" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="GATE" x="0" y="0" length="middle" direction="io" rot="R0"/>
+<pin name="SOURCE_1" x="0" y="-2.54" length="middle" direction="io" rot="R0"/>
+<pin name="SOURCE_2" x="0" y="-5.08" length="middle" direction="io" rot="R0"/>
+<pin name="DRAIN" x="35.56" y="0" length="middle" direction="io" rot="R180"/>
+<pin name="SOURCE_3" x="0" y="-7.62" length="middle" direction="io" rot="R0"/>
+<pin name="SOURCE_4" x="0" y="-10.16" length="middle" direction="io" rot="R0"/>
+<pin name="SOURCE_5" x="0" y="-12.7" length="middle" direction="io" rot="R0"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="IPB017N10N5ATMA1" prefix="Q">
+<description>&lt;b&gt;N-Channel 100 V 180A (Tc) 375W (Tc) Surface Mount PG-TO263-7&lt;/b&gt;&lt;p&gt;
+Source: &lt;a href="https://www.digikey.com/en/products/detail/infineon-technologies/IPB017N10N5ATMA1/5213937?msockid=3bdc366bbe0663d83c1223c0bf3662a6"&gt; Datasheet &lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="IPB017N10N5ATMA1" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="IPB017N10N5ATMA1">
+<connects>
+<connect gate="G$1" pin="GATE" pad="1"/>
+<connect gate="G$1" pin="SOURCE_1" pad="2"/>
+<connect gate="G$1" pin="SOURCE_2" pad="3"/>
+<connect gate="G$1" pin="DRAIN" pad="4"/>
+<connect gate="G$1" pin="SOURCE_3" pad="5"/>
+<connect gate="G$1" pin="SOURCE_4" pad="6"/>
+<connect gate="G$1" pin="SOURCE_5" pad="7"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="Mouser_Part_Number" value="726-IPB017N10N5ATMA1" constant="no"/>
+<attribute name="Mouser_Price-Stock" value="https://www.mouser.co.uk/ProductDetail/Infineon-Technologies/IPB017N10N5ATMA1?qs=3Bi3m9r5MQZXrupZoiX5%252BA%3D%3D" constant="no"/>
+<attribute name="Manufacturer_Name" value="Infineon" constant="no"/>
+<attribute name="Manufacturer_Part_Number" value="IPB017N10N5ATMA1" constant="no"/>
+<attribute name="Description" value="N-Channel 100 V 180A (Tc) 375W (Tc) Surface Mount PG-TO263-7" constant="no"/>
+<attribute name="Height" value="4.82mm" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>

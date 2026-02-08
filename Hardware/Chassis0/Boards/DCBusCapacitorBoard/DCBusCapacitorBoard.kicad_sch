@@ -1,0 +1,2326 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "2365f093-f079-4cf2-9926-0ba7dd4b2726")
+	(paper "A4")
+	(lib_symbols
+		(symbol "InverterCom:UCS2C331MHD"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 8.89 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "UCS2C331MHD"
+				(at 8.89 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "CAPPRD750W80D1825H3200"
+				(at 8.89 -96.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+				(at 8.89 -196.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+				(at 0.254 18.034 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "32"
+				(at 8.89 -396.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "647-UCS2C331MHD"
+				(at 8.89 -496.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+				(at 8.89 -596.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Nichicon"
+				(at 8.89 -696.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "UCS2C331MHD"
+				(at 8.89 -796.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "UCS2C331MHD_1_1"
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 5.588 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.588 2.54) (xy 5.588 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.112 2.54) (xy 7.112 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.112 0) (xy 7.62 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "+"
+					(at 2.54 2.54 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 0 180)
+					(length 5.08)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Mechanical:MountingHole_Pad"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole_Pad"
+				(at 0 4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole with connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*Pad*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_Pad_0_1"
+				(circle
+					(center 0 1.27)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_1_1"
+				(pin input line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(label "DC_LINK_+"
+		(at 127 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "02272b3f-b2b3-4663-8f6e-e4384789ac61")
+	)
+	(label "DC_LINK_-"
+		(at 101.6 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "08a6c9f0-2ed3-4466-9c5d-e165bbffb31b")
+	)
+	(label "DC_LINK_-"
+		(at 127 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "125ea560-6561-4f4e-8fd3-9d0eefabdae0")
+	)
+	(label "DC_LINK_+"
+		(at 101.6 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "176ec5fe-650b-461f-8dac-d15800f3e271")
+	)
+	(label "DC_LINK_+"
+		(at 76.2 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "25bc9837-6b6d-41c8-9f04-020e52a9329e")
+	)
+	(label "DC_LINK_-"
+		(at 101.6 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2a76c6ba-20b1-4dc9-b5f8-5c89833e8693")
+	)
+	(label "DC_LINK_-"
+		(at 152.4 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2f3d91cc-fec2-40c0-84d1-89ba9590cacd")
+	)
+	(label "DC_LINK_+"
+		(at 127 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "30ebf2e1-36bc-48de-8446-afd886194cab")
+	)
+	(label "DC_LINK_-"
+		(at 76.2 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "41e4052d-9c45-4e7a-b210-99e492891958")
+	)
+	(label "DC_LINK_+"
+		(at 101.6 88.9 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "56dffcb3-839c-496b-abe3-2ff45f6bfe8d")
+	)
+	(label "DC_LINK_-"
+		(at 177.8 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5ba1486e-6951-478d-a092-79dbf70d05ca")
+	)
+	(label "DC_LINK_-"
+		(at 76.2 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "62eb1ceb-8936-4bec-bf95-a0923166f03a")
+	)
+	(label "DC_LINK_-"
+		(at 38.1 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8e54ab3b-bf75-4bea-9563-556607bc47e1")
+	)
+	(label "DC_LINK_+"
+		(at 38.1 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9fd1d66b-d943-48b3-b570-239bdce9aebf")
+	)
+	(label "DC_LINK_+"
+		(at 177.8 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a15e9612-92c6-4562-aab1-035aa97e05b0")
+	)
+	(label "DC_LINK_+"
+		(at 76.2 88.9 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a4e53a13-0e0f-4d56-a1f7-a347adc246ce")
+	)
+	(label "DC_LINK_+"
+		(at 152.4 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b36decba-4814-4b47-87d8-b8ceca616eee")
+	)
+	(label "DC_LINK_+"
+		(at 76.2 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b4ee0c32-a6b0-4660-9647-1fa9235ab3f0")
+	)
+	(label "CHASSIS_GND_1"
+		(at 38.1 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bc7e2488-719b-436a-82ae-b4f51ee03e48")
+	)
+	(label "DC_LINK_-"
+		(at 127 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cb9e0f0e-5cff-46b6-998a-341552c244f1")
+	)
+	(label "CHASSIS_GND"
+		(at 36.83 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d93f28b8-f345-47d0-94ee-331da25c51a6")
+	)
+	(label "DC_LINK_-"
+		(at 76.2 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "dfd6a427-aa3c-4d7b-be57-939f23e77eb5")
+	)
+	(label "DC_LINK_+"
+		(at 101.6 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e15236dd-abad-4c83-a909-8acaf0ec0e54")
+	)
+	(label "DC_LINK_-"
+		(at 152.4 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e3afb22b-fe46-4a3d-9810-3f427674db89")
+	)
+	(label "DC_LINK_-"
+		(at 177.8 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e6fdfe1a-8228-4a6f-8b47-9d69a758c793")
+	)
+	(label "DC_LINK_-"
+		(at 101.6 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e87e0a95-ac87-4158-974b-a3a10a095eb8")
+	)
+	(label "DC_LINK_+"
+		(at 152.4 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e938af9e-a729-41fe-abf4-cc3940859338")
+	)
+	(label "DC_LINK_+"
+		(at 177.8 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "fe12bef9-8a06-4824-bd91-21dafa025f55")
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 35.56 38.1 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "013fb0a9-e96b-4961-b973-1462dc941710")
+		(property "Reference" "H1"
+			(at 34.29 31.75 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 34.29 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
+			(at 35.56 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 35.56 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 35.56 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f73cd72b-6a14-4f52-b5e2-1c3843f6089d")
+		)
+		(instances
+			(project ""
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 35.56 116.84 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1824b2e2-40ba-4149-b4be-f25a5522228c")
+		(property "Reference" "H5"
+			(at 34.29 110.49 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 34.29 113.03 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad"
+			(at 35.56 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 35.56 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 35.56 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ae669975-de48-4e40-a981-52433cc9e10d")
+		)
+		(instances
+			(project "DCBusFilter"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 177.8 38.1 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1b16d685-8903-473a-8e21-d6d8f4a315ae")
+		(property "Reference" "C5"
+			(at 182.88 41.5247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 182.88 44.0647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 81.61 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -18.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 195.834 38.354 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -218.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -318.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -418.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -518.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -618.39 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d95c456b-0cd4-462f-8393-efae62f6b9f4")
+		)
+		(pin "1"
+			(uuid "415f23d2-b392-402e-98dd-44df234b0742")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 177.8 63.5 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2993a4de-d52b-481e-8d92-feec6ac33fdd")
+		(property "Reference" "C10"
+			(at 182.88 66.9247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 182.88 69.4647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 81.61 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -18.39 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 195.834 63.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -218.39 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -318.39 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -418.39 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -518.39 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -618.39 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "54fa5234-5949-476b-a361-9b786bd290cf")
+		)
+		(pin "1"
+			(uuid "b7f17a36-eeb9-44d2-94df-605cf4ec17d2")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 152.4 38.1 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "32cbdf1d-5733-4631-80a3-046150fdd4a1")
+		(property "Reference" "C4"
+			(at 157.48 41.5247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 157.48 44.0647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 56.21 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -43.79 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 170.434 38.354 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -243.79 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -343.79 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -443.79 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -543.79 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -643.79 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "762b02ba-41b4-485b-be1f-7b5f9dbcf953")
+		)
+		(pin "1"
+			(uuid "2e94c23a-06d8-4cfa-88b0-5aeefb6d9c97")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 127 63.5 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6698383c-eed8-4294-a4fc-9fcaa872b3e6")
+		(property "Reference" "C8"
+			(at 132.08 66.9247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 132.08 69.4647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 30.81 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -69.19 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 145.034 63.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -269.19 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -369.19 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -469.19 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -569.19 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -669.19 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "04b5df8f-3257-4e96-afc8-95bf64aa7821")
+		)
+		(pin "1"
+			(uuid "b94aa805-8fad-49ea-bf12-b3c61e530d95")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 101.6 63.5 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "78fb2f0a-4ccc-4e4f-bec4-a1901c7d7394")
+		(property "Reference" "C7"
+			(at 106.68 66.9247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 106.68 69.4647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 5.41 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -94.59 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 119.634 63.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -294.59 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -394.59 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -494.59 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -594.59 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -694.59 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "9505fc79-70b4-42f6-9634-e3efaf6ce334")
+		)
+		(pin "1"
+			(uuid "2d8ec975-52df-4f78-a7d3-a821c4629ba4")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 34.29 104.14 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "845ad597-f4b3-4a9a-8eda-347757a44f75")
+		(property "Reference" "H4"
+			(at 33.02 97.79 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 33.02 100.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_ISO14580_Pad"
+			(at 34.29 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 34.29 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 34.29 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8f3758ce-3027-4bfd-86b9-8930b24ec79a")
+		)
+		(instances
+			(project "DCBusFilter"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 76.2 38.1 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9c0c16db-f842-4eec-8a38-0c36ab3325e0")
+		(property "Reference" "C1"
+			(at 81.28 41.5247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 81.28 44.0647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at -19.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -119.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 94.234 38.354 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -319.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -419.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -519.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -619.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -719.99 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4dfc1403-3382-47a2-a1b4-c6d4cca35ede")
+		)
+		(pin "1"
+			(uuid "9b5b3085-fb95-4f69-a6ab-130e0db2bc91")
+		)
+		(instances
+			(project ""
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 101.6 88.9 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9c8f4c03-dffc-45de-9f4e-7b93bf96c64b")
+		(property "Reference" "C12"
+			(at 106.68 92.3247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 106.68 94.8647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 5.41 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -94.59 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 119.634 89.154 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -294.59 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -394.59 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -494.59 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -594.59 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -694.59 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1963aef3-9caa-4a24-a6a4-b0ab1700f196")
+		)
+		(pin "1"
+			(uuid "e02a9fba-1835-4f7b-9fd5-ccb02f21678b")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 76.2 63.5 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b5f6c699-3302-49b7-9b7e-2cb28cf2e323")
+		(property "Reference" "C6"
+			(at 81.28 66.9247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 81.28 69.4647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at -19.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -119.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 94.234 63.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -319.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -419.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -519.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -619.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -719.99 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "47eda3bd-6cd9-49e2-9592-f887cf419c17")
+		)
+		(pin "1"
+			(uuid "f53a1c0c-67d6-4e22-aef1-57be7976b6bf")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 101.6 38.1 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b8b5541f-0463-4380-bd54-656b1e3ceb66")
+		(property "Reference" "C2"
+			(at 106.68 41.5247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 106.68 44.0647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 5.41 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -94.59 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 119.634 38.354 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -294.59 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -394.59 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -494.59 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -594.59 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -694.59 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "842190f8-c837-4714-8c1c-18b50a2c4fd6")
+		)
+		(pin "1"
+			(uuid "d16b83e0-ec5d-4b65-b34b-a0b68822ef04")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 76.2 88.9 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d269465f-6031-4b16-b01e-8694b193278a")
+		(property "Reference" "C11"
+			(at 81.28 92.3247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 81.28 94.8647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at -19.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -119.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 94.234 89.154 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -319.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -419.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -519.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -619.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -719.99 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1a10a1ca-5482-4095-a305-847456957ffc")
+		)
+		(pin "1"
+			(uuid "f1bfa3e4-e074-4d3d-afde-453e18ab131d")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 127 38.1 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d7184e3a-801b-4c7c-b87e-ba0b52161b77")
+		(property "Reference" "C3"
+			(at 132.08 41.5247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 132.08 44.0647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 30.81 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -69.19 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 145.034 38.354 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -269.19 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -369.19 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -469.19 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -569.19 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -669.19 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "104d6f99-a38e-42e5-a942-bf589a0a9163")
+		)
+		(pin "1"
+			(uuid "dce8c1bd-eabb-444f-bc19-b602d42d731d")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCS2C331MHD")
+		(at 152.4 63.5 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e186017c-a50b-4b8d-9d97-01130a050a9d")
+		(property "Reference" "C9"
+			(at 157.48 66.9247 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "UCS2C331MHD"
+			(at 157.48 69.4647 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "CAPPRD750W80D1825H3200"
+			(at 56.21 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://nichicon-us.com/english/products/pdfs/e-ucs.pdf"
+			(at -43.79 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Aluminum Electrolytic Capacitors - Radial Leaded 160VOLTS 330uf 18X31.5 20%"
+			(at 170.434 63.754 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "32"
+			(at -243.79 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCS2C331MHD"
+			(at -343.79 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCS2C331MHD?qs=Im7Ui%252B8riBXnrXQfoAgrfg%3D%3D"
+			(at -443.79 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at -543.79 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCS2C331MHD"
+			(at -643.79 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "a9ab7a75-2d71-4c55-a5f3-fea2ec17a76a")
+		)
+		(pin "1"
+			(uuid "31f9564a-9463-43f0-8d8f-bbe2aaf0338e")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 35.56 63.5 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e2a9a334-d0ff-4d14-b7c3-ed82bb6fea82")
+		(property "Reference" "H2"
+			(at 34.29 57.15 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 34.29 59.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
+			(at 35.56 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 35.56 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 35.56 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3cfe54ee-3627-4af1-9d3c-7e4667e54690")
+		)
+		(instances
+			(project "DCBusFilter"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

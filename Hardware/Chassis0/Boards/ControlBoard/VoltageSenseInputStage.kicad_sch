@@ -1,0 +1,1452 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "2b915f17-d6ff-4d8e-8939-a785bdeb1260")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:SZMMSZ4678T1G"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "Z"
+				(at 10.16 8.89 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "SZMMSZ4678T1G"
+				(at 10.16 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "SOD3716X135N"
+				(at 10.16 -93.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MMSZ4678T1-D.PDF"
+				(at 10.16 -193.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "500 mW Rating on FR-4 or FR-5 Board; Wide Zener Reverse Voltage Range - 1.8 V to 43 V; Package Designed for Optimal Automated Board Assembly; Small Package Size for High Density Applications; ESD Rating of Class 3 (exceeding 16 kV) per the Human Body Model Mechanical Characteristics:; CASE: Void-free, transfer-molded, thermosetting plastic case; FINISH: Corrosion resistant finish, easily solderable; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; POLARITY: Cathode indicated by polarit"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "1.35"
+				(at 10.16 -393.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "863-SZMMSZ4678T1G"
+				(at 10.16 -493.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/SZMMSZ4678T1G?qs=PJJcWtbOkNWoCp4u9L439w%3D%3D"
+				(at 10.16 -593.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "onsemi"
+				(at 10.16 -693.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "SZMMSZ4678T1G"
+				(at 10.16 -793.65 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "SZMMSZ4678T1G_1_1"
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.064 -2.54) (xy 5.08 -2.032)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.032) (xy 5.08 -2.032)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.032) (xy 6.096 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 10.16 2.54) (xy 10.16 -2.54) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 12.7 0) (xy 10.16 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 15.24 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "ZENER CLAMPS ADC INPUT AT 1.8V\nADC MAX INPUT IS 1.8V ON SENSE PINS"
+		(exclude_from_sim no)
+		(at 83.82 43.434 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "346e86c4-423b-4d00-bd9a-2cea0633176e")
+	)
+	(junction
+		(at 71.12 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5effe1f8-801e-4e5b-9928-7e4d83095932")
+	)
+	(junction
+		(at 82.55 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6f2d9904-9538-44d9-9096-54ad550579f8")
+	)
+	(junction
+		(at 62.23 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "851db39f-00ae-4689-b9a3-dd112bba1cd3")
+	)
+	(junction
+		(at 52.07 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b6508c22-1dac-44e0-9521-2fc800744e1b")
+	)
+	(junction
+		(at 62.23 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c153fda1-fd85-444c-8596-2fa7b4e50358")
+	)
+	(junction
+		(at 71.12 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "def6f50b-8300-4159-9eef-6dab618fffb6")
+	)
+	(junction
+		(at 82.55 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f54bf68a-7eea-4715-a9e7-1533952262bc")
+	)
+	(wire
+		(pts
+			(xy 92.71 22.86) (xy 93.98 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01f7f684-7f44-4588-86d0-76b6e1cdc5ad")
+	)
+	(wire
+		(pts
+			(xy 62.23 22.86) (xy 71.12 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05e267f3-a0b6-4b02-8bd7-bf3a3997bea2")
+	)
+	(wire
+		(pts
+			(xy 101.6 22.86) (xy 102.87 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d1de037-5816-4770-a377-678aa5a9b68a")
+	)
+	(wire
+		(pts
+			(xy 62.23 38.1) (xy 52.07 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d2be541-6de7-4b88-8f99-a0c9bb8ab301")
+	)
+	(wire
+		(pts
+			(xy 71.12 38.1) (xy 62.23 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d3304df-7813-4dfd-984a-90d900e2c05c")
+	)
+	(wire
+		(pts
+			(xy 52.07 22.86) (xy 52.07 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "398aff38-f5bb-4854-b8a4-d844e80f2732")
+	)
+	(wire
+		(pts
+			(xy 71.12 38.1) (xy 82.55 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c66b465-283f-4df0-924b-e67c23e6403e")
+	)
+	(wire
+		(pts
+			(xy 71.12 22.86) (xy 71.12 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e0b47ab-422e-4f8e-9b3d-5d7e51beed92")
+	)
+	(wire
+		(pts
+			(xy 82.55 22.86) (xy 85.09 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "734e59ce-a43d-4403-8dcb-42268f190282")
+	)
+	(wire
+		(pts
+			(xy 52.07 22.86) (xy 62.23 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ce5fe77-19f7-4663-9152-ebecfe19bfac")
+	)
+	(wire
+		(pts
+			(xy 82.55 38.1) (xy 109.22 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96ac8045-5c93-49e6-bd84-a61f15609669")
+	)
+	(wire
+		(pts
+			(xy 71.12 22.86) (xy 82.55 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9aafbd18-2e74-43fb-838a-ae148656616c")
+	)
+	(wire
+		(pts
+			(xy 46.99 22.86) (xy 52.07 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5f2c4aa-26e0-44a0-a1a9-3614032a0996")
+	)
+	(wire
+		(pts
+			(xy 71.12 34.29) (xy 71.12 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a96878d8-fe54-4e0b-8c2d-9a016845ecc7")
+	)
+	(wire
+		(pts
+			(xy 52.07 38.1) (xy 52.07 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8c27ccd-f7a2-477e-a589-07cc237dbf49")
+	)
+	(wire
+		(pts
+			(xy 62.23 34.29) (xy 62.23 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7165db1-7bf9-4ced-baa0-4fbf392e8a36")
+	)
+	(wire
+		(pts
+			(xy 110.49 22.86) (xy 111.76 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ecca9f53-7ed9-4ff9-aae8-55a4ef7dae11")
+	)
+	(wire
+		(pts
+			(xy 62.23 22.86) (xy 62.23 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efc1a93f-86c6-4c32-a6e2-a6ab6d7889d2")
+	)
+	(hierarchical_label "HV_IN"
+		(shape input)
+		(at 119.38 22.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8f963503-8af5-4cdf-9424-1d5f8d1542f2")
+	)
+	(hierarchical_label "LV_OUT"
+		(shape input)
+		(at 46.99 22.86 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d51a71ad-0413-4838-8eef-0d509f68182f")
+	)
+	(hierarchical_label "GND"
+		(shape input)
+		(at 109.22 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "deb1dd89-536d-4c8f-8220-fff1b3c1f06e")
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 71.12 30.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "01715da4-224a-49f5-840f-d00b4de05950")
+		(property "Reference" "R76"
+			(at 73.66 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 73.66 31.7499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 69.342 30.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 71.12 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 71.12 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "821858aa-11aa-44e5-af07-0904c71a74fe")
+		)
+		(pin "2"
+			(uuid "01567f0a-7a86-4a34-b51e-2257f79a9e13")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "R94")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "R82")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "R76")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "R88")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 106.68 22.86 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "02e20690-39bf-4c37-b84e-95571312d207")
+		(property "Reference" "R79"
+			(at 106.68 16.51 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "250k"
+			(at 106.68 19.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 106.68 24.638 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 106.68 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 106.68 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d8e6b3ec-52fc-48df-ab09-df859f7bd3e2")
+		)
+		(pin "2"
+			(uuid "5bff4f61-01dc-40f6-985a-1f3941b21736")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "R97")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "R85")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "R79")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "R91")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:SZMMSZ4678T1G")
+		(at 82.55 22.86 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "10d68b0a-ec4f-474e-9213-8fd967d2824b")
+		(property "Reference" "Z1"
+			(at 86.36 29.2099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "SZMMSZ4678T1G"
+			(at 86.36 31.7499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "InverterCom:SOD3716X135N"
+			(at -11.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MMSZ4678T1-D.PDF"
+			(at -111.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "500 mW Rating on FR-4 or FR-5 Board; Wide Zener Reverse Voltage Range - 1.8 V to 43 V; Package Designed for Optimal Automated Board Assembly; Small Package Size for High Density Applications; ESD Rating of Class 3 (exceeding 16 kV) per the Human Body Model Mechanical Characteristics:; CASE: Void-free, transfer-molded, thermosetting plastic case; FINISH: Corrosion resistant finish, easily solderable; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; POLARITY: Cathode indicated by polarit"
+			(at 82.55 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.35"
+			(at -311.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "863-SZMMSZ4678T1G"
+			(at -411.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/SZMMSZ4678T1G?qs=PJJcWtbOkNWoCp4u9L439w%3D%3D"
+			(at -511.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "onsemi"
+			(at -611.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "SZMMSZ4678T1G"
+			(at -711.1 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1d5d9cca-4652-4aa2-9747-6069d65b096d")
+		)
+		(pin "2"
+			(uuid "c81edfa1-a7f7-4be8-9e18-59ea43731cd1")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "Z4")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "Z2")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "Z1")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "Z3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 52.07 30.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5a0bf6e8-fdb6-48f0-96b2-5370ebd02643")
+		(property "Reference" "C108"
+			(at 55.88 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10nF"
+			(at 55.88 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 53.0352 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 52.07 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 52.07 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "eee4e795-7d1c-4982-a56e-b2ae3716a61d")
+		)
+		(pin "2"
+			(uuid "ad94d39d-aca6-475c-9155-7a47e836ca8a")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "C111")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "C109")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "C108")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "C110")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 115.57 22.86 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8c7584d4-e622-4068-af81-a762c82abc8a")
+		(property "Reference" "R80"
+			(at 115.57 16.51 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "250k"
+			(at 115.57 19.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 115.57 24.638 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 115.57 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 115.57 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "199e9b74-029f-4642-8973-435a18d64148")
+		)
+		(pin "2"
+			(uuid "9ebd3272-d985-4264-8b9e-6904df1d0412")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "R98")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "R86")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "R80")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "R92")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 97.79 22.86 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cc91b362-a667-4de5-b7b7-f54cc2ed8e50")
+		(property "Reference" "R78"
+			(at 97.79 16.51 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "250k"
+			(at 97.79 19.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 97.79 24.638 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 97.79 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 97.79 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "02d375bd-8bab-43aa-b315-cbae40f4af60")
+		)
+		(pin "2"
+			(uuid "581d8d0e-f32b-4f63-89bd-059e25771fb1")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "R96")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "R84")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "R78")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "R90")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 62.23 30.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp yes)
+		(fields_autoplaced yes)
+		(uuid "ce0ba1da-e186-4367-befc-ae723e9f75f6")
+		(property "Reference" "R75"
+			(at 64.77 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2k"
+			(at 64.77 31.7499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 60.452 30.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 62.23 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 62.23 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "993b0c4c-5fcf-426a-b472-12292f5cd988")
+		)
+		(pin "2"
+			(uuid "d12e63d3-33da-4c98-9247-16dd948e5034")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "R93")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "R81")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "R75")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "R87")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 88.9 22.86 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "eded0db5-77d5-496a-83c6-c45e03e0bc69")
+		(property "Reference" "R77"
+			(at 88.9 16.51 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "250k"
+			(at 88.9 19.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 88.9 24.638 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 88.9 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 88.9 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "298bac9c-3b68-425d-80d3-0c76c9be3241")
+		)
+		(pin "2"
+			(uuid "50ac1a39-e9cd-4832-bb03-193b57d563f8")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/32ad724d-8a3d-48ce-a180-9ab2ebaf5ad0"
+					(reference "R95")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/6c8eedba-1dc0-4215-97e2-6152db7fae6f"
+					(reference "R83")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/869a33cf-185b-47ea-bdc4-3ca088b388be"
+					(reference "R77")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/7a3cf8b1-a74b-46f9-bccc-862caf07379b/d198fd8a-90bd-4c02-9686-bd4330f078e6"
+					(reference "R89")
+					(unit 1)
+				)
+			)
+		)
+	)
+)

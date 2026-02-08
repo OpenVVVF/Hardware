@@ -1,0 +1,6187 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "2c2811fa-4b0a-47f7-9e78-637f3575b8b3")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Connector:Conn_01x02_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02_Socket"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x02, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x02_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector:Conn_01x05_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x05_Socket"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x05, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x05_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 5.08) (xy -0.508 5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 2.54) (xy -0.508 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -5.08) (xy -0.508 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 4.572)
+					(mid -0.5058 5.08)
+					(end 0 5.588)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 2.032)
+					(mid -0.5058 2.54)
+					(end 0 3.048)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -5.588)
+					(mid -0.5058 -5.08)
+					(end 0 -4.572)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:1548129"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "1548129"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "1548129"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.phoenixcontact.com/en-in/products/pcb-terminal-block-mkdsn-15-3-508-spe-1548129"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "Pluggable Terminal Blocks MKDSN 1,5/ 3-5,08 SPE"
+				(at 4.064 4.826 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "10.15"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "651-1548129"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Phoenix-Contact/1548129?qs=ulEaXIWI0c%2FYtJCBk3iUtQ%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Phoenix Contact"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "1548129"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "1548129_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -7.62)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:1987724"
+			(pin_names
+				(offset 0.762)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "1987724"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "1987724"
+				(at 16.51 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-DGA18/1075322.pdf"
+				(at 16.51 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "Phoenix Contact PT 2.5/ 2-5.0-V PCB Terminal Block, 2 Way/Pole, Screw Terminals, 20  10 AWG Through Hole,"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "Phoenix Contact PT 2.5/ 2-5.0-V PCB Terminal Block, 2 Way/Pole, Screw Terminals, 20  10 AWG Through Hole,"
+				(at 16.51 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Height" "9.15"
+				(at 16.51 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "651-1987724"
+				(at 16.51 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Phoenix-Contact/1987724?qs=gjk32EaArKIePzXcIKo3jg%3D%3D"
+				(at 16.51 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Phoenix Contact"
+				(at 16.51 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "1987724"
+				(at 16.51 -15.24 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(symbol "1987724_0_0"
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "1987724_0_1"
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 15.24 2.54) (xy 15.24 -5.08) (xy 5.08 -5.08) (xy 5.08 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP01R1-508-04BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP01R1-508-04BE"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP01R150804BE"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "8.9"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TBP01R1-508-04BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP01R1-508-08BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP01R1-508-08BE"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "SHDR8W100P0X508_1X8_4224X1200X890P"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "8.9"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP01R1-508-08BE"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP01R1-508-08BE?qs=PzGy0jfpSMvxLRQvHckPeQ%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP01R1-508-08BE"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TBP01R1-508-08BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -20.32)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -15.24 0)
+					(length 5.08)
+					(name "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -17.78 0)
+					(length 5.08)
+					(name "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP02R1-381-02BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP02R1-381-02BE"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP02R138102BE"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "7.2"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP02R1-381-02BE"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-02BE?qs=PzGy0jfpSMuDSg0nR5k9Yg%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP02R1-381-02BE"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TBP02R1-381-02BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP02R1-381-06BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP02R1-381-06BE"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "SHDR6W80P0X381_1X6_2365X920X720P"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "7.2"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP02R1-381-06BE"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-06BE?qs=PzGy0jfpSMusbQ6fY%252Bjf%252BQ%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP02R1-381-06BE"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TBP02R1-381-06BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -15.24)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Mechanical:MountingHole_Pad"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole_Pad"
+				(at 0 4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole with connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*Pad*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_Pad_0_1"
+				(circle
+					(center 0 1.27)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "MountingHole_Pad_1_1"
+				(pin input line
+					(at 0 -2.54 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(rectangle
+		(start 66.04 157.48)
+		(end 109.22 195.58)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 0d866412-78fc-46cd-8195-9ead1666dbe0)
+	)
+	(rectangle
+		(start 147.32 63.5)
+		(end 208.28 107.95)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 120a415f-ae9b-4728-9ab2-b008aae1869c)
+	)
+	(rectangle
+		(start 66.04 12.7)
+		(end 146.05 156.21)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 4816b3ad-d983-4b72-b5e2-2aaf0e6b0605)
+	)
+	(rectangle
+		(start 22.86 95.25)
+		(end 64.77 195.58)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 6073e95a-627d-4be4-857e-e85ee79ae691)
+	)
+	(rectangle
+		(start 110.49 157.48)
+		(end 146.05 195.58)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 876fd9de-7567-4326-ad45-50d8733deb23)
+	)
+	(rectangle
+		(start 147.32 12.7)
+		(end 283.21 62.23)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 895e1607-6c2e-46bf-a82b-09612c9b4378)
+	)
+	(rectangle
+		(start 209.55 63.5)
+		(end 256.54 107.95)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid ae63a8d4-3b80-4081-830f-249e5eede7a9)
+	)
+	(rectangle
+		(start 22.86 12.7)
+		(end 64.77 93.98)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid f75da651-c99e-47d8-8181-c079df3db945)
+	)
+	(text "ISOLATED CANBUS"
+		(exclude_from_sim no)
+		(at 90.17 162.306 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "0c833ba2-48ce-450c-b392-d8a3d16a7cfe")
+	)
+	(text "+12V NOMINAL INPUT (9-36VDC)"
+		(exclude_from_sim no)
+		(at 127.508 160.528 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "32c506ff-f890-4488-853f-b79a98e1a31d")
+	)
+	(text "Mounting Holes"
+		(exclude_from_sim no)
+		(at 40.132 18.796 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3b75cd3e-6ff0-4003-a73e-678f044eaf85")
+	)
+	(text "GATE CONNECTIONS, WITH DESAT"
+		(exclude_from_sim no)
+		(at 104.394 18.034 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "437241d2-36b8-4df9-89ae-93eb06f35bbd")
+	)
+	(text "LV ADC INPUTS (0-5V)"
+		(exclude_from_sim no)
+		(at 212.344 15.748 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "634fddb3-c14b-424c-8910-1bae7223b5f9")
+	)
+	(text "ADC4 INPUT: THROTTLES, HEATSINK TMP, SPARE"
+		(exclude_from_sim no)
+		(at 254.254 30.48 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6354b921-13c7-4190-8210-d43ba130ee26")
+	)
+	(text "NOTE ABOUT LABELS: \nTHE SUFFIX _[LETTER] INDICATES\n THE GROUND PLANE. DIFFERENT\nLETTERS ARE ISOLATED"
+		(exclude_from_sim no)
+		(at 265.684 19.558 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6f55a95e-d28a-4034-831d-17f5d4fddb8b")
+	)
+	(text "ADC2 INPUT: CURRENT SENSE"
+		(exclude_from_sim no)
+		(at 169.926 27.178 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8f7b7c09-ab37-4158-9edb-ef55fc868460")
+	)
+	(text "ONBOARD +12V ISOALTED TERMINAL"
+		(exclude_from_sim no)
+		(at 230.632 67.818 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "96e0b5d5-0a08-4cd3-b59e-82213dde1477")
+	)
+	(text "ADC1 INPUT: HIGH VOLTAGE SENSE"
+		(exclude_from_sim no)
+		(at 171.704 69.088 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9b7559fe-e3a0-4386-bbd9-32441687a393")
+	)
+	(text "REMEMBER TO GET MATING PLUGS FOR THESE!\nTBP02P1-381-06BE"
+		(exclude_from_sim no)
+		(at 212.344 19.558 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9c7f8483-0e5a-4937-9cfb-42b6a3f0ca03")
+	)
+	(text "ADC3 INPUT: HALL SENSORS, MTR TMP"
+		(exclude_from_sim no)
+		(at 205.232 30.988 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "aefb0e30-d22e-429f-8c66-e650d705dabd")
+	)
+	(text "DONT FORGET TO ORDER MATING PLUG TERMINAL BLOCKS:\n\nONE OF TBP01P1-508-04BE FOR EVERY PLUG SOCKET"
+		(exclude_from_sim no)
+		(at 101.6 25.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b0e64227-f53c-4a9a-ad1f-af56e084553d")
+	)
+	(text "AUX OUTPUT RELAYS\n240VAC/30VDC, 8A MAX"
+		(exclude_from_sim no)
+		(at 43.688 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b4bf6bed-8468-47a1-9800-26c10ed91b8c")
+	)
+	(text "REMEMBER TO ORDER MATING\nTERMINAL PLUGS: TBP02P1-381-03BE "
+		(exclude_from_sim no)
+		(at 43.942 107.696 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c5ab924e-7cab-461b-bd11-6eed87042075")
+	)
+	(text "REMEMBER TO ORDER MATING PLUG: TBP01P1-508-08BE "
+		(exclude_from_sim no)
+		(at 177.546 72.136 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e512fdcd-5801-40aa-a09a-3f7c118deeca")
+	)
+	(no_connect
+		(at 121.92 125.73)
+		(uuid "0bff2392-9931-4561-8d0d-9d9be3684535")
+	)
+	(no_connect
+		(at 38.1 66.04)
+		(uuid "0e2cb7ff-db8a-470e-81c6-68eff9e309dc")
+	)
+	(no_connect
+		(at 121.92 128.27)
+		(uuid "22ad9388-70a1-4f01-a363-b97d1fbc0a26")
+	)
+	(no_connect
+		(at 83.82 125.73)
+		(uuid "2ff62212-73db-43a0-a911-72cc140587e5")
+	)
+	(no_connect
+		(at 121.92 147.32)
+		(uuid "4ea197a2-63e2-4d39-af2f-584bc522b88d")
+	)
+	(no_connect
+		(at 83.82 147.32)
+		(uuid "53fa7d05-a06d-48aa-b9fb-97f3939d47bf")
+	)
+	(no_connect
+		(at 38.1 27.94)
+		(uuid "63847274-d5d0-427a-89be-5548bd4140a1")
+	)
+	(no_connect
+		(at 129.54 86.36)
+		(uuid "8190541f-72db-47df-978c-b720899a135f")
+	)
+	(no_connect
+		(at 38.1 40.64)
+		(uuid "8a449fe8-dd35-4e68-8d3e-c636944442ae")
+	)
+	(no_connect
+		(at 38.1 53.34)
+		(uuid "9015b4f4-0196-4f5c-97a5-ccb8e33a12f9")
+	)
+	(no_connect
+		(at 91.44 86.36)
+		(uuid "a11b01ed-27d2-4340-aee0-d6fd110eabc8")
+	)
+	(no_connect
+		(at 91.44 43.18)
+		(uuid "a8d67d5c-3213-49ec-9478-846c95c6688e")
+	)
+	(no_connect
+		(at 83.82 109.22)
+		(uuid "abaa8146-c59a-4260-bee9-e8d8d8983aff")
+	)
+	(no_connect
+		(at 129.54 64.77)
+		(uuid "b1b6263d-045a-48b3-9e72-459d2e0bdb99")
+	)
+	(no_connect
+		(at 83.82 106.68)
+		(uuid "b58458eb-6b0e-4046-be2d-d8bfa5cf2aa5")
+	)
+	(no_connect
+		(at 91.44 64.77)
+		(uuid "cbe4ec57-8dae-4684-96ad-ad0abe18bb71")
+	)
+	(no_connect
+		(at 121.92 106.68)
+		(uuid "d301568d-23b3-4d17-b1ea-69b63d53e2d7")
+	)
+	(no_connect
+		(at 83.82 144.78)
+		(uuid "d661086b-70df-47b8-afe3-b754d5ec31df")
+	)
+	(no_connect
+		(at 129.54 43.18)
+		(uuid "efdbfc88-1c6e-4226-9c19-1c3694bf4c79")
+	)
+	(no_connect
+		(at 121.92 144.78)
+		(uuid "f869fa1e-0260-45c7-81c1-35614ae7c1a7")
+	)
+	(no_connect
+		(at 83.82 128.27)
+		(uuid "fb19d8a8-817e-4f95-b02d-29991f94a693")
+	)
+	(no_connect
+		(at 121.92 109.22)
+		(uuid "fcc94a7a-0e0e-44cd-9d52-68e5ae54bc4e")
+	)
+	(hierarchical_label "PH_V_L_G"
+		(shape input)
+		(at 91.44 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0143b044-8131-4456-8d2e-3ae64e34268c")
+	)
+	(hierarchical_label "RELAY1_COM"
+		(shape input)
+		(at 45.72 189.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "01f4cf3a-2dda-4b5b-9654-61e820721e39")
+	)
+	(hierarchical_label "THROTTLE_V"
+		(shape input)
+		(at 252.73 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "044cdcab-fbe6-40d3-88ae-39ca698ff310")
+	)
+	(hierarchical_label "PH_W_L_C"
+		(shape input)
+		(at 91.44 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "05676297-d7a0-4a98-b553-1eb8243a8068")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 223.52 81.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "10197811-0398-4455-9e57-5fe27ae9eb2c")
+	)
+	(hierarchical_label "PH_V_H_C"
+		(shape input)
+		(at 121.92 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "114dde78-b9e3-400a-ac06-1ac8d72732b5")
+	)
+	(hierarchical_label "DC_LINK_BUS_VSENSE_U"
+		(shape input)
+		(at 176.53 85.09 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "14eb9124-0f95-4c6c-87d1-963477b5cc15")
+	)
+	(hierarchical_label "PH_W_H_C"
+		(shape input)
+		(at 129.54 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1789c8b4-9835-438e-a22d-75023d4358b8")
+	)
+	(hierarchical_label "RELAY3_NO"
+		(shape input)
+		(at 45.72 120.65 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "198e4652-bdd8-459a-9f56-4194fcfd8084")
+	)
+	(hierarchical_label "GND_Y"
+		(shape input)
+		(at 173.99 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "198fdcc7-43fb-4e38-ab66-ce16d598c98d")
+	)
+	(hierarchical_label "VIN_GND"
+		(shape input)
+		(at 135.89 182.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1abf2b92-be2f-4cbb-af9e-8e8b8fcbfb2e")
+	)
+	(hierarchical_label "PH_V_L_G"
+		(shape input)
+		(at 83.82 133.35 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1c325b35-e9b6-428e-a3bf-e3d2ef96dbf3")
+	)
+	(hierarchical_label "+5V_OUT_W"
+		(shape input)
+		(at 214.63 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2143ce2b-d1fc-475c-8614-7250def81c4c")
+	)
+	(hierarchical_label "PH_U_L_E"
+		(shape input)
+		(at 83.82 111.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "21b48dcb-3ecf-4fc7-91ab-8f42a10827aa")
+	)
+	(hierarchical_label "RELAY1_NO"
+		(shape input)
+		(at 45.72 175.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "230358ad-6a67-4e48-98a2-11018f6fabe3")
+	)
+	(hierarchical_label "CANBUS_H_X"
+		(shape input)
+		(at 90.17 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "253b2c30-48a7-435a-a227-9ab591d42f01")
+	)
+	(hierarchical_label "SPARE_V"
+		(shape input)
+		(at 252.73 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2922c6cc-a1be-4209-a118-a3b7dca9270b")
+	)
+	(hierarchical_label "CANBUS_GND_X"
+		(shape input)
+		(at 90.17 186.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2cd6253b-77e3-4b3a-bc5e-16e956b636c9")
+	)
+	(hierarchical_label "+VIN_Z"
+		(shape input)
+		(at 135.89 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2dccbf03-a194-4c5d-ab9a-b0919d931ea6")
+	)
+	(hierarchical_label "RELAY2_NO"
+		(shape input)
+		(at 44.45 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3256f96c-7a9d-483f-a574-68aabeb613c5")
+	)
+	(hierarchical_label "GND_W"
+		(shape input)
+		(at 214.63 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "35fe756d-4187-4d10-9dfe-c3fb5c71031a")
+	)
+	(hierarchical_label "PH_W_H_G"
+		(shape input)
+		(at 129.54 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "36d6ebe4-4b1d-4854-888a-c24acab97e34")
+	)
+	(hierarchical_label "+5V_OUT_Y"
+		(shape input)
+		(at 173.99 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "36f76678-4b9c-4a59-9a67-2634f502a38c")
+	)
+	(hierarchical_label "PH_V_L_C"
+		(shape input)
+		(at 91.44 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "387661c0-d0f6-4b1b-8cbe-24927d27c7f0")
+	)
+	(hierarchical_label "REGEN_THROTTLE_V"
+		(shape input)
+		(at 252.73 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "39fa9aa6-e17d-4291-a1df-1fe0298f1e3a")
+	)
+	(hierarchical_label "RELAY2_COM"
+		(shape input)
+		(at 44.45 162.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3aa73be6-9be2-487e-a3b1-962986d815db")
+	)
+	(hierarchical_label "PH_W_L_G"
+		(shape input)
+		(at 91.44 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "42672f29-262d-459b-89af-e302a18346c9")
+	)
+	(hierarchical_label "CANBUS_H_X"
+		(shape input)
+		(at 90.17 189.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "42f4bfe6-8bc9-4704-966a-5547c64ef7f7")
+	)
+	(hierarchical_label "CANBUS_L_X"
+		(shape input)
+		(at 90.17 191.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "460f6738-1160-4d9d-8a65-5163fad11f3b")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 252.73 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4781cc3e-6b55-4dc1-ba96-3dfc813bb7ee")
+	)
+	(hierarchical_label "PH_U_L_E"
+		(shape input)
+		(at 91.44 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "48d5abaf-dc98-448d-a3ed-5948330d10dc")
+	)
+	(hierarchical_label "PH_W_VSENSE_U"
+		(shape input)
+		(at 176.53 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4a266fa5-7ccc-4848-86db-dc728db995d0")
+	)
+	(hierarchical_label "PH_W_H_G"
+		(shape input)
+		(at 121.92 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4e6255d4-4b13-4c69-8561-74eaf9b2d952")
+	)
+	(hierarchical_label "PH_U_L_C"
+		(shape input)
+		(at 91.44 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4fbb397e-3c87-49be-a386-cfa91a0b2237")
+	)
+	(hierarchical_label "PH_U_H_C"
+		(shape input)
+		(at 129.54 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "50246d16-6a93-4bc4-8842-f2cc2d451235")
+	)
+	(hierarchical_label "ISENSE_PH_V_Y"
+		(shape input)
+		(at 173.99 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "504c61c1-da09-4648-ad58-3ff75273b605")
+	)
+	(hierarchical_label "PH_U_H_G"
+		(shape input)
+		(at 121.92 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "527d90f7-add3-4f08-a683-1e4d6ed1dfa8")
+	)
+	(hierarchical_label "RELAY2_NO"
+		(shape input)
+		(at 44.45 148.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "55d7c130-39cc-413d-83dd-aed11384a4d1")
+	)
+	(hierarchical_label "PH_V_H_E"
+		(shape input)
+		(at 129.54 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "58925727-0344-4157-a847-87065ebc7aca")
+	)
+	(hierarchical_label "PH_U_H_E"
+		(shape input)
+		(at 121.92 111.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5a15bda3-7849-4d4d-9ef5-0fe195c811a1")
+	)
+	(hierarchical_label "ISENSE_DC_LINK_Y"
+		(shape input)
+		(at 173.99 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5b17a7dd-8f71-4167-889a-c4833e98f129")
+	)
+	(hierarchical_label "ISENSE_PH_U_Y"
+		(shape input)
+		(at 173.99 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5cebe052-d531-4e5c-b179-f00d597fe299")
+	)
+	(hierarchical_label "RELAY3_NO"
+		(shape input)
+		(at 45.72 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5f4a0e50-4a73-4306-9f46-f9c8a64fd6c8")
+	)
+	(hierarchical_label "RELAY3_COM"
+		(shape input)
+		(at 45.72 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6482f260-29b7-45f9-9efb-5ed1028b296b")
+	)
+	(hierarchical_label "PH_U_VSENSE_U"
+		(shape input)
+		(at 176.53 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6bb5905a-d3c2-4e4b-bf47-5fa319e14a86")
+	)
+	(hierarchical_label "VIN_GND"
+		(shape input)
+		(at 135.89 166.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "734836d3-169b-4fa7-92df-b25f0a2b6a33")
+	)
+	(hierarchical_label "HALL_PH_V_W"
+		(shape input)
+		(at 214.63 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "763ab0e6-373d-41b2-b601-3363af1ca862")
+	)
+	(hierarchical_label "PH_W_L_E"
+		(shape input)
+		(at 83.82 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "827d9333-7478-4741-b59f-d4d1c69537b7")
+	)
+	(hierarchical_label "PH_V_H_E"
+		(shape input)
+		(at 121.92 130.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "84c5424b-5419-4712-b808-7da68257a5b0")
+	)
+	(hierarchical_label "PH_W_H_E"
+		(shape input)
+		(at 121.92 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "84dc48b8-c84e-47ad-84c4-762bd80e8b79")
+	)
+	(hierarchical_label "RELAY1_COM"
+		(shape input)
+		(at 45.72 177.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8690213a-e12e-4ca0-abcb-75e57c684fc2")
+	)
+	(hierarchical_label "+VIN_Z"
+		(shape input)
+		(at 135.89 185.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "879268a3-0b12-4842-871e-83b1868b2349")
+	)
+	(hierarchical_label "HALL_PH_U_W"
+		(shape input)
+		(at 214.63 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8ce01f55-5cdc-417d-9629-a7515e14f44b")
+	)
+	(hierarchical_label "PH_V_L_E"
+		(shape input)
+		(at 91.44 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8feaecb0-5633-4013-9f94-973d7b27566e")
+	)
+	(hierarchical_label "PH_W_H_C"
+		(shape input)
+		(at 121.92 142.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "93967efe-036f-43f9-8aed-4d5e10aa4d3f")
+	)
+	(hierarchical_label "PH_W_L_C"
+		(shape input)
+		(at 83.82 142.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "93d34f5a-ea7d-458b-9bc0-83d611d9ca04")
+	)
+	(hierarchical_label "GND_U"
+		(shape input)
+		(at 176.53 97.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "944ada10-57ae-4069-80be-e296eda2cf92")
+	)
+	(hierarchical_label "ISENSE_PH_W_Y"
+		(shape input)
+		(at 173.99 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "999dbdeb-d8a5-4b71-a047-d0fa2f32291f")
+	)
+	(hierarchical_label "PH_V_H_C"
+		(shape input)
+		(at 129.54 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9c33d196-2523-407a-8114-5e1bf358938e")
+	)
+	(hierarchical_label "RELAY3_COM"
+		(shape input)
+		(at 45.72 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a12a561b-c599-4f7a-ada4-d41d050bfa2d")
+	)
+	(hierarchical_label "PH_V_H_G"
+		(shape input)
+		(at 129.54 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a531ec7d-034c-44d2-9896-2fbdc511a598")
+	)
+	(hierarchical_label "PH_W_L_E"
+		(shape input)
+		(at 91.44 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a7523bcb-2c64-428d-9574-97ef9c3cf616")
+	)
+	(hierarchical_label "PH_U_H_C"
+		(shape input)
+		(at 121.92 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a770f86e-7a0b-41fa-a5c6-a78b63054856")
+	)
+	(hierarchical_label "CANBUS_GND_X"
+		(shape input)
+		(at 90.17 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "aee1248e-953d-4fd5-bce0-35be66aaca7f")
+	)
+	(hierarchical_label "PH_U_H_E"
+		(shape input)
+		(at 129.54 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b12af6b8-c0c3-4d35-8528-f58d8b9b6bc7")
+	)
+	(hierarchical_label "GND_U"
+		(shape input)
+		(at 176.53 92.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b3f9128d-c067-41ea-a9cb-973083bc84f2")
+	)
+	(hierarchical_label "PH_V_H_G"
+		(shape input)
+		(at 121.92 133.35 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b50b6d16-16ef-4fc3-a15e-2a6891d1c2b3")
+	)
+	(hierarchical_label "HEATSINK_TMP_V"
+		(shape input)
+		(at 252.73 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c0551df0-8e7f-4cd6-897c-066b24a6f692")
+	)
+	(hierarchical_label "CANBUS_L_X"
+		(shape input)
+		(at 90.17 175.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c23889ff-f3a5-43fe-9fe1-e7a8631a735f")
+	)
+	(hierarchical_label "+5V_OUT_V"
+		(shape input)
+		(at 252.73 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c32654e7-b5e8-449f-a3b1-2a5524ac9f10")
+	)
+	(hierarchical_label "PH_V_VSENSE_U"
+		(shape input)
+		(at 176.53 95.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "cbbd080a-0732-4822-86ea-a1875ab99428")
+	)
+	(hierarchical_label "PH_V_L_C"
+		(shape input)
+		(at 83.82 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "cbbf01c6-3c76-488a-8393-977dbaa64767")
+	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 223.52 78.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cf82c5c9-1e90-4022-88b5-678370e6f019")
+	)
+	(hierarchical_label "PH_W_L_G"
+		(shape input)
+		(at 83.82 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d14886bd-aad3-4cb2-9224-9c34ea8a55d2")
+	)
+	(hierarchical_label "PH_W_H_E"
+		(shape input)
+		(at 129.54 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d4e8485f-3097-4fb0-a1b4-fe3ff7bfd94a")
+	)
+	(hierarchical_label "MTR_TMP_W"
+		(shape input)
+		(at 214.63 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d579a8ad-fc32-4ab5-bfa3-c6ff881e41ed")
+	)
+	(hierarchical_label "PH_U_L_C"
+		(shape input)
+		(at 83.82 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d6d30d7c-bd7b-43e2-9caf-516fc3265ec7")
+	)
+	(hierarchical_label "HALL_PH_W_W"
+		(shape input)
+		(at 214.63 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d76bb6a4-6e93-4485-8693-8c5792e754d8")
+	)
+	(hierarchical_label "RELAY2_COM"
+		(shape input)
+		(at 44.45 151.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dbf790a2-5fb0-442a-a8d2-1a90f40ea4af")
+	)
+	(hierarchical_label "PH_U_L_G"
+		(shape input)
+		(at 91.44 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dcf0843a-1b68-4759-b857-0573c4362deb")
+	)
+	(hierarchical_label "PH_U_L_G"
+		(shape input)
+		(at 83.82 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f041a811-17a3-49ea-8f6a-32e5c52ab1bb")
+	)
+	(hierarchical_label "GND_U"
+		(shape input)
+		(at 176.53 87.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f2891f36-e8a9-474d-9ca7-44ef30a1bd88")
+	)
+	(hierarchical_label "PH_U_H_G"
+		(shape input)
+		(at 129.54 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f3ab34db-e9e9-4475-b310-236a10b77932")
+	)
+	(hierarchical_label "RELAY1_NO"
+		(shape input)
+		(at 45.72 186.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f59fb4df-a3b3-4cf9-a394-acb689e57ac1")
+	)
+	(hierarchical_label "GND_U"
+		(shape input)
+		(at 176.53 102.87 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f991c604-cbd3-472a-8b19-f34f1de8bdeb")
+	)
+	(hierarchical_label "PH_V_L_E"
+		(shape input)
+		(at 83.82 130.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fff31de1-d432-49bd-a5e2-e409ac16e8bd")
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 91.44 48.26 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "08104420-d7c0-4814-824b-539117889a24")
+		(property "Reference" "J12"
+			(at 81.28 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 81.28 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150804BE"
+			(at 74.93 -46.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 74.93 -146.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 91.44 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 74.93 -346.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 74.93 -446.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 74.93 -546.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 74.93 -646.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 74.93 -746.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e9beaad9-ae7f-43e9-b1f6-1be45626dd3b")
+		)
+		(pin "4"
+			(uuid "e7814db2-fc45-4a4d-b1ce-706f15c1d9c1")
+		)
+		(pin "3"
+			(uuid "8b9af49a-7973-45d4-8f43-4b3a17295c96")
+		)
+		(pin "2"
+			(uuid "b979c790-639a-495c-bc3a-87fd5f5960aa")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP02R1-381-06BE")
+		(at 252.73 53.34 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1580122e-a475-4264-8f0c-3f8362af4b9f")
+		(property "Reference" "J28"
+			(at 242.57 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R1-381-06BE"
+			(at 242.57 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SHDR6W80P0X381_1X6_2365X920X720P"
+			(at 236.22 -41.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+			(at 236.22 -141.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+			(at 252.73 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "7.2"
+			(at 236.22 -341.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R1-381-06BE"
+			(at 236.22 -441.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-06BE?qs=PzGy0jfpSMusbQ6fY%252Bjf%252BQ%3D%3D"
+			(at 236.22 -541.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 236.22 -641.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R1-381-06BE"
+			(at 236.22 -741.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "f7ac0201-ef96-4fa2-8555-0b9ea543f0d7")
+		)
+		(pin "6"
+			(uuid "cf5d4379-cc5a-43c7-8c4e-f4112e5d208b")
+		)
+		(pin "4"
+			(uuid "c0bf5cad-2792-407e-82d8-c1715516da61")
+		)
+		(pin "3"
+			(uuid "3b86b609-c439-4b08-91b9-b20fd7baf231")
+		)
+		(pin "2"
+			(uuid "71df9f6c-cbbb-4006-94ed-781aaf8c0b4f")
+		)
+		(pin "1"
+			(uuid "b5f4c3c6-71ce-4182-96d8-0967e71371a2")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 40.64 123.19 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2831eecd-7c55-4c03-9be5-db975e557960")
+		(property "Reference" "J2"
+			(at 41.275 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02_Socket"
+			(at 41.275 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 40.64 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 40.64 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b7bba31f-204f-4737-ab2d-b90d1bb8111f")
+		)
+		(pin "1"
+			(uuid "6caf9a8a-2f6e-4e3b-bbcd-938c64cf405e")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 129.54 69.85 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2c104e12-d433-47bc-8c55-eb892480aa6f")
+		(property "Reference" "J19"
+			(at 119.38 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 119.38 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150804BE"
+			(at 113.03 -25.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 113.03 -125.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 129.54 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 113.03 -325.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 113.03 -425.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 113.03 -525.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 113.03 -625.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 113.03 -725.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8f9d74ff-5d06-433f-90bd-0ec2455f86a6")
+		)
+		(pin "4"
+			(uuid "1ec85df3-2cee-4801-9504-4e4c27868c55")
+		)
+		(pin "3"
+			(uuid "d89f5eb7-64da-42fe-94c2-c6b9d6665aa8")
+		)
+		(pin "2"
+			(uuid "c03b65af-ecf8-4aae-996f-d705985377fa")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 38.1 38.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "30aaac42-2743-4752-9b3d-4daaa6af674f")
+		(property "Reference" "H2"
+			(at 40.64 35.5599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 40.64 38.0999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+			(at 38.1 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 38.1 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "acd686e1-0048-4dcb-baa1-09fff178f50b")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x05_Socket")
+		(at 116.84 147.32 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "407bf8cf-3002-4ecb-b355-59742ab1c6ad")
+		(property "Reference" "J17"
+			(at 117.475 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05_Socket"
+			(at 117.475 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
+			(at 116.84 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 116.84 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated"
+			(at 116.84 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "10435973-32ce-4c24-8a0b-b5341065df10")
+		)
+		(pin "5"
+			(uuid "8643db1e-11a0-4930-b6cf-d75c27f152d3")
+		)
+		(pin "1"
+			(uuid "cb2bbce8-c8f0-41b9-849e-7af4cd0423f9")
+		)
+		(pin "4"
+			(uuid "30684f40-428e-4648-94be-cd11ccfec0bb")
+		)
+		(pin "3"
+			(uuid "8c03b6a4-bb31-4c81-b1f4-748f4d9f6dd9")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 38.1 25.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "41099ff6-d1a7-459b-bdb0-6a23059afa12")
+		(property "Reference" "H1"
+			(at 40.64 22.8599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 40.64 25.3999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 38.1 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0d928b4d-5d76-4f68-abdb-55ddc8d17c06")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP02R1-381-02BE")
+		(at 45.72 189.23 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "45ebb3f1-f009-49f4-b6a2-e81e0e5b69b8")
+		(property "Reference" "J6"
+			(at 35.56 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R1-381-02BE"
+			(at 35.56 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP02R138102BE"
+			(at 29.21 94.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+			(at 29.21 -5.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+			(at 45.72 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "7.2"
+			(at 29.21 -205.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R1-381-02BE"
+			(at 29.21 -305.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-02BE?qs=PzGy0jfpSMuDSg0nR5k9Yg%3D%3D"
+			(at 29.21 -405.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 29.21 -505.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R1-381-02BE"
+			(at 29.21 -605.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "635fc84f-be40-4ba9-a0c8-f7045a74a7f8")
+		)
+		(pin "1"
+			(uuid "20a860d9-abe6-4260-8dbc-a802939915d6")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x05_Socket")
+		(at 116.84 109.22 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5691dcd1-ba66-4a66-b140-8d9abc7811d2")
+		(property "Reference" "J15"
+			(at 117.475 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05_Socket"
+			(at 117.475 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
+			(at 116.84 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 116.84 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated"
+			(at 116.84 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "701a9121-45b0-4cc3-8157-b2a4cc5aa8f1")
+		)
+		(pin "5"
+			(uuid "dab74077-e3a8-407e-9539-a6467b157e13")
+		)
+		(pin "1"
+			(uuid "79eca366-b5c6-496a-8106-b961d9b2d1ec")
+		)
+		(pin "4"
+			(uuid "c63c760a-deb7-4337-8d67-88ddddf01ccb")
+		)
+		(pin "3"
+			(uuid "5bbfbcb7-581a-40da-9db8-6225f4b4d580")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:1548129")
+		(at 90.17 191.77 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5cbd6fdf-f935-401d-a9a0-7213f2803e2a")
+		(property "Reference" "J11"
+			(at 80.01 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1548129"
+			(at 80.01 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:1548129"
+			(at 73.66 96.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.phoenixcontact.com/en-in/products/pcb-terminal-block-mkdsn-15-3-508-spe-1548129"
+			(at 73.66 -3.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Pluggable Terminal Blocks MKDSN 1,5/ 3-5,08 SPE"
+			(at 86.106 196.596 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "10.15"
+			(at 73.66 -203.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "651-1548129"
+			(at 73.66 -303.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Phoenix-Contact/1548129?qs=ulEaXIWI0c%2FYtJCBk3iUtQ%3D%3D"
+			(at 73.66 -403.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Phoenix Contact"
+			(at 73.66 -503.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "1548129"
+			(at 73.66 -603.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "e1ab4b05-65bb-4dcf-962a-704ab339f19a")
+		)
+		(pin "1"
+			(uuid "1bf36c55-c73b-4aa6-8d03-6704aa455498")
+		)
+		(pin "2"
+			(uuid "cd4db0e2-5a51-4893-818a-a83b2ea997aa")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x05_Socket")
+		(at 78.74 128.27 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6a2b3c75-1fcd-4c69-b9aa-75691bcc58c7")
+		(property "Reference" "J8"
+			(at 79.375 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05_Socket"
+			(at 79.375 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
+			(at 78.74 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 78.74 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated"
+			(at 78.74 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "fccf40df-0146-4949-8f79-3d745078feed")
+		)
+		(pin "5"
+			(uuid "2b8c6aab-ce56-4c01-9bae-62c1abc126ae")
+		)
+		(pin "1"
+			(uuid "fb5bc39f-2486-4d3d-827c-0bb21f9f7d86")
+		)
+		(pin "4"
+			(uuid "c7d9a597-2b27-4ca6-9ab8-5e9bd0b9aaa5")
+		)
+		(pin "3"
+			(uuid "3b725d55-b3da-4ad1-a2ac-f21706a89103")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x05_Socket")
+		(at 116.84 128.27 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "716867ad-46d1-4c8c-8933-99c5c98991d9")
+		(property "Reference" "J16"
+			(at 117.475 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05_Socket"
+			(at 117.475 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
+			(at 116.84 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 116.84 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated"
+			(at 116.84 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "31215d32-1276-43e6-b736-1261ec3b41c2")
+		)
+		(pin "5"
+			(uuid "786a3151-7fc9-44af-bdef-571ffe25ac37")
+		)
+		(pin "1"
+			(uuid "e174c435-9f83-44a9-89f3-13c69281a12a")
+		)
+		(pin "4"
+			(uuid "409a2506-46c4-4b73-ae43-7d7958845b1c")
+		)
+		(pin "3"
+			(uuid "72f08878-abea-4319-aff5-f9a8b3b81a57")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 129.54 91.44 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7a044dba-c104-426a-93e5-d5a068047413")
+		(property "Reference" "J20"
+			(at 119.38 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 119.38 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150804BE"
+			(at 113.03 -3.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 113.03 -103.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 129.54 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 113.03 -303.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 113.03 -403.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 113.03 -503.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 113.03 -603.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 113.03 -703.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4f19b832-1f95-4c78-89ed-51f485c8b162")
+		)
+		(pin "4"
+			(uuid "c3772309-33bc-461c-a18b-e2ff521bca7a")
+		)
+		(pin "3"
+			(uuid "6b3f985c-f5ea-4540-b34f-0d86005f3c1a")
+		)
+		(pin "2"
+			(uuid "53b2aa29-3f31-485f-8a8c-079d8512d1ef")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:1548129")
+		(at 90.17 175.26 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "86220b59-b299-42e1-b6ff-f4521b39ac3d")
+		(property "Reference" "J10"
+			(at 80.01 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1548129"
+			(at 80.01 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:1548129"
+			(at 73.66 80.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.phoenixcontact.com/en-in/products/pcb-terminal-block-mkdsn-15-3-508-spe-1548129"
+			(at 73.66 -19.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Pluggable Terminal Blocks MKDSN 1,5/ 3-5,08 SPE"
+			(at 86.106 180.086 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "10.15"
+			(at 73.66 -219.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "651-1548129"
+			(at 73.66 -319.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Phoenix-Contact/1548129?qs=ulEaXIWI0c%2FYtJCBk3iUtQ%3D%3D"
+			(at 73.66 -419.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Phoenix Contact"
+			(at 73.66 -519.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "1548129"
+			(at 73.66 -619.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "55aab176-ecba-492b-b57a-75aa2dfe7100")
+		)
+		(pin "1"
+			(uuid "99d8b669-517f-4b32-b321-2726d6bdd2bd")
+		)
+		(pin "2"
+			(uuid "c3b8cc52-5f1f-408a-a79a-96cac88849f0")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 91.44 91.44 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8e81e4ad-4c20-40c1-a5d8-d7a189bd67c9")
+		(property "Reference" "J14"
+			(at 81.28 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 81.28 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150804BE"
+			(at 74.93 -3.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 74.93 -103.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 91.44 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 74.93 -303.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 74.93 -403.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 74.93 -503.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 74.93 -603.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 74.93 -703.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "07cf237b-23e1-44f5-af4a-a20a5e1051c6")
+		)
+		(pin "4"
+			(uuid "1f103204-3568-4a75-80b0-c8d989efa094")
+		)
+		(pin "3"
+			(uuid "ef584774-12ad-4f76-8462-693aa80bc118")
+		)
+		(pin "2"
+			(uuid "2959f489-d648-4205-80c7-28e5e2432c69")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP02R1-381-02BE")
+		(at 45.72 134.62 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8eab8dd7-cbb5-4f13-aa06-c6ce7f7cff73")
+		(property "Reference" "J5"
+			(at 35.56 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R1-381-02BE"
+			(at 35.56 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP02R138102BE"
+			(at 29.21 39.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+			(at 29.21 -60.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+			(at 45.72 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "7.2"
+			(at 29.21 -260.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R1-381-02BE"
+			(at 29.21 -360.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-02BE?qs=PzGy0jfpSMuDSg0nR5k9Yg%3D%3D"
+			(at 29.21 -460.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 29.21 -560.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R1-381-02BE"
+			(at 29.21 -660.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8f9c2e3a-cd61-4534-8f3e-1dbb7bf053e6")
+		)
+		(pin "1"
+			(uuid "64e8fce3-612e-45ef-9771-6f1cabaa8c01")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 39.37 151.13 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "95be0939-3ee6-43d5-acca-5261076ad748")
+		(property "Reference" "J1"
+			(at 40.005 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02_Socket"
+			(at 40.005 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 39.37 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 39.37 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 39.37 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1976494e-56c6-4227-97b8-80e3296962f2")
+		)
+		(pin "1"
+			(uuid "c2cac499-96da-4c46-84d3-7a912e9b91b7")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x05_Socket")
+		(at 78.74 147.32 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "97f6675b-e64a-4e2d-8fc1-b48c57dabd8d")
+		(property "Reference" "J9"
+			(at 79.375 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05_Socket"
+			(at 79.375 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
+			(at 78.74 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 78.74 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated"
+			(at 78.74 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d0c9a5e5-0579-4bc5-b5f0-e3fdfb8df49d")
+		)
+		(pin "5"
+			(uuid "43956001-43e4-4439-8a39-6bee4a72d2cf")
+		)
+		(pin "1"
+			(uuid "9f1587d0-f473-4880-8fe4-8a60b52ed982")
+		)
+		(pin "4"
+			(uuid "cd67a6a2-13fc-431a-93da-b6ddb62abfdc")
+		)
+		(pin "3"
+			(uuid "f2eb8f83-69cf-4ae2-b40f-5ddb70db900a")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:1987724")
+		(at 135.89 168.91 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "99378e6c-0ad0-4234-8566-5cfc00f1fd5c")
+		(property "Reference" "J22"
+			(at 119.38 168.9101 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1987724"
+			(at 119.38 166.3701 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "InverterCom:1987724"
+			(at 119.38 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-DGA18/1075322.pdf"
+			(at 119.38 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Phoenix Contact PT 2.5/ 2-5.0-V PCB Terminal Block, 2 Way/Pole, Screw Terminals, 20  10 AWG Through Hole,"
+			(at 135.89 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "Phoenix Contact PT 2.5/ 2-5.0-V PCB Terminal Block, 2 Way/Pole, Screw Terminals, 20  10 AWG Through Hole,"
+			(at 119.38 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "9.15"
+			(at 119.38 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "651-1987724"
+			(at 119.38 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Phoenix-Contact/1987724?qs=gjk32EaArKIePzXcIKo3jg%3D%3D"
+			(at 119.38 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Phoenix Contact"
+			(at 119.38 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "1987724"
+			(at 119.38 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4cf92050-0202-440e-98ec-5631d2ef4df0")
+		)
+		(pin "2"
+			(uuid "64c1f077-e035-4479-80fd-351d87afcb15")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP02R1-381-06BE")
+		(at 173.99 53.34 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9954fe6a-cee5-478d-921b-95e24d692eb4")
+		(property "Reference" "J24"
+			(at 163.83 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R1-381-06BE"
+			(at 163.83 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SHDR6W80P0X381_1X6_2365X920X720P"
+			(at 157.48 -41.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+			(at 157.48 -141.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+			(at 173.99 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "7.2"
+			(at 157.48 -341.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R1-381-06BE"
+			(at 157.48 -441.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-06BE?qs=PzGy0jfpSMusbQ6fY%252Bjf%252BQ%3D%3D"
+			(at 157.48 -541.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 157.48 -641.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R1-381-06BE"
+			(at 157.48 -741.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "ff91bfeb-b4f5-43be-a683-6b5ea40064d3")
+		)
+		(pin "6"
+			(uuid "0d940a40-c209-4b16-ae5a-e91fa38a5734")
+		)
+		(pin "4"
+			(uuid "b62227a6-4036-4f00-b492-91ae8c180a5f")
+		)
+		(pin "3"
+			(uuid "01bcddc8-4c02-4cc5-bb5e-3026ec1013e7")
+		)
+		(pin "2"
+			(uuid "05f83616-0650-4807-a2f8-7eb8ae18b907")
+		)
+		(pin "1"
+			(uuid "a1a0d35a-fd33-4da9-8434-47339bb2f1ea")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 129.54 48.26 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "99cc9196-9af8-4e10-98a2-5e8fd3862458")
+		(property "Reference" "J18"
+			(at 119.38 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 119.38 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150804BE"
+			(at 113.03 -46.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 113.03 -146.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 129.54 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 113.03 -346.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 113.03 -446.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 113.03 -546.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 113.03 -646.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 113.03 -746.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "007c8970-2f88-4be4-9c71-42f3515c415f")
+		)
+		(pin "4"
+			(uuid "9cd5c11f-6114-4cf5-9069-2fb0dcf8921e")
+		)
+		(pin "3"
+			(uuid "d0158fbe-0ffb-489a-abc6-1a9304067ce1")
+		)
+		(pin "2"
+			(uuid "329f7a82-b686-4146-b32c-61591f2014f7")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 38.1 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a887b848-2b34-4480-89d8-1fcd65462e19")
+		(property "Reference" "H3"
+			(at 40.64 48.2599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 40.64 50.7999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 38.1 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "93999500-07c9-4b2b-b8a6-6be0db6a272b")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole_Pad")
+		(at 38.1 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b483f634-143c-4959-9a1a-5f092a1ba990")
+		(property "Reference" "H4"
+			(at 40.64 60.9599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole_Pad"
+			(at 40.64 63.4999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+			(at 38.1 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 38.1 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole with connection"
+			(at 38.1 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d7b5853d-8534-429d-ba70-0cea65d2c336")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 40.64 177.8 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b91c163d-98d5-41ad-859c-283385616670")
+		(property "Reference" "J3"
+			(at 41.275 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x02_Socket"
+			(at 41.275 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 40.64 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 40.64 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "02f14acb-db96-4fc1-b9fb-f6ba283fc7c8")
+		)
+		(pin "1"
+			(uuid "5825f56c-becd-43cf-8cf1-d7a56784c54b")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:1987724")
+		(at 223.52 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b9e00ca8-8b10-45b5-b1c0-420ae4987ab9")
+		(property "Reference" "J27"
+			(at 240.03 78.7399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1987724"
+			(at 240.03 81.2799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "InverterCom:1987724"
+			(at 240.03 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-DGA18/1075322.pdf"
+			(at 240.03 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "Phoenix Contact PT 2.5/ 2-5.0-V PCB Terminal Block, 2 Way/Pole, Screw Terminals, 20  10 AWG Through Hole,"
+			(at 223.52 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "Phoenix Contact PT 2.5/ 2-5.0-V PCB Terminal Block, 2 Way/Pole, Screw Terminals, 20  10 AWG Through Hole,"
+			(at 240.03 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "9.15"
+			(at 240.03 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "651-1987724"
+			(at 240.03 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Phoenix-Contact/1987724?qs=gjk32EaArKIePzXcIKo3jg%3D%3D"
+			(at 240.03 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Phoenix Contact"
+			(at 240.03 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "1987724"
+			(at 240.03 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "69d909ab-3f2d-4346-9eed-981cd44b553c")
+		)
+		(pin "2"
+			(uuid "35a40435-a40f-4c0a-866e-fab80d27f4f5")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x05_Socket")
+		(at 78.74 109.22 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ba624391-586a-4bbe-8a6c-c542ef69fa7b")
+		(property "Reference" "J7"
+			(at 79.375 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x05_Socket"
+			(at 79.375 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical"
+			(at 78.74 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 78.74 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x05, script generated"
+			(at 78.74 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c1c2501a-ba03-4ed8-8594-9a8fd19f3a25")
+		)
+		(pin "5"
+			(uuid "9603ff65-833d-4e6a-8cb8-6fa060167f5b")
+		)
+		(pin "1"
+			(uuid "159d74ea-e056-4e62-9261-eb18de9c98a2")
+		)
+		(pin "4"
+			(uuid "34993ea9-2f12-44c9-9b02-019ad627f65e")
+		)
+		(pin "3"
+			(uuid "ad3fc7e3-6614-49bc-b014-cd54501da983")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 91.44 69.85 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c04486c9-e336-43a8-a487-0363c9026303")
+		(property "Reference" "J13"
+			(at 81.28 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 81.28 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150804BE"
+			(at 74.93 -25.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 74.93 -125.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 91.44 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 74.93 -325.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 74.93 -425.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 74.93 -525.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 74.93 -625.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 74.93 -725.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b8740a92-eab2-49a0-8a59-b880db6366d2")
+		)
+		(pin "4"
+			(uuid "fe2ceaa9-c479-46fe-89ad-144501adc667")
+		)
+		(pin "3"
+			(uuid "6097d084-d337-441b-8517-3807fced451e")
+		)
+		(pin "2"
+			(uuid "641c5f12-b5f9-4c9b-9897-59f49a3f9deb")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP02R1-381-06BE")
+		(at 214.63 53.34 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e06c58b4-85db-454b-8ead-a880051b3795")
+		(property "Reference" "J26"
+			(at 204.47 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R1-381-06BE"
+			(at 204.47 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SHDR6W80P0X381_1X6_2365X920X720P"
+			(at 198.12 -41.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+			(at 198.12 -141.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+			(at 214.63 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "7.2"
+			(at 198.12 -341.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R1-381-06BE"
+			(at 198.12 -441.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-06BE?qs=PzGy0jfpSMusbQ6fY%252Bjf%252BQ%3D%3D"
+			(at 198.12 -541.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 198.12 -641.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R1-381-06BE"
+			(at 198.12 -741.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "4cc432b9-6205-44f4-ba86-b17406db96b0")
+		)
+		(pin "6"
+			(uuid "1b91a1d6-4d68-4a47-ac68-9eaea05ef19c")
+		)
+		(pin "4"
+			(uuid "6c53a121-ac34-4d09-98ba-aa93e968c72b")
+		)
+		(pin "3"
+			(uuid "8a716005-7d8f-4dee-a314-45601d5dd578")
+		)
+		(pin "2"
+			(uuid "adac997a-0136-4055-8cfa-bc9064ff1b4e")
+		)
+		(pin "1"
+			(uuid "2873b336-c9af-4166-858b-da01d2c9d148")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-08BE")
+		(at 176.53 102.87 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e9a89a32-d482-41d8-805b-b082f1530970")
+		(property "Reference" "J25"
+			(at 166.37 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-08BE"
+			(at 166.37 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SHDR8W100P0X508_1X8_4224X1200X890P"
+			(at 160.02 7.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 160.02 -92.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 176.53 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.9"
+			(at 160.02 -292.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-08BE"
+			(at 160.02 -392.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP01R1-508-08BE?qs=PzGy0jfpSMvxLRQvHckPeQ%3D%3D"
+			(at 160.02 -492.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 160.02 -592.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-08BE"
+			(at 160.02 -692.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "8"
+			(uuid "cb303b00-9016-40be-9fff-c7df90d5e9d4")
+		)
+		(pin "1"
+			(uuid "faf41164-67bb-417a-986f-e0815d9d554b")
+		)
+		(pin "2"
+			(uuid "90862695-8eb4-4b2d-aab4-d3945d4ff2b4")
+		)
+		(pin "7"
+			(uuid "931dc637-63ed-4908-9a69-5e111364cbec")
+		)
+		(pin "6"
+			(uuid "6859c74e-8564-4c01-a273-1dc94e73bb56")
+		)
+		(pin "5"
+			(uuid "8a6c26b5-cde0-4fd1-a30c-4ef7ead92235")
+		)
+		(pin "3"
+			(uuid "21d9c5b2-1707-4c73-bdd1-a9b63bd78da9")
+		)
+		(pin "4"
+			(uuid "6912eef0-7810-448c-abe7-d10f9f93e305")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP02R1-381-02BE")
+		(at 44.45 162.56 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f4799357-cdc4-426b-861b-2f849f8460b0")
+		(property "Reference" "J4"
+			(at 34.29 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R1-381-02BE"
+			(at 34.29 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP02R138102BE"
+			(at 27.94 67.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp02r1-381.pdf"
+			(at 27.94 -32.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable,Receptacle, Horizontal, 3.81 Pitch, Terminal Block Connector"
+			(at 44.45 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "7.2"
+			(at 27.94 -232.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R1-381-02BE"
+			(at 27.94 -332.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R1-381-02BE?qs=PzGy0jfpSMuDSg0nR5k9Yg%3D%3D"
+			(at 27.94 -432.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 27.94 -532.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R1-381-02BE"
+			(at 27.94 -632.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "4abe4dcb-4f81-418a-a488-7fe1d8f22d08")
+		)
+		(pin "1"
+			(uuid "3561e8f4-250f-4605-b6d3-c1ac376f4c7e")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 130.81 185.42 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f9130af4-46da-4715-a56e-0118b5b3c154")
+		(property "Reference" "J21"
+			(at 132.7151 186.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x02_Socket"
+			(at 130.1751 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 130.81 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 130.81 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 130.81 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1b4fdc37-49ab-4a01-8343-1c640c170ec9")
+		)
+		(pin "1"
+			(uuid "7a21f699-6672-4562-a202-5acb646aeeda")
+		)
+		(instances
+			(project ""
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/cce886e5-3de0-446d-9657-6a47123275cd"
+					(reference "J21")
+					(unit 1)
+				)
+			)
+		)
+	)
+)
