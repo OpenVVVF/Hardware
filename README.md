@@ -1,10 +1,14 @@
 ## Overview
 
+
+![Size 2 Inverter CAD Rendering](Size2.png)
+
 This project provides open source power electronics designs for motor drives spanning a wide power range, from small robotics drives to large traction inverters. The platform is designed with modularity at its core, allowing common electronics, firmware, and design methodology to be shared across all chassis sizes while optimizing mechanical and thermal design for each power class.
 
 The project originated as a personal academic endeavor and has grown into a comprehensive inverter platform suitable for various applications including agricultural robots, electric motorcycles, industrial vehicles, marine propulsion, and heavy-duty traction systems. All designs are released under open source licenses to enable innovation, education, and collaboration within the power electronics community.
 
 Each chassis size represents a complete design ecosystem including power stages, gate drivers, control boards, filtering, and mechanical integration. The unified model numbering system allows users to quickly identify the specifications of any inverter variant, while the shared electronic architecture simplifies firmware development, component sourcing, and community support.
+
 
 ---
 
