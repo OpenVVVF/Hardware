@@ -268,6 +268,224 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "InverterCom:BAT54WS-7-F"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 11.43 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "BAT54WS-7-F"
+				(at 11.43 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "SOD2513X120N"
+				(at 11.43 -97.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.diodes.com//assets/Datasheets/BAT54WS.pdf"
+				(at 11.43 -197.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "Diodes Inc BAT54WS-7-F, SMT Schottky Switching Diode, 30V 200mA, 5ns, 2-Pin SOD-323"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "1.2"
+				(at 11.43 -397.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "621-BAT54WS-F"
+				(at 11.43 -497.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/BAT54WS-7-F?qs=BJo294706GxanB6a%2FKrrdw%3D%3D"
+				(at 11.43 -597.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Diodes Incorporated"
+				(at 11.43 -697.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "BAT54WS-7-F"
+				(at 11.43 -797.46 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "BAT54WS-7-F_0_1"
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 5.08 3.81) (xy 3.81 3.81) (xy 3.81 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 -2.54) (xy 5.08 -3.81) (xy 6.35 -3.81) (xy 6.35 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "BAT54WS-7-F_1_1"
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.54) (xy 5.08 -2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 10.16 2.54) (xy 10.16 -2.54) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 10.16 0) (xy 12.7 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 15.24 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "InverterCom:IPB017N10N5ATMA1"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -542,6 +760,12 @@
 		(uuid "35517530-1fb1-4c94-a96a-7ef2740c6217")
 	)
 	(junction
+		(at 20.32 173.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3a64589f-38a7-44c7-8a18-80a5c33948ec")
+	)
+	(junction
 		(at 57.15 147.32)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -558,6 +782,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "526c6940-e202-4bde-98bc-3c3a099311d5")
+	)
+	(junction
+		(at 50.8 182.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "596482e6-50a3-4aa4-be26-8940bb177308")
 	)
 	(junction
 		(at 152.4 152.4)
@@ -761,6 +991,16 @@
 	)
 	(wire
 		(pts
+			(xy 50.8 182.88) (xy 76.2 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "221bd1a3-1a30-4992-96ed-9c7aae356021")
+	)
+	(wire
+		(pts
 			(xy 59.69 68.58) (xy 62.23 68.58)
 		)
 		(stroke
@@ -818,6 +1058,16 @@
 			(type default)
 		)
 		(uuid "324ca2f0-3fde-4217-a125-7b9bba937410")
+	)
+	(wire
+		(pts
+			(xy 38.1 185.42) (xy 40.64 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "346f1601-9753-4d40-b60e-b1b5e2e8b391")
 	)
 	(wire
 		(pts
@@ -881,6 +1131,16 @@
 	)
 	(wire
 		(pts
+			(xy 50.8 173.99) (xy 50.8 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c9488af-ff81-4d7d-8f47-f792ec3ad5c3")
+	)
+	(wire
+		(pts
 			(xy 165.1 152.4) (xy 152.4 152.4)
 		)
 		(stroke
@@ -898,6 +1158,16 @@
 			(type default)
 		)
 		(uuid "64fbb74b-a014-486e-aa35-b04112a06e7f")
+	)
+	(wire
+		(pts
+			(xy 48.26 173.99) (xy 50.8 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66e59b9f-18be-4408-a1b1-57c839232335")
 	)
 	(wire
 		(pts
@@ -1041,6 +1311,26 @@
 	)
 	(wire
 		(pts
+			(xy 50.8 182.88) (xy 50.8 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "904bc30a-3aa3-41da-b078-65f02c929a8c")
+	)
+	(wire
+		(pts
+			(xy 20.32 173.99) (xy 40.64 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "944bd9e1-e76d-456c-85fc-c78b4afb5cbf")
+	)
+	(wire
+		(pts
 			(xy 53.34 101.6) (xy 53.34 104.14)
 		)
 		(stroke
@@ -1048,6 +1338,16 @@
 			(type default)
 		)
 		(uuid "9f5b0530-0f67-40b5-a2fa-65e53dee761a")
+	)
+	(wire
+		(pts
+			(xy 48.26 185.42) (xy 50.8 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a2552bca-4da6-452d-9f9e-0ae35a69f313")
 	)
 	(wire
 		(pts
@@ -1098,6 +1398,16 @@
 			(type default)
 		)
 		(uuid "b19a07aa-8313-452d-a2cd-584b7866cb6a")
+	)
+	(wire
+		(pts
+			(xy 20.32 149.86) (xy 20.32 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b1cef010-8014-44fc-972e-feca0155e0c9")
 	)
 	(wire
 		(pts
@@ -1191,6 +1501,16 @@
 	)
 	(wire
 		(pts
+			(xy 22.86 185.42) (xy 20.32 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ced3815d-0836-4ec5-b941-ef8547f6ec05")
+	)
+	(wire
+		(pts
 			(xy 165.1 152.4) (xy 190.5 152.4)
 		)
 		(stroke
@@ -1248,6 +1568,16 @@
 			(type default)
 		)
 		(uuid "eef08477-de7d-4cb6-a828-fe6e54fd7a90")
+	)
+	(wire
+		(pts
+			(xy 20.32 185.42) (xy 20.32 173.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0acd187-0ce7-4937-a9d4-953403755f1e")
 	)
 	(wire
 		(pts
@@ -1643,6 +1973,134 @@
 				)
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/bbd1521a-f9e8-40f3-bbec-0e52065dc1d0"
 					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:BAT54WS-7-F")
+		(at 22.86 185.42 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "21ce05cc-c391-4d87-bbc1-43aff7434437")
+		(property "Reference" "D12"
+			(at 30.48 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BAT54WS-7-F"
+			(at 30.48 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SOD2513X120N"
+			(at 34.29 282.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.diodes.com//assets/Datasheets/BAT54WS.pdf"
+			(at 34.29 382.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Diodes Inc BAT54WS-7-F, SMT Schottky Switching Diode, 30V 200mA, 5ns, 2-Pin SOD-323"
+			(at 22.86 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "1.2"
+			(at 34.29 582.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "621-BAT54WS-F"
+			(at 34.29 682.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Diodes-Incorporated/BAT54WS-7-F?qs=BJo294706GxanB6a%2FKrrdw%3D%3D"
+			(at 34.29 782.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Diodes Incorporated"
+			(at 34.29 882.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "BAT54WS-7-F"
+			(at 34.29 982.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5924c01f-40ee-41b9-9951-c0ebdbd5c51c")
+		)
+		(pin "1"
+			(uuid "0a802e67-e074-42b9-8962-d8030bbae6a4")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/54dc08ac-11db-4d81-801a-70d02441e8c3"
+					(reference "D12")
+					(unit 1)
+				)
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/7769571f-e510-49bc-8cfc-a650fd193802"
+					(reference "D14")
+					(unit 1)
+				)
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/bbd1521a-f9e8-40f3-bbec-0e52065dc1d0"
+					(reference "D13")
 					(unit 1)
 				)
 			)
@@ -2322,6 +2780,81 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 44.45 173.99 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7b3f2a20-0c51-4d03-9ca9-46fbc9cfe1bc")
+		(property "Reference" "R68"
+			(at 44.45 170.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "9.1"
+			(at 44.45 171.958 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 44.45 172.212 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 44.45 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 44.45 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "845e517b-fbdd-4a3e-b868-137018ea5832")
+		)
+		(pin "1"
+			(uuid "7e81db1b-4d4e-4bf8-aaf3-8e287d0b5a5e")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/54dc08ac-11db-4d81-801a-70d02441e8c3"
+					(reference "R68")
+					(unit 1)
+				)
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/7769571f-e510-49bc-8cfc-a650fd193802"
+					(reference "R72")
+					(unit 1)
+				)
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/bbd1521a-f9e8-40f3-bbec-0e52065dc1d0"
+					(reference "R70")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "InverterCom:IPB017N10N5ATMA1")
 		(at 53.34 68.58 90)
 		(unit 1)
@@ -2461,6 +2994,81 @@
 				)
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/bbd1521a-f9e8-40f3-bbec-0e52065dc1d0"
 					(reference "Q5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 44.45 185.42 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b0191dd2-3abe-44aa-ac3c-99ed9ca61ea8")
+		(property "Reference" "R69"
+			(at 44.45 181.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "6.8"
+			(at 44.45 183.388 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 44.45 183.642 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 44.45 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 44.45 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "00ed6be4-2d29-48ac-8161-8360241ef167")
+		)
+		(pin "1"
+			(uuid "8a94c4ce-02de-4dd6-a447-6d807b2e27b9")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/54dc08ac-11db-4d81-801a-70d02441e8c3"
+					(reference "R69")
+					(unit 1)
+				)
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/7769571f-e510-49bc-8cfc-a650fd193802"
+					(reference "R73")
+					(unit 1)
+				)
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726/bbd1521a-f9e8-40f3-bbec-0e52065dc1d0"
+					(reference "R71")
 					(unit 1)
 				)
 			)
