@@ -1,7 +1,3 @@
- Here's the complete updated README with all changes integrated:
-
----
-
 ## Overview
 
 This project provides open source power electronics designs for motor drives spanning a wide power range, from small robotics drives to large traction inverters. The platform is designed with modularity at its core, allowing common electronics, firmware, and design methodology to be shared across all chassis sizes while optimizing mechanical and thermal design for each power class.
