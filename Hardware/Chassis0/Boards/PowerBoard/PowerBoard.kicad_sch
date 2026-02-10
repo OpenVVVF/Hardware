@@ -553,6 +553,145 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "InverterCom:7466205R"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1958,6 +2097,16 @@
 		)
 		(uuid "16f2d2c5-fe50-4e13-818f-3eb178792721")
 	)
+	(label "+5V_B"
+		(at 97.79 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "18a14d77-3ec9-44c9-a6be-18217272e2f1")
+	)
 	(label "PH_U_L_S"
 		(at 43.18 110.49 180)
 		(effects
@@ -2007,6 +2156,16 @@
 			(justify right bottom)
 		)
 		(uuid "237d8c05-5e5e-4da3-8402-f7e6ba4cb5c8")
+	)
+	(label "GND_B"
+		(at 186.69 102.87 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2716a80d-1143-49d0-a218-02e2fe1ffaa7")
 	)
 	(label "PH_W_L_S"
 		(at 220.98 110.49 180)
@@ -2108,6 +2267,16 @@
 		)
 		(uuid "36a72935-c3b3-4f24-a1df-f1e6a77accb6")
 	)
+	(label "GND_B"
+		(at 105.41 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3721a02e-db08-41fc-8221-2998e52801f9")
+	)
 	(label "PH_V_L_G"
 		(at 132.08 107.95 180)
 		(effects
@@ -2168,6 +2337,16 @@
 		)
 		(uuid "46a3301e-9743-43ae-8239-a0f8eb1e0961")
 	)
+	(label "+5V_B"
+		(at 276.86 95.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "4ac0da61-c55b-4c79-91f7-a2a57702930a")
+	)
 	(label "ISENSE_PH_U_B"
 		(at 41.91 21.59 0)
 		(effects
@@ -2187,6 +2366,16 @@
 			(justify right bottom)
 		)
 		(uuid "55e5e429-5a02-469e-b58d-16f166d44786")
+	)
+	(label "+5V_B"
+		(at 105.41 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5756e068-0eda-4352-affc-738104ed1aa9")
 	)
 	(label "PH_U_H_D"
 		(at 43.18 88.9 180)
@@ -2378,6 +2567,16 @@
 		)
 		(uuid "84498bf6-d154-4d23-b832-39a0c198332f")
 	)
+	(label "GND_B"
+		(at 276.86 102.87 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8c96e3f4-d91e-4194-be3d-677f902af6b1")
+	)
 	(label "ISENSE_PH_U_B"
 		(at 85.09 120.65 0)
 		(effects
@@ -2487,6 +2686,16 @@
 			(justify right bottom)
 		)
 		(uuid "afb69046-c677-4106-a494-59a390aa06f9")
+	)
+	(label "GND_B"
+		(at 97.79 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b059fa9c-9356-46ff-a1d0-cafddf33658d")
 	)
 	(label "DC_LINK_-"
 		(at 247.65 30.48 180)
@@ -2748,6 +2957,16 @@
 		)
 		(uuid "d5d210b4-e079-4664-af7c-fa7a32fd3c13")
 	)
+	(label "+5V_B"
+		(at 186.69 95.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d6f15c4f-e1ee-4579-a5d7-8464cede8004")
+	)
 	(label "PH_V_H_G"
 		(at 132.08 91.44 180)
 		(effects
@@ -2991,6 +3210,75 @@
 			(project "PowerBoard"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "IC3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 105.41 52.07 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "05ac40d3-0e57-47e1-a28f-dc95b59020c0")
+		(property "Reference" "C30"
+			(at 101.6 53.3401 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 101.6 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 104.4448 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 105.41 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 105.41 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f1ef3f6b-bf2c-47b9-b95f-e9e5ee11d0c0")
+		)
+		(pin "2"
+			(uuid "2e407886-24d5-4d06-987d-f0a684c77091")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C30")
 					(unit 1)
 				)
 			)
@@ -4384,6 +4672,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 276.86 99.06 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7c9018a9-703c-4b8a-a4bf-419f448ce3c1")
+		(property "Reference" "C29"
+			(at 273.05 100.3301 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 273.05 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 275.8948 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 276.86 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 276.86 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "56f0da62-d45a-4bee-a778-4b4ee79c7e09")
+		)
+		(pin "2"
+			(uuid "2ad2e2d3-ba8a-4666-9a1b-457a146d29bb")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 54.61 187.96 0)
 		(unit 1)
@@ -4506,6 +4863,75 @@
 			(project "PowerBoard"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "H10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 97.79 97.79 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "88b207ce-f3f0-47c6-848b-c090232cc340")
+		(property "Reference" "C27"
+			(at 93.98 99.0601 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 93.98 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 96.8248 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 97.79 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 97.79 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "89534480-e6c4-4da0-98f5-6455f7f22257")
+		)
+		(pin "2"
+			(uuid "e1669c55-3803-4e65-9629-280022ffea0b")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C27")
 					(unit 1)
 				)
 			)
@@ -6649,6 +7075,75 @@
 			(project "PowerBoard"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "H8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 186.69 99.06 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f6e9a357-6fab-4662-8c65-551ebb2a5c41")
+		(property "Reference" "C28"
+			(at 182.88 100.3301 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 182.88 97.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 185.7248 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 186.69 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 186.69 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d4561060-5b5b-4a6b-b16b-5b8f0a5eda1f")
+		)
+		(pin "2"
+			(uuid "87630829-fffe-45a6-8554-238ef0052018")
+		)
+		(instances
+			(project "PowerBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "C28")
 					(unit 1)
 				)
 			)
