@@ -36,7 +36,7 @@ static void configureZones() {
     // zone_mgr.addAsyncFixed(15.0f, 20.0f, 4000.0f);
 
 
-    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 12000.0f);
+    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 20000.0f);
 
     // zone_mgr.addRCFM(0.0f, 2000.0f, 1200.0f, 200.0f);
     // -- alstom wmata 2000/3000/6000 switching pattern
@@ -151,19 +151,20 @@ ChannelConfig u_current {
 //         .name = "I_PH_V",
 //         .zero_offset_volts = 0.0f
 // };
-// ChannelConfig w_current {
-//         .device_index = 1,
-//         .channel = 0,
-//         .type = SensorType::BIPOLAR_CURRENT,
-//         .scale = 1,
-//         .offset = 0.0f,
-//         .low_pass_factor = 1.0f,
-//         .name = "I_PH_W",
-//         .zero_offset_volts = 0.0f
-// };
+ChannelConfig w_current {
+        .device_index = 1,
+        .channel = 0,
+        .type = SensorType::BIPOLAR_CURRENT,
+        .scale = -1204.8193f,
+        .offset = 0.0f,
+        .low_pass_factor = 1.0f,
+        .name = "I_PH_W",
+        .zero_offset_volts = 0.410f
+};
     measurements->addChannels(channel_map);
     measurements->addChannel(dc_main_current);
     measurements->addChannel(u_current);
+     measurements->addChannel(w_current);
     // measurements->addChannel(v_current);
     
     // Initial update to populate values
@@ -174,19 +175,21 @@ ChannelConfig u_current {
     sleep_ms(100);
     // measurements->calibrateCurrentSensors();
     float sum = 0.0f;
-    float i_u_sum = 0.0f;
+    float i_u_sum, i_w_sum = 0.0f;
 const int N = 200;
 
 for (int i = 0; i < N; i++) {
     measurements->update();                 // get fresh ADC values
     sum += measurements->readRawVoltage("I_DC_MAIN");
     i_u_sum += measurements->readRawVoltage("I_PH_U");
+    i_w_sum += measurements->readRawVoltage("I_PH_W");
     sleep_ms(2);
 }
 
 
 measurements->setZeroOffsetVolts("I_DC_MAIN",  sum / N);
 measurements->setZeroOffsetVolts("I_PH_U", i_u_sum / N);
+measurements->setZeroOffsetVolts("I_PH_W", i_w_sum / N);
     printf("Current sensor calibration complete.\n\n");
 
     // Optional: decide whether to start enabled from core0.
@@ -214,7 +217,7 @@ measurements->setZeroOffsetVolts("I_PH_U", i_u_sum / N);
 
     float i_u  = measurements->read("I_PH_U");
     // float i_v  = measurements->read("I_PH_V");
-    // float v_w  = measurements->read("I_DC_W");
+    float i_w  = measurements->read("I_PH_W");
     
 
     float i_dc_main = measurements->read("I_DC_MAIN");   // <-- main current (A)
@@ -225,8 +228,8 @@ measurements->setZeroOffsetVolts("I_PH_U", i_u_sum / N);
     printf("\r\n=== Telemetry ===\r\n");
     printf("DC Bus: %6.1fV | I_DC_MAIN: %7.1fA | V_U: %5.1fV | V_V: %5.1fV | V_W: %5.1fV\r\n",
            v_dc, i_dc_main, v_u, v_v, v_w);
-    printf("I_PH_U: %7.1fA\r\n",
-          i_u);
+    printf("I_PH_U: %7.1fA  |   I_PH_W: %7.1fA\r\n",
+          i_u, i_w);
     printf("SIN: %5.5fV | COS: %5.5fV | Rotor: %6.1f°\r\n", enc_sin, enc_cos, rotor_pos);
     printf("Sensor sample rate: %luKHz\r\n", updateCounter / 1000);
     updateCounter = 0;

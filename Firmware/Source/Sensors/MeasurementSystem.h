@@ -63,12 +63,54 @@ private:
     float m_accumulator = 0.0f;  // For calibration
     uint32_t m_sample_count = 0;
     bool m_faulted = false;
+    // In MeasurementChannel class:
+    bool m_use_low_pass = false;
+    float m_fault_low = 0.01f;
+    float m_fault_high = 1.79f; // 1.8 - 0.01
+
 };
 
 class MeasurementSystem {
 public:
     explicit MeasurementSystem(MAX2253x_MultiADC& adc);
+    struct UpdateEntry {
+    MeasurementChannel* ch;
+    uint8_t device;
+    uint8_t chan; // 0..3
+};
+    struct DeviceChan {
+    MeasurementChannel* ch;
+    uint8_t chan; // 0..3
+};
 
+static constexpr uint32_t PERIOD_FAST_US = 0;     // every loop
+static constexpr uint32_t PERIOD_5KHZ_US = 200;   // 5 kHz
+static constexpr uint32_t PERIOD_1KHZ_US = 1000;  // 1 kHz
+static constexpr uint32_t PERIOD_18KHZ_US = 55;   // 1e6 / 18000 ≈ 55.56us
+
+
+std::vector<std::vector<DeviceChan>> m_dev_chans;   // [device] -> channels on that device
+std::vector<uint32_t> m_dev_period_us;              // [device] -> desired period
+std::vector<uint32_t> m_dev_last_us;                // [device] -> last read time_us_32()
+std::vector<std::array<float,4>> m_dev_cache;       // [device] -> last volta
+
+static inline uint32_t period_for_channel(const ChannelConfig& cfg) {
+    // Currents: cap at ~18 kHz
+    if (cfg.type == SensorType::BIPOLAR_CURRENT || cfg.type == SensorType::UNIPOLAR_CURRENT) {
+        return PERIOD_18KHZ_US;
+    }
+    if (cfg.type == SensorType::VOLTAGE_DIVIDER) {
+        return PERIOD_5KHZ_US;   // 200us
+    }
+    return PERIOD_1KHZ_US;       // 1000us
+}
+
+
+std::vector<UpdateEntry> m_update_list;
+
+// Cached encoder channel pointers (avoid map find in loop)
+MeasurementChannel* m_encoder_sin_ch = nullptr;
+MeasurementChannel* m_encoder_cos_ch = nullptr;
     // Register channels - call this once at startup
     void addChannel(const ChannelConfig& config);
     void addChannels(const std::vector<ChannelConfig>& configs);
