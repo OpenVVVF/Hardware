@@ -80,7 +80,8 @@ int main() {
     initializeCommands();
 
     SerialProcessor serial_proc;
-
+    Telemetry::init_default_sensors();
+Telemetry::set_period_us(10000); // 100 Hz
     printf("\r\n3-Phase SPWM Controller\r\n");
     printf("Type 'HELP' or 'h' for commands\r\n");
 
@@ -219,7 +220,8 @@ if ((uint32_t)(now_us - last_rate_us) >= 1000000u) {
 }
 
 // send frame (default 100 Hz). Set to 5000us if you want 200 Hz, etc.
-Telemetry::send_frame(*measurements, ctx, sensor_rate_khz);
+Telemetry::send_frame(*measurements, ctx, sensor_rate_khz, true);
+
 
         
         
@@ -250,6 +252,8 @@ Telemetry::send_frame(*measurements, ctx, sensor_rate_khz);
           i_u, i_w);
     printf("SIN: %5.5fV | COS: %5.5fV | Rotor: %6.1f°\r\n", enc_sin, enc_cos, rotor_pos);
     printf("Sensor sample rate: %luKHz\r\n", updateCounter / 1000);
+
+    Telemetry::log("LoopHz", updateCounter / 1000);
     updateCounter = 0;
         // measurements->printChannels();
     last_telemetry = get_absolute_time();

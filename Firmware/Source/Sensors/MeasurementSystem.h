@@ -89,7 +89,7 @@ public:
 
     // Iterate sensors in ID order (fast, no map lookups)
     template <typename Fn>
-    void forEachSensor(Fn&& fn) {
+    void forEachSensor(Fn&& fn) const {
         for (auto& s : m_sensors) fn(s.id, *s.name, s.ch);
     }
 

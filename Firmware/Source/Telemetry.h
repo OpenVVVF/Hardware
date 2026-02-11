@@ -4,22 +4,33 @@
 
 class MeasurementSystem;
 struct CommandContext;
-struct RtStatus;
 
 namespace Telemetry {
 
 static constexpr uint32_t MAGIC = 0x544C4D31u; // "TLM1"
 static constexpr uint8_t  VERSION = 1;
-static constexpr uint8_t  MSG_TELEMETRY = 1;
 
-// Send one telemetry frame (COBS + CRC) to stdio (USB CDC).
-// Returns true if it wrote a frame.
-bool send_frame(const MeasurementSystem& ms,
-                const CommandContext& ctx,
-                float sensor_rate_khz);
+enum MsgType : uint8_t {
+    MSG_DATA   = 1,  // (id,value) pairs
+    MSG_DEFINE = 2,  // new key definitions
+};
 
-// Optional: set/override telemetry rate limiter in microseconds
+// Configure telemetry periodic send rate
 void set_period_us(uint32_t period_us);
 uint32_t get_period_us();
+
+// Optional: call once at boot to define known sensor keys upfront (so DATA is tiny)
+void init_default_sensors(); // uses a built-in list you define in .cpp
+
+// Dynamic logging
+bool log(const char* key, float value);
+bool log(const char* key, const char* value); // small strings (capped)
+
+// Sends frames if due. Frame may contain queued logs + (optionally) sensor snapshot.
+// Returns true if it wrote at least one frame.
+bool send_frame(const MeasurementSystem& ms,
+                const CommandContext& ctx,
+                float sensor_rate_khz,
+                bool include_sensor_snapshot = true);
 
 } // namespace Telemetry

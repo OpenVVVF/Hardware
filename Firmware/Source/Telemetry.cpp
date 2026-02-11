@@ -1,13 +1,14 @@
 #include "Telemetry.h"
 #include "pico/stdlib.h"
 #include <cstring>
+#include <cstdint>
 
 // Forward decls from your project
 #include "Sensors/MeasurementSystem.h"
 #include "Command/CommandContext.h"
-#include "RtBridge.h" // for RtStatus if you want it
 
 namespace Telemetry {
+
 
 // ---------------- CRC16-CCITT (0x1021, init 0xFFFF) ----------------
 static uint16_t crc16_ccitt(const uint8_t* data, size_t len) {
@@ -22,16 +23,11 @@ static uint16_t crc16_ccitt(const uint8_t* data, size_t len) {
 }
 
 // ---------------- COBS encode ----------------
-// Encodes input into out. Returns encoded length (no delimiter).
-// You must append a 0x00 delimiter yourself.
 static size_t cobs_encode(const uint8_t* in, size_t len, uint8_t* out, size_t out_cap) {
-    // Worst case expansion is + len/254 + 1
-    // Caller should provide enough out_cap.
     size_t read_index = 0;
     size_t write_index = 1;
     size_t code_index = 0;
     uint8_t code = 1;
-
     if (out_cap == 0) return 0;
 
     while (read_index < len) {
@@ -59,106 +55,458 @@ static size_t cobs_encode(const uint8_t* in, size_t len, uint8_t* out, size_t ou
     return write_index;
 }
 
-// ---------------- Packet structs ----------------
+static inline void write_bytes_stdio(const uint8_t* data, size_t n) {
+    for (size_t i = 0; i < n; ++i) putchar_raw((char)data[i]);
+}
+
+// ---------------- Protocol structs ----------------
 #pragma pack(push, 1)
 struct TelemetryHeader {
     uint32_t magic;       // MAGIC
     uint8_t  version;     // VERSION
-    uint8_t  msg_type;    // MSG_TELEMETRY
+    uint8_t  msg_type;    // MsgType
     uint16_t payload_len; // bytes
     uint32_t seq;         // increments
     uint32_t time_us;     // time_us_32()
 };
-
-struct TelemetryPayloadV1 {
-    float v_dc;
-    float v_u;
-    float v_v;
-    float v_w;
-
-    float i_dc_main;
-    float i_u;
-    float i_w;
-
-    float enc_sin;
-    float enc_cos;
-    float rotor_deg;
-
-    float sensor_rate_khz;
-};
 #pragma pack(pop)
 
 static_assert(sizeof(TelemetryHeader) == 16, "Header size mismatch");
-static_assert(sizeof(TelemetryPayloadV1) == 44, "Payload size mismatch");
 
+// ---------------- Key registry (no heap) ----------------
+// We avoid resending keys by assigning an ID the first time we see a key.
+// DEFINE sends: [u16 id][u8 type][u8 key_len][key bytes]
+// DATA sends:   repeated items: [u16 id][u8 type][value...]
+enum ValueType : uint8_t {
+    VT_F32 = 1,
+    VT_STR = 2,
+};
+
+static constexpr uint16_t MAX_KEYS   = 128;
+static constexpr uint8_t  KEY_MAXLEN = 32;   // stored once in MCU
+static constexpr uint8_t  STR_MAXLEN = 48;   // sent per string sample
+struct KeyEntry {
+    uint16_t id = 0;
+    uint32_t hash = 0;
+    uint8_t  type = 0;
+    uint8_t  key_len = 0;
+    char     key[KEY_MAXLEN] = {};
+    bool     used = false;
+};
+
+static KeyEntry g_keys[MAX_KEYS];
+static uint16_t g_next_id = 1;
+
+// FNV-1a 32-bit (fast, good enough)
+static uint32_t fnv1a(const char* s) {
+    uint32_t h = 2166136261u;
+    while (*s) {
+        h ^= (uint8_t)(*s++);
+        h *= 16777619u;
+    }
+    return h;
+}
+
+static int find_key_index(const char* key, uint32_t h) {
+    for (int i = 0; i < (int)MAX_KEYS; ++i) {
+        if (!g_keys[i].used) continue;
+        if (g_keys[i].hash != h) continue;
+        if (std::strncmp(g_keys[i].key, key, KEY_MAXLEN) == 0) return i;
+    }
+    return -1;
+}
+
+static int allocate_key(const char* key, uint32_t h, uint8_t type) {
+    for (int i = 0; i < (int)MAX_KEYS; ++i) {
+        if (g_keys[i].used) continue;
+        g_keys[i].used = true;
+        g_keys[i].id   = g_next_id++;
+        g_keys[i].hash = h;
+        g_keys[i].type = type;
+
+        const size_t klen = std::min<size_t>(std::strlen(key), KEY_MAXLEN - 1);
+        g_keys[i].key_len = (uint8_t)klen;
+        std::memcpy(g_keys[i].key, key, klen);
+        g_keys[i].key[klen] = '\0';
+        return i;
+    }
+    return -1; // table full
+}
+
+// ---------------- Log queue (no heap) ----------------
+// We queue samples; send_frame flushes them periodically.
+static constexpr uint16_t LOGQ_MAX = 256;
+
+struct LogItem {
+    uint16_t id = 0;
+    uint8_t  type = 0;
+    union {
+        float f32;
+        struct {
+            uint8_t len;
+            char    bytes[STR_MAXLEN];
+        } str;
+    } v;
+};
+
+static LogItem g_logq[LOGQ_MAX];
+static uint16_t g_q_head = 0;
+static uint16_t g_q_tail = 0;
+
+static inline bool q_empty() { return g_q_head == g_q_tail; }
+static inline bool q_full()  { return (uint16_t)(g_q_tail + 1) % LOGQ_MAX == g_q_head; }
+
+static bool q_push(const LogItem& it) {
+    if (q_full()) return false;
+    g_logq[g_q_tail] = it;
+    g_q_tail = (uint16_t)(g_q_tail + 1) % LOGQ_MAX;
+    return true;
+}
+
+static bool q_pop(LogItem& out) {
+    if (q_empty()) return false;
+    out = g_logq[g_q_head];
+    g_q_head = (uint16_t)(g_q_head + 1) % LOGQ_MAX;
+    return true;
+}
+
+// ---------------- Define queue (so DEFINE always precedes DATA) ----------------
+static constexpr uint16_t DEFQ_MAX = 128;
+struct DefItem {
+    uint16_t id;
+    uint8_t  type;
+    uint8_t  key_len;
+    char     key[KEY_MAXLEN];
+};
+
+static DefItem g_defq[DEFQ_MAX];
+static uint16_t g_d_head = 0;
+static uint16_t g_d_tail = 0;
+
+static inline bool d_empty() { return g_d_head == g_d_tail; }
+static inline bool d_full()  { return (uint16_t)(g_d_tail + 1) % DEFQ_MAX == g_d_head; }
+
+static bool d_push(uint16_t id, uint8_t type, const char* key, uint8_t key_len) {
+    if (d_full()) return false;
+    DefItem& d = g_defq[g_d_tail];
+    d.id = id;
+    d.type = type;
+    d.key_len = key_len;
+    std::memset(d.key, 0, sizeof(d.key));
+    std::memcpy(d.key, key, key_len);
+    g_d_tail = (uint16_t)(g_d_tail + 1) % DEFQ_MAX;
+    return true;
+}
+
+static bool d_pop(DefItem& out) {
+    if (d_empty()) return false;
+    out = g_defq[g_d_head];
+    g_d_head = (uint16_t)(g_d_head + 1) % DEFQ_MAX;
+    return true;
+}
+
+// ---------------- Rate limiting ----------------
 static uint32_t g_seq = 0;
 static uint32_t g_period_us = 10000; // 100 Hz default
 static uint32_t g_last_send_us = 0;
 
 void set_period_us(uint32_t period_us) { g_period_us = period_us; }
 uint32_t get_period_us() { return g_period_us; }
+// add near globals
+static uint32_t g_last_define_us = 0;
+static constexpr uint32_t DEFINE_REANNOUNCE_US = 100000; // 10 Hz for first few seconds
 
-static inline void write_bytes_stdio(const uint8_t* data, size_t n) {
-    // Very fast raw writes; stdio over USB CDC.
-    // putchar_raw is in pico/stdlib.h
-    for (size_t i = 0; i < n; ++i) putchar_raw((char)data[i]);
+
+static void enqueue_all_definitions() {
+    for (int i = 0; i < (int)MAX_KEYS; ++i) {
+        if (!g_keys[i].used) continue;
+        // push (id,type,key) again; host will just overwrite same mapping
+        d_push(g_keys[i].id, g_keys[i].type, g_keys[i].key, g_keys[i].key_len);
+    }
 }
 
+// ---------------- Default sensors you want every frame ----------------
+// Add/remove to match your project.
+static const char* DEFAULT_SENSORS[] = {
+    "V_DC_BUS",
+    "V_PH_U",
+    "V_PH_V",
+    "V_PH_W",
+    "I_DC_MAIN",
+    "I_PH_U",
+    "I_PH_W",
+    "ENCODER_SIN",
+    "ENCODER_COS",
+    // You can also register derived values as their own IDs:
+    "ROTOR_DEG",
+    "SENSOR_RATE_KHZ",
+};
+
+static constexpr size_t DEFAULT_SENSORS_N = sizeof(DEFAULT_SENSORS) / sizeof(DEFAULT_SENSORS[0]);
+
+void init_default_sensors() {
+    for (size_t i = 0; i < DEFAULT_SENSORS_N; ++i) {
+        const char* k = DEFAULT_SENSORS[i];
+        const uint32_t h = fnv1a(k);
+        int idx = find_key_index(k, h);
+        if (idx < 0) {
+            idx = allocate_key(k, h, VT_F32);
+            if (idx >= 0) {
+                d_push(g_keys[idx].id, g_keys[idx].type, g_keys[idx].key, g_keys[idx].key_len);
+            }
+        }
+    }
+}
+
+// ---------------- Public logging API ----------------
+bool log(const char* key, float value) {
+    if (!key) return false;
+    const uint32_t h = fnv1a(key);
+    int idx = find_key_index(key, h);
+    if (idx < 0) {
+        idx = allocate_key(key, h, VT_F32);
+        if (idx < 0) return false;
+        // enqueue DEFINE once
+        d_push(g_keys[idx].id, g_keys[idx].type, g_keys[idx].key, g_keys[idx].key_len);
+    } else if (g_keys[idx].type != VT_F32) {
+        // type mismatch; refuse (or you could allocate a separate key variant)
+        return false;
+    }
+
+    LogItem it{};
+    it.id = g_keys[idx].id;
+    it.type = VT_F32;
+    it.v.f32 = value;
+    return q_push(it);
+}
+
+bool log(const char* key, const char* value) {
+    if (!key || !value) return false;
+    const uint32_t h = fnv1a(key);
+    int idx = find_key_index(key, h);
+    if (idx < 0) {
+        idx = allocate_key(key, h, VT_STR);
+        if (idx < 0) return false;
+        d_push(g_keys[idx].id, g_keys[idx].type, g_keys[idx].key, g_keys[idx].key_len);
+    } else if (g_keys[idx].type != VT_STR) {
+        return false;
+    }
+
+    LogItem it{};
+    it.id = g_keys[idx].id;
+    it.type = VT_STR;
+
+    const size_t len = std::min<size_t>(std::strlen(value), STR_MAXLEN);
+    it.v.str.len = (uint8_t)len;
+    std::memcpy(it.v.str.bytes, value, len);
+    if (len < STR_MAXLEN) it.v.str.bytes[len] = '\0';
+    return q_push(it);
+}
+
+// ---------------- Frame building helpers ----------------
+static inline void put_u16(uint8_t*& w, uint16_t v) { *w++ = (uint8_t)(v & 0xFF); *w++ = (uint8_t)(v >> 8); }
+static inline void put_u32(uint8_t*& w, uint32_t v) { *w++ = (uint8_t)(v); *w++ = (uint8_t)(v >> 8); *w++ = (uint8_t)(v >> 16); *w++ = (uint8_t)(v >> 24); }
+static inline void put_f32(uint8_t*& w, float f) {
+    static_assert(sizeof(float) == 4, "float must be 32-bit");
+    std::memcpy(w, &f, 4);
+    w += 4;
+}
+
+// Returns bytes written into payload (not including header)
+static size_t build_define_payload(uint8_t* payload, size_t cap) {
+    // format: [u8 n_defs] repeated: [u16 id][u8 type][u8 key_len][key bytes]
+    if (cap < 1) return 0;
+    uint8_t* w = payload;
+    *w++ = 0; // n_defs placeholder
+    uint8_t n = 0;
+
+    while (!d_empty()) {
+        DefItem d{};
+        if (!d_pop(d)) break;
+
+        const size_t need = 2 + 1 + 1 + d.key_len;
+        if ((size_t)(w - payload) + need > cap) {
+            // no space: push back? simplest: drop (or you can keep it by not popping until fits)
+            // For robustness, you'd implement "peek" instead of pop; keeping simple here.
+            break;
+        }
+
+        put_u16(w, d.id);
+        *w++ = d.type;
+        *w++ = d.key_len;
+        std::memcpy(w, d.key, d.key_len);
+        w += d.key_len;
+        n++;
+    }
+
+    payload[0] = n;
+    return (size_t)(w - payload);
+}
+
+static size_t build_data_payload(uint8_t* payload, size_t cap,
+                                const MeasurementSystem& ms,
+                                float sensor_rate_khz,
+                                bool include_sensor_snapshot)
+{
+    // format:
+    // [u8 n_items]
+    // repeated items:
+    //   [u16 id][u8 type][value...]
+    // value:
+    //   VT_F32: 4 bytes
+    //   VT_STR: [u8 len][bytes...]
+    if (cap < 1) return 0;
+    uint8_t* w = payload;
+    *w++ = 0; // n_items placeholder
+    uint8_t n = 0;
+
+    // 1) Include sensor snapshot (registered default sensors) first (optional)
+    if (include_sensor_snapshot) {
+        // We assume init_default_sensors() was called, so IDs exist.
+        for (size_t i = 0; i < DEFAULT_SENSORS_N; ++i) {
+            const char* k = DEFAULT_SENSORS[i];
+            const uint32_t h = fnv1a(k);
+            const int idx = find_key_index(k, h);
+            if (idx < 0) continue;
+
+            float v = 0.0f;
+            if (std::strcmp(k, "ROTOR_DEG") == 0) {
+                v = ms.getRotorPositionDegrees();
+            } else if (std::strcmp(k, "SENSOR_RATE_KHZ") == 0) {
+                v = sensor_rate_khz;
+            } else {
+                v = ms.read(k);
+            }
+
+            const size_t need = 2 + 1 + 4;
+            if ((size_t)(w - payload) + need > cap) break;
+            put_u16(w, g_keys[idx].id);
+            *w++ = VT_F32;
+            put_f32(w, v);
+            n++;
+        }
+    }
+
+    // 2) Drain queued log items
+    while (!q_empty()) {
+        LogItem it{};
+        if (!q_pop(it)) break;
+
+        size_t need = 0;
+        if (it.type == VT_F32) need = 2 + 1 + 4;
+        else if (it.type == VT_STR) need = 2 + 1 + 1 + it.v.str.len;
+        else continue;
+
+        if ((size_t)(w - payload) + need > cap) {
+            // not enough room; drop remainder this cycle (or push back with a real ring "peek")
+            break;
+        }
+
+        put_u16(w, it.id);
+        *w++ = it.type;
+        if (it.type == VT_F32) {
+            put_f32(w, it.v.f32);
+        } else {
+            *w++ = it.v.str.len;
+            std::memcpy(w, it.v.str.bytes, it.v.str.len);
+            w += it.v.str.len;
+        }
+        n++;
+    }
+
+    payload[0] = n;
+    return (size_t)(w - payload);
+}
+
+// ---------------- Public send_frame ----------------
 bool send_frame(const MeasurementSystem& ms,
-                const CommandContext& ctx,
-                float sensor_rate_khz)
+                const CommandContext& /*ctx*/,
+                float sensor_rate_khz,
+                bool include_sensor_snapshot)
 {
     const uint32_t now = time_us_32();
+    if ((uint32_t)(now - g_last_define_us) > DEFINE_REANNOUNCE_US) {
+    enqueue_all_definitions();
+    g_last_define_us = now;
+}
+
     if ((uint32_t)(now - g_last_send_us) < g_period_us) return false;
     g_last_send_us = now;
 
-    TelemetryPayloadV1 p{};
-    p.v_dc = ms.read("V_DC_BUS");
-    p.v_u  = ms.read("V_PH_U");
-    p.v_v  = ms.read("V_PH_V");
-    p.v_w  = ms.read("V_PH_W");
+    bool wrote_any = false;
 
-    p.i_dc_main = ms.read("I_DC_MAIN");
-    p.i_u       = ms.read("I_PH_U");
-    p.i_w       = ms.read("I_PH_W");
+    // If we have new definitions, send a DEFINE frame first (so host can decode following DATA)
+    if (!d_empty()) {
+        uint8_t payload[200]; // keep small; adjust if you define many keys at once
+        const size_t p_len = build_define_payload(payload, sizeof(payload));
+        if (p_len > 0) {
+            TelemetryHeader h{};
+            h.magic = MAGIC;
+            h.version = VERSION;
+            h.msg_type = MSG_DEFINE;
+            h.payload_len = (uint16_t)p_len;
+            h.seq = g_seq++;
+            h.time_us = now;
 
-    p.enc_sin   = ms.read("ENCODER_SIN");
-    p.enc_cos   = ms.read("ENCODER_COS");
-    p.rotor_deg = ms.getRotorPositionDegrees();
+            uint8_t raw[16 + sizeof(payload) + 2];
+            size_t off = 0;
+            std::memcpy(raw + off, &h, sizeof(h)); off += sizeof(h);
+            std::memcpy(raw + off, payload, p_len); off += p_len;
 
-    p.sensor_rate_khz = sensor_rate_khz;
+            const uint16_t crc = crc16_ccitt(raw, off);
+            raw[off++] = (uint8_t)(crc & 0xFF);
+            raw[off++] = (uint8_t)((crc >> 8) & 0xFF);
 
-    TelemetryHeader h{};
-    h.magic = MAGIC;
-    h.version = VERSION;
-    h.msg_type = MSG_TELEMETRY;
-    h.payload_len = (uint16_t)sizeof(TelemetryPayloadV1);
-    h.seq = g_seq++;
-    h.time_us = now;
+            constexpr size_t RAW_MAX = sizeof(raw);
+            constexpr size_t COBS_MAX = RAW_MAX + (RAW_MAX / 254) + 2;
+            uint8_t enc[COBS_MAX];
 
-    // Build raw buffer: header + payload + crc
-    uint8_t raw[16 + 44 + 2];
-    size_t off = 0;
-    std::memcpy(raw + off, &h, sizeof(h)); off += sizeof(h);
-    std::memcpy(raw + off, &p, sizeof(p)); off += sizeof(p);
+            const size_t enc_len = cobs_encode(raw, off, enc, sizeof(enc));
+            if (enc_len) {
+                write_bytes_stdio(enc, enc_len);
+                putchar_raw('\0');
+                wrote_any = true;
+            }
+        }
+    }
 
-    const uint16_t crc = crc16_ccitt(raw, off);
-    raw[off++] = (uint8_t)(crc & 0xFF);
-    raw[off++] = (uint8_t)((crc >> 8) & 0xFF);
+    // Send DATA frame if we have any data to send OR we want a periodic sensor snapshot
+    const bool have_any_data = !q_empty() || include_sensor_snapshot;
+    if (have_any_data) {
+        uint8_t payload[240]; // tune to your USB/host parsing needs
+        const size_t p_len = build_data_payload(payload, sizeof(payload), ms, sensor_rate_khz, include_sensor_snapshot);
+        if (p_len > 1) { // >1 means at least header byte + one item
+            TelemetryHeader h{};
+            h.magic = MAGIC;
+            h.version = VERSION;
+            h.msg_type = MSG_DATA;
+            h.payload_len = (uint16_t)p_len;
+            h.seq = g_seq++;
+            h.time_us = now;
 
-    // COBS encode
-    // Worst-case expansion: n + n/254 + 1
-    constexpr size_t RAW_MAX = sizeof(raw);
-    constexpr size_t COBS_MAX = RAW_MAX + (RAW_MAX / 254) + 2;
-    uint8_t enc[COBS_MAX];
+            uint8_t raw[16 + sizeof(payload) + 2];
+            size_t off = 0;
+            std::memcpy(raw + off, &h, sizeof(h)); off += sizeof(h);
+            std::memcpy(raw + off, payload, p_len); off += p_len;
 
-    const size_t enc_len = cobs_encode(raw, off, enc, sizeof(enc));
-    if (enc_len == 0) return false;
+            const uint16_t crc = crc16_ccitt(raw, off);
+            raw[off++] = (uint8_t)(crc & 0xFF);
+            raw[off++] = (uint8_t)((crc >> 8) & 0xFF);
 
-    // Write encoded + delimiter 0x00
-    write_bytes_stdio(enc, enc_len);
-    putchar_raw('\0');
-    return true;
+            constexpr size_t RAW_MAX = sizeof(raw);
+            constexpr size_t COBS_MAX = RAW_MAX + (RAW_MAX / 254) + 2;
+            uint8_t enc[COBS_MAX];
+
+            const size_t enc_len = cobs_encode(raw, off, enc, sizeof(enc));
+            if (enc_len) {
+                write_bytes_stdio(enc, enc_len);
+                putchar_raw('\0');
+                wrote_any = true;
+            }
+        }
+    }
+
+    return wrote_any;
 }
 
 } // namespace Telemetry
