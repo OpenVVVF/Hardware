@@ -83,25 +83,19 @@ void MeasurementChannel::calibrateZero(float samples) {
 
 MeasurementSystem::MeasurementSystem(MAX2253x_MultiADC& adc) : m_adc(adc) {}
 
-void MeasurementSystem::resetEncoderTracking() {
-    m_encoder_sin_min = FLT_MAX;
-    m_encoder_sin_max = -FLT_MAX;
-    m_encoder_cos_min = FLT_MAX;
-    m_encoder_cos_max = -FLT_MAX;
-
-    m_encoder_tracking_initialized = false;
-
-    m_encoder_last_sin = 0.0f;
-    m_encoder_last_cos = 0.0f;
-    m_encoder_still_count = 0;
-    m_encoder_stationary = false;
-
-    m_encoder_cal_locked = false;
-    m_encoder_sin_center_locked = 0.0f;
-    m_encoder_cos_center_locked = 0.0f;
-    m_encoder_sin_amp_locked = 1.0f;
-    m_encoder_cos_amp_locked = 1.0f;
-}
+// void MeasurementSystem::resetEncoderTracking() {
+//     // m_encoder_cal_locked = false;
+//     // m_encoder_sin_center_locked = 0.0f;
+//     // m_encoder_cos_center_locked = 0.0f;
+//     // m_encoder_sin_amp_locked = 1.0f;
+//     // m_encoder_cos_amp_locked = 1.0f;
+//     //    m_enc_Sxx = 0.0;
+//     // m_enc_Sxy = 0.0;
+//     // m_enc_Syy2 = 0.0;
+//     // m_enc_stats_n = 0;
+//     // m_enc_k_locked = 0.0f;
+//     // m_enc_inv_y2_rms_locked = 1.0f;
+// }
 
 void MeasurementSystem::addChannel(const ChannelConfig& config) {
     auto ptr = std::make_unique<MeasurementChannel>(config);
@@ -198,64 +192,6 @@ void MeasurementSystem::update() {
             dc.ch->update(m_dev_cache[dev][dc.chan]);
         }
     }
-    // --- Encoder tracking ---
-    if (!m_encoder_tracking_active) return;
-    if (!m_encoder_sin_ch || !m_encoder_cos_ch) return;
-    if (m_encoder_sin_ch->isFaulted() || m_encoder_cos_ch->isFaulted()) return;
-
-    float sin_val = m_encoder_sin_ch->getValue();
-    float cos_val = m_encoder_cos_ch->getValue();
-
-    if (!m_encoder_tracking_initialized) {
-        m_encoder_sin_min = m_encoder_sin_max = sin_val;
-        m_encoder_cos_min = m_encoder_cos_max = cos_val;
-
-        m_encoder_last_sin = sin_val;
-        m_encoder_last_cos = cos_val;
-
-        m_encoder_still_count = 0;
-        m_encoder_stationary = false;
-
-        m_encoder_cal_locked = false;
-        m_encoder_tracking_initialized = true;
-        return;
-    }
-
-    constexpr float STILL_EPS = 0.0008f;
-    constexpr uint32_t STILL_N = 80;
-
-    float ds = fabsf(sin_val - m_encoder_last_sin);
-    float dc = fabsf(cos_val - m_encoder_last_cos);
-
-    if ((ds + dc) < STILL_EPS) {
-        if (m_encoder_still_count < 0xFFFFFFFFu) m_encoder_still_count++;
-    } else {
-        m_encoder_still_count = 0;
-    }
-    m_encoder_stationary = (m_encoder_still_count >= STILL_N);
-
-    m_encoder_last_sin = sin_val;
-    m_encoder_last_cos = cos_val;
-
-    if (!m_encoder_stationary && !m_encoder_cal_locked) {
-        if (sin_val < m_encoder_sin_min) m_encoder_sin_min = sin_val;
-        if (sin_val > m_encoder_sin_max) m_encoder_sin_max = sin_val;
-        if (cos_val < m_encoder_cos_min) m_encoder_cos_min = cos_val;
-        if (cos_val > m_encoder_cos_max) m_encoder_cos_max = cos_val;
-
-        float sin_amp = (m_encoder_sin_max - m_encoder_sin_min) * 0.5f;
-        float cos_amp = (m_encoder_cos_max - m_encoder_cos_min) * 0.5f;
-
-        constexpr float AMP_LOCK_MIN = 0.05f;
-
-        if (sin_amp > AMP_LOCK_MIN && cos_amp > AMP_LOCK_MIN) {
-            m_encoder_sin_center_locked = (m_encoder_sin_min + m_encoder_sin_max) * 0.5f;
-            m_encoder_cos_center_locked = (m_encoder_cos_min + m_encoder_cos_max) * 0.5f;
-            m_encoder_sin_amp_locked    = sin_amp;
-            m_encoder_cos_amp_locked    = cos_amp;
-            m_encoder_cal_locked = true;
-        }
-    }
 }
 
 float MeasurementSystem::read(const std::string& channel_name) const {
@@ -325,40 +261,33 @@ bool MeasurementSystem::isChannelFaulted(const std::string& name) const {
 }
 
 float MeasurementSystem::getRotorPositionDegrees() const {
-    auto sin_it = m_channels.find("ENCODER_SIN");
-    auto cos_it = m_channels.find("ENCODER_COS");
+    // Use cached pointers if available (fast), otherwise map lookup fallback.
+    const MeasurementChannel* sin_ch = m_encoder_sin_ch;
+    const MeasurementChannel* cos_ch = m_encoder_cos_ch;
 
-    if (sin_it == m_channels.end() || cos_it == m_channels.end()) {
-        return NAN;
+    if (!sin_ch || !cos_ch) {
+        auto sin_it = m_channels.find("ENCODER_SIN");
+        auto cos_it = m_channels.find("ENCODER_COS");
+        if (sin_it == m_channels.end() || cos_it == m_channels.end()) return NAN;
+        sin_ch = sin_it->second.get();
+        cos_ch = cos_it->second.get();
     }
 
-    float sin_val = sin_it->second->getValue();
-    float cos_val = cos_it->second->getValue();
+    if (sin_ch->isFaulted() || cos_ch->isFaulted()) return NAN;
 
-    // If we don't have locked calibration yet, provide a usable fallback.
-    // IMPORTANT: This won't be "absolute" until locked, but it's stable and avoids FLT_MAX math.
-    if (!m_encoder_tracking_initialized || !m_encoder_cal_locked) {
-        float angle_rad = atan2f(sin_val, cos_val);
-        float angle_deg = angle_rad * 180.0f / M_PI;
-        if (angle_deg < 0.0f) angle_deg += 360.0f;
-        return angle_deg;
-    }
+    const float sin_v = sin_ch->getRawVoltage();
+    const float cos_v = cos_ch->getRawVoltage();
 
-    float sin_centered = sin_val - m_encoder_sin_center_locked;
-    float cos_centered = cos_val - m_encoder_cos_center_locked;
+    // Fixed center+amp normalization using assumed raw range [0.154, 0.665]
+    float sin_n = (sin_v - ENC_CENTER_V) * ENC_INV_AMP_V;
+    float cos_n = (cos_v - ENC_CENTER_V) * ENC_INV_AMP_V;
 
-    // Normalize with locked amplitudes to handle different encoder gains.
-    float sin_amp = m_encoder_sin_amp_locked;
-    float cos_amp = m_encoder_cos_amp_locked;
+    // Optional: clamp to avoid atan2 weirdness if you overshoot slightly
+    // (harmless if your signals stay in range)
+    sin_n = std::clamp(sin_n, -1.2f, 1.2f);
+    cos_n = std::clamp(cos_n, -1.2f, 1.2f);
 
-    // Guard: never divide by tiny numbers (works across many encoder types)
-    constexpr float AMP_MIN = 0.02f; // 20mV
-    if (sin_amp > AMP_MIN && cos_amp > AMP_MIN) {
-        sin_centered /= sin_amp;
-        cos_centered /= cos_amp;
-    }
-
-    float angle_rad = atan2f(sin_centered, cos_centered);
+    float angle_rad = atan2f(sin_n, cos_n);
     float angle_deg = angle_rad * 180.0f / M_PI;
     if (angle_deg < 0.0f) angle_deg += 360.0f;
     return angle_deg;

@@ -166,12 +166,12 @@ MeasurementChannel* m_encoder_cos_ch = nullptr;
     float getRotorPositionDegrees() const; // Get angle (0-360°)
 
     // Encoder tracking controls
-    void resetEncoderTracking();
-    void setEncoderTracking(bool enable) { m_encoder_tracking_active = enable; }
-    bool isEncoderTrackingEnabled() const { return m_encoder_tracking_active; }
+    // void resetEncoderTracking();
+    // void setEncoderTracking(bool enable) { m_encoder_tracking_active = enable; }
+    // bool isEncoderTrackingEnabled() const { return m_encoder_tracking_active; }
 
-    // Optional: allow re-learning / locking behavior
-    bool isEncoderCalibrationLocked() const { return m_encoder_cal_locked; }
+    // // Optional: allow re-learning / locking behavior
+    // bool isEncoderCalibrationLocked() const { return m_encoder_cal_locked; }
 
     bool setZeroOffsetVolts(const std::string& name, float v) {
         auto it = m_channels.find(name);
@@ -193,30 +193,18 @@ private:
     std::unordered_map<std::string, std::unique_ptr<MeasurementChannel>> m_channels;
     std::vector<std::pair<size_t, uint8_t>> m_physical_map;  // Reverse lookup
 
-    // --- Encoder Tracking State (min/max + stationary detection + lock) ---
-    float m_encoder_sin_min = FLT_MAX;
-    float m_encoder_sin_max = -FLT_MAX;
-    float m_encoder_cos_min = FLT_MAX;
-    float m_encoder_cos_max = -FLT_MAX;
 
-    // Enable by default
-    bool m_encoder_tracking_active = true;
 
-    // New: track whether we've seen at least one valid sample
-    bool m_encoder_tracking_initialized = false;
+    // --- Fixed sin/cos encoder calibration (raw volts) ---
+static constexpr float ENC_RAW_MIN_V = 0.154f;
+static constexpr float ENC_RAW_MAX_V = 0.665f;
 
-    // Stationary detection
-    float m_encoder_last_sin = 0.0f;
-    float m_encoder_last_cos = 0.0f;
-    uint32_t m_encoder_still_count = 0;
-    bool m_encoder_stationary = false;
+// Center and amplitude derived from fixed min/max
+static constexpr float ENC_CENTER_V  = (ENC_RAW_MIN_V + ENC_RAW_MAX_V) * 0.5f; // 0.4095
+static constexpr float ENC_AMP_V     = (ENC_RAW_MAX_V - ENC_RAW_MIN_V) * 0.5f; // 0.2555
+static constexpr float ENC_INV_AMP_V = 1.0f / ENC_AMP_V;
 
-    // Locked calibration (prevents "same position, different angle")
-    bool  m_encoder_cal_locked = false;
-    float m_encoder_sin_center_locked = 0.0f;
-    float m_encoder_cos_center_locked = 0.0f;
-    float m_encoder_sin_amp_locked    = 1.0f;
-    float m_encoder_cos_amp_locked    = 1.0f;
+
      struct SensorEntry {
         uint16_t id;
         std::string* name;      // points into m_sensor_names storage

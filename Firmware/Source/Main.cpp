@@ -108,8 +108,8 @@ int main() {
         {0, 3, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 1.0f, "V_DC_BUS", 0.0f}, // DC Link bus
 
         // Device 2 (CS=15): Encoder signals (filtered for clean angle)
-        {2, 2, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "ENCODER_SIN", 0.0f}, // Encoder sine
-        {2, 1, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "ENCODER_COS", 0.0f},  // Encoder cosine
+        {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f}, // Encoder sine
+        {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},  // Encoder cosine
     
         // //phase v
         // {1, 1, SensorType::DIRECT, 0.0f, 0.0f, 0.05f, "NEW2", 0.0f},
