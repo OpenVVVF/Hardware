@@ -32,6 +32,9 @@ add_executable(${PROJECT_NAME}
 
     ${SOURCE_DIR}/Sensors/MeasurementSystem.cpp
     ${SOURCE_DIR}/Sensors/MAX2253x.cpp
+     ${SOURCE_DIR}/Telemetry.cpp
+
+
     # ${SOURCE_DIR}/svpwm.c
     ${SOURCE_DIR}/Command/CommandInitializer.cpp
     ${SOURCE_DIR}/Command/CommandManager.cpp

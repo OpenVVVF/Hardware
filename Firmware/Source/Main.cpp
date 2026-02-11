@@ -21,6 +21,7 @@
 
 #include "Sensors/MAX2253x.h"
 #include "Sensors/MeasurementSystem.h"
+#include "Telemetry.h"
 
 static CommutationManager zone_mgr;
 
@@ -36,7 +37,7 @@ static void configureZones() {
     // zone_mgr.addAsyncFixed(15.0f, 20.0f, 4000.0f);
 
 
-    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 20000.0f);
+    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 12000.0f);
 
     // zone_mgr.addRCFM(0.0f, 2000.0f, 1200.0f, 200.0f);
     // -- alstom wmata 2000/3000/6000 switching pattern
@@ -175,7 +176,7 @@ ChannelConfig w_current {
     sleep_ms(100);
     // measurements->calibrateCurrentSensors();
     float sum = 0.0f;
-    float i_u_sum, i_w_sum = 0.0f;
+    float i_u_sum = 0.0f, i_w_sum = 0.0f;
 const int N = 200;
 
 for (int i = 0; i < N; i++) {
@@ -204,7 +205,24 @@ measurements->setZeroOffsetVolts("I_PH_W", i_w_sum / N);
         // ---- Measurements (core0) ----
         measurements->update();
         updateCounter += 1;
+        // ---- Binary telemetry at >=100 Hz (core0) ----
+static uint32_t last_rate_us = time_us_32();
+static uint32_t updates_in_window = 0;
+updates_in_window++;
 
+uint32_t now_us = time_us_32();
+float sensor_rate_khz = 0.0f;
+if ((uint32_t)(now_us - last_rate_us) >= 1000000u) {
+    sensor_rate_khz = (float)updates_in_window / 1000.0f; // updates/sec -> kHz
+    updates_in_window = 0;
+    last_rate_us = now_us;
+}
+
+// send frame (default 100 Hz). Set to 5000us if you want 200 Hz, etc.
+Telemetry::send_frame(*measurements, ctx, sensor_rate_khz);
+
+        
+        
         // ---- Serial commands (core0) ----
         serial_proc.poll();
 

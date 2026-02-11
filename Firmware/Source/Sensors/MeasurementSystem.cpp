@@ -110,6 +110,24 @@ void MeasurementSystem::addChannel(const ChannelConfig& config) {
     // Avoid operator[] (can default-construct then assign). Use emplace:
     m_channels.emplace(config.name, std::move(ptr));
 
+    auto it = m_name_to_id.find(config.name);
+    if (it == m_name_to_id.end()) {
+        const uint16_t new_id = (uint16_t)(m_sensors.size() + 1);
+
+        // Store name in stable vector (so pointers don't depend on unordered_map storage)
+        m_sensor_names.push_back(config.name);
+        std::string* stable_name = &m_sensor_names.back();
+
+        m_name_to_id.emplace(*stable_name, new_id);
+        m_sensors.push_back(SensorEntry{ new_id, stable_name, raw });
+    } else {
+        // If re-adding a channel with same name (unusual), update pointer
+        const uint16_t id = it->second;
+        if (id >= 1 && id <= m_sensors.size()) {
+            m_sensors[id - 1].ch = raw;
+        }
+    }
+    
      // Ensure per-device arrays are large enough
     const size_t dev = config.device_index;
     if (m_dev_chans.size() <= dev) {

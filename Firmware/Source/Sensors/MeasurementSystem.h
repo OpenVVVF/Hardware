@@ -12,6 +12,12 @@
 #include <cfloat>  // For FLT_MAX
 #include "MAX2253x.h"
 
+#include <cstdint>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+
 enum class SensorType {
     VOLTAGE_DIVIDER,      // HV bus, battery voltage (unipolar)
     BIPOLAR_CURRENT,      // Shunt with offset (e.g., 0.5V = 0A, 2.5V = +Imax)
@@ -72,6 +78,31 @@ private:
 
 class MeasurementSystem {
 public:
+ struct SensorInfo {
+        uint16_t id;
+        const std::string* name;       // pointer stable as long as vector not reallocated
+        MeasurementChannel* ch;
+    };
+
+    // --- Dynamic sensor registry ---
+    uint16_t getSensorCount() const { return (uint16_t)m_sensors.size(); }
+
+    // Iterate sensors in ID order (fast, no map lookups)
+    template <typename Fn>
+    void forEachSensor(Fn&& fn) {
+        for (auto& s : m_sensors) fn(s.id, *s.name, s.ch);
+    }
+
+    // Convenience read by id (optional)
+    float readById(uint16_t id) const {
+        if (id == 0 || id > m_sensors.size()) return 0.0f;
+        return m_sensors[id - 1].ch->getValue();
+    }
+
+    const std::string* nameById(uint16_t id) const {
+        if (id == 0 || id > m_sensors.size()) return nullptr;
+        return m_sensors[id - 1].name;
+    }
     explicit MeasurementSystem(MAX2253x_MultiADC& adc);
     struct UpdateEntry {
     MeasurementChannel* ch;
@@ -186,4 +217,13 @@ private:
     float m_encoder_cos_center_locked = 0.0f;
     float m_encoder_sin_amp_locked    = 1.0f;
     float m_encoder_cos_amp_locked    = 1.0f;
+     struct SensorEntry {
+        uint16_t id;
+        std::string* name;      // points into m_sensor_names storage
+        MeasurementChannel* ch; // stable pointer owned by m_channels unique_ptr
+    };
+
+    std::vector<std::string> m_sensor_names;                // stable storage for names
+    std::unordered_map<std::string, uint16_t> m_name_to_id; // name -> id
+    std::vector<SensorEntry> m_sensors;                     // index = id-1
 };
