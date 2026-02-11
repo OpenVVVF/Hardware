@@ -5,113 +5,6 @@
 	(uuid "167bca41-78df-42fe-8b44-26c197d2d5de")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector:TestPoint"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.762)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "TP"
-				(at 0 6.858 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "TestPoint"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "test point"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "test point tp"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Pin* Test*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "TestPoint_0_1"
-				(circle
-					(center 0 3.302)
-					(radius 0.762)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "TestPoint_1_1"
-				(pin passive line
-					(at 0 0 90)
-					(length 2.54)
-					(name "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:C"
 			(pin_numbers
 				(hide yes)
@@ -234,610 +127,6 @@
 					(at 0 -3.81 90)
 					(length 2.794)
 					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Device:R"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "R"
-				(at 2.032 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "R"
-				(at 0 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at -1.778 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Resistor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "R res resistor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "R_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "R_0_1"
-				(rectangle
-					(start -1.016 -2.54)
-					(end 1.016 2.54)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "R_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 1.27)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 1.27)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "InverterCom:LTST-C230CKT"
-			(pin_names
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "LED"
-				(at 12.7 8.89 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Value" "LTST-C230CKT"
-				(at 12.7 6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Footprint" "LEDC3216X120N"
-				(at 12.7 -93.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 12.7 -193.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Description" "Standard LEDs - SMD Red Clear 638nm"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Height" "1.2"
-				(at 12.7 -393.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Mouser Part Number" "859-LTST-C230CKT"
-				(at 12.7 -493.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Lite-On/LTST-C230CKT?qs=Ajas4iFhtucdJAOTHdHdqw%3D%3D"
-				(at 12.7 -593.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Name" "Lite-On"
-				(at 12.7 -693.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Part_Number" "LTST-C230CKT"
-				(at 12.7 -793.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(symbol "LTST-C230CKT_1_1"
-				(polyline
-					(pts
-						(xy 2.54 0) (xy 5.08 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 0) (xy 10.16 2.54) (xy 10.16 -2.54) (xy 5.08 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.334 4.318) (xy 4.572 3.556) (xy 3.81 5.08) (xy 5.334 4.318)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.35 2.54) (xy 3.81 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.874 4.318) (xy 7.112 3.556) (xy 6.35 5.08) (xy 7.874 4.318)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 8.89 2.54) (xy 6.35 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 10.16 0) (xy 12.7 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 2.54)
-					(name "K"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 0 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "InverterCom:LTST-C230GKT"
-			(pin_names
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "LED"
-				(at 12.7 8.89 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Value" "LTST-C230GKT"
-				(at 12.7 6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Footprint" "LEDC3216X120N"
-				(at 12.7 -93.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 12.7 -193.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Description" "Lite-On LTST-C230GKT Green LED, 569 nm, 3016 (1206), Rectangle Lens SMD Package"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Height" "1.2"
-				(at 12.7 -393.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Mouser Part Number" "859-LTST-C230GKT"
-				(at 12.7 -493.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Lite-On/LTST-C230GKT?qs=7ZnIBiPc9DrbEstVFO1DAg%3D%3D"
-				(at 12.7 -593.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Name" "Lite-On"
-				(at 12.7 -693.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(property "Manufacturer_Part_Number" "LTST-C230GKT"
-				(at 12.7 -793.65 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-					(hide yes)
-				)
-			)
-			(symbol "LTST-C230GKT_1_1"
-				(polyline
-					(pts
-						(xy 2.54 0) (xy 5.08 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.08 0) (xy 10.16 2.54) (xy 10.16 -2.54) (xy 5.08 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 5.334 4.318) (xy 4.572 3.556) (xy 3.81 5.08) (xy 5.334 4.318)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.35 2.54) (xy 3.81 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 7.874 4.318) (xy 7.112 3.556) (xy 6.35 5.08) (xy 7.874 4.318)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(polyline
-					(pts
-						(xy 8.89 2.54) (xy 6.35 5.08)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 10.16 0) (xy 12.7 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 2.54)
-					(name "K"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 0 180)
-					(length 2.54)
-					(name "A"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1458,36 +747,6 @@
 		)
 		(uuid "2fab4d83-4c85-4519-a7f3-1d9af1250d8b")
 	)
-	(text "GREEN LED FOR +5V CURRENT SENSE RAIL"
-		(exclude_from_sim no)
-		(at 188.976 155.194 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "88703ea4-4a63-4530-a08f-653ae99cb9ca")
-	)
-	(text "GREEN LED FOR +3.3V ADC POWER"
-		(exclude_from_sim no)
-		(at 40.386 58.166 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "b480e2dd-0514-42fe-8d16-664d8a48d7b7")
-	)
-	(text "GREEN LED FOR +3.3V ADC POWER"
-		(exclude_from_sim no)
-		(at 39.116 148.336 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "e54a9aa0-8358-44b2-be7b-a18f90fe4b48")
-	)
 	(text "ADC2: CURRENT SENSE (DC LINK, PHU, PHV, PHW)"
 		(exclude_from_sim no)
 		(at 103.124 103.378 0)
@@ -1547,12 +806,6 @@
 		(uuid "734fbaaa-c6be-46bf-917e-9e8b9d02cccd")
 	)
 	(junction
-		(at 187.96 52.07)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "846a9e27-a890-48df-96e6-defaef85b5e1")
-	)
-	(junction
 		(at 160.02 30.48)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1577,12 +830,6 @@
 		(uuid "a264ee47-57c3-4ce2-b607-0b3c53868577")
 	)
 	(junction
-		(at 227.33 102.87)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a3ad7178-13d4-4f35-a203-906d209171b1")
-	)
-	(junction
 		(at 160.02 60.96)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1595,40 +842,16 @@
 		(uuid "b134c984-c46a-4deb-81c3-4a955903b2ef")
 	)
 	(junction
-		(at 224.79 91.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b1be204c-4d1e-4020-86fd-d612e88ff1f6")
-	)
-	(junction
 		(at 73.66 110.49)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b9ad116a-839b-41fa-bcf3-8bc98caff851")
 	)
 	(junction
-		(at 185.42 26.67)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d71bdd12-7df8-4c99-a15a-cade2d88ad96")
-	)
-	(junction
 		(at 124.46 115.57)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d8b59eba-d734-4833-864b-55c526e42fb9")
-	)
-	(junction
-		(at 229.87 114.3)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ddd3cd54-b4fe-4d31-91ac-43e39b58c382")
-	)
-	(junction
-		(at 231.14 125.73)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "de4ca429-628e-48a6-a831-b16ac9ec3d5c")
 	)
 	(junction
 		(at 96.52 40.64)
@@ -1647,18 +870,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e9e4ea0f-d663-4cc3-9f76-dc2ec8c735c3")
-	)
-	(junction
-		(at 185.42 64.77)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f09a65bf-cac0-40e3-81ae-62e8b7306c54")
-	)
-	(junction
-		(at 187.96 39.37)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f0cf23fb-cd2f-49b0-a8af-c3bcd1378156")
 	)
 	(junction
 		(at 83.82 40.64)
@@ -1756,16 +967,6 @@
 	)
 	(wire
 		(pts
-			(xy 185.42 66.04) (xy 185.42 64.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "20ad1e7e-13f2-4a07-9704-24d13420fc61")
-	)
-	(wire
-		(pts
 			(xy 73.66 118.11) (xy 85.09 118.11)
 		)
 		(stroke
@@ -1793,36 +994,6 @@
 			(type default)
 		)
 		(uuid "22806eec-b722-4fb9-9946-e760ac7f5279")
-	)
-	(wire
-		(pts
-			(xy 46.99 160.02) (xy 46.99 165.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "294168d2-f065-476f-aab9-7557d4961fda")
-	)
-	(wire
-		(pts
-			(xy 184.15 147.32) (xy 185.42 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2adcd6e1-dd38-4423-88ab-b9fe74abe534")
-	)
-	(wire
-		(pts
-			(xy 171.45 147.32) (xy 176.53 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2eb800e6-739e-4dad-8c51-41520a1ee4af")
 	)
 	(wire
 		(pts
@@ -2126,16 +1297,6 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 52.07) (xy 187.96 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7e1ffafe-ece5-4a30-aaaa-9983a8622c67")
-	)
-	(wire
-		(pts
 			(xy 57.15 110.49) (xy 60.96 110.49)
 		)
 		(stroke
@@ -2143,16 +1304,6 @@
 			(type default)
 		)
 		(uuid "805c672f-b804-4560-bfeb-498d41a11434")
-	)
-	(wire
-		(pts
-			(xy 200.66 147.32) (xy 205.74 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "80ef1fa8-42d3-41c5-bdaa-eb088a828460")
 	)
 	(wire
 		(pts
@@ -2196,7 +1347,7 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 125.73) (xy 237.49 125.73)
+			(xy 118.11 125.73) (xy 237.49 125.73)
 		)
 		(stroke
 			(width 0)
@@ -2243,16 +1394,6 @@
 			(type default)
 		)
 		(uuid "9dbca90c-8dff-49d3-9fac-1af459c1007d")
-	)
-	(wire
-		(pts
-			(xy 46.99 130.81) (xy 46.99 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e6de030-43c3-4299-90df-f8fcc4faf5a9")
 	)
 	(wire
 		(pts
@@ -2396,16 +1537,6 @@
 	)
 	(wire
 		(pts
-			(xy 118.11 125.73) (xy 231.14 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c666e3f1-783d-4676-bf2e-ed8e80c2a462")
-	)
-	(wire
-		(pts
 			(xy 252.73 114.3) (xy 255.27 114.3)
 		)
 		(stroke
@@ -2446,16 +1577,6 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 143.51) (xy 46.99 144.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d1833954-0913-4cac-8acd-bb518460a764")
-	)
-	(wire
-		(pts
 			(xy 107.95 38.1) (xy 110.49 38.1)
 		)
 		(stroke
@@ -2493,16 +1614,6 @@
 			(type default)
 		)
 		(uuid "d5a99830-c1a1-45ba-a1ae-3cbbee1c7603")
-	)
-	(wire
-		(pts
-			(xy 48.26 40.64) (xy 48.26 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d61ab014-35a6-4382-8f9c-e6416c039fc3")
 	)
 	(wire
 		(pts
@@ -2576,16 +1687,6 @@
 	)
 	(wire
 		(pts
-			(xy 48.26 69.85) (xy 48.26 74.93)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f1085842-b802-496b-98ba-c4c55fa0f09c")
-	)
-	(wire
-		(pts
 			(xy 229.87 114.3) (xy 229.87 123.19)
 		)
 		(stroke
@@ -2644,16 +1745,6 @@
 		)
 		(uuid "feb2f39f-fa40-41b5-9495-36e9aad7a9c8")
 	)
-	(wire
-		(pts
-			(xy 48.26 53.34) (xy 48.26 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ffe61895-f683-49ee-9ae3-e7a816710d68")
-	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
 		(at 57.15 118.11 180)
@@ -2687,17 +1778,6 @@
 		)
 		(uuid "0ed6948a-d522-46ae-843b-53f3af6fc5cb")
 	)
-	(hierarchical_label "ISENSE_GND_C"
-		(shape input)
-		(at 156.21 99.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1067da25-e5c6-4d51-8b48-972f97ddc62c")
-	)
 	(hierarchical_label "VSENSE_GND_B"
 		(shape input)
 		(at 212.09 54.61 0)
@@ -2708,17 +1788,6 @@
 			(justify left)
 		)
 		(uuid "143cfe3f-7419-439d-80b7-57c9b26aeeae")
-	)
-	(hierarchical_label "+3.3V_A"
-		(shape input)
-		(at 48.26 40.64 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "19a5f612-50d2-4674-8ddc-81364b99118c")
 	)
 	(hierarchical_label "ISENSE_PH_V_C"
 		(shape input)
@@ -2786,17 +1855,6 @@
 		)
 		(uuid "30fe6353-311f-488a-a932-a186fb9c5dbe")
 	)
-	(hierarchical_label "GND_A"
-		(shape input)
-		(at 48.26 74.93 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "314326bf-ef16-4673-9fef-3565dc5d8ee7")
-	)
 	(hierarchical_label "VSENSE_PH_U_B"
 		(shape input)
 		(at 212.09 52.07 0)
@@ -2818,17 +1876,6 @@
 			(justify left)
 		)
 		(uuid "32175b81-dc8e-4eff-93d3-a96b833a3cf5")
-	)
-	(hierarchical_label "ISENSE_+5V_C"
-		(shape input)
-		(at 171.45 147.32 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "32c5d26f-a46d-43ee-ba87-027874cd962c")
 	)
 	(hierarchical_label "SPI_RX_A"
 		(shape input)
@@ -2962,17 +2009,6 @@
 		)
 		(uuid "7772f371-385d-40a4-b3e1-4abc1082ec0f")
 	)
-	(hierarchical_label "ISENSE_GND_C"
-		(shape input)
-		(at 205.74 147.32 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "8622e38b-d325-4192-95b0-8364e00bf306")
-	)
 	(hierarchical_label "VSENSE_GND_B"
 		(shape input)
 		(at 212.09 67.31 0)
@@ -3005,17 +2041,6 @@
 			(justify right)
 		)
 		(uuid "a2646e5e-1ee9-490d-8063-9b58aa411c88")
-	)
-	(hierarchical_label "GND_A"
-		(shape input)
-		(at 46.99 165.1 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a3a19b8e-51a2-433f-9f22-b77a97e21f28")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -3071,17 +2096,6 @@
 			(justify right)
 		)
 		(uuid "d58d77db-427e-46d7-96c0-0106ee237a44")
-	)
-	(hierarchical_label "+3.3V_A"
-		(shape input)
-		(at 46.99 130.81 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d943c433-02a3-408b-bb4d-07a5176cb7b8")
 	)
 	(hierarchical_label "ISENSE_PH_W_C"
 		(shape input)
@@ -3148,17 +2162,6 @@
 			(justify left)
 		)
 		(uuid "f7d41c4a-88be-4b94-9abf-a7ffba363030")
-	)
-	(hierarchical_label "VSENSE_GND_B"
-		(shape input)
-		(at 149.86 66.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ff597bc6-e327-4902-b336-21cea56cc9b7")
 	)
 	(symbol
 		(lib_id "Device:C")
@@ -3295,212 +2298,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
 					(reference "C2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 46.99 139.7 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "11a34699-cf0d-41c2-a543-46146f57fbb8")
-		(property "Reference" "R125"
-			(at 49.53 138.4299 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "220"
-			(at 49.53 140.9699 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 48.768 139.7 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 46.99 139.7 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 46.99 139.7 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "78cca953-a08f-4ee9-85fd-acd2a8de276c")
-		)
-		(pin "2"
-			(uuid "7e8e20e0-ac80-42d4-87c9-774a530f973d")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "R125")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 48.26 49.53 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1e8541be-cc01-442f-989f-18ae3af54092")
-		(property "Reference" "R4"
-			(at 50.8 48.2599 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "220"
-			(at 50.8 50.7999 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 50.038 49.53 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 48.26 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 48.26 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "61c6bb77-697b-4871-b45f-8d55a1e2aa05")
-		)
-		(pin "2"
-			(uuid "3eddc94b-228a-470f-ab47-4bb9c9359b3c")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "R4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 187.96 53.34 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "1fdb4194-ed06-4578-bf88-b56e76cd9e5f")
-		(property "Reference" "TP6"
-			(at 187.452 58.42 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 189.484 58.166 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 182.88 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 182.88 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 187.96 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ed7dc0e4-c3ab-4c36-894a-e0765cc31794")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP6")
 					(unit 1)
 				)
 			)
@@ -3705,128 +2502,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:LTST-C230CKT")
-		(at 200.66 147.32 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "3342233a-cdfc-41a7-a279-4b21c5a51617")
-		(property "Reference" "LED2"
-			(at 191.7699 143.51 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "LTST-C230CKT"
-			(at 194.3099 143.51 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "InverterCom:LEDC3216X120N"
-			(at 187.96 53.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 187.96 -46.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Description" "Standard LEDs - SMD Red Clear 638nm"
-			(at 200.66 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Height" "1.2"
-			(at 187.96 -246.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Mouser Part Number" "859-LTST-C230CKT"
-			(at 187.96 -346.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Lite-On/LTST-C230CKT?qs=Ajas4iFhtucdJAOTHdHdqw%3D%3D"
-			(at 187.96 -446.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "Lite-On"
-			(at 187.96 -546.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "LTST-C230CKT"
-			(at 187.96 -646.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "609ddd2d-037a-4cf6-8a9f-8aba26280a4a")
-		)
-		(pin "1"
-			(uuid "5b47823d-fca4-43cc-abad-9d870d56b29e")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "LED2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 147.32 57.15 0)
 		(unit 1)
@@ -3896,194 +2571,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:LTST-C230GKT")
-		(at 48.26 69.85 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "37c7de2c-00cc-42c6-a3e0-ee0e23be09f7")
-		(property "Reference" "LED1"
-			(at 52.07 60.9599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "LTST-C230GKT"
-			(at 52.07 63.4999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "InverterCom:LEDC3216X120N"
-			(at 141.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 241.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Description" "Lite-On LTST-C230GKT Green LED, 569 nm, 3016 (1206), Rectangle Lens SMD Package"
-			(at 48.26 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Height" "1.2"
-			(at 441.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Mouser Part Number" "859-LTST-C230GKT"
-			(at 541.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Lite-On/LTST-C230GKT?qs=7ZnIBiPc9DrbEstVFO1DAg%3D%3D"
-			(at 641.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "Lite-On"
-			(at 741.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "LTST-C230GKT"
-			(at 841.91 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "95399464-035f-4490-83ce-be36f725a6e8")
-		)
-		(pin "2"
-			(uuid "1b91ed68-1167-455b-8cba-2e15c0228af3")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "LED1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 224.79 91.44 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "3afe06b6-c7e1-4ae6-a285-363a57eb2431")
-		(property "Reference" "TP7"
-			(at 225.298 86.36 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 223.266 86.614 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 229.87 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 229.87 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 224.79 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9047aacd-8fcd-4f61-9aca-1a61718a6948")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 124.46 134.62 0)
 		(unit 1)
@@ -4147,204 +2634,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
 					(reference "C6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 187.96 39.37 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "562daa8a-178b-469f-8d41-f4762429c240")
-		(property "Reference" "TP5"
-			(at 188.468 34.29 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 186.436 34.544 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 193.04 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 193.04 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 187.96 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "af7c92dc-9f3e-4684-919a-6c9179a97bd4")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 149.86 66.04 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "56a28e1f-76a3-4900-a028-52d44d1b7338")
-		(property "Reference" "TP1"
-			(at 144.78 65.532 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 145.034 67.564 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 149.86 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 149.86 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 149.86 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "4e1b68b3-c58f-49e1-a2bd-ace4dfded5ed")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 156.21 99.06 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6221af31-10de-4794-accf-db6d9715cc68")
-		(property "Reference" "TP2"
-			(at 151.13 98.552 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 151.384 100.584 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 156.21 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 156.21 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 156.21 99.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "777d4f26-0a8a-45c1-8918-5663d5575a2b")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP2")
 					(unit 1)
 				)
 			)
@@ -4421,72 +2710,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 227.33 102.87 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6a657a36-df65-4ddb-8888-b26ce3787188")
-		(property "Reference" "TP8"
-			(at 227.838 97.79 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 225.806 98.044 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 232.41 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 232.41 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 227.33 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "35d0f74c-0340-480c-b031-cd7d0f931b74")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 124.46 111.76 0)
 		(unit 1)
@@ -4556,72 +2779,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 185.42 26.67 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9c757dd9-21b0-4aeb-a1a5-f8940a3e7c72")
-		(property "Reference" "TP3"
-			(at 185.928 21.59 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 183.896 21.844 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 190.5 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 190.5 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ad934f97-b2d3-419b-be26-8b2b0b97bff5")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C")
 		(at 83.82 36.83 0)
 		(unit 1)
@@ -4685,72 +2842,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
 					(reference "C3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 231.14 125.73 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a6b388f2-40f3-4959-b669-54041594c51e")
-		(property "Reference" "TP10"
-			(at 230.632 130.81 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 232.664 130.556 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 226.06 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 226.06 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 231.14 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "bc90b51c-f048-455a-bed9-96308566f83f")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP10")
 					(unit 1)
 				)
 			)
@@ -4913,72 +3004,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
 					(reference "IC2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 229.87 114.3 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ab0516d2-4b1a-4242-98ee-1d00cb862cff")
-		(property "Reference" "TP9"
-			(at 230.378 109.22 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 228.346 109.474 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 234.95 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 234.95 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 229.87 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "57bf6a84-7274-4de8-b26f-e1ce99e75060")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP9")
 					(unit 1)
 				)
 			)
@@ -5263,142 +3288,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 180.34 147.32 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ddd21ac4-8b87-4bae-bd42-312e4d80dfa7")
-		(property "Reference" "R5"
-			(at 179.0699 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "1k"
-			(at 181.6099 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 180.34 145.542 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 180.34 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 180.34 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9b2d21b7-cac4-4132-8ddf-b08de4534542")
-		)
-		(pin "2"
-			(uuid "a3fb9811-7540-40e6-94aa-75bbe404e053")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "R5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 185.42 66.04 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "e8ce2cfb-bf73-4e9d-a440-2b603f6c9584")
-		(property "Reference" "TP4"
-			(at 184.912 71.12 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 186.944 70.866 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.54mm_Drill1.5mm_Beaded"
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 180.34 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 185.42 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "8af856c8-cd42-42ee-bf75-8dda690f0b49")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "TP4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:MAX22530AWE+")
 		(at 118.11 130.81 180)
 		(unit 1)
@@ -5555,128 +3444,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
 					(reference "IC1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:LTST-C230GKT")
-		(at 46.99 160.02 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f43dd526-311d-4c11-a10e-42ab0af0fb31")
-		(property "Reference" "LED35"
-			(at 50.8 151.1299 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "LTST-C230GKT"
-			(at 50.8 153.6699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "InverterCom:LEDC3216X120N"
-			(at 140.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 240.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Description" "Lite-On LTST-C230GKT Green LED, 569 nm, 3016 (1206), Rectangle Lens SMD Package"
-			(at 46.99 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Height" "1.2"
-			(at 440.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Mouser Part Number" "859-LTST-C230GKT"
-			(at 540.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Lite-On/LTST-C230GKT?qs=7ZnIBiPc9DrbEstVFO1DAg%3D%3D"
-			(at 640.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "Lite-On"
-			(at 740.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "LTST-C230GKT"
-			(at 840.64 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "208c6518-9c8c-4154-9bca-0274f6469adc")
-		)
-		(pin "2"
-			(uuid "fecbb941-f87a-417f-83c4-2b93b9a4e087")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/526e8f9d-16b3-45e7-a64f-e093936231e3"
-					(reference "LED35")
 					(unit 1)
 				)
 			)
