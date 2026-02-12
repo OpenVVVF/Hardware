@@ -159,13 +159,26 @@ private:
     static constexpr float ENC_INV_AMP_V = 1.0f / ENC_AMP_V;
 
 
+    public:
+    // --- Telemetry / external read-only sensor registry ---
     struct SensorEntry {
-        uint16_t id;
-        std::string* name;
-        MeasurementChannel* ch;
+        uint16_t id;                 // stable within a boot (or stable across boots if you keep channel add order fixed)
+        std::string name;            // owned storage (NO dangling pointers)
+        MeasurementChannel* ch;      // pointer owned by MeasurementSystem via unique_ptr in m_channels
     };
 
-    std::vector<std::string> m_sensor_names;
+    // Telemetry can iterate this in init() to register names, and in update() to read values.
+    const std::vector<SensorEntry>& sensors() const { return m_sensors; }
+    size_t sensorCount() const { return m_sensors.size(); }
+
+    // Optional convenience: O(1) access by id (since ids are 1..N)
+    const SensorEntry* findSensorById(uint16_t id) const {
+        if (id == 0 || id > m_sensors.size()) return nullptr;
+        return &m_sensors[id - 1];
+    }
+
+private:
     std::unordered_map<std::string, uint16_t> m_name_to_id;
     std::vector<SensorEntry> m_sensors;
+
 };
