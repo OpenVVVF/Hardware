@@ -73,7 +73,8 @@ int main() {
     printf("Current sensor calibration complete.\n\n");
 
     Telemetry::set_period_us(10000); // 100 Hz
-    Telemetry::init(*measurements);
+    Telemetry::init(); 
+    Telemetry::bindMeasurementSystem(*measurements);
 
     absolute_time_t last_print = get_absolute_time();
     absolute_time_t last_telemetry = get_absolute_time();
@@ -83,7 +84,7 @@ int main() {
         measurements->update();
         updateCounter += 1;
 
-        Telemetry::updateSensors(*measurements);
+        Telemetry::updateSensors();
         Telemetry::log("ROTOR_DEG", measurements->getRotorPositionDegrees());
         serial_proc.poll();
 
