@@ -20,7 +20,7 @@ void set_period_us(uint32_t period_us);
 uint32_t get_period_us();
 
 // Optional: call once at boot to define known sensor keys upfront (so DATA is tiny)
-void init_default_sensors(); // uses a built-in list you define in .cpp
+void init(const MeasurementSystem& ms); // uses a built-in list you define in .cpp
 
 // Dynamic logging
 bool log(const char* key, float value);

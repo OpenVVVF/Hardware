@@ -2,13 +2,13 @@
 #include "pico/stdlib.h"
 #include <cstring>
 #include <cstdint>
+#include <algorithm>
 
 // Forward decls from your project
 #include "Sensors/MeasurementSystem.h"
 #include "Command/CommandContext.h"
 
 namespace Telemetry {
-
 
 // ---------------- CRC16-CCITT (0x1021, init 0xFFFF) ----------------
 static uint16_t crc16_ccitt(const uint8_t* data, size_t len) {
@@ -73,18 +73,24 @@ struct TelemetryHeader {
 
 static_assert(sizeof(TelemetryHeader) == 16, "Header size mismatch");
 
-// ---------------- Key registry (no heap) ----------------
-// We avoid resending keys by assigning an ID the first time we see a key.
-// DEFINE sends: [u16 id][u8 type][u8 key_len][key bytes]
-// DATA sends:   repeated items: [u16 id][u8 type][value...]
+// ---------------- Types ----------------
 enum ValueType : uint8_t {
     VT_F32 = 1,
     VT_STR = 2,
 };
 
-static constexpr uint16_t MAX_KEYS   = 128;
-static constexpr uint8_t  KEY_MAXLEN = 32;   // stored once in MCU
-static constexpr uint8_t  STR_MAXLEN = 48;   // sent per string sample
+// ---------------- Limits ----------------
+static constexpr uint16_t MAX_KEYS   = 128;  // for dynamic keys created via Telemetry::log()
+static constexpr uint8_t  KEY_MAXLEN = 32;
+static constexpr uint8_t  STR_MAXLEN = 48;
+
+static constexpr uint16_t LOGQ_MAX   = 256;
+static constexpr uint16_t DEFQ_MAX   = 256;  // allow initial sensor defs burst
+static constexpr uint16_t MAX_SENSORS = 128; // max MeasurementSystem sensors exposed to telemetry
+
+// ---------------- Key registry (dynamic keys only; no heap) ----------------
+// DEFINE sends: [u16 id][u8 type][u8 key_len][key bytes]
+// DATA sends:   repeated items: [u16 id][u8 type][value...]
 struct KeyEntry {
     uint16_t id = 0;
     uint32_t hash = 0;
@@ -95,9 +101,9 @@ struct KeyEntry {
 };
 
 static KeyEntry g_keys[MAX_KEYS];
-static uint16_t g_next_id = 1;
+static uint16_t g_next_id = 1; // will be set in init() to avoid collisions with sensor IDs
 
-// FNV-1a 32-bit (fast, good enough)
+// FNV-1a 32-bit
 static uint32_t fnv1a(const char* s) {
     uint32_t h = 2166136261u;
     while (*s) {
@@ -119,6 +125,7 @@ static int find_key_index(const char* key, uint32_t h) {
 static int allocate_key(const char* key, uint32_t h, uint8_t type) {
     for (int i = 0; i < (int)MAX_KEYS; ++i) {
         if (g_keys[i].used) continue;
+
         g_keys[i].used = true;
         g_keys[i].id   = g_next_id++;
         g_keys[i].hash = h;
@@ -130,13 +137,10 @@ static int allocate_key(const char* key, uint32_t h, uint8_t type) {
         g_keys[i].key[klen] = '\0';
         return i;
     }
-    return -1; // table full
+    return -1;
 }
 
 // ---------------- Log queue (no heap) ----------------
-// We queue samples; send_frame flushes them periodically.
-static constexpr uint16_t LOGQ_MAX = 256;
-
 struct LogItem {
     uint16_t id = 0;
     uint8_t  type = 0;
@@ -170,8 +174,7 @@ static bool q_pop(LogItem& out) {
     return true;
 }
 
-// ---------------- Define queue (so DEFINE always precedes DATA) ----------------
-static constexpr uint16_t DEFQ_MAX = 128;
+// ---------------- Define queue ----------------
 struct DefItem {
     uint16_t id;
     uint8_t  type;
@@ -193,7 +196,7 @@ static bool d_push(uint16_t id, uint8_t type, const char* key, uint8_t key_len) 
     d.type = type;
     d.key_len = key_len;
     std::memset(d.key, 0, sizeof(d.key));
-    std::memcpy(d.key, key, key_len);
+    if (key_len) std::memcpy(d.key, key, key_len);
     g_d_tail = (uint16_t)(g_d_tail + 1) % DEFQ_MAX;
     return true;
 }
@@ -205,6 +208,17 @@ static bool d_pop(DefItem& out) {
     return true;
 }
 
+// ---------------- Sensor bindings (from MeasurementSystem) ----------------
+struct SensorBinding {
+    uint16_t id = 0;
+    uint8_t  name_len = 0;
+    char     name[KEY_MAXLEN] = {};
+    const MeasurementChannel* ch = nullptr;  // read-only access
+};
+
+static SensorBinding g_sensors[MAX_SENSORS];
+static uint16_t g_sensor_count = 0;
+
 // ---------------- Rate limiting ----------------
 static uint32_t g_seq = 0;
 static uint32_t g_period_us = 10000; // 100 Hz default
@@ -212,52 +226,44 @@ static uint32_t g_last_send_us = 0;
 
 void set_period_us(uint32_t period_us) { g_period_us = period_us; }
 uint32_t get_period_us() { return g_period_us; }
-// add near globals
+
+// Re-announce defines periodically (helps host resync)
 static uint32_t g_last_define_us = 0;
-static constexpr uint32_t DEFINE_REANNOUNCE_US = 100000; // 10 Hz for first few seconds
+static constexpr uint32_t DEFINE_REANNOUNCE_US = 100000; // 10 Hz (tune as desired)
 
+// ---------------- Small helpers ----------------
+static inline void put_u16(uint8_t*& w, uint16_t v) { *w++ = (uint8_t)(v & 0xFF); *w++ = (uint8_t)(v >> 8); }
+static inline void put_u32(uint8_t*& w, uint32_t v) { *w++ = (uint8_t)(v); *w++ = (uint8_t)(v >> 8); *w++ = (uint8_t)(v >> 16); *w++ = (uint8_t)(v >> 24); }
+static inline void put_f32(uint8_t*& w, float f) {
+    static_assert(sizeof(float) == 4, "float must be 32-bit");
+    std::memcpy(w, &f, 4);
+    w += 4;
+}
 
+static void reset_queues_and_tables() {
+    // defs + logs
+    g_q_head = g_q_tail = 0;
+    g_d_head = g_d_tail = 0;
+
+    // dynamic keys
+    for (auto& k : g_keys) k = KeyEntry{};
+}
+
+// Push *all* known definitions again (sensor defs + dynamic keys)
 static void enqueue_all_definitions() {
+    // 1) Measurement sensors
+    for (uint16_t i = 0; i < g_sensor_count; ++i) {
+        const auto& s = g_sensors[i];
+        d_push(s.id, VT_F32, s.name, s.name_len);
+    }
+    // 2) Dynamic keys
     for (int i = 0; i < (int)MAX_KEYS; ++i) {
         if (!g_keys[i].used) continue;
-        // push (id,type,key) again; host will just overwrite same mapping
         d_push(g_keys[i].id, g_keys[i].type, g_keys[i].key, g_keys[i].key_len);
     }
 }
 
-// ---------------- Default sensors you want every frame ----------------
-// Add/remove to match your project.
-static const char* DEFAULT_SENSORS[] = {
-    "V_DC_BUS",
-    "V_PH_U",
-    "V_PH_V",
-    "V_PH_W",
-    "I_DC_MAIN",
-    "I_PH_U",
-    "I_PH_W",
-    "ENCODER_SIN",
-    "ENCODER_COS",
-    // You can also register derived values as their own IDs:
-    "ROTOR_DEG",
-};
-
-static constexpr size_t DEFAULT_SENSORS_N = sizeof(DEFAULT_SENSORS) / sizeof(DEFAULT_SENSORS[0]);
-
-void init_default_sensors() {
-    for (size_t i = 0; i < DEFAULT_SENSORS_N; ++i) {
-        const char* k = DEFAULT_SENSORS[i];
-        const uint32_t h = fnv1a(k);
-        int idx = find_key_index(k, h);
-        if (idx < 0) {
-            idx = allocate_key(k, h, VT_F32);
-            if (idx >= 0) {
-                d_push(g_keys[idx].id, g_keys[idx].type, g_keys[idx].key, g_keys[idx].key_len);
-            }
-        }
-    }
-}
-
-// ---------------- Public logging API ----------------
+// ---------------- Public logging API (dynamic extra keys) ----------------
 bool log(const char* key, float value) {
     if (!key) return false;
     const uint32_t h = fnv1a(key);
@@ -265,10 +271,8 @@ bool log(const char* key, float value) {
     if (idx < 0) {
         idx = allocate_key(key, h, VT_F32);
         if (idx < 0) return false;
-        // enqueue DEFINE once
         d_push(g_keys[idx].id, g_keys[idx].type, g_keys[idx].key, g_keys[idx].key_len);
     } else if (g_keys[idx].type != VT_F32) {
-        // type mismatch; refuse (or you could allocate a separate key variant)
         return false;
     }
 
@@ -302,16 +306,45 @@ bool log(const char* key, const char* value) {
     return q_push(it);
 }
 
-// ---------------- Frame building helpers ----------------
-static inline void put_u16(uint8_t*& w, uint16_t v) { *w++ = (uint8_t)(v & 0xFF); *w++ = (uint8_t)(v >> 8); }
-static inline void put_u32(uint8_t*& w, uint32_t v) { *w++ = (uint8_t)(v); *w++ = (uint8_t)(v >> 8); *w++ = (uint8_t)(v >> 16); *w++ = (uint8_t)(v >> 24); }
-static inline void put_f32(uint8_t*& w, float f) {
-    static_assert(sizeof(float) == 4, "float must be 32-bit");
-    std::memcpy(w, &f, 4);
-    w += 4;
+// ---------------- Init from MeasurementSystem ----------------
+// Call once at startup, after MeasurementSystem has added channels.
+void init(const MeasurementSystem& ms) {
+    reset_queues_and_tables();
+
+    g_seq = 0;
+    g_last_send_us = 0;
+    g_last_define_us = 0;
+
+    // Build sensor bindings from MeasurementSystem registry
+    g_sensor_count = 0;
+    const auto& sensors = ms.sensors();
+
+    const size_t n = std::min<size_t>(sensors.size(), MAX_SENSORS);
+    for (size_t i = 0; i < n; ++i) {
+        const auto& s = sensors[i];
+
+        SensorBinding& b = g_sensors[g_sensor_count++];
+        b.id = s.id;
+        b.ch = s.ch;
+
+        const size_t name_len = std::min<size_t>(s.name.size(), KEY_MAXLEN - 1);
+        b.name_len = (uint8_t)name_len;
+        std::memset(b.name, 0, sizeof(b.name));
+        if (name_len) std::memcpy(b.name, s.name.data(), name_len);
+        b.name[name_len] = '\0';
+
+        // Queue a DEFINE for this sensor immediately
+        d_push(b.id, VT_F32, b.name, b.name_len);
+    }
+
+    // Ensure dynamic keys allocated via Telemetry::log() won't collide with sensor IDs.
+    // Sensor IDs are 1..N in your scheme, so start after max sensor id.
+    uint16_t max_id = 0;
+    for (uint16_t i = 0; i < g_sensor_count; ++i) max_id = std::max<uint16_t>(max_id, g_sensors[i].id);
+    g_next_id = (uint16_t)(max_id + 1);
 }
 
-// Returns bytes written into payload (not including header)
+// ---------------- Payload building ----------------
 static size_t build_define_payload(uint8_t* payload, size_t cap) {
     // format: [u8 n_defs] repeated: [u16 id][u8 type][u8 key_len][key bytes]
     if (cap < 1) return 0;
@@ -324,17 +357,15 @@ static size_t build_define_payload(uint8_t* payload, size_t cap) {
         if (!d_pop(d)) break;
 
         const size_t need = 2 + 1 + 1 + d.key_len;
-        if ((size_t)(w - payload) + need > cap) {
-            // no space: push back? simplest: drop (or you can keep it by not popping until fits)
-            // For robustness, you'd implement "peek" instead of pop; keeping simple here.
-            break;
-        }
+        if ((size_t)(w - payload) + need > cap) break;
 
         put_u16(w, d.id);
         *w++ = d.type;
         *w++ = d.key_len;
-        std::memcpy(w, d.key, d.key_len);
-        w += d.key_len;
+        if (d.key_len) {
+            std::memcpy(w, d.key, d.key_len);
+            w += d.key_len;
+        }
         n++;
     }
 
@@ -342,45 +373,31 @@ static size_t build_define_payload(uint8_t* payload, size_t cap) {
     return (size_t)(w - payload);
 }
 
-static size_t build_data_payload(uint8_t* payload, size_t cap,
-                                const MeasurementSystem& ms)
-{
+static size_t build_data_payload(uint8_t* payload, size_t cap) {
     // format:
     // [u8 n_items]
     // repeated items:
     //   [u16 id][u8 type][value...]
-    // value:
-    //   VT_F32: 4 bytes
-    //   VT_STR: [u8 len][bytes...]
     if (cap < 1) return 0;
     uint8_t* w = payload;
     *w++ = 0; // n_items placeholder
     uint8_t n = 0;
 
-    // 1) Include sensor snapshot (registered default sensors) first (optional)
-        // We assume init_default_sensors() was called, so IDs exist.
-        for (size_t i = 0; i < DEFAULT_SENSORS_N; ++i) {
-            const char* k = DEFAULT_SENSORS[i];
-            const uint32_t h = fnv1a(k);
-            const int idx = find_key_index(k, h);
-            if (idx < 0) continue;
+    // 1) Sensor snapshot from MeasurementSystem (no hardcoded list)
+    for (uint16_t i = 0; i < g_sensor_count; ++i) {
+        const auto& s = g_sensors[i];
+        if (!s.ch) continue;
 
-            float v = 0.0f;
-            if (std::strcmp(k, "ROTOR_DEG") == 0) {
-                v = ms.getRotorPositionDegrees();
-            } else {
-                v = ms.read(k);
-            }
+        const size_t need = 2 + 1 + 4;
+        if ((size_t)(w - payload) + need > cap) break;
 
-            const size_t need = 2 + 1 + 4;
-            if ((size_t)(w - payload) + need > cap) break;
-            put_u16(w, g_keys[idx].id);
-            *w++ = VT_F32;
-            put_f32(w, v);
-            n++;
-        }
+        put_u16(w, s.id);
+        *w++ = VT_F32;
+        put_f32(w, s.ch->getValue());
+        n++;
+    }
 
-    // 2) Drain queued log items
+    // 2) Drain queued dynamic log items
     while (!q_empty()) {
         LogItem it{};
         if (!q_pop(it)) break;
@@ -390,10 +407,7 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
         else if (it.type == VT_STR) need = 2 + 1 + 1 + it.v.str.len;
         else continue;
 
-        if ((size_t)(w - payload) + need > cap) {
-            // not enough room; drop remainder this cycle (or push back with a real ring "peek")
-            break;
-        }
+        if ((size_t)(w - payload) + need > cap) break;
 
         put_u16(w, it.id);
         *w++ = it.type;
@@ -401,8 +415,10 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
             put_f32(w, it.v.f32);
         } else {
             *w++ = it.v.str.len;
-            std::memcpy(w, it.v.str.bytes, it.v.str.len);
-            w += it.v.str.len;
+            if (it.v.str.len) {
+                std::memcpy(w, it.v.str.bytes, it.v.str.len);
+                w += it.v.str.len;
+            }
         }
         n++;
     }
@@ -411,23 +427,24 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
     return (size_t)(w - payload);
 }
 
-// ---------------- Public send_frame ----------------
-bool updateSensors(const MeasurementSystem& ms)
-{
+// ---------------- Public updateSensors (sends frames) ----------------
+bool updateSensors(const MeasurementSystem& /*ms*/) {
     const uint32_t now = time_us_32();
+
+    // Periodically re-announce defines so host can resync
     if ((uint32_t)(now - g_last_define_us) > DEFINE_REANNOUNCE_US) {
-    enqueue_all_definitions();
-    g_last_define_us = now;
-}
+        enqueue_all_definitions();
+        g_last_define_us = now;
+    }
 
     if ((uint32_t)(now - g_last_send_us) < g_period_us) return false;
     g_last_send_us = now;
 
     bool wrote_any = false;
 
-    // If we have new definitions, send a DEFINE frame first (so host can decode following DATA)
+    // 1) Send DEFINE frame if queued
     if (!d_empty()) {
-        uint8_t payload[200]; // keep small; adjust if you define many keys at once
+        uint8_t payload[240];
         const size_t p_len = build_define_payload(payload, sizeof(payload));
         if (p_len > 0) {
             TelemetryHeader h{};
@@ -460,11 +477,11 @@ bool updateSensors(const MeasurementSystem& ms)
         }
     }
 
-    // Send DATA frame if we have any data to send OR we want a periodic sensor snapshot
-    if (true) {
-        uint8_t payload[240]; // tune to your USB/host parsing needs
-        const size_t p_len = build_data_payload(payload, sizeof(payload), ms);
-        if (p_len > 1) { // >1 means at least header byte + one item
+    // 2) Send DATA frame (sensor snapshot + queued logs)
+    {
+        uint8_t payload[300];
+        const size_t p_len = build_data_payload(payload, sizeof(payload));
+        if (p_len > 1) {
             TelemetryHeader h{};
             h.magic = MAGIC;
             h.version = VERSION;

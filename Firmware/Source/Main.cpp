@@ -34,8 +34,6 @@ int main() {
     initializeCommands();
 
     SerialProcessor serial_proc;
-    Telemetry::init_default_sensors();
-    Telemetry::set_period_us(10000); // 100 Hz
     printf("\r\n3-Phase SPWM Controller\r\n");
     printf("Type 'HELP' or 'h' for commands\r\n");
 
@@ -49,7 +47,6 @@ int main() {
 
     static MeasurementSystem ms_instance(*adc_system);
     measurements = &ms_instance;
-
     const std::vector<ChannelConfig> channel_map = {
         //{device_index, channel, type, scale, offset, low_pass, name, zero_offset}
         {0, 0, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 0.1f, "V_PH_W", 0.0f},  // Phase W
@@ -75,6 +72,9 @@ int main() {
     measurements->calibrateCurrentSensors();
     printf("Current sensor calibration complete.\n\n");
 
+    Telemetry::set_period_us(10000); // 100 Hz
+    Telemetry::init(*measurements);
+
     absolute_time_t last_print = get_absolute_time();
     absolute_time_t last_telemetry = get_absolute_time();
     unsigned long updateCounter = 0;
@@ -84,6 +84,7 @@ int main() {
         updateCounter += 1;
 
         Telemetry::updateSensors(*measurements);
+        Telemetry::log("ROTOR_DEG", measurements->getRotorPositionDegrees());
         serial_proc.poll();
 
     //    if (absolute_time_diff_us(last_telemetry, get_absolute_time()) > 10000) {
