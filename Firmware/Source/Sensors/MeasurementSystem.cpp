@@ -36,25 +36,19 @@ void MeasurementChannel::update(float adc_voltage) {
         case SensorType::VOLTAGE_DIVIDER:
             physical_value = adc_voltage * m_config.scale + m_config.offset;
             break;
-
         case SensorType::BIPOLAR_CURRENT:
             physical_value = (adc_voltage - m_config.zero_offset_volts) * m_config.scale; // scale is A/V
-
             break;
-
         case SensorType::UNIPOLAR_CURRENT:
             physical_value = adc_voltage * m_config.scale + m_config.offset;
             break;
-
         case SensorType::TEMPERATURE:
             physical_value = adc_voltage * m_config.scale + m_config.offset;
             break;
-
         case SensorType::THROTTLE:
             physical_value = (adc_voltage - m_config.offset) * m_config.scale;
             physical_value = std::clamp(physical_value, 0.0f, 1.0f);
             break;
-
         case SensorType::DIRECT:
         default:
             physical_value = adc_voltage + m_config.offset;
