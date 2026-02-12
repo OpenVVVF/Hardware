@@ -19,7 +19,9 @@ static MeasurementSystem* measurements = nullptr;
 
 static void configureZones() {
     zone_mgr.clearZones();
-    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 12000.0f);
+    // zone_mgr.addAsyncFixed(0.0f, 2000.0f, 12000.0f);
+    zone_mgr.addAsyncFixed(0.0f, 4.0f, 12000.0f);
+    zone_mgr.addSync(4.0f, 200.0f, 2000);
 }
 
 int main() {

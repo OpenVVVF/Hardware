@@ -4,8 +4,8 @@
 #include "pico/multicore.h"
 #include "pico/util/queue.h"
 #include "hardware/sync.h"
+#include "Switching/OpenLoopPwmDriver.h"
 
-#include "Switching/PWMDriver.h"
 
 // -----------------------------
 // Core0 -> Core1 command queue
@@ -70,7 +70,7 @@ static CommutationManager* g_zone_mgr = nullptr;
 // -----------------------------
 // Core1-owned runtime variables
 // -----------------------------
-static PWMDriver* g_driver = nullptr;
+static OpenLoopPwmDriver* g_driver = nullptr;
 static SPWMStrategy g_spwm;
 
 static float g_ramp_rate = 5.0f; // Hz/s
@@ -167,11 +167,8 @@ static void apply_msg(const RtMsg& m) {
 // -----------------------------
 static void core1_entry() {
     // Create driver on core1 so all driver state lives on core1
-    PWMDriver::Config cfg;
-    cfg.min_duty_percent = 1.0f;
-    cfg.max_duty_percent = 99.0f;
-
-    static PWMDriver driver(cfg);
+    OpenLoopPwmDriver::Config cfg;
+    static OpenLoopPwmDriver driver(cfg);
     g_driver = &driver;
 
     driver.setStrategy(&g_spwm);
