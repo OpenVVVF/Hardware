@@ -27,7 +27,6 @@ static inline float clamp01(float x) {
     return x;
 }
 
-
 void MeasurementChannel::update(float adc_voltage) {
     m_last_raw_voltage = adc_voltage;
 
@@ -68,34 +67,9 @@ void MeasurementChannel::update(float adc_voltage) {
     } else {
         m_filtered_value = physical_value;
     }
-
-   // Fault detection
-    m_faulted = (adc_voltage < m_fault_low || adc_voltage > m_fault_high);
 }
-
-void MeasurementChannel::calibrateZero(float samples) {
-    (void)samples;
-    m_accumulator = 0.0f;
-    m_sample_count = 0;
-}
-
-// --- MeasurementSystem Implementation ---
 
 MeasurementSystem::MeasurementSystem(MAX2253x_MultiADC& adc) : m_adc(adc) {}
-
-// void MeasurementSystem::resetEncoderTracking() {
-//     // m_encoder_cal_locked = false;
-//     // m_encoder_sin_center_locked = 0.0f;
-//     // m_encoder_cos_center_locked = 0.0f;
-//     // m_encoder_sin_amp_locked = 1.0f;
-//     // m_encoder_cos_amp_locked = 1.0f;
-//     //    m_enc_Sxx = 0.0;
-//     // m_enc_Sxy = 0.0;
-//     // m_enc_Syy2 = 0.0;
-//     // m_enc_stats_n = 0;
-//     // m_enc_k_locked = 0.0f;
-//     // m_enc_inv_y2_rms_locked = 1.0f;
-// }
 
 void MeasurementSystem::addChannel(const ChannelConfig& config) {
     auto ptr = std::make_unique<MeasurementChannel>(config);
@@ -202,30 +176,24 @@ float MeasurementSystem::read(const std::string& channel_name) const {
     return 0.0f;
 }
 
-float MeasurementSystem::getDCBusVoltage() const {
-    const char* names[] = {"V_DC", "V_BUS", "HV_BUS", "BATTERY", "DC_BUS"};
-    for (const char* name : names) {
-        auto val = read(name);
-        if (val != 0.0f) return val;
-    }
-    return 0.0f;
-}
+void MeasurementSystem::calibrateCurrentSensors() {
+    std::unordered_map<MeasurementChannel*, float> volts;
 
-float MeasurementSystem::getBatteryVoltage() const {
-    const char* names[] = {"V_BATTERY", "V_BAT", "BATTERY"};
-    for (const char* name : names) {
-        auto it = m_channels.find(name);
-        if (it != m_channels.end()) {
-            return it->second->getValue();
+    for (const auto& [name, ch] : m_channels) {
+        const auto& cfg = ch->getConfig();
+        if (cfg.type == SensorType::BIPOLAR_CURRENT || cfg.type == SensorType::UNIPOLAR_CURRENT) {
+            volts.emplace(ch.get(), 0.0f);
         }
     }
-    return 0.0f;
-}
-
-float MeasurementSystem::getPhaseCurrent(uint8_t phase) const {
-    char buf[16];
-    std::snprintf(buf, sizeof(buf), "I_PHASE_%c", 'A' + phase);
-    return read(buf);
+    const int samples = 200;
+    for (int i = 1; i <= samples; i++) {
+        update();
+        for (auto& [channel, v] : volts) {
+            v += channel->getRawVoltage();
+            if(i == samples) channel->setZeroOffsetVolts(v / samples);
+        }
+        sleep_ms(2);
+    }
 }
 
 void MeasurementSystem::printChannels() const {
@@ -252,14 +220,6 @@ void MeasurementSystem::printChannels() const {
     std::printf("\n");
 }
 
-bool MeasurementSystem::isChannelFaulted(const std::string& name) const {
-    auto it = m_channels.find(name);
-    if (it != m_channels.end()) {
-        return it->second->isFaulted();
-    }
-    return true;
-}
-
 float MeasurementSystem::getRotorPositionDegrees() const {
     // Use cached pointers if available (fast), otherwise map lookup fallback.
     const MeasurementChannel* sin_ch = m_encoder_sin_ch;
@@ -272,8 +232,6 @@ float MeasurementSystem::getRotorPositionDegrees() const {
         sin_ch = sin_it->second.get();
         cos_ch = cos_it->second.get();
     }
-
-    if (sin_ch->isFaulted() || cos_ch->isFaulted()) return NAN;
 
     const float sin_v = sin_ch->getRawVoltage();
     const float cos_v = cos_ch->getRawVoltage();

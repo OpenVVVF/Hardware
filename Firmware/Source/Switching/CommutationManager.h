@@ -12,6 +12,15 @@ enum class ZoneType {
     SYNC,
     RCFM  // Random Carrier Frequency Modulation
 };
+static const char* zoneTypeToStr(ZoneType t) {
+    switch (t) {
+        case ZoneType::ASYNC_FIXED: return "ASYNC-FIX";
+        case ZoneType::ASYNC_RAMP:  return "ASYNC-RMP";
+        case ZoneType::SYNC:        return "SYNC";
+        case ZoneType::RCFM:        return "RCFM";
+        default:                    return "DEF";
+    }
+}
 
 struct ZoneConfig {
     float freq_start;
