@@ -74,32 +74,8 @@ private:
 class MeasurementSystem {
 public:
 
-    // --- Dynamic sensor registry ---
-    uint16_t getSensorCount() const { return (uint16_t)m_sensors.size(); }
-
-    // Iterate sensors in ID order (fast, no map lookups)
-    template <typename Fn>
-    void forEachSensor(Fn&& fn) const {
-        for (auto& s : m_sensors) fn(s.id, *s.name, s.ch);
-    }
-
-    // Convenience read by id (optional)
-    float readById(uint16_t id) const {
-        if (id == 0 || id > m_sensors.size()) return 0.0f;
-        return m_sensors[id - 1].ch->getValue();
-    }
-
-    const std::string* nameById(uint16_t id) const {
-        if (id == 0 || id > m_sensors.size()) return nullptr;
-        return m_sensors[id - 1].name;
-    }
     explicit MeasurementSystem(MAX2253x_MultiADC& adc);
 
-    struct UpdateEntry {
-        MeasurementChannel* ch;
-        uint8_t device;
-        uint8_t chan; // 0..3
-    };
     struct DeviceChan {
         MeasurementChannel* ch;
         uint8_t chan; // 0..3
@@ -127,8 +103,6 @@ public:
         return PERIOD_1KHZ_US;       // 1000us
     }
 
-
-std::vector<UpdateEntry> m_update_list;
 
 // Cached encoder channel pointers (avoid map find in loop)
 MeasurementChannel* m_encoder_sin_ch = nullptr;
