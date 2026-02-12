@@ -1,0 +1,88 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "7466205R"
+   (description "WP-SMBU REDCUBE Bush, SMT_closed height: 7mm, total height: 7mm, thread: M5 x 4mm, diameter: 9mm, on Reel, with Polyimide Tape, REDCUBE SMT;  M5, blind 4mm")
+   (family "CON")
+   (package "7466205R")
+   (attribute "Datasheet Link" "https://www.we-online.com/components/products/download/3D_7466205+%28rev1%29.pdf")
+   (attribute "Geometry.Height" "7mm")
+   (attribute "Mouser Part Number" "710-7466205R")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/7466205R?qs=lBTPRtX1sU8D2oI%252B7M8jdw%3D%3D")
+   (attribute "Manufacturer_Name" "Wurth Elektronik")
+   (attribute "Manufacturer_Part_Number" "7466205R")
+   (gate
+    (symbol "7466205R")
+    (pin "1" 1 PS)
+   )
+  )
+  (symbol "7466205R"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -100) (pt 200 -100) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "7466205R"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -5.5 5.5)
+      (pt 6.2 5.5)
+      (pt 6.2 -5.5)
+      (pt -5.5 -5.5)
+      (pt -5.5 5.5))))
+   (layer TASM
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt 0 4.5)
+      (arc (pt 0.000 4.500) (pt -4.500 -4.500) (pt 4.500 4.500) (start 180.0) (sweep 90.0))
+      (pt 0 -4.5)
+      (arc (pt 0.000 -4.500) (pt -4.500 -4.500) (pt 4.500 4.500) (start 180.0) (sweep -90.0))
+      (pt 0 4.5))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt 5.6 0)
+      (arc (pt 5.600 0.000) (pt 5.500 -0.200) (pt 5.700 0.000) (start 180.0) (sweep 90.0))
+      (pt 5.6 -0.2)
+      (arc (pt 5.600 -0.200) (pt 5.500 -0.200) (pt 5.700 -0.000) (start 180.0) (sweep -90.0))
+      (pt 5.6 0))))
+   (leg 1 (pt 0.000 0.000) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (round 10.000))
+   )
+   (model "7466205R.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

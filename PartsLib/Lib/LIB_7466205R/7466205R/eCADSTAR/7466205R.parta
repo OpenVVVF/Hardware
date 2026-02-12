@@ -1,0 +1,62 @@
+(Japanese_coding: sjis)
+(function "ECS_1040667"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2020-01-10-22:31:16)
+    (utime 2025-11-16-18:51:51)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+    )
+    (property "symbolName" "7466205R")
+)
+
+
+(pinAssign "ECS_1040667"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2020-01-10-22:31:16)
+    (utime 2025-11-16-18:51:51)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_1040667")
+                (port "1" (match "1"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "7466205R")
+)
+
+
+(part "7466205R"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2020-01-10-22:31:16)
+    (utime 2025-11-16-18:51:51)
+    (packageRef "7466205R")
+    (pinAssignRef "ECS_1040667")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "YES")
+    (property "refDesPrefix" "J")
+    (property "description" "WP-SMBU REDCUBE Bush, SMT_closed height: 7mm, total height: 7mm, thread: M5 x 4mm, diameter: 9mm, on Reel, with Polyimide Tape, REDCUBE SMT;  M5, blind 4mm")
+    (property "Mouser_Part_Number" "710-7466205R")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/7466205R?qs=lBTPRtX1sU8D2oI%252B7M8jdw%3D%3D")
+    (property "Manufacturer_Name" "Wurth Elektronik")
+    (property "Manufacturer_Part_Number" "7466205R")
+    (property "Datasheet_Link" "https://www.we-online.com/components/products/download/3D_7466205+%28rev1%29.pdf")
+    (property "compAreaTopHeight" 7)
+)
+
+

@@ -1,0 +1,127 @@
+(footprint "7466205R"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "7466205R-2")
+	(tags "Connector")
+	(property "Reference" "J**"
+		(at 0 -7.5 0)
+		(layer "F.SilkS")
+		(uuid "b61f6655-ecdd-4449-bea5-8d56a2a96d2f")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "7466205R"
+		(at 0.35 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "f8e5dde8-6ba1-44ff-8c8c-177847931a99")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "bc2e9a50-6e22-4793-b8c6-4320046bb4be")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "635a3ab5-02b8-4484-9a07-200e23ddb67c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start 0 -4.5)
+		(end 0 -4.5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "4135f6f4-7703-4d4f-bc6e-ef8be0199535")
+	)
+	(fp_line
+		(start 0 4.5)
+		(end 0 4.5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "7e814891-3d0d-4b29-bdf7-e0e485ce16d5")
+	)
+	(fp_arc
+		(start 0 -4.5)
+		(mid 4.5 0)
+		(end 0 4.5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "3ba25d15-a109-472b-89e7-c701fb46bf8b")
+	)
+	(fp_arc
+		(start 0 4.5)
+		(mid -4.5 0)
+		(end 0 -4.5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "b439be0c-6cd0-45cc-badc-6dde2e37d208")
+	)
+	(fp_rect
+		(start -7 -7)
+		(end 7 7)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "b5e10b92-1139-4e70-8c02-46d2f88173c6")
+	)
+	(pad "1" smd circle
+		(at 0 0 90)
+		(size 12 12)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "7d7785e2-e263-41bd-9bfb-1726a3c96e0e")
+	)
+	(embedded_fonts no)
+	(model "/home/tliao/Desktop/InverterGen5/PartsLib/3D/7466205R.stp"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 90 -0)
+		)
+	)
+)
