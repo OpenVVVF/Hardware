@@ -1,27 +1,15 @@
-// main.cpp (DROP-IN replacement for multicore RT bridge)
-//
-// Core1: PWMDriver + update loop + carrier selection (RtBridge)
-// Core0: commands + serial + measurements + printing from RtStatus snapshot
-//
-// Notes:
-// - zone_mgr is configured on core0 BEFORE RtBridge starts, then treated as read-only.
-// - Remove ALL direct PWMDriver usage from core0.
-
-#include "pico/stdlib.h"
 #include <vector>
-
+#include "pico/stdlib.h"
 #include "Switching/CommutationManager.h"
-#include "Hardware.h"
-
-#include "RtBridge.h"                // <-- your new bridge
 #include "Command/CommandContext.h"
 #include "Command/CommandManager.h"
 #include "Command/SerialProcessor.h"
 #include "Command/CommandInitializer.h"
-
 #include "Sensors/MAX2253x.h"
 #include "Sensors/MeasurementSystem.h"
 #include "Telemetry.h"
+#include "Hardware.h"
+#include "RtBridge.h"
 
 static CommutationManager zone_mgr;
 
@@ -94,52 +82,16 @@ int main() {
         // ---- Measurements (core0) ----
         measurements->update();
         updateCounter += 1;
-        // ---- Binary telemetry at >=100 Hz (core0) ----
-        static uint32_t last_rate_us = time_us_32();
-        static uint32_t updates_in_window = 0;
-        updates_in_window++;
 
-        uint32_t now_us = time_us_32();
-        float sensor_rate_khz = 0.0f;
-        if ((uint32_t)(now_us - last_rate_us) >= 1000000u) {
-            sensor_rate_khz = (float)updates_in_window / 1000.0f; // updates/sec -> kHz
-            updates_in_window = 0;
-            last_rate_us = now_us;
-        }
-
-
-        Telemetry::send_frame(*measurements, ctx, sensor_rate_khz, true);
-
+        Telemetry::updateSensors(*measurements);
         serial_proc.poll();
 
-       if (absolute_time_diff_us(last_telemetry, get_absolute_time()) > 1000000) {
-            float v_dc = measurements->read("V_DC_BUS");
-            float v_u  = measurements->read("V_PH_U");
-            float v_v  = measurements->read("V_PH_V");
-            float v_w  = measurements->read("V_PH_W");
-
-            float i_u  = measurements->read("I_PH_U");
-            float i_w  = measurements->read("I_PH_W");
-
-
-            float i_dc_main = measurements->read("I_DC_MAIN");
-
-            float enc_sin   = measurements->read("ENCODER_SIN");
-            float enc_cos   = measurements->read("ENCODER_COS");
-            float rotor_pos = measurements->getRotorPositionDegrees();
-            printf("\r\n=== Telemetry ===\r\n");
-            printf("DC Bus: %6.1fV | I_DC_MAIN: %7.1fA | V_U: %5.1fV | V_V: %5.1fV | V_W: %5.1fV\r\n",
-                   v_dc, i_dc_main, v_u, v_v, v_w);
-            printf("I_PH_U: %7.1fA  |   I_PH_W: %7.1fA\r\n",
-                  i_u, i_w);
-            printf("SIN: %5.5fV | COS: %5.5fV | Rotor: %6.1f°\r\n", enc_sin, enc_cos, rotor_pos);
-            printf("Sensor sample rate: %luKHz\r\n", updateCounter / 1000);
-            
-            Telemetry::log("LoopHz", updateCounter / 1000);
-            updateCounter = 0;
-            // measurements->printChannels();
-            last_telemetry = get_absolute_time();
-        }
+    //    if (absolute_time_diff_us(last_telemetry, get_absolute_time()) > 10000) {
+    //         // Telemetry::log("LoopHz", );
+    //         updateCounter = 0;
+    //         // measurements->printChannels();
+    //         last_telemetry = get_absolute_time();
+    //     }
 
         // ---- Status print using core1 snapshot
         if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {

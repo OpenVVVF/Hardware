@@ -239,7 +239,6 @@ static const char* DEFAULT_SENSORS[] = {
     "ENCODER_COS",
     // You can also register derived values as their own IDs:
     "ROTOR_DEG",
-    "SENSOR_RATE_KHZ",
 };
 
 static constexpr size_t DEFAULT_SENSORS_N = sizeof(DEFAULT_SENSORS) / sizeof(DEFAULT_SENSORS[0]);
@@ -344,9 +343,7 @@ static size_t build_define_payload(uint8_t* payload, size_t cap) {
 }
 
 static size_t build_data_payload(uint8_t* payload, size_t cap,
-                                const MeasurementSystem& ms,
-                                float sensor_rate_khz,
-                                bool include_sensor_snapshot)
+                                const MeasurementSystem& ms)
 {
     // format:
     // [u8 n_items]
@@ -361,7 +358,6 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
     uint8_t n = 0;
 
     // 1) Include sensor snapshot (registered default sensors) first (optional)
-    if (include_sensor_snapshot) {
         // We assume init_default_sensors() was called, so IDs exist.
         for (size_t i = 0; i < DEFAULT_SENSORS_N; ++i) {
             const char* k = DEFAULT_SENSORS[i];
@@ -372,8 +368,6 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
             float v = 0.0f;
             if (std::strcmp(k, "ROTOR_DEG") == 0) {
                 v = ms.getRotorPositionDegrees();
-            } else if (std::strcmp(k, "SENSOR_RATE_KHZ") == 0) {
-                v = sensor_rate_khz;
             } else {
                 v = ms.read(k);
             }
@@ -385,7 +379,6 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
             put_f32(w, v);
             n++;
         }
-    }
 
     // 2) Drain queued log items
     while (!q_empty()) {
@@ -419,10 +412,7 @@ static size_t build_data_payload(uint8_t* payload, size_t cap,
 }
 
 // ---------------- Public send_frame ----------------
-bool send_frame(const MeasurementSystem& ms,
-                const CommandContext& /*ctx*/,
-                float sensor_rate_khz,
-                bool include_sensor_snapshot)
+bool updateSensors(const MeasurementSystem& ms)
 {
     const uint32_t now = time_us_32();
     if ((uint32_t)(now - g_last_define_us) > DEFINE_REANNOUNCE_US) {
@@ -471,10 +461,9 @@ bool send_frame(const MeasurementSystem& ms,
     }
 
     // Send DATA frame if we have any data to send OR we want a periodic sensor snapshot
-    const bool have_any_data = !q_empty() || include_sensor_snapshot;
-    if (have_any_data) {
+    if (true) {
         uint8_t payload[240]; // tune to your USB/host parsing needs
-        const size_t p_len = build_data_payload(payload, sizeof(payload), ms, sensor_rate_khz, include_sensor_snapshot);
+        const size_t p_len = build_data_payload(payload, sizeof(payload), ms);
         if (p_len > 1) { // >1 means at least header byte + one item
             TelemetryHeader h{};
             h.magic = MAGIC;

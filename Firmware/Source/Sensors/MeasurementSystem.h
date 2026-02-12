@@ -73,11 +73,6 @@ private:
 
 class MeasurementSystem {
 public:
-    struct SensorInfo {
-        uint16_t id;
-        const std::string* name;       // pointer stable as long as vector not reallocated
-        MeasurementChannel* ch;
-    };
 
     // --- Dynamic sensor registry ---
     uint16_t getSensorCount() const { return (uint16_t)m_sensors.size(); }

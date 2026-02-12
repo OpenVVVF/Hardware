@@ -28,9 +28,6 @@ bool log(const char* key, const char* value); // small strings (capped)
 
 // Sends frames if due. Frame may contain queued logs + (optionally) sensor snapshot.
 // Returns true if it wrote at least one frame.
-bool send_frame(const MeasurementSystem& ms,
-                const CommandContext& ctx,
-                float sensor_rate_khz,
-                bool include_sensor_snapshot = true);
+bool updateSensors(const MeasurementSystem& ms);
 
 } // namespace Telemetry
