@@ -4,11 +4,11 @@
 #include <cstdio>
 #include <cstring>
 #include <cctype>
-#include <strings.h>  // strcasecmp
-#include <cstdlib>    // atof, atoi
+#include <strings.h>
+#include <cstdlib>
 
 CommandManager& CommandManager::instance() {
-    static CommandManager inst;  // OK: instance() is a member, can call private ctor
+    static CommandManager inst;
     return inst;
 }
 
@@ -35,9 +35,7 @@ CommandInterface* CommandManager::findCommand(const char* name) {
     return nullptr;
 }
 
-// Parse next token from string, returns ptr after token
 static const char* nextToken(const char* str, char* token, size_t tokenSize) {
-    // Skip leading whitespace
     while (*str && isspace((unsigned char)*str)) str++;
 
     if (*str == '\0') {
@@ -45,7 +43,6 @@ static const char* nextToken(const char* str, char* token, size_t tokenSize) {
         return str;
     }
 
-    // Find end of token (whitespace or null)
     const char* end = str;
     while (*end && !isspace((unsigned char)*end)) end++;
 
@@ -60,11 +57,9 @@ static const char* nextToken(const char* str, char* token, size_t tokenSize) {
 void CommandManager::processLine(const char* line) {
     if (!line || !context_) return;
 
-    // Skip leading whitespace
     while (*line && isspace((unsigned char)*line)) line++;
     if (*line == '\0') return;
 
-    // Extract command name
     char cmdName[16];
     const char* rest = nextToken(line, cmdName, sizeof(cmdName));
 
@@ -75,15 +70,13 @@ void CommandManager::processLine(const char* line) {
     }
 
     int argc = cmd->getArgCount();
-    ArgValue values[4] = {};  // Max 4 args supported
+    ArgValue values[4] = {};
 
-    // Parse and validate each expected argument
     for (int i = 0; i < argc; i++) {
         ArgSpec spec = cmd->getArgSpec(i);
         char token[32];
         rest = nextToken(rest, token, sizeof(token));
 
-        // Check if argument provided
         if (token[0] == '\0') {
             if (spec.required) {
                 printf("Error: Missing required argument <%s>\r\n", spec.name);
@@ -94,7 +87,6 @@ void CommandManager::processLine(const char* line) {
             }
         }
 
-        // Parse value
         float val;
         if (spec.type == ArgSpec::FLOAT) {
             val = (float)atof(token);
@@ -102,7 +94,6 @@ void CommandManager::processLine(const char* line) {
             val = (float)atoi(token);
         }
 
-        // Check bounds
         if (val < spec.min || val > spec.max) {
             char rangeStr[32];
             spec.printRange(rangeStr, sizeof(rangeStr));
@@ -113,7 +104,7 @@ void CommandManager::processLine(const char* line) {
         values[i] = {val, (int32_t)val, true};
     }
 
-    // Check for extra arguments
+
     char extra[16];
     rest = nextToken(rest, extra, sizeof(extra));
     if (extra[0] != '\0') {
@@ -121,7 +112,6 @@ void CommandManager::processLine(const char* line) {
         return;
     }
 
-    // Execute with validated arguments
     cmd->execute(values, *context_);
 }
 
@@ -131,7 +121,6 @@ void CommandManager::printHelp() const {
     for (size_t i = 0; i < count_; i++) {
         CommandInterface* cmd = commands_[i];
 
-        // Print command name and signature
         printf("  %-8s", cmd->getCommandName());
 
         int argc = cmd->getArgCount();
@@ -153,8 +142,6 @@ void CommandManager::printHelp() const {
             remaining -= (size_t)n;
         }
         printf("%-20s - %s", sigBuffer, cmd->getShortDescription());
-
-        // Print ranges if any arguments
         if (argc > 0) {
             printf("\r\n         ");
             for (int j = 0; j < argc; j++) {
