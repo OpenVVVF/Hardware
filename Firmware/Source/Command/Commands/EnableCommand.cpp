@@ -18,7 +18,6 @@ public:
                 return;
             }
 
-            // Not in estop — just enable if needed
             if (!status.enabled) {
                 if (ctx.enable) ctx.enable();
                 printf("Enabled\r\n");
@@ -27,8 +26,6 @@ public:
             }
             return;
         }
-
-        // Status unavailable (very early startup)
         if (ctx.enable) ctx.enable();
         printf("Enable requested\r\n");
     }
