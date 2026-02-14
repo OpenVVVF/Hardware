@@ -10,12 +10,15 @@
 #include "Telemetry.h"
 #include "Hardware.h"
 #include "RtBridge.h"
+#include "mcp2515/mcp2515.h"
 
 static CommutationManager zone_mgr;
 
 // Measurement system instances
 static MAX2253x_MultiADC* adc_system = nullptr;
 static MeasurementSystem* measurements = nullptr;
+
+static MCP2515 can0{spi0, 27, 3, 4, 2};
 
 static void configureZones() {
     zone_mgr.clearZones();
@@ -26,6 +29,18 @@ int main() {
     stdio_init_all();
     sleep_ms(500);
 
+    can0.reset();
+    can0.setBitrate(CAN_1000KBPS, MCP_8MHZ);
+    can0.setNormalMode();
+    struct can_frame msg = {
+        .can_id = 0xAABB,
+        .can_dlc = 8,
+        .data = {0xDE, 0xAD, 0xBE, 0xEF, 0xDE, 0xAD, 0xBE, 0xEF},
+    };
+
+    while (1) {
+        can0.sendMessage(MCP2515::TXB0, &msg);
+    }
 
     configureZones();
     CommandContext ctx = RtBridge::initAndGetContext(&zone_mgr);
