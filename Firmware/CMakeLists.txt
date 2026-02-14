@@ -24,9 +24,7 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/Main.cpp
     ${SOURCE_DIR}/RtBridge.cpp
     ${SOURCE_DIR}/Switching/CommutationManager.cpp
-
-    ${SOURCE_DIR}/Switching/OpenLoopPwmDriver.cpp
-    ${SOURCE_DIR}/Switching/ThreePhasePwmBridge.cpp
+    ${SOURCE_DIR}/Switching/PWMDriver.cpp
 
     # ${SOURCE_DIR}/Configuration/ConfigManager.cpp
 
