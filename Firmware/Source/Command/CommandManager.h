@@ -12,9 +12,7 @@ public:
     static CommandManager& instance();
     
     void registerCommand(CommandInterface* cmd);
-    void setContext(CommandContext& ctx);  // Declaration only
-    
-    // Parses line, extracts first token, matches case-insensitively
+    void setContext(CommandContext& ctx); 
     void processLine(const char* line);
     
     void printHelp() const;
@@ -22,8 +20,7 @@ public:
 private:
     CommandManager() = default;
     
-    // Case-insensitive string search
-    CommandInterface* findCommand(const char* name);  // Added this declaration
+    CommandInterface* findCommand(const char* name);
     
     bool nameEquals(const char* a, const char* b);
     
@@ -32,5 +29,4 @@ private:
     size_t count_ = 0;
     CommandContext* context_ = nullptr;
 };
-
 #endif

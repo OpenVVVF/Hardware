@@ -5,21 +5,20 @@
 #include <stdio.h>
 
 struct ArgValue {
-    float f_val;      // For FLOAT type
-    int32_t i_val;    // For INT type  
-    bool present;     // Whether argument was provided
+    float f_val;
+    int32_t i_val;
+    bool present;
 };
 
 struct ArgSpec {
-    const char* name;        // e.g., "freq", "rate"
-    const char* unit;        // e.g., "Hz", "Hz/s"
-    float min;               // Minimum value (inclusive)
-    float max;               // Maximum value (inclusive)
-    float default_val;       // Used if not required and not provided
-    bool required;           // If true, must be present
+    const char* name;
+    const char* unit;
+    float min;
+    float max;
+    float default_val;
+    bool required;
     enum Type { FLOAT, INT } type;
     
-    // Helper for formatting ranges in help
     void printRange(char* buf, size_t size) const {
         if (type == FLOAT) {
             snprintf(buf, size, "%.1f-%.1f %s", min, max, unit);

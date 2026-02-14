@@ -5,7 +5,7 @@
 #include "pico/stdlib.h"
 
 class SerialProcessor {
-    static constexpr size_t LINE_SIZE = 64;  // Increased for longer command names
+    static constexpr size_t LINE_SIZE = 64;
     char line_[LINE_SIZE];
     uint8_t idx_;
     
