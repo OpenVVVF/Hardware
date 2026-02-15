@@ -26,12 +26,17 @@ add_executable(${PROJECT_NAME}
     ${SOURCE_DIR}/Switching/CommutationManager.cpp
     ${SOURCE_DIR}/Switching/PWMDriver.cpp
 
+    ${SOURCE_DIR}/../ThirdParty/mcp2515/mcp2515.cpp
+
     # ${SOURCE_DIR}/Configuration/ConfigManager.cpp
 
     # ${SOURCE_DIR}/FileSystem/FileSystem.cpp
 
     ${SOURCE_DIR}/Sensors/MeasurementSystem.cpp
     ${SOURCE_DIR}/Sensors/MAX2253x.cpp
+     ${SOURCE_DIR}/Telemetry.cpp
+
+
     # ${SOURCE_DIR}/svpwm.c
     ${SOURCE_DIR}/Command/CommandInitializer.cpp
     ${SOURCE_DIR}/Command/CommandManager.cpp

@@ -13,8 +13,19 @@
 MeasurementChannel::MeasurementChannel(const ChannelConfig& cfg)
     : m_config(cfg) {
     m_filtered_value = cfg.offset;  // Initialize to offset
+    // Precompute things used every sample
+    m_use_low_pass = (cfg.low_pass_factor > 0.0f && cfg.low_pass_factor < 1.0f);
+
+    constexpr float MAX_ADC_VOLTAGE = 1.8f;
+    m_fault_low  = 0.01f;
+    m_fault_high = MAX_ADC_VOLTAGE - 0.01f;
 }
 
+static inline float clamp01(float x) {
+    if (x < 0.0f) return 0.0f;
+    if (x > 1.0f) return 1.0f;
+    return x;
+}
 
 void MeasurementChannel::update(float adc_voltage) {
     m_last_raw_voltage = adc_voltage;
@@ -25,25 +36,19 @@ void MeasurementChannel::update(float adc_voltage) {
         case SensorType::VOLTAGE_DIVIDER:
             physical_value = adc_voltage * m_config.scale + m_config.offset;
             break;
-
         case SensorType::BIPOLAR_CURRENT:
             physical_value = (adc_voltage - m_config.zero_offset_volts) * m_config.scale; // scale is A/V
-
             break;
-
         case SensorType::UNIPOLAR_CURRENT:
             physical_value = adc_voltage * m_config.scale + m_config.offset;
             break;
-
         case SensorType::TEMPERATURE:
             physical_value = adc_voltage * m_config.scale + m_config.offset;
             break;
-
         case SensorType::THROTTLE:
             physical_value = (adc_voltage - m_config.offset) * m_config.scale;
             physical_value = std::clamp(physical_value, 0.0f, 1.0f);
             break;
-
         case SensorType::DIRECT:
         default:
             physical_value = adc_voltage + m_config.offset;
@@ -56,51 +61,57 @@ void MeasurementChannel::update(float adc_voltage) {
     } else {
         m_filtered_value = physical_value;
     }
-
-    // Fault detection (stuck at 0 or max)
-    constexpr float MAX_ADC_VOLTAGE = 1.8f;
-    if (adc_voltage < 0.01f || adc_voltage > (MAX_ADC_VOLTAGE - 0.01f)) {
-        m_faulted = true;
-    } else {
-        m_faulted = false;
-    }
 }
-
-void MeasurementChannel::calibrateZero(float samples) {
-    (void)samples;
-    m_accumulator = 0.0f;
-    m_sample_count = 0;
-}
-
-// --- MeasurementSystem Implementation ---
 
 MeasurementSystem::MeasurementSystem(MAX2253x_MultiADC& adc) : m_adc(adc) {}
 
-void MeasurementSystem::resetEncoderTracking() {
-    m_encoder_sin_min = FLT_MAX;
-    m_encoder_sin_max = -FLT_MAX;
-    m_encoder_cos_min = FLT_MAX;
-    m_encoder_cos_max = -FLT_MAX;
-
-    m_encoder_tracking_initialized = false;
-
-    m_encoder_last_sin = 0.0f;
-    m_encoder_last_cos = 0.0f;
-    m_encoder_still_count = 0;
-    m_encoder_stationary = false;
-
-    m_encoder_cal_locked = false;
-    m_encoder_sin_center_locked = 0.0f;
-    m_encoder_cos_center_locked = 0.0f;
-    m_encoder_sin_amp_locked = 1.0f;
-    m_encoder_cos_amp_locked = 1.0f;
-}
-
 void MeasurementSystem::addChannel(const ChannelConfig& config) {
     auto ptr = std::make_unique<MeasurementChannel>(config);
-    m_channels[config.name] = std::move(ptr);
+    MeasurementChannel* raw = ptr.get();
 
-    // Ensure physical map is large enough
+    // Avoid operator[] (can default-construct then assign). Use emplace:
+    m_channels.emplace(config.name, std::move(ptr));
+
+    auto it = m_name_to_id.find(config.name);
+    if (it == m_name_to_id.end()) {
+    const uint16_t new_id = static_cast<uint16_t>(m_sensors.size() + 1);
+
+    // Map name -> id
+    m_name_to_id.emplace(config.name, new_id);
+
+    // Store name owned by SensorEntry (no pointers, no lifetime issues)
+    m_sensors.push_back(SensorEntry{ new_id, config.name, raw });
+} else {
+    // If re-adding a channel with same name (unusual), update pointer
+    const uint16_t id = it->second;
+    if (id >= 1 && id <= m_sensors.size()) {
+        m_sensors[id - 1].ch = raw;
+    }
+}
+
+    
+     // Ensure per-device arrays are large enough
+    const size_t dev = config.device_index;
+    if (m_dev_chans.size() <= dev) {
+        m_dev_chans.resize(dev + 1);
+        m_dev_period_us.resize(dev + 1, PERIOD_1KHZ_US);
+        m_dev_last_us.resize(dev + 1, 0);
+        m_dev_cache.resize(dev + 1);
+        for (auto& a : m_dev_cache) a = {0,0,0,0};
+    }
+
+    // Add channel to that device’s update list
+    m_dev_chans[dev].push_back(DeviceChan{ raw, static_cast<uint8_t>(config.channel) });
+
+    // Set device period as the minimum required by any channel on it
+    const uint32_t p = period_for_channel(config);
+    if (p < m_dev_period_us[dev]) m_dev_period_us[dev] = p;
+
+    // Cache encoder pointers if you want (optional)
+    if (config.name == "ENCODER_SIN") m_encoder_sin_ch = raw;
+    if (config.name == "ENCODER_COS") m_encoder_cos_ch = raw;
+
+    // Physical map (not hot)
     size_t max_dev = config.device_index + 1;
     if (m_physical_map.size() < max_dev * 4) {
         m_physical_map.resize(max_dev * 4, {0, 0});
@@ -111,6 +122,7 @@ void MeasurementSystem::addChannel(const ChannelConfig& config) {
     }
 }
 
+
 void MeasurementSystem::addChannels(const std::vector<ChannelConfig>& configs) {
     for (const auto& cfg : configs) {
         addChannel(cfg);
@@ -118,96 +130,34 @@ void MeasurementSystem::addChannels(const std::vector<ChannelConfig>& configs) {
 }
 
 void MeasurementSystem::update() {
-    auto all_devices = m_adc.read_all_devices_voltage();
+     const uint32_t now = time_us_32();
 
-    for (auto& [name, channel] : m_channels) {
-        const auto& cfg = channel->getConfig();
-        if (cfg.device_index < all_devices.size() && cfg.channel < 4) {
-            float voltage = all_devices[cfg.device_index][cfg.channel];
-            channel->update(voltage);
+    // For each device that has any channels mapped:
+    for (size_t dev = 0; dev < m_dev_chans.size(); ++dev) {
+        if (m_dev_chans[dev].empty()) continue;
+
+        const uint32_t period = m_dev_period_us[dev];
+        bool do_read = false;
+
+        if ((uint32_t)(now - m_dev_last_us[dev]) >= m_dev_period_us[dev]) {
+            do_read = true;
         }
-    }
 
-    // --- Encoder tracking: stable at standstill + lock once swing is sufficient ---
-    if (!m_encoder_tracking_active) {
-        return;
-    }
+        if (!do_read) continue;
 
-    auto sin_it = m_channels.find("ENCODER_SIN");
-    auto cos_it = m_channels.find("ENCODER_COS");
-    if (sin_it == m_channels.end() || cos_it == m_channels.end()) {
-        return;
-    }
+        // Read this device only
+        float v[4];
+        m_adc.read_device_voltage_into(dev, v);
 
-    auto* sin_ch = sin_it->second.get();
-    auto* cos_ch = cos_it->second.get();
-    if (sin_ch->isFaulted() || cos_ch->isFaulted()) {
-        return;
-    }
+        m_dev_cache[dev][0] = v[0];
+        m_dev_cache[dev][1] = v[1];
+        m_dev_cache[dev][2] = v[2];
+        m_dev_cache[dev][3] = v[3];
+        m_dev_last_us[dev] = now;
 
-    float sin_val = sin_ch->getValue();
-    float cos_val = cos_ch->getValue();
-
-    // Init on first good sample
-    if (!m_encoder_tracking_initialized) {
-        m_encoder_sin_min = m_encoder_sin_max = sin_val;
-        m_encoder_cos_min = m_encoder_cos_max = cos_val;
-
-        m_encoder_last_sin = sin_val;
-        m_encoder_last_cos = cos_val;
-
-        m_encoder_still_count = 0;
-        m_encoder_stationary = false;
-
-        m_encoder_cal_locked = false;
-        m_encoder_tracking_initialized = true;
-        return;
-    }
-
-    // Stationary detection (gap-independent)
-    // NOTE: Use a tiny absolute epsilon; this works across many encoders because it is
-    // near ADC noise floor. If your ADC is noisier, raise STILL_EPS.
-    constexpr float STILL_EPS = 0.0008f;   // 0.8mV
-    constexpr uint32_t STILL_N = 80;       // require "still" for N update() calls
-
-    float ds = fabsf(sin_val - m_encoder_last_sin);
-    float dc = fabsf(cos_val - m_encoder_last_cos);
-
-    if ((ds + dc) < STILL_EPS) {
-        if (m_encoder_still_count < 0xFFFFFFFFu) m_encoder_still_count++;
-    } else {
-        m_encoder_still_count = 0;
-    }
-    m_encoder_stationary = (m_encoder_still_count >= STILL_N);
-
-    m_encoder_last_sin = sin_val;
-    m_encoder_last_cos = cos_val;
-
-    // Only update min/max while moving AND not locked.
-    // Outward-only updates: prevents amplitude collapse at standstill.
-    if (!m_encoder_stationary && !m_encoder_cal_locked) {
-        if (sin_val < m_encoder_sin_min) m_encoder_sin_min = sin_val;
-        if (sin_val > m_encoder_sin_max) m_encoder_sin_max = sin_val;
-        if (cos_val < m_encoder_cos_min) m_encoder_cos_min = cos_val;
-        if (cos_val > m_encoder_cos_max) m_encoder_cos_max = cos_val;
-
-        // Lock calibration once swing is "enough".
-        //
-        // Support arbitrary sin/cos encoders:
-        // - We pick a lock threshold based on ADC range, not your specific encoder.
-        // - But your current encoder swing is ~0.2 to 0.665V => amplitude ~0.2325V.
-        //   So a good general lock minimum is ~0.05V (50mV), well below typical swing.
-        float sin_amp = (m_encoder_sin_max - m_encoder_sin_min) * 0.5f;
-        float cos_amp = (m_encoder_cos_max - m_encoder_cos_min) * 0.5f;
-
-        constexpr float AMP_LOCK_MIN = 0.05f; // 50mV (works for your swing and many others)
-
-        if (sin_amp > AMP_LOCK_MIN && cos_amp > AMP_LOCK_MIN) {
-            m_encoder_sin_center_locked = (m_encoder_sin_min + m_encoder_sin_max) * 0.5f;
-            m_encoder_cos_center_locked = (m_encoder_cos_min + m_encoder_cos_max) * 0.5f;
-            m_encoder_sin_amp_locked    = sin_amp;
-            m_encoder_cos_amp_locked    = cos_amp;
-            m_encoder_cal_locked = true;
+        // Update only channels on this device
+        for (const auto& dc : m_dev_chans[dev]) {
+            dc.ch->update(m_dev_cache[dev][dc.chan]);
         }
     }
 }
@@ -220,30 +170,24 @@ float MeasurementSystem::read(const std::string& channel_name) const {
     return 0.0f;
 }
 
-float MeasurementSystem::getDCBusVoltage() const {
-    const char* names[] = {"V_DC", "V_BUS", "HV_BUS", "BATTERY", "DC_BUS"};
-    for (const char* name : names) {
-        auto val = read(name);
-        if (val != 0.0f) return val;
-    }
-    return 0.0f;
-}
+void MeasurementSystem::calibrateCurrentSensors() {
+    std::unordered_map<MeasurementChannel*, float> volts;
 
-float MeasurementSystem::getBatteryVoltage() const {
-    const char* names[] = {"V_BATTERY", "V_BAT", "BATTERY"};
-    for (const char* name : names) {
-        auto it = m_channels.find(name);
-        if (it != m_channels.end()) {
-            return it->second->getValue();
+    for (const auto& [name, ch] : m_channels) {
+        const auto& cfg = ch->getConfig();
+        if (cfg.type == SensorType::BIPOLAR_CURRENT || cfg.type == SensorType::UNIPOLAR_CURRENT) {
+            volts.emplace(ch.get(), 0.0f);
         }
     }
-    return 0.0f;
-}
-
-float MeasurementSystem::getPhaseCurrent(uint8_t phase) const {
-    char buf[16];
-    std::snprintf(buf, sizeof(buf), "I_PHASE_%c", 'A' + phase);
-    return read(buf);
+    const int samples = 200;
+    for (int i = 1; i <= samples; i++) {
+        update();
+        for (auto& [channel, v] : volts) {
+            v += channel->getRawVoltage();
+            if(i == samples) channel->setZeroOffsetVolts(v / samples);
+        }
+        sleep_ms(2);
+    }
 }
 
 void MeasurementSystem::printChannels() const {
@@ -270,49 +214,32 @@ void MeasurementSystem::printChannels() const {
     std::printf("\n");
 }
 
-bool MeasurementSystem::isChannelFaulted(const std::string& name) const {
-    auto it = m_channels.find(name);
-    if (it != m_channels.end()) {
-        return it->second->isFaulted();
-    }
-    return true;
-}
-
 float MeasurementSystem::getRotorPositionDegrees() const {
-    auto sin_it = m_channels.find("ENCODER_SIN");
-    auto cos_it = m_channels.find("ENCODER_COS");
+    // Use cached pointers if available (fast), otherwise map lookup fallback.
+    const MeasurementChannel* sin_ch = m_encoder_sin_ch;
+    const MeasurementChannel* cos_ch = m_encoder_cos_ch;
 
-    if (sin_it == m_channels.end() || cos_it == m_channels.end()) {
-        return NAN;
+    if (!sin_ch || !cos_ch) {
+        auto sin_it = m_channels.find("ENCODER_SIN");
+        auto cos_it = m_channels.find("ENCODER_COS");
+        if (sin_it == m_channels.end() || cos_it == m_channels.end()) return NAN;
+        sin_ch = sin_it->second.get();
+        cos_ch = cos_it->second.get();
     }
 
-    float sin_val = sin_it->second->getValue();
-    float cos_val = cos_it->second->getValue();
+    const float sin_v = sin_ch->getRawVoltage();
+    const float cos_v = cos_ch->getRawVoltage();
 
-    // If we don't have locked calibration yet, provide a usable fallback.
-    // IMPORTANT: This won't be "absolute" until locked, but it's stable and avoids FLT_MAX math.
-    if (!m_encoder_tracking_initialized || !m_encoder_cal_locked) {
-        float angle_rad = atan2f(sin_val, cos_val);
-        float angle_deg = angle_rad * 180.0f / M_PI;
-        if (angle_deg < 0.0f) angle_deg += 360.0f;
-        return angle_deg;
-    }
+    // Fixed center+amp normalization using assumed raw range [0.154, 0.665]
+    float sin_n = (sin_v - ENC_CENTER_V) * ENC_INV_AMP_V;
+    float cos_n = (cos_v - ENC_CENTER_V) * ENC_INV_AMP_V;
 
-    float sin_centered = sin_val - m_encoder_sin_center_locked;
-    float cos_centered = cos_val - m_encoder_cos_center_locked;
+    // Optional: clamp to avoid atan2 weirdness if you overshoot slightly
+    // (harmless if your signals stay in range)
+    sin_n = std::clamp(sin_n, -1.2f, 1.2f);
+    cos_n = std::clamp(cos_n, -1.2f, 1.2f);
 
-    // Normalize with locked amplitudes to handle different encoder gains.
-    float sin_amp = m_encoder_sin_amp_locked;
-    float cos_amp = m_encoder_cos_amp_locked;
-
-    // Guard: never divide by tiny numbers (works across many encoder types)
-    constexpr float AMP_MIN = 0.02f; // 20mV
-    if (sin_amp > AMP_MIN && cos_amp > AMP_MIN) {
-        sin_centered /= sin_amp;
-        cos_centered /= cos_amp;
-    }
-
-    float angle_rad = atan2f(sin_centered, cos_centered);
+    float angle_rad = atan2f(sin_n, cos_n);
     float angle_deg = angle_rad * 180.0f / M_PI;
     if (angle_deg < 0.0f) angle_deg += 360.0f;
     return angle_deg;

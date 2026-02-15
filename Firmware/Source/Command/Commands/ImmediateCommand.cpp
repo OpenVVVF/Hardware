@@ -32,14 +32,11 @@ public:
         if (ctx.set_frequency_immediate) {
             ctx.set_frequency_immediate(f);
         } else if (ctx.set_target_frequency) {
-            // Fallback: if immediate hook not provided, at least set target
             ctx.set_target_frequency(f);
         } else {
             printf("Error: No frequency control hook available\r\n");
             return;
         }
-
-        // Auto-enable if nonzero requested
         if (f != 0.0f && ctx.enable) {
             if (!have_status || !status.enabled) {
                 ctx.enable();

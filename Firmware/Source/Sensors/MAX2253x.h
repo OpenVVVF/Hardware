@@ -6,7 +6,7 @@
 #include <vector>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
-
+#include "hardware/structs/sio.h"
 enum class ErrorCode {
     NONE = 0,
     NOT_INITIALIZED,
@@ -23,7 +23,8 @@ enum class ErrorCode {
 class MAX2253x_Device {
 public:
     explicit MAX2253x_Device(uint8_t cs_pin);
-    
+    void read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_status = nullptr);
+    void read_all_adc_voltage_into(float out4[4], uint16_t* int_status = nullptr);
     bool init();
     bool is_initialized() const { return m_initialized; }
     
@@ -40,6 +41,7 @@ public:
     uint8_t get_device_id() const { return m_device_id; }
 
 private:
+    uint32_t m_cs_mask;
     uint8_t m_cs_pin;
     bool m_initialized;
     uint8_t m_device_id;
@@ -56,9 +58,15 @@ private:
 class MAX2253x_MultiADC {
 public:
     static spi_inst_t* SPI_PORT;
-    static constexpr uint32_t SPI_BAUDRATE = 5'000'000;
+    static constexpr uint32_t SPI_BAUDRATE = 10'000'000;
     
     explicit MAX2253x_MultiADC(const std::vector<uint8_t>& cs_pins);
+    void read_device_voltage_into(size_t index, float out4[4]);
+    const std::vector<std::array<uint16_t, 4>>& read_all_devices_raw_ref();
+    const std::vector<std::array<float, 4>>& read_all_devices_voltage_ref();
+
+    void read_all_devices_raw_into(std::array<uint16_t, 4>* out, size_t out_count);
+    void read_all_devices_voltage_into(std::array<float, 4>* out, size_t out_count);
     
     bool init();
     void print_status();
@@ -70,4 +78,6 @@ public:
 
 private:
     std::vector<MAX2253x_Device> m_devices;
+    std::vector<std::array<uint16_t, 4>> m_raw_cache;
+    std::vector<std::array<float, 4>> m_voltage_cache;
 };

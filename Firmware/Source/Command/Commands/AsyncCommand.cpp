@@ -5,7 +5,6 @@
 #include <Hardware.h>
 #include <Switching/CommutationManager.h>
 
-// Replace `ctx.commutationMgr` with however your CommandContext exposes CommutationManager.
 class AsyncCommand : public CommandInterface {
 public:
     AsyncCommand()
@@ -35,19 +34,11 @@ public:
         const float start_hz   = args[0].f_val;
         const float end_hz     = args[1].f_val;
         const float carrier_hz = args[2].f_val;
-
-        // zone manager is bridged through ctx.zone_mgr (set in RtBridge::initAndGetContext)
         if (!ctx.zone_mgr) {
             return;
         }
         ctx.zone_mgr->clearZones();
         ctx.zone_mgr->addAsyncFixed(start_hz, end_hz, carrier_hz);
-
-        // Optional: if you want manual carrier mode OFF so zones take effect immediately:
-        // if (ctx.set_manual_carrier_mode) ctx.set_manual_carrier_mode(false);
-
-        // Optional: status/ack
-        // if (ctx.println) ctx.println("OK");
     }
     
 };

@@ -29,9 +29,19 @@ static bool spi_read_with_timeout(spi_inst_t* spi, uint8_t* rx_buffer, size_t le
     return bytes_read == len;
 }
 
-MAX2253x_Device::MAX2253x_Device(uint8_t cs_pin) 
-    : m_cs_pin(cs_pin), m_initialized(false), m_device_id(0), m_last_error(ErrorCode::NONE) {
-}
+MAX2253x_Device::MAX2253x_Device(uint8_t cs_pin)
+  : m_cs_pin(cs_pin),
+    m_initialized(false),
+    m_device_id(0),
+    m_last_error(ErrorCode::NONE),
+    m_cs_mask(1u << cs_pin) {}
+
+static inline void cs_low(uint32_t mask)  { sio_hw->gpio_clr = mask; }
+static inline void cs_high(uint32_t mask) { sio_hw->gpio_set = mask; }
+
+void MAX2253x_Device::begin_transaction() { cs_low(m_cs_mask); }
+void MAX2253x_Device::end_transaction()   { cs_high(m_cs_mask); }
+
 
 bool MAX2253x_Device::init() {
     gpio_init(m_cs_pin);
@@ -43,15 +53,13 @@ bool MAX2253x_Device::init() {
     return true;
 }
 
-void MAX2253x_Device::begin_transaction() {
-    gpio_put(m_cs_pin, 0);
-    sleep_us(1);
-}
+// void MAX2253x_Device::begin_transaction() {
+//     gpio_put(m_cs_pin, 0);
+// }
 
-void MAX2253x_Device::end_transaction() {
-    sleep_us(1);
-    gpio_put(m_cs_pin, 1);
-}
+// void MAX2253x_Device::end_transaction() {
+//     gpio_put(m_cs_pin, 1);
+// }
 
 uint16_t MAX2253x_Device::read_register(uint8_t address) {
     uint8_t header = (address & 0x3F) << 2;
@@ -67,33 +75,17 @@ uint16_t MAX2253x_Device::read_register(uint8_t address) {
 }
 
 std::array<uint16_t, 4> MAX2253x_Device::read_all_adc_raw() {
-    std::array<uint16_t, 4> values = {0};
-    uint8_t burst_cmd = 0x05;
-    
-    begin_transaction();
-    spi_write_blocking(MAX2253x_MultiADC::SPI_PORT, &burst_cmd, 1);
-    
-    uint8_t rx_buffer[10];
-    spi_read_blocking(MAX2253x_MultiADC::SPI_PORT, 0, rx_buffer, 10);
-    
-    end_transaction();
-    
-    for(int i = 0; i < 4; i++) {
-        values[i] = ((rx_buffer[i*2] << 8) | rx_buffer[i*2 + 1]) & 0x0FFF;
-    }
-    
+    std::array<uint16_t, 4> values{};
+    read_all_adc_raw_into(values.data(), nullptr);
     return values;
 }
 
+
 std::array<float, 4> MAX2253x_Device::read_all_adc_voltage() {
-    auto raw = read_all_adc_raw();
-    std::array<float, 4> voltages;
-    
-    const float scale = VOLTAGE_REFERENCE / static_cast<float>(ADC_MAX_VALUE);
-    for(int i = 0; i < 4; i++) {
-        voltages[i] = static_cast<float>(raw[i]) * scale;
-    }
-    
+    std::array<float, 4> voltages{};
+    float tmp[4];
+    read_all_adc_voltage_into(tmp, nullptr);
+    voltages[0] = tmp[0]; voltages[1] = tmp[1]; voltages[2] = tmp[2]; voltages[3] = tmp[3];
     return voltages;
 }
 
@@ -162,6 +154,33 @@ bool MAX2253x_Device::check_diagnostics() {
     
     return !has_fault;
 }
+void MAX2253x_Device::read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_status) {
+    static const uint8_t tx[11] = { 0x05, 0,0,0,0,0,0,0,0,0,0 };
+    uint8_t rx[11]; // no zeroing
+
+    begin_transaction();
+    spi_write_read_blocking(MAX2253x_MultiADC::SPI_PORT, tx, rx, 11);
+    end_transaction();
+
+    out4[0] = ((rx[1] << 8) | rx[2]) & 0x0FFF;
+    out4[1] = ((rx[3] << 8) | rx[4]) & 0x0FFF;
+    out4[2] = ((rx[5] << 8) | rx[6]) & 0x0FFF;
+    out4[3] = ((rx[7] << 8) | rx[8]) & 0x0FFF;
+
+    if (int_status) *int_status = (uint16_t)((rx[9] << 8) | rx[10]);
+}
+
+
+void MAX2253x_Device::read_all_adc_voltage_into(float out4[4], uint16_t* int_status) {
+    uint16_t raw4[4];
+    read_all_adc_raw_into(raw4, int_status);
+
+    const float scale = VOLTAGE_REFERENCE / static_cast<float>(ADC_MAX_VALUE);
+    out4[0] = raw4[0] * scale;
+    out4[1] = raw4[1] * scale;
+    out4[2] = raw4[2] * scale;
+    out4[3] = raw4[3] * scale;
+}
 
 bool MAX2253x_Device::verify_adc_reading() {
     if (!m_initialized) {
@@ -229,16 +248,23 @@ const char* MAX2253x_Device::get_error_string() const {
 }
 
 MAX2253x_MultiADC::MAX2253x_MultiADC(const std::vector<uint8_t>& cs_pins) {
+    m_devices.reserve(cs_pins.size());
     for(uint8_t cs : cs_pins) {
         m_devices.emplace_back(cs);
     }
+    m_raw_cache.resize(m_devices.size());
+    m_voltage_cache.resize(m_devices.size());
 }
+
 
 bool MAX2253x_MultiADC::init() {
     printf("\n=== MAX2253x Multi-ADC Smart Init ===\n");
     
     spi_init(SPI_PORT, SPI_BAUDRATE);
-    spi_set_format(SPI_PORT, 8, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);
+    uint actual = spi_init(SPI_PORT, SPI_BAUDRATE);
+spi_set_format(SPI_PORT, 8, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);
+
+printf("SPI requested: %u Hz, actual: %u Hz\n", SPI_BAUDRATE, actual);
     
     gpio_set_function(Hardware::Pins::SPI::SCK, GPIO_FUNC_SPI);
     gpio_set_function(Hardware::Pins::SPI::MOSI, GPIO_FUNC_SPI);
@@ -327,18 +353,67 @@ std::array<float, 4> MAX2253x_MultiADC::read_device_voltage(size_t index) {
     return m_devices[index].read_all_adc_voltage();
 }
 
-std::vector<std::array<uint16_t, 4>> MAX2253x_MultiADC::read_all_devices_raw() {
-    std::vector<std::array<uint16_t, 4>> results;
-    for(size_t i = 0; i < m_devices.size(); i++) {
-        results.push_back(read_device_raw(i));
+void MAX2253x_MultiADC::read_device_voltage_into(size_t index, float out4[4]) {
+    if (index >= m_devices.size()) {
+        out4[0] = out4[1] = out4[2] = out4[3] = 0.0f;
+        return;
     }
-    return results;
+    m_devices[index].read_all_adc_voltage_into(out4, nullptr); // uses your fast burst read
 }
+
+const std::vector<std::array<uint16_t, 4>>& MAX2253x_MultiADC::read_all_devices_raw_ref() {
+    for (size_t i = 0; i < m_devices.size(); i++) {
+        m_devices[i].read_all_adc_raw_into(m_raw_cache[i].data(), nullptr);
+    }
+    return m_raw_cache;
+}
+
+const std::vector<std::array<float, 4>>& MAX2253x_MultiADC::read_all_devices_voltage_ref() {
+    // Tightest: read raw then convert
+    read_all_devices_raw_ref();
+
+    const float scale = VOLTAGE_REFERENCE / static_cast<float>(ADC_MAX_VALUE);
+    for (size_t i = 0; i < m_devices.size(); i++) {
+        m_voltage_cache[i][0] = m_raw_cache[i][0] * scale;
+        m_voltage_cache[i][1] = m_raw_cache[i][1] * scale;
+        m_voltage_cache[i][2] = m_raw_cache[i][2] * scale;
+        m_voltage_cache[i][3] = m_raw_cache[i][3] * scale;
+    }
+    return m_voltage_cache;
+}
+
+void MAX2253x_MultiADC::read_all_devices_raw_into(std::array<uint16_t, 4>* out, size_t out_count) {
+    const size_t n = (out_count < m_devices.size()) ? out_count : m_devices.size();
+    for (size_t i = 0; i < n; i++) {
+        m_devices[i].read_all_adc_raw_into(out[i].data(), nullptr);
+    }
+}
+
+void MAX2253x_MultiADC::read_all_devices_voltage_into(std::array<float, 4>* out, size_t out_count) {
+    const size_t n = (out_count < m_devices.size()) ? out_count : m_devices.size();
+    const float scale = VOLTAGE_REFERENCE / static_cast<float>(ADC_MAX_VALUE);
+
+    for (size_t i = 0; i < n; i++) {
+        uint16_t raw4[4];
+        m_devices[i].read_all_adc_raw_into(raw4, nullptr);
+        out[i][0] = raw4[0] * scale;
+        out[i][1] = raw4[1] * scale;
+        out[i][2] = raw4[2] * scale;
+        out[i][3] = raw4[3] * scale;
+    }
+}
+
 
 std::vector<std::array<float, 4>> MAX2253x_MultiADC::read_all_devices_voltage() {
     std::vector<std::array<float, 4>> results;
-    for(size_t i = 0; i < m_devices.size(); i++) {
-        results.push_back(read_device_voltage(i));
-    }
+    results.resize(m_devices.size());
+    read_all_devices_voltage_into(results.data(), results.size());
+    return results;
+}
+
+std::vector<std::array<uint16_t, 4>> MAX2253x_MultiADC::read_all_devices_raw() {
+    std::vector<std::array<uint16_t, 4>> results;
+    results.resize(m_devices.size());
+    read_all_devices_raw_into(results.data(), results.size());
     return results;
 }

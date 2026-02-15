@@ -2,7 +2,6 @@
 #include "CommandManager.h"
 #include "CommandInterface.h"
 
-// declare factories (or put these in one small header)
 CommandInterface* makeFreqCommand();
 CommandInterface* makeRampCommand();
 CommandInterface* makeCarrierCommand();

@@ -7,19 +7,17 @@
 
 class CommandInterface {
 public:
-    static constexpr int MAX_ARGS = 8;  // tune to your needs
+    static constexpr int MAX_ARGS = 8;
 
-    // 0-arg command
+
     CommandInterface(const char* name, const char* desc)
         : name_(name), desc_(desc), count_(0) {}
 
-    // 1-arg command
     CommandInterface(const char* name, const char* desc, const ArgSpec& one)
         : name_(name), desc_(desc), count_(1) {
         specs_[0] = one;
     }
 
-    // N-arg command
     CommandInterface(const char* name, const char* desc, std::initializer_list<ArgSpec> many)
         : name_(name), desc_(desc) {
         int n = (int)many.size();
@@ -35,7 +33,6 @@ public:
 
     virtual ~CommandInterface() = default;
 
-    // Defaults now come from stored data
     virtual const char* getCommandName() const { return name_; }
     virtual const char* getShortDescription() const { return desc_; }
 
@@ -45,7 +42,6 @@ public:
         return (index >= 0 && index < count_) ? specs_[index] : ArgSpec{};
     }
 
-    // Still required
     virtual void execute(const ArgValue* args, CommandContext& ctx) = 0;
 
 private:
