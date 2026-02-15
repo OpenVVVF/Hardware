@@ -2,6 +2,13 @@
 #include "hardware/clocks.h"
 #include "hardware/irq.h"
 #include "Hardware.h"
+#include <cmath>
+
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 
 // Static instance pointer for ISR
 PWMDriver* PWMDriver::instance_ = nullptr;

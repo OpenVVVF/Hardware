@@ -1,6 +1,3 @@
-// CmdAsyncFixed.h
-#pragma once
-
 #include "../CommandInterface.h"
 #include <Hardware.h>
 #include <Switching/CommutationManager.h>

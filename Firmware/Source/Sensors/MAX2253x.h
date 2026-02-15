@@ -4,9 +4,15 @@
 #include <cstdint>
 #include <array>
 #include <vector>
+#ifndef UNIT_TEST
 #include "pico/stdlib.h"
+#endif
+
+#ifndef UNIT_TEST
 #include "hardware/spi.h"
 #include "hardware/structs/sio.h"
+#endif
+
 enum class ErrorCode {
     NONE = 0,
     NOT_INITIALIZED,
