@@ -4,16 +4,8 @@
 #include "Hardware.h"
 #include <cmath>
 
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
-
-// Static instance pointer for ISR
 PWMDriver* PWMDriver::instance_ = nullptr;
 
-// C-compatible ISR wrapper
 extern "C" void pwm_wrap_isr() {
     if (PWMDriver::instance()) {
         PWMDriver::instance()->isrHandler();

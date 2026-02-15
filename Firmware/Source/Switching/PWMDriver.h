@@ -5,6 +5,9 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
 #include "Hardware.h"
+
+#define M_PI 3.14159265358979323846
+
 // ============================================================================
 // Modulation Strategy Interface
 // Implement this to add SVM, FOC, SHE, etc.
