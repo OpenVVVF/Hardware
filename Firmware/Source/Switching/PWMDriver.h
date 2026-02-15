@@ -1,168 +1,169 @@
 #pragma once
 
-#include <cstdint>
-#include <cmath>
-#include "pico/stdlib.h"
 #include "hardware/pwm.h"
-#include "Hardware.h"
+#include <cstdint>
 
-#define M_PI 3.14159265358979323846
-
-// ============================================================================
-// Modulation Strategy Interface
-// Implement this to add SVM, FOC, SHE, etc.
-// ============================================================================
 class ModulationStrategy {
 public:
     virtual ~ModulationStrategy() = default;
-    
-    // Compute duty cycles (0 to top) for three phases
-    // theta: electrical angle [0, 2π]
-    // mod_index: 0.0 to 1.0+ (modulation depth)
-    // top: PWM counter top value (period)
-    virtual void computeDuties(float theta, float mod_index, uint16_t top,
-                              uint16_t& duty_u, uint16_t& duty_v, uint16_t& duty_w) = 0;
-    
-    virtual const char* getName() const = 0;
+
+    // NEW: fixed-point friendly strategy hook (no floats required in ISR).
+    // phase_q32: electrical angle in Q0.32 turns (0..2^32-1 is 0..360°)
+    // mod_q15: modulation index in Q1.15 (0..32767 maps to 0..~1.0)
+    virtual void computeDuties(uint32_t phase_q32,
+                              int16_t mod_q15,
+                              uint16_t top,
+                              uint16_t& duty_u,
+                              uint16_t& duty_v,
+                              uint16_t& duty_w) = 0;
 };
 
-// ============================================================================
-// Sine PWM Implementation (SPWM)
-// ============================================================================
-class SPWMStrategy : public ModulationStrategy {
+class SPWMStrategy final : public ModulationStrategy {
 public:
-    void computeDuties(float theta, float mod_index, uint16_t top,
-                      uint16_t& duty_u, uint16_t& duty_v, uint16_t& duty_w) override;
-    const char* getName() const override { return "SPWM"; }
+    // LUT size must be power of two
+    static constexpr uint32_t LUT_BITS = 10;
+    static constexpr uint32_t LUT_SIZE = 1u << LUT_BITS;
+
+    SPWMStrategy();
+
+    void computeDuties(uint32_t phase_q32,
+                       int16_t mod_q15,
+                       uint16_t top,
+                       uint16_t& duty_u,
+                       uint16_t& duty_v,
+                       uint16_t& duty_w) override;
+
+private:
+    static constexpr uint32_t INDEX_SHIFT = 32 - LUT_BITS;
+
+    // Q0.32 offsets for +/-120 degrees (1/3 and 2/3 of a turn)
+    static constexpr uint32_t PHASE_120 = 0x55555555u;
+    static constexpr uint32_t PHASE_240 = 0xAAAAAAABu;
+
+    // sine LUT scaled to int16 in [-32767..32767]
+    int16_t sin_lut_[LUT_SIZE];
+
+    static inline uint16_t dutyFromPhase(uint32_t phase_q32,
+                                         int16_t mod_q15,
+                                         uint16_t top,
+                                         const int16_t* lut);
 };
 
-// ============================================================================
-// Hardware Driver for 3-Phase Bridge
-// ============================================================================
 class PWMDriver {
 public:
     struct Config {
-        
-        // Safety limits: keep duty away from 0% and 100% for bootstrap caps
-        float min_duty_percent = 1.0f;   // 1% minimum
-        float max_duty_percent = 99.0f;  // 99% maximum
-        
-        // Future expansion: deadtime in PWM clock cycles
-        uint deadtime_cycles = 0;
+        float min_duty_percent = 2.0f;
+        float max_duty_percent = 98.0f;
     };
 
     explicit PWMDriver(const Config& cfg);
-    
-    // Setup PWM hardware. Call once at startup.
-    void init(float initial_carrier_hz = 2000.0f);
-    
-    // ------------------------------------------------------------------------
-    // Modulation Strategy (hot-swappable)
-    // ------------------------------------------------------------------------
-    void setStrategy(ModulationStrategy* strategy);
-    ModulationStrategy* getStrategy() const { return strategy_; }
-    
-    // ------------------------------------------------------------------------
-    // Carrier Frequency (automatically updates hardware)
-    // ------------------------------------------------------------------------
-    void setCarrierFrequency(float hz);
-    float getCarrierFrequency() const { return carrier_hz_; }
-    
-    // ------------------------------------------------------------------------
-    // Electrical Frequency Control (with optional ramping)
-    // ------------------------------------------------------------------------
-    void setTargetFrequency(float hz, float ramp_rate_hz_per_sec = 100.0f);
-    void setFrequencyImmediate(float hz);  // Bypass ramp
     float getCurrentFrequency() const { return current_freq_; }
     float getTargetFrequency() const { return target_freq_; }
-    
-    // ------------------------------------------------------------------------
-    // Modulation Index (auto-calculated from frequency unless overridden)
-    // ------------------------------------------------------------------------
-    void setModulationIndex(float mi);  // 0.0 to 1.0+
     float getModulationIndex() const { return mod_index_; }
-    void setAutoModulation(bool enable); // If true, scales MI with frequency
-    
-    // ------------------------------------------------------------------------
-    // Synchronous Mode (for high-frequency operation)
-    // In sync mode: dtheta = 2π / pulses_per_cycle (locked to carrier)
-    // In async mode: dtheta = 2π * f / carrier (free running)
-    // ------------------------------------------------------------------------
-    void setSynchronousMode(bool enable, uint16_t pulses_per_cycle = 0);
     bool isSynchronousMode() const { return sync_mode_; }
     uint16_t getPulsesPerCycle() const { return pulses_per_cycle_; }
-    
-    // ------------------------------------------------------------------------
-    // Control Interface
-    // ------------------------------------------------------------------------
-    void enable();           // Soft start with synchronization
-    void disable();          // Ramp down and stop (soft disable)
-    void emergencyStop();    // Immediate hardware shutdown (force GPIO low)
-    void clearEmergency();   // Reset from emergency state
-    
+
     bool isEnabled() const { return enabled_; }
     bool isEmergencyStopped() const { return emergency_stop_; }
-    
-    // ------------------------------------------------------------------------
-    // Main Loop Update (call at regular intervals, e.g., 5ms)
-    // Handles frequency ramping and modulation index curves
-    // ------------------------------------------------------------------------
-    void update(float dt_seconds);
-    
-    // ------------------------------------------------------------------------
-    // Low-level Access (for advanced users)
-    // ------------------------------------------------------------------------
-    void forceAllGpioLow();
-    void restorePwmPins();
-    uint16_t getTop() const { return pwm_top_; }
-    
-    // ------------------------------------------------------------------------
-    // Interrupt Handler (internal use, but public for ISR registration)
-    // ------------------------------------------------------------------------
+    float getCarrierFrequency() const { return carrier_hz_; }
+    void init(float initial_carrier_hz);
+    void setStrategy(ModulationStrategy* strategy);
+
+    void setCarrierFrequency(float hz);
+
+    void setTargetFrequency(float hz, float ramp_rate);
+    void setFrequencyImmediate(float hz);
+
+    void setModulationIndex(float mi);
+    void setAutoModulation(bool enable);
+
+    void setSynchronousMode(bool enable, uint16_t pulses_per_cycle);
+
+    void enable();
+    void disable();
+
+    void emergencyStop();
+    void clearEmergency();
+
+    void update(float dt);
+
     void isrHandler();
-    
-    // Singleton accessor for C ISR wrapper
+
     static PWMDriver* instance() { return instance_; }
 
 private:
+    struct PwmTiming {
+        float clk_div;
+        uint16_t top;
+    };
+
+    static PWMDriver* instance_;
+
+    // ----- constants -----
+    static constexpr float TWO_PI = 6.2831853071795864769f;
+
+    // If your slices truly are 0,1,2, keep this.
+    // If not guaranteed, you can compute from GPIO->slice at init and store.
+    static constexpr uint kPhaseCount = 3;
+    static constexpr uint kSlices[kPhaseCount] = {0, 1, 2};
+
+    struct PhasePins { uint a, b; };
+    static PhasePins kPins[kPhaseCount];
+
+    // ----- helpers -----
+    static PwmTiming computeTiming(uint32_t sys_hz, float carrier_hz);
+    void applyTimingToHardware(const PwmTiming& t);
+    void recalcDutyLimits();
+
+    void updatePhaseStep();
+
+    static inline uint16_t clampDuty(uint16_t x, uint16_t lo, uint16_t hi) {
+        return (x < lo) ? lo : (x > hi) ? hi : x;
+    }
+
+    static inline int16_t floatToQ15Clamp01(float x);
+
+    inline void setSliceComplementary(uint slice, uint16_t level) {
+        // faster/cleaner than two pwm_set_chan_level calls
+        pwm_set_both_levels(slice, level, level);
+    }
+
+    void forceAllGpioLow();
+    void restorePwmPins();
+
+private:
     Config config_;
+
     ModulationStrategy* strategy_ = nullptr;
-    
-    // Hardware state
-    uint16_t pwm_top_ = 0;
-    float clk_div_ = 1.0f;
-    float carrier_hz_ = 2000.0f;
-    static constexpr uint PWM_SLICE_MASK = (1u << 0) | (1u << 1) | (1u << 2);
-    
-    // Operating state
+    float fixed_clk_div_ = 1.0f;     // static divider chosen at init
+    uint16_t computeTopFromCarrier_(float carrier_hz) const;
+    void chooseFixedDivider_(float min_carrier_hz);
     bool enabled_ = false;
     bool emergency_stop_ = false;
-    bool sync_mode_ = false;
-    bool auto_modulation_ = true;  // Default to frequency-based MI curve
-    
-    // Electrical angle state
-    float theta_ = 0.0f;
-    float dtheta_ = 0.0f;
-    
-    // Frequency control
-    float current_freq_ = 0.0f;
+
+    // carrier / PWM timing
+    float carrier_hz_ = 0.0f;
+    float clk_div_ = 1.0f;
+    uint16_t pwm_top_ = 0;
+
+    // precomputed duty limits in counts (NO float in ISR)
+    uint16_t min_count_ = 0;
+    uint16_t max_count_ = 0;
+
+    // frequency control
     float target_freq_ = 0.0f;
-    float ramp_rate_ = 100.0f;
+    float current_freq_ = 0.0f;
+    float ramp_rate_ = 0.0f;
+
+    // modulation
+    bool auto_modulation_ = true;
+    float mod_index_ = 0.0f;   // for API/debug only
+    int16_t mod_q15_ = 0;      // for ISR math
+
+    // phase stepping
+    bool sync_mode_ = false;
     uint16_t pulses_per_cycle_ = 0;
-    
-    // Modulation
-    float mod_index_ = 0.0f;
-    
-    // Singleton instance for ISR
-    static PWMDriver* instance_;
-    
-    // Internal methods
-    void updateHardwareClock(float carrier_hz);
-    void updatePhaseStep();
-    void setSliceComplementary(uint slice, uint16_t level);
-    static uint16_t clampDuty(uint16_t x, uint16_t lo, uint16_t hi);
-    
-    // Helper to get slice numbers from GPIO
-    uint getSlice(uint gpio) const { return pwm_gpio_to_slice_num(gpio); }
-    uint getChan(uint gpio) const { return pwm_gpio_to_channel(gpio); }
+
+    uint32_t phase_q32_ = 0;     // Q0.32 turns
+    uint32_t phase_step_q32_ = 0;
 };

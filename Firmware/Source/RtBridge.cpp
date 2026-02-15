@@ -1,217 +1,136 @@
 #include "RtBridge.h"
-
-#include "pico/stdlib.h"
-#include "pico/multicore.h"
-#include "pico/util/queue.h"
-#include "hardware/sync.h"
-
 #include "Switching/PWMDriver.h"
 
-// -----------------------------
-// Core0 -> Core1 command queue
-// -----------------------------
-enum class RtCmd : uint8_t {
-    SET_RAMP_RATE,
-    SET_MANUAL_CARRIER_HZ,
-    SET_MANUAL_CARRIER_MODE,
-
-    ENABLE,
-    DISABLE,
-
-    ESTOP,
-    CLEAR_ESTOP,
-
-    SET_TARGET_FREQ,
-    SET_FREQ_IMMEDIATE,
-};
-
-struct RtMsg {
-    RtCmd cmd;
-    float f;      // float payload
-    uint32_t u;   // int/bool payload
-};
-
-static queue_t g_q;
+// Definition of the static instance pointer
+RtBridge* RtBridge::s_Instance = nullptr;
 
 // -----------------------------
-// Core1 -> Core0 status sharing (seqlock)
+// Initialization
 // -----------------------------
-struct RtStatusShared {
-    volatile uint32_t seq;
-    RtStatus status;
-};
+CommandContext RtBridge::InitAndGetContext(CommutationManager* _Manager) {
+    // Assign instance pointer for the trampoline
+    s_Instance = this;
 
-static RtStatusShared g_shared;
+    // Push the zone manager via the queue so Core 1 owns it
+    m_Queue.push(InitZoneManager{_Manager});
 
-static inline void status_write(const RtStatus& in) {
-    g_shared.seq++;
-    __dmb();
-    g_shared.status = in;
-    __dmb();
-    g_shared.seq++;
-}
+    m_SharedStatus.Seq = 0;
 
-static inline bool status_read(RtStatus* out) {
-    uint32_t a = g_shared.seq;
-    __dmb();
-    RtStatus snap = g_shared.status;
-    __dmb();
-    uint32_t b = g_shared.seq;
-    if (a != b || (a & 1u)) return false;
-    *out = snap;
-    return true;
+    // Launch Core 1 using the static trampoline
+    multicore_launch_core1(Core1EntryTrampoline);
+
+    // Build the context with static function pointers
+    // (Required because CommandContext stores C-style function pointers)
+    CommandContext Ctx {};
+    Ctx.zone_mgr = _Manager;
+
+    Ctx.set_ramp_rate = CtxSetRampRate;
+    Ctx.set_manual_carrier_hz = CtxSetManualCarrierHz;
+    Ctx.set_manual_carrier_mode = CtxSetManualCarrierMode;
+
+    Ctx.enable = CtxEnable;
+    Ctx.disable = CtxDisable;
+
+    Ctx.emergency_stop = CtxEstop;
+    Ctx.clear_emergency_stop = CtxClearEstop;
+
+    Ctx.set_target_frequency = CtxSetTargetFreq;
+    Ctx.set_frequency_immediate = CtxSetFreqImmediate;
+
+    Ctx.try_get_status = CtxTryGetStatus;
+
+    return Ctx;
 }
 
 // -----------------------------
-// Shared (but effectively immutable) pointer
+// Static Trampoline Implementation
 // -----------------------------
-static CommutationManager* g_zone_mgr = nullptr;
-
-// -----------------------------
-// Core1-owned runtime variables
-// -----------------------------
-static PWMDriver* g_driver = nullptr;
-static SPWMStrategy g_spwm;
-
-static float g_ramp_rate = 5.0f; // Hz/s
-static float g_manual_carrier_hz = 2000.0f;
-static bool  g_manual_carrier_mode = false;
-
-// Cache to avoid redundant PWM reprogramming
-static float    last_carrier_hz = 0.0f;
-static bool     last_sync_mode  = false;
-static uint16_t last_pulses     = 0;
-
-// -----------------------------
-// Carrier update logic (core1)
-// -----------------------------
-static void updateCarrierFromZones_core1() {
-    if (!g_driver || !g_driver->isEnabled()) return;
-
-    if (g_manual_carrier_mode) {
-        if (last_carrier_hz != g_manual_carrier_hz || last_sync_mode != false) {
-            g_driver->setCarrierFrequency(g_manual_carrier_hz);
-            g_driver->setSynchronousMode(false, 0);
-            last_carrier_hz = g_manual_carrier_hz;
-            last_sync_mode = false;
-            last_pulses = 0;
-        }
-        return;
-    }
-
-    float current_freq = g_driver->getCurrentFrequency();
-    ZoneConfig zone{};
-    float sync_pulses_f = 0.0f;
-
-    if (g_zone_mgr && g_zone_mgr->getZone(current_freq, &zone)) {
-        float carrier = g_zone_mgr->calculateCarrier(current_freq, &zone, &sync_pulses_f);
-        bool sync_mode = (zone.type == ZoneType::SYNC);
-        uint16_t pulses = sync_mode ? (uint16_t)sync_pulses_f : 0;
-
-        if (last_carrier_hz != carrier || last_sync_mode != sync_mode || last_pulses != pulses) {
-            g_driver->setCarrierFrequency(carrier);
-            g_driver->setSynchronousMode(sync_mode, pulses);
-            last_carrier_hz = carrier;
-            last_sync_mode = sync_mode;
-            last_pulses = pulses;
-        }
+void RtBridge::Core1EntryTrampoline() {
+    if (s_Instance) {
+        s_Instance->Core1Loop();
     }
 }
 
 // -----------------------------
-// Core1: apply messages
+// Core 1 Loop (Instance Method)
 // -----------------------------
-static void apply_msg(const RtMsg& m) {
-    switch (m.cmd) {
-        case RtCmd::SET_RAMP_RATE:
-            g_ramp_rate = m.f;
-            break;
+void RtBridge::Core1Loop() {
+    // Create driver on Core 1
+    PWMDriver::Config Cfg;
+    Cfg.min_duty_percent = 1.0f;
+    Cfg.max_duty_percent = 99.0f;
 
-        case RtCmd::SET_MANUAL_CARRIER_HZ:
-            g_manual_carrier_hz = m.f;
-            break;
+    PWMDriver Driver(Cfg);
+    m_Driver = &Driver;
 
-        case RtCmd::SET_MANUAL_CARRIER_MODE:
-            g_manual_carrier_mode = (m.u != 0);
-            break;
+    Driver.setStrategy(new SPWMStrategy());
+    Driver.setAutoModulation(true);
+    Driver.init(2000.0f);
+    Driver.enable();
 
-        case RtCmd::ENABLE:
-            g_driver->enable();
-            break;
-
-        case RtCmd::DISABLE:
-            g_driver->disable();
-            break;
-
-        case RtCmd::ESTOP:
-            g_driver->emergencyStop();
-            break;
-
-        case RtCmd::CLEAR_ESTOP:
-            g_driver->clearEmergency();
-            break;
-
-        case RtCmd::SET_TARGET_FREQ:
-            // ramp_rate is core1-owned; every target set uses latest ramp
-            g_driver->setTargetFrequency(m.f, g_ramp_rate);
-            break;
-
-        case RtCmd::SET_FREQ_IMMEDIATE:
-            g_driver->setFrequencyImmediate(m.f);
-            break;
-    }
-}
-
-// -----------------------------
-// Core1 loop
-// -----------------------------
-static void core1_entry() {
-    // Create driver on core1 so all driver state lives on core1
-    PWMDriver::Config cfg;
-    cfg.min_duty_percent = 1.0f;
-    cfg.max_duty_percent = 99.0f;
-
-    static PWMDriver driver(cfg);
-    g_driver = &driver;
-
-    driver.setStrategy(&g_spwm);
-    driver.setAutoModulation(true);
-    driver.init(2000.0f);
-
-    driver.enable();
-
-    absolute_time_t next = make_timeout_time_us(1000);
+    absolute_time_t Next = make_timeout_time_us(1000);
 
     while (true) {
-        // Drain control queue quickly
-        RtMsg msg{};
-        while (queue_try_remove(&g_q, &msg)) {
-            apply_msg(msg);
+        StructVariant Msg;
+        while (m_Queue.try_pop(Msg)) {
+            std::visit(Overloaded {
+                [this](RtCmd _Cmd) {
+                    if (!m_Driver) return;
+                    switch (_Cmd) {
+                        case RtCmd::Enable:  m_Driver->enable(); break;
+                        case RtCmd::Disable: m_Driver->disable(); break;
+                        case RtCmd::Estop:   m_Driver->emergencyStop(); break;
+                        case RtCmd::ClearEstop: m_Driver->clearEmergency(); break;
+                    }
+                },
+                [this](const SetRampRate& _R) { 
+                    m_RampRate = _R.Value; 
+                },
+                [this](const SetManualCarrierHz& _R) { 
+                    m_ManualCarrierHz = _R.Value; 
+                },
+                [this](const SetManualCarrierMode& _R) { 
+                    m_ManualCarrierMode = _R.Enable; 
+                },
+                [this](const SetTargetFreq& _R) {
+                    if(m_Driver) m_Driver->setTargetFrequency(_R.Value, m_RampRate);
+                },
+                [this](const SetFreqImmediate& _R) {
+                    if(m_Driver) m_Driver->setFrequencyImmediate(_R.Value);
+                },
+                [this](const InitZoneManager& _R) {
+                    m_Manager = _R.Manager;
+                },
+                [](const MotorConfig&) {},
+                [](const SensorData&) {},
+                [](const CurrentCommand&) {}
+            }, Msg);
         }
 
-        // 1kHz tick (replace with tighter tick if you want)
-        if (absolute_time_diff_us(get_absolute_time(), next) <= 0) {
-            next = delayed_by_us(next, 1000);
+        // 1kHz tick
+        if (absolute_time_diff_us(get_absolute_time(), Next) <= 0) {
+            Next = delayed_by_us(Next, 1000);
 
-            if (!driver.isEmergencyStopped()) {
-                driver.update(0.001f);
-                updateCarrierFromZones_core1();
+            if (m_Driver && !m_Driver->isEmergencyStopped()) {
+                m_Driver->update(0.001f);
+                UpdateCarrierFromZones();
             }
 
-            // Publish status snapshot
-            RtStatus st{};
-            st.enabled = driver.isEnabled();
-            st.estop = driver.isEmergencyStopped();
-            st.current_freq = driver.getCurrentFrequency();
-            st.modulation_index = driver.getModulationIndex();
-            st.carrier_hz = driver.getCarrierFrequency();
-            st.sync_mode = driver.isSynchronousMode();
-            st.pulses = driver.getPulsesPerCycle();
-            st.manual_carrier_mode = g_manual_carrier_mode;
-            st.manual_carrier_hz = g_manual_carrier_hz;
-            st.ramp_rate = g_ramp_rate;
+            if (m_Driver) {
+                RtStatus St {};
+                St.enabled = m_Driver->isEnabled();
+                St.estop = m_Driver->isEmergencyStopped();
+                St.current_freq = m_Driver->getCurrentFrequency();
+                St.modulation_index = m_Driver->getModulationIndex();
+                St.carrier_hz = m_Driver->getCarrierFrequency();
+                St.sync_mode = m_Driver->isSynchronousMode();
+                St.pulses = m_Driver->getPulsesPerCycle();
+                St.manual_carrier_mode = m_ManualCarrierMode;
+                St.manual_carrier_hz = m_ManualCarrierHz;
+                St.ramp_rate = m_RampRate;
 
-            status_write(st);
+                StatusWrite(St);
+            }
         }
 
         tight_loop_contents();
@@ -219,69 +138,103 @@ static void core1_entry() {
 }
 
 // -----------------------------
-// Core0 enqueue helpers (used by CommandContext function pointers)
+// Carrier Logic (Instance Method)
 // -----------------------------
-static inline void q_push_void(RtCmd c) {
-    RtMsg m{c, 0.0f, 0};
-    (void)queue_try_add(&g_q, &m);
+void RtBridge::UpdateCarrierFromZones() {
+    if (!m_Driver || !m_Driver->isEnabled()) return;
+
+    if (m_ManualCarrierMode) {
+        if (m_LastCarrierHz != m_ManualCarrierHz || m_LastSyncMode != false) {
+            m_Driver->setCarrierFrequency(m_ManualCarrierHz);
+            m_Driver->setSynchronousMode(false, 0);
+            m_LastCarrierHz = m_ManualCarrierHz;
+            m_LastSyncMode = false;
+            m_LastPulses = 0;
+        }
+        return;
+    }
+
+    float CurrentFreq = m_Driver->getCurrentFrequency();
+    ZoneConfig Zone {};
+    float SyncPulsesF = 0.0f;
+
+    if (m_Manager && m_Manager->getZone(CurrentFreq, &Zone)) {
+        float Carrier = m_Manager->calculateCarrier(CurrentFreq, &Zone, &SyncPulsesF);
+        bool SyncMode = (Zone.type == ZoneType::SYNC);
+        uint16_t Pulses = SyncMode ? (uint16_t)SyncPulsesF : 0;
+
+        if (m_LastCarrierHz != Carrier || m_LastSyncMode != SyncMode || m_LastPulses != Pulses) {
+            m_Driver->setCarrierFrequency(Carrier);
+            m_Driver->setSynchronousMode(SyncMode, Pulses);
+            m_LastCarrierHz = Carrier;
+            m_LastSyncMode = SyncMode;
+            m_LastPulses = Pulses;
+        }
+    }
 }
 
-static inline void q_push_f(RtCmd c, float v) {
-    RtMsg m{c, v, 0};
-    (void)queue_try_add(&g_q, &m);
+// -----------------------------
+// Status Seqlock Implementation
+// -----------------------------
+void RtBridge::StatusWrite(const RtStatus& _Status) {
+    m_SharedStatus.Seq++;
+    __dmb();
+    m_SharedStatus.Status = _Status;
+    __dmb();
+    m_SharedStatus.Seq++;
 }
 
-static inline void q_push_b(RtCmd c, bool b) {
-    RtMsg m{c, 0.0f, b ? 1u : 0u};
-    (void)queue_try_add(&g_q, &m);
+bool RtBridge::StatusRead(RtStatus* _OutStatus) {
+    uint32_t A = m_SharedStatus.Seq;
+    __dmb();
+    RtStatus Snap = m_SharedStatus.Status;
+    __dmb();
+    uint32_t B = m_SharedStatus.Seq;
+    if (A != B || (A & 1u)) return false;
+    *_OutStatus = Snap;
+    return true;
 }
 
-// These must be real function pointers (no capturing lambdas)
-static void ctx_set_ramp_rate(float v)          { q_push_f(RtCmd::SET_RAMP_RATE, v); }
-static void ctx_set_manual_carrier_hz(float v)  { q_push_f(RtCmd::SET_MANUAL_CARRIER_HZ, v); }
-static void ctx_set_manual_carrier_mode(bool b) { q_push_b(RtCmd::SET_MANUAL_CARRIER_MODE, b); }
-
-static void ctx_enable()  { q_push_void(RtCmd::ENABLE); }
-static void ctx_disable() { q_push_void(RtCmd::DISABLE); }
-
-static void ctx_estop()        { q_push_void(RtCmd::ESTOP); }
-static void ctx_clear_estop()  { q_push_void(RtCmd::CLEAR_ESTOP); }
-
-static void ctx_set_target_freq(float v)        { q_push_f(RtCmd::SET_TARGET_FREQ, v); }
-static void ctx_set_freq_immediate(float v)     { q_push_f(RtCmd::SET_FREQ_IMMEDIATE, v); }
-
-static bool ctx_try_get_status(RtStatus* out) { return status_read(out); }
-
 // -----------------------------
-// Public API
+// Static Context Callbacks
 // -----------------------------
-CommandContext RtBridge::initAndGetContext(CommutationManager* zone_mgr) {
-    g_zone_mgr = zone_mgr;
+void RtBridge::CtxSetRampRate(float _Value) { 
+    if(s_Instance) s_Instance->m_Queue.push(SetRampRate{_Value}); 
+}
 
-    // queue capacity: tune as you like
-    queue_init(&g_q, sizeof(RtMsg), 32);
+void RtBridge::CtxSetManualCarrierHz(float _Value) { 
+    if(s_Instance) s_Instance->m_Queue.push(SetManualCarrierHz{_Value}); 
+}
 
-    g_shared.seq = 0;
+void RtBridge::CtxSetManualCarrierMode(bool _Enable) { 
+    if(s_Instance) s_Instance->m_Queue.push(SetManualCarrierMode{_Enable}); 
+}
 
-    multicore_launch_core1(core1_entry);
+void RtBridge::CtxEnable() { 
+    if(s_Instance) s_Instance->m_Queue.push(RtCmd::Enable); 
+}
 
-    CommandContext ctx{};
-    ctx.zone_mgr = zone_mgr;
+void RtBridge::CtxDisable() { 
+    if(s_Instance) s_Instance->m_Queue.push(RtCmd::Disable); 
+}
 
-    ctx.set_ramp_rate = ctx_set_ramp_rate;
-    ctx.set_manual_carrier_hz = ctx_set_manual_carrier_hz;
-    ctx.set_manual_carrier_mode = ctx_set_manual_carrier_mode;
+void RtBridge::CtxEstop() { 
+    if(s_Instance) s_Instance->m_Queue.push(RtCmd::Estop); 
+}
 
-    ctx.enable = ctx_enable;
-    ctx.disable = ctx_disable;
+void RtBridge::CtxClearEstop() { 
+    if(s_Instance) s_Instance->m_Queue.push(RtCmd::ClearEstop); 
+}
 
-    ctx.emergency_stop = ctx_estop;
-    ctx.clear_emergency_stop = ctx_clear_estop;
+void RtBridge::CtxSetTargetFreq(float _Value) { 
+    if(s_Instance) s_Instance->m_Queue.push(SetTargetFreq{_Value}); 
+}
 
-    ctx.set_target_frequency = ctx_set_target_freq;
-    ctx.set_frequency_immediate = ctx_set_freq_immediate;
+void RtBridge::CtxSetFreqImmediate(float _Value) { 
+    if(s_Instance) s_Instance->m_Queue.push(SetFreqImmediate{_Value}); 
+}
 
-    ctx.try_get_status = ctx_try_get_status;
-
-    return ctx;
+bool RtBridge::CtxTryGetStatus(RtStatus* _OutStatus) { 
+    if(s_Instance) return s_Instance->StatusRead(_OutStatus);
+    return false;
 }

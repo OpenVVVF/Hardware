@@ -19,16 +19,19 @@ static MeasurementSystem* measurements = nullptr;
 
 static void configureZones() {
     zone_mgr.clearZones();
-    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 12000.0f);
+    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 1200.0f);
+    // zone_mgr.addRCFM(0, 2000, 1200, 200);
 }
 
 int main() {
     stdio_init_all();
     sleep_ms(500);
 
+    RtBridge Bridge_ = RtBridge();
+
 
     configureZones();
-    CommandContext ctx = RtBridge::initAndGetContext(&zone_mgr);
+    CommandContext ctx = Bridge_.InitAndGetContext(&zone_mgr);
 
     CommandManager::instance().setContext(ctx);
     initializeCommands();
@@ -94,6 +97,11 @@ int main() {
     //         // measurements->printChannels();
     //         last_telemetry = get_absolute_time();
     //     }
+        
+        MotorConfig C;
+        C._MaxDcBusCurrent_A = 666.0f; 
+
+        // RtBridge::MainQueue.push(C);
 
         // ---- Status print using core1 snapshot
         if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {

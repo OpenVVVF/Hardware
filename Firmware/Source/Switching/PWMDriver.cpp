@@ -1,10 +1,21 @@
 #include "PWMDriver.h"
 #include "hardware/clocks.h"
 #include "hardware/irq.h"
+#include "hardware/gpio.h"
+#include "pico/time.h"
 #include "Hardware.h"
+
 #include <cmath>
+#include <algorithm>
 
 PWMDriver* PWMDriver::instance_ = nullptr;
+
+// Define pins here (so header doesn’t need Hardware.h)
+PWMDriver::PhasePins PWMDriver::kPins[PWMDriver::kPhaseCount] = {
+    {Hardware::Pins::U_A, Hardware::Pins::U_B},
+    {Hardware::Pins::V_A, Hardware::Pins::V_B},
+    {Hardware::Pins::W_A, Hardware::Pins::W_B},
+};
 
 extern "C" void pwm_wrap_isr() {
     if (PWMDriver::instance()) {
@@ -13,41 +24,138 @@ extern "C" void pwm_wrap_isr() {
 }
 
 // ============================================================================
-// SPWM Implementation
+// SPWMLutStrategy
 // ============================================================================
-void SPWMStrategy::computeDuties(float theta, float mod_index, uint16_t top,
-                                uint16_t& duty_u, uint16_t& duty_v, uint16_t& duty_w) {
-    // Three-phase sine calculation
-    float su = sinf(theta);
-    float sv = sinf(theta - 2.0f * static_cast<float>(M_PI) / 3.0f);
-    float sw = sinf(theta + 2.0f * static_cast<float>(M_PI) / 3.0f);
-    
-    // Apply modulation index and offset to [0, 1]
-    auto toDuty = [&](float s) -> uint16_t {
-        float x = (mod_index * s + 1.0f) * 0.5f;
-        if (x < 0.0f) x = 0.0f;
-        if (x > 1.0f) x = 1.0f;
-        return static_cast<uint16_t>(x * static_cast<float>(top));
-    };
-    
-    duty_u = toDuty(su);
-    duty_v = toDuty(sv);
-    duty_w = toDuty(sw);
+SPWMStrategy::SPWMStrategy() {
+    // Fill LUT ONCE (outside ISR). This uses sinf but only at init.
+    // LUT maps full turn [0..2π) across LUT_SIZE samples.
+    for (uint32_t i = 0; i < LUT_SIZE; ++i) {
+        float theta = (6.2831853071795864769f * static_cast<float>(i)) / static_cast<float>(LUT_SIZE);
+        float s = sinf(theta);
+        int32_t v = static_cast<int32_t>(lroundf(s * 32767.0f));
+        if (v > 32767) v = 32767;
+        if (v < -32767) v = -32767;
+        sin_lut_[i] = static_cast<int16_t>(v);
+    }
+}
+
+inline uint16_t SPWMStrategy::dutyFromPhase(uint32_t phase_q32,
+                                               int16_t mod_q15,
+                                               uint16_t top,
+                                               const int16_t* lut) {
+    // index from top LUT_BITS bits
+    uint32_t idx = phase_q32 >> INDEX_SHIFT;
+    int32_t s = lut[idx]; // [-32767..32767]
+
+    // apply modulation: (s * mod_q15) >> 15 yields [-32767..32767] approx
+    int32_t v = (s * static_cast<int32_t>(mod_q15)) >> 15;
+
+    // map [-32767..32767] -> [0..top]
+    // (v + 32767) * top / 65534
+    uint32_t x = static_cast<uint32_t>(v + 32767) * static_cast<uint32_t>(top);
+    return static_cast<uint16_t>(x / 65534u);
+}
+
+void SPWMStrategy::computeDuties(uint32_t phase_q32,
+                                   int16_t mod_q15,
+                                   uint16_t top,
+                                   uint16_t& duty_u,
+                                   uint16_t& duty_v,
+                                   uint16_t& duty_w) {
+    // 3-phase: U = θ, V = θ-120°, W = θ+120°
+    uint32_t p_u = phase_q32;
+    uint32_t p_v = phase_q32 - PHASE_120;
+    uint32_t p_w = phase_q32 + PHASE_120;
+
+    duty_u = dutyFromPhase(p_u, mod_q15, top, sin_lut_);
+    duty_v = dutyFromPhase(p_v, mod_q15, top, sin_lut_);
+    duty_w = dutyFromPhase(p_w, mod_q15, top, sin_lut_);
 }
 
 // ============================================================================
-// PWMDriver Implementation
+// PWMDriver helpers
+// ============================================================================
+PWMDriver::PwmTiming PWMDriver::computeTiming(uint32_t sys_hz, float carrier_hz) {
+    // Compute ideal top for div=1.0:
+    // pwm_freq = sys_hz / (div * (top+1) * 2) for phase-correct,
+    // but you’re using phase-correct after enabling.
+    // Your original formula used (sys_hz / (2*hz)) - 1, we keep same behavior.
+    float ideal_top = (static_cast<float>(sys_hz) / (2.0f * carrier_hz)) - 1.0f;
+
+    float div = 1.0f;
+    uint16_t top = 0;
+
+    if (ideal_top > 65535.0f) {
+        // round up to nearest 0.1 like your original
+        div = ceilf((ideal_top / 65535.0f) * 10.0f) / 10.0f;
+        if (div > 255.0f) div = 255.0f;
+        float t = (static_cast<float>(sys_hz) / (2.0f * carrier_hz * div)) - 1.0f;
+        if (t < 0.0f) t = 0.0f;
+        if (t > 65535.0f) t = 65535.0f;
+        top = static_cast<uint16_t>(t);
+    } else {
+        if (ideal_top < 0.0f) ideal_top = 0.0f;
+        top = static_cast<uint16_t>(ideal_top);
+    }
+
+    return {div, top};
+}
+
+void PWMDriver::applyTimingToHardware(const PwmTiming& t) {
+    // Critical section: disable wrap IRQ while changing div/top
+    irq_set_enabled(PWM_IRQ_WRAP, false);
+
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        pwm_set_clkdiv(kSlices[i], t.clk_div);
+        pwm_set_wrap(kSlices[i], t.top);
+    }
+
+    clk_div_ = t.clk_div;
+    pwm_top_ = t.top;
+
+    // update dependent precomputes
+    recalcDutyLimits();
+    updatePhaseStep();
+
+    irq_set_enabled(PWM_IRQ_WRAP, true);
+}
+
+void PWMDriver::recalcDutyLimits() {
+    // Precompute clamp counts in integer math.
+    // Clamp to valid [0..top] bounds.
+    uint32_t lo = (static_cast<uint32_t>(pwm_top_) *
+                   static_cast<uint32_t>(config_.min_duty_percent)) / 100u;
+    uint32_t hi = (static_cast<uint32_t>(pwm_top_) *
+                   static_cast<uint32_t>(config_.max_duty_percent)) / 100u;
+
+    if (lo > pwm_top_) lo = pwm_top_;
+    if (hi > pwm_top_) hi = pwm_top_;
+    if (hi < lo) hi = lo;
+
+    min_count_ = static_cast<uint16_t>(lo);
+    max_count_ = static_cast<uint16_t>(hi);
+}
+
+int16_t PWMDriver::floatToQ15Clamp01(float x) {
+    if (x < 0.0f) x = 0.0f;
+    if (x > 0.999969f) x = 0.999969f; // (32767/32768)
+    int32_t q = static_cast<int32_t>(lroundf(x * 32768.0f));
+    if (q > 32767) q = 32767;
+    if (q < 0) q = 0;
+    return static_cast<int16_t>(q);
+}
+
+// ============================================================================
+// PWMDriver
 // ============================================================================
 PWMDriver::PWMDriver(const Config& cfg) : config_(cfg) {
-    // Set singleton (last constructed driver wins - don't create multiple instances)
     instance_ = this;
 }
 
 void PWMDriver::init(float initial_carrier_hz) {
-    // Initialize slices but don't enable yet
+    chooseFixedDivider_(Hardware::Limits::Switching::MIN_HZ);
+
     setCarrierFrequency(initial_carrier_hz);
-    
-    // Configure pins as GPIO (low) initially for safety
     forceAllGpioLow();
 }
 
@@ -58,54 +166,28 @@ void PWMDriver::setStrategy(ModulationStrategy* strategy) {
 void PWMDriver::setCarrierFrequency(float hz) {
     if (hz < Hardware::Limits::Switching::MIN_HZ) hz = Hardware::Limits::Switching::MIN_HZ;
     if (hz > Hardware::Limits::Switching::MAX_HZ) hz = Hardware::Limits::Switching::MAX_HZ;
-    
+
     carrier_hz_ = hz;
+
+    uint16_t new_top = computeTopFromCarrier_(carrier_hz_);
+
     if (enabled_) {
-        updateHardwareClock(hz);
+        // No blanking: TOP is double-buffered and latches on boundary.
+        // Keep the 3 slices consistent by writing them together with wrap IRQ disabled.
+        irq_set_enabled(PWM_IRQ_WRAP, false);
+        for (uint i = 0; i < kPhaseCount; ++i) {
+            pwm_set_wrap(kSlices[i], new_top);
+        }
+        irq_set_enabled(PWM_IRQ_WRAP, true);
+
+        pwm_top_ = new_top;
+        recalcDutyLimits();
         updatePhaseStep();
     } else {
-        // Pre-calculate top value even if not running
-        const uint32_t sys_hz = clock_get_hz(clk_sys);
-        float ideal_top = (static_cast<float>(sys_hz) / (2.0f * hz)) - 1.0f;
-        if (ideal_top > 65535.0f) {
-            clk_div_ = ceilf((ideal_top / 65535.0f) * 10.0f) / 10.0f;
-            if (clk_div_ > 255.0f) clk_div_ = 255.0f;
-            pwm_top_ = static_cast<uint16_t>((static_cast<float>(sys_hz) / 
-                      (2.0f * hz * clk_div_)) - 1.0f);
-        } else {
-            clk_div_ = 1.0f;
-            pwm_top_ = static_cast<uint16_t>(ideal_top);
-        }
+        pwm_top_ = new_top;
+        recalcDutyLimits();
+        updatePhaseStep();
     }
-}
-
-void PWMDriver::updateHardwareClock(float carrier_hz) {
-    const uint32_t sys_hz = clock_get_hz(clk_sys);
-    float ideal_top = (static_cast<float>(sys_hz) / (2.0f * carrier_hz)) - 1.0f;
-    float div = 1.0f;
-    uint16_t new_top;
-    
-    if (ideal_top > 65535.0f) {
-        div = ceilf((ideal_top / 65535.0f) * 10.0f) / 10.0f;
-        if (div > 255.0f) div = 255.0f;
-        new_top = static_cast<uint16_t>((static_cast<float>(sys_hz) / 
-                                        (2.0f * carrier_hz * div)) - 1.0f);
-    } else {
-        new_top = static_cast<uint16_t>(ideal_top);
-    }
-    
-    // Critical section: disable IRQ during hardware update
-    irq_set_enabled(PWM_IRQ_WRAP, false);
-    
-    for (uint slice = 0; slice < 3; slice++) {
-        pwm_set_clkdiv(slice, div);
-        pwm_set_wrap(slice, new_top);
-    }
-    
-    pwm_top_ = new_top;
-    clk_div_ = div;
-    
-    irq_set_enabled(PWM_IRQ_WRAP, true);
 }
 
 void PWMDriver::setTargetFrequency(float hz, float ramp_rate) {
@@ -120,8 +202,14 @@ void PWMDriver::setFrequencyImmediate(float hz) {
 }
 
 void PWMDriver::setModulationIndex(float mi) {
+    auto_modulation_ = false;
+
+    // Keep float for API/debug, but store fixed-point for ISR.
     mod_index_ = mi;
-    auto_modulation_ = false;  // Manual override disables auto curve
+    if (mod_index_ < 0.0f) mod_index_ = 0.0f;
+    if (mod_index_ > 0.999f) mod_index_ = 0.999f;
+
+    mod_q15_ = floatToQ15Clamp01(mod_index_);
 }
 
 void PWMDriver::setAutoModulation(bool enable) {
@@ -135,73 +223,120 @@ void PWMDriver::setSynchronousMode(bool enable, uint16_t pulses_per_cycle) {
 }
 
 void PWMDriver::updatePhaseStep() {
+    // phase_step_q32 = (electrical_freq / carrier_hz) * 2^32 turns-per-tick
+    // If synchronous mode: exactly 1/pulses_per_cycle turns per PWM tick.
     if (sync_mode_ && std::fabs(current_freq_) > 0.01f && pulses_per_cycle_ > 0) {
-        // Synchronous: fixed angle step per PWM cycle
-        dtheta_ = 2.0f * static_cast<float>(M_PI) / static_cast<float>(pulses_per_cycle_);
-    } else {
-        // Asynchronous: continuous phase rotation
-        if (carrier_hz_ > 0) {
-            dtheta_ = 2.0f * static_cast<float>(M_PI) * current_freq_ / carrier_hz_;
-        } else {
-            dtheta_ = 0;
+        // one electrical cycle per pulses_per_cycle PWM ticks
+        phase_step_q32_ = static_cast<uint32_t>(
+            (static_cast<uint64_t>(1) << 32) / static_cast<uint32_t>(pulses_per_cycle_)
+        );
+        if (current_freq_ < 0.0f) {
+            phase_step_q32_ = 0u - phase_step_q32_; // reverse
         }
+        return;
     }
+
+    if (carrier_hz_ <= 0.0f) {
+        phase_step_q32_ = 0;
+        return;
+    }
+
+    // Do this outside ISR, double is fine here (not in IRQ).
+    double turns_per_tick = static_cast<double>(current_freq_) / static_cast<double>(carrier_hz_);
+    double step = turns_per_tick * 4294967296.0; // 2^32
+
+    // Clamp to uint32 range via int64.
+    int64_t s = static_cast<int64_t>(llround(step));
+    phase_step_q32_ = static_cast<uint32_t>(s);
+}
+void PWMDriver::chooseFixedDivider_(float min_carrier_hz) {
+    const uint32_t sys_hz = clock_get_hz(clk_sys);
+
+    // Need: top <= 65535 at min_carrier_hz
+    // top = sys / (2 * min_hz * div) - 1  <= 65535
+    // => div >= sys / (2 * min_hz * (65535+1))
+    const double denom = 2.0 * (double)min_carrier_hz * 65536.0;
+    double required = (double)sys_hz / denom;
+
+    if (required < 1.0) required = 1.0;
+    if (required > 255.0) required = 255.0;
+
+    // Quantize to 1/16 steps (RP2040 divider fractional resolution)
+    double q = ceil(required * 16.0) / 16.0;
+    if (q > 255.0) q = 255.0;
+
+    fixed_clk_div_ = (float)q;
+    clk_div_ = fixed_clk_div_; // driver uses clk_div_ elsewhere
+}
+
+uint16_t PWMDriver::computeTopFromCarrier_(float carrier_hz) const {
+    const uint32_t sys_hz = clock_get_hz(clk_sys);
+
+    if (carrier_hz < Hardware::Limits::Switching::MIN_HZ) carrier_hz = Hardware::Limits::Switching::MIN_HZ;
+    if (carrier_hz > Hardware::Limits::Switching::MAX_HZ) carrier_hz = Hardware::Limits::Switching::MAX_HZ;
+
+    double top = ((double)sys_hz / (2.0 * (double)carrier_hz * (double)fixed_clk_div_)) - 1.0;
+    if (top < 0.0) top = 0.0;
+    if (top > 65535.0) top = 65535.0;
+    return (uint16_t)llround(top);
 }
 
 void PWMDriver::enable() {
     if (emergency_stop_) return;
-    
-    // Initialize PWM hardware
+
     pwm_config cfg = pwm_get_default_config();
     pwm_config_set_clkdiv(&cfg, clk_div_);
     pwm_config_set_wrap(&cfg, pwm_top_);
-    pwm_config_set_phase_correct(&cfg, false);  // Start as edge-aligned
-    
-    // Initialize all three half-bridges
-    auto init_slice = [&](uint gpio_a, uint gpio_b) {
+    pwm_config_set_phase_correct(&cfg, false); // sync start edge-aligned
+
+    // init slices using arrays
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        uint gpio_a = kPins[i].a;
+        uint gpio_b = kPins[i].b;
         uint slice = pwm_gpio_to_slice_num(gpio_a);
+
         gpio_set_function(gpio_a, GPIO_FUNC_PWM);
         gpio_set_function(gpio_b, GPIO_FUNC_PWM);
+
         pwm_init(slice, &cfg, false);
-        // Complementary output: B inverted relative to A
+
+        // complementary output by polarity inversion (NOTE: RP2040 has no deadtime insertion)
         pwm_set_output_polarity(slice, false, true);
-        pwm_set_chan_level(slice, PWM_CHAN_A, pwm_top_ / 2);
-        pwm_set_chan_level(slice, PWM_CHAN_B, pwm_top_ / 2);
-    };
-    
-    init_slice(Hardware::Pins::U_A, Hardware::Pins::U_B);
-    init_slice(Hardware::Pins::V_A, Hardware::Pins::V_B);
-    init_slice(Hardware::Pins::W_A, Hardware::Pins::W_B);
-    
-    // Sync procedure: align counters
-    pwm_set_counter(0, 0);
-    pwm_set_counter(1, 0);
-    pwm_set_counter(2, 0);
-    
-    // Brief enable to sync, then switch to phase-correct
-    pwm_set_mask_enabled(PWM_SLICE_MASK);
+
+        // start mid-duty
+        pwm_set_both_levels(slice, pwm_top_ / 2, pwm_top_ / 2);
+    }
+
+    // sync counters (assuming slices are 0,1,2; otherwise store actual slice nums)
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        pwm_set_counter(kSlices[i], 0);
+    }
+
+    // brief enable to sync, then stop
+    pwm_set_mask_enabled((1u << kSlices[0]) | (1u << kSlices[1]) | (1u << kSlices[2]));
     sleep_us(50);
     pwm_set_mask_enabled(0);
-    
-    // Switch to phase-correct (center-aligned) for better waveform
-    pwm_set_phase_correct(0, true);
-    pwm_set_phase_correct(1, true);
-    pwm_set_phase_correct(2, true);
-    
-    // Reset counters and restart
-    pwm_set_counter(0, 0);
-    pwm_set_counter(1, 0);
-    pwm_set_counter(2, 0);
-    pwm_set_mask_enabled(PWM_SLICE_MASK);
-    
-    // Setup interrupt
-    pwm_clear_irq(0);
-    pwm_set_irq_enabled(0, true);
+
+    // switch to phase-correct (center-aligned)
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        pwm_set_phase_correct(kSlices[i], true);
+    }
+
+    // reset counters and restart
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        pwm_set_counter(kSlices[i], 0);
+    }
+    pwm_set_mask_enabled((1u << kSlices[0]) | (1u << kSlices[1]) | (1u << kSlices[2]));
+
+    // IRQ on slice 0 wrap
+    pwm_clear_irq(kSlices[0]);
+    pwm_set_irq_enabled(kSlices[0], true);
+
     irq_set_exclusive_handler(PWM_IRQ_WRAP, pwm_wrap_isr);
     irq_set_enabled(PWM_IRQ_WRAP, true);
-    
+
     enabled_ = true;
-    theta_ = 0.0f;
+    phase_q32_ = 0;
     updatePhaseStep();
 }
 
@@ -211,7 +346,7 @@ void PWMDriver::disable() {
     forceAllGpioLow();
     target_freq_ = 0.0f;
     current_freq_ = 0.0f;
-    theta_ = 0.0f;
+    phase_q32_ = 0;
 }
 
 void PWMDriver::emergencyStop() {
@@ -221,7 +356,7 @@ void PWMDriver::emergencyStop() {
     forceAllGpioLow();
     target_freq_ = 0.0f;
     current_freq_ = 0.0f;
-    theta_ = 0.0f;
+    phase_q32_ = 0;
 }
 
 void PWMDriver::clearEmergency() {
@@ -233,41 +368,40 @@ void PWMDriver::clearEmergency() {
 
 void PWMDriver::update(float dt) {
     if (emergency_stop_) return;
-    
+
     // Frequency ramping
     float err = target_freq_ - current_freq_;
     if (std::fabs(err) > 0.01f) {
         float step = ramp_rate_ * dt;
-        if (err > 0) {
+        if (err > 0.0f) {
             current_freq_ += (err > step ? step : err);
         } else {
             current_freq_ -= (-err > step ? step : -err);
         }
         updatePhaseStep();
     } else {
-        current_freq_ = target_freq_;  // Snap to target
+        current_freq_ = target_freq_;
     }
-    
+
     // Auto-disable when ramped to zero
     if (enabled_ && target_freq_ == 0.0f && std::fabs(current_freq_) < 0.01f) {
         disable();
         return;
     }
-    
-    // Auto-modulation curve (matches your original code)
-    
+
+    // Auto-modulation curve (kept from your original behavior)
     if (auto_modulation_) {
         float abs_freq = std::fabs(current_freq_);
         if (abs_freq <= 0.0f) {
-            mod_index_ = 0.04f;  // Maintain minimum flux
+            mod_index_ = 0.04f;
         } else if (abs_freq >= 120.0f) {
-            mod_index_ = 0.99f;  // Full modulation at high speed
+            mod_index_ = 0.99f;
         } else {
-            // Linear ramp from 5% to 99% over 0-60Hz
             mod_index_ = 0.04f + (abs_freq / 120.0f) * (0.99f - 0.04f);
         }
+        mod_q15_ = floatToQ15Clamp01(mod_index_);
     }
-    
+
     // Enable PWM if we have a target but were disabled
     if (!enabled_ && std::fabs(target_freq_) > 0.01f && !emergency_stop_) {
         enable();
@@ -275,72 +409,44 @@ void PWMDriver::update(float dt) {
 }
 
 void PWMDriver::isrHandler() {
-    pwm_clear_irq(0);
-    
-    if (emergency_stop_ || !enabled_ || !strategy_) {
-        return;
-    }
-    
-    // Get duty values from modulation strategy
-    uint16_t du, dv, dw;
-    strategy_->computeDuties(theta_, mod_index_, pwm_top_, du, dv, dw);
-    
-    // Apply safety clamping (keep away from 0% and 100% for bootstrap)
-    uint16_t lo = static_cast<uint16_t>(pwm_top_ * (config_.min_duty_percent / 100.0f));
-    uint16_t hi = static_cast<uint16_t>(pwm_top_ * (config_.max_duty_percent / 100.0f));
-    
-    du = clampDuty(du, lo, hi);
-    dv = clampDuty(dv, lo, hi);
-    dw = clampDuty(dw, lo, hi);
-    
-    // Update hardware
-    setSliceComplementary(0, du);
-    setSliceComplementary(1, dv);
-    setSliceComplementary(2, dw);
-    
-    // Advance electrical angle
-    theta_ += dtheta_;
-    if (theta_ >= 2.0f * static_cast<float>(M_PI)) {
-        theta_ -= 2.0f * static_cast<float>(M_PI);
-    }
-    if (theta_ < 0.0f) {
-        theta_ += 2.0f * static_cast<float>(M_PI);
-    }
-}
+    pwm_clear_irq(kSlices[0]);
 
-void PWMDriver::setSliceComplementary(uint slice, uint16_t level) {
-    // Write same level to both channels. Polarity inversion on B channel 
-    // (set during init) creates complementary pair with deadtime if hardware supports it
-    pwm_set_chan_level(slice, PWM_CHAN_A, level);
-    pwm_set_chan_level(slice, PWM_CHAN_B, level);
+    if (emergency_stop_ || !enabled_ || !strategy_) return;
+
+    // Compute duties with LUT/fixed-point (no float here)
+    uint16_t du, dv, dw;
+    strategy_->computeDuties(phase_q32_, mod_q15_, pwm_top_, du, dv, dw);
+
+    // Clamp using precomputed counts (no float here)
+    du = clampDuty(du, min_count_, max_count_);
+    dv = clampDuty(dv, min_count_, max_count_);
+    dw = clampDuty(dw, min_count_, max_count_);
+
+    // Fast writes
+    setSliceComplementary(kSlices[0], du);
+    setSliceComplementary(kSlices[1], dv);
+    setSliceComplementary(kSlices[2], dw);
+
+    // Advance phase
+    phase_q32_ += phase_step_q32_;
 }
 
 void PWMDriver::forceAllGpioLow() {
-    auto force_low = [&](uint gpio) {
+    auto force_low = [](uint gpio) {
         gpio_set_function(gpio, GPIO_FUNC_SIO);
         gpio_set_dir(gpio, GPIO_OUT);
         gpio_put(gpio, 0);
     };
-    
-    force_low(Hardware::Pins::U_A);
-    force_low(Hardware::Pins::U_B);
-    force_low(Hardware::Pins::V_A);
-    force_low(Hardware::Pins::V_B);
-    force_low(Hardware::Pins::W_A);
-    force_low(Hardware::Pins::W_B);
+
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        force_low(kPins[i].a);
+        force_low(kPins[i].b);
+    }
 }
 
 void PWMDriver::restorePwmPins() {
-    gpio_set_function(Hardware::Pins::U_A, GPIO_FUNC_PWM);
-    gpio_set_function(Hardware::Pins::U_B, GPIO_FUNC_PWM);
-    gpio_set_function(Hardware::Pins::V_A, GPIO_FUNC_PWM);
-    gpio_set_function(Hardware::Pins::V_B, GPIO_FUNC_PWM);
-    gpio_set_function(Hardware::Pins::W_A, GPIO_FUNC_PWM);
-    gpio_set_function(Hardware::Pins::W_B, GPIO_FUNC_PWM);
-}
-
-uint16_t PWMDriver::clampDuty(uint16_t x, uint16_t lo, uint16_t hi) {
-    if (x < lo) return lo;
-    if (x > hi) return hi;
-    return x;
+    for (uint i = 0; i < kPhaseCount; ++i) {
+        gpio_set_function(kPins[i].a, GPIO_FUNC_PWM);
+        gpio_set_function(kPins[i].b, GPIO_FUNC_PWM);
+    }
 }
