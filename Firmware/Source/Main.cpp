@@ -186,7 +186,7 @@ int main() {
     g_Foc.ApplyCurrentLimits(CurrentCmd);
 
     // 5. Initialize Telemetry
-    Telemetry::set_period_us(1000); // 100 Hz
+    Telemetry::set_period_us(1000); // 100 Hz (it's not lmao...)
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
 
