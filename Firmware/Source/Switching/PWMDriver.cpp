@@ -31,7 +31,6 @@ static inline float fast_min3(float a, float b, float c) {
 
 FOCStrategy::FOCStrategy() {
     resetControllers();
-    resetCalibrationState();
 }
 
 float FOCStrategy::clamp(float x, float lo, float hi) {
@@ -69,18 +68,6 @@ void FOCStrategy::resetControllers() {
     speed_loop_accum_ = 0.0f;
 }
 
-void FOCStrategy::resetCalibrationState() {
-    cal_state_ = CalState::IDLE;
-    tried_dir_flip_ = false;
-    tried_pi_shift_ = false;
-    cal_state_start_us_ = 0;
-    theta_mech_align_raw_ = 0.0f;
-    theta_mech_verify_start_ = 0.0f;
-    last_driver_enabled_ = false;
-}
-
-
-
 void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t top,
                                uint16_t& duty_u, uint16_t& duty_v, uint16_t& duty_w) {
     // Safe default (zero vector)
@@ -88,41 +75,15 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     duty_v = top / 2;
     duty_w = top / 2;
 
-    if (!meas_read_ || !driver_ || driver_->isEmergencyStopped()) {
+    if (!meas_read_ || !driver_ || !driver_->isEnabled() || driver_->isEmergencyStopped()) {
         resetControllers();
-        cal_state_ = CalState::IDLE;
-        last_driver_enabled_ = false;
         return;
     }
-
-    const bool enabled = driver_->isEnabled();
 
     // Read latest measurement snapshot (lock-free)
     FocMeasurement m{};
     if (!meas_read_(&m)) {
         // If we can't get a consistent snapshot, keep zero vector.
-        return;
-    }
-
-    // If we just transitioned disabled->enabled, start calibration (if enabled)
-    if (!last_driver_enabled_ && enabled) {
-        resetControllers();
-        if (autocal_enabled_ && !calibrated_) {
-            cal_state_ = CalState::ALIGN;
-            cal_state_start_us_ = m.t_us;
-            tried_dir_flip_ = false;
-            tried_pi_shift_ = false;
-            enc_dir_ = +1;
-        } else {
-            cal_state_ = CalState::RUN;
-        }
-    }
-    last_driver_enabled_ = enabled;
-
-    // If disabled, keep zero vector and reset control integrators (but keep calibration result)
-    if (!enabled) {
-        resetControllers();
-        cal_state_ = CalState::IDLE;
         return;
     }
 
@@ -139,161 +100,94 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
         return;
     }
 
-    // --- Clarke transform (a=u, b=v, c=w). Assumes i_u + i_v + i_w ≈ 0. ---
-    const float i_u = m.i_u;
-    const float i_v = m.i_v;
-    const float INV_SQRT3 = 0.57735026919f;
-    const float i_alpha = i_u;
-    const float i_beta  = (i_u + 2.0f * i_v) * INV_SQRT3;
-
-    // dt for ISR-rate current loop
-    const float dt_isr = 1.0f / fmaxf(100.0f, driver_->getCarrierFrequency());
-
-    // --- Calibration state machine ---
-    const uint32_t elapsed_us = (uint32_t)(m.t_us - cal_state_start_us_);
-    const float TWO_PI = 2.0f * static_cast<float>(M_PI);
-
-    float theta_ctrl = 0.0f; // the angle used for Park/Inverse-Park this cycle
-    float id_ref = 0.0f;
-    float iq_ref = 0.0f;
-
-    if (autocal_enabled_ && !calibrated_) {
-        if (cal_state_ == CalState::IDLE) {
-            // Shouldn't happen if we started calibration on enable, but handle anyway.
-            cal_state_ = CalState::ALIGN;
-            cal_state_start_us_ = m.t_us;
-            tried_dir_flip_ = false;
-            tried_pi_shift_ = false;
-            enc_dir_ = +1;
-        }
-
-        if (cal_state_ == CalState::ALIGN) {
-            // Force a stationary stator field along theta_ctrl=0 using a forced reference frame.
-            theta_ctrl = 0.0f;
-            id_ref = align_id_a_;
-            iq_ref = 0.0f;
-
-            if (elapsed_us >= align_time_ms_ * 1000u) {
-                // Capture the encoder mechanical angle once the rotor has settled.
-                theta_mech_align_raw_ = m.theta_mech_rad;
-
-                // Choose elec_offset so that theta_e = p*dir*theta_mech + offset == 0 at the locked position.
-                elec_offset_rad_ = wrap_0_2pi(-static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * theta_mech_align_raw_);
-
-                // Move to VERIFY
-                cal_state_ = CalState::VERIFY;
-                cal_state_start_us_ = m.t_us;
-                theta_mech_verify_start_ = m.theta_mech_rad;
-                resetControllers();
-            }
-        }
-
-        if (cal_state_ == CalState::VERIFY) {
-            theta_ctrl = wrap_0_2pi(static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * m.theta_mech_rad + elec_offset_rad_);
-            id_ref = 0.0f;
-            iq_ref = clamp(verify_iq_a_, 0.0f, iq_max_);
-
-            if (elapsed_us >= verify_time_ms_ * 1000u) {
-                // Use raw encoder motion sign to decide whether we want to flip direction.
-                const float delta_mech = angle_diff(m.theta_mech_rad, theta_mech_verify_start_);
-
-                // "Moved enough" threshold (rad). Keep it low; motor is free spinning.
-                const float MIN_MOVE = 0.05f; // ~3 degrees mech
-
-                if (delta_mech < -MIN_MOVE && !tried_dir_flip_) {
-                    // Motor moved opposite to encoder-positive direction.
-                    // Flip our encoder direction mapping so +Iq produces +encoder motion.
-                    enc_dir_ = -enc_dir_;
-                    tried_dir_flip_ = true;
-                    tried_pi_shift_ = false;
-
-                    elec_offset_rad_ = wrap_0_2pi(-static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * theta_mech_align_raw_);
-                    cal_state_start_us_ = m.t_us;
-                    theta_mech_verify_start_ = m.theta_mech_rad;
-                    resetControllers();
-                } else if (fabsf(delta_mech) < MIN_MOVE && !tried_pi_shift_) {
-                    // Not much motion: try π electrical shift (covers common sign/axis ambiguities).
-                    elec_offset_rad_ = wrap_0_2pi(elec_offset_rad_ + static_cast<float>(M_PI));
-                    tried_pi_shift_ = true;
-
-                    cal_state_start_us_ = m.t_us;
-                    theta_mech_verify_start_ = m.theta_mech_rad;
-                    resetControllers();
-                } else {
-                    // Accept calibration
-                    calibrated_ = true;
-                    cal_state_ = CalState::RUN;
-                    resetControllers();
-                }
-            }
-        }
-    }
-
-    // --- RUN mode (normal speed->Iq loop) ---
-    if (cal_state_ == CalState::RUN || calibrated_) {
-        const float speed_target_hz = driver_->getCurrentFrequency();
-        if (fabsf(speed_target_hz) < 0.01f) {
-            resetControllers();
-            return;
-        }
-
-        theta_ctrl = wrap_0_2pi(static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * m.theta_mech_rad + elec_offset_rad_);
-
-        // Timing from measurement timestamp for speed estimate
-        float dt_meas = 0.0f;
-        if (have_prev_) {
-            uint32_t du = (uint32_t)(m.t_us - prev_t_us_);
-            dt_meas = (float)du * 1e-6f;
-            if (dt_meas < 1e-6f || dt_meas > 0.02f) dt_meas = 0.0f;
-        }
-
-        // Electrical speed estimate (rad/s), low-pass filtered
-        if (have_prev_ && dt_meas > 0.0f) {
-            float dth = angle_diff(theta_ctrl, prev_theta_e_);
-            float omega_inst = dth / dt_meas;
-            omega_e_ += (omega_inst - omega_e_) * speed_lp_;
-            speed_loop_accum_ += dt_meas;
-        }
-        prev_t_us_ = m.t_us;
-        prev_theta_e_ = theta_ctrl;
-        have_prev_ = true;
-
-        // Speed loop @ ~1kHz produces iq_ref
-        const float omega_ref = speed_target_hz * TWO_PI;
-        if (speed_loop_accum_ >= 0.001f) {
-            const float dt_spd = speed_loop_accum_;
-            speed_loop_accum_ = 0.0f;
-
-            const float e_spd = omega_ref - omega_e_;
-            spd_int_ += spd_pi_ki_ * e_spd * dt_spd;
-            spd_int_ = clamp(spd_int_, -iq_max_, iq_max_);
-            iq_ref = spd_pi_kp_ * e_spd + spd_int_;
-            iq_ref = clamp(iq_ref, -iq_max_, iq_max_);
-        } else {
-            iq_ref = clamp(spd_int_, -iq_max_, iq_max_);
-        }
-
-        id_ref = id_ref_;
-    } else if (cal_state_ != CalState::ALIGN && cal_state_ != CalState::VERIFY) {
-        // If we somehow got here without a valid state, stay safe.
+    // If command is essentially zero, behave like the existing open-loop behavior:
+    // ramp setpoint to 0 will auto-disable the driver; meanwhile, output zero vector.
+    const float speed_target_hz = driver_->getCurrentFrequency();
+    if (fabsf(speed_target_hz) < 0.01f) {
         resetControllers();
         return;
     }
 
-    // --- Park transform using theta_ctrl ---
-    const float s = sinf(theta_ctrl);
-    const float c = cosf(theta_ctrl);
+    // Timing from measurement timestamp (preferred for speed estimate)
+    float dt_meas = 0.0f;
+    if (have_prev_) {
+        uint32_t du = (uint32_t)(m.t_us - prev_t_us_);
+        dt_meas = (float)du * 1e-6f;
+        // Sanity bound to reject jitter / rollover artefacts
+        if (dt_meas < 1e-6f || dt_meas > 0.02f) dt_meas = 0.0f;
+    }
+
+    // Electrical angle
+    float theta_e = wrap_0_2pi((float)pole_pairs_ * m.theta_mech_rad + elec_offset_rad_);
+
+    // Electrical speed estimate (rad/s), low-pass filtered
+    if (have_prev_ && dt_meas > 0.0f) {
+        float dth = angle_diff(theta_e, prev_theta_e_);
+        float omega_inst = dth / dt_meas;
+        omega_e_ += (omega_inst - omega_e_) * speed_lp_;
+        speed_loop_accum_ += dt_meas;
+    }
+    prev_t_us_ = m.t_us;
+    prev_theta_e_ = theta_e;
+    have_prev_ = true;
+
+    // Reconstruct missing phase current if needed (caller may provide i_v already)
+    const float i_u = m.i_u;
+    const float i_v = m.i_v;
+    const float i_w = m.i_w;
+
+    // Clarke transform (a=u, b=v, c=w). Assumes i_u + i_v + i_w ≈ 0.
+    // i_alpha = i_a
+    // i_beta  = (i_a + 2*i_b)/sqrt(3)
+    const float INV_SQRT3 = 0.57735026919f;
+    const float i_alpha = i_u;
+    const float i_beta  = (i_u + 2.0f * i_v) * INV_SQRT3;
+
+    // Park transform
+    float s = sinf(theta_e);
+    float c = cosf(theta_e);
     const float i_d =  i_alpha * c + i_beta * s;
     const float i_q = -i_alpha * s + i_beta * c;
 
-    // --- Current PI controllers -> v_d, v_q ---
+    // ----------------------------
+    // Speed loop (generates i_q reference)
+    // Run ~1kHz using accumulated measurement dt.
+    // ----------------------------
+    static constexpr float TWO_PI = 2.0f * static_cast<float>(M_PI);
+    const float omega_ref = speed_target_hz * TWO_PI;
+    float iq_ref = 0.0f;
+
+    if (speed_loop_accum_ >= 0.001f) {
+        const float dt_spd = speed_loop_accum_;
+        speed_loop_accum_ = 0.0f;
+
+        const float e_spd = omega_ref - omega_e_;
+        spd_int_ += spd_pi_ki_ * e_spd * dt_spd;
+        // Anti-windup clamp in “A” domain
+        spd_int_ = clamp(spd_int_, -iq_max_, iq_max_);
+        iq_ref = spd_pi_kp_ * e_spd + spd_int_;
+        iq_ref = clamp(iq_ref, -iq_max_, iq_max_);
+    } else {
+        // Hold last integrator contribution as the main command
+        iq_ref = clamp(spd_int_, -iq_max_, iq_max_);
+    }
+
+    const float id_ref = id_ref_;
+
+    // ----------------------------
+    // Current PI controllers -> v_d, v_q
+    // Run at PWM rate; dt from carrier.
+    // ----------------------------
+    float dt_isr = 1.0f / fmaxf(100.0f, driver_->getCarrierFrequency());
+
     const float e_id = id_ref - i_d;
     const float e_iq = iq_ref - i_q;
 
     id_int_ += id_pi_ki_ * e_id * dt_isr;
     iq_int_ += iq_pi_ki_ * e_iq * dt_isr;
 
-    const float v_max = 0.57735026919f * m.v_bus; // Vdc/sqrt(3)
+    // Voltage limit for linear SVPWM region (|V_alpha,beta| <= Vdc/sqrt(3))
+    const float v_max = 0.57735026919f * m.v_bus;
 
     float v_d = id_pi_kp_ * e_id + id_int_;
     float v_q = iq_pi_kp_ * e_iq + iq_int_;
@@ -304,6 +198,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
         float scale = v_max / v_mag;
         v_d *= scale;
         v_q *= scale;
+        // back-calc integrators to match saturated output
         id_int_ = v_d - id_pi_kp_ * e_id;
         iq_int_ = v_q - iq_pi_kp_ * e_iq;
     }
@@ -312,7 +207,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     const float v_alpha = v_d * c - v_q * s;
     const float v_beta  = v_d * s + v_q * c;
 
-    // SVPWM via common-mode injection
+    // SVPWM via common-mode injection in phase domain
     const float SQRT3_BY_2 = 0.86602540378f;
     float v_u = v_alpha;
     float v_v = -0.5f * v_alpha + SQRT3_BY_2 * v_beta;
@@ -325,11 +220,13 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     v_v += v_off;
     v_w += v_off;
 
+    // Convert to duty ratios (leg voltage relative to DC midpoint: (d-0.5)*Vdc)
     const float inv_vdc = 1.0f / m.v_bus;
     float du = 0.5f + v_u * inv_vdc;
     float dv = 0.5f + v_v * inv_vdc;
     float dw = 0.5f + v_w * inv_vdc;
 
+    // Final clamp to [0,1]
     du = clamp(du, 0.0f, 1.0f);
     dv = clamp(dv, 0.0f, 1.0f);
     dw = clamp(dw, 0.0f, 1.0f);
@@ -338,6 +235,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     duty_v = (uint16_t)(dv * (float)top);
     duty_w = (uint16_t)(dw * (float)top);
 }
+
 // ============================================================================
 // SPWM Implementation
 // ============================================================================

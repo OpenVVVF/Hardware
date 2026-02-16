@@ -211,13 +211,7 @@ static void core1_entry() {
     g_foc.setMeasReader(meas_read);
     g_foc.attachDriver(&driver);
     g_foc.setPolePairs(6);
-    g_foc.setAutoCalEnabled(true);
-    g_foc.clearCalibration();
-    // Alignment/verification defaults are safe for bring-up; tweak here if needed.
-    // g_foc.setAlignCurrentA(10.0f);
-    // g_foc.setAlignTimeMs(600);
-    // g_foc.setVerifyCurrentA(5.0f);
-    // g_foc.setVerifyTimeMs(250);
+    g_foc.setElectricalOffsetRad(0);
     // Defaults are conservative; tune pole pairs + offset for your motor.
     // g_foc.setPolePairs(4);
     // g_foc.setElectricalOffsetRad(0.0f);
