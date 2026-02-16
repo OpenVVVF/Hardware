@@ -433,7 +433,7 @@ float mech_angle = atan2f(sum_sn / (float)N, sum_cs / (float)N);
 mech_angle = wrap_0_2pi(mech_angle);
 
 // With your FOC: elec = mech*pp + offset
-float elec_sign = +1.0f;          // flip to -1 if needed
+float elec_sign = -1.0f;          // flip to -1 if needed
 float phase_correction_rad = 0.0f; // usually 0 with your Park, unless wiring/phase mapping differs
 
 float raw_elec = elec_sign * mech_angle * C._PolePairs_unitless;
