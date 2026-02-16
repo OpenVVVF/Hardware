@@ -39,8 +39,8 @@
 
   _DaxisController_.fKp = 0.5f;
   _DaxisController_.fKi = 80.0f; 
-  _DaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _DaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fLowOutLim = -4.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fUpOutLim = 4.0f; // volts (Eventually make this equal to the voltage of dc bus)
 
 
   _QaxisController_ = {};
@@ -50,8 +50,8 @@
 
   _QaxisController_.fKp = 0.5f;
   _QaxisController_.fKi = 80.0f;
-  _QaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _QaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus) 
+  _QaxisController_.fLowOutLim = -4.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _QaxisController_.fUpOutLim = 4.0f; // volts (Eventually make this equal to the voltage of dc bus) 
 
 
   _Clarke_ = {};

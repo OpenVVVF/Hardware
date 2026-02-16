@@ -148,9 +148,9 @@ int main() {
     static MeasurementSystem ms_instance(*adc_system);
     measurements = &ms_instance;
     const std::vector<ChannelConfig> channel_map = {
-        {0, 0, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 0.1f, "V_PH_W", 0.0f},
-        {0, 1, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 0.1f, "V_PH_V", 0.0f},
-        {0, 2, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 0.1f, "V_PH_U", 0.0f},
+        {0, 0, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 1.0f, "V_PH_W", 0.0f},
+        {0, 1, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 1.0f, "V_PH_V", 0.0f},
+        {0, 2, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 1.0f, "V_PH_U", 0.0f},
         {0, 3, SensorType::VOLTAGE_DIVIDER, 1500.0f, 0.0f, 1.0f, "V_DC_BUS", 0.0f},
         {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f},
         {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},
@@ -280,44 +280,43 @@ int main() {
             
 
 
-            // Keep state between 1kHz ticks
-            static float smoothed_angle_rad = 0.0f;
-            static float filtered_velocity = 0.0f;
+           // ------------------------------------------------------------------
+            // TRUE PLL TRACKING OBSERVER (1kHz)
+            // ------------------------------------------------------------------
+            static float theta_est = 0.0f;
+            static float omega_est = 0.0f;
 
             float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
-            float raw_velocity = SenseData._EncoderVelocity_RadPerSec;
 
-            // 1. Heavily filter the spiky velocity 
-            // (Mechanical inertia means actual speed doesn't change instantly)
-            filtered_velocity = (0.02f * raw_velocity) + (0.98f * filtered_velocity); 
+            // Tuning parameters for ~100 rad/s bandwidth
+            const float Kp_pll = 200.0f;
+            const float Ki_pll = 2000.0f;
+            const float dt = 0.001f; // 1kHz loop
 
-            // 2. Predict the new angle using the SMOOTH velocity
-            smoothed_angle_rad += filtered_velocity * 0.001f;
+            // 1. Calculate Error (Shortest path)
+            float error = raw_adc_rad - theta_est;
+            while (error > 3.14159265f) error -= 6.283185307f;
+            while (error < -3.14159265f) error += 6.283185307f;
 
-            // 3. Find the error between our prediction and the raw ADC reading
-            float angle_err = raw_adc_rad - smoothed_angle_rad;
+            // 2. PI Controller to estimate velocity
+            omega_est += Ki_pll * error * dt;
 
-            // Wrap error to -PI to PI so it always takes the shortest path
-            while (angle_err > 3.14159265f) angle_err -= 6.283185307f;
-            while (angle_err < -3.14159265f) angle_err += 6.283185307f;
+            // 3. Integrate to estimate angle
+            theta_est += (omega_est + Kp_pll * error) * dt;
 
-            // 4. Gently pull the prediction toward the true sensor reading (PLL behavior)
-            // A gain of 0.05 acts like a spring pulling it to reality without tracking the noise
-            smoothed_angle_rad += angle_err * 0.05f; 
+            // 4. Wrap the final estimated angle cleanly
+            while (theta_est >= 6.283185307f) theta_est -= 6.283185307f;
+            while (theta_est < 0.0f) theta_est += 6.283185307f;
 
-            // 5. Wrap the final output to 0 to 2PI
-            while (smoothed_angle_rad >= 6.283185307f) smoothed_angle_rad -= 6.283185307f;
-            while (smoothed_angle_rad < 0.0f) smoothed_angle_rad += 6.283185307f;
-
-            // Feed the clean data to FOC
-            SenseData._EncoderPosition_Rad = smoothed_angle_rad;
-            SenseData._EncoderVelocity_RadPerSec = filtered_velocity; // Feeds decouple terms too!
+            // Feed FOC
+            SenseData._EncoderPosition_Rad = theta_est;
+            SenseData._EncoderVelocity_RadPerSec = omega_est;
 
 
             // Pass the smoothly extrapolated angle to the FOC controller
             // SenseData._EncoderPosition_Rad = smoothed_angle_rad;
             
-            Telemetry::log("SMOOTH_DEG", smoothed_angle_rad * 57.29577f);
+            Telemetry::log("SMOOTH_DEG", theta_est * 57.29577f);
             Telemetry::log("ENCODER_OFFSET", g_Foc._EncoderOffset_Rad);
 
 
@@ -335,23 +334,28 @@ int main() {
                 g_Driver->setDutyCycles(TargetDutyCycles._Du_unitless, TargetDutyCycles._Dv_unitless, TargetDutyCycles._Dw_unitless);
                 updateCarrierFromZones();
             }
+
+
+
+            RtStatus st{};
+            const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
+
+            Telemetry::log("DEBUG_VQ", st.debug_Vq);
+            Telemetry::log("DEBUG_VD", st.debug_Vd);
+            Telemetry::log("DEBUG_AngleElec", st.debug_angle_elec);
+            Telemetry::log("DEBUG_IQ_MEASURED", st.debug_Iq_measured);
+
         }
 
 
-        RtStatus st{};
-        const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
-
-        Telemetry::log("DEBUG_VQ", st.debug_Vq);
-        Telemetry::log("DEBUG_VD", st.debug_Vd);
-        Telemetry::log("DEBUG_AngleElec", st.debug_angle_elec);
-        Telemetry::log("DEBUG_IQ_MEASURED", st.debug_Iq_measured);
 
         // ------------------------------------------------------------------
         // 1Hz Console Status Prints
         // ------------------------------------------------------------------
         if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {
 
-
+            RtStatus st{};
+            const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
 
             if (!have) {
                 printf("RT STATUS: unavailable\r\n");
