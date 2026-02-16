@@ -77,13 +77,16 @@ void FOCStrategy::resetCalibrationState() {
     theta_mech_align_raw_ = 0.0f;
     theta_mech_verify_start_ = 0.0f;
     last_driver_enabled_ = false;
+    pending_cal_start_ = false;
+    run_start_us_ = 0;
 }
+
 
 
 
 void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t top,
                                uint16_t& duty_u, uint16_t& duty_v, uint16_t& duty_w) {
-    // Safe default (zero vector)
+    // Safe default (zero vector / no line-line voltage)
     duty_u = top / 2;
     duty_v = top / 2;
     duty_w = top / 2;
@@ -92,6 +95,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
         resetControllers();
         cal_state_ = CalState::IDLE;
         last_driver_enabled_ = false;
+        pending_cal_start_ = false;
         return;
     }
 
@@ -100,21 +104,27 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     // Read latest measurement snapshot (lock-free)
     FocMeasurement m{};
     if (!meas_read_(&m)) {
-        // If we can't get a consistent snapshot, keep zero vector.
+        // If we can't get a consistent snapshot this ISR, keep zero vector.
         return;
     }
 
-    // If we just transitioned disabled->enabled, start calibration (if enabled)
+    const uint32_t now_us = time_us_32();
+
+    // Track enable transitions. We DO NOT start ALIGN timing until sensors are valid.
     if (!last_driver_enabled_ && enabled) {
         resetControllers();
+        have_prev_ = false;
+
         if (autocal_enabled_ && !calibrated_) {
-            cal_state_ = CalState::ALIGN;
-            cal_state_start_us_ = m.t_us;
+            cal_state_ = CalState::IDLE;      // will enter ALIGN once sensors are valid
+            pending_cal_start_ = true;
             tried_dir_flip_ = false;
             tried_pi_shift_ = false;
             enc_dir_ = +1;
         } else {
             cal_state_ = CalState::RUN;
+            run_start_us_ = now_us;
+            pending_cal_start_ = false;
         }
     }
     last_driver_enabled_ = enabled;
@@ -123,20 +133,29 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     if (!enabled) {
         resetControllers();
         cal_state_ = CalState::IDLE;
+        pending_cal_start_ = false;
         return;
     }
 
-    // Basic validity
+    // Basic validity (must have bus voltage + encoder angle)
     if (!(m.v_bus > 1.0f) || !std::isfinite(m.theta_mech_rad)) {
         resetControllers();
         return;
     }
 
-    // Reject stale sensor snapshots (e.g., core0 stalled)
-    const uint32_t now_us = time_us_32();
-    if ((uint32_t)(now_us - m.t_us) > 5000u) { // >5ms old
+    // Reject stale sensor snapshots (e.g., core0 stalled). Use a generous limit for bring-up.
+    // NOTE: Proper FOC current control ideally uses phase-current sampling synchronized to PWM.
+    const uint32_t STALE_LIMIT_US = 20000u; // 20ms
+    if ((uint32_t)(now_us - m.t_us) > STALE_LIMIT_US) {
         resetControllers();
         return;
+    }
+
+    // Start calibration once sensors are valid
+    if (pending_cal_start_) {
+        cal_state_ = CalState::ALIGN;
+        cal_state_start_us_ = now_us;
+        pending_cal_start_ = false;
     }
 
     // --- Clarke transform (a=u, b=v, c=w). Assumes i_u + i_v + i_w ≈ 0. ---
@@ -150,7 +169,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     const float dt_isr = 1.0f / fmaxf(100.0f, driver_->getCarrierFrequency());
 
     // --- Calibration state machine ---
-    const uint32_t elapsed_us = (uint32_t)(m.t_us - cal_state_start_us_);
+    const uint32_t elapsed_us = (uint32_t)(now_us - cal_state_start_us_);
     const float TWO_PI = 2.0f * static_cast<float>(M_PI);
 
     float theta_ctrl = 0.0f; // the angle used for Park/Inverse-Park this cycle
@@ -159,9 +178,9 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
 
     if (autocal_enabled_ && !calibrated_) {
         if (cal_state_ == CalState::IDLE) {
-            // Shouldn't happen if we started calibration on enable, but handle anyway.
+            // Should not happen if we used pending_cal_start_, but keep safe.
             cal_state_ = CalState::ALIGN;
-            cal_state_start_us_ = m.t_us;
+            cal_state_start_us_ = now_us;
             tried_dir_flip_ = false;
             tried_pi_shift_ = false;
             enc_dir_ = +1;
@@ -174,21 +193,19 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
             iq_ref = 0.0f;
 
             if (elapsed_us >= align_time_ms_ * 1000u) {
-                // Capture the encoder mechanical angle once the rotor has settled.
+                // Capture the encoder mechanical angle once the rotor has (hopefully) settled.
                 theta_mech_align_raw_ = m.theta_mech_rad;
 
-                // Choose elec_offset so that theta_e = p*dir*theta_mech + offset == 0 at the locked position.
+                // Choose elec_offset so that theta_e = p*dir*theta_mech + offset == 0 at locked position.
                 elec_offset_rad_ = wrap_0_2pi(-static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * theta_mech_align_raw_);
 
                 // Move to VERIFY
                 cal_state_ = CalState::VERIFY;
-                cal_state_start_us_ = m.t_us;
+                cal_state_start_us_ = now_us;
                 theta_mech_verify_start_ = m.theta_mech_rad;
                 resetControllers();
             }
-        }
-
-        if (cal_state_ == CalState::VERIFY) {
+        } else if (cal_state_ == CalState::VERIFY) {
             theta_ctrl = wrap_0_2pi(static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * m.theta_mech_rad + elec_offset_rad_);
             id_ref = 0.0f;
             iq_ref = clamp(verify_iq_a_, 0.0f, iq_max_);
@@ -208,7 +225,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
                     tried_pi_shift_ = false;
 
                     elec_offset_rad_ = wrap_0_2pi(-static_cast<float>(pole_pairs_) * static_cast<float>(enc_dir_) * theta_mech_align_raw_);
-                    cal_state_start_us_ = m.t_us;
+                    cal_state_start_us_ = now_us;
                     theta_mech_verify_start_ = m.theta_mech_rad;
                     resetControllers();
                 } else if (fabsf(delta_mech) < MIN_MOVE && !tried_pi_shift_) {
@@ -216,13 +233,14 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
                     elec_offset_rad_ = wrap_0_2pi(elec_offset_rad_ + static_cast<float>(M_PI));
                     tried_pi_shift_ = true;
 
-                    cal_state_start_us_ = m.t_us;
+                    cal_state_start_us_ = now_us;
                     theta_mech_verify_start_ = m.theta_mech_rad;
                     resetControllers();
                 } else {
                     // Accept calibration
                     calibrated_ = true;
                     cal_state_ = CalState::RUN;
+                    run_start_us_ = now_us;
                     resetControllers();
                 }
             }
@@ -271,6 +289,12 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
             iq_ref = clamp(iq_ref, -iq_max_, iq_max_);
         } else {
             iq_ref = clamp(spd_int_, -iq_max_, iq_max_);
+        }
+
+        // Startup torque boost: helps break static friction so "F <Hz>" spins immediately.
+        if ((uint32_t)(now_us - run_start_us_) < (start_boost_ms_ * 1000u) && fabsf(omega_e_) < 5.0f) {
+            const float sign = (omega_ref >= 0.0f) ? 1.0f : -1.0f;
+            iq_ref = clamp(sign * fabsf(start_iq_boost_a_), -iq_max_, iq_max_);
         }
 
         id_ref = id_ref_;
@@ -338,6 +362,7 @@ void FOCStrategy::computeDuties(float /*theta*/, float /*mod_index*/, uint16_t t
     duty_v = (uint16_t)(dv * (float)top);
     duty_w = (uint16_t)(dw * (float)top);
 }
+
 // ============================================================================
 // SPWM Implementation
 // ============================================================================

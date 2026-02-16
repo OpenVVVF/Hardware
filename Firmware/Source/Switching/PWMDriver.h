@@ -89,6 +89,10 @@ public:
     void setVerifyCurrentA(float a) { verify_iq_a_ = a; }
     void setVerifyTimeMs(uint32_t ms) { verify_time_ms_ = ms; }
 
+    // Startup torque boost (helps the motor begin spinning immediately)
+    void setStartBoostCurrentA(float a) { start_iq_boost_a_ = a; }
+    void setStartBoostTimeMs(uint32_t ms) { start_boost_ms_ = ms; }
+
     bool isCalibrated() const { return calibrated_; }
     float getElectricalOffsetRad() const { return elec_offset_rad_; }
     int  getEncoderDirection() const { return enc_dir_; }
@@ -120,6 +124,14 @@ private:
     float verify_iq_a_ = 5.0f;      // [A] torque "bump"
     uint32_t verify_time_ms_ = 250; // [ms]
 
+    // Startup boost settings
+    float start_iq_boost_a_ = 10.0f;      // [A] initial torque assist
+    uint32_t start_boost_ms_ = 400;       // [ms] max time to apply boost
+
+    // Internal timing/state
+    uint32_t run_start_us_ = 0;           // when RUN started
+    bool pending_cal_start_ = false;      // wait for valid sensors before ALIGN
+
     enum class CalState : uint8_t { IDLE, ALIGN, VERIFY, RUN };
     CalState cal_state_ = CalState::IDLE;
     bool calibrated_ = false;
@@ -136,8 +148,8 @@ private:
     float iq_pi_ki_ = 20.0f;
 
     // Speed loop PI gains (conservative)
-    float spd_pi_kp_ = 0.0025f;
-    float spd_pi_ki_ = 0.5f;
+    float spd_pi_kp_ = 0.02f;   // rad/s -> A (aggressive for bring-up)
+    float spd_pi_ki_ = 5.0f;    // rad/s*s -> A (aggressive for bring-up)
 
     // Integrators
     float id_int_ = 0.0f;
