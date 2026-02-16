@@ -61,6 +61,7 @@ using FocMeasReadFn = bool (*)(FocMeasurement* out);
 
 class PWMDriver; // fwd
 
+
 class FOCStrategy : public ModulationStrategy {
 public:
     FOCStrategy();
@@ -68,13 +69,29 @@ public:
     void setMeasReader(FocMeasReadFn fn) { meas_read_ = fn; }
     void attachDriver(PWMDriver* d) { driver_ = d; }
 
-    // Configuration (safe defaults; tune on the bench)
+    // -------- Configuration --------
     void setPolePairs(uint8_t pole_pairs) { pole_pairs_ = (pole_pairs == 0 ? 1 : pole_pairs); }
-    void setElectricalOffsetRad(float rad) { elec_offset_rad_ = rad; }
+    void setElectricalOffsetRad(float rad) { elec_offset_rad_ = rad; calibrated_ = true; } // manual override
     void setIqMax(float a) { iq_max_ = (a < 0 ? -a : a); }
     void setIdRef(float a) { id_ref_ = a; }
     void setCurrentGains(float kp, float ki) { id_pi_kp_ = kp; id_pi_ki_ = ki; iq_pi_kp_ = kp; iq_pi_ki_ = ki; }
     void setSpeedGains(float kp, float ki) { spd_pi_kp_ = kp; spd_pi_ki_ = ki; }
+
+    // -------- Auto-calibration (encoder electrical zero + direction) --------
+    // Default behavior: on first enable after boot, lock rotor to a fixed stator field,
+    // compute encoder electrical offset, then do a small torque "bump" to verify direction.
+    void setAutoCalEnabled(bool en) { autocal_enabled_ = en; }
+    void clearCalibration() { calibrated_ = false; cal_state_ = CalState::IDLE; }
+
+    // Tuning knobs for bring-up
+    void setAlignCurrentA(float a) { align_id_a_ = a; }
+    void setAlignTimeMs(uint32_t ms) { align_time_ms_ = ms; }
+    void setVerifyCurrentA(float a) { verify_iq_a_ = a; }
+    void setVerifyTimeMs(uint32_t ms) { verify_time_ms_ = ms; }
+
+    bool isCalibrated() const { return calibrated_; }
+    float getElectricalOffsetRad() const { return elec_offset_rad_; }
+    int  getEncoderDirection() const { return enc_dir_; }
 
     // Compute duty cycles (0..top) for three phases.
     // theta/mod_index args are ignored; they exist for interface compatibility.
@@ -90,10 +107,27 @@ private:
     // Basic configuration
     uint8_t pole_pairs_ = 4;        // adjust for your motor
     float elec_offset_rad_ = 0.0f;  // electrical zero offset (sensor->phase alignment)
+    int   enc_dir_ = +1;            // +1 or -1: maps encoder increasing angle to +electrical angle
 
     // References / limits
     float id_ref_ = 0.0f;           // [A]
     float iq_max_ = 60.0f;          // [A] torque current limit (bring-up)
+
+    // Auto-cal config
+    bool autocal_enabled_ = true;
+    float align_id_a_ = 10.0f;       // [A] rotor lock current (d-axis in forced frame)
+    uint32_t align_time_ms_ = 600;  // [ms]
+    float verify_iq_a_ = 5.0f;      // [A] torque "bump"
+    uint32_t verify_time_ms_ = 250; // [ms]
+
+    enum class CalState : uint8_t { IDLE, ALIGN, VERIFY, RUN };
+    CalState cal_state_ = CalState::IDLE;
+    bool calibrated_ = false;
+    bool tried_dir_flip_ = false;
+    bool tried_pi_shift_ = false;
+    uint32_t cal_state_start_us_ = 0;
+    float theta_mech_align_raw_ = 0.0f;   // captured at end of ALIGN
+    float theta_mech_verify_start_ = 0.0f;
 
     // PI gains (approx: V/A and V/(A*s) for current loops)
     float id_pi_kp_ = 0.05f;
@@ -118,13 +152,15 @@ private:
     float speed_lp_ = 0.10f;        // speed low-pass factor
     float speed_loop_accum_ = 0.0f; // seconds
 
+    bool last_driver_enabled_ = false;
+
     // Helpers
     static float wrap_0_2pi(float a);
     static float angle_diff(float a, float b);
     static float clamp(float x, float lo, float hi);
     void resetControllers();
+    void resetCalibrationState();
 };
-
 // ============================================================================
 // Hardware Driver for 3-Phase Bridge
 // ============================================================================
