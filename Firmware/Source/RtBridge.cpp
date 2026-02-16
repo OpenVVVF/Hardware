@@ -213,17 +213,20 @@ static void core1_entry() {
     g_foc.setPolePairs(6);
     g_foc.setAutoCalEnabled(true);
     g_foc.clearCalibration();
+    // Alignment/verification defaults are safe for bring-up; tweak here if needed.
+    // g_foc.setAlignCurrentA(10.0f);
+    // g_foc.setAlignTimeMs(600);
+    // g_foc.setVerifyCurrentA(5.0f);
+    // g_foc.setVerifyTimeMs(250);
     // Defaults are conservative; tune pole pairs + offset for your motor.
     // g_foc.setPolePairs(4);
     // g_foc.setElectricalOffsetRad(0.0f);
     driver.setStrategy(&g_foc);
     driver.setAutoModulation(true);
-    // Start with a higher carrier (inaudible) by default.
-    driver.init(20000.0f);
+    driver.init(2000.0f);
 
-    // IMPORTANT: do not enable at boot. We'll enable on the first non-zero
-    // frequency command so the measurement pipeline is definitely live.
-    driver.disable();
+    // Start disabled; enable on command (F/ENABLE) so auto-cal runs when sensors are ready.
+    // driver.enable();
 
     absolute_time_t next = make_timeout_time_us(1000);
 
