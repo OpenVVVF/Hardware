@@ -34,6 +34,98 @@ public:
 };
 
 // ============================================================================
+// Field-Oriented Control (FOC) – sensor-based PMSM/BLDC current control
+//
+// This implementation assumes:
+//   * You provide rotor mechanical angle (rad) from an absolute sensor (sin/cos).
+//   * You provide at least 2 phase currents (the 3rd can be reconstructed).
+//   * Control is executed on the PWM ISR core, using a lock-free snapshot reader.
+//
+// Notes:
+//   * This is a pragmatic “bring-up” FOC loop: PI current controllers + simple
+//     SVPWM via zero-sequence (common-mode) injection.
+//   * Motor parameters (Ld/Lq/psi) decoupling is intentionally omitted to keep
+//     bring-up safe; add feedforward once the loop is stable.
+// ============================================================================
+
+struct FocMeasurement {
+    uint32_t t_us = 0;           // time_us_32() when sample was captured
+    float i_u = 0.0f;            // phase U current [A]
+    float i_v = 0.0f;            // phase V current [A]
+    float i_w = 0.0f;            // phase W current [A]
+    float v_bus = 0.0f;          // DC bus voltage [V]
+    float theta_mech_rad = 0.0f; // mechanical rotor angle [rad], 0..2pi
+};
+
+using FocMeasReadFn = bool (*)(FocMeasurement* out);
+
+class PWMDriver; // fwd
+
+class FOCStrategy : public ModulationStrategy {
+public:
+    FOCStrategy();
+
+    void setMeasReader(FocMeasReadFn fn) { meas_read_ = fn; }
+    void attachDriver(PWMDriver* d) { driver_ = d; }
+
+    // Configuration (safe defaults; tune on the bench)
+    void setPolePairs(uint8_t pole_pairs) { pole_pairs_ = (pole_pairs == 0 ? 1 : pole_pairs); }
+    void setElectricalOffsetRad(float rad) { elec_offset_rad_ = rad; }
+    void setIqMax(float a) { iq_max_ = (a < 0 ? -a : a); }
+    void setIdRef(float a) { id_ref_ = a; }
+    void setCurrentGains(float kp, float ki) { id_pi_kp_ = kp; id_pi_ki_ = ki; iq_pi_kp_ = kp; iq_pi_ki_ = ki; }
+    void setSpeedGains(float kp, float ki) { spd_pi_kp_ = kp; spd_pi_ki_ = ki; }
+
+    // Compute duty cycles (0..top) for three phases.
+    // theta/mod_index args are ignored; they exist for interface compatibility.
+    void computeDuties(float theta, float mod_index, uint16_t top,
+                      uint16_t& duty_u, uint16_t& duty_v, uint16_t& duty_w) override;
+    const char* getName() const override { return "FOC"; }
+
+private:
+    // Snapshot source
+    FocMeasReadFn meas_read_ = nullptr;
+    PWMDriver* driver_ = nullptr;
+
+    // Basic configuration
+    uint8_t pole_pairs_ = 4;        // adjust for your motor
+    float elec_offset_rad_ = 0.0f;  // electrical zero offset (sensor->phase alignment)
+
+    // References / limits
+    float id_ref_ = 0.0f;           // [A]
+    float iq_max_ = 60.0f;          // [A] torque current limit (bring-up)
+
+    // PI gains (approx: V/A and V/(A*s) for current loops)
+    float id_pi_kp_ = 0.05f;
+    float id_pi_ki_ = 20.0f;
+    float iq_pi_kp_ = 0.05f;
+    float iq_pi_ki_ = 20.0f;
+
+    // Speed loop PI gains (conservative)
+    float spd_pi_kp_ = 0.0025f;
+    float spd_pi_ki_ = 0.5f;
+
+    // Integrators
+    float id_int_ = 0.0f;
+    float iq_int_ = 0.0f;
+    float spd_int_ = 0.0f;
+
+    // State
+    bool have_prev_ = false;
+    uint32_t prev_t_us_ = 0;
+    float prev_theta_e_ = 0.0f;
+    float omega_e_ = 0.0f;          // electrical rad/s (filtered)
+    float speed_lp_ = 0.10f;        // speed low-pass factor
+    float speed_loop_accum_ = 0.0f; // seconds
+
+    // Helpers
+    static float wrap_0_2pi(float a);
+    static float angle_diff(float a, float b);
+    static float clamp(float x, float lo, float hi);
+    void resetControllers();
+};
+
+// ============================================================================
 // Hardware Driver for 3-Phase Bridge
 // ============================================================================
 class PWMDriver {
