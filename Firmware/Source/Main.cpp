@@ -111,6 +111,7 @@ int main() {
     ctx.clear_emergency_stop = []() { if (g_Driver) g_Driver->clearEmergency(); };
     ctx.set_target_frequency = [](float val) { if (g_Driver) g_Driver->setTargetFrequency(val, g_RampRate); };
     ctx.set_frequency_immediate = [](float val) { if (g_Driver) g_Driver->setFrequencyImmediate(val); };
+    ctx.setEncoderOffset = [](float val) {g_Foc._EncoderOffset_Rad = val; };
     
     // Status polling callback bypasses the seqlock now
     ctx.try_get_status = [](RtStatus* st) -> bool {
@@ -155,8 +156,8 @@ int main() {
         {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f},
         {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},
         {1, 3, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 1.0f, "I_DC_MAIN", 0.410f},
-        {1, 1, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 1.0f, "I_PH_U", 0.410f},
-        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 1.0f, "I_PH_W", 0.410f}
+        {1, 1, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_U", 0.410f},
+        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_W", 0.410f}
     };
 
     measurements->addChannels(channel_map);
@@ -169,7 +170,7 @@ int main() {
 
     // 4. Configure FOC
     MotorConfig C; 
-    C._PolePairs_unitless = 6;
+    C._PolePairs_unitless = 5;
     C._Ld_Henry = 0.000040f;
     C._Lq_Henry = 0.000040f;
     C._DcBusVoltage_V = 60.0f;
@@ -181,7 +182,7 @@ int main() {
 
     CurrentCommand CurrentCmd;
     CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 1.0f;
+    CurrentCmd._IqCmd_A = 2.0f;
     g_Foc.ApplyCurrentLimits(CurrentCmd);
 
     // 5. Initialize Telemetry
@@ -193,59 +194,265 @@ int main() {
 
 
 // ------------------------------------------------------------------
-    // BRUTE-FORCE STATIC LOCK CALIBRATION
-    // ------------------------------------------------------------------
-    printf("\nLocking rotor... KEEP HANDS CLEAR!\n");
-    g_Driver->enable();
+// SAFE CALIBRATION: current-limited open-loop (NO 100A spikes)
+// ------------------------------------------------------------------
+printf("\nCAL: Encoder offset calibration (CURRENT LIMITED)...\n");
+g_Driver->enable();
 
-    // 1. High-power lock to defeat friction deadband (20 Volts!)
-    absolute_time_t lock_end = delayed_by_ms(get_absolute_time(), 2000);
-    while (absolute_time_diff_us(get_absolute_time(), lock_end) > 0) {
-        measurements->update();
-        
-        FocOutput cal_out{};
-        cal_out._Valpha_V = 5.0f; // Push hard to snap it into the valley
-        cal_out._Vbeta_V  = 0.0f;
-        cal_out._Vdc_V    = C._DcBusVoltage_V; 
-        
-        PhaseVoltages duty;
-        GenerateSpwm(cal_out, 0.95f, duty);
-        g_Driver->setDutyCycles(duty._Du_unitless, duty._Dv_unitless, duty._Dw_unitless);
-        sleep_us(200); // 5kHz pacing
+auto wrap_0_2pi = [](float a) {
+    const float TWO_PI = 6.283185307f;
+    while (a >= TWO_PI) a -= TWO_PI;
+    while (a <  0.0f)   a += TWO_PI;
+    return a;
+};
+
+auto wrap_pm_pi = [](float a) {
+    const float PI = 3.1415926535f;
+    const float TWO_PI = 6.283185307f;
+    while (a >  PI) a -= TWO_PI;
+    while (a < -PI) a += TWO_PI;
+    return a;
+};
+
+struct SinCosCal {
+    float sin_mid = 0.0f;
+    float cos_mid = 0.0f;
+    float sin_gain = 1.0f;
+    float cos_gain = 1.0f;
+};
+
+auto read_norm_sincos = [&](const SinCosCal& cal, float* s_out, float* c_out) {
+    float s = measurements->read("ENCODER_SIN");
+    float c = measurements->read("ENCODER_COS");
+    s = (s - cal.sin_mid) * cal.sin_gain;
+    c = (c - cal.cos_mid) * cal.cos_gain;
+    float r = sqrtf(s*s + c*c);
+    if (r > 1e-6f) { s /= r; c /= r; }
+    *s_out = s; *c_out = c;
+};
+
+// Library-consistent open-loop voltage -> duty (centered SPWM), with voltage limiting
+auto set_vdq_openloop = [&](float Vd, float Vq, float theta_e, float Vdc, float max_mod) {
+    tIPark ip = {};
+    ip.m_dq2albe = tIPark_dq2albe;
+    ip.fD = Vd;
+    ip.fQ = Vq;
+    ip.fSinAng = sinf(theta_e);
+    ip.fCosAng = cosf(theta_e);
+    ip.m_dq2albe(&ip); // ip.fAl/ip.fBe
+
+    tIFClarke ic = IF_CLARKE_DEFAULTS;
+    ic.fAl = ip.fAl;
+    ic.fBe = ip.fBe;
+    ic.m_albe2abc(&ic); // ic.fA/ic.fB/ic.fC (phase refs, volts)
+
+    if (Vdc < 1e-3f) { g_Driver->setDutyCycles(0.5f,0.5f,0.5f); return; }
+
+    const float Vlimit = 0.5f * Vdc * max_mod; // SPWM capability (phase peak)
+    float Va = ic.fA, Vb = ic.fB, Vc = ic.fC;
+
+    float maxAbs = fabsf(Va);
+    if (fabsf(Vb) > maxAbs) maxAbs = fabsf(Vb);
+    if (fabsf(Vc) > maxAbs) maxAbs = fabsf(Vc);
+
+    if (maxAbs > Vlimit && maxAbs > 1e-9f) {
+        float k = Vlimit / maxAbs;
+        Va *= k; Vb *= k; Vc *= k;
     }
 
-    // 2. Average 1000 samples while locked to defeat ADC noise
-    float sum_sin = 0.0f;
-    float sum_cos = 0.0f;
-    for (int i = 0; i < 1000; i++) {
-        measurements->update();
-        // These are already offset-corrected by your channel_map!
-        sum_sin += measurements->read("ENCODER_SIN"); 
-        sum_cos += measurements->read("ENCODER_COS");
-        sleep_us(200);
-    }
-    
-    float avg_sin = sum_sin / 1000.0f;
-    float avg_cos = sum_cos / 1000.0f;
+    float du = 0.5f + (Va / Vdc);
+    float dv = 0.5f + (Vb / Vdc);
+    float dw = 0.5f + (Vc / Vdc);
 
-    // 3. Calculate flawless offset
-    float mech_angle_rad = atan2f(avg_sin, avg_cos);
-    float raw_elec = mech_angle_rad * C._PolePairs_unitless;
-    
-    g_Foc._EncoderOffset_Rad = fmodf(-raw_elec, 2.0f * 3.1415926535f);
-    if (g_Foc._EncoderOffset_Rad < 0.0f) {
-        g_Foc._EncoderOffset_Rad += 2.0f * 3.1415926535f;
+    if (du < 0) du = 0; if (du > 1) du = 1;
+    if (dv < 0) dv = 0; if (dv > 1) dv = 1;
+    if (dw < 0) dw = 0; if (dw > 1) dw = 1;
+
+    g_Driver->setDutyCycles(du, dv, dw);
+};
+
+// -------- Safety / limits --------
+const float I_LOCK_MAX_A   = 8.0f;   // <= set to your safe calibration current
+const float I_TRIP_A       = 20.0f;  // hard trip (instant stop) - set to safe hardware limit
+const float max_mod_cal    = 0.70f;  // extra headroom for calibration
+const float theta_e_lock   = 0.0f;
+
+// Use very small starting voltages.
+// (On low-R motors, even 1–2V can be plenty.)
+const float Vd_lock_min_V  = 0.3f;
+const float Vd_lock_max_V  = 3.0f;   // do NOT start with 10V
+const float Vd_ramp_V_per_s = 1.0f;  // slow ramp
+
+// These still sweep, but current-limited
+const float sweep_hz_e     = 0.5f;
+const float sweep_time_s   = 6.0f;
+
+auto read_currents = [&](){
+    float Idc = measurements->read("I_DC_MAIN");
+    float Iu  = measurements->read("I_PH_U");
+    float Iw  = measurements->read("I_PH_W");
+    float Iv  = -(Iu + Iw);
+    // Use worst-case magnitude as a conservative limiter
+    float Ipk = fabsf(Iu);
+    if (fabsf(Iv) > Ipk) Ipk = fabsf(Iv);
+    if (fabsf(Iw) > Ipk) Ipk = fabsf(Iw);
+    return std::pair<float,float>(Idc, Ipk); // (dc, phase_peak_est)
+};
+
+auto hard_stop = [&](){
+    g_Driver->setDutyCycles(0.5f,0.5f,0.5f);
+    // If you prefer a hard gate-off:
+    // g_Driver->emergencyStop();
+};
+
+// -------- Get Vdc --------
+measurements->update();
+float Vdc_meas = measurements->read("V_DC_BUS");
+if (Vdc_meas < 5.0f) Vdc_meas = C._DcBusVoltage_V;
+
+// -------- 1) Sweep to compute sin/cos min/max, but current-limited --------
+printf("CAL: Sweep for sin/cos min/max (current limited)...\n");
+SinCosCal sc{};
+float sin_min=1e9f, sin_max=-1e9f, cos_min=1e9f, cos_max=-1e9f;
+
+float Vd_cmd = Vd_lock_min_V;
+
+absolute_time_t t0 = get_absolute_time();
+absolute_time_t last = get_absolute_time();
+
+while (absolute_time_diff_us(t0, get_absolute_time()) < (int64_t)(sweep_time_s * 1e6f)) {
+    measurements->update();
+    float dt = absolute_time_diff_us(last, get_absolute_time()) * 1e-6f;
+    last = get_absolute_time();
+    if (dt < 0) dt = 0;
+
+    float t = absolute_time_diff_us(t0, get_absolute_time()) * 1e-6f;
+    float theta_e = wrap_0_2pi(6.283185307f * sweep_hz_e * t);
+
+    auto [Idc, Ipk] = read_currents();
+
+    // Hard trip
+    if (fabsf(Idc) > I_TRIP_A || Ipk > I_TRIP_A) {
+        printf("CAL TRIP: Overcurrent! Idc=%f, Ipk=%f\n", Idc, Ipk);
+        hard_stop();
+        break;
     }
-    
-    g_Foc.Reset(); 
-    
-    // Re-apply torque command
-    // CurrentCommand CurrentCmd;
-    CurrentCmd._IdCmd_A = 0.0f; 
-    CurrentCmd._IqCmd_A = 2.0f; 
-    g_Foc.ApplyCurrentLimits(CurrentCmd);
-    
-    printf("Calibration Complete! Offset Locked: %f rad\n\n", g_Foc._EncoderOffset_Rad);
+
+    // Simple limiter: ramp Vd up until we approach I_LOCK_MAX, ramp down if above
+    if (Ipk < I_LOCK_MAX_A * 0.85f) {
+        Vd_cmd += Vd_ramp_V_per_s * dt;
+    } else if (Ipk > I_LOCK_MAX_A) {
+        Vd_cmd -= 3.0f * Vd_ramp_V_per_s * dt;
+    }
+    if (Vd_cmd < Vd_lock_min_V) Vd_cmd = Vd_lock_min_V;
+    if (Vd_cmd > Vd_lock_max_V) Vd_cmd = Vd_lock_max_V;
+
+    set_vdq_openloop(Vd_cmd, 0.0f, theta_e, Vdc_meas, max_mod_cal);
+
+    float s = measurements->read("ENCODER_SIN");
+    float c = measurements->read("ENCODER_COS");
+    if (s < sin_min) sin_min = s;
+    if (s > sin_max) sin_max = s;
+    if (c < cos_min) cos_min = c;
+    if (c > cos_max) cos_max = c;
+
+    sleep_us(600);
+}
+
+// Compute sin/cos normalization
+sc.sin_mid  = 0.5f*(sin_max + sin_min);
+sc.cos_mid  = 0.5f*(cos_max + cos_min);
+float sin_amp = 0.5f*(sin_max - sin_min);
+float cos_amp = 0.5f*(cos_max - cos_min);
+sc.sin_gain = (sin_amp > 1e-6f) ? (1.0f / sin_amp) : 1.0f;
+sc.cos_gain = (cos_amp > 1e-6f) ? (1.0f / cos_amp) : 1.0f;
+
+printf("CAL: sin[min,max]=[%f,%f] mid=%f gain=%f\n", sin_min, sin_max, sc.sin_mid, sc.sin_gain);
+printf("CAL: cos[min,max]=[%f,%f] mid=%f gain=%f\n", cos_min, cos_max, sc.cos_mid, sc.cos_gain);
+
+// -------- 2) Lock at theta_e_lock with current limit --------
+printf("CAL: Locking at theta_e=%f (current limited)...\n", theta_e_lock);
+
+// Re-use current-limited Vd_cmd from sweep, start low
+Vd_cmd = Vd_lock_min_V;
+absolute_time_t lock_end = delayed_by_ms(get_absolute_time(), 1200);
+last = get_absolute_time();
+
+while (absolute_time_diff_us(get_absolute_time(), lock_end) > 0) {
+    measurements->update();
+    float dt = absolute_time_diff_us(last, get_absolute_time()) * 1e-6f;
+    last = get_absolute_time();
+    if (dt < 0) dt = 0;
+
+    auto [Idc, Ipk] = read_currents();
+    if (fabsf(Idc) > I_TRIP_A || Ipk > I_TRIP_A) {
+        printf("CAL TRIP: Overcurrent during lock! Idc=%f, Ipk=%f\n", Idc, Ipk);
+        hard_stop();
+        break;
+    }
+
+    // keep Ipk near I_LOCK_MAX
+    if (Ipk < I_LOCK_MAX_A * 0.90f) Vd_cmd += Vd_ramp_V_per_s * dt;
+    if (Ipk > I_LOCK_MAX_A)         Vd_cmd -= 4.0f * Vd_ramp_V_per_s * dt;
+
+    if (Vd_cmd < Vd_lock_min_V) Vd_cmd = Vd_lock_min_V;
+    if (Vd_cmd > Vd_lock_max_V) Vd_cmd = Vd_lock_max_V;
+
+    set_vdq_openloop(Vd_cmd, 0.0f, theta_e_lock, Vdc_meas, max_mod_cal);
+    sleep_us(400);
+}
+
+// -------- 3) Sample normalized sin/cos while continuing limited lock --------
+printf("CAL: Sampling...\n");
+float sum_sn=0.0f, sum_cs=0.0f;
+const int N = 1200;
+
+for (int i = 0; i < N; i++) {
+    measurements->update();
+
+    auto [Idc, Ipk] = read_currents();
+    if (fabsf(Idc) > I_TRIP_A || Ipk > I_TRIP_A) {
+        printf("CAL TRIP: Overcurrent during sampling! Idc=%f, Ipk=%f\n", Idc, Ipk);
+        hard_stop();
+        break;
+    }
+
+    // keep lock applied but don’t chase too hard during averaging
+    if (Ipk > I_LOCK_MAX_A) Vd_cmd *= 0.98f;
+    set_vdq_openloop(Vd_cmd, 0.0f, theta_e_lock, Vdc_meas, max_mod_cal);
+
+    float sn, cs;
+    read_norm_sincos(sc, &sn, &cs);
+    sum_sn += sn;
+    sum_cs += cs;
+
+    sleep_us(400);
+}
+
+float mech_angle = atan2f(sum_sn / (float)N, sum_cs / (float)N);
+mech_angle = wrap_0_2pi(mech_angle);
+
+// With your FOC: elec = mech*pp + offset
+float elec_sign = +1.0f;          // flip to -1 if needed
+float phase_correction_rad = 0.0f; // usually 0 with your Park, unless wiring/phase mapping differs
+
+float raw_elec = elec_sign * mech_angle * C._PolePairs_unitless;
+float desired_elec = wrap_0_2pi(theta_e_lock + phase_correction_rad);
+
+g_Foc._EncoderOffset_Rad = wrap_0_2pi(desired_elec - raw_elec);
+
+g_Foc.Reset();
+CurrentCmd._IdCmd_A = 0.0f;
+CurrentCmd._IqCmd_A = 2.0f;
+g_Foc.ApplyCurrentLimits(CurrentCmd);
+
+printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
+       Vd_cmd, mech_angle, g_Foc._EncoderOffset_Rad);
+
+// release
+hard_stop();
+
+
 
 
     // 6. Timing Variables for the Main Loop

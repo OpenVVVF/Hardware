@@ -32,6 +32,8 @@ struct RtStatus {
     float debug_Iq_measured;
     float debug_Iq_error;
     float debug_angle_elec;
+
+    float encoder_offset;
 };
 
 // ======================
@@ -62,6 +64,7 @@ struct CommandContext {
 
     // Optional
     ctx_set_float_fn set_target_frequency;
+    ctx_set_float_fn setEncoderOffset;
     ctx_set_float_fn set_frequency_immediate;
 
     // ---- Core1 → Core0 telemetry ----

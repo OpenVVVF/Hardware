@@ -13,6 +13,7 @@ CommandInterface* makeEmergencyStopCommand();
 CommandInterface* makeEnableCommand();
 CommandInterface* makeImmediateCommand();
 CommandInterface* makeHelpCommand();
+CommandInterface* makeEncoderOffsetCommand();
 
 void initializeCommands() {
     auto& mgr = CommandManager::instance();
@@ -29,6 +30,7 @@ void initializeCommands() {
         makeEnableCommand(),
         makeImmediateCommand(),
         makeHelpCommand(),
+        makeEncoderOffsetCommand()
     };
 
     for (auto* c : cmds) mgr.registerCommand(c);

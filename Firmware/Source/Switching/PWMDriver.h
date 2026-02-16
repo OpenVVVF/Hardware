@@ -57,6 +57,8 @@ public:
     };
 
     explicit PWMDriver(const Config& cfg);
+    volatile uint32_t pwm_wrap_count_ = 0;
+    volatile uint32_t last_wrap_time_us_ = 0;
     float getCurrentFrequency() const { return current_freq_; }
     float getTargetFrequency() const { return target_freq_; }
     float getModulationIndex() const { return mod_index_; }

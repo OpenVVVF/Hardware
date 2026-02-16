@@ -397,6 +397,8 @@ void PWMDriver::update(float dt) {
 
 void PWMDriver::isrHandler() {
     pwm_clear_irq(kSlices[0]);
+    pwm_wrap_count_++;
+    last_wrap_time_us_ = time_us_32();
 
     if (emergency_stop_ || !enabled_) return;
 

@@ -39,8 +39,8 @@
 
   _DaxisController_.fKp = 0.5f;
   _DaxisController_.fKi = 80.0f; 
-  _DaxisController_.fLowOutLim = -4.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _DaxisController_.fUpOutLim = 4.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus)
 
 
   _QaxisController_ = {};
@@ -50,8 +50,8 @@
 
   _QaxisController_.fKp = 0.5f;
   _QaxisController_.fKi = 80.0f;
-  _QaxisController_.fLowOutLim = -4.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _QaxisController_.fUpOutLim = 4.0f; // volts (Eventually make this equal to the voltage of dc bus) 
+  _QaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _QaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus) 
 
 
   _Clarke_ = {};
@@ -215,7 +215,8 @@
       float Vq = _Vq_V;
       float Vmag = sqrtf(Vd * Vd + Vq * Vq);
       
-      float Vmax = _Config_._DcBusVoltage_V * _Config_._MaxModulation_unitless / sqrtf(3.0f);
+      float Vmax = 0.5f * _Config_._DcBusVoltage_V * _Config_._MaxModulation_unitless;
+
       // Note: sqrt(3)/3 for peak phase voltage from DC bus, or adjust based on your modulation
       
       if (Vmag > Vmax) {
