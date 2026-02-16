@@ -156,7 +156,7 @@ int main() {
         {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f},
         {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},
         {1, 3, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 1.0f, "I_DC_MAIN", 0.410f},
-        {1, 1, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_U", 0.410f},
+        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 0.1f, "I_PH_U", 0.410f},
         {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_W", 0.410f}
     };
 
@@ -190,6 +190,62 @@ int main() {
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
 
+
+
+
+// ------------------------------------------------------------------
+    // HARDWARE DIAGNOSTIC: CURRENT SENSOR POLARITY CHECK
+    // ------------------------------------------------------------------
+    printf("\n--- DIAGNOSTIC: VERIFYING CURRENT SENSOR POLARITY ---\n");
+    g_Driver->enable();
+
+    // 1. Set a small, safe test voltage (1.5V)
+    float test_voltage = 1.5f;
+    measurements->update();
+    float vdc = measurements->read("V_DC_BUS");
+    if (vdc < 5.0f) vdc = 60.0f; // Fallback to your config nominal
+
+    printf("Applying %.2fV strictly to Phase U...\n", test_voltage);
+
+    // 2. Manually calculate duty cycles to align the magnetic field EXACTLY to Phase U
+    // Phase U gets positive voltage, V and W get half-negative to complete the circuit
+    float duty_U = 0.5f + (test_voltage / vdc);
+    float duty_V = 0.5f + (-test_voltage / 2.0f / vdc);
+    float duty_W = 0.5f + (-test_voltage / 2.0f / vdc);
+
+    // Apply the static voltages directly to the PWM driver
+    g_Driver->setDutyCycles(duty_U, duty_V, duty_W);
+
+    // 3. Wait a brief moment for the current to rise through the motor inductance
+    sleep_ms(100);
+
+    // 4. Read the resulting currents
+    measurements->update();
+    float i_u = measurements->read("I_PH_U");
+    float i_w = measurements->read("I_PH_W");
+    float i_v = -(i_u + i_w); // Assuming wye-wound, sum of currents is 0
+
+    printf("\n--- RESULTS ---\n");
+    printf("  Phase U Current: %7.3f A  <-- MUST BE POSITIVE\n", i_u);
+    printf("  Phase V Current: %7.3f A  <-- Should be negative (~ half of U)\n", i_v);
+    printf("  Phase W Current: %7.3f A  <-- Should be negative (~ half of U)\n\n", i_w);
+
+    // 5. Evaluate and warn
+    if (i_u > 0.2f) {
+        printf(">>> PASS: Phase U polarity is CORRECT.\n");
+    } else if (i_u < -0.2f) {
+        printf(">>> FATAL FAIL: Phase U is REVERSED!\n");
+        printf("    This will cause a 100A positive feedback explosion.\n");
+        printf("    Fix: Multiply sensor reading by -1 or flip sensor wiring.\n");
+    } else {
+        printf(">>> WARN: Current too low to determine polarity. Increase test_voltage.\n");
+    }
+    printf("-----------------------------------------------------\n\n");
+
+    // 6. Safely turn off the drive before proceeding
+    g_Driver->setDutyCycles(0.5f, 0.5f, 0.5f);
+    g_Driver->disable();
+    sleep_ms(1000); // Pause so you can read the console
 
 
 
