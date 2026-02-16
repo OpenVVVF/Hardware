@@ -123,12 +123,12 @@
   
       float _EncoderOffset_Rad = 0.0f;
 
-
+      tPI _DaxisController_;
+      tPI _QaxisController_;
   private:
       MotorConfig _Config_;
       
-      tPI _DaxisController_;
-      tPI _QaxisController_;
+
       
       tFFClarke _Clarke_;
       tFPark _Park_;

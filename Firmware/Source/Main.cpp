@@ -453,11 +453,18 @@ printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
 hard_stop();
 
 
+    g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
+
+
 
 
     // 6. Timing Variables for the Main Loop
     absolute_time_t last_print = get_absolute_time();
     absolute_time_t next_foc_tick = get_absolute_time(); // Track 1kHz control loop
+
+    absolute_time_t old_t = get_absolute_time();
+
+    float dt_S = 0.0f;
 
     // ----------------------------------------------------------------------
     // Unified Run Loop
@@ -468,6 +475,11 @@ hard_stop();
         Telemetry::updateSensors();
         Telemetry::log("ROTOR_DEG", measurements->getRotorPositionDegrees());
         serial_proc.poll();
+
+        dt_S = (float)(get_absolute_time()-old_t)/1'000'000.0f;
+        old_t = get_absolute_time();
+
+        Telemetry::log("LOOP_ITERATION_TIMES_S", dt_S);
 
         // ------------------------------------------------------------------
         // ~1kHz FOC Control Tick (Replaces Core 1 Loop)
@@ -483,7 +495,10 @@ hard_stop();
             SenseData._Iv_A  = -(SenseData._Iu_A + SenseData._Iw_A);
             SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
             SenseData._EncoderPosition_Rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
-            SenseData._EncoderVelocity_RadPerSec = measurements->getRotorOmegaMechanicalRadPerSec(0.001f);
+            SenseData._EncoderVelocity_RadPerSec = measurements->getRotorOmegaMechanicalRadPerSec(dt_S);
+
+            g_Foc._DaxisController_.fDtSec = dt_S;
+            g_Foc._QaxisController_.fDtSec = dt_S;
             
 
 
@@ -498,7 +513,7 @@ hard_stop();
             // Tuning parameters for ~100 rad/s bandwidth
             const float Kp_pll = 200.0f;
             const float Ki_pll = 2000.0f;
-            const float dt = 0.001f; // 1kHz loop
+            const float dt = dt_S; // 1kHz loop
 
             // 1. Calculate Error (Shortest path)
             float error = raw_adc_rad - theta_est;
@@ -527,7 +542,7 @@ hard_stop();
             Telemetry::log("ENCODER_OFFSET", g_Foc._EncoderOffset_Rad);
 
 
-            
+
 
             g_Foc.UpdateSensors(SenseData);
 
