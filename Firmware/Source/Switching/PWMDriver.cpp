@@ -71,52 +71,39 @@ void SPWMStrategy::computeDuties(uint32_t phase_q32,
     duty_v = dutyFromPhase(p_v, mod_q15, top, sin_lut_);
     duty_w = dutyFromPhase(p_w, mod_q15, top, sin_lut_);
 }
-
-// ============================================================================
-// PWMDriver helpers
-// ============================================================================
-PWMDriver::PwmTiming PWMDriver::computeTiming(uint32_t sys_hz, float carrier_hz) {
-    // Compute ideal top for div=1.0:
-    // pwm_freq = sys_hz / (div * (top+1) * 2) for phase-correct,
-    // but you’re using phase-correct after enabling.
-    // Your original formula used (sys_hz / (2*hz)) - 1, we keep same behavior.
-    float ideal_top = (static_cast<float>(sys_hz) / (2.0f * carrier_hz)) - 1.0f;
-
-    float div = 1.0f;
-    uint16_t top = 0;
-
-    if (ideal_top > 65535.0f) {
-        // round up to nearest 0.1 like your original
-        div = ceilf((ideal_top / 65535.0f) * 10.0f) / 10.0f;
-        if (div > 255.0f) div = 255.0f;
-        float t = (static_cast<float>(sys_hz) / (2.0f * carrier_hz * div)) - 1.0f;
-        if (t < 0.0f) t = 0.0f;
-        if (t > 65535.0f) t = 65535.0f;
-        top = static_cast<uint16_t>(t);
-    } else {
-        if (ideal_top < 0.0f) ideal_top = 0.0f;
-        top = static_cast<uint16_t>(ideal_top);
-    }
-
-    return {div, top};
+static inline float clamp01(float x) {
+    if (x < 0.0f) return 0.0f;
+    if (x > 1.0f) return 1.0f;
+    return x;
 }
 
-void PWMDriver::applyTimingToHardware(const PwmTiming& t) {
-    // Critical section: disable wrap IRQ while changing div/top
+void PWMDriver::setDutyCycles(float du, float dv, float dw) {
+    du = clamp01(du);
+    dv = clamp01(dv);
+    dw = clamp01(dw);
+
+    // Convert to counts [0..pwm_top_]
+    uint16_t cu = (uint16_t)lroundf(du * (float)pwm_top_);
+    uint16_t cv = (uint16_t)lroundf(dv * (float)pwm_top_);
+    uint16_t cw = (uint16_t)lroundf(dw * (float)pwm_top_);
+
+    // Enforce your configured min/max bounds
+    cu = clampDuty(cu, min_count_, max_count_);
+    cv = clampDuty(cv, min_count_, max_count_);
+    cw = clampDuty(cw, min_count_, max_count_);
+
+    // Make update coherent wrt ISR
     irq_set_enabled(PWM_IRQ_WRAP, false);
+    manual_du_ = cu;
+    manual_dv_ = cv;
+    manual_dw_ = cw;
+    manual_duty_mode_ = true;
+    irq_set_enabled(PWM_IRQ_WRAP, true);
+}
 
-    for (uint i = 0; i < kPhaseCount; ++i) {
-        pwm_set_clkdiv(kSlices[i], t.clk_div);
-        pwm_set_wrap(kSlices[i], t.top);
-    }
-
-    clk_div_ = t.clk_div;
-    pwm_top_ = t.top;
-
-    // update dependent precomputes
-    recalcDutyLimits();
-    updatePhaseStep();
-
+void PWMDriver::clearManualDuties() {
+    irq_set_enabled(PWM_IRQ_WRAP, false);
+    manual_duty_mode_ = false;
     irq_set_enabled(PWM_IRQ_WRAP, true);
 }
 
@@ -153,7 +140,7 @@ PWMDriver::PWMDriver(const Config& cfg) : config_(cfg) {
 }
 
 void PWMDriver::init(float initial_carrier_hz) {
-    chooseFixedDivider_(Hardware::Limits::Switching::MIN_HZ);
+    chooseFixedDivider(Hardware::Limits::Switching::MIN_HZ);
 
     setCarrierFrequency(initial_carrier_hz);
     forceAllGpioLow();
@@ -169,7 +156,7 @@ void PWMDriver::setCarrierFrequency(float hz) {
 
     carrier_hz_ = hz;
 
-    uint16_t new_top = computeTopFromCarrier_(carrier_hz_);
+    uint16_t new_top = computeTopFromCarrier(carrier_hz_);
 
     if (enabled_) {
         // No blanking: TOP is double-buffered and latches on boundary.
@@ -249,7 +236,7 @@ void PWMDriver::updatePhaseStep() {
     int64_t s = static_cast<int64_t>(llround(step));
     phase_step_q32_ = static_cast<uint32_t>(s);
 }
-void PWMDriver::chooseFixedDivider_(float min_carrier_hz) {
+void PWMDriver::chooseFixedDivider(float min_carrier_hz) {
     const uint32_t sys_hz = clock_get_hz(clk_sys);
 
     // Need: top <= 65535 at min_carrier_hz
@@ -269,7 +256,7 @@ void PWMDriver::chooseFixedDivider_(float min_carrier_hz) {
     clk_div_ = fixed_clk_div_; // driver uses clk_div_ elsewhere
 }
 
-uint16_t PWMDriver::computeTopFromCarrier_(float carrier_hz) const {
+uint16_t PWMDriver::computeTopFromCarrier(float carrier_hz) const {
     const uint32_t sys_hz = clock_get_hz(clk_sys);
 
     if (carrier_hz < Hardware::Limits::Switching::MIN_HZ) carrier_hz = Hardware::Limits::Switching::MIN_HZ;
@@ -411,25 +398,31 @@ void PWMDriver::update(float dt) {
 void PWMDriver::isrHandler() {
     pwm_clear_irq(kSlices[0]);
 
-    if (emergency_stop_ || !enabled_ || !strategy_) return;
+    if (emergency_stop_ || !enabled_) return;
 
-    // Compute duties with LUT/fixed-point (no float here)
     uint16_t du, dv, dw;
-    strategy_->computeDuties(phase_q32_, mod_q15_, pwm_top_, du, dv, dw);
 
-    // Clamp using precomputed counts (no float here)
-    du = clampDuty(du, min_count_, max_count_);
-    dv = clampDuty(dv, min_count_, max_count_);
-    dw = clampDuty(dw, min_count_, max_count_);
+    if (manual_duty_mode_) {
+        du = manual_du_;
+        dv = manual_dv_;
+        dw = manual_dw_;
+    } else {
+        if (!strategy_) return;
 
-    // Fast writes
+        strategy_->computeDuties(phase_q32_, mod_q15_, pwm_top_, du, dv, dw);
+
+        du = clampDuty(du, min_count_, max_count_);
+        dv = clampDuty(dv, min_count_, max_count_);
+        dw = clampDuty(dw, min_count_, max_count_);
+
+        phase_q32_ += phase_step_q32_;
+    }
+
     setSliceComplementary(kSlices[0], du);
     setSliceComplementary(kSlices[1], dv);
     setSliceComplementary(kSlices[2], dw);
-
-    // Advance phase
-    phase_q32_ += phase_step_q32_;
 }
+
 
 void PWMDriver::forceAllGpioLow() {
     auto force_low = [](uint gpio) {

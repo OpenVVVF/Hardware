@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cfloat>
+#include <math.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846f
@@ -243,4 +244,25 @@ float MeasurementSystem::getRotorPositionDegrees() const {
     float angle_deg = angle_rad * 180.0f / M_PI;
     if (angle_deg < 0.0f) angle_deg += 360.0f;
     return angle_deg;
+}
+
+float MeasurementSystem::getRotorOmegaMechanicalRadPerSec(float dt_s) const {
+    if (dt_s <= 0.0f) return NAN;
+
+    const float deg = getRotorPositionDegrees();
+    if (!isfinite(deg)) return NAN;
+
+    if (!isfinite(m_prev_deg)) {
+        m_prev_deg = deg;
+        m_omega_m_rad_s = 0.0f;
+        return m_omega_m_rad_s;
+    }
+
+    const float ddeg = wrapDeltaDeg(deg - m_prev_deg);
+    m_prev_deg = deg;
+
+    // deg -> rad, then / dt
+    const float drad = ddeg * (float)M_PI / 180.0f;
+    m_omega_m_rad_s = drad / dt_s;
+    return m_omega_m_rad_s;
 }

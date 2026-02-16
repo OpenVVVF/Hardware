@@ -1,5 +1,5 @@
 #include "RtBridge.h"
-#include "Switching/PWMDriver.h"
+#include "Switching/Modulation.h"
 
 // Definition of the static instance pointer
 RtBridge* RtBridge::s_Instance = nullptr;
@@ -63,10 +63,102 @@ void RtBridge::Core1Loop() {
     PWMDriver Driver(Cfg);
     m_Driver = &Driver;
 
-    Driver.setStrategy(new SPWMStrategy());
+    static SPWMStrategy strat;
+    m_Strategy = &strat;
+
+    Driver.setStrategy(m_Strategy);
     Driver.setAutoModulation(true);
     Driver.init(2000.0f);
     Driver.enable();
+
+
+    
+    static FocController controller;
+    FOCController_ = &controller;
+
+    FocOutput FOCOutput;
+
+
+
+
+
+    // // --- START CALIBRATION ROUTINE ---
+    
+    // // 1. Create a dummy FOC output and sensor data
+    // SensorData TempSensors; 
+    // TempSensors._EncoderPosition_Rad = 0; 
+    
+    // // 2. Lock the rotor for 2 seconds (2000ms)
+    // // Use a small voltage (e.g., 2-3V). 
+    // // If your bus is 60V, 3V is safe. 
+    // // If it doesn't lock, increase slightly, but do not exceed 5V for safety during test.
+    // absolute_time_t CalibEnd = delayed_by_ms(get_absolute_time(), 2000);
+    
+    // while (absolute_time_diff_us(get_absolute_time(), CalibEnd) > 0) {
+    //     // We need to continuously feed the SPWM generator
+    //     // We bypass the normal UpdateVoltages and use our Calibrate function
+        
+    //     // Note: You might need to update TempSensors here if your encoder needs time to settle
+    //     // but usually for calibration we just care about the final reading.
+        
+    //     FOCController_->CalibrateEncoderOffset(3.0f); // Apply 3V
+        
+    //     PhaseVoltages TargetDutyCycles;
+    //     GenerateSpwm(FOCController_->UpdateVoltages(), 0.50, TargetDutyCycles); 
+    //     // NOTE: You need a getter for FocOutput or make _Valpha/_Vbeta public.
+    //     // Easiest hack: FOCController_->_Valpha_V is likely public or friend.
+        
+    //     m_Driver->setDutyCycles(TargetDutyCycles._Du_unitless, TargetDutyCycles._Dv_unitless, TargetDutyCycles._Dw_unitless);
+        
+    //     StructVariant Msg;
+    //     if (m_Queue.try_pop(Msg)) {
+    //          if (std::holds_alternative<SensorData>(Msg)) {
+    //              FOCController_->UpdateSensors(std::get<SensorData>(Msg));
+    //          }
+    //     }
+        
+
+    //     sleep_ms(10); // Run at ~100Hz during calibration
+    // }
+    
+    // // 3. Read the current sensor data from Core0 (it should be updating in background)
+    // // OR, if Sensors_ is not updating because Core0 hasn't pushed, you have a problem.
+    // // Let's assume Sensors_ has valid data or push a request.
+    
+    // // HACK: Since Core0 pushes sensor data, we just read the last known state.
+    // // But we need the ENCODER value NOW.
+    
+    // // Ideally, you have access to measurements pointer here, but you don't.
+    // // We rely on the last SensorData pushed to FOCController.
+    // // This requires Core0 to be running and pushing data while we lock.
+    // // Since Core0 is in an infinite loop in main, it IS pushing to the queue.
+    // // We need to pop that queue!
+    
+
+    // // 4. Calculate the offset
+    // // Current Electrical Angle = 0 (where we forced it)
+    // // Measured Mechanical Angle = Sensors_._EncoderPosition_Rad
+    // // Offset = TargetElec - (Mech * Poles)
+    
+    // float MechedAngle = FOCController_->Sensors_._EncoderPosition_Rad;
+    // float Poles = FOCController_->GetMotorConfig()._PolePairs_unitless;
+    
+    // // The offset needed to make the measured angle equal to 0
+    // float CalculatedOffset = 0.0f - (MechedAngle * Poles);
+    
+    // // Normalize to -PI to PI? Not strictly necessary if the angle logic wraps, but good practice.
+    
+    // FOCController_->_EncoderOffset_Rad = CalculatedOffset;
+    
+    
+    // // Turn off calibration voltage (reset controllers)
+    // FOCController_->Reset();
+    
+    // // --- END CALIBRATION ROUTINE ---
+
+
+
+
 
     absolute_time_t Next = make_timeout_time_us(1000);
 
@@ -101,9 +193,15 @@ void RtBridge::Core1Loop() {
                 [this](const InitZoneManager& _R) {
                     m_Manager = _R.Manager;
                 },
-                [](const MotorConfig&) {},
-                [](const SensorData&) {},
-                [](const CurrentCommand&) {}
+                [this](const MotorConfig& _R) {
+                    FOCController_->SetMotorConfig(_R);
+                },
+                [this](const SensorData& _R) {
+                    FOCController_->UpdateSensors(_R);
+                },
+                [this](const CurrentCommand& _R) {
+                    FOCController_->ApplyCurrentLimits(_R);
+                }
             }, Msg);
         }
 
@@ -111,8 +209,19 @@ void RtBridge::Core1Loop() {
         if (absolute_time_diff_us(get_absolute_time(), Next) <= 0) {
             Next = delayed_by_us(Next, 1000);
 
+
             if (m_Driver && !m_Driver->isEmergencyStopped()) {
-                m_Driver->update(0.001f);
+
+                // Now that the FOC Controller has been fed with new data (if any)
+                // firstly, generate the raw output
+                // then use (either swpm, or svpwm) to generate actual output 0-1 duty cycles
+                // then write those to the registers for each phase
+                FOCOutput = FOCController_->UpdateVoltages();
+                PhaseVoltages TargetDutyCycles;
+                GenerateSpwm(FOCOutput, 0.95, TargetDutyCycles);
+                 
+                // m_Driver->update(0.001f);
+                m_Driver->setDutyCycles(TargetDutyCycles._Du_unitless, TargetDutyCycles._Dv_unitless, TargetDutyCycles._Dw_unitless);
                 UpdateCarrierFromZones();
             }
 
@@ -128,6 +237,12 @@ void RtBridge::Core1Loop() {
                 St.manual_carrier_mode = m_ManualCarrierMode;
                 St.manual_carrier_hz = m_ManualCarrierHz;
                 St.ramp_rate = m_RampRate;
+
+                St.debug_Vd = FOCController_->_Vd_V;
+                St.debug_Vq = FOCController_->_Vq_V;
+                St.debug_Iq_measured = FOCController_->_Iq_A;
+                St.debug_angle_elec = FOCController_->_ElectricalAngle_Rad;
+                // St.debug_Iq_error = FOCController_->_QaxisController_.
 
                 StatusWrite(St);
             }

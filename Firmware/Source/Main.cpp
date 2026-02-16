@@ -19,7 +19,7 @@ static MeasurementSystem* measurements = nullptr;
 
 static void configureZones() {
     zone_mgr.clearZones();
-    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 1200.0f);
+    zone_mgr.addAsyncFixed(0.0f, 2000.0f, 4000.0f);
     // zone_mgr.addRCFM(0, 2000, 1200, 200);
 }
 
@@ -75,6 +75,30 @@ int main() {
     measurements->calibrateCurrentSensors();
     printf("Current sensor calibration complete.\n\n");
 
+
+
+    // Interface to motor driver code on core 1
+    MotorConfig C; // pretend this was actually filled out lmao
+    C._PolePairs_unitless = 6;          // 12 poles / 2 = 6 pole pairs
+    C._Ld_Henry = 0.000040f;            // 80uH phase-to-phase / 2 = 40uH
+    C._Lq_Henry = 0.000040f;            
+    // C._Rs_Ohm = 0.025f;                 // 50mOhm phase-to-phase / 2 = 25mOhm
+    C._DcBusVoltage_V = 60.0f;          // SET TO YOUR ACTUAL DC BUS VOLTAGE
+    C._MaxDcBusCurrent_A = 10.0f;
+    C._MaxPhaseCurrent_A = 50.0f;       // Set a safe limit for your motor
+    C._MaxModulation_unitless = 0.9f;   // Leave some margin for SVM
+    C._FluxLinkage_Wb = 0.0f;           // Guessing 0 for now, usually small for IPM
+
+    Bridge_.m_Queue.push(C);
+
+
+    CurrentCommand CurrentCmd;
+    CurrentCmd._IdCmd_A = 0.0f; // flux current
+    CurrentCmd._IqCmd_A = 2.0f; // torque current
+    Bridge_.m_Queue.push(CurrentCmd);
+
+
+
     Telemetry::set_period_us(10000); // 100 Hz
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
@@ -98,15 +122,36 @@ int main() {
     //         last_telemetry = get_absolute_time();
     //     }
         
-        MotorConfig C;
-        C._MaxDcBusCurrent_A = 666.0f; 
 
-        // RtBridge::MainQueue.push(C);
+
+
+        SensorData SenseData;
+        SenseData._Idc_A = measurements->read("I_DC_MAIN");
+        SenseData._Iu_A = measurements->read("I_PH_U");
+        SenseData._Iw_A = measurements->read("I_PH_W");
+        SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
+        SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
+        SenseData._EncoderPosition_Rad = measurements->getRotorPositionDegrees() * 0.01745329251; // deg to radian magic num (pi/180)
+        //measurements->getRotorOmegaMechanicalRadPerSec(controlHz);
+        SenseData._EncoderVelocity_RadPerSec = measurements->getRotorOmegaMechanicalRadPerSec(0.001); // FIX THE TIME HERE ITS WRONG!!
+        Bridge_.m_Queue.push(SenseData);
 
         // ---- Status print using core1 snapshot
+
+        RtStatus st{};
+        const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
+
+
+        Telemetry::log("DEBUG_VQ", st.debug_Vq);
+        Telemetry::log("DEBUG_VD", st.debug_Vd);
+        Telemetry::log("DEBUG_AngleElec", st.debug_angle_elec);
+        Telemetry::log("DEBUG_IQ_ERR", st.debug_Iq_error);
+        Telemetry::log("DEBUG_IQ_MEASURED", st.debug_Iq_measured);
+
         if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {
-            RtStatus st{};
-            const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
+
+
+
 
             if (!have) {
                 printf("RT STATUS: unavailable\r\n");
@@ -125,12 +170,15 @@ int main() {
                         zone_str = zoneTypeToStr(zone.type);
                     }
 
+
                     printf("%s-%s F:%6.2fHz Mod:%3.0f%% n:%2u Car:%4.0fHz\r\n",
                            zone_str, st.sync_mode ? "SYNC" : "ASYNC",
                            st.current_freq, st.modulation_index * 100.0f,
                            (unsigned)st.pulses, st.carrier_hz);
                 }
             }
+
+
 
             last_print = get_absolute_time();
         }

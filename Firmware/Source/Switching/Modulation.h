@@ -8,9 +8,19 @@
 
   #pragma once
 
-  #include "FocController.h"
-  #include "vector_transfs.h"
+  #include "FOC.h"
+  #include "space_vector_transfs/vector_transfs.h"
   
+
+  // ur mom >:) I AM TIRED. PLEASE WORK.
+  struct PhaseVoltages {
+
+    float _Du_unitless; // float from 0-1
+    float _Dv_unitless; // float from 0-1
+    float _Dw_unitless; // float from 0-1
+
+  };
+
   /**
    * @brief Generate SPWM duty cycles from FOC output
    * @param FocOut FOC output containing Valpha, Vbeta, Vdc

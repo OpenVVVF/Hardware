@@ -79,6 +79,9 @@ public:
 
     void setSynchronousMode(bool enable, uint16_t pulses_per_cycle);
 
+
+    void setDutyCycles(float du, float dv, float dw);
+
     void enable();
     void disable();
 
@@ -110,12 +113,16 @@ private:
     struct PhasePins { uint a, b; };
     static PhasePins kPins[kPhaseCount];
 
-    // ----- helpers -----
-    static PwmTiming computeTiming(uint32_t sys_hz, float carrier_hz);
-    void applyTimingToHardware(const PwmTiming& t);
     void recalcDutyLimits();
 
     void updatePhaseStep();
+
+    void clearManualDuties();
+    bool isManualDutyMode() const { return manual_duty_mode_; }
+    // Disable manual mode (return to strategy-driven)
+
+    uint16_t computeTopFromCarrier(float carrier_hz) const;
+    void chooseFixedDivider(float min_carrier_hz);
 
     static inline uint16_t clampDuty(uint16_t x, uint16_t lo, uint16_t hi) {
         return (x < lo) ? lo : (x > hi) ? hi : x;
@@ -136,11 +143,12 @@ private:
 
     ModulationStrategy* strategy_ = nullptr;
     float fixed_clk_div_ = 1.0f;     // static divider chosen at init
-    uint16_t computeTopFromCarrier_(float carrier_hz) const;
-    void chooseFixedDivider_(float min_carrier_hz);
     bool enabled_ = false;
     bool emergency_stop_ = false;
-
+    volatile bool manual_duty_mode_ = false;
+    volatile uint16_t manual_du_ = 0;
+    volatile uint16_t manual_dv_ = 0;
+    volatile uint16_t manual_dw_ = 0;
     // carrier / PWM timing
     float carrier_hz_ = 0.0f;
     float clk_div_ = 1.0f;

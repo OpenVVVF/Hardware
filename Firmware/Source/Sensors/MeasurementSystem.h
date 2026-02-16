@@ -121,8 +121,16 @@ MeasurementChannel* m_encoder_cos_ch = nullptr;
     // Diagnostics
     void printChannels() const;
 
+    float getRotorOmegaMechanicalRadPerSec(float dt_s) const;
     // Zero calibration for current sensors
     void calibrateCurrentSensors();
+    static inline float wrapDeltaDeg(float delta_deg) {
+    // result in (-180, 180]
+    delta_deg = fmodf(delta_deg + 180.0f, 360.0f);
+    if (delta_deg < 0.0f) delta_deg += 360.0f;
+    return delta_deg - 180.0f;
+}
+
 
     // --- Sin/Cos Encoder Methods ---
     float getRotorPositionDegrees() const; // Get angle (0-360°)
@@ -143,6 +151,8 @@ MeasurementChannel* m_encoder_cos_ch = nullptr;
     
 
 private:
+    mutable float m_prev_deg = NAN;
+    mutable float m_omega_m_rad_s = 0.0f;
     MAX2253x_MultiADC& m_adc;
     std::unordered_map<std::string, std::unique_ptr<MeasurementChannel>> m_channels;
     std::vector<std::pair<size_t, uint8_t>> m_physical_map;  // Reverse lookup

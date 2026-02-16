@@ -1,8 +1,6 @@
 /**
   ***********************************************************************************
   * @file    FocController.h
-  * @author  [your name]
-  * @version V1.0
   * @date    2026-02-15
   * @brief   Field-Oriented Control using vector_transfs.h.
   *          Outputs Valpha/Vbeta for external modulation (SPWM/SVM).
@@ -64,7 +62,7 @@
       float _ElectricalAngle_Rad;         // For SVM sector calculation
       bool _VoltageLimited;               // True if hit voltage limit
   };
-  
+
   /**
    * @brief FOC controller
    */
@@ -82,9 +80,23 @@
       void SetDaxisGains(float Kp, float Ki);
       void SetQaxisGains(float Kp, float Ki);
       
-      void UpdateSensors(const SensorData& Sensors);
-      FocOutput UpdateVoltages(const CurrentCommand& Cmd);
+      void UpdateSensors(const SensorData& _Sensors);
       
+    void CalibrateEncoderOffset(float Voltage_V);
+
+      /**
+       * @brief Processes and limits current commands. 
+       *        Must be called before UpdateVoltages.
+       *        Stores limited targets in internal state.
+       */
+      void ApplyCurrentLimits(const CurrentCommand& Cmd);
+      
+      /**
+       * @brief Executes PI loops and transforms. 
+       *        Uses targets set by ApplyCurrentLimits.
+       */
+      FocOutput UpdateVoltages();
+
       void Reset();
   
       // Public state - includes sensor data plus computed values
@@ -97,6 +109,11 @@
       float _Ibeta_A;
       float _Id_A;
       float _Iq_A;
+      
+      // Commanded (Target) Currents - Set by ApplyCurrentLimits
+      float _IdCommanded_A;
+      float _IqCommanded_A;
+      
       float _Vd_V;
       float _Vq_V;
       float _Valpha_V;
@@ -104,6 +121,9 @@
       bool _PhaseCurrentLimited;
       bool _DcBusCurrentLimited;
   
+      float _EncoderOffset_Rad = 0.0f;
+
+
   private:
       MotorConfig _Config_;
       
@@ -116,8 +136,9 @@
       
       float _VdFeedforward_V_;
       float _VqFeedforward_V_;
+
       
       void CalculateDecoupling();
-      void ApplyCurrentLimits(CurrentCommand& Cmd);
+      
       void ApplyVoltageLimiting();
   };

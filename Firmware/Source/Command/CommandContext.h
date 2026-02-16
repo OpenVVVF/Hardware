@@ -25,6 +25,13 @@ struct RtStatus {
     float manual_carrier_hz;
 
     float ramp_rate;
+
+
+    float debug_Vd;
+    float debug_Vq;
+    float debug_Iq_measured;
+    float debug_Iq_error;
+    float debug_angle_elec;
 };
 
 // ======================

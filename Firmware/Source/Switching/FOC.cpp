@@ -6,25 +6,63 @@
   ***********************************************************************************
   */
 
-  #include "FocController.h"
+  #include "FOC.h"
   #include <cmath>
-  
-  FocController::FocController() 
-      : _VdFeedforward_V_(0.0f),
-        _VqFeedforward_V_(0.0f) {
-      
-      // Initialize PID controllers with defaults
-      _DaxisController_ = PI_DEFAULTS;
-      _QaxisController_ = PI_DEFAULTS;
-      
-      // Initialize transform modules
-      _Clarke_ = FF_CLARKE_DEFAULTS;
-      _Park_ = F_PARK_DEFAULTS;
-      _InversePark_ = I_PARK_DEFAULTS;
-      
-      // Zero state
-      State_ = {};
-  }
+
+
+  FocController::FocController()
+  : _ElectricalAngle_Rad(0.0f),
+    _ElectricalSpeed_RadPerSec(0.0f),
+    _SinTheta_unitless(0.0f),
+    _CosTheta_unitless(1.0f),
+    _Ialpha_A(0.0f),
+    _Ibeta_A(0.0f),
+    _Id_A(0.0f),
+    _Iq_A(0.0f),
+    _IdCommanded_A(0.0f),
+    _IqCommanded_A(0.0f),
+    _Vd_V(0.0f),
+    _Vq_V(0.0f),
+    _Valpha_V(0.0f),
+    _Vbeta_V(0.0f),
+    _PhaseCurrentLimited(false),
+    _DcBusCurrentLimited(false),
+    _VdFeedforward_V_(0.0f),
+    _VqFeedforward_V_(0.0f)
+{
+
+
+  _DaxisController_ = {};
+  _DaxisController_.fDtSec = 0.001f;
+  _DaxisController_.m_calc = tPI_calc;
+  _DaxisController_.m_rst = tPI_rst;
+
+  _DaxisController_.fKp = 0.5;
+  _DaxisController_.fKi = 25.0f; 
+  _DaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+
+
+  _QaxisController_ = {};
+  _QaxisController_.fDtSec = 0.001f;
+  _QaxisController_.m_calc = tPI_calc;
+  _QaxisController_.m_rst = tPI_rst;
+
+  _QaxisController_.fKp = 0.5;
+  _QaxisController_.fKi = 25.0f;
+  _QaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _QaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus) 
+
+
+  _Clarke_ = {};
+  _Clarke_.m_abc2albe = tFFClarke_abc2albe;
+  _Park_ = {};
+  _Park_.m_albe2dq = tFPark_albe2dq;
+  _InversePark_ = {};
+  _InversePark_.m_dq2albe = tIPark_dq2albe;
+
+  Sensors_ = {};
+}
   
   void FocController::SetMotorConfig(const MotorConfig& Config) {
       _Config_ = Config;
@@ -49,20 +87,75 @@
       tPI_rst(&_DaxisController_);
       tPI_rst(&_QaxisController_);
       
-      // Reset state
-      State_ = {};
+      // Reset state variables
+      _ElectricalAngle_Rad = 0.0f;
+      _ElectricalSpeed_RadPerSec = 0.0f;
+      _SinTheta_unitless = 0.0f;
+      _CosTheta_unitless = 1.0f;
+      _Ialpha_A = 0.0f;
+      _Ibeta_A = 0.0f;
+      _Id_A = 0.0f;
+      _Iq_A = 0.0f;
+      _IdCommanded_A = 0.0f;
+      _IqCommanded_A = 0.0f;
+      _Vd_V = 0.0f;
+      _Vq_V = 0.0f;
+      _Valpha_V = 0.0f;
+      _Vbeta_V = 0.0f;
+      _PhaseCurrentLimited = false;
+      _DcBusCurrentLimited = false;
+      
       _VdFeedforward_V_ = 0.0f;
       _VqFeedforward_V_ = 0.0f;
   }
   
+    void FocController::CalibrateEncoderOffset(float Voltage_V) {
+        // 1. Override the electrical angle to 0 (Align to Phase A)
+        _ElectricalAngle_Rad = 0.0f;
+
+        // 2. Precompute sin/cos for this angle (sin(0)=0, cos(0)=1)
+        _SinTheta_unitless = 0.0f;
+        _CosTheta_unitless = 1.0f;
+
+        // 3. Manually set Voltage vectors to lock rotor to D-axis
+        // Vd = Voltage, Vq = 0 (No torque, just flux alignment)
+        _Vd_V = Voltage_V; 
+        _Vq_V = 0.0f;
+
+        // 4. Apply voltage limiting just in case
+        ApplyVoltageLimiting();
+
+        // 5. Inverse Park (D/Q -> Alpha/Beta)
+        _InversePark_.fD = _Vd_V;
+        _InversePark_.fQ = _Vq_V;
+        _InversePark_.fSinAng = _SinTheta_unitless;
+        _InversePark_.fCosAng = _CosTheta_unitless;
+        _InversePark_.m_dq2albe(&_InversePark_);
+
+        _Valpha_V = _InversePark_.fAl;
+        _Vbeta_V = _InversePark_.fBe;
+
+        // 6. IMPORTANT: Zero out the PID integrators so they don't wind up
+        // while we are manually controlling voltage.
+        tPI_rst(&_DaxisController_);
+        tPI_rst(&_QaxisController_);
+    }
+
   void FocController::UpdateSensors(const SensorData& Sensors) {
+      // Store sensor data in public state
+      Sensors_ = Sensors;
+      
       // Compute electrical angle and speed
-      State_._ElectricalAngle_Rad = Sensors._EncoderPosition_Rad * _Config_._PolePairs_unitless;
-      State_._ElectricalSpeed_RadPerSec = Sensors._EncoderVelocity_RadPerSec * _Config_._PolePairs_unitless;
+    _ElectricalAngle_Rad = fmodf(Sensors._EncoderPosition_Rad * _Config_._PolePairs_unitless + _EncoderOffset_Rad, 2.0f * 3.1415926535);
+    if (_ElectricalAngle_Rad < 0.0f) _ElectricalAngle_Rad += 2.0f * 3.1415926535;
+
+
+    //   _ElectricalAngle_Rad = Sensors._EncoderPosition_Rad * _Config_._PolePairs_unitless;
+      _ElectricalSpeed_RadPerSec = Sensors._EncoderVelocity_RadPerSec * _Config_._PolePairs_unitless;
       
       // Precompute sin/cos for Park transforms
-      State_._SinTheta_unitless = sinf(State_._ElectricalAngle_Rad);
-      State_._CosTheta_unitless = cosf(State_._ElectricalAngle_Rad);
+      _SinTheta_unitless = sinf(_ElectricalAngle_Rad);
+      _CosTheta_unitless = cosf(_ElectricalAngle_Rad);
       
       // Forward Clarke: ABC -> Alpha/Beta
       _Clarke_.fA = Sensors._Iu_A;
@@ -70,39 +163,40 @@
       _Clarke_.fC = Sensors._Iw_A;
       _Clarke_.m_abc2albe(&_Clarke_);
       
-      State_._Ialpha_A = _Clarke_.fAl;
-      State_._Ibeta_A = _Clarke_.fBe;
+      _Ialpha_A = _Clarke_.fAl;
+      _Ibeta_A = _Clarke_.fBe;
       
       // Forward Park: Alpha/Beta -> D/Q
-      _Park_.fAl = State_._Ialpha_A;
-      _Park_.fBe = State_._Ibeta_A;
-      _Park_.fSinAng = State_._SinTheta_unitless;
-      _Park_.fCosAng = State_._CosTheta_unitless;
+      _Park_.fAl = _Ialpha_A;
+      _Park_.fBe = _Ibeta_A;
+      _Park_.fSinAng = _SinTheta_unitless;
+      _Park_.fCosAng = _CosTheta_unitless;
       _Park_.m_albe2dq(&_Park_);
       
-      State_._Id_A = _Park_.fD;
-      State_._Iq_A = _Park_.fQ;
+      _Id_A = _Park_.fD;
+      _Iq_A = _Park_.fQ;
   }
   
-  void FocController::ApplyCurrentLimits(CurrentReference& Ref) {
-      // Limit Id (flux) - usually 0 for SPM, negative for flux weakening
-      // Not implementing full MTPA/flux weakening here, just hard limits
+  void FocController::ApplyCurrentLimits(const CurrentCommand& Cmd) {
+      // Store D-axis command (pass-through for now, usually 0 for SPM)
+      _IdCommanded_A = Cmd._IdCmd_A;
       
       // Limit Iq (torque) based on thermal and DC bus constraints
       float IqMax = _Config_._MaxPhaseCurrent_A;
       float IqMin = -_Config_._MaxPhaseCurrent_A;
       
-      // Check DC bus current approximation: Idc ≈ 3/2 * (Id*cos + Iq*sin) for rough limit
-      // Simplified: just check magnitude for now
-      float IqRefLimited = fmaxf(IqMin, fminf(IqMax, Ref._IqRef_A));
+      // Apply limits
+      float IqCmdLimited = fmaxf(IqMin, fminf(IqMax, Cmd._IqCmd_A));
       
-      if (IqRefLimited != Ref._IqRef_A) {
-          State_._PhaseCurrentLimited = true;
+      // Update status flag
+      if (IqCmdLimited != Cmd._IqCmd_A) {
+          _PhaseCurrentLimited = true;
       } else {
-          State_._PhaseCurrentLimited = false;
+          _PhaseCurrentLimited = false;
       }
       
-      Ref._IqRef_A = IqRefLimited;
+      // Store limited Q-axis command into internal state
+      _IqCommanded_A = IqCmdLimited;
   }
   
   void FocController::CalculateDecoupling() {
@@ -110,15 +204,15 @@
       // Vd_ff = -omega_e * Lq * Iq
       // Vq_ff = omega_e * Ld * Id + omega_e * lambda_pm
       
-      _VdFeedforward_V_ = -State_._ElectricalSpeed_RadPerSec * _Config_._Lq_Henry * State_._Iq_A;
-      _VqFeedforward_V_ = State_._ElectricalSpeed_RadPerSec * _Config_._Ld_Henry * State_._Id_A 
-                         + State_._ElectricalSpeed_RadPerSec * _Config_._FluxLinkage_Wb;
+      _VdFeedforward_V_ = -_ElectricalSpeed_RadPerSec * _Config_._Lq_Henry * _Iq_A;
+      _VqFeedforward_V_ = _ElectricalSpeed_RadPerSec * _Config_._Ld_Henry * _Id_A 
+                          + _ElectricalSpeed_RadPerSec * _Config_._FluxLinkage_Wb;
   }
   
   void FocController::ApplyVoltageLimiting() {
       // Circle limitation in d-q frame
-      float Vd = State_._Vd_V;
-      float Vq = State_._Vq_V;
+      float Vd = _Vd_V;
+      float Vq = _Vq_V;
       float Vmag = sqrtf(Vd * Vd + Vq * Vq);
       
       float Vmax = _Config_._DcBusVoltage_V * _Config_._MaxModulation_unitless / sqrtf(3.0f);
@@ -126,55 +220,51 @@
       
       if (Vmag > Vmax) {
           float Scale = Vmax / Vmag;
-          State_._Vd_V *= Scale;
-          State_._Vq_V *= Scale;
-          State_._DcBusCurrentLimited = true;  // Reusing flag for voltage saturation
+          _Vd_V *= Scale;
+          _Vq_V *= Scale;
+          _DcBusCurrentLimited = true;  // Reusing flag for voltage saturation
       } else {
-          State_._DcBusCurrentLimited = false;
+          _DcBusCurrentLimited = false;
       }
   }
   
-  FocOutput FocController::UpdateVoltages(const CurrentReference& Ref) {
-      FocOutput Output = {};
-      
-      // Make mutable copy for limiting
-      CurrentReference RefLimited = Ref;
-      
-      // Apply current limits
-      ApplyCurrentLimits(RefLimited);
+  FocOutput FocController::UpdateVoltages() {
+      FocOutput Output = {0};
       
       // Calculate feedforward terms
       CalculateDecoupling();
       
       // D-axis PI controller
-      _DaxisController_.fIn = RefLimited._IdRef_A - State_._Id_A;
+      // Error = Commanded (Setpoint) - Measured
+      _DaxisController_.fIn = _IdCommanded_A - _Id_A;
       _DaxisController_.m_calc(&_DaxisController_);
-      State_._Vd_V = _DaxisController_.fOut + _VdFeedforward_V_;
+      _Vd_V = _DaxisController_.fOut + _VdFeedforward_V_;
       
       // Q-axis PI controller
-      _QaxisController_.fIn = RefLimited._IqRef_A - State_._Iq_A;
+      _QaxisController_.fIn = _IqCommanded_A - _Iq_A;
       _QaxisController_.m_calc(&_QaxisController_);
-      State_._Vq_V = _QaxisController_.fOut + _VqFeedforward_V_;
+      _Vq_V = _QaxisController_.fOut + _VqFeedforward_V_;
       
       // Apply voltage limiting (circle limitation)
       ApplyVoltageLimiting();
       
       // Inverse Park: D/Q -> Alpha/Beta
-      _InversePark_.fD = State_._Vd_V;
-      _InversePark_.fQ = State_._Vq_V;
-      _InversePark_.fSinAng = State_._SinTheta_unitless;
-      _InversePark_.fCosAng = State_._CosTheta_unitless;
+      _InversePark_.fD = _Vd_V;
+      _InversePark_.fQ = _Vq_V;
+      _InversePark_.fSinAng = _SinTheta_unitless;
+      _InversePark_.fCosAng = _CosTheta_unitless;
       _InversePark_.m_dq2albe(&_InversePark_);
       
-      State_._Valpha_V = _InversePark_.fAl;
-      State_._Vbeta_V = _InversePark_.fBe;
+      _Valpha_V = _InversePark_.fAl;
+      _Vbeta_V = _InversePark_.fBe;
       
       // Populate output for external modulation
-      Output._Valpha_V = State_._Valpha_V;
-      Output._Vbeta_V = State_._Vbeta_V;
+      Output._Valpha_V = _Valpha_V;
+      Output._Vbeta_V = _Vbeta_V;
       Output._Vdc_V = _Config_._DcBusVoltage_V;
-      Output._ElectricalAngle_Rad = State_._ElectricalAngle_Rad;
-      Output._VoltageLimited = State_._DcBusCurrentLimited;  // Voltage saturation flag
+      Output._ElectricalAngle_Rad = _ElectricalAngle_Rad;
+      Output._VoltageLimited = _DcBusCurrentLimited;  // Voltage saturation flag
       
       return Output;
+
   }
