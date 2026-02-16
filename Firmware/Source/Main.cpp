@@ -26,38 +26,22 @@
 // Inter-Core Communication Structures
 // ----------------------------------------------------------------------
 
-// Core 0 -> Core 1: Commands
-enum class CmdType { 
-    ENABLE, DISABLE, ESTOP, CLEAR_ESTOP, 
-    SET_FREQ, SET_ENC_OFFSET 
-};
+// Core 0 -> Core 1: Just send raw torque targets!
+ThreadSafeQueue<CurrentCommand> tx_queue;
 
-struct CoreCommand {
-    CmdType type;
-    float value; // Payload (e.g., target frequency or offset)
-};
-
-// Core 1 -> Core 0: Telemetry & State
+// Core 1 -> Core 0: FOC State Only
 struct TelemetryPacket {
-    // Sensor data
-    SensorData sense;
     float raw_adc_rad;
     float theta_est;
-    
-    // FOC Debug State
     float vq_v;
     float vd_v;
     float iq_meas;
     float elec_angle;
-    
-    // Timing
-    float foc_dt_s;
+    float enc_offset;
+    float foc_update_hz;
 };
 
-// Instantiate the dual queues
-ThreadSafeQueue<CoreCommand> tx_queue;     // Core 0 sends commands down to Core 1
-ThreadSafeQueue<TelemetryPacket> rx_queue; // Core 1 sends state up to Core 0
-
+ThreadSafeQueue<TelemetryPacket> rx_queue;
 
 
 // ----------------------------------------------------------------------
@@ -122,47 +106,31 @@ namespace {
 }
 
 
-
-
-/**
- * CORE 1: THE CRITICAL CONTROL LOOP
- * Handles: ADC, FOC, PWM Switching, and consuming commands.
- */
 void core1_entry() {
     absolute_time_t next_foc_tick = get_absolute_time();
     absolute_time_t old_t = get_absolute_time();
 
-    // true PLL tracking observer state
     float theta_est = 0.0f;
     float omega_est = 0.0f;
     const float Kp_pll = 200.0f;
     const float Ki_pll = 2000.0f;
 
     while (true) {
-        // 1. Process all pending commands from Core 0
-        CoreCommand cmd;
-        while (tx_queue.try_pop(cmd)) {
-            if (!g_Driver) continue;
-            switch (cmd.type) {
-                case CmdType::ENABLE:         g_Driver->enable(); break;
-                case CmdType::DISABLE:        g_Driver->disable(); break;
-                case CmdType::ESTOP:          g_Driver->emergencyStop(); break;
-                case CmdType::CLEAR_ESTOP:    g_Driver->clearEmergency(); break;
-                case CmdType::SET_FREQ:       g_Driver->setTargetFrequency(cmd.value, g_RampRate); break;
-                case CmdType::SET_ENC_OFFSET: g_Foc._EncoderOffset_Rad = cmd.value; break;
-            }
+        // 1. UPDATE TARGET TORQUE (Dead simple)
+        CurrentCommand new_cmd;
+        if (tx_queue.try_pop(new_cmd)) {
+            // Update the FOC targets immediately
+            g_Foc.ApplyCurrentLimits(new_cmd); 
         }
 
-        // 2. Strict 1kHz FOC Tick
+        // 2. STRICT 2.5KHZ FOC TICK
         if (absolute_time_diff_us(get_absolute_time(), next_foc_tick) <= 0) {
             float dt_S = (float)absolute_time_diff_us(old_t, get_absolute_time()) / 1000000.0f;
             old_t = get_absolute_time();
-            next_foc_tick = delayed_by_us(next_foc_tick, 1000); 
+            next_foc_tick = delayed_by_us(next_foc_tick, 400); 
 
-            // Fast ADC Read
             measurements->update();
 
-            // Populate Sensors
             SensorData SenseData;
             SenseData._Idc_A = measurements->read("I_DC_MAIN");
             SenseData._Iu_A  = measurements->read("I_PH_U");
@@ -170,6 +138,7 @@ void core1_entry() {
             SenseData._Iv_A  = -(SenseData._Iu_A + SenseData._Iw_A);
             SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
 
+            
             // PLL Tracking Observer
             float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
             float error = raw_adc_rad - theta_est;
@@ -181,6 +150,7 @@ void core1_entry() {
             while (theta_est >= 6.283185307f) theta_est -= 6.283185307f;
             while (theta_est < 0.0f) theta_est += 6.283185307f;
 
+
             SenseData._EncoderPosition_Rad = theta_est;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
 
@@ -188,32 +158,20 @@ void core1_entry() {
             g_Foc._QaxisController_.fDtSec = dt_S;
             g_Foc.UpdateSensors(SenseData);
 
-            // Apply Switching
+            // Execute modulation
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 FocOutput FOC_Out = g_Foc.UpdateVoltages();
                 PhaseVoltages TargetDuty;
                 GenerateSpwm(FOC_Out, 0.95f, TargetDuty);
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
-                updateCarrierFromZones();
             }
 
-            // 3. Offload Telemetry to Core 0 safely
-            TelemetryPacket t_pack;
-            t_pack.sense = SenseData;
-            t_pack.raw_adc_rad = raw_adc_rad;
-            t_pack.theta_est = theta_est;
-            t_pack.vq_v = g_Foc._Vq_V;
-            t_pack.vd_v = g_Foc._Vd_V;
-            t_pack.iq_meas = g_Foc._Iq_A;
-            t_pack.elec_angle = g_Foc._ElectricalAngle_Rad;
-            t_pack.foc_dt_s = dt_S;
-            
+            // 3. SEND TELEMETRY
+            TelemetryPacket t_pack{raw_adc_rad, theta_est, g_Foc._Vq_V, g_Foc._Vd_V, g_Foc._Iq_A, g_Foc._ElectricalAngle_Rad, g_Foc._EncoderOffset_Rad, 1.0f/dt_S};
             rx_queue.push(t_pack);
         }
     }
 }
-
-
 
 // ----------------------------------------------------------------------
 // Main Application
@@ -653,94 +611,97 @@ hard_stop();
 
 
 
-    // Setup Command Context to push to tx_queue instead of acting directly
+    // Local struct to hold the FOC state safely (No static variables!)
+    RtStatus current_status{};
+
+    // Setup Command Context
     CommandContext ctx{};
     ctx.zone_mgr = &zone_mgr;
     ctx.set_ramp_rate = [](float val) { g_RampRate = val; };
     ctx.set_manual_carrier_hz = [](float val) { g_ManualCarrierHz = val; };
     ctx.set_manual_carrier_mode = [](bool val) { g_ManualCarrierMode = val; };
     
-    // Safely route execution commands across the core boundary
-    ctx.enable = []() { tx_queue.push({CmdType::ENABLE, 0.0f}); };
-    ctx.disable = []() { tx_queue.push({CmdType::DISABLE, 0.0f}); };
-    ctx.emergency_stop = []() { tx_queue.push({CmdType::ESTOP, 0.0f}); };
-    ctx.clear_emergency_stop = []() { tx_queue.push({CmdType::CLEAR_ESTOP, 0.0f}); };
-    ctx.set_target_frequency = [](float val) { tx_queue.push({CmdType::SET_FREQ, val}); };
-    ctx.setEncoderOffset = [](float val) { tx_queue.push({CmdType::SET_ENC_OFFSET, val}); };
+    // // Commands route to Core 1
+    // ctx.enable = []() { tx_queue.push({CmdType::ENABLE, 0.0f}); };
+    // ctx.disable = []() { tx_queue.push({CmdType::DISABLE, 0.0f}); };
+    // ctx.emergency_stop = []() { tx_queue.push({CmdType::ESTOP, 0.0f}); };
+    // ctx.clear_emergency_stop = []() { tx_queue.push({CmdType::CLEAR_ESTOP, 0.0f}); };
+    // ctx.set_target_frequency = [](float val) { tx_queue.push({CmdType::SET_FREQ, val}); };
+    // ctx.setEncoderOffset = [](float val) { tx_queue.push({CmdType::SET_ENC_OFFSET, val}); };
+
+    // // Status callback captures our local struct by reference
+    // ctx.try_get_status = [&current_status](RtStatus* st) -> bool {
+    //     if (!g_Driver) return false;
+    //     st->enabled = g_Driver->isEnabled();
+    //     st->estop = g_Driver->isEmergencyStopped();
+    //     st->current_freq = g_Driver->getCurrentFrequency();
+    //     st->modulation_index = g_Driver->getModulationIndex();
+    //     st->carrier_hz = g_Driver->getCarrierFrequency();
+    //     st->sync_mode = g_Driver->isSynchronousMode();
+    //     st->pulses = g_Driver->getPulsesPerCycle();
+    //     st->manual_carrier_mode = g_ManualCarrierMode;
+    //     st->manual_carrier_hz = g_ManualCarrierHz;
+    //     st->ramp_rate = g_RampRate;
+        
+    //     // Grab the FOC data we sync'd from the queue
+    //     st->debug_Vd = current_status.debug_Vd;
+    //     st->debug_Vq = current_status.debug_Vq;
+    //     st->debug_Iq_measured = current_status.debug_Iq_measured;
+    //     st->debug_angle_elec = current_status.debug_angle_elec;
+    //     return true;
+    // };
 
     CommandManager::instance().setContext(ctx);
     initializeCommands();
     SerialProcessor serial_proc;
 
+    // Initialize telemetry and bind the measurement system so it can grab hardware data
     Telemetry::init(); 
+    Telemetry::bindMeasurementSystem(*measurements);
+
+    Telemetry::init(); 
+    Telemetry::bindMeasurementSystem(*measurements);
 
     // -> LAUNCH CORE 1 <-
     multicore_launch_core1(core1_entry);
 
     absolute_time_t last_print = get_absolute_time();
-    absolute_time_t old_t = get_absolute_time();
+
+    // Local variables just so we have something to print to the console at 1Hz
+    float print_vq = 0.0f;
+    float print_vd = 0.0f;
+    float print_iq = 0.0f;
 
     while (true) {
-        // Handle incoming serial communications
-        serial_proc.poll();
+        // (Optional: You can eventually put simple serial string parsing here 
+        // to push new CurrentCommands to tx_queue. Example:)
+        // if (serial_read == "set iq 5.0") { tx_queue.push({0.0f, 5.0f}); }
 
-        // Drain the telemetry queue from Core 1
+        // 1. Drain the telemetry queue from Core 1
         TelemetryPacket tp;
         while (rx_queue.try_pop(tp)) {
-            // Highly granular logging to hunt down noise & phase discrepancies 
-            Telemetry::log("CORE1_LOOP_DT", tp.foc_dt_s);
-            
-            // Current sensing diagnostic logs
-            Telemetry::log("I_PH_U", tp.sense._Iu_A);
-            Telemetry::log("I_PH_V", tp.sense._Iv_A);
-            Telemetry::log("I_PH_W", tp.sense._Iw_A);
-            Telemetry::log("I_DC", tp.sense._Idc_A);
-            
-            // Encoder / Alignment tracking
+            // Save latest for console print
+            print_vq = tp.vq_v;
+            print_vd = tp.vd_v;
+            print_iq = tp.iq_meas;
+
+            // Push to Telemetry
+            Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
             Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
             Telemetry::log("THETA_EST_RAD", tp.theta_est);
             Telemetry::log("ELEC_ANGLE", tp.elec_angle);
-            Telemetry::log("ENC_OFFSET", g_Foc._EncoderOffset_Rad);
-
-            // FOC state
+            Telemetry::log("ENC_OFFSET", tp.enc_offset);
             Telemetry::log("DEBUG_VQ", tp.vq_v);
             Telemetry::log("DEBUG_VD", tp.vd_v);
             Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
         }
 
-        Telemetry::updateSensors();
+        // 2. Dispatch telemetry frames
+        Telemetry::updateSensors(); 
 
-        // ------------------------------------------------------------------
-        // 1Hz Console Status Prints
-        // ------------------------------------------------------------------
+        // 3. Simple 1Hz console print
         if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {
-
-            RtStatus st{};
-            const bool have = (ctx.try_get_status && ctx.try_get_status(&st));
-
-            if (!have) {
-                printf("RT STATUS: unavailable\r\n");
-            } else if (st.estop) {
-                printf("EMERGENCY STOP ACTIVE\r\n");
-            } else if (!st.enabled) {
-                printf("IDLE: Gates LOW, freq=0\r\n");
-            } else {
-                if (st.manual_carrier_mode) {
-                    printf("MANUAL CARRIER F:%6.2fHz Mod:%3.0f%% Car:%4.0fHz [AUTO OFF]\r\n",
-                           st.current_freq, st.modulation_index * 100.0f, st.carrier_hz);
-                } else {
-                    ZoneConfig zone{};
-                    const char* zone_str = "DEF";
-                    if (zone_mgr.getZone(st.current_freq, &zone)) {
-                        zone_str = zoneTypeToStr(zone.type);
-                    }
-
-                    printf("%s-%s F:%6.2fHz Mod:%3.0f%% n:%2u Car:%4.0fHz\r\n",
-                           zone_str, st.sync_mode ? "SYNC" : "ASYNC",
-                           st.current_freq, st.modulation_index * 100.0f,
-                           (unsigned)st.pulses, st.carrier_hz);
-                }
-            }
+            printf("FOC State | Vd: %.2f | Vq: %.2f | Iq_meas: %.2f\r\n", print_vd, print_vq, print_iq);
             last_print = get_absolute_time();
         }
     }
