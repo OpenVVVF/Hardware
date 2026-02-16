@@ -181,7 +181,7 @@ int main() {
 
     CurrentCommand CurrentCmd;
     CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 2.0f;
+    CurrentCmd._IqCmd_A = 1.0f;
     g_Foc.ApplyCurrentLimits(CurrentCmd);
 
     // 5. Initialize Telemetry
@@ -221,29 +221,45 @@ int main() {
             
 
 
-            // Keep track of the last angle we saw from the ADC
-            static float last_measured_rad = 0.0f;
-            static float estimated_angle_rad = 0.0f;
+            // Keep state between 1kHz ticks
+            static float smoothed_angle_rad = 0.0f;
+            static float filtered_velocity = 0.0f;
 
-            float current_measured_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
+            float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
+            float raw_velocity = SenseData._EncoderVelocity_RadPerSec;
 
-            // Did the ADC actually give us a new, different value?
-            if (current_measured_rad != last_measured_rad) {
-                // Resync our estimator to reality
-                estimated_angle_rad = current_measured_rad;
-                last_measured_rad = current_measured_rad;
-            } else {
-                // The ADC is lagging. Predict where the rotor is right now based on its velocity!
-                // We are in a 1ms loop, so dt = 0.001
-                estimated_angle_rad += SenseData._EncoderVelocity_RadPerSec * 0.001f;
-                
-                // Wrap the angle neatly between 0 and 2*PI
-                if (estimated_angle_rad > 6.283185307f) estimated_angle_rad -= 6.283185307f;
-                if (estimated_angle_rad < 0.0f) estimated_angle_rad += 6.283185307f;
-            }
+            // 1. Heavily filter the spiky velocity 
+            // (Mechanical inertia means actual speed doesn't change instantly)
+            filtered_velocity = (0.02f * raw_velocity) + (0.98f * filtered_velocity); 
 
-            // Override the sensor data with our smooth, predicted angle
-            SenseData._EncoderPosition_Rad = estimated_angle_rad;
+            // 2. Predict the new angle using the SMOOTH velocity
+            smoothed_angle_rad += filtered_velocity * 0.001f;
+
+            // 3. Find the error between our prediction and the raw ADC reading
+            float angle_err = raw_adc_rad - smoothed_angle_rad;
+
+            // Wrap error to -PI to PI so it always takes the shortest path
+            while (angle_err > 3.14159265f) angle_err -= 6.283185307f;
+            while (angle_err < -3.14159265f) angle_err += 6.283185307f;
+
+            // 4. Gently pull the prediction toward the true sensor reading (PLL behavior)
+            // A gain of 0.05 acts like a spring pulling it to reality without tracking the noise
+            smoothed_angle_rad += angle_err * 0.05f; 
+
+            // 5. Wrap the final output to 0 to 2PI
+            while (smoothed_angle_rad >= 6.283185307f) smoothed_angle_rad -= 6.283185307f;
+            while (smoothed_angle_rad < 0.0f) smoothed_angle_rad += 6.283185307f;
+
+            // Feed the clean data to FOC
+            SenseData._EncoderPosition_Rad = smoothed_angle_rad;
+            SenseData._EncoderVelocity_RadPerSec = filtered_velocity; // Feeds decouple terms too!
+
+
+            // Pass the smoothly extrapolated angle to the FOC controller
+            // SenseData._EncoderPosition_Rad = smoothed_angle_rad;
+            
+            Telemetry::log("SMOOTH_DEG", smoothed_angle_rad * 57.29577f);
+
 
             g_Foc.UpdateSensors(SenseData);
 

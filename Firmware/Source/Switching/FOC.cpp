@@ -37,7 +37,7 @@
   _DaxisController_.m_calc = tPI_calc;
   _DaxisController_.m_rst = tPI_rst;
 
-  _DaxisController_.fKp = 0.5;
+  _DaxisController_.fKp = 2.0f;
   _DaxisController_.fKi = 25.0f; 
   _DaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
   _DaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus)
@@ -48,7 +48,7 @@
   _QaxisController_.m_calc = tPI_calc;
   _QaxisController_.m_rst = tPI_rst;
 
-  _QaxisController_.fKp = 0.5;
+  _QaxisController_.fKp = 2.0f;
   _QaxisController_.fKi = 25.0f;
   _QaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
   _QaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus) 
