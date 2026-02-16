@@ -225,8 +225,7 @@ static void core1_entry() {
     driver.setAutoModulation(true);
     driver.init(2000.0f);
 
-    // Start disabled; enable on command (F/ENABLE) so auto-cal runs when sensors are ready.
-    // driver.enable();
+    driver.enable();
 
     absolute_time_t next = make_timeout_time_us(1000);
 
