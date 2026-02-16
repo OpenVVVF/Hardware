@@ -189,6 +189,65 @@ int main() {
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
 
+
+
+
+// ------------------------------------------------------------------
+    // BRUTE-FORCE STATIC LOCK CALIBRATION
+    // ------------------------------------------------------------------
+    printf("\nLocking rotor... KEEP HANDS CLEAR!\n");
+    g_Driver->enable();
+
+    // 1. High-power lock to defeat friction deadband (20 Volts!)
+    absolute_time_t lock_end = delayed_by_ms(get_absolute_time(), 2000);
+    while (absolute_time_diff_us(get_absolute_time(), lock_end) > 0) {
+        measurements->update();
+        
+        FocOutput cal_out{};
+        cal_out._Valpha_V = 5.0f; // Push hard to snap it into the valley
+        cal_out._Vbeta_V  = 0.0f;
+        cal_out._Vdc_V    = C._DcBusVoltage_V; 
+        
+        PhaseVoltages duty;
+        GenerateSpwm(cal_out, 0.95f, duty);
+        g_Driver->setDutyCycles(duty._Du_unitless, duty._Dv_unitless, duty._Dw_unitless);
+        sleep_us(200); // 5kHz pacing
+    }
+
+    // 2. Average 1000 samples while locked to defeat ADC noise
+    float sum_sin = 0.0f;
+    float sum_cos = 0.0f;
+    for (int i = 0; i < 1000; i++) {
+        measurements->update();
+        // These are already offset-corrected by your channel_map!
+        sum_sin += measurements->read("ENCODER_SIN"); 
+        sum_cos += measurements->read("ENCODER_COS");
+        sleep_us(200);
+    }
+    
+    float avg_sin = sum_sin / 1000.0f;
+    float avg_cos = sum_cos / 1000.0f;
+
+    // 3. Calculate flawless offset
+    float mech_angle_rad = atan2f(avg_sin, avg_cos);
+    float raw_elec = mech_angle_rad * C._PolePairs_unitless;
+    
+    g_Foc._EncoderOffset_Rad = fmodf(-raw_elec, 2.0f * 3.1415926535f);
+    if (g_Foc._EncoderOffset_Rad < 0.0f) {
+        g_Foc._EncoderOffset_Rad += 2.0f * 3.1415926535f;
+    }
+    
+    g_Foc.Reset(); 
+    
+    // Re-apply torque command
+    // CurrentCommand CurrentCmd;
+    CurrentCmd._IdCmd_A = 0.0f; 
+    CurrentCmd._IqCmd_A = 2.0f; 
+    g_Foc.ApplyCurrentLimits(CurrentCmd);
+    
+    printf("Calibration Complete! Offset Locked: %f rad\n\n", g_Foc._EncoderOffset_Rad);
+
+
     // 6. Timing Variables for the Main Loop
     absolute_time_t last_print = get_absolute_time();
     absolute_time_t next_foc_tick = get_absolute_time(); // Track 1kHz control loop
@@ -259,7 +318,10 @@ int main() {
             // SenseData._EncoderPosition_Rad = smoothed_angle_rad;
             
             Telemetry::log("SMOOTH_DEG", smoothed_angle_rad * 57.29577f);
+            Telemetry::log("ENCODER_OFFSET", g_Foc._EncoderOffset_Rad);
 
+
+            
 
             g_Foc.UpdateSensors(SenseData);
 
