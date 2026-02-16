@@ -1,5 +1,4 @@
 #include <vector>
-#include <cmath>
 #include "pico/stdlib.h"
 #include "Switching/CommutationManager.h"
 #include "Command/CommandContext.h"
@@ -11,10 +10,6 @@
 #include "Telemetry.h"
 #include "Hardware.h"
 #include "RtBridge.h"
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846f
-#endif
 
 static CommutationManager zone_mgr;
 
@@ -87,25 +82,6 @@ int main() {
     while (true) {
         // ---- Measurements (core0) ----
         measurements->update();
-
-        // Publish fast measurements for FOC (core1 ISR reads these snapshots)
-        {
-            const float iu = measurements->read("I_PH_U");
-            const float iw = measurements->read("I_PH_W");
-            const float iv = -(iu + iw);  // reconstruct (i_u + i_v + i_w = 0)
-            const float vbus = measurements->read("V_DC_BUS");
-            const float deg = measurements->getRotorPositionDegrees();
-
-            FocMeasurement fm{};
-            fm.t_us = time_us_32();
-            fm.i_u = iu;
-            fm.i_v = iv;
-            fm.i_w = iw;
-            fm.v_bus = vbus;
-            fm.theta_mech_rad = (std::isfinite(deg) ? (deg * (float)M_PI / 180.0f) : NAN);
-            RtBridge::publishFocMeasurement(fm);
-        }
-
         updateCounter += 1;
 
         Telemetry::updateSensors();

@@ -63,35 +63,6 @@ static inline bool status_read(RtStatus* out) {
 }
 
 // -----------------------------
-// Core0 -> Core1 FOC measurement sharing (seqlock)
-// -----------------------------
-struct FocMeasShared {
-    volatile uint32_t seq;
-    FocMeasurement meas;
-};
-
-static FocMeasShared g_meas_shared;
-
-static inline void meas_write(const FocMeasurement& in) {
-    g_meas_shared.seq++;
-    __dmb();
-    g_meas_shared.meas = in;
-    __dmb();
-    g_meas_shared.seq++;
-}
-
-static inline bool meas_read(FocMeasurement* out) {
-    uint32_t a = g_meas_shared.seq;
-    __dmb();
-    FocMeasurement snap = g_meas_shared.meas;
-    __dmb();
-    uint32_t b = g_meas_shared.seq;
-    if (a != b || (a & 1u)) return false;
-    *out = snap;
-    return true;
-}
-
-// -----------------------------
 // Shared (but effectively immutable) pointer
 // -----------------------------
 static CommutationManager* g_zone_mgr = nullptr;
@@ -101,7 +72,6 @@ static CommutationManager* g_zone_mgr = nullptr;
 // -----------------------------
 static PWMDriver* g_driver = nullptr;
 static SPWMStrategy g_spwm;
-static FOCStrategy  g_foc;
 
 static float g_ramp_rate = 5.0f; // Hz/s
 static float g_manual_carrier_hz = 2000.0f;
@@ -204,18 +174,7 @@ static void core1_entry() {
     static PWMDriver driver(cfg);
     g_driver = &driver;
 
-    // --- Control strategy ---
-    // Switch from open-loop SPWM to sensor-based FOC.
-    // The FOC controller reads measurements published from core0 (ADC + encoder)
-    // using a lock-free seqlock snapshot.
-    g_foc.setMeasReader(meas_read);
-    g_foc.attachDriver(&driver);
-    g_foc.setPolePairs(6);
-    g_foc.setElectricalOffsetRad(0);
-    // Defaults are conservative; tune pole pairs + offset for your motor.
-    // g_foc.setPolePairs(4);
-    // g_foc.setElectricalOffsetRad(0.0f);
-    driver.setStrategy(&g_foc);
+    driver.setStrategy(&g_spwm);
     driver.setAutoModulation(true);
     driver.init(2000.0f);
 
@@ -303,7 +262,6 @@ CommandContext RtBridge::initAndGetContext(CommutationManager* zone_mgr) {
     queue_init(&g_q, sizeof(RtMsg), 32);
 
     g_shared.seq = 0;
-    g_meas_shared.seq = 0;
 
     multicore_launch_core1(core1_entry);
 
@@ -326,8 +284,4 @@ CommandContext RtBridge::initAndGetContext(CommutationManager* zone_mgr) {
     ctx.try_get_status = ctx_try_get_status;
 
     return ctx;
-}
-
-void RtBridge::publishFocMeasurement(const FocMeasurement& m) {
-    meas_write(m);
 }

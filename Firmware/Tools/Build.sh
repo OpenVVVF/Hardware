@@ -28,7 +28,7 @@ fi
 
 # Build the project
 echo "Compiling..."
-make -j4
+make -j$(nproc)
 
 # Verify UF2 file exists
 UF2_FILE="${PROJECT_NAME}.uf2"
