@@ -556,6 +556,8 @@ hard_stop();
             g_Foc._DaxisController_.fDtSec = dt_S;
             g_Foc._QaxisController_.fDtSec = dt_S;
             
+        Telemetry::log("I_PH_V", SenseData._Iv_A);
+
 
 
            // ------------------------------------------------------------------
