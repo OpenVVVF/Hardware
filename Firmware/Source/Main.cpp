@@ -321,7 +321,7 @@ int main() {
 
 
 
-    g_Driver->setCarrierFrequency(8000.0f);
+    g_Driver->setCarrierFrequency(12000.0f);
 
 // ------------------------------------------------------------------
     // HARDWARE DIAGNOSTIC: CURRENT SENSOR POLARITY CHECK
