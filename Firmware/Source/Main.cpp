@@ -752,6 +752,12 @@ hard_stop();
             // Telemetry::log("FAKE_I_V", tp.i_v);
             // Telemetry::log("FAKE_I_W", tp.i_w);
 
+
+
+            Telemetry::log("V_Alpha", tp.v_alpha);
+            Telemetry::log("V_Beta", tp.v_beta);
+
+
             Telemetry::log("V_U", tp.v_u);
             Telemetry::log("V_V", tp.v_v);
             Telemetry::log("V_W", tp.v_w);
