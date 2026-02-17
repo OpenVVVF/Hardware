@@ -180,7 +180,7 @@ void core1_entry() {
 
             // 3. SEND TELEMETRY
             TelemetryPacket t_pack;
-            t_pack.w = raw_adc_rad;
+            t_pack.raw_adc_rad = raw_adc_rad;
             t_pack.theta_est = theta_est;
             t_pack.vq_v = g_Foc._Vq_V;
             t_pack.vd_v = g_Foc._Vd_V;
