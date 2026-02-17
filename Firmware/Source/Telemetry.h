@@ -18,6 +18,11 @@ enum MsgType : uint8_t {
 void set_period_us(uint32_t period_us);
 uint32_t get_period_us();
 
+// Optional: how many sensor samples we try to include per MSG_DATA frame (chunking).
+// 0 = auto (fill frame as much as possible).
+void set_sensor_chunk_limit(uint16_t max_sensors_per_frame);
+uint16_t get_sensor_chunk_limit();
+
 // Initialize telemetry protocol/state (queues, seq, registries). No MeasurementSystem needed.
 void init();
 
