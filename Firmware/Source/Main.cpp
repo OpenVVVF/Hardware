@@ -652,7 +652,7 @@ printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
 hard_stop();
 
 
-    g_Foc._EncoderOffset_Rad = 0.6584;//3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
+    // g_Foc._EncoderOffset_Rad = 0.6584;//3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
 
 
 
