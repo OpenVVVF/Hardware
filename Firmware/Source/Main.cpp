@@ -39,6 +39,14 @@ struct TelemetryPacket {
     float elec_angle;
     float enc_offset;
     float foc_update_hz;
+
+    float i_alpha;
+    float i_beta;
+
+    float i_d;
+    float i_q;
+
+
 };
 
 ThreadSafeQueue<TelemetryPacket> rx_queue;
@@ -167,7 +175,7 @@ void core1_entry() {
             }
 
             // 3. SEND TELEMETRY
-            TelemetryPacket t_pack{raw_adc_rad, theta_est, g_Foc._Vq_V, g_Foc._Vd_V, g_Foc._Iq_A, g_Foc._ElectricalAngle_Rad, g_Foc._EncoderOffset_Rad, 1.0f/dt_S};
+            TelemetryPacket t_pack{raw_adc_rad, theta_est, g_Foc._Vq_V, g_Foc._Vd_V, g_Foc._Iq_A, g_Foc._ElectricalAngle_Rad, g_Foc._EncoderOffset_Rad, 1.0f/dt_S, g_Foc.i_alpha, g_Foc.i_beta, g_Foc.i_d, g_Foc.i_q};
             rx_queue.push(t_pack);
         }
     }
@@ -694,6 +702,16 @@ hard_stop();
             Telemetry::log("DEBUG_VQ", tp.vq_v);
             Telemetry::log("DEBUG_VD", tp.vd_v);
             Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
+
+
+            Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
+            Telemetry::log("DEBUG_I_BETA", tp.i_beta);
+
+            Telemetry::log("DEBUG_I_D", tp.i_d);
+            Telemetry::log("DEBUG_I_Q", tp.i_q);
+
+
+
         }
 
         // 2. Dispatch telemetry frames

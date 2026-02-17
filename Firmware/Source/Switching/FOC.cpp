@@ -177,8 +177,10 @@
       _Clarke_.m_abc2albe(&_Clarke_);
       
       _Ialpha_A = _Clarke_.fAl;
+      i_alpha = _Ialpha_A;
       _Ibeta_A = _Clarke_.fBe;
-      
+      i_beta = _Ibeta_A;
+
       // Forward Park: Alpha/Beta -> D/Q
       _Park_.fAl = _Ialpha_A;
       _Park_.fBe = _Ibeta_A;
@@ -188,6 +190,8 @@
       
       _Id_A = _Park_.fD;
       _Iq_A = _Park_.fQ;
+      i_d = _Id_A;
+      i_q = i_q;
   }
   
   void FocController::ApplyCurrentLimits(const CurrentCommand& Cmd) {

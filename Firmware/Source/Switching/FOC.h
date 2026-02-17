@@ -125,6 +125,15 @@
 
       tPI _DaxisController_;
       tPI _QaxisController_;
+
+        // debug 
+      float i_alpha;
+      float i_beta;
+  
+      float i_d;
+      float i_q;
+
+
   private:
       MotorConfig _Config_;
       
