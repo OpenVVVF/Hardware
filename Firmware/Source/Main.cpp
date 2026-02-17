@@ -40,7 +40,9 @@ struct TelemetryPacket {
     float enc_offset;
     float foc_update_hz;
 
+    float i_u;
     float i_v;
+    float i_w;
 
     float i_alpha;
     float i_beta;
@@ -177,7 +179,22 @@ void core1_entry() {
             }
 
             // 3. SEND TELEMETRY
-            TelemetryPacket t_pack{raw_adc_rad, theta_est, g_Foc._Vq_V, g_Foc._Vd_V, g_Foc._Iq_A, g_Foc._ElectricalAngle_Rad, g_Foc._EncoderOffset_Rad, 1.0f/dt_S, g_Foc.i_alpha, g_Foc.i_beta, g_Foc.i_d, g_Foc.i_q, SenseData._Iv_A};
+            TelemetryPacket t_pack;
+            t_pack.w = raw_adc_rad;
+            t_pack.theta_est = theta_est;
+            t_pack.vq_v = g_Foc._Vq_V;
+            t_pack.vd_v = g_Foc._Vd_V;
+            t_pack.iq_meas = g_Foc._Iq_A;
+            t_pack.elec_angle = g_Foc._ElectricalAngle_Rad;
+            t_pack.enc_offset = g_Foc._EncoderOffset_Rad;
+            t_pack.foc_update_hz=1.0f/dt_S;
+            t_pack.i_alpha =  g_Foc.i_alpha;
+            t_pack.i_beta = g_Foc.i_beta;
+            t_pack.i_d =  g_Foc.i_d;
+            t_pack.i_q =  g_Foc.i_q;
+            t_pack.i_u =  SenseData._Iu_A
+            t_pack.i_v =  SenseData._Iv_A
+            t_pack.i_w =  SenseData._Iw_A
             rx_queue.push(t_pack);
         }
     }
@@ -669,8 +686,6 @@ hard_stop();
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
 
-    Telemetry::init(); 
-    Telemetry::bindMeasurementSystem(*measurements);
 
     // -> LAUNCH CORE 1 <-
     multicore_launch_core1(core1_entry);
@@ -712,7 +727,9 @@ hard_stop();
             Telemetry::log("DEBUG_I_D", tp.i_d);
             Telemetry::log("DEBUG_I_Q", tp.i_q);
 
-            Telemetry::log("I_V", tp.i_v);
+            Telemetry::log("FAKE_I_V", tp.i_u);
+            Telemetry::log("FAKE_I_V", tp.i_v);
+            Telemetry::log("FAKE_I_V", tp.i_w);
 
 
 
