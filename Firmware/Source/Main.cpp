@@ -50,6 +50,13 @@ struct TelemetryPacket {
     float i_d;
     float i_q;
 
+    float v_alpha;
+    float v_beta;
+
+    float v_u;
+    float v_v;
+    float v_w;
+
 
 };
 
@@ -175,9 +182,9 @@ void core1_entry() {
 
 
             // Execute modulation
+            PhaseVoltages TargetDuty;
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 FocOutput FOC_Out = g_Foc.UpdateVoltages();
-                PhaseVoltages TargetDuty;
                 GenerateSpwm(FOC_Out, 0.95f, TargetDuty);
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
             }
@@ -200,6 +207,12 @@ void core1_entry() {
             t_pack.i_u =  SenseData._Iu_A;
             t_pack.i_v =  SenseData._Iv_A;
             t_pack.i_w =  SenseData._Iw_A;
+            t_pack.v_alpha = g_Foc._Valpha_V;
+            t_pack.v_beta = g_Foc._Vbeta_V;
+            t_pack.v_u =TargetDuty._Du_unitless;
+            t_pack.v_v =TargetDuty._Dv_unitless;
+            t_pack.v_w =TargetDuty._Dw_unitless;
+            
             rx_queue.push(t_pack);
         }
     }
@@ -738,6 +751,11 @@ hard_stop();
             Telemetry::log("FAKE_I_U", tp.i_u);
             Telemetry::log("FAKE_I_V", tp.i_v);
             Telemetry::log("FAKE_I_W", tp.i_w);
+
+            Telemetry::log("V_U", tp.v_u);
+            Telemetry::log("V_V", tp.v_v);
+            Telemetry::log("V_W", tp.v_w);
+
 
 
 
