@@ -42,8 +42,8 @@ static constexpr uint8_t  STR_MAXLEN            = 48;
 static constexpr uint32_t DEFAULT_PERIOD_US     = 1000;   // 100 Hz
 static constexpr uint32_t DEFINE_REANNOUNCE_US  = 100000;  // 10 Hz (host resync aid)
 
-static constexpr size_t   DEFINE_PAYLOAD_MAX    = 400;
-static constexpr size_t   DATA_PAYLOAD_MAX      = 500;
+static constexpr size_t   DEFINE_PAYLOAD_MAX    = 700;
+static constexpr size_t   DATA_PAYLOAD_MAX      = 900;
 
 // To decouple init order safely: dynamic key IDs live in a high range
 // so they never collide with MeasurementSystem sensor IDs (typically 1..N).
