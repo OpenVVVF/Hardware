@@ -178,6 +178,8 @@ void core1_entry() {
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
             }
 
+            updateCarrierFromZones();
+
             // 3. SEND TELEMETRY
             TelemetryPacket t_pack;
             t_pack.raw_adc_rad = raw_adc_rad;
