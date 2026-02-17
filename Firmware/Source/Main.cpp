@@ -66,8 +66,8 @@ namespace {
     SPWMStrategy g_SpwmStrategy;
 
     float g_RampRate = 5.0f;
-    float g_ManualCarrierHz = 2000.0f;
-    bool  g_ManualCarrierMode = false;
+    // float g_ManualCarrierHz = 2000.0f;
+    // bool  g_ManualCarrierMode = false;
 
     float    g_LastCarrierHz = 0.0f;
     bool     g_LastSyncMode  = false;
@@ -77,44 +77,44 @@ namespace {
     MAX2253x_MultiADC* adc_system = nullptr;
     MeasurementSystem* measurements = nullptr;
 
-    void updateCarrierFromZones() {
-        if (!g_Driver || !g_Driver->isEnabled()) return;
+    // void updateCarrierFromZones() {
+    //     if (!g_Driver || !g_Driver->isEnabled()) return;
 
-        if (g_ManualCarrierMode) {
-            if (g_LastCarrierHz != g_ManualCarrierHz || g_LastSyncMode != false) {
-                g_Driver->setCarrierFrequency(g_ManualCarrierHz);
-                g_Driver->setSynchronousMode(false, 0);
-                g_LastCarrierHz = g_ManualCarrierHz;
-                g_LastSyncMode = false;
-                g_LastPulses = 0;
-            }
-            return;
-        }
+    //     if (g_ManualCarrierMode) {
+    //         if (g_LastCarrierHz != g_ManualCarrierHz || g_LastSyncMode != false) {
+    //             g_Driver->setCarrierFrequency(g_ManualCarrierHz);
+    //             g_Driver->setSynchronousMode(false, 0);
+    //             g_LastCarrierHz = g_ManualCarrierHz;
+    //             g_LastSyncMode = false;
+    //             g_LastPulses = 0;
+    //         }
+    //         return;
+    //     }
 
-        float CurrentFreq = g_Driver->getCurrentFrequency();
-        ZoneConfig Zone {};
-        float SyncPulsesF = 0.0f;
+    //     float CurrentFreq = g_Driver->getCurrentFrequency();
+    //     ZoneConfig Zone {};
+    //     float SyncPulsesF = 0.0f;
 
-        if (zone_mgr.getZone(CurrentFreq, &Zone)) {
-            float Carrier = zone_mgr.calculateCarrier(CurrentFreq, &Zone, &SyncPulsesF);
-            bool SyncMode = (Zone.type == ZoneType::SYNC);
-            uint16_t Pulses = SyncMode ? (uint16_t)SyncPulsesF : 0;
+    //     if (zone_mgr.getZone(CurrentFreq, &Zone)) {
+    //         float Carrier = zone_mgr.calculateCarrier(CurrentFreq, &Zone, &SyncPulsesF);
+    //         bool SyncMode = (Zone.type == ZoneType::SYNC);
+    //         uint16_t Pulses = SyncMode ? (uint16_t)SyncPulsesF : 0;
 
-            if (g_LastCarrierHz != Carrier || g_LastSyncMode != SyncMode || g_LastPulses != Pulses) {
-                g_Driver->setCarrierFrequency(Carrier);
-                g_Driver->setSynchronousMode(SyncMode, Pulses);
-                g_LastCarrierHz = Carrier;
-                g_LastSyncMode = SyncMode;
-                g_LastPulses = Pulses;
-            }
-        }
-    }
+    //         if (g_LastCarrierHz != Carrier || g_LastSyncMode != SyncMode || g_LastPulses != Pulses) {
+    //             g_Driver->setCarrierFrequency(Carrier);
+    //             g_Driver->setSynchronousMode(SyncMode, Pulses);
+    //             g_LastCarrierHz = Carrier;
+    //             g_LastSyncMode = SyncMode;
+    //             g_LastPulses = Pulses;
+    //         }
+    //     }
+    // }
 
-    void configureZones() {
-        zone_mgr.clearZones();
-        zone_mgr.addAsyncFixed(0.0f, 2000.0f, 2000.0f);
-        // zone_mgr.addRCFM(0, 2000, 1200, 200);
-    }
+    // void configureZones() {
+    //     zone_mgr.clearZones();
+    //     zone_mgr.addAsyncFixed(0.0f, 2000.0f, 2000.0f);
+    //     // zone_mgr.addRCFM(0, 2000, 1200, 200);
+    // }
 }
 
 
@@ -171,7 +171,7 @@ void core1_entry() {
             g_Foc.UpdateSensors(SenseData);
 
             // updateCarrierFromZones();
-            g_Driver->setCarrierFrequency(2000.0f);
+            // g_Driver->setCarrierFrequency(2000.0f);
 
 
             // Execute modulation
@@ -226,7 +226,7 @@ int main() {
     g_Driver->enable();
     // Don't auto-enable here, let the command context handle it when ready
 
-    configureZones();
+    // configureZones();
 
     // // 2. Setup Command Context (Using captureless lambdas to cast to C function pointers)
     // CommandContext ctx{};
@@ -651,8 +651,8 @@ hard_stop();
     CommandContext ctx{};
     ctx.zone_mgr = &zone_mgr;
     ctx.set_ramp_rate = [](float val) { g_RampRate = val; };
-    ctx.set_manual_carrier_hz = [](float val) { g_ManualCarrierHz = val; };
-    ctx.set_manual_carrier_mode = [](bool val) { g_ManualCarrierMode = val; };
+    // ctx.set_manual_carrier_hz = [](float val) { g_ManualCarrierHz = val; };
+    // ctx.set_manual_carrier_mode = [](bool val) { g_ManualCarrierMode = val; };
     
     // // Commands route to Core 1
     // ctx.enable = []() { tx_queue.push({CmdType::ENABLE, 0.0f}); };
@@ -692,7 +692,7 @@ hard_stop();
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
 
-    g_Driver->setCarrierFrequency(2000.0f);
+    // g_Driver->setCarrierFrequency(2000.0f);
 
 
     // -> LAUNCH CORE 1 <-
