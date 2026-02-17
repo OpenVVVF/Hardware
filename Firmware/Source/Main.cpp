@@ -691,6 +691,8 @@ hard_stop();
     Telemetry::init(); 
     Telemetry::bindMeasurementSystem(*measurements);
 
+    g_Driver->setCarrierFrequency(2000.0f);
+
 
     // -> LAUNCH CORE 1 <-
     multicore_launch_core1(core1_entry);
