@@ -77,13 +77,11 @@
 
   Sensors_ = {};
   _CurrentLoop = {};
-  _CurrentLoop.Kp = 0.1f;
-  _CurrentLoop.Ki = 20.0f;
 }
   
   void FocController::SetMotorConfig(const MotorConfig& Config) {
       _Config_ = Config;
-      _CurrentLoop.MaxVoltageLimit = 1.5f;//_Config_._DcBusVoltage_V * 0.5f * _Config_._MaxModulation_unitless;
+      _CurrentLoop.MaxVoltageLimit = 10.0f;//_Config_._DcBusVoltage_V * 0.5f * _Config_._MaxModulation_unitless;
   }
   
   MotorConfig FocController::GetMotorConfig() const {
@@ -102,9 +100,7 @@ void FocController::SetQaxisGains(float Kp, float Ki) {
   void FocController::Reset() {
       // Reset PID controllers
 
-      _CurrentLoop = {};
-      _CurrentLoop.Kp = 0.1f;
-      _CurrentLoop.Ki = 20.0f;
+      _CurrentLoop.Reset();
     //   tPI_rst(&_DaxisController_);
     //   tPI_rst(&_QaxisController_);
       
@@ -261,6 +257,8 @@ void FocController::SetQaxisGains(float Kp, float Ki) {
     CalculateDecoupling();
     
     // 2. Calculate errors
+    // _IdCommanded_A = 0.0f;
+    // _IqCommanded_A = 20.0f;
     float Id_err = _IdCommanded_A - _Id_A;
     float Iq_err = _IqCommanded_A - _Iq_A;
 

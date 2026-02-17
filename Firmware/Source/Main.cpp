@@ -134,6 +134,8 @@ void core1_entry() {
     const float Kp_pll = 200.0f;
     const float Ki_pll = 2000.0f;
 
+    
+
     while (true) {
         // 1. UPDATE TARGET TORQUE (Dead simple)
         CurrentCommand new_cmd;
@@ -184,6 +186,16 @@ void core1_entry() {
             // Execute modulation
             PhaseVoltages TargetDuty;
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
+
+
+                g_Foc._CurrentLoop.Kp = -0.01f;
+                g_Foc._CurrentLoop.Ki = -5.0f;
+
+                CurrentCommand CurrentCmd;
+                CurrentCmd._IdCmd_A = 0.0f;
+                CurrentCmd._IqCmd_A = 5.0f;
+                g_Foc.ApplyCurrentLimits(CurrentCmd);
+
                 FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
                 GenerateSpwm(FOC_Out, 0.95f, TargetDuty);
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
@@ -324,7 +336,7 @@ int main() {
 
     CurrentCommand CurrentCmd;
     CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 1.0f;
+    CurrentCmd._IqCmd_A = 5.0f;
     g_Foc.ApplyCurrentLimits(CurrentCmd);
 
     // 5. Initialize Telemetry
@@ -334,7 +346,7 @@ int main() {
 
 
 
-    g_Driver->setCarrierFrequency(2000.0f);
+    g_Driver->setCarrierFrequency(4000.0f);
 
 // ------------------------------------------------------------------
     // HARDWARE DIAGNOSTIC: CURRENT SENSOR POLARITY CHECK
@@ -652,8 +664,8 @@ printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
 hard_stop();
 
 
-    g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
-
+    // g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
+// g_Foc._EncoderOffset_Rad = 6.94159f;
 
 
 
