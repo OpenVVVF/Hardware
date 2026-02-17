@@ -48,7 +48,8 @@
     float Bandwidth = TargetBandwidth * 2 * M_PI;
 
     float kP = Bandwidth * MotorInductance_H;
-    float kI = (Resistance_Ohm / MotorInductance_H) * Bandwidth * MotorInductance_H;
+    // float kI = (Resistance_Ohm / MotorInductance_H) * Bandwidth * MotorInductance_H;
+    float kI = 0;
 
   _DaxisController_.fKp = kP;
   _DaxisController_.fKi = kI; 
