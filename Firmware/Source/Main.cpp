@@ -287,7 +287,7 @@ int main() {
 
     CurrentCommand CurrentCmd;
     CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 2.0f;
+    CurrentCmd._IqCmd_A = 1.0f;
     g_Foc.ApplyCurrentLimits(CurrentCmd);
 
     // 5. Initialize Telemetry
