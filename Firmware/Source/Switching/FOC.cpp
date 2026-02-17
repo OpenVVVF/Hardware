@@ -39,7 +39,7 @@
 
 
     // Maybe works... idfk
-    int TargetBandwidth = 200; // hz
+    int TargetBandwidth = 2000; // hz
     float MotorInductance_H =  0.000040f;
     float Resistance_Ohm = 0.025;
 
@@ -50,8 +50,8 @@
 
   _DaxisController_.fKp = kP;
   _DaxisController_.fKi = kI; 
-  _DaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _DaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus)
 
 
   _QaxisController_ = {};
@@ -61,8 +61,8 @@
 
   _QaxisController_.fKp = kP;
   _QaxisController_.fKi = kI;
-  _QaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _QaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus) 
+  _QaxisController_.fLowOutLim = -2.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _QaxisController_.fUpOutLim = 2.0f; // volts (Eventually make this equal to the voltage of dc bus) 
 
 
   _Clarke_ = {};
