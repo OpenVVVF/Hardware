@@ -192,9 +192,9 @@ void core1_entry() {
             t_pack.i_beta = g_Foc.i_beta;
             t_pack.i_d =  g_Foc.i_d;
             t_pack.i_q =  g_Foc.i_q;
-            t_pack.i_u =  SenseData._Iu_A
-            t_pack.i_v =  SenseData._Iv_A
-            t_pack.i_w =  SenseData._Iw_A
+            t_pack.i_u =  SenseData._Iu_A;
+            t_pack.i_v =  SenseData._Iv_A;
+            t_pack.i_w =  SenseData._Iw_A;
             rx_queue.push(t_pack);
         }
     }
