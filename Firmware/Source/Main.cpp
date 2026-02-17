@@ -171,7 +171,7 @@ void core1_entry() {
             g_Foc.UpdateSensors(SenseData);
 
             // updateCarrierFromZones();
-            g_Driver->getCarrierFrequency(2000.0f);
+            g_Driver->setCarrierFrequency(2000.0f);
 
 
             // Execute modulation
