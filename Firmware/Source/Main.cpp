@@ -170,6 +170,10 @@ void core1_entry() {
             g_Foc._QaxisController_.fDtSec = dt_S;
             g_Foc.UpdateSensors(SenseData);
 
+            // updateCarrierFromZones();
+            g_Driver->getCarrierFrequency(2000.0f);
+
+
             // Execute modulation
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 FocOutput FOC_Out = g_Foc.UpdateVoltages();
@@ -178,7 +182,6 @@ void core1_entry() {
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
             }
 
-            updateCarrierFromZones();
 
             // 3. SEND TELEMETRY
             TelemetryPacket t_pack;
