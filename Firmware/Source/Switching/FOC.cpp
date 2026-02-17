@@ -9,6 +9,8 @@
   #include "FOC.h"
   #include <cmath>
 
+  #include "Sensors/MeasurementSystem.h"
+
 
   FocController::FocController()
   : _ElectricalAngle_Rad(0.0f),
@@ -39,19 +41,20 @@
 
 
     // Maybe works... idfk
-    int TargetBandwidth = 200; // hz
-    float MotorInductance_H =  0.000040f;
+    int TargetBandwidth = 2000; // hz
+    float MotorInductance_H =  0.000080f;
     float Resistance_Ohm = 0.025;
 
     float Bandwidth = TargetBandwidth * 2 * M_PI;
 
     float kP = Bandwidth * MotorInductance_H;
-    float kI = (Resistance_Ohm / MotorInductance_H) * Bandwidth * MotorInductance_H;
+    // float kI = (Resistance_Ohm / MotorInductance_H) * Bandwidth * MotorInductance_H;
+    float kI = 0;
 
   _DaxisController_.fKp = kP;
   _DaxisController_.fKi = kI; 
-  _DaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _DaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fLowOutLim = -1.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _DaxisController_.fUpOutLim = 1.0f; // volts (Eventually make this equal to the voltage of dc bus)
 
 
   _QaxisController_ = {};
@@ -61,8 +64,8 @@
 
   _QaxisController_.fKp = kP;
   _QaxisController_.fKi = kI;
-  _QaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
-  _QaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus) 
+  _QaxisController_.fLowOutLim = -1.0f; // volts (Eventually make this equal to the voltage of dc bus)
+  _QaxisController_.fUpOutLim = 1.0f; // volts (Eventually make this equal to the voltage of dc bus) 
 
 
   _Clarke_ = {};
@@ -175,8 +178,10 @@
       _Clarke_.m_abc2albe(&_Clarke_);
       
       _Ialpha_A = _Clarke_.fAl;
+      i_alpha = _Ialpha_A;
       _Ibeta_A = _Clarke_.fBe;
-      
+      i_beta = _Ibeta_A;
+
       // Forward Park: Alpha/Beta -> D/Q
       _Park_.fAl = _Ialpha_A;
       _Park_.fBe = _Ibeta_A;
@@ -186,6 +191,8 @@
       
       _Id_A = _Park_.fD;
       _Iq_A = _Park_.fQ;
+      i_d = _Id_A;
+      i_q = i_q;
   }
   
   void FocController::ApplyCurrentLimits(const CurrentCommand& Cmd) {
