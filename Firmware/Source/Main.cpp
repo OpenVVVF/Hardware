@@ -112,7 +112,7 @@ namespace {
 
     void configureZones() {
         zone_mgr.clearZones();
-        zone_mgr.addAsyncFixed(0.0f, 2000.0f, 4000.0f);
+        zone_mgr.addAsyncFixed(0.0f, 2000.0f, 2000.0f);
         // zone_mgr.addRCFM(0, 2000, 1200, 200);
     }
 }
