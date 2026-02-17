@@ -189,10 +189,10 @@
       _Park_.fCosAng = _CosTheta_unitless;
       _Park_.m_albe2dq(&_Park_);
       
-      _Id_A = _Park_.fQ;
-      _Iq_A = _Park_.fD;
+      _Id_A = _Park_.fD;
+      _Iq_A = _Park_.fQ;
       i_d = _Id_A;
-      i_q = i_q;
+      i_q = _Iq_A;
   }
   
   void FocController::ApplyCurrentLimits(const CurrentCommand& Cmd) {
