@@ -40,7 +40,7 @@
 
     // Maybe works... idfk
     int TargetBandwidth = 2000; // hz
-    float MotorInductance_H =  0.000040f;
+    float MotorInductance_H =  0.000080f;
     float Resistance_Ohm = 0.025;
 
     float Bandwidth = TargetBandwidth * 2 * M_PI;
