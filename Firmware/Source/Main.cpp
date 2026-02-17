@@ -727,9 +727,9 @@ hard_stop();
             Telemetry::log("DEBUG_I_D", tp.i_d);
             Telemetry::log("DEBUG_I_Q", tp.i_q);
 
-            Telemetry::log("FAKE_I_V", tp.i_u);
+            Telemetry::log("FAKE_I_U", tp.i_u);
             Telemetry::log("FAKE_I_V", tp.i_v);
-            Telemetry::log("FAKE_I_V", tp.i_w);
+            Telemetry::log("FAKE_I_W", tp.i_w);
 
 
 
