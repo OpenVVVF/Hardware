@@ -173,8 +173,8 @@ void core1_entry() {
             SenseData._EncoderPosition_Rad = theta_est;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
 
-            g_Foc._DaxisController_.fDtSec = dt_S;
-            g_Foc._QaxisController_.fDtSec = dt_S;
+            // g_Foc._DaxisController_.fDtSec = dt_S;
+            // g_Foc._QaxisController_.fDtSec = dt_S;
             g_Foc.UpdateSensors(SenseData);
 
             // updateCarrierFromZones();
@@ -184,7 +184,7 @@ void core1_entry() {
             // Execute modulation
             PhaseVoltages TargetDuty;
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
-                FocOutput FOC_Out = g_Foc.UpdateVoltages();
+                FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
                 GenerateSpwm(FOC_Out, 0.95f, TargetDuty);
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
             }
@@ -652,7 +652,7 @@ printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
 hard_stop();
 
 
-    // g_Foc._EncoderOffset_Rad = 0.6584;//3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
+    g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
 
 
 

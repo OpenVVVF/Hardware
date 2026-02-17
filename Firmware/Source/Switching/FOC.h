@@ -63,6 +63,60 @@
       bool _VoltageLimited;               // True if hit voltage limit
   };
 
+
+/**
+ * @brief Coupled Vector PI Controller for D/Q axes with dynamic anti-windup
+ */
+class VectorPIController {
+    public:
+        float Kp = 0.0f;
+        float Ki = 0.0f;
+        float MaxVoltageLimit = 0.0f; // Limit for sqrt(Vd^2 + Vq^2)
+        
+        float Id_int = 0.0f;
+        float Iq_int = 0.0f;
+    
+        void Reset() {
+            Id_int = 0.0f;
+            Iq_int = 0.0f;
+        }
+    
+        void Update(float Id_err, float Iq_err, float Vd_ff, float Vq_ff, float dt, float& Vd_out, float& Vq_out) {
+            // 1. Proportional term
+            float Vd_p = Id_err * Kp;
+            float Vq_p = Iq_err * Kp;
+    
+            // 2. Pre-limit output (P + current I + Feedforward)
+            // Feedforward is included here so it is subject to the hardware voltage limits!
+            float Vd_pre = Vd_p + Id_int + Vd_ff;
+            float Vq_pre = Vq_p + Iq_int + Vq_ff;
+    
+            // 3. Calculate total voltage vector magnitude
+            float v_mag = sqrtf(Vd_pre * Vd_pre + Vq_pre * Vq_pre);
+    
+            // 4. Dynamic Circle Limit & Anti-Windup
+            if (v_mag > MaxVoltageLimit && v_mag > 1e-6f) {
+                // Scale outputs to fit exactly on the limit circle
+                float scale = MaxVoltageLimit / v_mag;
+                Vd_out = Vd_pre * scale;
+                Vq_out = Vq_pre * scale;
+    
+                // Leaky Integrator: slowly bleed off windup while saturated
+                Id_int *= 0.99f;
+                Iq_int *= 0.99f;
+            } else {
+                // Voltage is within limits, output normally
+                Vd_out = Vd_pre;
+                Vq_out = Vq_pre;
+    
+                // Standard Integration step
+                Id_int += Ki * Id_err * dt;
+                Iq_int += Ki * Iq_err * dt;
+            }
+        }
+    };
+
+
   /**
    * @brief FOC controller
    */
@@ -95,7 +149,7 @@
        * @brief Executes PI loops and transforms. 
        *        Uses targets set by ApplyCurrentLimits.
        */
-      FocOutput UpdateVoltages();
+      FocOutput UpdateVoltages(float dt_S);
 
       void Reset();
   
@@ -123,8 +177,10 @@
   
       float _EncoderOffset_Rad = 0.0f;
 
-      tPI _DaxisController_;
-      tPI _QaxisController_;
+
+      VectorPIController _CurrentLoop;
+    //   tPI _DaxisController_;
+    //   tPI _QaxisController_;
 
         // debug 
       float i_alpha;
@@ -150,5 +206,5 @@
       
       void CalculateDecoupling();
       
-      void ApplyVoltageLimiting();
+    //   void ApplyVoltageLimiting();
   };
