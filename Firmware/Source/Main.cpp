@@ -123,7 +123,7 @@ void core1_entry() {
             g_Foc.ApplyCurrentLimits(new_cmd); 
         }
 
-        // 2. STRICT 2.5KHZ FOC TICK
+        // 2. STRICT 2KHZ FOC TICK
         if (absolute_time_diff_us(get_absolute_time(), next_foc_tick) <= 0) {
             float dt_S = (float)absolute_time_diff_us(old_t, get_absolute_time()) / 1000000.0f;
             old_t = get_absolute_time();
@@ -425,15 +425,15 @@ auto set_vdq_openloop = [&](float Vd, float Vq, float theta_e, float Vdc, float 
 };
 
 // -------- Safety / limits --------
-const float I_LOCK_MAX_A   = 8.0f;   // <= set to your safe calibration current
-const float I_TRIP_A       = 20.0f;  // hard trip (instant stop) - set to safe hardware limit
+const float I_LOCK_MAX_A   = 15.0f;   // <= set to your safe calibration current
+const float I_TRIP_A       = 50.0f;  // hard trip (instant stop) - set to safe hardware limit
 const float max_mod_cal    = 0.70f;  // extra headroom for calibration
 const float theta_e_lock   = 0.0f;
 
 // Use very small starting voltages.
 // (On low-R motors, even 1–2V can be plenty.)
-const float Vd_lock_min_V  = 0.3f;
-const float Vd_lock_max_V  = 3.0f;   // do NOT start with 10V
+const float Vd_lock_min_V  = 0.5f;
+const float Vd_lock_max_V  = 5.0f;   // do NOT start with 10V
 const float Vd_ramp_V_per_s = 1.0f;  // slow ramp
 
 // These still sweep, but current-limited
