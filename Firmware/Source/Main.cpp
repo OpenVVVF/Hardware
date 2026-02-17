@@ -701,7 +701,7 @@ hard_stop();
             Telemetry::log("ENC_OFFSET", tp.enc_offset);
             Telemetry::log("DEBUG_VQ", tp.vq_v);
             Telemetry::log("DEBUG_VD", tp.vd_v);
-            Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
+            // Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
 
 
             Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
