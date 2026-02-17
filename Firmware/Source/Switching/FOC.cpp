@@ -9,6 +9,8 @@
   #include "FOC.h"
   #include <cmath>
 
+  #include "Sensors/MeasurementSystem.h"
+
 
   FocController::FocController()
   : _ElectricalAngle_Rad(0.0f),
