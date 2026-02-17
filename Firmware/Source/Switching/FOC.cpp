@@ -37,8 +37,19 @@
   _DaxisController_.m_calc = tPI_calc;
   _DaxisController_.m_rst = tPI_rst;
 
-  _DaxisController_.fKp = 0.1f;
-  _DaxisController_.fKi = 6.0f; 
+
+    // Maybe works... idfk
+    int TargetBandwidth = 200; // hz
+    float MotorInductance_H =  0.000040f;
+    float Resistance_Ohm = 0.025;
+
+    float Bandwidth = TargetBandwidth * 2 * M_PI;
+
+    float kP = Bandwidth * MotorInductance_H;
+    float kI = (Resistance_Ohm / MotorInductance_H) * Bandwidth * MotorInductance_H;
+
+  _DaxisController_.fKp = kP;
+  _DaxisController_.fKi = kI; 
   _DaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
   _DaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus)
 
@@ -48,8 +59,8 @@
   _QaxisController_.m_calc = tPI_calc;
   _QaxisController_.m_rst = tPI_rst;
 
-  _QaxisController_.fKp = 0.1f;
-  _QaxisController_.fKi = 6.0f;
+  _QaxisController_.fKp = kP;
+  _QaxisController_.fKi = kI;
   _QaxisController_.fLowOutLim = -3.0f; // volts (Eventually make this equal to the voltage of dc bus)
   _QaxisController_.fUpOutLim = 3.0f; // volts (Eventually make this equal to the voltage of dc bus) 
 
