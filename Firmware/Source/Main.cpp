@@ -188,8 +188,8 @@ void core1_entry() {
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
 
 
-                g_Foc._CurrentLoop.Kp = -0.01f;
-                g_Foc._CurrentLoop.Ki = -5.0f;
+                g_Foc._CurrentLoop.Kp = 0.01f;
+                g_Foc._CurrentLoop.Ki = 5.0f;
 
                 CurrentCommand CurrentCmd;
                 CurrentCmd._IdCmd_A = 0.0f;
