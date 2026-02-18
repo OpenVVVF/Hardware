@@ -20,7 +20,7 @@
 
 
 #include "pico/multicore.h"
-#include "ThreadSafeQueue.h"
+#include "hardware/sync.h"   // __dmb(), __sev(), __wfe()
 
 // ----------------------------------------------------------------------
 // Inter-Core Communication Structures
@@ -28,41 +28,76 @@
 
 // Core 0 -> Core 1: Just send raw torque targets!
 ThreadSafeQueue<CurrentCommand> tx_queue;
+#include "pico/stdlib.h"
+#include "hardware/sync.h"
 
-// Core 1 -> Core 0: FOC State Only
-struct TelemetryPacket {
-    float raw_adc_rad;
-    float theta_est;
-    float vq_v;
-    float vd_v;
-    float iq_meas;
-    float elec_angle;
-    float enc_offset;
-    float foc_update_hz;
-
+typedef struct TelemetryPacket {
+    float raw_adc_rad, theta_est, vq_v, vd_v, iq_meas, elec_angle, enc_offset, foc_update_hz;
     float rotor_velocity;
+    float i_u, i_v, i_w;
+    float i_alpha, i_beta;
+    float i_d, i_q;
+    float v_alpha, v_beta;
+    float v_u, v_v, v_w;
+} TelemetryPacket;
 
-    float i_u;
-    float i_v;
-    float i_w;
+#define TELEMETRY_RB_SIZE 128u
+_Static_assert((TELEMETRY_RB_SIZE & (TELEMETRY_RB_SIZE - 1u)) == 0, "power of 2");
 
-    float i_alpha;
-    float i_beta;
+typedef struct {
+    TelemetryPacket buf[TELEMETRY_RB_SIZE];
 
-    float i_d;
-    float i_q;
+    volatile uint32_t head;   // producer writes
+    uint32_t _pad0[15];       // padding to reduce contention
+    volatile uint32_t tail;   // consumer writes
+    uint32_t _pad1[15];
 
-    float v_alpha;
-    float v_beta;
+    volatile uint32_t dropped;
+} telemetry_rb_t;
 
-    float v_u;
-    float v_v;
-    float v_w;
+static telemetry_rb_t g_tel_rb;
 
+static inline void copy_packet(TelemetryPacket *dst, const TelemetryPacket *src) {
+    const uint32_t *s = (const uint32_t*)src;
+    uint32_t *d = (uint32_t*)dst;
+    for (uint32_t i = 0; i < (sizeof(TelemetryPacket) / 4u); i++) d[i] = s[i];
+}
 
-};
+// Core 1
+static inline bool telemetry_try_push(const TelemetryPacket *p) {
+    telemetry_rb_t *r = &g_tel_rb;
 
-ThreadSafeQueue<TelemetryPacket> rx_queue;
+    uint32_t h = r->head;
+    uint32_t t = r->tail;
+    uint32_t next = (h + 1u) & (TELEMETRY_RB_SIZE - 1u);
+
+    if (next == t) { r->dropped++; return false; }  // full
+
+    bool was_empty = (h == t);
+
+    copy_packet(&r->buf[h], p);
+    __dmb();
+    r->head = next;
+
+    // Only wake consumer if we transitioned empty -> non-empty
+    if (was_empty) __sev();
+
+    return true;
+}
+
+// Core 0
+static inline bool telemetry_try_pop(TelemetryPacket *out) {
+    telemetry_rb_t *r = &g_tel_rb;
+
+    uint32_t t = r->tail;
+    uint32_t h = r->head;
+    if (t == h) return false; // empty
+
+    __dmb();
+    copy_packet(out, &r->buf[t]);
+    r->tail = (t + 1u) & (TELEMETRY_RB_SIZE - 1u);
+    return true;
+}
 
 
 // ----------------------------------------------------------------------
@@ -129,6 +164,7 @@ namespace {
 void core1_entry() {
     absolute_time_t next_foc_tick = get_absolute_time();
     absolute_time_t old_t = get_absolute_time();
+    absolute_time_t prev_tel_time = get_absolute_time();
 
     float theta_est = 0.0f;
     float omega_est = 0.0f;
@@ -204,32 +240,34 @@ void core1_entry() {
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
             }
 
+            if(absolute_time_diff_us(prev_tel_time, get_absolute_time()) >= 10000) {
+                prev_tel_time = get_absolute_time();
+                TelemetryPacket t_pack;
+                t_pack.raw_adc_rad = raw_adc_rad;
+                t_pack.theta_est = theta_est;
+                t_pack.vq_v = g_Foc._Vq_V;
+                t_pack.vd_v = g_Foc._Vd_V;
+                t_pack.iq_meas = g_Foc._Iq_A;
+                t_pack.elec_angle = g_Foc._ElectricalAngle_Rad;
+                t_pack.enc_offset = g_Foc._EncoderOffset_Rad;
+                t_pack.foc_update_hz=1.0f/dt_S;
+                t_pack.i_alpha =  g_Foc.i_alpha;
+                t_pack.i_beta = g_Foc.i_beta;
+                t_pack.i_d =  g_Foc.i_d;
+                t_pack.i_q =  g_Foc.i_q;
+                t_pack.i_u =  SenseData._Iu_A;
+                t_pack.i_v =  SenseData._Iv_A;
+                t_pack.i_w =  SenseData._Iw_A;
+                t_pack.v_alpha = g_Foc._Valpha_V;
+                t_pack.v_beta = g_Foc._Vbeta_V;
+                t_pack.v_u =TargetDuty._Du_unitless;
+                t_pack.v_v =TargetDuty._Dv_unitless;
+                t_pack.v_w =TargetDuty._Dw_unitless;
+                t_pack.rotor_velocity = omega_est;
+                
+                (void)telemetry_try_push(&t_pack);
 
-            // 3. SEND TELEMETRY
-            TelemetryPacket t_pack;
-            t_pack.raw_adc_rad = raw_adc_rad;
-            t_pack.theta_est = theta_est;
-            t_pack.vq_v = g_Foc._Vq_V;
-            t_pack.vd_v = g_Foc._Vd_V;
-            t_pack.iq_meas = g_Foc._Iq_A;
-            t_pack.elec_angle = g_Foc._ElectricalAngle_Rad;
-            t_pack.enc_offset = g_Foc._EncoderOffset_Rad;
-            t_pack.foc_update_hz=1.0f/dt_S;
-            t_pack.i_alpha =  g_Foc.i_alpha;
-            t_pack.i_beta = g_Foc.i_beta;
-            t_pack.i_d =  g_Foc.i_d;
-            t_pack.i_q =  g_Foc.i_q;
-            t_pack.i_u =  SenseData._Iu_A;
-            t_pack.i_v =  SenseData._Iv_A;
-            t_pack.i_w =  SenseData._Iw_A;
-            t_pack.v_alpha = g_Foc._Valpha_V;
-            t_pack.v_beta = g_Foc._Vbeta_V;
-            t_pack.v_u =TargetDuty._Du_unitless;
-            t_pack.v_v =TargetDuty._Dv_unitless;
-            t_pack.v_w =TargetDuty._Dw_unitless;
-            t_pack.rotor_velocity = omega_est;
-            
-            rx_queue.push(t_pack);
+            }
         }
     }
 }
@@ -739,57 +777,43 @@ hard_stop();
 
         // 1. Drain the telemetry queue from Core 1
         TelemetryPacket tp;
-        while (rx_queue.try_pop(tp)) {
-            // Save latest for console print
-            print_vq = tp.vq_v;
-            print_vd = tp.vd_v;
-            print_iq = tp.iq_meas;
+            while (telemetry_try_pop(&tp)) {
+                print_vq = tp.vq_v;
+                print_vd = tp.vd_v;
+                print_iq = tp.iq_meas;
 
-            // Push to Telemetry
-            Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
-            Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
-            Telemetry::log("THETA_EST_RAD", tp.theta_est);
-            Telemetry::log("ELEC_ANGLE", tp.elec_angle);
-            Telemetry::log("ENC_OFFSET", tp.enc_offset);
-            Telemetry::log("DEBUG_VQ", tp.vq_v);
-            Telemetry::log("DEBUG_VD", tp.vd_v);
-            // Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
-
-
-            Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
-            Telemetry::log("DEBUG_I_BETA", tp.i_beta);
-
-            Telemetry::log("DEBUG_I_D", tp.i_d);
-            Telemetry::log("DEBUG_I_Q", tp.i_q);
-
-            Telemetry::log("FAKE_I_U", tp.i_u);
-            Telemetry::log("FAKE_I_V", tp.i_v);
-            Telemetry::log("FAKE_I_W", tp.i_w);
+                // Push to Telemetry
+                Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
+                Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
+                Telemetry::log("THETA_EST_RAD", tp.theta_est);
+                Telemetry::log("ELEC_ANGLE", tp.elec_angle);
+                Telemetry::log("ENC_OFFSET", tp.enc_offset);
+                Telemetry::log("DEBUG_VQ", tp.vq_v);
+                Telemetry::log("DEBUG_VD", tp.vd_v);
+                // Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
 
 
+                Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
+                Telemetry::log("DEBUG_I_BETA", tp.i_beta);
 
-            Telemetry::log("V_Alpha", tp.v_alpha);
-            Telemetry::log("V_Beta", tp.v_beta);
+                Telemetry::log("DEBUG_I_D", tp.i_d);
+                Telemetry::log("DEBUG_I_Q", tp.i_q);
 
-
-            Telemetry::log("V_U", tp.v_u);
-            Telemetry::log("V_V", tp.v_v);
-            Telemetry::log("V_W", tp.v_w);
-
-            Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
+                Telemetry::log("FAKE_I_U", tp.i_u);
+                Telemetry::log("FAKE_I_V", tp.i_v);
+                Telemetry::log("FAKE_I_W", tp.i_w);
 
 
 
+                Telemetry::log("V_Alpha", tp.v_alpha);
+                Telemetry::log("V_Beta", tp.v_beta);
 
-        }
 
-        // 2. Dispatch telemetry frames
-        Telemetry::updateSensors(); 
-
-        // 3. Simple 1Hz console print
-        if (absolute_time_diff_us(last_print, get_absolute_time()) > 1000000) {
-            printf("FOC State | Vd: %.2f | Vq: %.2f | Iq_meas: %.2f\r\n", print_vd, print_vq, print_iq);
-            last_print = get_absolute_time();
-        }
+                Telemetry::log("V_U", tp.v_u);
+                Telemetry::log("V_V", tp.v_v);
+                Telemetry::log("V_W", tp.v_w);
+                Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
+                Telemetry::updateSensors(); 
+            }
     }
 }
