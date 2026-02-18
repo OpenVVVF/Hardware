@@ -48,10 +48,7 @@ typedef struct {
     TelemetryPacket buf[TELEMETRY_RB_SIZE];
 
     volatile uint32_t head;   // producer writes
-    uint32_t _pad0[15];       // padding to reduce contention
     volatile uint32_t tail;   // consumer writes
-    uint32_t _pad1[15];
-
     volatile uint32_t dropped;
 } telemetry_rb_t;
 
