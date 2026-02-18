@@ -164,8 +164,8 @@ FocOutput FocController::UpdateVoltages(float dt_S) {
     CalculateDecoupling();
 
     // 2. Calculate errors
-    float Id_err = _Id_A - _IdCommanded_A;
-    float Iq_err = _Iq_A - _IqCommanded_A;
+    float Id_err = _IdCommanded_A - _Id_A ;
+    float Iq_err = _IqCommanded_A - _Iq_A;
 
     // 3. Execute Coupled Vector PI Loop
     _CurrentLoop.Update(Id_err, Iq_err, _VdFeedforward_V_, _VqFeedforward_V_, dt_S, _Vd_V, _Vq_V);
@@ -185,8 +185,8 @@ FocOutput FocController::UpdateVoltages(float dt_S) {
     _Vbeta_V = _InversePark_.fBe;
 
     // 5. Populate output
-    Output._Valpha_V = _Valpha_V;
-    Output._Vbeta_V = _Vbeta_V;
+    Output._Valpha_V = -_Valpha_V;
+    Output._Vbeta_V = -_Vbeta_V;
     Output._Vdc_V = _Config_._DcBusVoltage_V;
     Output._ElectricalAngle_Rad = _ElectricalAngle_Rad;
     Output._VoltageLimited = _DcBusCurrentLimited;

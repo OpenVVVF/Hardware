@@ -40,6 +40,8 @@ struct TelemetryPacket {
     float enc_offset;
     float foc_update_hz;
 
+    float rotor_velocity;
+
     float i_u;
     float i_v;
     float i_w;
@@ -193,7 +195,7 @@ void core1_entry() {
 
                 CurrentCommand CurrentCmd;
                 CurrentCmd._IdCmd_A = 0.0f;
-                CurrentCmd._IqCmd_A = 5.0f;
+                CurrentCmd._IqCmd_A = -5.0f;
                 g_Foc.ApplyCurrentLimits(CurrentCmd);
 
                 FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
@@ -224,6 +226,7 @@ void core1_entry() {
             t_pack.v_u =TargetDuty._Du_unitless;
             t_pack.v_v =TargetDuty._Dv_unitless;
             t_pack.v_w =TargetDuty._Dw_unitless;
+            t_pack.rotor_velocity = omega_est;
             
             rx_queue.push(t_pack);
         }
@@ -310,8 +313,8 @@ int main() {
         {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f},
         {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},
         {1, 3, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 1.0f, "I_DC_MAIN", 0.410f},
-        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 0.1f, "I_PH_U", 0.410f},
-        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_W", 0.410f}
+        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 0.8f, "I_PH_U", 0.410f},
+        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.8f, "I_PH_W", 0.410f}
     };
 
     measurements->addChannels(channel_map);
@@ -773,6 +776,8 @@ hard_stop();
             Telemetry::log("V_U", tp.v_u);
             Telemetry::log("V_V", tp.v_v);
             Telemetry::log("V_W", tp.v_w);
+
+            Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
 
 
 
