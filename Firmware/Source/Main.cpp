@@ -192,6 +192,8 @@ void core1_entry() {
                 g_Foc._CurrentLoop.Kp = 0.01f;
                 g_Foc._CurrentLoop.Ki = 5.0f;
 
+                g_Foc.SetVoltageLimit(5.0f);
+
                 CurrentCommand CurrentCmd;
                 CurrentCmd._IdCmd_A = 0.0f;
                 CurrentCmd._IqCmd_A = 5.0f;

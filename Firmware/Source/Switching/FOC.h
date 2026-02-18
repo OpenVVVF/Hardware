@@ -50,6 +50,12 @@ class FocController {
      */
     FocOutput UpdateVoltages(float dt_S);
 
+    /**
+     * @brief internal limiter for the PID controller, will soft limit here.
+     * clamps kI windup too.
+     */
+    void SetVoltageLimit(float _Voltage_V);
+
     void UpdateSensors(const SensorData& Sensors);
 
     void Reset();

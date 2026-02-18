@@ -46,7 +46,11 @@ FocController::FocController()
 
 void FocController::SetMotorConfig(const MotorConfig& Config) {
     _Config_ = Config;
-    _CurrentLoop.MaxVoltageLimit = 7.0f;  //_Config_._DcBusVoltage_V * 0.5f * _Config_._MaxModulation_unitless;
+    _CurrentLoop.MaxVoltageLimit = _Config_._DcBusVoltage_V * 0.5f * _Config_._MaxModulation_unitless;
+}
+
+void FocController::SetVoltageLimit(float _Voltage_V) {
+    _CurrentLoop.MaxVoltageLimit = _Voltage_V;
 }
 
 MotorConfig FocController::GetMotorConfig() const {
@@ -62,6 +66,7 @@ void FocController::SetQaxisGains(float Kp, float Ki) {
     _CurrentLoop.Kp = Kp;
     _CurrentLoop.Ki = Ki;
 }
+
 void FocController::Reset() {
 
     _CurrentLoop.Reset();
