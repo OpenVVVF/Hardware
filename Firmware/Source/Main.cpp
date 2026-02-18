@@ -197,7 +197,7 @@ void core1_entry() {
                 g_Foc.ApplyCurrentLimits(CurrentCmd);
 
                 FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
-                GenerateSpwm(FOC_Out, 0.95f, TargetDuty);
+                GenerateSvm(FOC_Out, 0.95f, TargetDuty);
                 g_Driver->setDutyCycles(TargetDuty._Du_unitless, TargetDuty._Dv_unitless, TargetDuty._Dw_unitless);
             }
 

@@ -46,7 +46,7 @@ FocController::FocController()
 
 void FocController::SetMotorConfig(const MotorConfig& Config) {
     _Config_ = Config;
-    _CurrentLoop.MaxVoltageLimit = 18.0f;  //_Config_._DcBusVoltage_V * 0.5f * _Config_._MaxModulation_unitless;
+    _CurrentLoop.MaxVoltageLimit = 7.0f;  //_Config_._DcBusVoltage_V * 0.5f * _Config_._MaxModulation_unitless;
 }
 
 MotorConfig FocController::GetMotorConfig() const {
