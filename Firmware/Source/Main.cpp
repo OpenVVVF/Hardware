@@ -37,7 +37,7 @@ typedef struct TelemetryPacket {
     float i_u, i_v, i_w;
     float i_alpha, i_beta;
     float i_d, i_q;
-    float v_alpha, v_beta;
+    // float v_alpha, v_beta;
     float v_u, v_v, v_w;
 } TelemetryPacket;
 
@@ -228,8 +228,6 @@ void core1_entry() {
                 g_Foc._CurrentLoop.Kp = 0.01f;
                 g_Foc._CurrentLoop.Ki = 5.0f;
 
-                g_Foc.SetVoltageLimit(5.0f);
-
                 CurrentCommand CurrentCmd;
                 CurrentCmd._IdCmd_A = 0.0f;
                 CurrentCmd._IqCmd_A = 5.0f;
@@ -258,13 +256,12 @@ void core1_entry() {
                 t_pack.i_u =  SenseData._Iu_A;
                 t_pack.i_v =  SenseData._Iv_A;
                 t_pack.i_w =  SenseData._Iw_A;
-                t_pack.v_alpha = g_Foc._Valpha_V;
-                t_pack.v_beta = g_Foc._Vbeta_V;
+                // t_pack.v_alpha = g_Foc._Valpha_V;
+                // t_pack.v_beta = g_Foc._Vbeta_V;
                 t_pack.v_u =TargetDuty._Du_unitless;
                 t_pack.v_v =TargetDuty._Dv_unitless;
                 t_pack.v_w =TargetDuty._Dw_unitless;
-                t_pack.rotor_velocity = omega_est;
-                
+                t_pack.rotor_velocity = omega_est;                
                 (void)telemetry_try_push(&t_pack);
 
             }
@@ -350,8 +347,8 @@ int main() {
         {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f},
         {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},
         {1, 3, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 1.0f, "I_DC_MAIN", 0.410f},
-        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 0.8f, "I_PH_U", 0.410f},
-        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.8f, "I_PH_W", 0.410f}
+        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 0.1f, "I_PH_U", 0.410f},
+        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_W", 0.410f}
     };
 
     measurements->addChannels(channel_map);
@@ -386,7 +383,7 @@ int main() {
 
 
 
-    g_Driver->setCarrierFrequency(2000.0f);
+    g_Driver->setCarrierFrequency(4000.0f);
 
 // ------------------------------------------------------------------
     // HARDWARE DIAGNOSTIC: CURRENT SENSOR POLARITY CHECK
@@ -694,7 +691,7 @@ g_Foc._EncoderOffset_Rad = wrap_0_2pi(desired_elec - raw_elec);
 
 g_Foc.Reset();
 CurrentCmd._IdCmd_A = 0.0f;
-CurrentCmd._IqCmd_A = 2.0f;
+CurrentCmd._IqCmd_A = 7.0f;
 g_Foc.ApplyCurrentLimits(CurrentCmd);
 
 printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
@@ -769,7 +766,7 @@ hard_stop();
     float print_vq = 0.0f;
     float print_vd = 0.0f;
     float print_iq = 0.0f;
-
+    int counter = 0;
     while (true) {
         // (Optional: You can eventually put simple serial string parsing here 
         // to push new CurrentCommands to tx_queue. Example:)
@@ -777,6 +774,7 @@ hard_stop();
 
         // 1. Drain the telemetry queue from Core 1
         TelemetryPacket tp;
+        // if(true) {
             while (telemetry_try_pop(&tp)) {
                 print_vq = tp.vq_v;
                 print_vd = tp.vd_v;
@@ -805,14 +803,14 @@ hard_stop();
 
 
 
-                Telemetry::log("V_Alpha", tp.v_alpha);
-                Telemetry::log("V_Beta", tp.v_beta);
-
+                // Telemetry::log("V_Alpha", tp.v_alpha);
+                // Telemetry::log("V_Beta", tp.v_beta);
+                
+                Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
 
                 Telemetry::log("V_U", tp.v_u);
                 Telemetry::log("V_V", tp.v_v);
                 Telemetry::log("V_W", tp.v_w);
-                Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
                 Telemetry::updateSensors(); 
             }
     }
