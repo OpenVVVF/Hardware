@@ -225,13 +225,15 @@ void core1_entry() {
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
 
 
-                g_Foc._CurrentLoop.Kp = 0.01f;
+                g_Foc._CurrentLoop.Kp = 0.005f;
                 g_Foc._CurrentLoop.Ki = 5.0f;
 
                 CurrentCommand CurrentCmd;
                 CurrentCmd._IdCmd_A = 0.0f;
-                CurrentCmd._IqCmd_A = 5.0f;
+                CurrentCmd._IqCmd_A = -5.0f;
                 g_Foc.ApplyCurrentLimits(CurrentCmd);
+
+                g_Foc.SetVoltageLimit(8.0f);
 
                 FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
                 GenerateSvm(FOC_Out, 0.95f, TargetDuty);
@@ -347,8 +349,8 @@ int main() {
         {2, 2, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_SIN", 0.0f},
         {2, 1, SensorType::DIRECT, 1.0f, 0.0f, 1.0f, "ENCODER_COS", 0.0f},
         {1, 3, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 1.0f, "I_DC_MAIN", 0.410f},
-        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 0.1f, "I_PH_U", 0.410f},
-        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 0.1f, "I_PH_W", 0.410f}
+        {1, 1, SensorType::BIPOLAR_CURRENT, -1204.8193f, 0.0f, 1.0f, "I_PH_U", 0.410f},
+        {1, 0, SensorType::BIPOLAR_CURRENT, 1204.8193f, 0.0f, 1.0f, "I_PH_W", 0.410f}
     };
 
     measurements->addChannels(channel_map);
@@ -699,7 +701,7 @@ printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
 
 // release
 hard_stop();
-
+g_Foc._EncoderOffset_Rad = 2.380558f;
 
     // g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
 // g_Foc._EncoderOffset_Rad = 6.94159f;
