@@ -195,7 +195,7 @@ void core1_entry() {
 
                 CurrentCommand CurrentCmd;
                 CurrentCmd._IdCmd_A = 0.0f;
-                CurrentCmd._IqCmd_A = -5.0f;
+                CurrentCmd._IqCmd_A = 5.0f;
                 g_Foc.ApplyCurrentLimits(CurrentCmd);
 
                 FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
