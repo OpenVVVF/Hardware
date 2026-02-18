@@ -70,7 +70,6 @@ namespace {
     CommutationManager zone_mgr;
     FocController g_Foc;
     PWMDriver* g_Driver = nullptr;
-    SPWMStrategy g_SpwmStrategy;
 
     float g_RampRate = 5.0f;
     // float g_ManualCarrierHz = 2000.0f;
@@ -245,8 +244,6 @@ int main() {
 
     static PWMDriver driver(driverCfg);
     g_Driver = &driver;
-    g_Driver->setStrategy(&g_SpwmStrategy);
-    g_Driver->setAutoModulation(true);
     g_Driver->init(2000.0f);
     g_Driver->enable();
     // Don't auto-enable here, let the command context handle it when ready

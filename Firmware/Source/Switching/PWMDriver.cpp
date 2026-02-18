@@ -23,64 +23,16 @@ extern "C" void pwm_wrap_isr() {
     }
 }
 
-// ============================================================================
-// SPWMLutStrategy
-// ============================================================================
-SPWMStrategy::SPWMStrategy() {
-    // Fill LUT ONCE (outside ISR). This uses sinf but only at init.
-    // LUT maps full turn [0..2π) across LUT_SIZE samples.
-    for (uint32_t i = 0; i < LUT_SIZE; ++i) {
-        float theta = (6.2831853071795864769f * static_cast<float>(i)) / static_cast<float>(LUT_SIZE);
-        float s = sinf(theta);
-        int32_t v = static_cast<int32_t>(lroundf(s * 32767.0f));
-        if (v > 32767) v = 32767;
-        if (v < -32767) v = -32767;
-        sin_lut_[i] = static_cast<int16_t>(v);
-    }
-}
-
-inline uint16_t SPWMStrategy::dutyFromPhase(uint32_t phase_q32,
-                                               int16_t mod_q15,
-                                               uint16_t top,
-                                               const int16_t* lut) {
-    // index from top LUT_BITS bits
-    uint32_t idx = phase_q32 >> INDEX_SHIFT;
-    int32_t s = lut[idx]; // [-32767..32767]
-
-    // apply modulation: (s * mod_q15) >> 15 yields [-32767..32767] approx
-    int32_t v = (s * static_cast<int32_t>(mod_q15)) >> 15;
-
-    // map [-32767..32767] -> [0..top]
-    // (v + 32767) * top / 65534
-    uint32_t x = static_cast<uint32_t>(v + 32767) * static_cast<uint32_t>(top);
-    return static_cast<uint16_t>(x / 65534u);
-}
-
-void SPWMStrategy::computeDuties(uint32_t phase_q32,
-                                   int16_t mod_q15,
-                                   uint16_t top,
-                                   uint16_t& duty_u,
-                                   uint16_t& duty_v,
-                                   uint16_t& duty_w) {
-    // 3-phase: U = θ, V = θ-120°, W = θ+120°
-    uint32_t p_u = phase_q32;
-    uint32_t p_v = phase_q32 - PHASE_120;
-    uint32_t p_w = phase_q32 + PHASE_120;
-
-    duty_u = dutyFromPhase(p_u, mod_q15, top, sin_lut_);
-    duty_v = dutyFromPhase(p_v, mod_q15, top, sin_lut_);
-    duty_w = dutyFromPhase(p_w, mod_q15, top, sin_lut_);
-}
-static inline float clamp01(float x) {
+static inline float clamp(float x) {
     if (x < 0.0f) return 0.0f;
     if (x > 1.0f) return 1.0f;
     return x;
 }
 
 void PWMDriver::setDutyCycles(float du, float dv, float dw) {
-    du = clamp01(du);
-    dv = clamp01(dv);
-    dw = clamp01(dw);
+    du = clamp(du);
+    dv = clamp(dv);
+    dw = clamp(dw);
 
     // Convert to counts [0..pwm_top_]
     uint16_t cu = (uint16_t)lroundf(du * (float)pwm_top_);
@@ -97,13 +49,6 @@ void PWMDriver::setDutyCycles(float du, float dv, float dw) {
     manual_du_ = cu;
     manual_dv_ = cv;
     manual_dw_ = cw;
-    manual_duty_mode_ = true;
-    irq_set_enabled(PWM_IRQ_WRAP, true);
-}
-
-void PWMDriver::clearManualDuties() {
-    irq_set_enabled(PWM_IRQ_WRAP, false);
-    manual_duty_mode_ = false;
     irq_set_enabled(PWM_IRQ_WRAP, true);
 }
 
@@ -123,15 +68,6 @@ void PWMDriver::recalcDutyLimits() {
     max_count_ = static_cast<uint16_t>(hi);
 }
 
-int16_t PWMDriver::floatToQ15Clamp01(float x) {
-    if (x < 0.0f) x = 0.0f;
-    if (x > 0.999969f) x = 0.999969f; // (32767/32768)
-    int32_t q = static_cast<int32_t>(lroundf(x * 32768.0f));
-    if (q > 32767) q = 32767;
-    if (q < 0) q = 0;
-    return static_cast<int16_t>(q);
-}
-
 // ============================================================================
 // PWMDriver
 // ============================================================================
@@ -146,9 +82,6 @@ void PWMDriver::init(float initial_carrier_hz) {
     forceAllGpioLow();
 }
 
-void PWMDriver::setStrategy(ModulationStrategy* strategy) {
-    strategy_ = strategy;
-}
 
 void PWMDriver::setCarrierFrequency(float hz) {
     if (hz < Hardware::Limits::Switching::MIN_HZ) hz = Hardware::Limits::Switching::MIN_HZ;
@@ -166,76 +99,13 @@ void PWMDriver::setCarrierFrequency(float hz) {
             pwm_set_wrap(kSlices[i], new_top);
         }
         irq_set_enabled(PWM_IRQ_WRAP, true);
-
-        pwm_top_ = new_top;
-        recalcDutyLimits();
-        updatePhaseStep();
-    } else {
-        pwm_top_ = new_top;
-        recalcDutyLimits();
-        updatePhaseStep();
-    }
+    } 
+    pwm_top_ = new_top;
+    recalcDutyLimits();
+    
 }
 
-void PWMDriver::setTargetFrequency(float hz, float ramp_rate) {
-    target_freq_ = hz;
-    ramp_rate_ = ramp_rate;
-}
 
-void PWMDriver::setFrequencyImmediate(float hz) {
-    target_freq_ = hz;
-    current_freq_ = hz;
-    updatePhaseStep();
-}
-
-void PWMDriver::setModulationIndex(float mi) {
-    auto_modulation_ = false;
-
-    // Keep float for API/debug, but store fixed-point for ISR.
-    mod_index_ = mi;
-    if (mod_index_ < 0.0f) mod_index_ = 0.0f;
-    if (mod_index_ > 0.999f) mod_index_ = 0.999f;
-
-    mod_q15_ = floatToQ15Clamp01(mod_index_);
-}
-
-void PWMDriver::setAutoModulation(bool enable) {
-    auto_modulation_ = enable;
-}
-
-void PWMDriver::setSynchronousMode(bool enable, uint16_t pulses_per_cycle) {
-    sync_mode_ = enable;
-    pulses_per_cycle_ = pulses_per_cycle;
-    updatePhaseStep();
-}
-
-void PWMDriver::updatePhaseStep() {
-    // phase_step_q32 = (electrical_freq / carrier_hz) * 2^32 turns-per-tick
-    // If synchronous mode: exactly 1/pulses_per_cycle turns per PWM tick.
-    if (sync_mode_ && std::fabs(current_freq_) > 0.01f && pulses_per_cycle_ > 0) {
-        // one electrical cycle per pulses_per_cycle PWM ticks
-        phase_step_q32_ = static_cast<uint32_t>(
-            (static_cast<uint64_t>(1) << 32) / static_cast<uint32_t>(pulses_per_cycle_)
-        );
-        if (current_freq_ < 0.0f) {
-            phase_step_q32_ = 0u - phase_step_q32_; // reverse
-        }
-        return;
-    }
-
-    if (carrier_hz_ <= 0.0f) {
-        phase_step_q32_ = 0;
-        return;
-    }
-
-    // Do this outside ISR, double is fine here (not in IRQ).
-    double turns_per_tick = static_cast<double>(current_freq_) / static_cast<double>(carrier_hz_);
-    double step = turns_per_tick * 4294967296.0; // 2^32
-
-    // Clamp to uint32 range via int64.
-    int64_t s = static_cast<int64_t>(llround(step));
-    phase_step_q32_ = static_cast<uint32_t>(s);
-}
 void PWMDriver::chooseFixedDivider(float min_carrier_hz) {
     const uint32_t sys_hz = clock_get_hz(clk_sys);
 
@@ -323,27 +193,17 @@ void PWMDriver::enable() {
     irq_set_enabled(PWM_IRQ_WRAP, true);
 
     enabled_ = true;
-    phase_q32_ = 0;
-    updatePhaseStep();
 }
 
 void PWMDriver::disable() {
     enabled_ = false;
     pwm_set_mask_enabled(0);
     forceAllGpioLow();
-    target_freq_ = 0.0f;
-    current_freq_ = 0.0f;
-    phase_q32_ = 0;
 }
 
 void PWMDriver::emergencyStop() {
     emergency_stop_ = true;
-    enabled_ = false;
-    pwm_set_mask_enabled(0);
-    forceAllGpioLow();
-    target_freq_ = 0.0f;
-    current_freq_ = 0.0f;
-    phase_q32_ = 0;
+    disable();
 }
 
 void PWMDriver::clearEmergency() {
@@ -353,48 +213,6 @@ void PWMDriver::clearEmergency() {
     enable();
 }
 
-void PWMDriver::update(float dt) {
-    if (emergency_stop_) return;
-
-    // Frequency ramping
-    float err = target_freq_ - current_freq_;
-    if (std::fabs(err) > 0.01f) {
-        float step = ramp_rate_ * dt;
-        if (err > 0.0f) {
-            current_freq_ += (err > step ? step : err);
-        } else {
-            current_freq_ -= (-err > step ? step : -err);
-        }
-        updatePhaseStep();
-    } else {
-        current_freq_ = target_freq_;
-    }
-
-    // Auto-disable when ramped to zero
-    if (enabled_ && target_freq_ == 0.0f && std::fabs(current_freq_) < 0.01f) {
-        disable();
-        return;
-    }
-
-    // Auto-modulation curve (kept from your original behavior)
-    if (auto_modulation_) {
-        float abs_freq = std::fabs(current_freq_);
-        if (abs_freq <= 0.0f) {
-            mod_index_ = 0.04f;
-        } else if (abs_freq >= 120.0f) {
-            mod_index_ = 0.99f;
-        } else {
-            mod_index_ = 0.04f + (abs_freq / 120.0f) * (0.99f - 0.04f);
-        }
-        mod_q15_ = floatToQ15Clamp01(mod_index_);
-    }
-
-    // Enable PWM if we have a target but were disabled
-    if (!enabled_ && std::fabs(target_freq_) > 0.01f && !emergency_stop_) {
-        enable();
-    }
-}
-
 void PWMDriver::isrHandler() {
     pwm_clear_irq(kSlices[0]);
     pwm_wrap_count_++;
@@ -402,27 +220,9 @@ void PWMDriver::isrHandler() {
 
     if (emergency_stop_ || !enabled_) return;
 
-    uint16_t du, dv, dw;
-
-    if (manual_duty_mode_) {
-        du = manual_du_;
-        dv = manual_dv_;
-        dw = manual_dw_;
-    } else {
-        if (!strategy_) return;
-
-        strategy_->computeDuties(phase_q32_, mod_q15_, pwm_top_, du, dv, dw);
-
-        du = clampDuty(du, min_count_, max_count_);
-        dv = clampDuty(dv, min_count_, max_count_);
-        dw = clampDuty(dw, min_count_, max_count_);
-
-        phase_q32_ += phase_step_q32_;
-    }
-
-    setSliceComplementary(kSlices[0], du);
-    setSliceComplementary(kSlices[1], dv);
-    setSliceComplementary(kSlices[2], dw);
+    setSliceComplementary(kSlices[0], manual_du_);
+    setSliceComplementary(kSlices[1], manual_dv_);
+    setSliceComplementary(kSlices[2], manual_dw_);
 }
 
 

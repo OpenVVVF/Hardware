@@ -20,7 +20,7 @@ MeasurementChannel::MeasurementChannel(const ChannelConfig& cfg)
     m_fault_high = MAX_ADC_VOLTAGE - 0.01f;
 }
 
-static inline float clamp01(float x) {
+static inline float clamp(float x) {
     if (x < 0.0f) return 0.0f;
     if (x > 1.0f) return 1.0f;
     return x;
