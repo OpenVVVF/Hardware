@@ -336,7 +336,7 @@ int main() {
 
     CurrentCommand CurrentCmd;
     CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 5.0f;
+    CurrentCmd._IqCmd_A = 10.0f;
     g_Foc.ApplyCurrentLimits(CurrentCmd);
 
     // 5. Initialize Telemetry
@@ -346,7 +346,7 @@ int main() {
 
 
 
-    g_Driver->setCarrierFrequency(4000.0f);
+    g_Driver->setCarrierFrequency(2000.0f);
 
 // ------------------------------------------------------------------
     // HARDWARE DIAGNOSTIC: CURRENT SENSOR POLARITY CHECK
@@ -744,11 +744,11 @@ hard_stop();
             print_iq = tp.iq_meas;
 
             // Push to Telemetry
-            // Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
-            // Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
-            // Telemetry::log("THETA_EST_RAD", tp.theta_est);
-            // Telemetry::log("ELEC_ANGLE", tp.elec_angle);
-            // Telemetry::log("ENC_OFFSET", tp.enc_offset);
+            Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
+            Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
+            Telemetry::log("THETA_EST_RAD", tp.theta_est);
+            Telemetry::log("ELEC_ANGLE", tp.elec_angle);
+            Telemetry::log("ENC_OFFSET", tp.enc_offset);
             Telemetry::log("DEBUG_VQ", tp.vq_v);
             Telemetry::log("DEBUG_VD", tp.vd_v);
             // Telemetry::log("DEBUG_IQ_MEAS", tp.iq_meas);
@@ -760,9 +760,9 @@ hard_stop();
             Telemetry::log("DEBUG_I_D", tp.i_d);
             Telemetry::log("DEBUG_I_Q", tp.i_q);
 
-            // Telemetry::log("FAKE_I_U", tp.i_u);
-            // Telemetry::log("FAKE_I_V", tp.i_v);
-            // Telemetry::log("FAKE_I_W", tp.i_w);
+            Telemetry::log("FAKE_I_U", tp.i_u);
+            Telemetry::log("FAKE_I_V", tp.i_v);
+            Telemetry::log("FAKE_I_W", tp.i_w);
 
 
 
