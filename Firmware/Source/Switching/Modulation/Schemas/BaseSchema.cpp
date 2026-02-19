@@ -22,7 +22,7 @@ bool ModulationScheme::IsActiveAtFrequency(float _Frequency_Hz, float _Transitio
 
     return (AboveMin && BelowMax);
 }
-
+ 
 bool ModulationScheme::RequiresHardTransition() {
     return false;
 }
