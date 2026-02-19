@@ -10,7 +10,7 @@
 #include <cmath>
 #include <algorithm>
 
-void SpwmModulationScheme::ApplyConfig(SpwmConfig _Config) {
+void SPWMModulationScheme::ApplyConfig(SPWMConfig _Config) {
     // Store locally for specific parameters (Carrier Ramping)
     SpecificConfig_ = _Config;
 
@@ -18,7 +18,7 @@ void SpwmModulationScheme::ApplyConfig(SpwmConfig _Config) {
     ModulationScheme::ApplyConfig(_Config);
 }
 
-HardwareCommand SpwmModulationScheme::Update(ModulationInput _Input, float _Weight_unitless) {
+HardwareCommand SPWMModulationScheme::Update(ModulationInput _Input, float _Weight_unitless) {
     HardwareCommand Cmd = {0};
 
     // 1. Calculate Target Carrier Frequency via the frequency ramp
@@ -75,7 +75,7 @@ HardwareCommand SpwmModulationScheme::Update(ModulationInput _Input, float _Weig
     return Cmd;
 }
 
-float SpwmModulationScheme::CalculateRampedCarrier(float _Frequency_Hz) {
+float SPWMModulationScheme::CalculateRampedCarrier(float _Frequency_Hz) {
     // If Start and End are effectively identical, return early
     if (std::abs(SpecificConfig_.CarrierStart_Hz_ - SpecificConfig_.CarrierEnd_Hz_) < 0.1f) {
         return SpecificConfig_.CarrierStart_Hz_;

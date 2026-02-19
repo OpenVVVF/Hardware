@@ -47,7 +47,6 @@ public:
 
     volatile uint32_t pwm_wrap_count_ = 0;  ///< Monotonic counter of PWM wrap events (used for timing).
     volatile uint32_t last_wrap_time_us_ = 0; ///< Timestamp of the last PWM wrap event in microseconds.
-
     bool isEnabled() const { return enabled_; }
     bool isEmergencyStopped() const { return emergency_stop_; }
     float getCarrierFrequency() const { return carrier_hz_; }

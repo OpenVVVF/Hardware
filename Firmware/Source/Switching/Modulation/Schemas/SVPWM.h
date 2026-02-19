@@ -14,7 +14,7 @@
 /**
 * @brief Configuration for SVPWM modulation.
 */
-struct SvmConfig : public ModulationCommonConfig {
+struct SVPWMConfig : public ModulationCommonConfig {
     float CarrierStart_Hz_ = 2000.0f; 
     float CarrierEnd_Hz_   = 2000.0f; 
 };
@@ -22,15 +22,15 @@ struct SvmConfig : public ModulationCommonConfig {
 /**
 * @brief Implementation of Space Vector Pulse Width Modulation (SVPWM).
 */
-class SvmModulationScheme : public ModulationScheme {
+class SVPWMModulationScheme : public ModulationScheme {
     public:
-    SvmModulationScheme() = default;
+    SVPWMModulationScheme() = default;
 
     /**
     * @brief Applies specific SVM configuration.
     * @param _Config The configuration object containing carrier and base settings.
     */
-    void ApplyConfig(SvmConfig _Config);
+    void ApplyConfig(SVPWMConfig _Config);
 
     /**
     * @brief SVM is an asynchronous scheme and supports interpolated transitions.
@@ -46,7 +46,7 @@ class SvmModulationScheme : public ModulationScheme {
     HardwareCommand Update(ModulationInput _Input, float _Weight_unitless) override;
 
     private:
-    SvmConfig SpecificConfig_;
+    SVPWMConfig SpecificConfig_;
 
     /**
     * @brief Internal helper to calculate the current ramped carrier frequency.

@@ -10,14 +10,14 @@
 #include <cmath>
 #include <algorithm>
 
-void SvmModulationScheme::ApplyConfig(SvmConfig _Config) {
+void SVPWMModulationScheme::ApplyConfig(SVPWMConfig _Config) {
     SpecificConfig_ = _Config;
     ModulationScheme::ApplyConfig(_Config);
 }
 
 
 
-HardwareCommand SvmModulationScheme::Update(ModulationInput _Input, float _Weight_unitless) {
+HardwareCommand SVPWMModulationScheme::Update(ModulationInput _Input, float _Weight_unitless) {
     HardwareCommand Cmd = {0};
 
     // 1. Calculate Target Carrier Frequency via the frequency ramp
@@ -80,7 +80,7 @@ HardwareCommand SvmModulationScheme::Update(ModulationInput _Input, float _Weigh
     return Cmd;
 }
 
-float SvmModulationScheme::CalculateRampedCarrier(float _Frequency_Hz) {
+float SVPWMModulationScheme::CalculateRampedCarrier(float _Frequency_Hz) {
     if (std::abs(SpecificConfig_.CarrierStart_Hz_ - SpecificConfig_.CarrierEnd_Hz_) < 0.1f) {
         return SpecificConfig_.CarrierStart_Hz_;
     }

@@ -22,6 +22,7 @@
 #include "Switching/Modulation/ModulationSelector.h"
 #include "Switching/Modulation/Schemas/SPWM.h"
 #include "Switching/Modulation/Schemas/SVPWM.h"
+#include "Switching/Modulation/Schemas/RCFSPWM.h"
 
 
 // ----------------------------------------------------------------------
@@ -166,21 +167,35 @@ void core1_entry() {
     
     static ModulationSelector g_Modulator;
 
-    static SvmModulationScheme g_SvmScheme;
-    SvmConfig svmCfg;
-    svmCfg.MaxModulationIndex_ = 0.95f;
-    svmCfg.InfluenceStart_Hz_ = 0.0f;
-    svmCfg.InfluenceEnd_Hz_   = 5.0f; 
-    svmCfg.CarrierStart_Hz_   = 2000.0f;
-    svmCfg.CarrierEnd_Hz_     = 2000.0f;
-    g_SvmScheme.ApplyConfig(svmCfg);
-    g_Modulator.RegisterScheme(&g_SvmScheme);
+    // 1. Define the persistent configuration object
+    static RCFSPWMConfig rcf_cfg;
+    rcf_cfg.CarrierBase_Hz_   = 1200.0f;  // Center Frequency
+    rcf_cfg.DitherRange_Hz_   = 400.0f;   // Total spread is +/- 200Hz (1000 to 1400)
+    rcf_cfg.MinDiff_Hz_       = 5.0f;    // Minimum jump distance
+    rcf_cfg.MaxDiff_Hz_       = 10.0f;    // Maximum jump distance
+    rcf_cfg.UpdatePeriod_ms_  = 0.5f;     // Interval between frequency changes
+    rcf_cfg.MaxModulationIndex_ = 0.95f;
+    rcf_cfg.InfluenceStart_Hz_  = 0.0f;
+    rcf_cfg.InfluenceEnd_Hz_    = 4.0f; 
+    static RCFSPWMModulationScheme rcf_scheme;
+    rcf_scheme.ApplyConfig(rcf_cfg);
+    g_Modulator.RegisterScheme(&rcf_scheme);
+
+    // static SVPWMModulationScheme g_SvmScheme;
+    // SVPWMConfig svmCfg;
+    // svmCfg.MaxModulationIndex_ = 0.95f;
+    // svmCfg.InfluenceStart_Hz_ = 0.0f;
+    // svmCfg.InfluenceEnd_Hz_   = 5.0f; 
+    // svmCfg.CarrierStart_Hz_   = 2000.0f;
+    // svmCfg.CarrierEnd_Hz_     = 2000.0f;
+    // g_SvmScheme.ApplyConfig(svmCfg);
+    // g_Modulator.RegisterScheme(&g_SvmScheme);
 
 
-    static SpwmModulationScheme g_SvmScheme2;
-    SpwmConfig svmCfg2;
+    static SPWMModulationScheme g_SvmScheme2;
+    SPWMConfig svmCfg2;
     svmCfg2.MaxModulationIndex_ = 0.95f;
-    svmCfg2.InfluenceStart_Hz_ = 4.0f;
+    svmCfg2.InfluenceStart_Hz_ = 2.0f;
     svmCfg2.InfluenceEnd_Hz_   = 1000.0f; 
     svmCfg2.CarrierStart_Hz_   = 4000.0f;
     svmCfg2.CarrierEnd_Hz_     = 4000.0f;

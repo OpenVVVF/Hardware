@@ -155,10 +155,6 @@ void PWMDriver::chooseFixedDivider(float min_carrier_hz) {
 uint16_t PWMDriver::computeTopFromCarrier(float carrier_hz) const {
     const uint32_t sys_hz = clock_get_hz(clk_sys);
 
-    // Safety clamps
-    if (carrier_hz < Hardware::Limits::Switching::MIN_HZ) carrier_hz = Hardware::Limits::Switching::MIN_HZ;
-    if (carrier_hz > Hardware::Limits::Switching::MAX_HZ) carrier_hz = Hardware::Limits::Switching::MAX_HZ;
-
     // Calculate TOP: Top = (clk / (div * 2 * freq)) - 1
     double top = ((double)sys_hz / (2.0 * (double)carrier_hz * (double)fixed_clk_div_)) - 1.0;
     
@@ -287,7 +283,6 @@ void PWMDriver::restorePwmPins() {
 }
 
 void PWMDriver::SetHardwareCommand(HardwareCommand _Cmd) {
-
     setCarrierFrequency(_Cmd.SwitchingFrequency_Hz);
     setDutyCycles(_Cmd.DutyPhU_unitless, _Cmd.DutyPhV_unitless, _Cmd.DutyPhW_unitless);
 }
