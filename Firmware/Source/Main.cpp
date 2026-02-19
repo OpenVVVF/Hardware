@@ -8,11 +8,12 @@
 #include "Sensors/MAX2253x.h"
 #include "Sensors/MeasurementSystem.h"
 #include "Telemetry.h"
-#include "ThreadSafeQueue.h"
 #include "pico/stdlib.h"
 
-// Bring in FOC and Switching headers that used to be hidden in RtBridge
-#include "Switching/FOC.h"
+#include "Switching/Control/ControlSelector.h"
+#include "Switching/Control/Schemas/FOC.h"
+#include "Switching/Control/Schemas/VHz.h"
+
 #include "Switching/HWInterface/PWMDriver.h"
 #include "hardware/sync.h"  // __dmb(), __sev(), __wfe()
 #include "pico/multicore.h"
@@ -29,7 +30,7 @@
 // ----------------------------------------------------------------------
 
 // Core 0 -> Core 1: Just send raw torque targets!
-ThreadSafeQueue<CurrentCommand> tx_queue;
+// ThreadSafeQueue<CurrentCommand> tx_queue;
 SerialProcessor serial_proc;
 #include "hardware/sync.h"
 #include "pico/stdlib.h"
@@ -140,54 +141,31 @@ void updateTel() {
 // Global State (Replaces RtBridge Instance State)
 // ----------------------------------------------------------------------
 namespace {
-FocController g_Foc;
-PWMDriver* g_Driver = nullptr;
+    // We instantiate the specific controllers here so they persist in memory
+    FocController g_Foc;
+    VHzController g_Vhz;
 
-float g_RampRate = 5.0f;
-// float g_ManualCarrierHz = 2000.0f;
-// bool  g_ManualCarrierMode = false;
+    // The shared motor config that the ControlSelector will distribute
+    MotorConfig g_MotorConfig;
 
-float g_LastCarrierHz = 0.0f;
-bool g_LastSyncMode = false;
-uint16_t g_LastPulses = 0;
+    PWMDriver* g_Driver = nullptr;
+    float g_RampRate = 5.0f;
+    float g_LastCarrierHz = 0.0f;
+    bool g_LastSyncMode = false;
+    uint16_t g_LastPulses = 0;
 
-// Measurement system instances
-MAX2253x_MultiADC* adc_system = nullptr;
-MeasurementSystem* measurements = nullptr;
-
-
-}  // namespace
+    // Measurement system instances
+    MAX2253x_MultiADC* adc_system = nullptr;
+    MeasurementSystem* measurements = nullptr;
+}
 
 void core1_entry() {
     // ===========================================================================
     // 1. SYSTEM SETUP
     // ===========================================================================
     
+    // --- Setup Modulator ---
     static ModulationSelector g_Modulator;
-
-    // // 1. Define the persistent configuration object
-    // static RCFSPWMConfig rcf_cfg;
-    // rcf_cfg.CarrierBase_Hz_   = 1200.0f;  // Center Frequency
-    // rcf_cfg.DitherRange_Hz_   = 400.0f;   // Total spread is +/- 200Hz (1000 to 1400)
-    // rcf_cfg.MinDiff_Hz_       = 5.0f;    // Minimum jump distance
-    // rcf_cfg.MaxDiff_Hz_       = 10.0f;    // Maximum jump distance
-    // rcf_cfg.UpdatePeriod_ms_  = 0.5f;     // Interval between frequency changes
-    // rcf_cfg.MaxModulationIndex_ = 0.95f;
-    // rcf_cfg.InfluenceStart_Hz_  = 0.0f;
-    // rcf_cfg.InfluenceEnd_Hz_    = 4.0f; 
-    // static RCFSPWMModulationScheme rcf_scheme;
-    // rcf_scheme.ApplyConfig(rcf_cfg);
-    // g_Modulator.RegisterScheme(&rcf_scheme);
-
-    // static SVPWMModulationScheme g_SvmScheme;
-    // SVPWMConfig svmCfg;
-    // svmCfg.MaxModulationIndex_ = 0.95f;
-    // svmCfg.InfluenceStart_Hz_ = 0.0f;
-    // svmCfg.InfluenceEnd_Hz_   = 5.0f; 
-    // svmCfg.CarrierStart_Hz_   = 2000.0f;
-    // svmCfg.CarrierEnd_Hz_     = 2000.0f;
-    // g_SvmScheme.ApplyConfig(svmCfg);
-    // g_Modulator.RegisterScheme(&g_SvmScheme);
 
     static SPWMModulationScheme g_SvmScheme2;
     SPWMConfig svmCfg2;
@@ -199,20 +177,40 @@ void core1_entry() {
     g_SvmScheme2.ApplyConfig(svmCfg2);
     g_Modulator.RegisterScheme(&g_SvmScheme2);
 
-
     static NPulseModulationScheme g_NPulseScheme;
     NPulseConfig nPulseCfg;
     nPulseCfg.MaxModulationIndex_ = 0.95f;
     nPulseCfg.InfluenceStart_Hz_ = 4.0f; 
     nPulseCfg.InfluenceEnd_Hz_   = 100.0f; 
-    nPulseCfg.PulseRatio_    = 501;    // f_sw will be 21 * f_fund
-    nPulseCfg.MinCarrier_Hz_ = 100.0f; // Won't drop below 2kHz even if slow
+    nPulseCfg.PulseRatio_    = 501;    
+    nPulseCfg.MinCarrier_Hz_ = 100.0f; 
     g_NPulseScheme.ApplyConfig(nPulseCfg);
     g_Modulator.RegisterScheme(&g_NPulseScheme);
 
+    // --- Setup Control Selector ---
+    static ControlSelector g_Controller;
 
-   
+    // Optional: Setup V/Hz for ultra-low speed starting (e.g., 0 to 5 rad/s)
+    // VHzConfig vhzCfg;
+    // vhzCfg.InfluenceStart_RadPerSec_ = 0.0f;
+    // vhzCfg.InfluenceEnd_RadPerSec_ = 5.0f;
+    // vhzCfg._NominalVelocity_RadPerSec = 100.0f;
+    // vhzCfg._NominalVoltage_V = 24.0f;
+    // vhzCfg._VoltageBoost_V = 1.0f;
+    // g_Vhz.ApplyConfig(vhzCfg);
+    // g_Controller.RegisterScheme(&g_Vhz);
 
+    // Setup FOC (Handles the rest of the speed range, or in this test case, 0 to MAX)
+    FocConfig focCfg;
+    focCfg.InfluenceStart_RadPerSec_ = 0.0f; // Set to 5.0f if V/Hz is enabled above
+    focCfg.InfluenceEnd_RadPerSec_ = 10000.0f; // Effectively infinite
+    focCfg._Kp_Q_axis = 0.005f;
+    focCfg._Ki_Q_axis = 5.0f;
+    focCfg._Kp_D_axis = 0.005f; // Add D-axis tuning
+    focCfg._Ki_D_axis = 5.0f;
+    focCfg._SoftVoltageLimit_V = 6.0f;
+    g_Foc.ApplyConfig(focCfg);
+    g_Controller.RegisterScheme(&g_Foc);
 
     // ===========================================================================
     // 2. RUNTIME LOOP
@@ -228,13 +226,7 @@ void core1_entry() {
     const float Ki_pll = 2000.0f;
 
     while (true) {
-        // --- UPDATE TARGET TORQUE ---
-        CurrentCommand new_cmd;
-        if (tx_queue.try_pop(new_cmd)) {
-            g_Foc.ApplyCurrentLimits(new_cmd);
-        }
-
-        // --- STRICT FOC TICK ---
+        // --- STRICT TICK ---
         if (absolute_time_diff_us(get_absolute_time(), next_foc_tick) <= 0) {
             float dt_S = (float)absolute_time_diff_us(old_t, get_absolute_time()) / 1000000.0f;
             old_t = get_absolute_time();
@@ -263,26 +255,24 @@ void core1_entry() {
             SenseData._EncoderPosition_Rad = theta_est;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
 
-            g_Foc.UpdateSensors(SenseData);
-
-            // --- EXECUTE MODULATION ---
+            // --- EXECUTE CONTROL & MODULATION ---
             HardwareCommand HwCmd = {0};
 
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
-                g_Foc._CurrentLoop.Kp = 0.005f;
-                g_Foc._CurrentLoop.Ki = 5.0f;
+                
+                // 1. Build the generic DriveCommand 
+                // Using the hardcoded values you requested for this test
+                DriveCommand driveCmd = {0};
+                driveCmd._IqCmd_A = -5.0f; // -5A torque request
+                driveCmd._IdCmd_A = 0.0f;
+                // driveCmd._VelocityCmd_RadPerSec = ... (If V/Hz was active)
 
-                CurrentCommand CurrentCmd;
-                CurrentCmd._IdCmd_A = 0.0f;
-                CurrentCmd._IqCmd_A = -5.0f;
-                g_Foc.ApplyCurrentLimits(CurrentCmd);
-                g_Foc.SetVoltageLimit(6.0f);
-
-                // 1. Run Control Law
-                ModulationInput FOC_Out = g_Foc.UpdateVoltages(dt_S);
+                // 2. Run Control Selector
+                // It automatically routes the DriveCommand to FOC or V/Hz based on speed
+                ModulationInput ControlOut = g_Controller.Update(SenseData, driveCmd, dt_S);
 
                 // 3. Select and Run Modulation
-                HwCmd = g_Modulator.Update(FOC_Out);
+                HwCmd = g_Modulator.Update(ControlOut);
 
                 // 4. Update Hardware
                 g_Driver->setCarrierFrequency(HwCmd.SwitchingFrequency_Hz);
@@ -297,16 +287,21 @@ void core1_entry() {
                 TelemetryPacket t_pack;
                 t_pack.raw_adc_rad = raw_adc_rad;
                 t_pack.theta_est = theta_est;
-                t_pack.vq_v = g_Foc._Vq_V;
+                
+                // Pulling debug data from g_Foc. If V/Hz is active, these will be stale, 
+                // but safe to read. You could eventually move these into ModulationInput.
+                t_pack.vq_v = g_Foc._Vq_V; 
                 t_pack.vd_v = g_Foc._Vd_V;
                 t_pack.iq_meas = g_Foc._Iq_A;
                 t_pack.elec_angle = g_Foc._ElectricalAngle_Rad;
                 t_pack.enc_offset = g_Foc._EncoderOffset_Rad;
+                
                 t_pack.foc_update_hz = 1.0f / dt_S;
                 t_pack.i_alpha = g_Foc.i_alpha;
                 t_pack.i_beta = g_Foc.i_beta;
                 t_pack.i_d = g_Foc.i_d;
                 t_pack.i_q = g_Foc.i_q;
+                
                 t_pack.i_u = SenseData._Iu_A;
                 t_pack.i_v = SenseData._Iv_A;
                 t_pack.i_w = SenseData._Iw_A;
@@ -320,6 +315,7 @@ void core1_entry() {
         }
     }
 }
+
 
 // ----------------------------------------------------------------------
 // Main Application
@@ -375,22 +371,19 @@ int main() {
     measurements->calibrateCurrentSensors();
     Telemetry::printf("Current sensor calibration complete.\n\n");
 
-    // 4. Configure FOC
-    MotorConfig C;
-    C._PolePairs_unitless = 5;
-    C._Ld_Henry = 0.000040f;
-    C._Lq_Henry = 0.000040f;
-    C._DcBusVoltage_V = 60.0f;
-    C._MaxDcBusCurrent_A = 10.0f;
-    C._MaxPhaseCurrent_A = 50.0f;
-    C._MaxModulation_unitless = 0.9f;
-    C._FluxLinkage_Wb = 0.0f;
-    g_Foc.SetMotorConfig(C);
+    // 4. Configure Global Motor Limits
+    g_MotorConfig._PolePairs_unitless = 5;
+    g_MotorConfig._Ld_Henry = 0.000040f;
+    g_MotorConfig._Lq_Henry = 0.000040f;
+    g_MotorConfig._DcBusVoltage_V = 60.0f;
+    g_MotorConfig._MaxDcBusCurrent_A = 10.0f;
+    g_MotorConfig._MaxPhaseCurrent_A = 50.0f;
+    g_MotorConfig._MaxModulation_unitless = 0.9f;
+    g_MotorConfig._FluxLinkage_Wb = 0.0f;
 
-    CurrentCommand CurrentCmd;
-    CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 10.0f;
-    g_Foc.ApplyCurrentLimits(CurrentCmd);
+    // Distribute motor config to all controllers
+    g_Foc.SetMotorConfig(g_MotorConfig);
+    g_Vhz.SetMotorConfig(g_MotorConfig);
 
     // 5. Initialize Telemetry
     Telemetry::set_period_us(1000);  // 100 Hz (it's not lmao...)
@@ -582,7 +575,7 @@ int main() {
     // -------- Get Vdc --------
     measurements->update();
     float Vdc_meas = measurements->read("V_DC_BUS");
-    if (Vdc_meas < 5.0f) Vdc_meas = C._DcBusVoltage_V;
+    if (Vdc_meas < 5.0f) Vdc_meas = g_MotorConfig._DcBusVoltage_V;
 
     // -------- 1) Sweep to compute sin/cos min/max, but current-limited --------
     Telemetry::printf("CAL: Sweep for sin/cos min/max (current limited)...\n");
@@ -712,15 +705,12 @@ int main() {
     float elec_sign = -1.0f;            // flip to -1 if needed
     float phase_correction_rad = 0.0f;  // usually 0 with your Park, unless wiring/phase mapping differs
 
-    float raw_elec = elec_sign * mech_angle * C._PolePairs_unitless;
+    float raw_elec = elec_sign * mech_angle * g_MotorConfig._PolePairs_unitless;
     float desired_elec = wrap_0_2pi(theta_e_lock + phase_correction_rad);
 
     g_Foc._EncoderOffset_Rad = wrap_0_2pi(desired_elec - raw_elec);
 
-    g_Foc.Reset();
-    CurrentCmd._IdCmd_A = 0.0f;
-    CurrentCmd._IqCmd_A = 7.0f;
-    g_Foc.ApplyCurrentLimits(CurrentCmd);
+
 
     Telemetry::printf("CAL DONE: Vd_used~%f V, mech=%f rad, offset=%f rad\n\n",
                       Vd_cmd, mech_angle, g_Foc._EncoderOffset_Rad);
