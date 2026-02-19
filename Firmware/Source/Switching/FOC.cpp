@@ -162,8 +162,8 @@ void FocController::CalculateDecoupling() {
 }
 
 
-FocOutput FocController::UpdateVoltages(float dt_S) {
-    FocOutput Output = {0};
+ModulationInput FocController::UpdateVoltages(float dt_S) {
+    ModulationInput Output = {0};
 
     // 1. Calculate feedforward terms
     CalculateDecoupling();
@@ -190,11 +190,11 @@ FocOutput FocController::UpdateVoltages(float dt_S) {
     _Vbeta_V = _InversePark_.fBe;
 
     // 5. Populate output
-    Output._Valpha_V = -_Valpha_V;
-    Output._Vbeta_V = -_Vbeta_V;
-    Output._Vdc_V = _Config_._DcBusVoltage_V;
-    Output._ElectricalAngle_Rad = _ElectricalAngle_Rad;
-    Output._VoltageLimited = _DcBusCurrentLimited;
+    Output.Valpha_V = -_Valpha_V;
+    Output.Vbeta_V = -_Vbeta_V;
+    Output.Vdc_V = _Config_._DcBusVoltage_V;
+    Output.Theta_Rad = _ElectricalAngle_Rad;
+    Output.Omega_RadPerSec = _ElectricalSpeed_RadPerSec;
 
     return Output;
 }

@@ -7,15 +7,13 @@
 #include "Hardware.h"
 #include "Sensors/MAX2253x.h"
 #include "Sensors/MeasurementSystem.h"
-#include "Switching/CommutationManager.h"
 #include "Telemetry.h"
 #include "ThreadSafeQueue.h"
 #include "pico/stdlib.h"
 
 // Bring in FOC and Switching headers that used to be hidden in RtBridge
 #include "Switching/FOC.h"
-#include "Switching/Modulation.h"
-#include "Switching/PWMDriver.h"
+#include "Switching/HWInterface/PWMDriver.h"
 #include "hardware/sync.h"  // __dmb(), __sev(), __wfe()
 #include "pico/multicore.h"
 
@@ -142,7 +140,6 @@ void updateTel() {
 // Global State (Replaces RtBridge Instance State)
 // ----------------------------------------------------------------------
 namespace {
-CommutationManager zone_mgr;
 FocController g_Foc;
 PWMDriver* g_Driver = nullptr;
 
@@ -282,18 +279,10 @@ void core1_entry() {
                 g_Foc.SetVoltageLimit(6.0f);
 
                 // 1. Run Control Law
-                FocOutput FOC_Out = g_Foc.UpdateVoltages(dt_S);
-
-                // 2. Prepare Generic Input
-                ModulationInput ModIn;
-                ModIn.Valpha_V        = FOC_Out._Valpha_V;
-                ModIn.Vbeta_V         = FOC_Out._Vbeta_V;
-                ModIn.Vdc_V           = FOC_Out._Vdc_V;
-                ModIn.Theta_Rad       = FOC_Out._ElectricalAngle_Rad;
-                ModIn.Omega_RadPerSec = omega_est;
+                ModulationInput FOC_Out = g_Foc.UpdateVoltages(dt_S);
 
                 // 3. Select and Run Modulation
-                HwCmd = g_Modulator.Update(ModIn);
+                HwCmd = g_Modulator.Update(FOC_Out);
 
                 // 4. Update Hardware
                 g_Driver->setCarrierFrequency(HwCmd.SwitchingFrequency_Hz);
@@ -352,7 +341,6 @@ int main() {
     // configureZones();
 
     CommandContext ctx{};
-    ctx.zone_mgr = &zone_mgr;
 
     CommandManager::instance().setContext(ctx);
     initializeCommands();

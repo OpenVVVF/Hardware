@@ -3,8 +3,6 @@
 
 #include <cstdint>
 
-// Forward declarations
-class CommutationManager;
 
 
 // ======================
@@ -12,7 +10,6 @@ class CommutationManager;
 // ======================
 struct CommandContext {
     // Read-only shared config (must not be modified after core1 starts)
-    CommutationManager* zone_mgr;
 };
 
 #endif // COMMAND_CONTEXT_H

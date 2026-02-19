@@ -17,6 +17,8 @@
 #include "VectorPIController.h"
 #include "SwitchingStructs.h"
 
+#include "Modulation/ModulationInput.h"
+
 
 /**
  * @brief FOC controller
@@ -48,7 +50,7 @@ class FocController {
      * @brief Executes PI loops and transforms.
      *        Uses targets set by ApplyCurrentLimits.
      */
-    FocOutput UpdateVoltages(float dt_S);
+    ModulationInput UpdateVoltages(float dt_S);
 
     /**
      * @brief internal limiter for the PID controller, will soft limit here.

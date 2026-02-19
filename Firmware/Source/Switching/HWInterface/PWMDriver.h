@@ -73,7 +73,8 @@ public:
 
 
     /**
-    @brief NAUGHTY METHOD FIX THIS LATER ITS A VERY BAD BOY
+    @brief TODO: fix calibration then u can remove and merge :) 
+    NAUGHTY METHOD FIX THIS LATER ITS A VERY BAD BOY
     */
     void SetHardwareCommand(HardwareCommand _Cmd);
 

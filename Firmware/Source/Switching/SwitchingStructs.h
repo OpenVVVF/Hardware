@@ -8,15 +8,6 @@
 
 #pragma once
 
-/**
- * @brief Scalar voltages for phase u, v, and w.
- * Maps to duty cycle for the three phases.
- */
-struct PhaseVoltages {
-    float _Du_unitless;  // float from 0-1
-    float _Dv_unitless;  // float from 0-1
-    float _Dw_unitless;  // float from 0-1
-};
 
 /**
  * @brief Motor and inverter configuration
@@ -57,13 +48,3 @@ struct CurrentCommand {
     float _IqCmd_A;  // Q-axis current command (torque)
 };
 
-/**
- * @brief FOC output for external modulation
- */
-struct FocOutput {
-    float _Valpha_V;             // Stationary frame alpha voltage
-    float _Vbeta_V;              // Stationary frame beta voltage
-    float _Vdc_V;                // DC bus voltage
-    float _ElectricalAngle_Rad;  // For SVM sector calculation
-    bool _VoltageLimited;        // True if hit voltage limit
-};

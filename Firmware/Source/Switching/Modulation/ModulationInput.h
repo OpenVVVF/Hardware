@@ -1,3 +1,13 @@
+/***********************************************************************************
+* @file    ModulationInput.h
+* @date    2026-02-18
+* @brief   Input data structure for modulation schemes.
+*
+*          Contains all required input parameters for calculating PWM commands,
+*          including stationary frame voltages, DC bus voltage, and electrical
+*          state variables (angle and velocity).
+***********************************************************************************/
+
 #pragma once
 
 
