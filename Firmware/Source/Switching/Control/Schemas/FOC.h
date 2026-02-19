@@ -14,7 +14,8 @@
 #include "BaseSchema.h"
 #include "pid_controllers/fp_pid.h"
 #include "space_vector_transfs/vector_transfs.h"
-#include "../../VectorPIController.h"
+
+#include "Utils/Control/VectorPIController.h"
 
 /**
 * @brief Specific configuration for FOC loop tuning.
@@ -86,7 +87,7 @@ class FocController : public ControlScheme {
     bool _DcBusCurrentLimited;
     
     float _EncoderOffset_Rad = 0.0f;
-    VectorPIController _CurrentLoop;
+    VectorPiController _CurrentLoop;
 
     // Debug tracking variables
     float i_alpha; 

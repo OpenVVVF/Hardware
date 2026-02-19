@@ -30,8 +30,8 @@ void FocController::ApplyConfig(FocConfig _Config) {
     ControlScheme::ApplyConfig(_Config);
     SpecificConfig_ = _Config;
     
-    _CurrentLoop.Kp = SpecificConfig_._Kp_Q_axis; 
-    _CurrentLoop.Ki = SpecificConfig_._Ki_Q_axis; 
+    _CurrentLoop.Kp_ = SpecificConfig_._Kp_Q_axis; 
+    _CurrentLoop.Ki_ = SpecificConfig_._Ki_Q_axis; 
 }
 
 void FocController::Reset() {
@@ -63,9 +63,9 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
 
     // --- 1. DYNAMIC LIMIT RESOLUTION ---
     if (SpecificConfig_._SoftVoltageLimit_V > 0.001f) {
-        _CurrentLoop.MaxVoltageLimit = SpecificConfig_._SoftVoltageLimit_V;
+        _CurrentLoop.MaxVoltageLimit_ = SpecificConfig_._SoftVoltageLimit_V;
     } else {
-        _CurrentLoop.MaxVoltageLimit = MotorConfig_._DcBusVoltage_V * 0.5f * MotorConfig_._MaxModulation_unitless;
+        _CurrentLoop.MaxVoltageLimit_ = MotorConfig_._DcBusVoltage_V * 0.5f * MotorConfig_._MaxModulation_unitless;
     }
 
     // --- 2. SENSOR PROCESSING & TRANSFORMS ---
@@ -118,7 +118,7 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
 
     // Diagnostic clipping check
     float v_mag = sqrtf(_Vd_V * _Vd_V + _Vq_V * _Vq_V);
-    _DcBusCurrentLimited = (v_mag >= _CurrentLoop.MaxVoltageLimit * 0.99f);
+    _DcBusCurrentLimited = (v_mag >= _CurrentLoop.MaxVoltageLimit_ * 0.99f);
 
     // --- 5. INVERSE PARK TRANSFORM (D/Q -> Alpha/Beta) ---
     _InversePark_.fD = _Vd_V; 
