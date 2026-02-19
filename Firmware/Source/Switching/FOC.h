@@ -15,7 +15,7 @@
 #include "space_vector_transfs/vector_transfs.h"
 
 #include "VectorPIController.h"
-#include "SwitchingStructs.h"
+#include "Control/ControlInput.h"
 
 #include "Modulation/ModulationInput.h"
 
