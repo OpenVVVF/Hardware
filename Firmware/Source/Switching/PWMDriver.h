@@ -11,6 +11,17 @@
 #include "hardware/pwm.h"
 #include <cstdint>
 
+
+// AIDAN PLEASE MAKE THE PWMDRIVER SUPPORT THIS!
+struct HardwareCommand {
+    float SwitchingFrequency_Hz;
+    float DutyPhU_unitless;
+    float DutyPhV_unitless;
+    float DutyPhW_unitless;
+    
+};
+
+
 /**
  * @brief Handles generation of 3-phase complementary PWM signals for motor control.
  * 
@@ -60,6 +71,12 @@ public:
      * @param dw Duty cycle for Phase W (0.0 to 1.0).
      */
     void setDutyCycles(float du, float dv, float dw);
+
+
+    /**
+    @brief NAUGHTY METHOD FIX THIS LATER ITS A VERY BAD BOY
+    */
+    void SetHardwareCommand(HardwareCommand _Cmd);
 
     void enable();
     void disable();

@@ -1,7 +1,4 @@
-#ifndef UNIT_TEST
 #include "pico/bootrom.h"
-#endif
-
 #include "../CommandInterface.h"
 #include "../CommandContext.h"
 #include <cstdio>
@@ -11,9 +8,8 @@ public:
     FlashCommand() : CommandInterface("flash", "Reboot system in flasher mode") {}
     
     void execute(const ArgValue* args, CommandContext& ctx) override {
-#ifndef UNIT_TEST
+        Telemetry::printf("Flashing Pico...");
         reset_usb_boot(0, 0);
-#endif
     }
 };
 

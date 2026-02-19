@@ -2,35 +2,37 @@
 #include "CommandManager.h"
 #include "CommandInterface.h"
 
-CommandInterface* makeFreqCommand();
-CommandInterface* makeRampCommand();
-CommandInterface* makeCarrierCommand();
-CommandInterface* makeAutoCommand();
-CommandInterface* makeAsyncCommand();
+// CommandInterface* makeFreqCommand();
+// CommandInterface* makeRampCommand();
+// CommandInterface* makeCarrierCommand();
+// CommandInterface* makeAutoCommand();
+// CommandInterface* makeAsyncCommand();
 CommandInterface* makeFlashCommand();
-CommandInterface* makeSoftStopCommand();
-CommandInterface* makeEmergencyStopCommand();
-CommandInterface* makeEnableCommand();
-CommandInterface* makeImmediateCommand();
+// CommandInterface* makeSoftStopCommand();
+// CommandInterface* makeEmergencyStopCommand();
+// CommandInterface* makeEnableCommand();
+// CommandInterface* makeImmediateCommand();
 CommandInterface* makeHelpCommand();
-CommandInterface* makeEncoderOffsetCommand();
+CommandInterface* makeRebootCommand();
+// CommandInterface* makeEncoderOffsetCommand();
 
 void initializeCommands() {
     auto& mgr = CommandManager::instance();
 
     CommandInterface* cmds[] = {
-        makeFreqCommand(),
-        makeRampCommand(),
-        makeCarrierCommand(),
-        makeAutoCommand(),
-        makeAsyncCommand(),
+        // makeFreqCommand(),
+        // makeRampCommand(),
+        // makeCarrierCommand(),
+        // makeAutoCommand(),
+        // makeAsyncCommand(),
         makeFlashCommand(),
-        makeSoftStopCommand(),
-        makeEmergencyStopCommand(),
-        makeEnableCommand(),
-        makeImmediateCommand(),
+        makeRebootCommand(),
+        // makeSoftStopCommand(),
+        // makeEmergencyStopCommand(),
+        // makeEnableCommand(),
+        // makeImmediateCommand(),
         makeHelpCommand(),
-        makeEncoderOffsetCommand()
+        // makeEncoderOffsetCommand()
     };
 
     for (auto* c : cmds) mgr.registerCommand(c);

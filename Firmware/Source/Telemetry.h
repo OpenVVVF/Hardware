@@ -26,6 +26,8 @@ uint16_t get_sensor_chunk_limit();
 // Initialize telemetry protocol/state (queues, seq, registries). No MeasurementSystem needed.
 void init();
 
+bool printf(const char* fmt, ...);
+
 // Bind MeasurementSystem and register its exposed sensors (queues DEFINE entries).
 // Safe to call after Telemetry::init(), and safe to call again if sensors change.
 void bindMeasurementSystem(const MeasurementSystem& ms);

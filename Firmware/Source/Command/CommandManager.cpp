@@ -65,7 +65,7 @@ void CommandManager::processLine(const char* line) {
 
     CommandInterface* cmd = findCommand(cmdName);
     if (!cmd) {
-        printf("Unknown command '%s'. Type HELP for list.\r\n", cmdName);
+        Telemetry::printf("Unknown command '%s'. Type HELP for list.\r\n", cmdName);
         return;
     }
 
@@ -79,7 +79,7 @@ void CommandManager::processLine(const char* line) {
 
         if (token[0] == '\0') {
             if (spec.required) {
-                printf("Error: Missing required argument <%s>\r\n", spec.name);
+                Telemetry::printf("Error: Missing required argument <%s>\r\n", spec.name);
                 return;
             } else {
                 values[i] = {spec.default_val, (int32_t)spec.default_val, false};
@@ -97,7 +97,7 @@ void CommandManager::processLine(const char* line) {
         if (val < spec.min || val > spec.max) {
             char rangeStr[32];
             spec.printRange(rangeStr, sizeof(rangeStr));
-            printf("Error: %s out of range (%s)\r\n", spec.name, rangeStr);
+            Telemetry::printf("Error: %s out of range (%s)\r\n", spec.name, rangeStr);
             return;
         }
 
@@ -108,7 +108,7 @@ void CommandManager::processLine(const char* line) {
     char extra[16];
     rest = nextToken(rest, extra, sizeof(extra));
     if (extra[0] != '\0') {
-        printf("Error: Too many arguments. Expected %d, got more.\r\n", argc);
+        Telemetry::printf("Error: Too many arguments. Expected %d, got more.\r\n", argc);
         return;
     }
 
@@ -116,12 +116,12 @@ void CommandManager::processLine(const char* line) {
 }
 
 void CommandManager::printHelp() const {
-    printf("\r\n=== Command Reference ===\r\n");
+    Telemetry::printf("\r\n=== Command Reference ===\r\n");
 
     for (size_t i = 0; i < count_; i++) {
         CommandInterface* cmd = commands_[i];
 
-        printf("  %-8s", cmd->getCommandName());
+        Telemetry::printf("  %-8s", cmd->getCommandName());
 
         int argc = cmd->getArgCount();
         char sigBuffer[64] = "";
@@ -141,17 +141,17 @@ void CommandManager::printHelp() const {
             p += n;
             remaining -= (size_t)n;
         }
-        printf("%-20s - %s", sigBuffer, cmd->getShortDescription());
+        Telemetry::printf("%-20s - %s", sigBuffer, cmd->getShortDescription());
         if (argc > 0) {
-            printf("\r\n         ");
+            Telemetry::printf("\r\n         ");
             for (int j = 0; j < argc; j++) {
                 ArgSpec spec = cmd->getArgSpec(j);
                 char range[32];
                 spec.printRange(range, sizeof(range));
-                printf(" %s:%s", spec.name, range);
+                Telemetry::printf(" %s:%s", spec.name, range);
             }
         }
-        printf("\r\n");
+        Telemetry::printf("\r\n");
     }
-    printf("=========================\r\n");
+    Telemetry::printf("=========================\r\n");
 }

@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <cstring>
 #include <algorithm>
+#include <cstdio>
+#include <cstdarg>
 
 #include "Sensors/MeasurementSystem.h" // MeasurementSystem + MeasurementChannel
 
@@ -278,6 +280,17 @@ static size_t build_define_payload(uint8_t* payload, size_t cap) {
     payload[0] = n_defs;
     return (size_t)(w - payload);
 }
+static void reserve_print_key() {
+    const char* key = "print";
+    const uint32_t h = fnv1a(key);
+    int idx = find_dyn_key(key, h);
+    if (idx >= 0) return;
+
+    idx = alloc_dyn_key(key, h, VT_STR);
+    if (idx < 0) return;
+
+    enqueue_define(g_dyn[idx].id, g_dyn[idx].type, g_dyn[idx].key, g_dyn[idx].key_len);
+}
 
 static size_t build_data_payload(uint8_t* payload, size_t cap) {
     if (cap < 1) return 0;
@@ -381,6 +394,7 @@ void init() {
     g_frame_seq = 0;
     g_last_send_us = 0;
     g_last_define_us = 0;
+    reserve_print_key();
 }
 
 void bindMeasurementSystem(const MeasurementSystem& ms) {
@@ -409,6 +423,19 @@ void bindMeasurementSystem(const MeasurementSystem& ms) {
 
         enqueue_define(b.id, VT_F32, b.name, b.name_len);
     }
+}
+static bool flush_defines_now(uint32_t now_us) {
+    bool wrote = false;
+    // Send as many DEFINE frames as needed to empty the define queue.
+    while (!g_define_q.empty()) {
+        uint8_t payload[DEFINE_PAYLOAD_MAX];
+        const size_t len = build_define_payload(payload, sizeof(payload));
+        if (len == 0) break;
+        wrote |= send_frame(MSG_DEFINE, payload, len, now_us);
+        // If send_frame fails, stop to avoid spinning.
+        if (!wrote) break;
+    }
+    return wrote;
 }
 
 bool log(const char* key, float value) {
@@ -457,6 +484,23 @@ bool log(const char* key, const char* value) {
 
     return g_log_q.push(it);
 }
+bool printf(const char* fmt, ...) {
+    if (!fmt) return false;
+
+    // One message string (capped by STR_MAXLEN in log())
+    char buf[STR_MAXLEN + 1];
+
+    va_list ap;
+    va_start(ap, fmt);
+    const int n = vsnprintf(buf, sizeof(buf), fmt, ap);
+    va_end(ap);
+
+    if (n <= 0) return false;
+    buf[STR_MAXLEN] = '\0';
+
+    // Use a fixed key so the host can treat it as “console output”
+    return Telemetry::log("print", buf);
+}
 
 bool updateSensors() {
     if (!g_ms) return false;
@@ -473,17 +517,16 @@ bool updateSensors() {
 
     bool wrote = false;
 
-    if (!g_define_q.empty()) {
-        uint8_t payload[DEFINE_PAYLOAD_MAX];
-        const size_t len = build_define_payload(payload, sizeof(payload));
-        if (len > 0) wrote |= send_frame(MSG_DEFINE, payload, len, now);
-    }
+   // Always prioritize sending defines first (can take multiple frames)
+wrote |= flush_defines_now(now);
 
-    {
-        uint8_t payload[DATA_PAYLOAD_MAX];
-        const size_t len = build_data_payload(payload, sizeof(payload));
-        if (len > 1) wrote |= send_frame(MSG_DATA, payload, len, now);
-    }
+// Only after defines are flushed do we send DATA
+{
+    uint8_t payload[DATA_PAYLOAD_MAX];
+    const size_t len = build_data_payload(payload, sizeof(payload));
+    if (len > 1) wrote |= send_frame(MSG_DATA, payload, len, now);
+}
+
 
     return wrote;
 }

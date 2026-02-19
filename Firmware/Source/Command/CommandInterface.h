@@ -4,6 +4,7 @@
 #include "CommandTypes.h"
 #include "CommandContext.h"
 #include <initializer_list>
+#include <Telemetry.h>
 
 class CommandInterface {
 public:

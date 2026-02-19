@@ -285,3 +285,9 @@ void PWMDriver::restorePwmPins() {
         gpio_set_function(kPins[i].b, GPIO_FUNC_PWM);
     }
 }
+
+void PWMDriver::SetHardwareCommand(HardwareCommand _Cmd) {
+
+    setCarrierFrequency(_Cmd.SwitchingFrequency_Hz);
+    setDutyCycles(_Cmd.DutyPhU_unitless, _Cmd.DutyPhV_unitless, _Cmd.DutyPhW_unitless);
+}
