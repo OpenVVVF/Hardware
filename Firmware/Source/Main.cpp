@@ -180,8 +180,8 @@ namespace {
 
 
     // A. Configure Modulation (Transitions from SPWM to NPulse at 4Hz)
-    static SPWMModulationScheme g_Svm;
-    SPWMConfig svmCfg;
+    static SVPWMModulationScheme g_Svm;
+    SVPWMConfig svmCfg;
     svmCfg.InfluenceStart_Hz_ = 0.0f;
     svmCfg.InfluenceEnd_Hz_   = 5.0f; 
     svmCfg.CarrierStart_Hz_   = 2000.0f;
@@ -193,7 +193,7 @@ namespace {
     static NPulseModulationScheme g_NPulse;
     NPulseConfig nPulseCfg;
     nPulseCfg.InfluenceStart_Hz_ = 5.0f; 
-    nPulseCfg.InfluenceEnd_Hz_   = 11.0f; 
+    nPulseCfg.InfluenceEnd_Hz_   = 14.0f; 
     nPulseCfg.PulseRatio_        = 333;    
     nPulseCfg.MinCarrier_Hz_     = 200.0f; 
     nPulseCfg.MaxModulationIndex_ = 0.95f;
@@ -202,8 +202,8 @@ namespace {
 
     static NPulseModulationScheme g_NPulse2;
     NPulseConfig nPulseCfg2;
-    nPulseCfg2.InfluenceStart_Hz_ = 11.0f; 
-    nPulseCfg2.InfluenceEnd_Hz_   = 20.0f; 
+    nPulseCfg2.InfluenceStart_Hz_ = 14.0f; 
+    nPulseCfg2.InfluenceEnd_Hz_   = 26.0f; 
     nPulseCfg2.PulseRatio_        = 166;    
     nPulseCfg2.MinCarrier_Hz_     = 200.0f; 
     nPulseCfg2.MaxModulationIndex_ = 0.95f;
@@ -211,12 +211,12 @@ namespace {
     g_DriveManager.RegisterModulationScheme(&g_NPulse2);
 
 
-    static SPWMModulationScheme g_Svm2;
-    SPWMConfig svmCfg2;
+    static SVPWMModulationScheme g_Svm2;
+    SVPWMConfig svmCfg2;
     svmCfg2.InfluenceStart_Hz_ = 20.0f;
     svmCfg2.InfluenceEnd_Hz_   = 2000.0f; 
-    svmCfg2.CarrierStart_Hz_   = 3300.0f;
-    svmCfg2.CarrierEnd_Hz_     = 3300.0f;
+    svmCfg2.CarrierStart_Hz_   = 4316.0f;
+    svmCfg2.CarrierEnd_Hz_     = 4316.0f;
     svmCfg2.MaxModulationIndex_ = 0.95f;
     g_Svm2.ApplyConfig(svmCfg2);
     g_DriveManager.RegisterModulationScheme(&g_Svm2);
