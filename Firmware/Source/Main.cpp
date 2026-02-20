@@ -24,6 +24,10 @@
 #include "Switching/Modulation/Schemas/RCFSPWM.h"
 #include "Switching/Modulation/Schemas/NPulse.h"
 
+#include "Switching/Motion/CurrentController.h"
+
+#include "Switching/DriveManager.h"
+
 
 // ----------------------------------------------------------------------
 // Inter-Core Communication Structures
@@ -143,7 +147,7 @@ void updateTel() {
 namespace {
     // We instantiate the specific controllers here so they persist in memory
     FocController g_Foc;
-    VHzController g_Vhz;
+    // VHzController g_Vhz;
 
     // The shared motor config that the ControlSelector will distribute
     MotorConfig g_MotorConfig;
@@ -158,89 +162,112 @@ namespace {
     MAX2253x_MultiADC* adc_system = nullptr;
     MeasurementSystem* measurements = nullptr;
 }
-
-void core1_entry() {
+/**
+ * @file    core1_main.cpp
+ * @brief   System entry for high-speed motor control execution.
+ */
+ void core1_entry() {
     // ===========================================================================
     // 1. SYSTEM SETUP
     // ===========================================================================
+    static DriveManager g_DriveManager;
     
-    // --- Setup Modulator ---
-    static ModulationSelector g_Modulator;
+    static CurrentController g_CurrentController;
 
-    static SPWMModulationScheme g_SvmScheme2;
-    SPWMConfig svmCfg2;
-    svmCfg2.MaxModulationIndex_ = 0.95f;
-    svmCfg2.InfluenceStart_Hz_ = 0.0f;
-    svmCfg2.InfluenceEnd_Hz_   = 4.0f; 
-    svmCfg2.CarrierStart_Hz_   = 2000.0f;
-    svmCfg2.CarrierEnd_Hz_     = 2000.0f;
-    g_SvmScheme2.ApplyConfig(svmCfg2);
-    g_Modulator.RegisterScheme(&g_SvmScheme2);
 
-    static NPulseModulationScheme g_NPulseScheme;
+
+    g_CurrentController.SetMotorConfig(g_MotorConfig);
+
+
+    // A. Configure Modulation (Transitions from SPWM to NPulse at 4Hz)
+    static SPWMModulationScheme g_Svm;
+    SPWMConfig svmCfg;
+    svmCfg.InfluenceStart_Hz_ = 0.0f;
+    svmCfg.InfluenceEnd_Hz_   = 5.0f; 
+    svmCfg.CarrierStart_Hz_   = 2000.0f;
+    svmCfg.CarrierEnd_Hz_     = 2000.0f;
+    svmCfg.MaxModulationIndex_ = 0.95f;
+    g_Svm.ApplyConfig(svmCfg);
+    g_DriveManager.RegisterModulationScheme(&g_Svm);
+
+    static NPulseModulationScheme g_NPulse;
     NPulseConfig nPulseCfg;
+    nPulseCfg.InfluenceStart_Hz_ = 5.0f; 
+    nPulseCfg.InfluenceEnd_Hz_   = 11.0f; 
+    nPulseCfg.PulseRatio_        = 333;    
+    nPulseCfg.MinCarrier_Hz_     = 200.0f; 
     nPulseCfg.MaxModulationIndex_ = 0.95f;
-    nPulseCfg.InfluenceStart_Hz_ = 4.0f; 
-    nPulseCfg.InfluenceEnd_Hz_   = 100.0f; 
-    nPulseCfg.PulseRatio_    = 501;    
-    nPulseCfg.MinCarrier_Hz_ = 100.0f; 
-    g_NPulseScheme.ApplyConfig(nPulseCfg);
-    g_Modulator.RegisterScheme(&g_NPulseScheme);
+    g_NPulse.ApplyConfig(nPulseCfg);
+    g_DriveManager.RegisterModulationScheme(&g_NPulse);
 
-    // --- Setup Control Selector ---
-    static ControlSelector g_Controller;
+    static NPulseModulationScheme g_NPulse2;
+    NPulseConfig nPulseCfg2;
+    nPulseCfg2.InfluenceStart_Hz_ = 11.0f; 
+    nPulseCfg2.InfluenceEnd_Hz_   = 20.0f; 
+    nPulseCfg2.PulseRatio_        = 166;    
+    nPulseCfg2.MinCarrier_Hz_     = 200.0f; 
+    nPulseCfg2.MaxModulationIndex_ = 0.95f;
+    g_NPulse2.ApplyConfig(nPulseCfg2);
+    g_DriveManager.RegisterModulationScheme(&g_NPulse2);
 
-    // Optional: Setup V/Hz for ultra-low speed starting (e.g., 0 to 5 rad/s)
-    // VHzConfig vhzCfg;
-    // vhzCfg.InfluenceStart_RadPerSec_ = 0.0f;
-    // vhzCfg.InfluenceEnd_RadPerSec_ = 5.0f;
-    // vhzCfg._NominalVelocity_RadPerSec = 100.0f;
-    // vhzCfg._NominalVoltage_V = 24.0f;
-    // vhzCfg._VoltageBoost_V = 1.0f;
-    // g_Vhz.ApplyConfig(vhzCfg);
-    // g_Controller.RegisterScheme(&g_Vhz);
 
-    // Setup FOC (Handles the rest of the speed range, or in this test case, 0 to MAX)
+    static SPWMModulationScheme g_Svm2;
+    SPWMConfig svmCfg2;
+    svmCfg2.InfluenceStart_Hz_ = 20.0f;
+    svmCfg2.InfluenceEnd_Hz_   = 2000.0f; 
+    svmCfg2.CarrierStart_Hz_   = 3300.0f;
+    svmCfg2.CarrierEnd_Hz_     = 3300.0f;
+    svmCfg2.MaxModulationIndex_ = 0.95f;
+    g_Svm2.ApplyConfig(svmCfg2);
+    g_DriveManager.RegisterModulationScheme(&g_Svm2);
+
+    // B. Configure Control (FOC tuning)
     FocConfig focCfg;
-    focCfg.InfluenceStart_RadPerSec_ = 0.0f; // Set to 5.0f if V/Hz is enabled above
-    focCfg.InfluenceEnd_RadPerSec_ = 10000.0f; // Effectively infinite
-    focCfg._Kp_Q_axis = 0.005f;
+    focCfg.InfluenceStart_RadPerSec_ = 0.0f;
+    focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
+    focCfg._Kp_Q_axis = 0.002f;
     focCfg._Ki_Q_axis = 5.0f;
-    focCfg._Kp_D_axis = 0.005f; // Add D-axis tuning
+    focCfg._Kp_D_axis = 0.002f;
     focCfg._Ki_D_axis = 5.0f;
-    focCfg._SoftVoltageLimit_V = 6.0f;
+    focCfg._SoftVoltageLimit_V = 7.0f;
     g_Foc.ApplyConfig(focCfg);
-    g_Controller.RegisterScheme(&g_Foc);
+
+    // C. Register Components with Manager
+    g_DriveManager.SetMotionController(&g_CurrentController);
+    g_DriveManager.RegisterControlScheme(&g_Foc);
+    
+    // D. Set Decimation (Outer loop runs 10x slower)
+    g_DriveManager.SetMotionUpdateRatio(10); 
 
     // ===========================================================================
-    // 2. RUNTIME LOOP
+    // 2. RUNTIME EXECUTION
     // ===========================================================================
-
     absolute_time_t next_foc_tick = get_absolute_time();
     absolute_time_t old_t = get_absolute_time();
     absolute_time_t prev_tel_time = get_absolute_time();
-
+    
     float theta_est = 0.0f;
     float omega_est = 0.0f;
     const float Kp_pll = 200.0f;
     const float Ki_pll = 2000.0f;
 
     while (true) {
-        // --- STRICT TICK ---
+        // Strict 400us Tick (2.5kHz)
         if (absolute_time_diff_us(get_absolute_time(), next_foc_tick) <= 0) {
             float dt_S = (float)absolute_time_diff_us(old_t, get_absolute_time()) / 1000000.0f;
             old_t = get_absolute_time();
             next_foc_tick = delayed_by_us(next_foc_tick, 400);
 
+            // Update Physical Sensors
             measurements->update();
 
             SensorData SenseData;
             SenseData._Idc_A = measurements->read("I_DC_MAIN");
+            SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
             SenseData._Iu_A = measurements->read("I_PH_U");
             SenseData._Iw_A = measurements->read("I_PH_W");
             SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
-            SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
-
+            
             // --- PLL Tracking Observer ---
             float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
             float error = raw_adc_rad - theta_est;
@@ -255,26 +282,21 @@ void core1_entry() {
             SenseData._EncoderPosition_Rad = theta_est;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
 
-            // --- EXECUTE CONTROL & MODULATION ---
             HardwareCommand HwCmd = {0};
 
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 
-                // 1. Build the generic DriveCommand 
-                // Using the hardcoded values you requested for this test
-                DriveCommand driveCmd = {0};
-                driveCmd._IqCmd_A = -5.0f; // -5A torque request
-                driveCmd._IdCmd_A = 0.0f;
-                // driveCmd._VelocityCmd_RadPerSec = ... (If V/Hz was active)
+                // 1. Define High-Level Setpoint
+                CurrentSetpoint target;
+                target._TargetIq_A = -5.0f; // -5A Torque Request
+                target._TargetId_A = 0.0f;  
+                target._VqFeedforward_V = 0.0f;
+                target._VdFeedforward_V = 0.0f;
 
-                // 2. Run Control Selector
-                // It automatically routes the DriveCommand to FOC or V/Hz based on speed
-                ModulationInput ControlOut = g_Controller.Update(SenseData, driveCmd, dt_S);
+                // 2. Process complete cascade via Manager
+                HwCmd = g_DriveManager.Update(SenseData, target, dt_S);
 
-                // 3. Select and Run Modulation
-                HwCmd = g_Modulator.Update(ControlOut);
-
-                // 4. Update Hardware
+                // 3. Apply to Inverter
                 g_Driver->setCarrierFrequency(HwCmd.SwitchingFrequency_Hz);
                 g_Driver->setDutyCycles(HwCmd.DutyPhU_unitless, 
                                         HwCmd.DutyPhV_unitless, 
@@ -380,10 +402,11 @@ int main() {
     g_MotorConfig._MaxPhaseCurrent_A = 50.0f;
     g_MotorConfig._MaxModulation_unitless = 0.9f;
     g_MotorConfig._FluxLinkage_Wb = 0.0f;
+    g_MotorConfig._MaxTorqueCurrent_A = 20.0f;
 
     // Distribute motor config to all controllers
     g_Foc.SetMotorConfig(g_MotorConfig);
-    g_Vhz.SetMotorConfig(g_MotorConfig);
+    // g_Vhz.SetMotorConfig(g_MotorConfig);
 
     // 5. Initialize Telemetry
     Telemetry::set_period_us(1000);  // 100 Hz (it's not lmao...)
@@ -729,6 +752,8 @@ int main() {
     Telemetry::printf("Finished Booting");
 
     while (true) {
+
+        // printf("fdsafdaf\n");
         // (Optional: You can eventually put simple serial string parsing here
         // to push new CurrentCommands to tx_queue. Example:)
         // if (serial_read == "set iq 5.0") { tx_queue.push({0.0f, 5.0f}); }
