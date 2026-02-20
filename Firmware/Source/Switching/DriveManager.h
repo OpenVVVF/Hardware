@@ -14,6 +14,8 @@
 #include "Control/ControlSelector.h"
 #include "Modulation/ModulationSelector.h"
 
+#include "Utils/Fault/FaultManager.h"
+
 /**
  * @brief Manages the execution flow from high-level setpoints to PWM duty cycles.
  */
@@ -23,25 +25,25 @@ public:
 
     /**
      * @brief Assigns the motion strategy (e.g., CurrentController, VelocityController).
-     * @param _motionController Pointer to the motion strategy instance.
+     * @param _MotionController Pointer to the motion strategy instance.
      */
-    void SetMotionController(MotionController* _motionController);
+    void SetMotionController(MotionController* _MotionController);
 
     /**
      * @brief Configures the execution ratio between the inner and outer loops.
-     * @param _ratio Number of inner-loop ticks per one outer-loop tick (e.g., 10).
+     * @param _Ratio Number of inner-loop ticks per one outer-loop tick (e.g., 10).
      */
-    void SetMotionUpdateRatio(uint16_t _ratio);
+    void SetMotionUpdateRatio(uint16_t _Ratio);
 
     /**
      * @brief Registers an inner-loop control scheme (e.g., FOC, V/Hz).
      */
-    void RegisterControlScheme(ControlScheme* _scheme);
+    void RegisterControlScheme(ControlScheme* _Scheme);
 
     /**
      * @brief Registers a modulation scheme (e.g., SPWM, N-Pulse).
      */
-    void RegisterModulationScheme(ModulationScheme* _scheme);
+    void RegisterModulationScheme(ModulationScheme* _Scheme);
 
     /**
      * @brief Executes the complete control pipeline.
@@ -50,7 +52,7 @@ public:
      * @param _dt_S The high-speed time step in seconds.
      * @return HardwareCommand containing final duty cycles and carrier frequency.
      */
-    HardwareCommand Update(const SensorData& _Sensors, 
+    HardwareCommand Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig, const SensorData& _Sensors, 
                            const BaseMotionSetpoint& _Setpoint, 
                            float _dt_S);
 

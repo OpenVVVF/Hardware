@@ -32,6 +32,7 @@ struct MotorConfig {
     float _MaxRpm_unitless;
     float _MinRpm_unitless;
     float _MaxVelocity_RadPerSec;
+    float _MinVelocity_RadPerSec;
     float _MaxAcceleration_RadPerSec2;
 };
 

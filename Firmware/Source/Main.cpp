@@ -28,6 +28,8 @@
 
 #include "Switching/DriveManager.h"
 
+#include "Utils/Fault/FaultManager.h"
+
 
 // ----------------------------------------------------------------------
 // Inter-Core Communication Structures
@@ -149,6 +151,8 @@ namespace {
     FocController g_Foc;
     // VHzController g_Vhz;
 
+    FaultManager g_FaultManager;
+
     // The shared motor config that the ControlSelector will distribute
     MotorConfig g_MotorConfig;
 
@@ -183,7 +187,7 @@ namespace {
     static SVPWMModulationScheme g_Svm;
     SVPWMConfig svmCfg;
     svmCfg.InfluenceStart_Hz_ = 0.0f;
-    svmCfg.InfluenceEnd_Hz_   = 5.0f; 
+    svmCfg.InfluenceEnd_Hz_   = 8.0f; 
     svmCfg.CarrierStart_Hz_   = 2000.0f;
     svmCfg.CarrierEnd_Hz_     = 2000.0f;
     svmCfg.MaxModulationIndex_ = 0.95f;
@@ -192,9 +196,9 @@ namespace {
 
     static NPulseModulationScheme g_NPulse;
     NPulseConfig nPulseCfg;
-    nPulseCfg.InfluenceStart_Hz_ = 5.0f; 
-    nPulseCfg.InfluenceEnd_Hz_   = 14.0f; 
-    nPulseCfg.PulseRatio_        = 333;    
+    nPulseCfg.InfluenceStart_Hz_ = 8.0f; 
+    nPulseCfg.InfluenceEnd_Hz_   = 19.0f; 
+    nPulseCfg.PulseRatio_        = 250;    
     nPulseCfg.MinCarrier_Hz_     = 200.0f; 
     nPulseCfg.MaxModulationIndex_ = 0.95f;
     g_NPulse.ApplyConfig(nPulseCfg);
@@ -202,9 +206,9 @@ namespace {
 
     static NPulseModulationScheme g_NPulse2;
     NPulseConfig nPulseCfg2;
-    nPulseCfg2.InfluenceStart_Hz_ = 14.0f; 
-    nPulseCfg2.InfluenceEnd_Hz_   = 26.0f; 
-    nPulseCfg2.PulseRatio_        = 166;    
+    nPulseCfg2.InfluenceStart_Hz_ = 19.0f; 
+    nPulseCfg2.InfluenceEnd_Hz_   = 30.0f; 
+    nPulseCfg2.PulseRatio_        = 105;    
     nPulseCfg2.MinCarrier_Hz_     = 200.0f; 
     nPulseCfg2.MaxModulationIndex_ = 0.95f;
     g_NPulse2.ApplyConfig(nPulseCfg2);
@@ -213,10 +217,10 @@ namespace {
 
     static SVPWMModulationScheme g_Svm2;
     SVPWMConfig svmCfg2;
-    svmCfg2.InfluenceStart_Hz_ = 20.0f;
+    svmCfg2.InfluenceStart_Hz_ = 30.0f;
     svmCfg2.InfluenceEnd_Hz_   = 2000.0f; 
-    svmCfg2.CarrierStart_Hz_   = 4316.0f;
-    svmCfg2.CarrierEnd_Hz_     = 4316.0f;
+    svmCfg2.CarrierStart_Hz_   = 3150.0f;
+    svmCfg2.CarrierEnd_Hz_     = 3150.0f;
     svmCfg2.MaxModulationIndex_ = 0.95f;
     g_Svm2.ApplyConfig(svmCfg2);
     g_DriveManager.RegisterModulationScheme(&g_Svm2);
@@ -229,7 +233,7 @@ namespace {
     focCfg._Ki_Q_axis = 5.0f;
     focCfg._Kp_D_axis = 0.002f;
     focCfg._Ki_D_axis = 5.0f;
-    focCfg._SoftVoltageLimit_V = 7.0f;
+    focCfg._SoftVoltageLimit_V = 4.0f;
     g_Foc.ApplyConfig(focCfg);
 
     // C. Register Components with Manager
@@ -294,7 +298,7 @@ namespace {
                 target._VdFeedforward_V = 0.0f;
 
                 // 2. Process complete cascade via Manager
-                HwCmd = g_DriveManager.Update(SenseData, target, dt_S);
+                HwCmd = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, SenseData, target, dt_S);
 
                 // 3. Apply to Inverter
                 g_Driver->setCarrierFrequency(HwCmd.SwitchingFrequency_Hz);
@@ -343,6 +347,9 @@ namespace {
 // Main Application
 // ----------------------------------------------------------------------
 int main() {
+
+    g_FaultManager.Init();
+    
     stdio_init_all();
     sleep_ms(500);
 
@@ -393,6 +400,9 @@ int main() {
     measurements->calibrateCurrentSensors();
     Telemetry::printf("Current sensor calibration complete.\n\n");
 
+
+    g_FaultManager.Update();
+
     // 4. Configure Global Motor Limits
     g_MotorConfig._PolePairs_unitless = 5;
     g_MotorConfig._Ld_Henry = 0.000040f;
@@ -403,6 +413,8 @@ int main() {
     g_MotorConfig._MaxModulation_unitless = 0.9f;
     g_MotorConfig._FluxLinkage_Wb = 0.0f;
     g_MotorConfig._MaxTorqueCurrent_A = 20.0f;
+    g_MotorConfig._MaxVelocity_RadPerSec = 10.0f;
+    g_MotorConfig._MinVelocity_RadPerSec = -10.0f;
 
     // Distribute motor config to all controllers
     g_Foc.SetMotorConfig(g_MotorConfig);
