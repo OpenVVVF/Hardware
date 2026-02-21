@@ -13,6 +13,7 @@
 #include "Motion/BaseMotionSchema.h"
 #include "Control/ControlSelector.h"
 #include "Modulation/ModulationSelector.h"
+#include "HWInterface/PWMDriver.h"
 
 #include "Utils/Fault/FaultManager.h"
 
@@ -52,7 +53,7 @@ public:
      * @param _dt_S The high-speed time step in seconds.
      * @return HardwareCommand containing final duty cycles and carrier frequency.
      */
-    HardwareCommand Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig, const SensorData& _Sensors, 
+    bool Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig, PWMDriver* _Driver, const SensorData& _Sensors, 
                            const BaseMotionSetpoint& _Setpoint, 
                            float _dt_S);
 

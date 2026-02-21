@@ -20,15 +20,20 @@ struct MotorConfig {
     float _FluxLinkage_Wb;
     
     // Hardware Electrical Limits
-    float _MaxPhaseCurrent_A;
-    float _ContinuousPhaseCurrent_A;
-    float _MaxDcBusCurrent_A;
-    float _MaxRegenCurrent_A;
-    float _DcBusVoltage_V;
+    float _HardMaxPhaseCurrent_A; // limit which, if ever reached, triggers fault
+    float _SoftMaxPhaseCurrent_A; // max limit on PI controllers - leave ~15-30% margin
+
+    float _HardMaxDcBusCurrent_A; // limit which, if ever reached, triggers fault
+    float _SoftMaxDcBusCurrent_A; // max limit on PI controllers - leave ~15-30% margin
+
+    float _HardMaxRegenCurrent_A; // limit which, if ever reached, triggers fault
+    float _SoftMaxRegenCurrent_A; // max limit on PI controllers - leave ~15-30% margin
+
+    // float _DcBusVoltage_V;
     float _MaxModulation_unitless;
 
     // Outer-Loop Motion Limits
-    float _MaxTorqueCurrent_A;
+    // float _MaxTorqueCurrent_A;
     float _MaxRpm_unitless;
     float _MinRpm_unitless;
     float _MaxVelocity_RadPerSec;

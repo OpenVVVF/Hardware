@@ -44,7 +44,7 @@ DriveCommand CurrentController::Update(const SensorData& _Sensors,
     }
 
     // Clamp to unified hardware limits
-    float maxAllowed = MotorConfig_._MaxTorqueCurrent_A; 
+    float maxAllowed = MotorConfig_._SoftMaxPhaseCurrent_A; 
     _ActiveIqCmd_A = std::clamp(_ActiveIqCmd_A, -maxAllowed, maxAllowed);
     _ActiveIdCmd_A = std::clamp(_ActiveIdCmd_A, -maxAllowed, maxAllowed);
 
@@ -68,7 +68,7 @@ DriveCommand CurrentController::Update(const SensorData& _Sensors,
 
     // Clamp to hardware velocity limits
     outputVelocity = std::clamp(outputVelocity, 
-                                -MotorConfig_._MaxVelocity_RadPerSec, 
+                                -MotorConfig_._MinVelocity_RadPerSec, 
                                  MotorConfig_._MaxVelocity_RadPerSec);
 
 

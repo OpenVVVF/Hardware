@@ -128,18 +128,18 @@ void updateTel() {
             Telemetry::log("DEBUG_I_D", tp.i_d);
             Telemetry::log("DEBUG_I_Q", tp.i_q);
 
-            Telemetry::log("FAKE_I_U", tp.i_u);
-            Telemetry::log("FAKE_I_V", tp.i_v);
-            Telemetry::log("FAKE_I_W", tp.i_w);
+            // Telemetry::log("FAKE_I_U", tp.i_u);
+            // Telemetry::log("FAKE_I_V", tp.i_v);
+            // Telemetry::log("FAKE_I_W", tp.i_w);
 
             // Telemetry::log("V_Alpha", tp.v_alpha);
             // Telemetry::log("V_Beta", tp.v_beta);
 
             Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
 
-            Telemetry::log("V_U", tp.v_u);
-            Telemetry::log("V_V", tp.v_v);
-            Telemetry::log("V_W", tp.v_w);
+            // Telemetry::log("V_U", tp.v_u);
+            // Telemetry::log("V_V", tp.v_v);
+            // Telemetry::log("V_W", tp.v_w);
             Telemetry::updateSensors();
         }
 }
@@ -233,7 +233,7 @@ namespace {
     focCfg._Ki_Q_axis = 5.0f;
     focCfg._Kp_D_axis = 0.002f;
     focCfg._Ki_D_axis = 5.0f;
-    focCfg._SoftVoltageLimit_V = 4.0f;
+    focCfg._SoftVoltageLimit_V = 5.0f;
     g_Foc.ApplyConfig(focCfg);
 
     // C. Register Components with Manager
@@ -298,13 +298,13 @@ namespace {
                 target._VdFeedforward_V = 0.0f;
 
                 // 2. Process complete cascade via Manager
-                HwCmd = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, SenseData, target, dt_S);
+                bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
 
-                // 3. Apply to Inverter
-                g_Driver->setCarrierFrequency(HwCmd.SwitchingFrequency_Hz);
-                g_Driver->setDutyCycles(HwCmd.DutyPhU_unitless, 
-                                        HwCmd.DutyPhV_unitless, 
-                                        HwCmd.DutyPhW_unitless);
+                // // 3. Apply to Inverter
+                // g_Driver->setCarrierFrequency(HwCmd.SwitchingFrequency_Hz);
+                // g_Driver->setDutyCycles(HwCmd.DutyPhU_unitless, 
+                //                         HwCmd.DutyPhV_unitless, 
+                //                         HwCmd.DutyPhW_unitless);
             }
 
             // --- TELEMETRY ---
@@ -407,12 +407,25 @@ int main() {
     g_MotorConfig._PolePairs_unitless = 5;
     g_MotorConfig._Ld_Henry = 0.000040f;
     g_MotorConfig._Lq_Henry = 0.000040f;
-    g_MotorConfig._DcBusVoltage_V = 60.0f;
-    g_MotorConfig._MaxDcBusCurrent_A = 10.0f;
-    g_MotorConfig._MaxPhaseCurrent_A = 50.0f;
+    // g_MotorConfig._DcBusVoltage_V = 60.0f;
+
+    // Motor config limits
+    g_MotorConfig._SoftMaxPhaseCurrent_A = 30.0f;
+    g_MotorConfig._HardMaxPhaseCurrent_A = 40.0f;
+
+    g_MotorConfig._HardMaxDcBusCurrent_A = 6.0f;
+    g_MotorConfig._SoftMaxDcBusCurrent_A = 2.0f;
+
+    g_MotorConfig._HardMaxRegenCurrent_A = 2.0f;
+    g_MotorConfig._SoftMaxRegenCurrent_A = 0.0f;
+
+
     g_MotorConfig._MaxModulation_unitless = 0.9f;
+    
     g_MotorConfig._FluxLinkage_Wb = 0.0f;
-    g_MotorConfig._MaxTorqueCurrent_A = 20.0f;
+    
+    // g_MotorConfig._MaxTorqueCurrent_A = 20.0f;
+    
     g_MotorConfig._MaxVelocity_RadPerSec = 10.0f;
     g_MotorConfig._MinVelocity_RadPerSec = -10.0f;
 
@@ -610,7 +623,7 @@ int main() {
     // -------- Get Vdc --------
     measurements->update();
     float Vdc_meas = measurements->read("V_DC_BUS");
-    if (Vdc_meas < 5.0f) Vdc_meas = g_MotorConfig._DcBusVoltage_V;
+    // if (Vdc_meas < 5.0f) Vdc_meas = g_MotorConfig._DcBusVoltage_V;
 
     // -------- 1) Sweep to compute sin/cos min/max, but current-limited --------
     Telemetry::printf("CAL: Sweep for sin/cos min/max (current limited)...\n");
@@ -763,6 +776,9 @@ int main() {
     absolute_time_t last_print = get_absolute_time();
     Telemetry::printf("Finished Booting");
 
+    // Initialize our non-blocking timer tracker
+    uint64_t lastFaultPrintTime_uS = time_us_64();
+
     while (true) {
 
         // printf("fdsafdaf\n");
@@ -772,5 +788,28 @@ int main() {
 
         // 1. Drain the telemetry queue from Core 1
         updateTel();
+
+
+        // 2. Print active faults once per second (1,000,000 microseconds)
+        uint64_t currentTime_uS = time_us_64();
+        if ((currentTime_uS - lastFaultPrintTime_uS) >= 1000000) {
+            lastFaultPrintTime_uS = currentTime_uS; // Reset the timer
+
+            // Fetch the list of active faults
+            FaultRecord currentFaults[MAX_ACTIVE_FAULTS];
+            uint8_t faultCount = g_FaultManager.GetActiveFaults(currentFaults, MAX_ACTIVE_FAULTS);
+
+            if (faultCount > 0) {
+                Telemetry::printf("--- Active Faults (%d) ---", faultCount);
+                for (uint8_t i = 0; i < faultCount; i++) {
+                    Telemetry::printf("  [%d] %s", i + 1, currentFaults[i].Description);
+                }
+                Telemetry::printf("--------------------------");
+            } else {
+                // Optional: A simple heartbeat so you know the loop is alive
+                // Telemetry::printf("System Healthy - No Active Faults");
+            }
+        }
+
     }
 }

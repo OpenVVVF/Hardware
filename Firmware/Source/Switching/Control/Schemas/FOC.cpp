@@ -65,7 +65,7 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
     if (SpecificConfig_._SoftVoltageLimit_V > 0.001f) {
         _CurrentLoop.MaxVoltageLimit_ = SpecificConfig_._SoftVoltageLimit_V;
     } else {
-        _CurrentLoop.MaxVoltageLimit_ = MotorConfig_._DcBusVoltage_V * 0.5f * MotorConfig_._MaxModulation_unitless;
+        _CurrentLoop.MaxVoltageLimit_ = _Sensors._DcBusVoltage_V * 0.5f * MotorConfig_._MaxModulation_unitless;
     }
 
     // --- 2. SENSOR PROCESSING & TRANSFORMS ---
@@ -99,8 +99,8 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
 
     // --- 3. COMMAND SATURATION ---
     _IdCommanded_A = _Cmd._IdCmd_A;
-    float IqMax = MotorConfig_._MaxPhaseCurrent_A;
-    float IqMin = -MotorConfig_._MaxPhaseCurrent_A;
+    float IqMax = MotorConfig_._SoftMaxPhaseCurrent_A;
+    float IqMin = -MotorConfig_._SoftMaxPhaseCurrent_A;
     
     _IqCommanded_A = fmaxf(IqMin, fminf(IqMax, _Cmd._IqCmd_A));
     _PhaseCurrentLimited = (_IqCommanded_A != _Cmd._IqCmd_A);
@@ -133,7 +133,7 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
     // --- 6. OUTPUT POPULATION ---
     Output.Valpha_V = -_Valpha_V; // Inverting to match hardware modulation sign convention
     Output.Vbeta_V  = -_Vbeta_V;
-    Output.Vdc_V    = MotorConfig_._DcBusVoltage_V;
+    Output.Vdc_V    = _Sensors._DcBusVoltage_V;
     Output.Theta_Rad       = _ElectricalAngle_Rad;
     Output.Omega_RadPerSec = _ElectricalSpeed_RadPerSec;
 

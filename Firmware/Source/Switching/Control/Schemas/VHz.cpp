@@ -45,7 +45,7 @@ ModulationInput VHzController::Update(const SensorData& _Sensors, const DriveCom
     _TargetVoltageMagnitude_V = (absSpeed * slope) + SpecificConfig_._VoltageBoost_V;
 
     // --- 3. HARDWARE SATURATION ---
-    float maxSystemVoltage = MotorConfig_._DcBusVoltage_V * 0.5f * MotorConfig_._MaxModulation_unitless;
+    float maxSystemVoltage = _Sensors._DcBusVoltage_V * 0.5f * MotorConfig_._MaxModulation_unitless;
     if (_TargetVoltageMagnitude_V > maxSystemVoltage) {
         _TargetVoltageMagnitude_V = maxSystemVoltage;
     }
@@ -56,7 +56,7 @@ ModulationInput VHzController::Update(const SensorData& _Sensors, const DriveCom
     Output.Vbeta_V  = _TargetVoltageMagnitude_V * sinf(_InternalAngle_Rad);
     
     // --- 5. OUTPUT POPULATION ---
-    Output.Vdc_V           = MotorConfig_._DcBusVoltage_V;
+    Output.Vdc_V           = _Sensors._DcBusVoltage_V;
     Output.Theta_Rad       = _InternalAngle_Rad;
     Output.Omega_RadPerSec = targetElectricalSpeed; // Report internal electrical target for downstream components
 
