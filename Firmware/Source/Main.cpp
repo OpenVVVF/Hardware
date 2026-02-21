@@ -187,51 +187,51 @@ namespace {
     static SVPWMModulationScheme g_Svm;
     SVPWMConfig svmCfg;
     svmCfg.InfluenceStart_Hz_ = 0.0f;
-    svmCfg.InfluenceEnd_Hz_   = 8.0f; 
-    svmCfg.CarrierStart_Hz_   = 2000.0f;
-    svmCfg.CarrierEnd_Hz_     = 2000.0f;
+    svmCfg.InfluenceEnd_Hz_   = 800.0f; 
+    svmCfg.CarrierStart_Hz_   = 4000.0f;
+    svmCfg.CarrierEnd_Hz_     = 4000.0f;
     svmCfg.MaxModulationIndex_ = 0.95f;
     g_Svm.ApplyConfig(svmCfg);
     g_DriveManager.RegisterModulationScheme(&g_Svm);
 
-    static NPulseModulationScheme g_NPulse;
-    NPulseConfig nPulseCfg;
-    nPulseCfg.InfluenceStart_Hz_ = 8.0f; 
-    nPulseCfg.InfluenceEnd_Hz_   = 19.0f; 
-    nPulseCfg.PulseRatio_        = 250;    
-    nPulseCfg.MinCarrier_Hz_     = 200.0f; 
-    nPulseCfg.MaxModulationIndex_ = 0.95f;
-    g_NPulse.ApplyConfig(nPulseCfg);
-    g_DriveManager.RegisterModulationScheme(&g_NPulse);
+    // static NPulseModulationScheme g_NPulse;
+    // NPulseConfig nPulseCfg;
+    // nPulseCfg.InfluenceStart_Hz_ = 8.0f; 
+    // nPulseCfg.InfluenceEnd_Hz_   = 19.0f; 
+    // nPulseCfg.PulseRatio_        = 250;    
+    // nPulseCfg.MinCarrier_Hz_     = 200.0f; 
+    // nPulseCfg.MaxModulationIndex_ = 0.95f;
+    // g_NPulse.ApplyConfig(nPulseCfg);
+    // g_DriveManager.RegisterModulationScheme(&g_NPulse);
 
-    static NPulseModulationScheme g_NPulse2;
-    NPulseConfig nPulseCfg2;
-    nPulseCfg2.InfluenceStart_Hz_ = 19.0f; 
-    nPulseCfg2.InfluenceEnd_Hz_   = 30.0f; 
-    nPulseCfg2.PulseRatio_        = 105;    
-    nPulseCfg2.MinCarrier_Hz_     = 200.0f; 
-    nPulseCfg2.MaxModulationIndex_ = 0.95f;
-    g_NPulse2.ApplyConfig(nPulseCfg2);
-    g_DriveManager.RegisterModulationScheme(&g_NPulse2);
+    // static NPulseModulationScheme g_NPulse2;
+    // NPulseConfig nPulseCfg2;
+    // nPulseCfg2.InfluenceStart_Hz_ = 19.0f; 
+    // nPulseCfg2.InfluenceEnd_Hz_   = 30.0f; 
+    // nPulseCfg2.PulseRatio_        = 105;    
+    // nPulseCfg2.MinCarrier_Hz_     = 200.0f; 
+    // nPulseCfg2.MaxModulationIndex_ = 0.95f;
+    // g_NPulse2.ApplyConfig(nPulseCfg2);
+    // g_DriveManager.RegisterModulationScheme(&g_NPulse2);
 
 
-    static SVPWMModulationScheme g_Svm2;
-    SVPWMConfig svmCfg2;
-    svmCfg2.InfluenceStart_Hz_ = 30.0f;
-    svmCfg2.InfluenceEnd_Hz_   = 2000.0f; 
-    svmCfg2.CarrierStart_Hz_   = 3150.0f;
-    svmCfg2.CarrierEnd_Hz_     = 3150.0f;
-    svmCfg2.MaxModulationIndex_ = 0.95f;
-    g_Svm2.ApplyConfig(svmCfg2);
-    g_DriveManager.RegisterModulationScheme(&g_Svm2);
+    // static SVPWMModulationScheme g_Svm2;
+    // SVPWMConfig svmCfg2;
+    // svmCfg2.InfluenceStart_Hz_ = 30.0f;
+    // svmCfg2.InfluenceEnd_Hz_   = 2000.0f; 
+    // svmCfg2.CarrierStart_Hz_   = 3150.0f;
+    // svmCfg2.CarrierEnd_Hz_     = 3150.0f;
+    // svmCfg2.MaxModulationIndex_ = 0.95f;
+    // g_Svm2.ApplyConfig(svmCfg2);
+    // g_DriveManager.RegisterModulationScheme(&g_Svm2);
 
     // B. Configure Control (FOC tuning)
     FocConfig focCfg;
     focCfg.InfluenceStart_RadPerSec_ = 0.0f;
     focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
-    focCfg._Kp_Q_axis = 0.002f;
+    focCfg._Kp_Q_axis = 0.001f;
     focCfg._Ki_Q_axis = 5.0f;
-    focCfg._Kp_D_axis = 0.002f;
+    focCfg._Kp_D_axis = 0.001f;
     focCfg._Ki_D_axis = 5.0f;
     focCfg._SoftVoltageLimit_V = 5.0f;
     g_Foc.ApplyConfig(focCfg);
@@ -292,7 +292,7 @@ namespace {
                 
                 // 1. Define High-Level Setpoint
                 CurrentSetpoint target;
-                target._TargetIq_A = -5.0f; // -5A Torque Request
+                target._TargetIq_A = -10.0f; // -5A Torque Request
                 target._TargetId_A = 0.0f;  
                 target._VqFeedforward_V = 0.0f;
                 target._VdFeedforward_V = 0.0f;
@@ -335,7 +335,7 @@ namespace {
                 t_pack.v_u = HwCmd.DutyPhU_unitless;
                 t_pack.v_v = HwCmd.DutyPhV_unitless;
                 t_pack.v_w = HwCmd.DutyPhW_unitless;
-                t_pack.rotor_velocity = omega_est;
+                t_pack.rotor_velocity = omega_est * 9.55; // convert to rpm
                 (void)telemetry_try_push(&t_pack);
             }
         }
@@ -407,7 +407,7 @@ int main() {
     g_MotorConfig._PolePairs_unitless = 5;
     g_MotorConfig._Ld_Henry = 0.000040f;
     g_MotorConfig._Lq_Henry = 0.000040f;
-    // g_MotorConfig._DcBusVoltage_V = 60.0f;
+    g_MotorConfig._FluxLinkage_Wb = 0.0f;
 
     // Motor config limits
     g_MotorConfig._SoftMaxPhaseCurrent_A = 30.0f;
@@ -418,16 +418,15 @@ int main() {
 
     g_MotorConfig._HardMaxRegenCurrent_A = 2.0f;
     g_MotorConfig._SoftMaxRegenCurrent_A = 0.0f;
+    
+    g_MotorConfig._SoftMaxVelocity_RPM = 60.0f;
+    g_MotorConfig._HardMaxVelocity_RPM = 500.0f;
+    g_MotorConfig._SoftMinVelocity_RPM = -60.0f;
+    g_MotorConfig._HardMinVelocity_RPM = -500.0f;
 
 
     g_MotorConfig._MaxModulation_unitless = 0.9f;
-    
-    g_MotorConfig._FluxLinkage_Wb = 0.0f;
-    
-    // g_MotorConfig._MaxTorqueCurrent_A = 20.0f;
-    
-    g_MotorConfig._MaxVelocity_RadPerSec = 10.0f;
-    g_MotorConfig._MinVelocity_RadPerSec = -10.0f;
+
 
     // Distribute motor config to all controllers
     g_Foc.SetMotorConfig(g_MotorConfig);

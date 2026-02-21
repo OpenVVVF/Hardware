@@ -14,12 +14,14 @@
 * Single source of truth for all physical and software safety limits.
 */
 struct MotorConfig {
+
+    // Constants
     float _PolePairs_unitless;
     float _Ld_Henry;
     float _Lq_Henry;
     float _FluxLinkage_Wb;
     
-    // Hardware Electrical Limits
+    // Electrical Limits
     float _HardMaxPhaseCurrent_A; // limit which, if ever reached, triggers fault
     float _SoftMaxPhaseCurrent_A; // max limit on PI controllers - leave ~15-30% margin
 
@@ -29,16 +31,16 @@ struct MotorConfig {
     float _HardMaxRegenCurrent_A; // limit which, if ever reached, triggers fault
     float _SoftMaxRegenCurrent_A; // max limit on PI controllers - leave ~15-30% margin
 
-    // float _DcBusVoltage_V;
-    float _MaxModulation_unitless;
+    float _MaxModulation_unitless; // usually 0.95, must never be more than 1 - clamps effective modulation range of dc bus
 
     // Outer-Loop Motion Limits
-    // float _MaxTorqueCurrent_A;
-    float _MaxRpm_unitless;
-    float _MinRpm_unitless;
-    float _MaxVelocity_RadPerSec;
-    float _MinVelocity_RadPerSec;
+    float _HardMaxVelocity_RPM; // limit which, if ever reached, triggers fault
+    float _SoftMaxVelocity_RPM; // max limit on PI controllers - leave ~15-30% margin
+    float _HardMinVelocity_RPM; // limit which, if ever reached, triggers fault
+    float _SoftMinVelocity_RPM; // max limit on PI controllers - leave ~15-30% margin
+
     float _MaxAcceleration_RadPerSec2;
+
 };
 
 

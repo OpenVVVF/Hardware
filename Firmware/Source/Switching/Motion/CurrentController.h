@@ -31,24 +31,19 @@ public:
     float MaxCurrentRamp_A_Per_S_ = 500.0f; ///< Slew rate limit for FOC targets
 
     /** * @brief Cascaded PID to translate a Current Error into a Velocity Command 
-    * allowing torque control over an open-loop V/Hz inner schema.
     */
     PidController VhzVelocityPid_;
 
+    // ========================================================
+    // NEW: PID Limit Governors
+    // ========================================================
+    PidController MaxGovernorPid_; ///< Chokes positive current limits
+    PidController MinGovernorPid_; ///< Chokes negative (regen) current limits
+
     CurrentController() = default;
 
-    /**
-    * @brief Resets the active tracking variables and clears PID windup.
-    */
     void Reset() override;
 
-    /**
-    * @brief Computes simultaneous outputs for FOC (direct current) and V/Hz (cascaded velocity).
-    * @param _Sensors Telemetry containing raw phase currents.
-    * @param _Target  Polymorphic target, expected to be CurrentSetpoint.
-    * @param _dt_S    Time step in seconds.
-    * @return DriveCommand populated with both Id/Iq and Velocity targets.
-    */
     DriveCommand Update(const SensorData& _Sensors, 
                         const BaseMotionSetpoint& _Target, 
                         float _dt_S) override;

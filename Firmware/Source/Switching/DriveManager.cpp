@@ -55,6 +55,7 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
     // 0. Sensor Telemetry Sanity Checks
     // =========================================================================
     
+
     // A. Phase Current
     if (std::abs(_Sensors._Iu_A) > _MotorConfig->_HardMaxPhaseCurrent_A) _FaultManager->ReportFault("Sens: Iu > HardMaxPhaseCurrent", FaultSeverity::Latched);
     if (std::abs(_Sensors._Iv_A) > _MotorConfig->_HardMaxPhaseCurrent_A) _FaultManager->ReportFault("Sens: Iv > HardMaxPhaseCurrent", FaultSeverity::Latched);
@@ -67,7 +68,12 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
     // C. DC Bus Voltage (Strict hardware minimum to prevent div-by-zero)
     if (_Sensors._DcBusVoltage_V <= 0.0f) _FaultManager->ReportFault("Sens: Vdc <= 0V", FaultSeverity::Latched);
 
-    // D. Math/NaN Checks
+    // D. Rotation Speed Check
+    // rad/sec * 9.55 ~= rpm
+    if (_Sensors._EncoderVelocity_RadPerSec * 9.55 > _MotorConfig->_HardMaxVelocity_RPM) _FaultManager->ReportFault("Sens: RPM > HardMaxVelocityRPM", FaultSeverity::Latched);
+    if (_Sensors._EncoderVelocity_RadPerSec * 9.55 < _MotorConfig->_HardMinVelocity_RPM) _FaultManager->ReportFault("Sens: RPM < HardMinVelocityRPM", FaultSeverity::Latched);
+
+    // #. Math/NaN Checks
     if (std::isnan(_Sensors._EncoderPosition_Rad) || std::isnan(_Sensors._EncoderVelocity_RadPerSec)) {
         _FaultManager->ReportFault("Sens: Encoder NaN", FaultSeverity::Latched);
     }
