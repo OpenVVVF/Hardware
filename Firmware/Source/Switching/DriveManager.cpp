@@ -74,7 +74,7 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
 
     // C. DC Bus Voltage
     if (_Sensors._DcBusVoltage_V <= 0.0f) _FaultManager->ReportFault("Sens: Vdc <= 0V", FaultSeverity::Latched);
-    if (_Sensors._DcBusVoltage_V > 350.0f) _FaultManager->ReportFault("Sens: Vdc > 350V", FaultSeverity::Latched);
+    if (_Sensors._DcBusVoltage_V > 300.0f) _FaultManager->ReportFault("Sens: Vdc > 350V", FaultSeverity::Latched);
 
     // D. Fast Rotation Speed Check
     float rpm = _Sensors._EncoderVelocity_RadPerSec * RADS_TO_RPM;

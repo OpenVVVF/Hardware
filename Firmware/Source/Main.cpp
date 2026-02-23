@@ -190,9 +190,9 @@ namespace {
     static SVPWMModulationScheme g_Svm;
     SVPWMConfig svmCfg;
     svmCfg.InfluenceStart_Hz_ = 0.0f;
-    svmCfg.InfluenceEnd_Hz_   = 3000.0f; 
-    svmCfg.CarrierStart_Hz_   = 8000.0f;
-    svmCfg.CarrierEnd_Hz_     = 8000.0f;
+    svmCfg.InfluenceEnd_Hz_   = 1000.0f; 
+    svmCfg.CarrierStart_Hz_   = 3000.0f;
+    svmCfg.CarrierEnd_Hz_     = 15000.0f;
     svmCfg.MaxModulationIndex_ = 0.95f;
     g_Svm.ApplyConfig(svmCfg);
     g_DriveManager.RegisterModulationScheme(&g_Svm);
@@ -243,9 +243,9 @@ namespace {
     FocConfig focCfg;
     focCfg.InfluenceStart_RadPerSec_ = 0.0f;
     focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
-    focCfg._Kp_Q_axis = 0.06f;
+    focCfg._Kp_Q_axis = 0.05f;
     focCfg._Ki_Q_axis = 1.0f;
-    focCfg._Kp_D_axis = 0.06f;
+    focCfg._Kp_D_axis = 0.05f;
     focCfg._Ki_D_axis = 1.0f;
     focCfg._SoftVoltageLimit_V = 12.0f;
     g_Foc.ApplyConfig(focCfg);
@@ -310,7 +310,7 @@ namespace {
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 
                 // 1. Define High-Level Setpoint
-                target._TargetIq_A = -40.0f * sin(get_absolute_time() / 7'00'000.0f); // -5A Torque Request
+                target._TargetIq_A = -40.0f * sin(get_absolute_time() / 8'00'000.0f); // -5A Torque Request
                 target._TargetId_A = 0.0f;  
                 target._VqFeedforward_V = 0.0f;
                 target._VdFeedforward_V = 0.0f;
