@@ -108,8 +108,8 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
     // --- 4. VECTOR PI CONTROL ---
     CalculateDecoupling();
 
-    float TotalVd_FF = _VdDecouplingFF_V_ + _Cmd._VdFeedforward_V;
-    float TotalVq_FF = _VqDecouplingFF_V_ + _Cmd._VqFeedforward_V;
+    float TotalVd_FF = _VdDecouplingFF_V_;// + _Cmd._VdFeedforward_V;
+    float TotalVq_FF = _VqDecouplingFF_V_;// + _Cmd._VqFeedforward_V;
     
     float Id_err = _IdCommanded_A - _Id_A;
     float Iq_err = _IqCommanded_A - _Iq_A;
@@ -123,7 +123,7 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
     // --- 5. INVERSE PARK TRANSFORM (D/Q -> Alpha/Beta) ---
     _InversePark_.fD = _Vd_V; 
     _InversePark_.fQ = _Vq_V;
-    _InversePark_.fSinAng = _SinTheta_unitless; 
+    _InversePark_.fSinAng = _SinTheta_unitless;  
     _InversePark_.fCosAng = _CosTheta_unitless;
     _InversePark_.m_dq2albe(&_InversePark_);
     

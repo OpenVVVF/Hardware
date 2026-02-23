@@ -11,7 +11,7 @@
 #pragma once
 
 #include "Motion/BaseMotionSchema.h"
-#include "Control/ControlSelector.h"
+#include "Control/Schemas/BaseSchema.h" 
 #include "Modulation/ModulationSelector.h"
 #include "HWInterface/PWMDriver.h"
 
@@ -37,9 +37,11 @@ public:
     void SetMotionUpdateRatio(uint16_t _Ratio);
 
     /**
-     * @brief Registers an inner-loop control scheme (e.g., FOC, V/Hz).
+     * @brief Sets the active inner-loop control scheme (e.g., FOC, V/Hz).
+     * Enforces strict single-scheme execution without overlapping transition zones.
+     * @param _Scheme Pointer to the scheme instance (must remain valid).
      */
-    void RegisterControlScheme(ControlScheme* _Scheme);
+    void SetControlScheme(ControlScheme* _Scheme);
 
     /**
      * @brief Registers a modulation scheme (e.g., SPWM, N-Pulse).
@@ -59,7 +61,7 @@ public:
 
 private:
     MotionController* MotionController_ = nullptr;
-    ControlSelector     ControlSelector_;
+    ControlScheme* ActiveControlScheme_ = nullptr; ///< Exclusively active control strategy
     ModulationSelector  ModulationSelector_;
 
     // Execution Decimation State

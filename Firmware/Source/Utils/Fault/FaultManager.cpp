@@ -36,25 +36,29 @@ void FaultManager::Init() {
 void FaultManager::Update() {
     // 1. Calculate internal delta-time (dt_S)
     uint64_t currentTime_uS = time_us_64();
-    float dt_S = (float)(currentTime_uS - LastUpdateTime_uS_) / 1000000.0f;
+    // OPTIMIZATION: Multiply by inverse is faster than division on Cortex-M0+ 
+    float dt_S = (float)(currentTime_uS - LastUpdateTime_uS_) * 0.000001f; 
     LastUpdateTime_uS_ = currentTime_uS;
 
     // 2. Poll hardware safety lines
     ProcessHardwarePins();
 
     // 3. Process Self-Clearing Faults
-    // Note: Iterating backwards ensures that removing an element (which shifts the 
-    // array down) doesn't cause us to accidentally skip the next element in the loop.
-    for (int i = ActiveFaultCount_ - 1; i >= 0; i--) {
-        if (ActiveFaults_[i].Severity == FaultSeverity::SelfClearing) {
-            
-            // Decrement the timer
-            ActiveFaults_[i].TimeRemaining_S -= dt_S;
-            
-            // Evaluate clearing conditions: timeout expired AND motor has stopped
-            // We use a small epsilon (0.1f) to account for noise around zero speed.
-            if (ActiveFaults_[i].TimeRemaining_S <= 0.0f && fabs(CurrentSpeed_) < 0.1f) {
-                RemoveFault(i);
+    // OPTIMIZATION: Completely bypass loop mechanics if the array is empty
+    if (ActiveFaultCount_ > 0) {
+        // Note: Iterating backwards ensures that removing an element (which shifts the 
+        // array down) doesn't cause us to accidentally skip the next element in the loop.
+        for (int i = ActiveFaultCount_ - 1; i >= 0; i--) {
+            if (ActiveFaults_[i].Severity == FaultSeverity::SelfClearing) {
+                
+                // Decrement the timer
+                ActiveFaults_[i].TimeRemaining_S -= dt_S;
+                
+                // Evaluate clearing conditions: timeout expired AND motor has stopped
+                // We use a small epsilon (0.1f) to account for noise around zero speed.
+                if (ActiveFaults_[i].TimeRemaining_S <= 0.0f && fabs(CurrentSpeed_) < 0.1f) {
+                    RemoveFault(i);
+                }
             }
         }
     }
@@ -93,6 +97,11 @@ void FaultManager::ReportFault(const char* _description, FaultSeverity _severity
         newFault.TimeRemaining_S = _timeout_S;
         
         ActiveFaultCount_++;
+
+        // OPTIMIZATION: Fast cache update without looping
+        if (_severity != FaultSeverity::Warning) {
+            SystemFaultedCache_ = true;
+        }
     }
 }
 
@@ -103,16 +112,6 @@ void FaultManager::AcknowledgeFaults() {
             RemoveFault(i);
         }
     }
-}
-
-bool FaultManager::IsSystemFaulted() const {
-    for (uint8_t i = 0; i < ActiveFaultCount_; i++) {
-        // Any fault that isn't just a warning constitutes a system-level fault
-        if (ActiveFaults_[i].Severity != FaultSeverity::Warning) {
-            return true;
-        }
-    }
-    return false;
 }
 
 uint8_t FaultManager::GetActiveFaults(FaultRecord* _outArray, uint8_t _maxRecords) const {
@@ -134,14 +133,19 @@ void FaultManager::ProcessHardwarePins() {
     bool gateFaultActive = (gpio_get(FaultPin_) == 0);
     bool gateNotReady    = (gpio_get(ReadyPin_) == 0);
 
-    // Hard hardware fault (e.g., desaturation / overcurrent). Requires user intervention.
-    if (gateFaultActive) {
+    // OPTIMIZATION: Edge detection prevents continuous string-comparison spam while pin is held low
+    if (gateFaultActive && !HwGateFaultActive_) {
         ReportFault("HW: Desat/Gate Fault", FaultSeverity::Latched);
+        HwGateFaultActive_ = true;
+    } else if (!gateFaultActive) {
+        HwGateFaultActive_ = false; 
     }
     
-    // Soft hardware fault (e.g., undervoltage lockout on boot). Usually self-clearing.
-    if (gateNotReady) {
+    if (gateNotReady && !HwGateNotReadyActive_) {
         ReportFault("HW: Gate Drv Not Ready", FaultSeverity::SelfClearing, 1.0f);
+        HwGateNotReadyActive_ = true;
+    } else if (!gateNotReady) {
+        HwGateNotReadyActive_ = false;
     }
 }
 
@@ -149,7 +153,7 @@ void FaultManager::EnforceHardwareSafety() {
     // Active-Low Reset Logic:
     // If faulted -> write 0 to pull Reset LOW (Disable chips).
     // If healthy -> write 1 to drive Reset HIGH (Enable chips).
-    if (IsSystemFaulted()) {
+    if (SystemFaultedCache_) {
         gpio_put(ResetPin_, 0); 
     } else {
         gpio_put(ResetPin_, 1); 
@@ -165,4 +169,16 @@ void FaultManager::RemoveFault(uint8_t _index) {
     }
     
     ActiveFaultCount_--;
+    UpdateFaultCache();
+}
+
+void FaultManager::UpdateFaultCache() {
+    // Recalculate O(1) state cache whenever a fault is removed
+    SystemFaultedCache_ = false;
+    for (uint8_t i = 0; i < ActiveFaultCount_; i++) {
+        if (ActiveFaults_[i].Severity != FaultSeverity::Warning) {
+            SystemFaultedCache_ = true;
+            break; // Stop immediately once we find a critical fault
+        }
+    }
 }

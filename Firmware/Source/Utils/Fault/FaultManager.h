@@ -81,8 +81,11 @@ public:
     /**
      * @brief Evaluates if the system is currently in a hazardous state.
      * @return True if any SelfClearing or Latched faults are active. Warnings return false.
+     * @note Evaluates in O(1) time using a cached state flag.
      */
-    bool IsSystemFaulted() const;
+    inline bool IsSystemFaulted() const { 
+        return SystemFaultedCache_; 
+    }
 
     /**
      * @brief Retrieves a copy of the active faults list for telemetry or logging.
@@ -110,6 +113,13 @@ private:
     uint8_t     ActiveFaultCount_ = 0;            ///< Number of currently active faults
 
     // --------------------------------------------------------
+    // High-Speed Execution Caches
+    // --------------------------------------------------------
+    bool SystemFaultedCache_  = false; ///< O(1) cache for IsSystemFaulted()
+    bool HwGateFaultActive_   = false; ///< Edge detector for Hardware Fault pin
+    bool HwGateNotReadyActive_= false; ///< Edge detector for Hardware Ready pin
+
+    // --------------------------------------------------------
     // Private Helpers
     // --------------------------------------------------------
 
@@ -128,4 +138,9 @@ private:
      * @param _index The array index of the fault to remove.
      */
     void RemoveFault(uint8_t _index);
+
+    /**
+     * @brief Recalculates the SystemFaultedCache_ boolean based on the current fault array.
+     */
+    void UpdateFaultCache();
 };

@@ -283,6 +283,80 @@ void PWMDriver::restorePwmPins() {
 }
 
 void PWMDriver::SetHardwareCommand(HardwareCommand _Cmd) {
-    setCarrierFrequency(_Cmd.SwitchingFrequency_Hz);
-    setDutyCycles(_Cmd.DutyPhU_unitless, _Cmd.DutyPhV_unitless, _Cmd.DutyPhW_unitless);
+    float hz = _Cmd.SwitchingFrequency_Hz;
+    float du = _Cmd.DutyPhU_unitless;
+    float dv = _Cmd.DutyPhV_unitless;
+    float dw = _Cmd.DutyPhW_unitless;
+
+    bool hz_changed = false;
+    uint16_t active_top = pwm_top_;
+    uint16_t active_min = min_count_;
+    uint16_t active_max = max_count_;
+
+    // 1. Frequency Processing (Early exit if frequency is unchanged)
+    if (std::abs(hz - carrier_hz_) > 0.1f) {
+        hz_changed = true;
+
+        // Clamp frequency to safe hardware limits
+        if (hz < Hardware::Limits::Switching::MIN_HZ) hz = Hardware::Limits::Switching::MIN_HZ;
+        if (hz > Hardware::Limits::Switching::MAX_HZ) hz = Hardware::Limits::Switching::MAX_HZ;
+
+        // Fast 32-bit float calculation for TOP
+        uint32_t sys_hz = clock_get_hz(clk_sys);
+        float top_f = ((float)sys_hz / (2.0f * hz * fixed_clk_div_)) - 1.0f;
+        
+        if (top_f < 0.0f) top_f = 0.0f;
+        if (top_f > 65535.0f) top_f = 65535.0f;
+        active_top = (uint16_t)(top_f + 0.5f);
+
+        // Precompute new integer clamp limits based on the new TOP
+        uint32_t lo = (static_cast<uint32_t>(active_top) * config_.min_duty_percent) / 100u;
+        uint32_t hi = (static_cast<uint32_t>(active_top) * config_.max_duty_percent) / 100u;
+        
+        if (lo > active_top) lo = active_top;
+        if (hi > active_top) hi = active_top;
+        if (hi < lo) hi = lo;
+
+        active_min = static_cast<uint16_t>(lo);
+        active_max = static_cast<uint16_t>(hi);
+    }
+
+    // 2. Fast Duty Cycle Clamping & Conversion (No library calls)
+    if (du < 0.0f) du = 0.0f; else if (du > 1.0f) du = 1.0f;
+    if (dv < 0.0f) dv = 0.0f; else if (dv > 1.0f) dv = 1.0f;
+    if (dw < 0.0f) dw = 0.0f; else if (dw > 1.0f) dw = 1.0f;
+
+    float f_top = (float)active_top;
+    uint16_t cu = (uint16_t)((du * f_top) + 0.5f);
+    uint16_t cv = (uint16_t)((dv * f_top) + 0.5f);
+    uint16_t cw = (uint16_t)((dw * f_top) + 0.5f);
+
+    if (cu < active_min) cu = active_min; else if (cu > active_max) cu = active_max;
+    if (cv < active_min) cv = active_min; else if (cv > active_max) cv = active_max;
+    if (cw < active_min) cw = active_min; else if (cw > active_max) cw = active_max;
+
+    // 3. Single Unified Critical Section
+    // Disable interrupts to ensure atomic updates to the hardware
+    irq_set_enabled(PWM_IRQ_WRAP, false);
+
+    if (hz_changed && enabled_) {
+        pwm_set_wrap(kSlices[0], active_top);
+        pwm_set_wrap(kSlices[1], active_top);
+        pwm_set_wrap(kSlices[2], active_top);
+    }
+
+    // Update shadow registers for the ISR to pick up
+    manual_du_ = cu;
+    manual_dv_ = cv;
+    manual_dw_ = cw;
+
+    irq_set_enabled(PWM_IRQ_WRAP, true);
+
+    // 4. Update the driver's state tracker
+    if (hz_changed) {
+        carrier_hz_ = hz;
+        pwm_top_ = active_top;
+        min_count_ = active_min;
+        max_count_ = active_max;
+    }
 }

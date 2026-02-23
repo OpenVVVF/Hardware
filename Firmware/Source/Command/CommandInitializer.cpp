@@ -14,7 +14,7 @@ CommandInterface* makeFlashCommand();
 // CommandInterface* makeImmediateCommand();
 CommandInterface* makeHelpCommand();
 CommandInterface* makeRebootCommand();
-// CommandInterface* makeEncoderOffsetCommand();
+CommandInterface* makeEncoderOffsetCommand();
 
 void initializeCommands() {
     auto& mgr = CommandManager::instance();
@@ -32,7 +32,7 @@ void initializeCommands() {
         // makeEnableCommand(),
         // makeImmediateCommand(),
         makeHelpCommand(),
-        // makeEncoderOffsetCommand()
+        makeEncoderOffsetCommand()
     };
 
     for (auto* c : cmds) mgr.registerCommand(c);

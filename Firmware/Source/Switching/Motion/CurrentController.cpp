@@ -47,10 +47,10 @@ DriveCommand CurrentController::Update(const SensorData& _Sensors,
         MaxGovernorPid_.Kd_ = 0.5f;
         MaxGovernorPid_.DecimationFactor_ = 5; // Run 5x slower for stability
         
-        MinGovernorPid_.Kp_ = 3.5f;
-        MinGovernorPid_.Ki_ = 4.9f;
-        MinGovernorPid_.Kd_ = 0.7;
-        MinGovernorPid_.DecimationFactor_ = 5; // Run 5x slower for stability
+        MinGovernorPid_.Kp_ = 0.15f;
+        MinGovernorPid_.Ki_ = 0.1f;
+        MinGovernorPid_.Kd_ = 0.0f;
+        MinGovernorPid_.DecimationFactor_ = 3; // Run 5x slower for stability
     }
     
     MaxGovernorPid_.MinOutput_ = 0.0f;
@@ -69,20 +69,22 @@ DriveCommand CurrentController::Update(const SensorData& _Sensors,
     float govErrMax = std::max(maxRpmErr, std::max(maxIdcErr, maxMagErr));
 
     // The PID automatically handles decimation caching!
-    float penaltyMax_A = MaxGovernorPid_.Update(govErrMax, 0.0f, _dt_S);
-    float allowedMaxIq_A = MotorConfig_._SoftMaxPhaseCurrent_A - penaltyMax_A;
+    float penaltyMax_A = 0.0f;//MaxGovernorPid_.Update(govErrMax, 0.0f, _dt_S);
+    float allowedMaxIq_A =MotorConfig_._SoftMaxPhaseCurrent_A;// MotorConfig_._SoftMaxPhaseCurrent_A - penaltyMax_A;
 
 
     // --- B. MIN LIMIT GOVERNOR ---
-    float minRpmErr = (MotorConfig_._SoftMinVelocity_RPM - currentRpm) * k_RpmToAmps; 
-    float minIdcErr = (-MotorConfig_._SoftMaxRegenCurrent_A - _Sensors._Idc_A);
-    float minMagErr = measuredCurrentMag_A - MotorConfig_._SoftMaxPhaseCurrent_A; 
+    float minRpmErr = (MotorConfig_._SoftMinVelocity_RPM - currentRpm); 
+    // float minIdcErr = (-MotorConfig_._SoftMaxRegenCurrent_A - _Sensors._Idc_A);
+    // float minMagErr = measuredCurrentMag_A - MotorConfig_._SoftMaxPhaseCurrent_A; 
 
-    float govErrMin = std::max(minRpmErr, std::max(minIdcErr, minMagErr));
+    // float govErrMin = std::max(minRpmErr, std::max(minIdcErr, minMagErr));
+
+    // MinGovernorPid_.
 
     // The PID automatically handles decimation caching!
-    float penaltyMin_A = MinGovernorPid_.Update(govErrMin, 0.0f, _dt_S);
-    float allowedMinIq_A = -MotorConfig_._SoftMaxPhaseCurrent_A + penaltyMin_A;
+    float penaltyMin_A = 0.0f;//MinGovernorPid_.Update(minRpmErr, 10.0f, _dt_S);
+    float allowedMinIq_A = -MotorConfig_._SoftMaxPhaseCurrent_A;//-MotorConfig_._SoftMaxPhaseCurrent_A + penaltyMin_A;
 
 
     // --- C. Safety Bounds ---
