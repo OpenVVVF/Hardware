@@ -18,7 +18,7 @@ static constexpr uint16_t DEVICE_ID_EXPECTED = 0x0000;
 spi_inst_t* MAX2253x_MultiADC::SPI_PORT = spi1;
 
 // Global TX dummy buffer to push 11 bytes (Header 0x05 + 10 zero bytes)
-const uint8_t MAX2253x_MultiADC::TX_BUFFER[11] = { 0x05, 0,0,0,0,0,0,0,0,0,0 };
+uint8_t MAX2253x_MultiADC::TX_BUFFER[11] = { 0x05, 0,0,0,0,0,0,0,0,0,0 };
 MAX2253x_MultiADC* MAX2253x_MultiADC::instance = nullptr;
 
 namespace {
@@ -146,9 +146,12 @@ bool MAX2253x_Device::check_diagnostics() {
     return !has_fault;
 }
 
-void MAX2253x_Device::read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_status) {
-    static const uint8_t tx[11] = { 0x05, 0,0,0,0,0,0,0,0,0,0 };
-    uint8_t rx[11]; // no zeroing
+void MAX2253x_Device::read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_status, bool use_filtered) {
+    // Create a dynamic buffer so we can inject the correct header
+    uint8_t tx[11] = { 0,0,0,0,0,0,0,0,0,0,0 };
+    tx[0] = use_filtered ? 0x15 : 0x05; 
+    uint8_t rx[11];
+
     begin_transaction();
     spi_write_read_blocking(MAX2253x_MultiADC::SPI_PORT, tx, rx, 11);
     end_transaction();
@@ -351,6 +354,12 @@ std::vector<std::array<uint16_t, 4>> MAX2253x_MultiADC::read_all_devices_raw() {
 // ============================================================================
 // --- DMA IMPLEMENTATION ---
 // ============================================================================
+
+void MAX2253x_MultiADC::set_filtered_read(bool enable) {
+    // 0x05 = Burst Read Raw (Address 0x01)
+    // 0x15 = Burst Read Filtered (Address 0x05)
+    TX_BUFFER[0] = enable ? 0x15 : 0x05;
+}
 
 void MAX2253x_MultiADC::init_dma() {
     instance = this;

@@ -28,7 +28,7 @@ enum class ErrorCode {
 class MAX2253x_Device {
 public:
     explicit MAX2253x_Device(uint8_t cs_pin);
-    void read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_status = nullptr);
+    void read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_status = nullptr, bool use_filtered = false);
     void read_all_adc_voltage_into(float out4[4], uint16_t* int_status = nullptr);
     bool init();
     bool is_initialized() const { return m_initialized; }
@@ -73,6 +73,7 @@ public:
     void read_all_devices_raw_into(std::array<uint16_t, 4>* out, size_t out_count);
     void read_all_devices_voltage_into(std::array<float, 4>* out, size_t out_count);
     
+
     bool init();
     void print_status();
     std::array<uint16_t, 4> read_device_raw(size_t device_index);
@@ -97,6 +98,8 @@ public:
     // Called by the hardware DMA interrupt.
     void dma_isr(); 
     
+    void set_filtered_read(bool enable);
+
     static MAX2253x_MultiADC* instance;
 
     // Fast inline accessor for MeasurementSystem to grab the parsed data
@@ -116,6 +119,6 @@ private:
     volatile bool m_async_busy = false;
     volatile bool m_async_ready = false;
     
-    static const uint8_t TX_BUFFER[11];
+    static uint8_t TX_BUFFER[11];
     std::vector<std::array<uint8_t, 11>> m_async_rx_buffers;
 };

@@ -243,10 +243,10 @@ namespace {
     FocConfig focCfg;
     focCfg.InfluenceStart_RadPerSec_ = 0.0f;
     focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
-    focCfg._Kp_Q_axis = 0.05f;
-    focCfg._Ki_Q_axis = 1.0f;
-    focCfg._Kp_D_axis = 0.05f;
-    focCfg._Ki_D_axis = 1.0f;
+    focCfg._Kp_Q_axis = 0.03f;
+    focCfg._Ki_Q_axis = 10.0f;
+    focCfg._Kp_D_axis = 0.03f;
+    focCfg._Ki_D_axis = 10.0f;
     focCfg._SoftVoltageLimit_V = 8.0f;
     g_Foc.ApplyConfig(focCfg);
 
@@ -803,6 +803,9 @@ int main() {
     // release
     hard_stop();
 
+
+
+    adc_system->set_filtered_read(false);
 
     // --- NEW: Attach the DMA trigger to the PWM Driver ---
     g_Driver->setPwmWrapCallback([](){
