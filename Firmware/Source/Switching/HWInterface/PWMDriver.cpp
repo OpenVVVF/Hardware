@@ -165,7 +165,8 @@ uint16_t PWMDriver::computeTopFromCarrier(float carrier_hz) const {
 
 void PWMDriver::enable() {
     if (emergency_stop_) return;
-
+    sys_hz = clock_get_hz(clk_sys);
+    
     pwm_config cfg = pwm_get_default_config();
     pwm_config_set_clkdiv(&cfg, clk_div_);
     pwm_config_set_wrap(&cfg, pwm_top_);
@@ -287,7 +288,6 @@ void PWMDriver::SetHardwareCommand(HardwareCommand _Cmd) {
     float du = _Cmd.DutyPhU_unitless;
     float dv = _Cmd.DutyPhV_unitless;
     float dw = _Cmd.DutyPhW_unitless;
-
     bool hz_changed = false;
     uint16_t active_top = pwm_top_;
     uint16_t active_min = min_count_;
@@ -302,7 +302,6 @@ void PWMDriver::SetHardwareCommand(HardwareCommand _Cmd) {
         if (hz > Hardware::Limits::Switching::MAX_HZ) hz = Hardware::Limits::Switching::MAX_HZ;
 
         // Fast 32-bit float calculation for TOP
-        uint32_t sys_hz = clock_get_hz(clk_sys);
         float top_f = ((float)sys_hz / (2.0f * hz * fixed_clk_div_)) - 1.0f;
         
         if (top_f < 0.0f) top_f = 0.0f;

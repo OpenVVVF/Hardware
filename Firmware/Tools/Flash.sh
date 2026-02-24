@@ -25,7 +25,7 @@ ls -lh "$UF2_PATH"
 echo
 
 # Wait for device
-echo "Waiting for RPI-RP2 drive..."
+echo "Waiting for RP2350 drive..."
 
 # Method 1: Try software flash first
 if [ -w "/dev/ttyACM0" ]; then
@@ -37,7 +37,7 @@ fi
 
 # Method 2: Wait for bootloader drive
 while true; do
-    MOUNT_PATH=$(findmnt -n -o TARGET --source LABEL=RPI-RP2 2>/dev/null || true)
+    MOUNT_PATH=$(findmnt -n -o TARGET --source LABEL=RP2350 2>/dev/null || true)
     
     if [ -n "$MOUNT_PATH" ]; then
         echo "✓ Pico detected at: $MOUNT_PATH"
@@ -46,7 +46,7 @@ while true; do
         sync
         
         echo "✓ File copied, waiting for reboot..."
-        while findmnt -n -o TARGET --source LABEL=RPI-RP2 >/dev/null 2>&1; do
+        while findmnt -n -o TARGET --source LABEL=RP2350 >/dev/null 2>&1; do
             sleep 0.1
         done
         

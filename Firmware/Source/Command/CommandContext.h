@@ -9,7 +9,7 @@
 // Command context (core0-safe)
 // ======================
 struct CommandContext {
-    float encoderOffset = 2.3830f;
+    float encoderOffset = 2.04f;//2.3830f;
     // Read-only shared config (must not be modified after core1 starts)
 };
 

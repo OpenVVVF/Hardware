@@ -50,7 +50,7 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
         return false;
     };
 
-    if (!_FaultManager || !_MotorConfig || !_Driver) {
+    if (!_FaultManager || !_MotorConfig || !_Driver || !ActiveControlScheme_) {
         return CommandSafeState();
     }
 
@@ -92,7 +92,7 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
     // =========================================================================
     AccumulatedMotionDt_S_ += _dt_S;
     MotionUpdateCounter_++;
-
+    
     if (MotionController_ && (MotionUpdateCounter_ >= MotionUpdateRatio_)) {
         
         CachedDriveCmd_ = MotionController_->Update(_Sensors, _Setpoint, AccumulatedMotionDt_S_);
@@ -118,17 +118,12 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
         float vdqMagSq = (CachedDriveCmd_._VdFeedforward_V * CachedDriveCmd_._VdFeedforward_V) + (CachedDriveCmd_._VqFeedforward_V * CachedDriveCmd_._VqFeedforward_V);
         if (vdqMagSq > maxVdqSq) _FaultManager->ReportFault("Motion: Vdq FF > BusLimit", FaultSeverity::Latched);
     }
-
     // =========================================================================
     // 2. Inner Loop Execution (High Speed / Modulation Input)
     // =========================================================================
-    ModulationInput modInput;
-    
-    if (ActiveControlScheme_) {
-        modInput = ActiveControlScheme_->Update(_Sensors, CachedDriveCmd_, _dt_S);
-    } else {
-        modInput = {0.0f, 0.0f, _Sensors._DcBusVoltage_V, 0.0f, 0.0f}; 
-    }
+    ModulationInput modInput = ActiveControlScheme_->Update(_Sensors, CachedDriveCmd_, _dt_S);
+
+
 
     // if (modInput.Vdc_V <= 0.0f) _FaultManager->ReportFault("Mod: Vdc <= 0V", FaultSeverity::Latched);
     
@@ -149,33 +144,38 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
     // =========================================================================
     HardwareCommand Output = ModulationSelector_.Update(modInput);
 
-    // Switching Frequency Limits
-    if (Output.SwitchingFrequency_Hz > Hardware::Limits::Switching::MAX_HZ) _FaultManager->ReportFault("HwCmd: SwFreq > MAX_HZ", FaultSeverity::Latched);
-    if (Output.SwitchingFrequency_Hz < Hardware::Limits::Switching::MIN_HZ) _FaultManager->ReportFault("HwCmd: SwFreq < MIN_HZ", FaultSeverity::Latched);
 
-    // // Physical Duty Cycle Limits
-    // if (Output.DutyPhU_unitless < 0.0f || Output.DutyPhU_unitless > 1.0f) _FaultManager->ReportFault("HwCmd: DutyPhU Out of Bounds", FaultSeverity::Latched);
-    // if (Output.DutyPhV_unitless < 0.0f || Output.DutyPhV_unitless > 1.0f) _FaultManager->ReportFault("HwCmd: DutyPhV Out of Bounds", FaultSeverity::Latched);
-    // if (Output.DutyPhW_unitless < 0.0f || Output.DutyPhW_unitless > 1.0f) _FaultManager->ReportFault("HwCmd: DutyPhW Out of Bounds", FaultSeverity::Latched);
 
-    // // NaN Duty Cycle Check
-    // if (Output.DutyPhU_unitless != Output.DutyPhU_unitless || 
-    //     Output.DutyPhV_unitless != Output.DutyPhV_unitless || 
-    //     Output.DutyPhW_unitless != Output.DutyPhW_unitless) {
-    //     _FaultManager->ReportFault("HwCmd: Duty Cycle NaN", FaultSeverity::Latched);
+    // // Switching Frequency Limits
+    // if (Output.SwitchingFrequency_Hz > Hardware::Limits::Switching::MAX_HZ) _FaultManager->ReportFault("HwCmd: SwFreq > MAX_HZ", FaultSeverity::Latched);
+    // if (Output.SwitchingFrequency_Hz < Hardware::Limits::Switching::MIN_HZ) _FaultManager->ReportFault("HwCmd: SwFreq < MIN_HZ", FaultSeverity::Latched);
+
+    // // // Physical Duty Cycle Limits
+    // // if (Output.DutyPhU_unitless < 0.0f || Output.DutyPhU_unitless > 1.0f) _FaultManager->ReportFault("HwCmd: DutyPhU Out of Bounds", FaultSeverity::Latched);
+    // // if (Output.DutyPhV_unitless < 0.0f || Output.DutyPhV_unitless > 1.0f) _FaultManager->ReportFault("HwCmd: DutyPhV Out of Bounds", FaultSeverity::Latched);
+    // // if (Output.DutyPhW_unitless < 0.0f || Output.DutyPhW_unitless > 1.0f) _FaultManager->ReportFault("HwCmd: DutyPhW Out of Bounds", FaultSeverity::Latched);
+
+    // // // NaN Duty Cycle Check
+    // // if (Output.DutyPhU_unitless != Output.DutyPhU_unitless || 
+    // //     Output.DutyPhV_unitless != Output.DutyPhV_unitless || 
+    // //     Output.DutyPhW_unitless != Output.DutyPhW_unitless) {
+    // //     _FaultManager->ReportFault("HwCmd: Duty Cycle NaN", FaultSeverity::Latched);
+    // // }
+
+    // // =========================================================================
+    // // 4. Single Point Fault Evaluation & HW Output Dispatch 
+    // // =========================================================================
+    // // Keep FaultManager speed cache updated for self-clearing faults
+    // _FaultManager->SetSpeed(_Sensors._EncoderVelocity_RadPerSec);
+    // _FaultManager->Update();
+
+
+    // // Final Tripwire Check - only branches/executes this single check per cycle!
+    // if (_FaultManager->IsSystemFaulted()) {
+    //     return CommandSafeState();
     // }
 
-    // =========================================================================
-    // 4. Single Point Fault Evaluation & HW Output Dispatch 
-    // =========================================================================
-    // Keep FaultManager speed cache updated for self-clearing faults
-    _FaultManager->SetSpeed(_Sensors._EncoderVelocity_RadPerSec);
-    _FaultManager->Update();
 
-    // Final Tripwire Check - only branches/executes this single check per cycle!
-    if (_FaultManager->IsSystemFaulted()) {
-        return CommandSafeState();
-    }
 
     _Driver->SetHardwareCommand(Output);
 

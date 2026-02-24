@@ -99,7 +99,7 @@ private:
         float clk_div;
         uint16_t top;
     };
-
+    uint32_t sys_hz = 0;
     static PWMDriver* instance_; ///< Singleton instance pointer.
 
     // ----- constants -----
@@ -142,9 +142,9 @@ private:
     bool emergency_stop_ = false;
     
     // Shadow registers updated by main thread, read by ISR
-    volatile uint16_t manual_du_ = 0;
-    volatile uint16_t manual_dv_ = 0;
-    volatile uint16_t manual_dw_ = 0;
+    uint16_t manual_du_ = 0;
+    uint16_t manual_dv_ = 0;
+    uint16_t manual_dw_ = 0;
 
     // carrier / PWM timing
     float carrier_hz_ = 0.0f;

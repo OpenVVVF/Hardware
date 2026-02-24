@@ -21,6 +21,12 @@ if(NOT BUILD_HOST_TESTS)
         message(FATAL_ERROR "PICO_SDK_PATH environment variable not set")
     endif()
     set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
+
+    # --- ADD THESE DEFAULTS OR ENSURE THEY ARE PASSED VIA COMMAND LINE ---
+    set(PICO_BOARD pico2 CACHE STRING "Board type")
+    # set(PICO_PLATFORM rp2350-riscv CACHE STRING "Platform type")
+    # ---------------------------------------------------------------------
+
     include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 endif()
 
@@ -72,7 +78,7 @@ if(NOT BUILD_HOST_TESTS)
 
     target_link_libraries(${PROJECT_NAME}
         pico_stdlib pico_multicore pico_rand pico_stdio_usb
-        hardware_spi hardware_pio hardware_gpio hardware_timer hardware_sync hardware_pwm
+        hardware_spi hardware_pio hardware_gpio hardware_timer hardware_sync hardware_pwm hardware_dma
     )
 
     pico_enable_stdio_usb(${PROJECT_NAME} 1)

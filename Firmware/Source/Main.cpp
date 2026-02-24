@@ -9,8 +9,7 @@
 #include "Sensors/MeasurementSystem.h"
 #include "Telemetry.h"
 #include "pico/stdlib.h"
-
-#include "Switching/Control/ControlSelector.h"
+#include "hardware/clocks.h"
 #include "Switching/Control/Schemas/FOC.h"
 #include "Switching/Control/Schemas/VHz.h"
 
@@ -126,6 +125,7 @@ void updateTel() {
             Telemetry::log("IQ_SET_PT", tp.iq_set);
 
             Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
+            Telemetry::log("SYS_CLOCK", clock_get_hz(clk_sys));
             Telemetry::log("DEBUG_I_BETA", tp.i_beta);
 
             Telemetry::log("DEBUG_I_D", tp.i_d);
@@ -192,7 +192,7 @@ namespace {
     svmCfg.InfluenceStart_Hz_ = 0.0f;
     svmCfg.InfluenceEnd_Hz_   = 1000.0f; 
     svmCfg.CarrierStart_Hz_   = 3000.0f;
-    svmCfg.CarrierEnd_Hz_     = 15000.0f;
+    svmCfg.CarrierEnd_Hz_     = 3000.0f;
     svmCfg.MaxModulationIndex_ = 0.95f;
     g_Svm.ApplyConfig(svmCfg);
     g_DriveManager.RegisterModulationScheme(&g_Svm);
@@ -243,11 +243,11 @@ namespace {
     FocConfig focCfg;
     focCfg.InfluenceStart_RadPerSec_ = 0.0f;
     focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
-    focCfg._Kp_Q_axis = 0.05f;
+    focCfg._Kp_Q_axis = 0.1f;
     focCfg._Ki_Q_axis = 1.0f;
-    focCfg._Kp_D_axis = 0.05f;
+    focCfg._Kp_D_axis = 0.1f;
     focCfg._Ki_D_axis = 1.0f;
-    focCfg._SoftVoltageLimit_V = 12.0f;
+    focCfg._SoftVoltageLimit_V = 8.0f;
     g_Foc.ApplyConfig(focCfg);
 
     // C. Register Components with Manager
@@ -274,10 +274,12 @@ namespace {
 
     while (true) {
         // Strict 400us Tick (2.5kHz)
-        if (absolute_time_diff_us(get_absolute_time(), next_foc_tick) <= 0) {
-            float dt_S = (float)absolute_time_diff_us(old_t, get_absolute_time()) / 1000000.0f;
+        absolute_time_t currentTime = get_absolute_time();
+        if (absolute_time_diff_us(old_t, currentTime) >= 50) {
+            float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
             old_t = get_absolute_time();
-            next_foc_tick = delayed_by_us(next_foc_tick, 5);
+
+
 
             // Update Physical Sensors
             measurements->update();
@@ -310,7 +312,8 @@ namespace {
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 
                 // 1. Define High-Level Setpoint
-                target._TargetIq_A = -40.0f * sin(get_absolute_time() / 8'00'000.0f); // -5A Torque Request
+                // If sine is >= 0, set to 60. If sine is < 0, set to -60.
+                target._TargetIq_A = (sin(get_absolute_time() / 2'00'000.0f) >= 0.0f) ? 60.0f : -60.0f;
                 target._TargetId_A = 0.0f;  
                 target._VqFeedforward_V = 0.0f;
                 target._VdFeedforward_V = 0.0f;
