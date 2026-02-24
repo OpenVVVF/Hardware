@@ -243,9 +243,9 @@ namespace {
     FocConfig focCfg;
     focCfg.InfluenceStart_RadPerSec_ = 0.0f;
     focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
-    focCfg._Kp_Q_axis = 0.1f;
+    focCfg._Kp_Q_axis = 0.05f;
     focCfg._Ki_Q_axis = 1.0f;
-    focCfg._Kp_D_axis = 0.1f;
+    focCfg._Kp_D_axis = 0.05f;
     focCfg._Ki_D_axis = 1.0f;
     focCfg._SoftVoltageLimit_V = 8.0f;
     g_Foc.ApplyConfig(focCfg);
@@ -274,15 +274,29 @@ namespace {
 
     while (true) {
         // Strict 400us Tick (2.5kHz)
-        absolute_time_t currentTime = get_absolute_time();
-        if (absolute_time_diff_us(old_t, currentTime) >= 50) {
-            float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
-            old_t = get_absolute_time();
+        // absolute_time_t currentTime = get_absolute_time();
+        // if (absolute_time_diff_us(old_t, currentTime) >= 50) {
+        //     float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
+        //     old_t = get_absolute_time();
 
 
 
-            // Update Physical Sensors
-            measurements->update();
+        if (measurements->update_from_dma()) {
+                    
+                    absolute_time_t currentTime = get_absolute_time();
+                    float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
+                    old_t = currentTime;
+
+                    // // 1. Gather Telemetry Data (No need to call update() anymore)
+                    // SensorData SenseData;
+                    // SenseData._Idc_A = measurements->read("I_DC_MAIN");
+                    // SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
+                    // SenseData._Iu_A = measurements->read("I_PH_U");
+                    // SenseData._Iw_A = measurements->read("I_PH_W");
+                    // SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
+
+            // // Update Physical Sensors
+            // measurements->update();
 
             SensorData SenseData;
             SenseData._Idc_A = measurements->read("I_DC_MAIN");
@@ -396,6 +410,12 @@ int main() {
         Telemetry::printf("FATAL: ADC initialization failed!\n");
         return -1;
     }
+
+    // --- NEW: Initialize the DMA ---
+    adc_system->init_dma();
+    
+
+
 
     static MeasurementSystem ms_instance(*adc_system);
     measurements = &ms_instance;
@@ -782,6 +802,16 @@ int main() {
 
     // release
     hard_stop();
+
+
+    // --- NEW: Attach the DMA trigger to the PWM Driver ---
+    g_Driver->setPwmWrapCallback([](){
+        if (MAX2253x_MultiADC::instance) {
+            MAX2253x_MultiADC::instance->start_async_read();
+        }
+    });
+
+
 
     // g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
     // g_Foc._EncoderOffset_Rad = 6.94159f;

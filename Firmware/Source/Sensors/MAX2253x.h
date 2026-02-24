@@ -1,16 +1,15 @@
-// MAX2253x.h (add friend declaration)
+// ========================= MAX2253x.h =========================
 #pragma once
 
 #include <cstdint>
 #include <array>
 #include <vector>
-#ifndef UNIT_TEST
-#include "pico/stdlib.h"
-#endif
 
 #ifndef UNIT_TEST
+#include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/structs/sio.h"
+#include "hardware/dma.h"
 #endif
 
 enum class ErrorCode {
@@ -82,8 +81,41 @@ public:
     std::vector<std::array<float, 4>> read_all_devices_voltage();
     size_t get_device_count() const { return m_devices.size(); }
 
+    // =========================================================================
+    // --- ASYNCHRONOUS DMA API ---
+    // =========================================================================
+    
+    void init_dma();
+    void start_async_read();
+    
+    // Checked by the FOC loop to see if the DMA sequence has finished
+    bool is_async_ready() const { return m_async_ready; }
+    
+    // Converts the raw DMA byte buffers into usable floating-point voltages
+    void process_async_data(); 
+    
+    // Called by the hardware DMA interrupt.
+    void dma_isr(); 
+    
+    static MAX2253x_MultiADC* instance;
+
+    // Fast inline accessor for MeasurementSystem to grab the parsed data
+    const float* get_cached_device_voltage(size_t index) const {
+        return m_voltage_cache[index].data();
+    }
+
 private:
     std::vector<MAX2253x_Device> m_devices;
     std::vector<std::array<uint16_t, 4>> m_raw_cache;
     std::vector<std::array<float, 4>> m_voltage_cache;
+
+    // --- DMA State Tracking ---
+    uint m_dma_tx;
+    uint m_dma_rx;
+    volatile size_t m_async_current_dev;
+    volatile bool m_async_busy = false;
+    volatile bool m_async_ready = false;
+    
+    static const uint8_t TX_BUFFER[11];
+    std::vector<std::array<uint8_t, 11>> m_async_rx_buffers;
 };
