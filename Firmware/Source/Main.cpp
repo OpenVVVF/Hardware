@@ -190,7 +190,7 @@ namespace {
     static SVPWMModulationScheme g_Svm;
     SVPWMConfig svmCfg;
     svmCfg.InfluenceStart_Hz_ = 0.0f;
-    svmCfg.InfluenceEnd_Hz_   = 1000.0f; 
+    svmCfg.InfluenceEnd_Hz_   = 150.0f; 
     svmCfg.CarrierStart_Hz_   = 3000.0f;
     svmCfg.CarrierEnd_Hz_     = 3000.0f;
     svmCfg.MaxModulationIndex_ = 0.95f;
@@ -247,7 +247,7 @@ namespace {
     focCfg._Ki_Q_axis = 10.0f;
     focCfg._Kp_D_axis = 0.03f;
     focCfg._Ki_D_axis = 10.0f;
-    focCfg._SoftVoltageLimit_V = 8.0f;
+    focCfg._SoftVoltageLimit_V = 0.0f;
     g_Foc.ApplyConfig(focCfg);
 
     // C. Register Components with Manager
@@ -306,6 +306,13 @@ namespace {
             SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
             
             // --- PLL Tracking Observer ---
+
+
+
+
+
+
+            // 1. Keep the PLL running exactly as it is so 'omega_est' stays smooth
             float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
             float error = raw_adc_rad - theta_est;
             while (error > 3.14159265f) error -= 6.283185307f;
@@ -316,10 +323,15 @@ namespace {
             while (theta_est >= 6.283185307f) theta_est -= 6.283185307f;
             while (theta_est < 0.0f) theta_est += 6.283185307f;
 
-            SenseData._EncoderPosition_Rad = theta_est;
-            SenseData._EncoderVelocity_RadPerSec = omega_est;
+            // 2. THE FIX: Feed the raw, zero-latency angle to the FOC loop
+            // Advance by ~500us to account for standard ADC -> Compute -> PWM transport delay
+            float phase_advance_rad = omega_est * 0.0005f; 
 
-            HardwareCommand HwCmd = {0};
+            // Use 'raw_adc_rad' here instead of 'theta_est'
+            SenseData._EncoderPosition_Rad = raw_adc_rad + phase_advance_rad;
+
+
+
 
 
 
@@ -327,10 +339,10 @@ namespace {
                 
                 // 1. Define High-Level Setpoint
                 // If sine is >= 0, set to 60. If sine is < 0, set to -60.
-                target._TargetIq_A = (sin(get_absolute_time() / 2'00'000.0f) >= 0.0f) ? 60.0f : -60.0f;
+                target._TargetIq_A = 50.0f;// * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
                 target._TargetId_A = 0.0f;  
-                target._VqFeedforward_V = 0.0f;
-                target._VdFeedforward_V = 0.0f;
+                // target._VqFeedforward_V = 0.0f;
+                // target._VdFeedforward_V = 0.0f;
 
                 // 2. Process complete cascade via Manager
                 bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
@@ -445,7 +457,7 @@ int main() {
     g_MotorConfig._PolePairs_unitless = 5;
     g_MotorConfig._Ld_Henry = 0.000040f;
     g_MotorConfig._Lq_Henry = 0.000040f;
-    g_MotorConfig._FluxLinkage_Wb = 0.0f;
+    g_MotorConfig._FluxLinkage_Wb = 0.0; // seems abt right from ~523.6 rads/sec @ 12v
 
     // Motor config limits
     g_MotorConfig._SoftMaxPhaseCurrent_A = 40.0f;
@@ -802,6 +814,28 @@ int main() {
 
     // release
     hard_stop();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

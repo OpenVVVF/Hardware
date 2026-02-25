@@ -52,9 +52,17 @@ void FocController::Reset() {
 }
 
 void FocController::CalculateDecoupling() {
-    _VdDecouplingFF_V_ = -_ElectricalSpeed_RadPerSec * MotorConfig_._Lq_Henry * _Iq_A;
-    _VqDecouplingFF_V_ = (_ElectricalSpeed_RadPerSec * MotorConfig_._Ld_Henry * _Id_A) + 
-                        (_ElectricalSpeed_RadPerSec * MotorConfig_._FluxLinkage_Wb);
+    // _VdDecouplingFF_V_ = -_ElectricalSpeed_RadPerSec * MotorConfig_._Lq_Henry * _Iq_A;
+    // _VqDecouplingFF_V_ = (_ElectricalSpeed_RadPerSec * MotorConfig_._Ld_Henry * _Id_A) + 
+    //                     (_ElectricalSpeed_RadPerSec * MotorConfig_._FluxLinkage_Wb);
+
+    // A. Inductive Cross-Coupling Decoupling (Use COMMANDED currents to prevent high-speed positive feedback)
+    _VdDecouplingFF_V_ = -_ElectricalSpeed_RadPerSec * MotorConfig_._Lq_Henry * _IqCommanded_A;
+    
+    // B. Back-EMF and D-Axis Decoupling
+    _VqDecouplingFF_V_ = (_ElectricalSpeed_RadPerSec * MotorConfig_._Ld_Henry * _IdCommanded_A) + 
+                         (_ElectricalSpeed_RadPerSec * MotorConfig_._FluxLinkage_Wb);
+
 }
 
 ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCommand& _Cmd, float _dt_S) {
@@ -108,8 +116,8 @@ ModulationInput FocController::Update(const SensorData& _Sensors, const DriveCom
     // --- 4. VECTOR PI CONTROL ---
     CalculateDecoupling();
 
-    float TotalVd_FF = _VdDecouplingFF_V_;// + _Cmd._VdFeedforward_V;
-    float TotalVq_FF = _VqDecouplingFF_V_;// + _Cmd._VqFeedforward_V;
+    float TotalVd_FF = _VdDecouplingFF_V_ + _Cmd._VdFeedforward_V;
+    float TotalVq_FF = _VqDecouplingFF_V_ + _Cmd._VqFeedforward_V;
     
     float Id_err = _IdCommanded_A - _Id_A;
     float Iq_err = _IqCommanded_A - _Iq_A;
