@@ -425,8 +425,8 @@ void MAX2253x_MultiADC::init_dma() {
 void MAX2253x_MultiADC::start_async_read() {
     if (m_async_busy || m_devices.empty()) return;
 
-    m_async_busy = true;
-    m_async_ready = false;
+    m_async_busy = 1;
+    m_async_ready = 0;
     m_async_current_dev = 0;
 
     // Start transaction for device 0
@@ -446,34 +446,44 @@ void MAX2253x_MultiADC::start_async_read() {
 }
 
 void MAX2253x_MultiADC::dma_isr() {
-    // Clear RX interrupt
+    // Clear RX interrupt for this channel
     dma_hw->ints0 = 1u << m_dma_rx;
 
-    // Ensure SPI is fully idle before toggling CS
+    // Make sure the SPI peripheral is truly idle before changing CS
     spi_wait_not_busy(SPI_PORT);
 
-    // Finish current device transaction
+    // End current device transaction (CS high)
     m_devices[m_async_current_dev].end_transaction();
+
+    // Enforce a minimum CS-high gap between devices (tCSH-ish)
+    // Tune this if needed (start small; 20–200 cycles is typical for "just enough")
+    busy_wait_at_least_cycles(50);
+
+    // Advance to next device
     m_async_current_dev++;
 
     if (m_async_current_dev < m_devices.size()) {
-        // Begin next device transaction
+        // Begin next device transaction (CS low)
         m_devices[m_async_current_dev].begin_transaction();
 
-        // Drain any stale RX bytes
+        // Clear any stale RX bytes before starting the next burst
         spi_drain_rx_fifo(SPI_PORT);
 
-        // Re-arm DMA counts EVERY burst (critical fix)
+        // Re-arm DMA counts EVERY burst (critical)
         dma_channel_set_trans_count(m_dma_tx, 11, false);
         dma_channel_set_read_addr(m_dma_tx, TX_BUFFER, false);
 
         dma_channel_set_trans_count(m_dma_rx, 11, false);
         dma_channel_set_write_addr(m_dma_rx, m_async_rx_buffers[m_async_current_dev].data(), false);
 
+        // Start both channels
         dma_start_channel_mask((1u << m_dma_tx) | (1u << m_dma_rx));
     } else {
-        m_async_busy = false;
-        m_async_ready = true;
+        // Sequence finished: publish completion safely across cores
+        m_async_busy = 0;     // use uint32_t if you applied that change
+        __dmb();              // ensure all DMA-written buffer contents are visible before ready=1
+        m_async_ready = 1;    // use uint32_t if you applied that change
+        __sev();              // optional: wake the other core if it's waiting
     }
 }
 void MAX2253x_MultiADC::process_async_data() {

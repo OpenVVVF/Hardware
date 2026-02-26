@@ -121,8 +121,8 @@ private:
     uint m_dma_tx;
     uint m_dma_rx;
     volatile size_t m_async_current_dev;
-    volatile bool m_async_busy = false;
-    volatile bool m_async_ready = false;
+volatile uint32_t m_async_busy = 0;
+volatile uint32_t m_async_ready = 0;
     
     static uint8_t TX_BUFFER[11];
     std::vector<std::array<uint8_t, 11>> m_async_rx_buffers;

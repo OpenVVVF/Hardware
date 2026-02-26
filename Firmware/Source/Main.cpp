@@ -190,7 +190,7 @@ namespace {
         static SVPWMModulationScheme g_Svm;
         SVPWMConfig svmCfg;
         svmCfg.InfluenceStart_Hz_ = 0.0f;
-        svmCfg.InfluenceEnd_Hz_   = 15.0f; 
+        svmCfg.InfluenceEnd_Hz_   = 10.0f; 
         svmCfg.CarrierStart_Hz_   = 3000.0f;
         svmCfg.CarrierEnd_Hz_     = 3000.0f;
         svmCfg.MaxModulationIndex_ = 0.95f;
@@ -199,7 +199,7 @@ namespace {
 
         static SVPWMModulationScheme g_Svm2;
         SVPWMConfig svmCfg2;
-        svmCfg2.InfluenceStart_Hz_ = 14.0f;
+        svmCfg2.InfluenceStart_Hz_ = 7.0f;
         svmCfg2.InfluenceEnd_Hz_   = 150.0f; 
         svmCfg2.CarrierStart_Hz_   = 5000.0f;
         svmCfg2.CarrierEnd_Hz_     = 5000.0f;
