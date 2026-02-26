@@ -112,7 +112,7 @@ void core1_entry() {
     focCfg._Ki_Q_axis = 10.0f;
     focCfg._Kp_D_axis = 0.03f;
     focCfg._Ki_D_axis = 10.0f;
-    focCfg._SoftVoltageLimit_V = 0.0f;
+    focCfg._SoftVoltageLimit_V = 8.0f;
     g_Foc.ApplyConfig(focCfg);
 
     // C. Register Components with Manager
@@ -135,7 +135,7 @@ void core1_entry() {
     const float Ki_pll = 2000.0f;
 
     CurrentSetpoint target;
-
+    g_CalibrationManager.SetMode(CalibrationManager::CalibrationMode::ENCODER_OFFSET);
     while (true) {
         if (measurements->update_from_dma()) {
             absolute_time_t currentTime = get_absolute_time();
@@ -149,7 +149,8 @@ void core1_entry() {
             SenseData._Iw_A = measurements->read("I_PH_W");
             SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
 
-           float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
+              // 1. Keep the PLL running exactly as it is so 'omega_est' stays smooth
+            float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
             float error = raw_adc_rad - theta_est;
             while (error > 3.14159265f) error -= 6.283185307f;
             while (error < -3.14159265f) error += 6.283185307f;
@@ -168,13 +169,16 @@ void core1_entry() {
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 // 1. Define High-Level Setpoint
                 // If sine is >= 0, set to 60. If sine is < 0, set to -60.
-                target._TargetIq_A = 10.0f * (sin(get_absolute_time() / 4'00'000.0f));// ? 60.0f : -60.0f;
+                target._TargetIq_A = -10.0f;//* sin(get_absolute_time() / 4'00'000.0f);// ? 60.0f : -60.0f;
                 target._TargetId_A = 0.0f;
-                bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
+            //    bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
+                g_CalibrationManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, dt_S);
             }
-
             if (absolute_time_diff_us(prev_tel_time, get_absolute_time()) >= 1000) {
                 prev_tel_time = get_absolute_time();
+                if(g_CalibrationManager.GetMode() == CalibrationManager::CalibrationMode::IDLE) {
+                    Telemetry::log("DEBUG_SEX", g_CalibrationManager.GetEncoderOffset_Rad());
+                }
                 Telemetry::log("CORE1_LOOP_HZ", 1.0f / dt_S);
                 Telemetry::log("ELEC_ANGLE", g_Foc._ElectricalAngle_Rad);
                 Telemetry::log("ENC_OFFSET", g_Foc._EncoderOffset_Rad);
@@ -187,6 +191,7 @@ void core1_entry() {
                 Telemetry::log("DEBUG_I_D", g_Foc.i_d);
                 Telemetry::log("DEBUG_I_Q", g_Foc.i_q);
                 Telemetry::log("ROTOR_VELOCITY", omega_est * 9.55);
+                Telemetry::log("ROTOR_DEG", SenseData._EncoderPosition_Rad);
             }
         }
     }

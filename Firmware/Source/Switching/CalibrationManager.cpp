@@ -10,7 +10,7 @@
 #include "Hardware.h"
 
 
-bool CalibrationManager::Update(FaultManager* _FaultManager, PWMDriver* _Driver, const SensorData& _Sensors, float _DT) {
+bool CalibrationManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig, PWMDriver* _Driver, const SensorData& _Sensors, float _DT) {
 
     
 
@@ -21,6 +21,14 @@ bool CalibrationManager::Update(FaultManager* _FaultManager, PWMDriver* _Driver,
         // -- ENCODER OFFSET -- //
         // encoder offset calibration (lock rotor to U phase, measure encoder has stopped changing, 
         // then sample value, perhaps then move rotor and lock to u phase again, maybe wrap to electrical and wrap, across all?)
+
+
+        // TODO:::::::
+
+        // TRY MEASURING THE OFFSET AT EVERY POLE AND HAVE A LOOKUP TABLE FOR THE ENCODER OFFSET OR SMTH
+        // IM FUCKING TIRED
+
+
         case CalibrationMode::ENCODER_OFFSET: {
             float dt = _DT; 
         
@@ -94,7 +102,7 @@ bool CalibrationManager::Update(FaultManager* _FaultManager, PWMDriver* _Driver,
                         float avgMechRad = m_encoderCalib.Accumulator / static_cast<float>(m_encoderCalib.SampleCount);
                         
                         // 2. Wrap it so it's consistent regardless of which pole pair it snapped to
-                        float mechPitch_Rad = EncoderCalibrationContext::TWO_PI / m_encoderCalib.PolePairs;
+                        float mechPitch_Rad = EncoderCalibrationContext::TWO_PI / _MotorConfig->_PolePairs_unitless;
                         
                         // Using double fmodf to safely handle any negative angles from the encoder
                         m_encoderCalib.MeasuredOffset_Rad = fmodf(fmodf(avgMechRad, mechPitch_Rad) + mechPitch_Rad, mechPitch_Rad);

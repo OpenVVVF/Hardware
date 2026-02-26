@@ -31,7 +31,7 @@ public:
     };
 
     void SetMode(CalibrationMode mode) {m_mode = mode;};
-    bool Update(FaultManager* _FaultManager, PWMDriver* _Driver, const SensorData& _Sensors, float _DT);
+    bool Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig, PWMDriver* _Driver, const SensorData& _Sensors, float _DT);
 
     float GetEncoderOffset_Rad() {return m_encoderCalib.MeasuredOffset_Rad; } 
     CalibrationMode GetMode() {return m_mode; }
@@ -56,7 +56,6 @@ private:
         float SampleTime_sec = 0.5f;        // How long to spend accumulating samples
         float Accumulator = 0.0f;
         uint32_t SampleCount = 0;
-        float PolePairs = 4.0f;             // !! UPDATE THIS TO YOUR MOTOR'S POLE PAIRS !!
         static constexpr float TWO_PI = 6.28318530718f;
     
         PidController CurrentPid;
