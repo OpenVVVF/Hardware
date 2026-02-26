@@ -26,6 +26,7 @@
 #include "Switching/Motion/CurrentController.h"
 
 #include "Switching/DriveManager.h"
+#include "Switching/CalibrationManager.h"
 
 #include "Utils/Fault/FaultManager.h"
 
@@ -109,43 +110,7 @@ static inline bool telemetry_try_pop(TelemetryPacket* out) {
     r->tail = (t + 1u) & (TELEMETRY_RB_SIZE - 1u);
     return true;
 }
-void updateTel() {
-        serial_proc.poll();
-        TelemetryPacket tp;
-        while (telemetry_try_pop(&tp)) {
-            // Push to Telemetry
-            Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
-            // Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
-            Telemetry::log("THETA_EST_RAD", tp.theta_est);
-            Telemetry::log("ELEC_ANGLE", tp.elec_angle);
-            Telemetry::log("ENC_OFFSET", tp.enc_offset);
-            Telemetry::log("DEBUG_VQ", tp.vq_v);
-            Telemetry::log("DEBUG_VD", tp.vd_v);
 
-            Telemetry::log("IQ_SET_PT", tp.iq_set);
-
-            Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
-            Telemetry::log("SYS_CLOCK", clock_get_hz(clk_sys));
-            Telemetry::log("DEBUG_I_BETA", tp.i_beta);
-
-            Telemetry::log("DEBUG_I_D", tp.i_d);
-            Telemetry::log("DEBUG_I_Q", tp.i_q);
-
-            // Telemetry::log("FAKE_I_U", tp.i_u);
-            // Telemetry::log("FAKE_I_V", tp.i_v);
-            // Telemetry::log("FAKE_I_W", tp.i_w);
-
-            // Telemetry::log("V_Alpha", tp.v_alpha);
-            // Telemetry::log("V_Beta", tp.v_beta);
-
-            Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
-
-            // Telemetry::log("V_U", tp.v_u);
-            // Telemetry::log("V_V", tp.v_v);
-            // Telemetry::log("V_W", tp.v_w);
-            Telemetry::updateSensors();
-        }
-}
 // ----------------------------------------------------------------------
 // Global State (Replaces RtBridge Instance State)
 // ----------------------------------------------------------------------
@@ -169,6 +134,49 @@ namespace {
     MAX2253x_MultiADC* adc_system = nullptr;
     MeasurementSystem* measurements = nullptr;
 }
+
+
+void updateTel() {
+    serial_proc.poll();
+    TelemetryPacket tp;
+    while (telemetry_try_pop(&tp)) {
+        // Push to Telemetry
+        Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
+        // Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
+        Telemetry::log("THETA_EST_RAD", tp.theta_est);
+        Telemetry::log("ELEC_ANGLE", tp.elec_angle);
+        Telemetry::log("ENC_OFFSET", tp.enc_offset);
+        Telemetry::log("DEBUG_VQ", tp.vq_v);
+        Telemetry::log("DEBUG_VD", tp.vd_v);
+
+        Telemetry::log("IQ_SET_PT", tp.iq_set);
+
+        Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
+
+        Telemetry::log("DC_BUS_POWER", measurements->read("V_DC_BUS") * measurements->read("I_DC_MAIN"));
+
+        // Telemetry::log("SYS_CLOCK", clock_get_hz(clk_sys));
+        Telemetry::log("DEBUG_I_BETA", tp.i_beta);
+
+        Telemetry::log("DEBUG_I_D", tp.i_d);
+        Telemetry::log("DEBUG_I_Q", tp.i_q);
+
+        // Telemetry::log("FAKE_I_U", tp.i_u);
+        // Telemetry::log("FAKE_I_V", tp.i_v);
+        // Telemetry::log("FAKE_I_W", tp.i_w);
+
+        // Telemetry::log("V_Alpha", tp.v_alpha);
+        // Telemetry::log("V_Beta", tp.v_beta);
+
+        Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
+
+        // Telemetry::log("V_U", tp.v_u);
+        // Telemetry::log("V_V", tp.v_v);
+        // Telemetry::log("V_W", tp.v_w);
+        Telemetry::updateSensors();
+    }
+}
+
 /**
  * @file    core1_main.cpp
  * @brief   System entry for high-speed motor control execution.
@@ -178,6 +186,7 @@ namespace {
     // 1. SYSTEM SETUP
     // ===========================================================================
     static DriveManager g_DriveManager;
+    static CalibrationManager g_CalibrationManager;
     
     static CurrentController g_CurrentController;
 
@@ -187,36 +196,36 @@ namespace {
 
 
     // A. Configure Modulation (Transitions from SPWM to NPulse at 4Hz)
-        static SVPWMModulationScheme g_Svm;
-        SVPWMConfig svmCfg;
-        svmCfg.InfluenceStart_Hz_ = 0.0f;
-        svmCfg.InfluenceEnd_Hz_   = 10.0f; 
-        svmCfg.CarrierStart_Hz_   = 3000.0f;
-        svmCfg.CarrierEnd_Hz_     = 3000.0f;
-        svmCfg.MaxModulationIndex_ = 0.95f;
-        g_Svm.ApplyConfig(svmCfg);
-        g_DriveManager.RegisterModulationScheme(&g_Svm);
+        // static SVPWMModulationScheme g_Svm;
+        // SVPWMConfig svmCfg;
+        // svmCfg.InfluenceStart_Hz_ = 0.0f;
+        // svmCfg.InfluenceEnd_Hz_   = 5.0f; 
+        // svmCfg.CarrierStart_Hz_   = 1000.0f;
+        // svmCfg.CarrierEnd_Hz_     = 1000.0f;
+        // svmCfg.MaxModulationIndex_ = 0.95f;
+        // g_Svm.ApplyConfig(svmCfg);
+        // g_DriveManager.RegisterModulationScheme(&g_Svm);
 
-        static SVPWMModulationScheme g_Svm2;
-        SVPWMConfig svmCfg2;
-        svmCfg2.InfluenceStart_Hz_ = 7.0f;
-        svmCfg2.InfluenceEnd_Hz_   = 150.0f; 
-        svmCfg2.CarrierStart_Hz_   = 5000.0f;
-        svmCfg2.CarrierEnd_Hz_     = 5000.0f;
-        svmCfg2.MaxModulationIndex_ = 0.95f;
-        g_Svm2.ApplyConfig(svmCfg2);
-        g_DriveManager.RegisterModulationScheme(&g_Svm2);
+        // static SVPWMModulationScheme g_Svm2;
+        // SVPWMConfig svmCfg2;
+        // svmCfg2.InfluenceStart_Hz_ = 4.0f;
+        // svmCfg2.InfluenceEnd_Hz_   = 25.0f; 
+        // svmCfg2.CarrierStart_Hz_   = 3000.0f;
+        // svmCfg2.CarrierEnd_Hz_     = 5000.0f;
+        // svmCfg2.MaxModulationIndex_ = 0.95f;
+        // g_Svm2.ApplyConfig(svmCfg2);
+        // g_DriveManager.RegisterModulationScheme(&g_Svm2);
 
 
-    // static SVPWMModulationScheme g_Svm3;
-    // SVPWMConfig svmCfg3;
-    // svmCfg3.InfluenceStart_Hz_ = 30.0f;
-    // svmCfg3.InfluenceEnd_Hz_   = 45.0f; 
-    // svmCfg3.CarrierStart_Hz_   = 3000.0f;
-    // svmCfg3.CarrierEnd_Hz_     = 4000.0f;
-    // svmCfg3.MaxModulationIndex_ = 0.95f;
-    // g_Svm3.ApplyConfig(svmCfg3);
-    // g_DriveManager.RegisterModulationScheme(&g_Svm3);
+        static SVPWMModulationScheme g_Svm3;
+        SVPWMConfig svmCfg3;
+        svmCfg3.InfluenceStart_Hz_ = 0.0f;
+        svmCfg3.InfluenceEnd_Hz_   = 150.0f; 
+        svmCfg3.CarrierStart_Hz_   = 5000.0f;
+        svmCfg3.CarrierEnd_Hz_     = 5000.0f;
+        svmCfg3.MaxModulationIndex_ = 0.95f;
+        g_Svm3.ApplyConfig(svmCfg3);
+        g_DriveManager.RegisterModulationScheme(&g_Svm3);
 
 
     // static NPulseModulationScheme g_NPulse;
@@ -282,32 +291,14 @@ namespace {
 
     CurrentSetpoint target;
 
-
     while (true) {
-        // Strict 400us Tick (2.5kHz)
-        // absolute_time_t currentTime = get_absolute_time();
-        // if (absolute_time_diff_us(old_t, currentTime) >= 50) {
-        //     float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
-        //     old_t = get_absolute_time();
-
-
 
         if (measurements->update_from_dma()) {
+           
                     
-                    absolute_time_t currentTime = get_absolute_time();
-                    float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
-                    old_t = currentTime;
-
-                    // // 1. Gather Telemetry Data (No need to call update() anymore)
-                    // SensorData SenseData;
-                    // SenseData._Idc_A = measurements->read("I_DC_MAIN");
-                    // SenseData._DcBusVoltage_V = measurements->read("V_DC_BUS");
-                    // SenseData._Iu_A = measurements->read("I_PH_U");
-                    // SenseData._Iw_A = measurements->read("I_PH_W");
-                    // SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
-
-            // // Update Physical Sensors
-            // measurements->update();
+            absolute_time_t currentTime = get_absolute_time();
+            float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
+            old_t = currentTime;
 
             SensorData SenseData;
             SenseData._Idc_A = measurements->read("I_DC_MAIN");
@@ -316,35 +307,16 @@ namespace {
             SenseData._Iw_A = measurements->read("I_PH_W");
             SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
             
-            // --- PLL Tracking Observer ---
-
-
-
-
-
-
             // 1. Keep the PLL running exactly as it is so 'omega_est' stays smooth
             float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
-            float error = raw_adc_rad - theta_est;
-            while (error > 3.14159265f) error -= 6.283185307f;
-            while (error < -3.14159265f) error += 6.283185307f;
-
-            omega_est += Ki_pll * error * dt_S;
-            theta_est += (omega_est + Kp_pll * error) * dt_S;
-            while (theta_est >= 6.283185307f) theta_est -= 6.283185307f;
-            while (theta_est < 0.0f) theta_est += 6.283185307f;
+            
 
             // 2. THE FIX: Feed the raw, zero-latency angle to the FOC loop
             // Advance by ~500us to account for standard ADC -> Compute -> PWM transport delay
             float phase_advance_rad = omega_est * 0.0005f; 
 
-            // Use 'raw_adc_rad' here instead of 'theta_est'
             SenseData._EncoderPosition_Rad = raw_adc_rad + phase_advance_rad;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
-
-
-
-
 
 
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
@@ -356,6 +328,9 @@ namespace {
                 // target._VqFeedforward_V = 0.0f;
                 // target._VdFeedforward_V = 0.0f;
 
+
+//                 g_CalibrationManager.Update(&g_FaultManager, g_Driver, SenseData);
+  //              continue;
                 // 2. Process complete cascade via Manager
                 bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
 
@@ -541,12 +516,8 @@ int main() {
 
         // 1. Drain the telemetry queue from Core 1
         updateTel();
-        if(delay > 1000) {
-            g_Foc._EncoderOffset_Rad = ctx.encoderOffset;
-            delay = 0;
-        }
-        delay++;
-        
+        //TODO: hardcode encoder offset here
+        g_Foc._EncoderOffset_Rad = ctx.encoderOffset;
 
         // 2. Print active faults once per second (1,000,000 microseconds)
         uint64_t currentTime_uS = time_us_64();
