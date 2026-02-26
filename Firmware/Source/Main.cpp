@@ -190,7 +190,7 @@ namespace {
         static SVPWMModulationScheme g_Svm;
         SVPWMConfig svmCfg;
         svmCfg.InfluenceStart_Hz_ = 0.0f;
-        svmCfg.InfluenceEnd_Hz_   = 4.0f; 
+        svmCfg.InfluenceEnd_Hz_   = 10.0f; 
         svmCfg.CarrierStart_Hz_   = 1000.0f;
         svmCfg.CarrierEnd_Hz_     = 1000.0f;
         svmCfg.MaxModulationIndex_ = 0.95f;
@@ -199,7 +199,7 @@ namespace {
 
         static SVPWMModulationScheme g_Svm2;
         SVPWMConfig svmCfg2;
-        svmCfg2.InfluenceStart_Hz_ = 2.0f;
+        svmCfg2.InfluenceStart_Hz_ = 5.0f;
         svmCfg2.InfluenceEnd_Hz_   = 150.0f; 
         svmCfg2.CarrierStart_Hz_   = 5000.0f;
         svmCfg2.CarrierEnd_Hz_     = 5000.0f;
@@ -340,6 +340,7 @@ namespace {
 
             // Use 'raw_adc_rad' here instead of 'theta_est'
             SenseData._EncoderPosition_Rad = raw_adc_rad + phase_advance_rad;
+            SenseData._EncoderVelocity_RadPerSec = omega_est;
 
 
 
@@ -350,7 +351,7 @@ namespace {
                 
                 // 1. Define High-Level Setpoint
                 // If sine is >= 0, set to 60. If sine is < 0, set to -60.
-                target._TargetIq_A = 10.0f;// * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
+                target._TargetIq_A = 20.0f;// * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
                 target._TargetId_A = 0.0f;  
                 // target._VqFeedforward_V = 0.0f;
                 // target._VdFeedforward_V = 0.0f;

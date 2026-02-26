@@ -121,7 +121,11 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
     // =========================================================================
     // 2. Inner Loop Execution (High Speed / Modulation Input)
     // =========================================================================
-    ModulationInput modInput = ActiveControlScheme_->Update(_Sensors, CachedDriveCmd_, _dt_S);
+
+    // TODO: Fixme!!!!  FIX VALUES AFTER CALIBRATION, THEN TRY MAKING IT WORK WITH VELOCITY TO CALCULATE FEEDFORWARD VALUES
+    SensorData Tmp = _Sensors;
+    Tmp._EncoderVelocity_RadPerSec = 0.0f;
+    ModulationInput modInput = ActiveControlScheme_->Update(Tmp, CachedDriveCmd_, _dt_S);
 
 
 
@@ -142,6 +146,7 @@ bool DriveManager::Update(FaultManager* _FaultManager, MotorConfig* _MotorConfig
     // =========================================================================
     // 3. Final Modulation Output
     // =========================================================================
+    modInput.Omega_RadPerSec = _Sensors._EncoderVelocity_RadPerSec; // tODO fix same as above. 
     HardwareCommand Output = ModulationSelector_.Update(modInput);
 
 
