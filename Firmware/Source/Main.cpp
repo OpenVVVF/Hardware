@@ -190,16 +190,16 @@ namespace {
         static SVPWMModulationScheme g_Svm;
         SVPWMConfig svmCfg;
         svmCfg.InfluenceStart_Hz_ = 0.0f;
-        svmCfg.InfluenceEnd_Hz_   = 10.0f; 
-        svmCfg.CarrierStart_Hz_   = 1000.0f;
-        svmCfg.CarrierEnd_Hz_     = 1000.0f;
+        svmCfg.InfluenceEnd_Hz_   = 15.0f; 
+        svmCfg.CarrierStart_Hz_   = 3000.0f;
+        svmCfg.CarrierEnd_Hz_     = 3000.0f;
         svmCfg.MaxModulationIndex_ = 0.95f;
         g_Svm.ApplyConfig(svmCfg);
         g_DriveManager.RegisterModulationScheme(&g_Svm);
 
         static SVPWMModulationScheme g_Svm2;
         SVPWMConfig svmCfg2;
-        svmCfg2.InfluenceStart_Hz_ = 5.0f;
+        svmCfg2.InfluenceStart_Hz_ = 14.0f;
         svmCfg2.InfluenceEnd_Hz_   = 150.0f; 
         svmCfg2.CarrierStart_Hz_   = 5000.0f;
         svmCfg2.CarrierEnd_Hz_     = 5000.0f;
@@ -351,7 +351,7 @@ namespace {
                 
                 // 1. Define High-Level Setpoint
                 // If sine is >= 0, set to 60. If sine is < 0, set to -60.
-                target._TargetIq_A = 20.0f;// * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
+                target._TargetIq_A = 10.0f;// * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
                 target._TargetId_A = 0.0f;  
                 // target._VqFeedforward_V = 0.0f;
                 // target._VdFeedforward_V = 0.0f;
@@ -435,9 +435,7 @@ int main() {
         return -1;
     }
 
-    // --- NEW: Initialize the DMA ---
-    adc_system->init_dma();
-    
+
 
 
 
@@ -501,111 +499,25 @@ int main() {
     static TelemetryPacket empty = {0};
     telemetry_try_push(&empty);
     updateTel();
-    g_Driver->setCarrierFrequency(4000.0f);
-
-    // ------------------------------------------------------------------
-    // HARDWARE DIAGNOSTIC: CURRENT SENSOR POLARITY CHECK
-    // ------------------------------------------------------------------
-    Telemetry::printf("\n--- DIAGNOSTIC: VERIFYING CURRENT SENSOR POLARITY ---\n");
-    g_Driver->enable();
-
-    // 1. Set a small, safe test voltage (1.5V)
-    float test_voltage = 1.5f;
-    measurements->update();
-    float vdc = measurements->read("V_DC_BUS");
-    if (vdc < 5.0f) vdc = 60.0f;  // Fallback to your config nominal
-
-    Telemetry::printf("Applying %.2fV strictly to Phase U...\n", test_voltage);
-
-    // 2. Manually calculate duty cycles to align the magnetic field EXACTLY to Phase U
-    // Phase U gets positive voltage, V and W get half-negative to complete the circuit
-    float duty_U = 0.5f + (test_voltage / vdc);
-    float duty_V = 0.5f + (-test_voltage / 2.0f / vdc);
-    float duty_W = 0.5f + (-test_voltage / 2.0f / vdc);
-
-    // Apply the static voltages directly to the PWM driver
-    g_Driver->setDutyCycles(duty_U, duty_V, duty_W);
-
-    // 3. Wait a brief moment for the current to rise through the motor inductance
-    sleep_ms(100);
-
-    // 4. Read the resulting currents
-    measurements->update();
-    float i_u = measurements->read("I_PH_U");
-    float i_w = measurements->read("I_PH_W");
-    float i_v = -(i_u + i_w);  // Assuming wye-wound, sum of currents is 0
-
-    Telemetry::printf("\n--- RESULTS ---\n");
-    Telemetry::printf("  Phase U Current: %7.3f A  <-- MUST BE POSITIVE\n", i_u);
-    Telemetry::printf("  Phase V Current: %7.3f A  <-- Should be negative (~ half of U)\n", i_v);
-    Telemetry::printf("  Phase W Current: %7.3f A  <-- Should be negative (~ half of U)\n\n", i_w);
-
-    // 5. Evaluate and warn
-    if (i_u > 0.2f) {
-        Telemetry::printf(">>> PASS: Phase U polarity is CORRECT.\n");
-    } else if (i_u < -0.2f) {
-        Telemetry::printf(">>> FATAL FAIL: Phase U is REVERSED!\n");
-        Telemetry::printf("    This will cause a 100A positive feedback explosion.\n");
-        Telemetry::printf("    Fix: Multiply sensor reading by -1 or flip sensor wiring.\n");
-    } else {
-        Telemetry::printf(">>> WARN: Current too low to determine polarity. Increase test_voltage.\n");
-    }
-    Telemetry::printf("-----------------------------------------------------\n\n");
-
-    // 6. Safely turn off the drive before proceeding
-    g_Driver->setDutyCycles(0.5f, 0.5f, 0.5f);
-    g_Driver->disable();
-    sleep_ms(1000);  // Pause so you can read the console
-
-    g_Driver->enable();
 
 
-   
-    auto hard_stop = [&]() {
-        g_Driver->setDutyCycles(0.5f, 0.5f, 0.5f);
-        // If you prefer a hard gate-off:
-        // g_Driver->emergencyStop();
-    };
 
-    // -------- Get Vdc --------
-    measurements->update();
-    float Vdc_meas = measurements->read("V_DC_BUS");
+
+    // --- NEW: Initialize the DMA ---
+    adc_system->init_dma();
     
-    hard_stop();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    adc_system->set_filtered_read(false);
+    // adc_system->set_filtered_read(false);
 
     // --- NEW: Attach the DMA trigger to the PWM Driver ---
-    g_Driver->setPwmWrapCallback([](){
-        if (MAX2253x_MultiADC::instance) {
-            MAX2253x_MultiADC::instance->start_async_read();
-        }
-    });
-
+ g_Driver->setPwmWrapCallback([](){
+    auto* adc = MAX2253x_MultiADC::instance;
+    if (!adc) return;
+    // Only start a new read if the previous one has been processed/cleared.
+    if (!adc->is_async_ready()) {
+        adc->start_async_read();
+    }
+});
 
 
     // g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!

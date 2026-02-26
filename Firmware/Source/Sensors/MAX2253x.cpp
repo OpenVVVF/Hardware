@@ -18,7 +18,19 @@ static constexpr uint8_t REG_CONTROL = 0x14;
 static constexpr uint16_t DEVICE_ID_EXPECTED = 0x0000;
 
 spi_inst_t* MAX2253x_MultiADC::SPI_PORT = spi1;
+// ---- SPI safety helpers (RP2040) ----
+static inline void spi_drain_rx_fifo(spi_inst_t* spi) {
+    while (spi_is_readable(spi)) {
+        (void)spi_get_hw(spi)->dr;
+    }
+}
 
+static inline void spi_wait_not_busy(spi_inst_t* spi) {
+    // Wait until SPI shifter is fully idle before toggling CS
+    while (spi_get_hw(spi)->sr & SPI_SSPSR_BSY_BITS) {
+        tight_loop_contents();
+    }
+}
 // Global TX dummy buffer to push 11 bytes (Header 0x05 + 10 zero bytes)
 uint8_t MAX2253x_MultiADC::TX_BUFFER[11] = { 0x05, 0,0,0,0,0,0,0,0,0,0 };
 MAX2253x_MultiADC* MAX2253x_MultiADC::instance = nullptr;
@@ -362,7 +374,7 @@ std::vector<std::array<uint16_t, 4>> MAX2253x_MultiADC::read_all_devices_raw() {
 void MAX2253x_MultiADC::set_filtered_read(bool enable) {
     // 0x05 = Burst Read Raw (Address 0x01)
     // 0x15 = Burst Read Filtered (Address 0x05)
-    TX_BUFFER[0] = enable ? 0x15 : 0x05;
+    TX_BUFFER[0] = 0x05;//enable ? 0x15 : 0x05;
 }
 
 void MAX2253x_MultiADC::init_dma() {
@@ -378,10 +390,11 @@ void MAX2253x_MultiADC::init_dma() {
     channel_config_set_dreq(&c_tx, spi_get_dreq(SPI_PORT, true));
     channel_config_set_read_increment(&c_tx, true);
     channel_config_set_write_increment(&c_tx, false);
-    
-    dma_channel_configure(m_dma_tx, &c_tx,
-        &spi_get_hw(SPI_PORT)->dr,
-        TX_BUFFER,
+
+    dma_channel_configure(
+        m_dma_tx, &c_tx,
+        &spi_get_hw(SPI_PORT)->dr, // write addr (SPI TX FIFO)
+        TX_BUFFER,                 // read addr
         11,
         false
     );
@@ -392,10 +405,13 @@ void MAX2253x_MultiADC::init_dma() {
     channel_config_set_dreq(&c_rx, spi_get_dreq(SPI_PORT, false));
     channel_config_set_read_increment(&c_rx, false);
     channel_config_set_write_increment(&c_rx, true);
-    
-    dma_channel_configure(m_dma_rx, &c_rx,
-        nullptr,
-        &spi_get_hw(SPI_PORT)->dr,
+
+    // NOTE: We'll set the write address each time (per device) before starting.
+    // Configure with a valid placeholder buffer to avoid nullptr write addr.
+    dma_channel_configure(
+        m_dma_rx, &c_rx,
+        m_async_rx_buffers.empty() ? nullptr : m_async_rx_buffers[0].data(), // write addr
+        &spi_get_hw(SPI_PORT)->dr, // read addr (SPI RX FIFO)
         11,
         false
     );
@@ -408,54 +424,82 @@ void MAX2253x_MultiADC::init_dma() {
 
 void MAX2253x_MultiADC::start_async_read() {
     if (m_async_busy || m_devices.empty()) return;
-    
+
     m_async_busy = true;
     m_async_ready = false;
     m_async_current_dev = 0;
 
+    // Start transaction for device 0
     m_devices[0].begin_transaction();
 
+    // Drain any stale RX bytes before starting the burst
+    spi_drain_rx_fifo(SPI_PORT);
+
+    // IMPORTANT: re-arm BOTH channels' transfer counts for each burst
+    dma_channel_set_trans_count(m_dma_tx, 11, false);
     dma_channel_set_read_addr(m_dma_tx, TX_BUFFER, false);
+
+    dma_channel_set_trans_count(m_dma_rx, 11, false);
     dma_channel_set_write_addr(m_dma_rx, m_async_rx_buffers[0].data(), false);
 
     dma_start_channel_mask((1u << m_dma_tx) | (1u << m_dma_rx));
 }
 
 void MAX2253x_MultiADC::dma_isr() {
-    // Clear interrupt
+    // Clear RX interrupt
     dma_hw->ints0 = 1u << m_dma_rx;
 
-    // Finish current
+    // Ensure SPI is fully idle before toggling CS
+    spi_wait_not_busy(SPI_PORT);
+
+    // Finish current device transaction
     m_devices[m_async_current_dev].end_transaction();
     m_async_current_dev++;
 
     if (m_async_current_dev < m_devices.size()) {
+        // Begin next device transaction
         m_devices[m_async_current_dev].begin_transaction();
-        
+
+        // Drain any stale RX bytes
+        spi_drain_rx_fifo(SPI_PORT);
+
+        // Re-arm DMA counts EVERY burst (critical fix)
+        dma_channel_set_trans_count(m_dma_tx, 11, false);
         dma_channel_set_read_addr(m_dma_tx, TX_BUFFER, false);
+
+        dma_channel_set_trans_count(m_dma_rx, 11, false);
         dma_channel_set_write_addr(m_dma_rx, m_async_rx_buffers[m_async_current_dev].data(), false);
-        
+
         dma_start_channel_mask((1u << m_dma_tx) | (1u << m_dma_rx));
     } else {
         m_async_busy = false;
         m_async_ready = true;
     }
 }
-
 void MAX2253x_MultiADC::process_async_data() {
     if (!m_async_ready) return;
     m_async_ready = false;
-    
+
     const float scale = VOLTAGE_REFERENCE / static_cast<float>(ADC_MAX_VALUE);
-    
+
     for (size_t i = 0; i < m_devices.size(); i++) {
         const auto& rx = m_async_rx_buffers[i];
-        
+
+        // Status is last 2 bytes
+        const uint16_t st = (uint16_t)((rx[9] << 8) | rx[10]);
+
+        // If the device reports framing/CRC/data loss, skip updating caches.
+        // Bits: 0x0200 framing, 0x0100 CRC, 0x0400 field-side data loss (per your diag decode)
+        if (st & (0x0200u | 0x0100u | 0x0400u)) {
+            // Keep previous cached values; do not overwrite with junk.
+            continue;
+        }
+
         m_raw_cache[i][0] = ((rx[1] << 8) | rx[2]) & 0x0FFF;
         m_raw_cache[i][1] = ((rx[3] << 8) | rx[4]) & 0x0FFF;
         m_raw_cache[i][2] = ((rx[5] << 8) | rx[6]) & 0x0FFF;
         m_raw_cache[i][3] = ((rx[7] << 8) | rx[8]) & 0x0FFF;
-        
+
         m_voltage_cache[i][0] = m_raw_cache[i][0] * scale;
         m_voltage_cache[i][1] = m_raw_cache[i][1] * scale;
         m_voltage_cache[i][2] = m_raw_cache[i][2] * scale;

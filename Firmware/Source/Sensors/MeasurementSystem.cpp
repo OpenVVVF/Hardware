@@ -139,8 +139,11 @@ bool MeasurementSystem::update_from_dma() {
         return false; 
     }
     
+
+    
     m_adc.process_async_data();
     
+
     for (size_t dev = 0; dev < m_dev_chans.size(); ++dev) {
         if (m_dev_chans[dev].empty()) continue;
         const float* v = m_adc.get_cached_device_voltage(dev);

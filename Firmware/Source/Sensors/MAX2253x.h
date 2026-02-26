@@ -91,6 +91,11 @@ public:
     
     // Checked by the FOC loop to see if the DMA sequence has finished
     bool is_async_ready() const { return m_async_ready; }
+
+    void wait_for_dma_blocking() {
+        // This uses the Pico SDK's native hardware wait on your RX DMA channel
+        dma_channel_wait_for_finish_blocking(m_dma_rx);
+    }
     
     // Converts the raw DMA byte buffers into usable floating-point voltages
     void process_async_data(); 
