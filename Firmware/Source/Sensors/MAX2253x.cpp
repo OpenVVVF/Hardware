@@ -7,6 +7,8 @@
 #include <cstring>
 #include "Hardware.h"
 
+#include "hardware/sync.h"
+
 static constexpr float VOLTAGE_REFERENCE = 1.8f;
 static constexpr uint16_t ADC_MAX_VALUE = 4095;
 
@@ -153,7 +155,9 @@ void MAX2253x_Device::read_all_adc_raw_into(uint16_t out4[4], uint16_t* int_stat
     uint8_t rx[11];
 
     begin_transaction();
+    uint32_t irq_status = save_and_disable_interrupts();
     spi_write_read_blocking(MAX2253x_MultiADC::SPI_PORT, tx, rx, 11);
+    restore_interrupts(irq_status);
     end_transaction();
 
     out4[0] = ((rx[1] << 8) | rx[2]) & 0x0FFF;
