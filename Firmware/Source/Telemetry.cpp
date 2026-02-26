@@ -51,6 +51,7 @@ static constexpr size_t   DATA_PAYLOAD_MAX      = 600;
 // so they never collide with MeasurementSystem sensor IDs (typically 1..N).
 static constexpr uint16_t DYNAMIC_ID_BASE       = 0x8000;
 
+
 // ============================================================
 // CRC16-CCITT + COBS + byte writers
 // ============================================================
@@ -136,6 +137,20 @@ struct RingQueue {
     inline void reset() { head = tail = 0; }
 };
 
+enum XLogKind : uint8_t { XLOG_F32 = 1, XLOG_STR = 2 };
+
+struct XLogItem {
+    uint8_t  kind;                 // XLOG_F32 / XLOG_STR
+    char     key[KEY_MAXLEN];      // includes '\0'
+    union {
+        float f32;
+        struct { uint8_t len; char bytes[STR_MAXLEN]; } str;
+    } v;
+};
+
+static RingQueue<XLogItem, XLOG_QUEUE_CAP> g_xlog_q;
+static spin_lock_t* g_xlog_lock = nullptr;
+
 // ============================================================
 // Sensor bindings (captured once for fast update)
 // ============================================================
@@ -159,6 +174,10 @@ struct DynamicKey {
     uint8_t  key_len = 0;
     char     key[KEY_MAXLEN]{};
     bool     used = false;
+
+      // --- NEW: sticky last value cache for floats ---
+    bool     has_last_f32 = false;
+    float    last_f32 = 0.0f;
 };
 
 static uint32_t fnv1a(const char* s) {
@@ -219,6 +238,36 @@ struct LogItem {
 
 static RingQueue<DefineItem, DEFINE_QUEUE_CAP> g_define_q;
 static RingQueue<LogItem,    LOG_QUEUE_CAP>   g_log_q;
+
+//multicore queue
+static bool xlog_push(const XLogItem& it) {
+    if (!g_xlog_lock) return false;
+
+    uint32_t irq = spin_lock_blocking(g_xlog_lock);
+    bool ok = g_xlog_q.push(it);
+    spin_unlock(g_xlog_lock, irq);
+    return ok;
+}
+static RingQueue<LogItem, LOG_QUEUE_CAP> g_str_q; // NEW: only strings are event-style
+
+static void drain_log_queue_to_cache() {
+    LogItem it{};
+    while (g_log_q.pop(it)) {
+        if (it.type == VT_F32) {
+            // Find the DynamicKey by id and update last value
+            for (int i = 0; i < (int)MAX_DYNAMIC_KEYS; ++i) {
+                if (!g_dyn[i].used) continue;
+                if (g_dyn[i].id != it.id) continue;
+                g_dyn[i].last_f32 = it.v.f32;
+                g_dyn[i].has_last_f32 = true;
+                break;
+            }
+        } else if (it.type == VT_STR) {
+            // strings stay event-based (print/log messages)
+            (void)g_str_q.push(it); // drop if full
+        }
+    }
+}
 
 // ============================================================
 // Runtime state
@@ -291,7 +340,6 @@ static void reserve_print_key() {
 
     enqueue_define(g_dyn[idx].id, g_dyn[idx].type, g_dyn[idx].key, g_dyn[idx].key_len);
 }
-
 static size_t build_data_payload(uint8_t* payload, size_t cap) {
     if (cap < 1) return 0;
 
@@ -299,7 +347,22 @@ static size_t build_data_payload(uint8_t* payload, size_t cap) {
     *w++ = 0; // n_items placeholder
     uint8_t n_items = 0;
 
-    // 1) Sensor snapshot (all bound sensors)
+    // 1) Sticky dynamic floats FIRST (so they never get omitted)
+    for (int i = 0; i < (int)MAX_DYNAMIC_KEYS; ++i) {
+        if (!g_dyn[i].used) continue;
+        if (g_dyn[i].type != VT_F32) continue;
+        if (!g_dyn[i].has_last_f32) continue;
+
+        const size_t need = 2 + 1 + 4;
+        if ((size_t)(w - payload) + need > cap) break; // if this breaks, cap is too small for your dyn set
+
+        put_u16(w, g_dyn[i].id);
+        *w++ = VT_F32;
+        put_f32(w, g_dyn[i].last_f32);
+        ++n_items;
+    }
+
+    // 2) Sensors SECOND (if we run out of room, we just stop adding sensors)
     for (uint16_t i = 0; i < g_sensor_count; ++i) {
         const auto& s = g_sensors[i];
         if (!s.ch) continue;
@@ -313,34 +376,24 @@ static size_t build_data_payload(uint8_t* payload, size_t cap) {
         ++n_items;
     }
 
-    // 2) Drain queued dynamic logs
-    while (!g_log_q.empty()) {
+    // 3) Event strings LAST
+    while (!g_str_q.empty()) {
         LogItem it{};
-        if (!g_log_q.pop(it)) break;
+        if (!g_str_q.pop(it)) break;
 
-        size_t need = 0;
-        if (it.type == VT_F32) need = 2 + 1 + 4;
-        else if (it.type == VT_STR) need = 2 + 1 + 1 + it.v.str.len;
-        else continue;
-
+        const size_t need = 2 + 1 + 1 + it.v.str.len;
         if ((size_t)(w - payload) + need > cap) break;
 
         put_u16(w, it.id);
-        *w++ = it.type;
-
-        if (it.type == VT_F32) {
-            put_f32(w, it.v.f32);
-        } else {
-            *w++ = it.v.str.len;
-            if (it.v.str.len) { std::memcpy(w, it.v.str.bytes, it.v.str.len); w += it.v.str.len; }
-        }
+        *w++ = VT_STR;
+        *w++ = it.v.str.len;
+        if (it.v.str.len) { std::memcpy(w, it.v.str.bytes, it.v.str.len); w += it.v.str.len; }
         ++n_items;
     }
 
     payload[0] = n_items;
     return (size_t)(w - payload);
 }
-
 // ============================================================
 // Frame sender (unchanged framing)
 // ============================================================
@@ -395,6 +448,15 @@ void init() {
     g_last_send_us = 0;
     g_last_define_us = 0;
     reserve_print_key();
+    g_str_q.reset();
+
+    g_xlog_q.reset();
+
+    // claim a HW spinlock once (core0 should call init() first)
+    if (!g_xlog_lock) {
+        int lock_num = spin_lock_claim_unused(true);
+        g_xlog_lock = spin_lock_instance((uint)lock_num);
+    }
 }
 
 void bindMeasurementSystem(const MeasurementSystem& ms) {
@@ -437,8 +499,7 @@ static bool flush_defines_now(uint32_t now_us) {
     }
     return wrote;
 }
-
-bool log(const char* key, float value) {
+static bool log_core0(const char* key, float value) {
     if (!key) return false;
 
     const uint32_t h = fnv1a(key);
@@ -452,14 +513,28 @@ bool log(const char* key, float value) {
         return false;
     }
 
-    LogItem it{};
-    it.id = g_dyn[idx].id;
-    it.type = VT_F32;
-    it.v.f32 = value;
-    return g_log_q.push(it);
-}
+    // ✅ Sticky cache updated immediately
+    g_dyn[idx].last_f32 = value;
+    g_dyn[idx].has_last_f32 = true;
 
-bool log(const char* key, const char* value) {
+    // ✅ No float queue push needed anymore
+    return true;
+}
+bool log(const char* key, float value) {
+    if (!key) return false;
+
+    if (get_core_num() == 0) {
+        return log_core0(key, value);
+    }
+
+    XLogItem it{};
+    it.kind = XLOG_F32;
+    std::strncpy(it.key, key, KEY_MAXLEN - 1);
+    it.key[KEY_MAXLEN - 1] = '\0';
+    it.v.f32 = value;
+    return xlog_push(it);
+}
+static bool log_core0(const char* key, const char* value) {
     if (!key || !value) return false;
 
     const uint32_t h = fnv1a(key);
@@ -484,6 +559,25 @@ bool log(const char* key, const char* value) {
 
     return g_log_q.push(it);
 }
+bool log(const char* key, const char* value) {
+    if (!key || !value) return false;
+
+    if (get_core_num() == 0) {
+        return log_core0(key, value);
+    }
+
+    XLogItem it{};
+    it.kind = XLOG_STR;
+    std::strncpy(it.key, key, KEY_MAXLEN - 1);
+    it.key[KEY_MAXLEN - 1] = '\0';
+
+    const size_t len = std::min<size_t>(std::strlen(value), STR_MAXLEN);
+    it.v.str.len = (uint8_t)len;
+    std::memcpy(it.v.str.bytes, value, len);
+    if (len < STR_MAXLEN) it.v.str.bytes[len] = '\0';
+
+    return xlog_push(it);
+}
 bool printf(const char* fmt, ...) {
     if (!fmt) return false;
 
@@ -501,9 +595,35 @@ bool printf(const char* fmt, ...) {
     // Use a fixed key so the host can treat it as “console output”
     return Telemetry::log("print", buf);
 }
+static void drain_xlog_to_core0() {
+    if (!g_xlog_lock) return;
 
+    while (true) {
+        XLogItem it{};
+        bool got = false;
+
+        uint32_t irq = spin_lock_blocking(g_xlog_lock);
+        got = g_xlog_q.pop(it);
+        spin_unlock(g_xlog_lock, irq);
+
+        if (!got) break;
+
+        if (it.kind == XLOG_F32) {
+            (void)log_core0(it.key, it.v.f32);
+        } else if (it.kind == XLOG_STR) {
+            // ensure null-terminated just in case
+            it.v.str.bytes[std::min<uint8_t>(it.v.str.len, STR_MAXLEN - 1)] = '\0';
+            (void)log_core0(it.key, it.v.str.bytes);
+        }
+    }
+}
 bool updateSensors() {
     if (!g_ms) return false;
+
+     // Core0 should own all telemetry state updates
+    if (get_core_num() != 0) return false;
+
+    drain_xlog_to_core0();
 
     const uint32_t now = time_us_32();
 
@@ -516,7 +636,7 @@ bool updateSensors() {
     g_last_send_us = now;
 
     bool wrote = false;
-
+    drain_log_queue_to_cache();
    // Always prioritize sending defines first (can take multiple frames)
 wrote |= flush_defines_now(now);
 

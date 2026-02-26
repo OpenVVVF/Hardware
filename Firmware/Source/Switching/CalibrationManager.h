@@ -15,17 +15,51 @@
 #include "Modulation/ModulationSelector.h"
 #include "HWInterface/PWMDriver.h"
 
+#include "Utils/Control/PIDController.h"
+
 #include "Utils/Fault/FaultManager.h"
 
 /**
  * @brief Manages the execution flow from high-level setpoints to PWM duty cycles.
  */
+
 class CalibrationManager {
 public:
     CalibrationManager() = default;
+    enum CalibrationMode {
+        ENCODER_MINMAX, ENCODER_OFFSET, LR, FL, IDLE
+    };
 
-    bool Update(FaultManager* _FaultManager, PWMDriver* _Driver, const SensorData& _Sensors);
+    void SetMode(CalibrationMode mode) {m_mode = mode;};
+    bool Update(FaultManager* _FaultManager, PWMDriver* _Driver, const SensorData& _Sensors, float _DT);
+
+    float GetEncoderOffset_Rad() {return m_encoderCalib.MeasuredOffset_Rad; } 
+    CalibrationMode GetMode() {return m_mode; }
 
 private:
-   
+    CalibrationMode m_mode;
+
+
+    struct EncoderCalibrationContext {
+        enum class State {
+            INIT,
+            WAIT_SETTLE,
+            SAMPLE,
+            DONE
+        };
+        
+        State CurrentState = State::INIT;
+        float Timer_sec = 0.0f;
+        float MeasuredOffset_Rad = 0.0f;
+
+        // Configurable constraints
+        float TargetAlignCurrent_A = 15.0f; // Safe DC holding current
+        float SettleTime_sec = 2.0f;        // Time to wait for physical alignment
+        float VelocityThreshold = 0.1f;     // Rad/sec to consider "stopped"
+
+        // Dedicated PID for managing the DC injection current
+        PidController CurrentPid;
+    } m_encoderCalib;
+
+
 };

@@ -1,14 +1,15 @@
 #pragma once
 #include <cstdint>
 #include <cstddef>
-
+#include "pico/multicore.h"
+#include "hardware/sync.h"
 class MeasurementSystem;
 
 namespace Telemetry {
 
 static constexpr uint32_t MAGIC   = 0x544C4D31u; // "TLM1"
 static constexpr uint8_t  VERSION = 1;
-
+static constexpr uint16_t XLOG_QUEUE_CAP = 128;
 enum MsgType : uint8_t {
     MSG_DATA   = 1,  // (id,value) pairs
     MSG_DEFINE = 2,  // key definitions

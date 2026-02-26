@@ -7,29 +7,24 @@
 #include "Hardware.h"
 #include "Sensors/MAX2253x.h"
 #include "Sensors/MeasurementSystem.h"
-#include "Telemetry.h"
-#include "pico/stdlib.h"
-#include "hardware/clocks.h"
+#include "Switching/CalibrationManager.h"
 #include "Switching/Control/Schemas/FOC.h"
 #include "Switching/Control/Schemas/VHz.h"
-
+#include "Switching/DriveManager.h"
 #include "Switching/HWInterface/PWMDriver.h"
-#include "hardware/sync.h"  // __dmb(), __sev(), __wfe()
-#include "pico/multicore.h"
-
 #include "Switching/Modulation/ModulationSelector.h"
+#include "Switching/Modulation/Schemas/NPulse.h"
+#include "Switching/Modulation/Schemas/RCFSPWM.h"
 #include "Switching/Modulation/Schemas/SPWM.h"
 #include "Switching/Modulation/Schemas/SVPWM.h"
-#include "Switching/Modulation/Schemas/RCFSPWM.h"
-#include "Switching/Modulation/Schemas/NPulse.h"
-
 #include "Switching/Motion/CurrentController.h"
-
-#include "Switching/DriveManager.h"
-#include "Switching/CalibrationManager.h"
-
+#include "Telemetry.h"
 #include "Utils/Fault/FaultManager.h"
-
+#include "hardware/clocks.h"
+#include "hardware/sync.h"  // __dmb(), __sev(), __wfe()
+#include "hardware/sync.h"
+#include "pico/multicore.h"
+#include "pico/stdlib.h"
 
 // ----------------------------------------------------------------------
 // Inter-Core Communication Structures
@@ -38,231 +33,81 @@
 // Core 0 -> Core 1: Just send raw torque targets!
 // ThreadSafeQueue<CurrentCommand> tx_queue;
 SerialProcessor serial_proc;
-#include "hardware/sync.h"
-#include "pico/stdlib.h"
-
-typedef struct TelemetryPacket {
-    float raw_adc_rad, theta_est, vq_v, vd_v, iq_meas, elec_angle, enc_offset, foc_update_hz;
-    float rotor_velocity;
-    float i_u, i_v, i_w;
-    float i_alpha, i_beta;
-    float i_d, i_q;
-    // float v_alpha, v_beta;
-    float v_u, v_v, v_w;
-
-    float iq_set;
-} TelemetryPacket;
-
-#define TELEMETRY_RB_SIZE 128u
-_Static_assert((TELEMETRY_RB_SIZE & (TELEMETRY_RB_SIZE - 1u)) == 0, "power of 2");
-
-typedef struct {
-    TelemetryPacket buf[TELEMETRY_RB_SIZE];
-
-    volatile uint32_t head;  // producer writes
-    volatile uint32_t tail;  // consumer writes
-    volatile uint32_t dropped;
-} telemetry_rb_t;
-
-static telemetry_rb_t g_tel_rb;
-
-static inline void copy_packet(TelemetryPacket* dst, const TelemetryPacket* src) {
-    const uint32_t* s = (const uint32_t*)src;
-    uint32_t* d = (uint32_t*)dst;
-    for (uint32_t i = 0; i < (sizeof(TelemetryPacket) / 4u); i++) d[i] = s[i];
-}
-
-// Core 1
-static inline bool telemetry_try_push(const TelemetryPacket* p) {
-    telemetry_rb_t* r = &g_tel_rb;
-
-    uint32_t h = r->head;
-    uint32_t t = r->tail;
-    uint32_t next = (h + 1u) & (TELEMETRY_RB_SIZE - 1u);
-
-    if (next == t) {
-        r->dropped++;
-        return false;
-    }  // full
-
-    bool was_empty = (h == t);
-
-    copy_packet(&r->buf[h], p);
-    __dmb();
-    r->head = next;
-
-    // Only wake consumer if we transitioned empty -> non-empty
-    if (was_empty) __sev();
-
-    return true;
-}
-
-// Core 0
-static inline bool telemetry_try_pop(TelemetryPacket* out) {
-    telemetry_rb_t* r = &g_tel_rb;
-
-    uint32_t t = r->tail;
-    uint32_t h = r->head;
-    if (t == h) return false;  // empty
-
-    __dmb();
-    copy_packet(out, &r->buf[t]);
-    r->tail = (t + 1u) & (TELEMETRY_RB_SIZE - 1u);
-    return true;
-}
 
 // ----------------------------------------------------------------------
 // Global State (Replaces RtBridge Instance State)
 // ----------------------------------------------------------------------
 namespace {
-    // We instantiate the specific controllers here so they persist in memory
-    FocController g_Foc;
-    // VHzController g_Vhz;
+// We instantiate the specific controllers here so they persist in memory
+FocController g_Foc;
+// VHzController g_Vhz;
 
-    FaultManager g_FaultManager;
+FaultManager g_FaultManager;
 
-    // The shared motor config that the ControlSelector will distribute
-    MotorConfig g_MotorConfig;
+// The shared motor config that the ControlSelector will distribute
+MotorConfig g_MotorConfig;
 
-    PWMDriver* g_Driver = nullptr;
-    float g_RampRate = 5.0f;
-    float g_LastCarrierHz = 0.0f;
-    bool g_LastSyncMode = false;
-    uint16_t g_LastPulses = 0;
+PWMDriver* g_Driver = nullptr;
+float g_RampRate = 5.0f;
+float g_LastCarrierHz = 0.0f;
+bool g_LastSyncMode = false;
+uint16_t g_LastPulses = 0;
 
-    // Measurement system instances
-    MAX2253x_MultiADC* adc_system = nullptr;
-    MeasurementSystem* measurements = nullptr;
-}
-
-
-void updateTel() {
-    serial_proc.poll();
-    TelemetryPacket tp;
-    while (telemetry_try_pop(&tp)) {
-        // Push to Telemetry
-        Telemetry::log("CORE1_LOOP_HZ", tp.foc_update_hz);
-        // Telemetry::log("RAW_ADC_RAD", tp.raw_adc_rad);
-        Telemetry::log("THETA_EST_RAD", tp.theta_est);
-        Telemetry::log("ELEC_ANGLE", tp.elec_angle);
-        Telemetry::log("ENC_OFFSET", tp.enc_offset);
-        Telemetry::log("DEBUG_VQ", tp.vq_v);
-        Telemetry::log("DEBUG_VD", tp.vd_v);
-
-        Telemetry::log("IQ_SET_PT", tp.iq_set);
-
-        Telemetry::log("DEBUG_I_ALPHA", tp.i_alpha);
-
-        Telemetry::log("DC_BUS_POWER", measurements->read("V_DC_BUS") * measurements->read("I_DC_MAIN"));
-
-        // Telemetry::log("SYS_CLOCK", clock_get_hz(clk_sys));
-        Telemetry::log("DEBUG_I_BETA", tp.i_beta);
-
-        Telemetry::log("DEBUG_I_D", tp.i_d);
-        Telemetry::log("DEBUG_I_Q", tp.i_q);
-
-        // Telemetry::log("FAKE_I_U", tp.i_u);
-        // Telemetry::log("FAKE_I_V", tp.i_v);
-        // Telemetry::log("FAKE_I_W", tp.i_w);
-
-        // Telemetry::log("V_Alpha", tp.v_alpha);
-        // Telemetry::log("V_Beta", tp.v_beta);
-
-        Telemetry::log("ROTOR_VELOCITY", tp.rotor_velocity);
-
-        // Telemetry::log("V_U", tp.v_u);
-        // Telemetry::log("V_V", tp.v_v);
-        // Telemetry::log("V_W", tp.v_w);
-        Telemetry::updateSensors();
-    }
-}
+// Measurement system instances
+MAX2253x_MultiADC* adc_system = nullptr;
+MeasurementSystem* measurements = nullptr;
+}  // namespace
 
 /**
  * @file    core1_main.cpp
  * @brief   System entry for high-speed motor control execution.
  */
- void core1_entry() {
+void core1_entry() {
     // ===========================================================================
     // 1. SYSTEM SETUP
     // ===========================================================================
     static DriveManager g_DriveManager;
     static CalibrationManager g_CalibrationManager;
-    
+
     static CurrentController g_CurrentController;
-
-
 
     g_CurrentController.SetMotorConfig(g_MotorConfig);
 
-
     // A. Configure Modulation (Transitions from SPWM to NPulse at 4Hz)
-        // static SVPWMModulationScheme g_Svm;
-        // SVPWMConfig svmCfg;
-        // svmCfg.InfluenceStart_Hz_ = 0.0f;
-        // svmCfg.InfluenceEnd_Hz_   = 5.0f; 
-        // svmCfg.CarrierStart_Hz_   = 1000.0f;
-        // svmCfg.CarrierEnd_Hz_     = 1000.0f;
-        // svmCfg.MaxModulationIndex_ = 0.95f;
-        // g_Svm.ApplyConfig(svmCfg);
-        // g_DriveManager.RegisterModulationScheme(&g_Svm);
-
-        // static SVPWMModulationScheme g_Svm2;
-        // SVPWMConfig svmCfg2;
-        // svmCfg2.InfluenceStart_Hz_ = 4.0f;
-        // svmCfg2.InfluenceEnd_Hz_   = 25.0f; 
-        // svmCfg2.CarrierStart_Hz_   = 3000.0f;
-        // svmCfg2.CarrierEnd_Hz_     = 5000.0f;
-        // svmCfg2.MaxModulationIndex_ = 0.95f;
-        // g_Svm2.ApplyConfig(svmCfg2);
-        // g_DriveManager.RegisterModulationScheme(&g_Svm2);
-
-
-        static SVPWMModulationScheme g_Svm3;
-        SVPWMConfig svmCfg3;
-        svmCfg3.InfluenceStart_Hz_ = 0.0f;
-        svmCfg3.InfluenceEnd_Hz_   = 150.0f; 
-        svmCfg3.CarrierStart_Hz_   = 5000.0f;
-        svmCfg3.CarrierEnd_Hz_     = 5000.0f;
-        svmCfg3.MaxModulationIndex_ = 0.95f;
-        g_Svm3.ApplyConfig(svmCfg3);
-        g_DriveManager.RegisterModulationScheme(&g_Svm3);
-
-
-    // static NPulseModulationScheme g_NPulse;
-    // NPulseConfig nPulseCfg;
-    // nPulseCfg.InfluenceStart_Hz_ = 8.0f; 
-    // nPulseCfg.InfluenceEnd_Hz_   = 19.0f; 
-    // nPulseCfg.PulseRatio_        = 250;    
-    // nPulseCfg.MinCarrier_Hz_     = 200.0f; 
-    // nPulseCfg.MaxModulationIndex_ = 0.95f;
-    // g_NPulse.ApplyConfig(nPulseCfg);
-    // g_DriveManager.RegisterModulationScheme(&g_NPulse);
-
-    // static NPulseModulationScheme g_NPulse2;
-    // NPulseConfig nPulseCfg2;
-    // nPulseCfg2.InfluenceStart_Hz_ = 19.0f; 
-    // nPulseCfg2.InfluenceEnd_Hz_   = 30.0f; 
-    // nPulseCfg2.PulseRatio_        = 105;    
-    // nPulseCfg2.MinCarrier_Hz_     = 200.0f; 
-    // nPulseCfg2.MaxModulationIndex_ = 0.95f;
-    // g_NPulse2.ApplyConfig(nPulseCfg2);
-    // g_DriveManager.RegisterModulationScheme(&g_NPulse2);
-
+    // static SVPWMModulationScheme g_Svm;
+    // SVPWMConfig svmCfg;
+    // svmCfg.InfluenceStart_Hz_ = 0.0f;
+    // svmCfg.InfluenceEnd_Hz_   = 5.0f;
+    // svmCfg.CarrierStart_Hz_   = 1000.0f;
+    // svmCfg.CarrierEnd_Hz_     = 1000.0f;
+    // svmCfg.MaxModulationIndex_ = 0.95f;
+    // g_Svm.ApplyConfig(svmCfg);
+    // g_DriveManager.RegisterModulationScheme(&g_Svm);
 
     // static SVPWMModulationScheme g_Svm2;
     // SVPWMConfig svmCfg2;
-    // svmCfg2.InfluenceStart_Hz_ = 45.0f;
-    // svmCfg2.InfluenceEnd_Hz_   = 2000.0f; 
-    // svmCfg2.CarrierStart_Hz_   = 4000.0f;
-    // svmCfg2.CarrierEnd_Hz_     = 4000.0f;
+    // svmCfg2.InfluenceStart_Hz_ = 4.0f;
+    // svmCfg2.InfluenceEnd_Hz_   = 25.0f;
+    // svmCfg2.CarrierStart_Hz_   = 3000.0f;
+    // svmCfg2.CarrierEnd_Hz_     = 5000.0f;
     // svmCfg2.MaxModulationIndex_ = 0.95f;
     // g_Svm2.ApplyConfig(svmCfg2);
     // g_DriveManager.RegisterModulationScheme(&g_Svm2);
 
+    static SVPWMModulationScheme g_Svm3;
+    SVPWMConfig svmCfg3;
+    svmCfg3.InfluenceStart_Hz_ = 0.0f;
+    svmCfg3.InfluenceEnd_Hz_ = 150.0f;
+    svmCfg3.CarrierStart_Hz_ = 5000.0f;
+    svmCfg3.CarrierEnd_Hz_ = 5000.0f;
+    svmCfg3.MaxModulationIndex_ = 0.95f;
+    g_Svm3.ApplyConfig(svmCfg3);
+    g_DriveManager.RegisterModulationScheme(&g_Svm3);
+
     // B. Configure Control (FOC tuning)
     FocConfig focCfg;
     focCfg.InfluenceStart_RadPerSec_ = 0.0f;
-    focCfg.InfluenceEnd_RadPerSec_   = 10000.0f;
+    focCfg.InfluenceEnd_RadPerSec_ = 10000.0f;
     focCfg._Kp_Q_axis = 0.03f;
     focCfg._Ki_Q_axis = 10.0f;
     focCfg._Kp_D_axis = 0.03f;
@@ -273,9 +118,9 @@ void updateTel() {
     // C. Register Components with Manager
     g_DriveManager.SetMotionController(&g_CurrentController);
     g_DriveManager.SetControlScheme(&g_Foc);
-    
+
     // D. Set Decimation (Outer loop runs 10x slower)
-    g_DriveManager.SetMotionUpdateRatio(10); 
+    g_DriveManager.SetMotionUpdateRatio(10);
 
     // ===========================================================================
     // 2. RUNTIME EXECUTION
@@ -283,7 +128,7 @@ void updateTel() {
     absolute_time_t next_foc_tick = get_absolute_time();
     absolute_time_t old_t = get_absolute_time();
     absolute_time_t prev_tel_time = get_absolute_time();
-    
+
     float theta_est = 0.0f;
     float omega_est = 0.0f;
     const float Kp_pll = 200.0f;
@@ -292,10 +137,7 @@ void updateTel() {
     CurrentSetpoint target;
 
     while (true) {
-
         if (measurements->update_from_dma()) {
-           
-                    
             absolute_time_t currentTime = get_absolute_time();
             float dt_S = (float)absolute_time_diff_us(old_t, currentTime) / 1000000.0f;
             old_t = currentTime;
@@ -306,81 +148,51 @@ void updateTel() {
             SenseData._Iu_A = measurements->read("I_PH_U");
             SenseData._Iw_A = measurements->read("I_PH_W");
             SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
-            
+
             // 1. Keep the PLL running exactly as it is so 'omega_est' stays smooth
             float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
-            
 
-            // 2. THE FIX: Feed the raw, zero-latency angle to the FOC loop
-            // Advance by ~500us to account for standard ADC -> Compute -> PWM transport delay
-            float phase_advance_rad = omega_est * 0.0005f; 
+            float phase_advance_rad = omega_est * 0.0005f;
 
             SenseData._EncoderPosition_Rad = raw_adc_rad + phase_advance_rad;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
 
-
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
-                
                 // 1. Define High-Level Setpoint
                 // If sine is >= 0, set to 60. If sine is < 0, set to -60.
-                target._TargetIq_A = 10.0f;// * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
-                target._TargetId_A = 0.0f;  
-                // target._VqFeedforward_V = 0.0f;
-                // target._VdFeedforward_V = 0.0f;
-
-
-//                 g_CalibrationManager.Update(&g_FaultManager, g_Driver, SenseData);
-  //              continue;
-                // 2. Process complete cascade via Manager
+                target._TargetIq_A = 10.0f;  // * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
+                target._TargetId_A = 0.0f;
                 bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
-
             }
 
-            // --- TELEMETRY ---
-            if (absolute_time_diff_us(prev_tel_time, get_absolute_time()) >= 10000) {
+            if (absolute_time_diff_us(prev_tel_time, get_absolute_time()) >= 1000) {
                 prev_tel_time = get_absolute_time();
-                TelemetryPacket t_pack;
-                // t_pack.raw_adc_rad = raw_adc_rad;
-                // t_pack.theta_est = theta_est;
-                
-                // Pulling debug data from g_Foc. If V/Hz is active, these will be stale, 
-                // but safe to read. You could eventually move these into ModulationInput.
-                t_pack.vq_v = g_Foc._Vq_V; 
-                t_pack.vd_v = g_Foc._Vd_V;
-                t_pack.iq_meas = g_Foc._Iq_A;
-                t_pack.elec_angle = g_Foc._ElectricalAngle_Rad;
-                t_pack.enc_offset = g_Foc._EncoderOffset_Rad;
-                
-                t_pack.foc_update_hz = 1.0f / dt_S;
-                t_pack.i_alpha = g_Foc.i_alpha;
-                t_pack.i_beta = g_Foc.i_beta;
-                t_pack.i_d = g_Foc.i_d;
-                t_pack.i_q = g_Foc.i_q;
-
-                t_pack.iq_set = target._TargetIq_A;
-                
-                t_pack.i_u = SenseData._Iu_A;
-                t_pack.i_v = SenseData._Iv_A;
-                t_pack.i_w = SenseData._Iw_A;
-                
-                // t_pack.v_u = HwCmd.DutyPhU_unitless;
-                // t_pack.v_v = HwCmd.DutyPhV_unitless;
-                // t_pack.v_w = HwCmd.DutyPhW_unitless;
-                t_pack.rotor_velocity = omega_est * 9.55; // convert to rpm
-                (void)telemetry_try_push(&t_pack);
+                Telemetry::log("CORE1_LOOP_HZ", 1.0f / dt_S);
+                Telemetry::log("ELEC_ANGLE", g_Foc._ElectricalAngle_Rad);
+                Telemetry::log("ENC_OFFSET", g_Foc._EncoderOffset_Rad);
+                Telemetry::log("DEBUG_VQ", g_Foc._Vq_V);
+                Telemetry::log("DEBUG_VD", g_Foc._Vd_V);
+                Telemetry::log("IQ_SET_PT", target._TargetIq_A);
+                Telemetry::log("DEBUG_I_ALPHA", g_Foc.i_alpha);
+                Telemetry::log("DC_BUS_POWER", measurements->read("V_DC_BUS") * measurements->read("I_DC_MAIN"));
+                Telemetry::log("DEBUG_I_BETA", g_Foc.i_beta);
+                Telemetry::log("DEBUG_I_D", g_Foc.i_d);
+                Telemetry::log("DEBUG_I_Q", g_Foc.i_q);
+                Telemetry::log("ROTOR_VELOCITY", omega_est * 9.55);
             }
         }
     }
 }
-
-
+void updateTel() {
+    serial_proc.poll();
+    Telemetry::updateSensors();
+}
 // ----------------------------------------------------------------------
 // Main Application
 // ----------------------------------------------------------------------
 int main() {
-
     g_FaultManager.Init();
-    
+
     stdio_init_all();
     sleep_ms(500);
 
@@ -394,7 +206,6 @@ int main() {
     g_Driver->init(2000.0f);
     g_Driver->enable();
 
-    // configureZones();
 
     CommandContext ctx{};
 
@@ -409,10 +220,6 @@ int main() {
         Telemetry::printf("FATAL: ADC initialization failed!\n");
         return -1;
     }
-
-
-
-
 
     static MeasurementSystem ms_instance(*adc_system);
     measurements = &ms_instance;
@@ -429,12 +236,8 @@ int main() {
 
     measurements->addChannels(channel_map);
     measurements->update();
-    measurements->printChannels();
-
-    Telemetry::printf("\nCalibrating current sensors...\n");
+    // measurements->printChannels();
     measurements->calibrateCurrentSensors();
-    Telemetry::printf("Current sensor calibration complete.\n\n");
-
 
     g_FaultManager.Update();
 
@@ -442,7 +245,7 @@ int main() {
     g_MotorConfig._PolePairs_unitless = 5;
     g_MotorConfig._Ld_Henry = 0.000040f;
     g_MotorConfig._Lq_Henry = 0.000040f;
-    g_MotorConfig._FluxLinkage_Wb = 0.0; // seems abt right from ~523.6 rads/sec @ 12v
+    g_MotorConfig._FluxLinkage_Wb = 0.0;  // seems abt right from ~523.6 rads/sec @ 12v
 
     // Motor config limits
     g_MotorConfig._SoftMaxPhaseCurrent_A = 40.0f;
@@ -453,47 +256,38 @@ int main() {
 
     g_MotorConfig._HardMaxRegenCurrent_A = 10.0f;
     g_MotorConfig._SoftMaxRegenCurrent_A = 0.0f;
-    
+
     g_MotorConfig._SoftMaxVelocity_RPM = 1020.0f;
     g_MotorConfig._HardMaxVelocity_RPM = 5000.0f;
     g_MotorConfig._SoftMinVelocity_RPM = -1200.0f;
     g_MotorConfig._HardMinVelocity_RPM = -5000.0f;
 
-
     g_MotorConfig._MaxModulation_unitless = 0.9f;
-
 
     // Distribute motor config to all controllers
     g_Foc.SetMotorConfig(g_MotorConfig);
     // g_Vhz.SetMotorConfig(g_MotorConfig);
 
     // 5. Initialize Telemetry
-    Telemetry::set_period_us(1000);  // 100 Hz (it's not lmao...)
+    Telemetry::set_period_us(10000);  // 100 Hz (it's not lmao...)
     Telemetry::init();
     Telemetry::bindMeasurementSystem(*measurements);
-    static TelemetryPacket empty = {0};
-    telemetry_try_push(&empty);
     updateTel();
-
-
-
 
     // --- NEW: Initialize the DMA ---
     adc_system->init_dma();
-    
 
     // adc_system->set_filtered_read(false);
 
     // --- NEW: Attach the DMA trigger to the PWM Driver ---
- g_Driver->setPwmWrapCallback([](){
-    auto* adc = MAX2253x_MultiADC::instance;
-    if (!adc) return;
-    // Only start a new read if the previous one has been processed/cleared.
-    if (!adc->is_async_ready()) {
-        adc->start_async_read();
-    }
-});
-
+    g_Driver->setPwmWrapCallback([]() {
+        auto* adc = MAX2253x_MultiADC::instance;
+        if (!adc) return;
+        // Only start a new read if the previous one has been processed/cleared.
+        if (!adc->is_async_ready()) {
+            adc->start_async_read();
+        }
+    });
 
     // g_Foc._EncoderOffset_Rad = 3.8f; // WE KNOW THIS IS BEST FOR NOW USE CAL DURING MOTOR DETECTION, THEN STORE THOSE VALUES AND LOAD THEM WHEN NEEDED!!!!
     // g_Foc._EncoderOffset_Rad = 6.94159f;
@@ -508,7 +302,6 @@ int main() {
     uint64_t lastFaultPrintTime_uS = time_us_64();
     int delay = 0;
     while (true) {
-
         // printf("fdsafdaf\n");
         // (Optional: You can eventually put simple serial string parsing here
         // to push new CurrentCommands to tx_queue. Example:)
@@ -516,13 +309,13 @@ int main() {
 
         // 1. Drain the telemetry queue from Core 1
         updateTel();
-        //TODO: hardcode encoder offset here
+        // TODO: hardcode encoder offset here
         g_Foc._EncoderOffset_Rad = ctx.encoderOffset;
 
         // 2. Print active faults once per second (1,000,000 microseconds)
         uint64_t currentTime_uS = time_us_64();
         if ((currentTime_uS - lastFaultPrintTime_uS) >= 1000000) {
-            lastFaultPrintTime_uS = currentTime_uS; // Reset the timer
+            lastFaultPrintTime_uS = currentTime_uS;  // Reset the timer
 
             // Fetch the list of active faults
             FaultRecord currentFaults[MAX_ACTIVE_FAULTS];
@@ -539,6 +332,5 @@ int main() {
                 // Telemetry::printf("System Healthy - No Active Faults");
             }
         }
-
     }
 }
