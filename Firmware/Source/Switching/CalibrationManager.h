@@ -41,23 +41,24 @@ private:
 
 
     struct EncoderCalibrationContext {
-        enum class State {
-            INIT,
-            WAIT_SETTLE,
-            SAMPLE,
-            DONE
-        };
-        
+        enum class State { INIT, WAIT_SETTLE, SAMPLE, DONE };
         State CurrentState = State::INIT;
+        
         float Timer_sec = 0.0f;
         float MeasuredOffset_Rad = 0.0f;
-
+    
         // Configurable constraints
-        float TargetAlignCurrent_A = 15.0f; // Safe DC holding current
-        float SettleTime_sec = 2.0f;        // Time to wait for physical alignment
-        float VelocityThreshold = 0.1f;     // Rad/sec to consider "stopped"
-
-        // Dedicated PID for managing the DC injection current
+        float TargetAlignCurrent_A = 5.0f; // Lowered slightly, watch that DC bus drop!
+        float SettleTime_sec = 2.0f;        
+        float VelocityThreshold = 0.1f;     
+    
+        // --- NEW: Multi-sampling & Wrapping ---
+        float SampleTime_sec = 0.5f;        // How long to spend accumulating samples
+        float Accumulator = 0.0f;
+        uint32_t SampleCount = 0;
+        float PolePairs = 4.0f;             // !! UPDATE THIS TO YOUR MOTOR'S POLE PAIRS !!
+        static constexpr float TWO_PI = 6.28318530718f;
+    
         PidController CurrentPid;
     } m_encoderCalib;
 

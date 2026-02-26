@@ -34,6 +34,7 @@ public:
     void setCarrierFrequency(float hz);
     void setDutyCycles(float du, float dv, float dw);
     void SetHardwareCommand(HardwareCommand _Cmd);
+    void SetNeutralDutycycle();
 
     void enable();
     void disable();

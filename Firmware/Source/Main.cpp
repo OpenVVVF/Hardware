@@ -149,18 +149,26 @@ void core1_entry() {
             SenseData._Iw_A = measurements->read("I_PH_W");
             SenseData._Iv_A = -(SenseData._Iu_A + SenseData._Iw_A);
 
-            // 1. Keep the PLL running exactly as it is so 'omega_est' stays smooth
-            float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
+           float raw_adc_rad = measurements->getRotorPositionDegrees() * 0.01745329251f;
+            float error = raw_adc_rad - theta_est;
+            while (error > 3.14159265f) error -= 6.283185307f;
+            while (error < -3.14159265f) error += 6.283185307f;
 
-            float phase_advance_rad = omega_est * 0.0005f;
+            omega_est += Ki_pll * error * dt_S;
+            theta_est += (omega_est + Kp_pll * error) * dt_S;
+            while (theta_est >= 6.283185307f) theta_est -= 6.283185307f;
+            while (theta_est < 0.0f) theta_est += 6.283185307f;
 
+            // 2. THE FIX: Feed the raw, zero-latency angle to the FOC loop
+            // Advance by ~500us to account for standard ADC -> Compute -> PWM transport delay
+            float phase_advance_rad = omega_est * 0.0005f; 
             SenseData._EncoderPosition_Rad = raw_adc_rad + phase_advance_rad;
             SenseData._EncoderVelocity_RadPerSec = omega_est;
 
             if (g_Driver && !g_Driver->isEmergencyStopped() && g_Driver->isEnabled()) {
                 // 1. Define High-Level Setpoint
                 // If sine is >= 0, set to 60. If sine is < 0, set to -60.
-                target._TargetIq_A = 10.0f;  // * (sin(get_absolute_time() / 4'00'000.0f) >= 0.0f);// ? 60.0f : -60.0f;
+                target._TargetIq_A = 10.0f * (sin(get_absolute_time() / 4'00'000.0f));// ? 60.0f : -60.0f;
                 target._TargetId_A = 0.0f;
                 bool Result = g_DriveManager.Update(&g_FaultManager, &g_MotorConfig, g_Driver, SenseData, target, dt_S);
             }

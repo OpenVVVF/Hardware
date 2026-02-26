@@ -22,17 +22,15 @@ bool CalibrationManager::Update(FaultManager* _FaultManager, PWMDriver* _Driver,
         // encoder offset calibration (lock rotor to U phase, measure encoder has stopped changing, 
         // then sample value, perhaps then move rotor and lock to u phase again, maybe wrap to electrical and wrap, across all?)
         case CalibrationMode::ENCODER_OFFSET: {
-    
             float dt = _DT; 
         
             switch (m_encoderCalib.CurrentState) {
                 
                 case EncoderCalibrationContext::State::INIT: {
-                    // Configure PID limits - output is duty cycle modulation (+/- 0.15 is 15% max modulation)
-                    m_encoderCalib.CurrentPid.Kp_ = 0.005f; // Needs tuning based on phase inductance/resistance
-                    m_encoderCalib.CurrentPid.Ki_ = 0.001f;
-                    m_encoderCalib.CurrentPid.MaxOutput_ = 0.15f; 
-                    m_encoderCalib.CurrentPid.MinOutput_ = -0.15f;
+                    m_encoderCalib.CurrentPid.Kp_ = 0.003f; 
+                    m_encoderCalib.CurrentPid.Ki_ = 0.1f;
+                    m_encoderCalib.CurrentPid.MaxOutput_ = 0.05f; 
+                    m_encoderCalib.CurrentPid.MinOutput_ = -0.05f;
                     m_encoderCalib.CurrentPid.Reset();
                     
                     m_encoderCalib.Timer_sec = 0.0f;
@@ -45,45 +43,71 @@ bool CalibrationManager::Update(FaultManager* _FaultManager, PWMDriver* _Driver,
                 case EncoderCalibrationContext::State::WAIT_SETTLE: {
                     m_encoderCalib.Timer_sec += dt;
         
-                    // Closed-loop control on Phase U current
-                    float currentError = m_encoderCalib.TargetAlignCurrent_A - _Sensors._Iu_A;
-                    
-                    // Execute PID (0.0f feedforward)
-                    float dutyModulation = m_encoderCalib.CurrentPid.Update(currentError, 0.0f, dt);
+                    float currentError = _Sensors._Iu_A - m_encoderCalib.TargetAlignCurrent_A ;
+                    float dutyModulation = 0.02;//m_encoderCalib.CurrentPid.Update(currentError, 0.0f, dt);
         
-                    // Command Hardware - Push current into U, return split evenly through V and W
                     HardwareCommand cmd;
-                    cmd.SwitchingFrequency_Hz = 4000.0f; 
+                    cmd.SwitchingFrequency_Hz = 8000.0f; 
                     cmd.DutyPhU_unitless = 0.5f + dutyModulation;
                     cmd.DutyPhV_unitless = 0.5f - (dutyModulation / 2.0f);
                     cmd.DutyPhW_unitless = 0.5f - (dutyModulation / 2.0f);
-                    
                     _Driver->SetHardwareCommand(cmd);
         
-                    // Check if rotor has settled
                     bool timeElapsed = (m_encoderCalib.Timer_sec >= m_encoderCalib.SettleTime_sec);
                     bool rotorStopped = (std::abs(_Sensors._EncoderVelocity_RadPerSec) < m_encoderCalib.VelocityThreshold);
         
                     if (timeElapsed && rotorStopped) {
+                        // Move to sample phase, reset accumulator
                         m_encoderCalib.CurrentState = EncoderCalibrationContext::State::SAMPLE;
+                        m_encoderCalib.Accumulator = 0.0f;
+                        m_encoderCalib.SampleCount = 0;
                     } else if (timeElapsed && !rotorStopped) {
-                        // Safety catch: Rotor oscillating or struggling to align
-                        _Driver->disable();
+                        _Driver->SetNeutralDutycycle();
                         // _FaultManager->TriggerFault(Fault::CALIBRATION_TIMEOUT);
                     }
                     break;
                 }
         
                 case EncoderCalibrationContext::State::SAMPLE: {
-                    m_encoderCalib.MeasuredOffset_Rad = _Sensors._EncoderPosition_Rad;
-                    _Driver->disable(); // Cut power immediately after sampling
-                    m_encoderCalib.CurrentState = EncoderCalibrationContext::State::DONE;
+                    m_encoderCalib.Timer_sec += dt;
+
+                    // MUST KEEP HOLDING THE ROTOR WITH PID WHILE SAMPLING!
+                    float currentError = _Sensors._Iu_A - m_encoderCalib.TargetAlignCurrent_A ;
+                    float dutyModulation = 0.02;//m_encoderCalib.CurrentPid.Update(currentError, 0.0f, dt);
+                    
+                    HardwareCommand cmd;
+                    cmd.SwitchingFrequency_Hz = 8000.0f; 
+                    cmd.DutyPhU_unitless = 0.5f + dutyModulation;
+                    cmd.DutyPhV_unitless = 0.5f - (dutyModulation / 2.0f);
+                    cmd.DutyPhW_unitless = 0.5f - (dutyModulation / 2.0f);
+                    _Driver->SetHardwareCommand(cmd);
+
+                    // Accumulate encoder readings
+                    m_encoderCalib.Accumulator += _Sensors._EncoderPosition_Rad;
+                    m_encoderCalib.SampleCount++;
+
+                    // Check if sampling duration is complete
+                    if (m_encoderCalib.Timer_sec >= (m_encoderCalib.SettleTime_sec + m_encoderCalib.SampleTime_sec)) {
+                        _Driver->SetNeutralDutycycle();
+                        
+                        // 1. Calculate Average
+                        float avgMechRad = m_encoderCalib.Accumulator / static_cast<float>(m_encoderCalib.SampleCount);
+                        
+                        // 2. Wrap it so it's consistent regardless of which pole pair it snapped to
+                        float mechPitch_Rad = EncoderCalibrationContext::TWO_PI / m_encoderCalib.PolePairs;
+                        
+                        // Using double fmodf to safely handle any negative angles from the encoder
+                        m_encoderCalib.MeasuredOffset_Rad = fmodf(fmodf(avgMechRad, mechPitch_Rad) + mechPitch_Rad, mechPitch_Rad);
+                        
+                        m_encoderCalib.CurrentState = EncoderCalibrationContext::State::DONE;
+                    }
                     break;
                 }
         
                 case EncoderCalibrationContext::State::DONE: {
                     m_encoderCalib.CurrentState = EncoderCalibrationContext::State::INIT; 
                     m_mode = CalibrationMode::IDLE; 
+                    break;
                 }
             }
             break;

@@ -48,6 +48,10 @@ void PWMDriver::setDutyCycles(float du, float dv, float dw) {
     irq_set_enabled(PWM_IRQ_WRAP, true);
 }
 
+void PWMDriver::SetNeutralDutycycle() {
+    setDutyCycles(0.5, 0.5, 0.5);
+}
+
 void PWMDriver::recalcDutyLimits() {
     uint32_t lo = (static_cast<uint32_t>(pwm_top_) * static_cast<uint32_t>(config_.min_duty_percent)) / 100u;
     uint32_t hi = (static_cast<uint32_t>(pwm_top_) * static_cast<uint32_t>(config_.max_duty_percent)) / 100u;
