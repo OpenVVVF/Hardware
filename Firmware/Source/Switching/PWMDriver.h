@@ -9,6 +9,7 @@
 // Modulation Strategy Interface
 // Implement this to add SVM, FOC, SHE, etc.
 // ============================================================================
+#define M_PI 3.141592653589793238264
 class ModulationStrategy {
 public:
     virtual ~ModulationStrategy() = default;
