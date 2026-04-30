@@ -35,3 +35,8 @@ The BOM and all other necessary files for each variant are provided in their res
 Contributions to the project are very welcome and highly encouraged! This project uses KiCad for schematic and PCB design and FreeCAD for the mechanical. It is highly recommended you do as well! If you wish to make modifications existing designs, all source files are again provided in their respective directories.
 
 When designing and contributing new designs, please attempt to maintain consistency with the existing design conventions and documentation standards. All new designs should include schematics, pcb layouts, BOMs and ideally some documentation/additional notes (and documentation is better than none!). If you have any questions feel free to reach out!
+
+
+# Sponsors
+
+A special thank you to our sponsors, [Mouser Electronics](https://mouser.com), [Mitsubishi Electric](https://www.mitsubishielectric.com/semiconductors/powerdevices/products/power-module/igbt-module-std/), and [SendCutSend](https://sendcutsend.com/)! Their support has been invaluable for making this project possible.
