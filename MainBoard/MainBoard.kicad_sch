@@ -1,0 +1,7781 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "1bd20b11-4068-4af7-8516-b3d686707223")
+	(paper "A4")
+	(lib_symbols
+		(symbol "Connector_Generic:Conn_02x08_Counter_Clockwise"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 1.27 10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_02x08_Counter_Clockwise"
+				(at 1.27 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, double row, 02x08, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_2x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_02x08_Counter_Clockwise_1_1"
+				(rectangle
+					(start -1.27 8.89)
+					(end 3.81 -11.43)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 7.747)
+					(end 0 7.493)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 5.207)
+					(end 0 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -7.493)
+					(end 0 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -10.033)
+					(end 0 -10.287)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 7.747)
+					(end 2.54 7.493)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 5.207)
+					(end 2.54 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 2.667)
+					(end 2.54 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 0.127)
+					(end 2.54 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -2.413)
+					(end 2.54 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -4.953)
+					(end 2.54 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -7.493)
+					(end 2.54 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -10.033)
+					(end 2.54 -10.287)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 7.62 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -10.16 0)
+					(length 3.81)
+					(name "Pin_8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 7.62 180)
+					(length 3.81)
+					(name "Pin_16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 5.08 180)
+					(length 3.81)
+					(name "Pin_15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 3.81)
+					(name "Pin_14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 3.81)
+					(name "Pin_13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 3.81)
+					(name "Pin_12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -5.08 180)
+					(length 3.81)
+					(name "Pin_11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -7.62 180)
+					(length 3.81)
+					(name "Pin_10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -10.16 180)
+					(length 3.81)
+					(name "Pin_9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector_Generic:Conn_02x10_Counter_Clockwise"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 1.27 12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_02x10_Counter_Clockwise"
+				(at 1.27 -15.24 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_2x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_02x10_Counter_Clockwise_1_1"
+				(rectangle
+					(start -1.27 11.43)
+					(end 3.81 -13.97)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 10.287)
+					(end 0 10.033)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 7.747)
+					(end 0 7.493)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 5.207)
+					(end 0 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -7.493)
+					(end 0 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -10.033)
+					(end 0 -10.287)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -12.573)
+					(end 0 -12.827)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 10.287)
+					(end 2.54 10.033)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 7.747)
+					(end 2.54 7.493)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 5.207)
+					(end 2.54 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 2.667)
+					(end 2.54 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 0.127)
+					(end 2.54 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -2.413)
+					(end 2.54 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -4.953)
+					(end 2.54 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -7.493)
+					(end 2.54 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -10.033)
+					(end 2.54 -10.287)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -12.573)
+					(end 2.54 -12.827)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 10.16 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 7.62 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -10.16 0)
+					(length 3.81)
+					(name "Pin_9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -12.7 0)
+					(length 3.81)
+					(name "Pin_10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 10.16 180)
+					(length 3.81)
+					(name "Pin_20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 7.62 180)
+					(length 3.81)
+					(name "Pin_19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 5.08 180)
+					(length 3.81)
+					(name "Pin_18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 3.81)
+					(name "Pin_17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 3.81)
+					(name "Pin_16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 3.81)
+					(name "Pin_15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -5.08 180)
+					(length 3.81)
+					(name "Pin_14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -7.62 180)
+					(length 3.81)
+					(name "Pin_13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -10.16 180)
+					(length 3.81)
+					(name "Pin_12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -12.7 180)
+					(length 3.81)
+					(name "Pin_11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP01R1-508-06BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP01R1-508-06BE"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP01R150806BE"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/TBP01R1-508.pdf"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "TBP01R1-508 Series - 2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "8.5"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP01R1-508-06BE"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-06BE?qs=PzGy0jfpSMtbefrSiaRjjA%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP01R1-508-06BE"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TBP01R1-508-06BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -15.24)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP01R2-508-06BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP01R2-508-06BE"
+				(at 16.51 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP01R250806BE"
+				(at 16.51 -94.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp01r2-508.pdf"
+				(at 16.51 -194.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "6 Position Terminal Block Header, Male Pins, Shrouded (4 Side) 0.200\" (5.08mm) Vertical Through Hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "12.4"
+				(at 16.51 -394.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP01R2-508-06BE"
+				(at 16.51 -494.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP01R2-508-06BE?qs=PzGy0jfpSMsphIICa8uwtQ%3D%3D"
+				(at 16.51 -594.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP01R2-508-06BE"
+				(at 16.51 -794.92 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "TBP01R2-508-06BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -15.24)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:UCM1H101MCL1GS"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 8.89 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "UCM1H101MCL1GS"
+				(at 8.89 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "CAPAE660X800N"
+				(at 8.89 -96.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+				(at 8.89 -196.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "8"
+				(at 8.89 -396.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+				(at 8.89 -496.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+				(at 8.89 -596.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Nichicon"
+				(at 8.89 -696.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+				(at 8.89 -796.19 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "UCM1H101MCL1GS_1_1"
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.064 1.778) (xy 4.064 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.572 1.27) (xy 3.556 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 5.08 2.54)
+					(end 5.842 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.62 2.54) (xy 7.62 -2.54) (xy 6.858 -2.54) (xy 6.858 2.54) (xy 7.62 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.62 0) (xy 10.16 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 0 180)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "CONNECTOR FROM MAIN BOARD TO CONTROL MODULE ABOVE\nADC SPI INPUTS / POWER TO ADCS"
+		(exclude_from_sim no)
+		(at 173.736 74.676 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "46c5d317-5aab-4a81-a3f4-80de1b32fdf9")
+	)
+	(text "CONNECTOR FROM MAIN BOARD TO CONTROL MODULE ABOVE\nADC SPI INPUTS / POWER TO ADCS / GATE DRIVE SIGNALS"
+		(exclude_from_sim no)
+		(at 176.784 24.892 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "61406aa5-a4a7-4a19-832b-67f7ec153f75")
+	)
+	(text "CANBUS OUTPUT CONNECTOR TO CONTROL BOARD\nINTERFACES TO OUTSIDE WORLD"
+		(exclude_from_sim no)
+		(at 24.384 19.812 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7e053760-42a3-49cc-bbaa-6ef797ad5f2b")
+	)
+	(text "CONNECTOR FROM THIS CONTROL BOARD\nTO GATE DRIVER ABOVE"
+		(exclude_from_sim no)
+		(at 100.33 193.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "99307eba-bd43-452c-b260-a1aa441bc0a4")
+	)
+	(text "CONNECTION FROM MAINBOARD TO CONTROL MODULE ABOVE\nPROVIDES RELAY OUTPUTS + GATE DRIVER INTERLOCK"
+		(exclude_from_sim no)
+		(at 23.114 119.634 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bddd2eee-d418-46b2-b099-02b8f0613f52")
+	)
+	(text "CONNECTOR FROM THIS CONTROL BOARD\nTO GATE DRIVER ABOVE"
+		(exclude_from_sim no)
+		(at 46.99 191.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d2593adc-c257-4526-8d9d-e0a991900c79")
+	)
+	(text "CONNECTOR FROM THIS CONTROL BOARD\nTO GATE DRIVER ABOVE"
+		(exclude_from_sim no)
+		(at 151.13 193.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d7c4fae2-5d03-47fb-8e80-e0fdeede13c9")
+	)
+	(text "CONNECTOR FROM MAIN BOARD TO CONTROL MODULE ABOVE\nCONTROL INPUTS + POWER TO RELAY SUBSYSTEM/GATE DRIVERS"
+		(exclude_from_sim no)
+		(at 156.464 120.396 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f5a410de-b0dc-497d-be3d-10a124471d92")
+	)
+	(junction
+		(at 259.08 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "10f047e2-49b5-47e6-ad3d-8adae62d49f3")
+	)
+	(junction
+		(at 229.87 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "115da627-0c33-4363-9d1a-ff9cadee294b")
+	)
+	(junction
+		(at 246.38 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2024e714-71ec-4a55-bfbe-479cd64daef6")
+	)
+	(junction
+		(at 229.87 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "47303a4b-b99f-4d60-b43c-af97bfdc2632")
+	)
+	(junction
+		(at 242.57 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "641139c1-d04a-4659-9348-11b668f2469f")
+	)
+	(junction
+		(at 261.62 138.43)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "70ed3e74-625d-4604-8672-468b4bfd080b")
+	)
+	(junction
+		(at 229.87 138.43)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7e54e20f-418f-4afd-9cc3-a72bd7c98411")
+	)
+	(junction
+		(at 261.62 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "855f0897-0863-434b-b92c-840e13baa396")
+	)
+	(junction
+		(at 274.32 138.43)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "89a439d7-607d-46ab-bbc9-3508346c19f8")
+	)
+	(junction
+		(at 259.08 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9952e026-52bb-4662-aa5c-06c200d1e861")
+	)
+	(junction
+		(at 274.32 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a98e7ec2-04ea-43c7-b07b-8d21bc570328")
+	)
+	(junction
+		(at 246.38 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b489efe7-6537-43ee-872e-cd987d12bbaf")
+	)
+	(junction
+		(at 242.57 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c073635a-1d02-4b50-9f4a-a2546d73acbb")
+	)
+	(junction
+		(at 242.57 138.43)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d1ee86a6-7e1a-4212-be6b-d5e8a5ad2b4c")
+	)
+	(junction
+		(at 246.38 138.43)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d8bfbd4d-a2d7-4030-8168-4251e403174c")
+	)
+	(junction
+		(at 274.32 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d9a793e6-1247-451c-a88b-28b0697c8580")
+	)
+	(junction
+		(at 261.62 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "eff9d3f8-1163-4f61-8952-e04ed7cc9c40")
+	)
+	(junction
+		(at 259.08 138.43)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fa66f4d5-a41a-4fdb-845b-3b0145a8d421")
+	)
+	(wire
+		(pts
+			(xy 261.62 161.29) (xy 261.62 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cba1107-2b63-4efe-8df8-be4986c7b100")
+	)
+	(wire
+		(pts
+			(xy 259.08 127) (xy 259.08 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2973fa2d-4dc9-48ff-8bd6-89ecc49f995b")
+	)
+	(wire
+		(pts
+			(xy 246.38 161.29) (xy 246.38 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c8ce893-af27-4145-815f-04db57c17e7e")
+	)
+	(wire
+		(pts
+			(xy 229.87 149.86) (xy 229.87 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "30db36ab-f3b6-47c9-aa76-75b0dffa1c9b")
+	)
+	(wire
+		(pts
+			(xy 229.87 127) (xy 229.87 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "336b1934-bef9-4f6b-a5da-d0f814e2617a")
+	)
+	(wire
+		(pts
+			(xy 242.57 149.86) (xy 242.57 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35f1911e-4620-4943-8e11-5ab043b9e29e")
+	)
+	(wire
+		(pts
+			(xy 246.38 138.43) (xy 246.38 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4072730b-cc73-4f57-8ab2-91b95de36ad7")
+	)
+	(wire
+		(pts
+			(xy 261.62 127) (xy 261.62 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63ac9003-e38b-4867-8adc-e00f20243004")
+	)
+	(wire
+		(pts
+			(xy 229.87 138.43) (xy 229.87 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "69e59b8d-6cb2-4a0a-8641-bd5dfd2cec20")
+	)
+	(wire
+		(pts
+			(xy 261.62 138.43) (xy 261.62 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70b1763a-eef7-4e27-9b71-cfdcc505d61e")
+	)
+	(wire
+		(pts
+			(xy 259.08 161.29) (xy 259.08 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7aa6d6f3-9aa9-46c9-8747-87e5e4054a64")
+	)
+	(wire
+		(pts
+			(xy 246.38 149.86) (xy 246.38 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7d0f7eba-786e-4d17-a9cb-41101b398f57")
+	)
+	(wire
+		(pts
+			(xy 274.32 138.43) (xy 274.32 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7eecefa8-2be6-41dc-996d-9581f52a689f")
+	)
+	(wire
+		(pts
+			(xy 274.32 161.29) (xy 274.32 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e92d618-d5be-4913-b391-17a569cf53d3")
+	)
+	(wire
+		(pts
+			(xy 259.08 138.43) (xy 259.08 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a25d55ee-2bef-442b-872f-5ec488d1a58f")
+	)
+	(wire
+		(pts
+			(xy 242.57 127) (xy 242.57 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3ff7a7b-b00a-4780-af2d-87bc1498fb55")
+	)
+	(wire
+		(pts
+			(xy 246.38 127) (xy 246.38 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4d34f79-1242-4d97-8441-e81fadd08770")
+	)
+	(wire
+		(pts
+			(xy 274.32 127) (xy 274.32 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b9b4e4a3-184f-47b2-bee8-71a2ab4f24e3")
+	)
+	(wire
+		(pts
+			(xy 242.57 161.29) (xy 242.57 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcd6654f-fb8e-44f8-9b3a-b5fae6d6e371")
+	)
+	(wire
+		(pts
+			(xy 259.08 149.86) (xy 259.08 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1678be6-4612-4e77-af3b-94b129962772")
+	)
+	(wire
+		(pts
+			(xy 261.62 149.86) (xy 261.62 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1ad8abc-da8f-46c1-b959-d5b99193b784")
+	)
+	(wire
+		(pts
+			(xy 274.32 149.86) (xy 274.32 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd5e286a-2c2a-40bb-8086-d90b744ca82d")
+	)
+	(wire
+		(pts
+			(xy 242.57 138.43) (xy 242.57 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d7089148-00ba-4538-a159-430c084e2248")
+	)
+	(wire
+		(pts
+			(xy 229.87 161.29) (xy 229.87 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fd4cafa6-680b-4ce8-8e91-f185cee7fd50")
+	)
+	(label "+12V_A"
+		(at 158.75 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "03128b15-c5f5-4cf6-b881-0a0bbf72b280")
+	)
+	(label "CAN_24V_OUT"
+		(at 35.56 35.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "04a61185-7750-4e56-9e98-85b4b2915bb2")
+	)
+	(label "RELAY2_NO"
+		(at 101.6 138.43 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0685999f-55f2-47c5-9449-73aba8b7d854")
+	)
+	(label "GND_A"
+		(at 187.96 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "072eb7ab-31d2-4bb1-90a9-6fc0ca5e1ade")
+	)
+	(label "+3.3V_A"
+		(at 187.96 97.79 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "09854a5e-0aaa-427f-8dbc-55f81f6ab21b")
+	)
+	(label "GND_A"
+		(at 101.6 34.29 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0b68a3b8-f6d7-4dba-b464-dfeb152df078")
+	)
+	(label "ISENSE_PH_W_Y"
+		(at 101.6 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0bbd9a47-13f1-4938-aeb1-6e34168da69c")
+	)
+	(label "CAN_HIGH"
+		(at 35.56 43.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0bffb3ec-2680-4f18-bdb9-ae76b1388ec4")
+	)
+	(label "SPI2_ADC2_CS_A"
+		(at 200.66 97.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0e7e5cd8-c20a-4103-9973-98132644980f")
+	)
+	(label "CAN_LOW"
+		(at 139.7 34.29 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "115147f7-fad5-4540-a649-d0890b3667e6")
+	)
+	(label "ISENSE_DC_LINK_Y"
+		(at 57.15 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "11785386-5b2c-4d63-b938-4c6bb46e760a")
+	)
+	(label "+3.3V_A"
+		(at 187.96 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "155eef23-61ad-48f8-ae92-fbc70630922c")
+	)
+	(label "GND_A"
+		(at 187.96 92.71 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1b1e0343-6de0-45fe-bcfc-48fa7b265bd7")
+	)
+	(label "SPI2_ADC1_CS_A"
+		(at 139.7 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1bc079ce-1e0c-4f9a-92c7-55b23682d81a")
+	)
+	(label "GND_A"
+		(at 261.62 107.95 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1dd79b00-7e3c-48d1-9a01-2833464a0daa")
+	)
+	(label "SPI1_CAN_CS_A"
+		(at 200.66 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "20a6b613-2423-4291-bf26-1db9c1b3e943")
+	)
+	(label "+12V_A"
+		(at 187.96 87.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "210c592f-13bf-4d30-803a-eaddeba4e6f3")
+	)
+	(label "ISENSE_PH_V_Y"
+		(at 57.15 72.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "21cbb942-f6f3-4d05-8774-0b6066f24c5a")
+	)
+	(label "RELAY_1_A"
+		(at 176.53 128.27 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2278fc06-4f43-4e7e-834e-d3ee3ceaddf2")
+	)
+	(label "+12V_A"
+		(at 189.23 143.51 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2336959b-06e1-4b74-a695-f210f35bd875")
+	)
+	(label "+3.3V_A"
+		(at 187.96 90.17 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2521b482-5594-4cf6-b874-78fb6c8de1a4")
+	)
+	(label "CAN_JUMPER_B"
+		(at 139.7 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2b49f02f-c2af-4dda-883e-e270ae104d8e")
+	)
+	(label "GND_A"
+		(at 189.23 146.05 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2c583945-8b47-415f-9e46-c699731aad7d")
+	)
+	(label "SPI2_ADC1_CS_A"
+		(at 200.66 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2d108d05-2437-4d19-a702-0a15c2de63cc")
+	)
+	(label "GND_A"
+		(at 189.23 151.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f6d27ba-d0bf-4d03-bc78-642fb4dbd8fc")
+	)
+	(label "SPI1_CAN_INT_A"
+		(at 200.66 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f983e64-1938-45bb-bdff-3310744f07c3")
+	)
+	(label "+12V_A"
+		(at 176.53 151.13 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2ff82791-cd8b-4708-b235-4c9eefdf2c35")
+	)
+	(label "ISENSE_DC_LINK_Y"
+		(at 101.6 78.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "30b1a8be-c5c8-4a6a-9ecf-f29744f405bb")
+	)
+	(label "SPI1_TX_A"
+		(at 200.66 35.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "31db7ea4-39f9-4eea-9d56-a2a88eb28c5f")
+	)
+	(label "DC_LINK_VSENSE_U"
+		(at 101.6 97.79 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "32ac05aa-80f6-427f-b4c4-2c36ce48b8f7")
+	)
+	(label "CAN_JUMPER_A"
+		(at 35.56 30.48 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "350dc0dd-fc08-4238-81a7-9a9ba5ec27b4")
+	)
+	(label "RELAY2_COM"
+		(at 101.6 140.97 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "358c4bcd-e855-41fd-9c17-b08198a6b7ee")
+	)
+	(label "PH_W_VSENSE_U"
+		(at 48.26 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3b18cb67-2897-432b-9627-e112dd2a2c98")
+	)
+	(label "PH_U_VSENSE_U"
+		(at 48.26 95.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3eb02285-a9a3-4803-8f60-c3eca1375aaa")
+	)
+	(label "RELAY_1_A"
+		(at 139.7 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3ecb9533-4709-464b-8520-bef1a18c474f")
+	)
+	(label "CAN_JUMPER_A"
+		(at 139.7 43.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "420a4873-3ee4-4aa4-a556-747b8fce6097")
+	)
+	(label "+3.3V_A"
+		(at 101.6 29.21 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "471c7faa-fff9-4259-a260-4f368b9439a0")
+	)
+	(label "SPI1_RX_A"
+		(at 101.6 44.45 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "48094986-c990-4f59-887c-0966aa702550")
+	)
+	(label "CAN_HIGH"
+		(at 139.7 31.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "563b345e-5b35-4dab-a725-9ec7cda647b6")
+	)
+	(label "DC_LINK_VSENSE_U"
+		(at 48.26 92.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "57d1b66a-7337-4270-a22e-e644dee29e13")
+	)
+	(label "GND_A"
+		(at 246.38 107.95 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "57ffdaab-dbc8-4340-8e46-4fcd1970850a")
+	)
+	(label "+12V_A"
+		(at 189.23 148.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5855e71e-b8f6-4db9-b902-df956a35fcd4")
+	)
+	(label "GND_A"
+		(at 139.7 92.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "59a71c39-1136-4cef-b42f-316fee076c1b")
+	)
+	(label "GND_A"
+		(at 176.53 148.59 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5ab9a844-6d9e-4734-b74c-a8052fb4a47e")
+	)
+	(label "SPI1_RX_A"
+		(at 200.66 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5d408b6c-a645-4b44-af6e-93aa8ce5b955")
+	)
+	(label "SPI1_TX_A"
+		(at 101.6 46.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "63aced71-c557-4f0d-8026-19dc6566f359")
+	)
+	(label "SPI1_CAN_INT_A"
+		(at 101.6 39.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "64172792-d360-458e-ba89-64eb3680413d")
+	)
+	(label "SPI2_SCK_A"
+		(at 139.7 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66682db5-5183-42f9-81c6-b87ae7314df6")
+	)
+	(label "+12V_A"
+		(at 101.6 31.75 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "66a1ce2f-aba5-4126-b4c8-707f5a7ef0b6")
+	)
+	(label "ISENSE_PH_U_Y"
+		(at 101.6 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "66caddab-5b3b-4c55-be3e-4b37283487af")
+	)
+	(label "RELAY2_COM"
+		(at 35.56 144.78 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6916d1f0-b3a9-4e06-a7d1-df59d96133de")
+	)
+	(label "+12V_A"
+		(at 176.53 146.05 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "693cc6dc-fd67-4555-9add-73ad7bf6ecb1")
+	)
+	(label "+12V_A"
+		(at 139.7 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6d12caf3-80a8-43bb-bd97-06d0ea64dfe4")
+	)
+	(label "+3.3V_A"
+		(at 274.32 107.95 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6d5491aa-842c-4f17-afaf-00873fc17619")
+	)
+	(label "GND_A"
+		(at 189.23 140.97 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6e83366d-68fd-49b7-a7a9-946a1028b306")
+	)
+	(label "CAN_5V_OUT"
+		(at 139.7 36.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6f06eabd-6cb0-461d-9fc2-bc43aece65cb")
+	)
+	(label "GND_U"
+		(at 48.26 102.87 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "79ef1cc3-5b75-46f4-9f1d-253871dda60a")
+	)
+	(label "GND_A"
+		(at 187.96 45.72 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7bb34962-4bde-46fe-8129-667ae539de11")
+	)
+	(label "RELAY2_NO"
+		(at 35.56 137.16 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7c3bb3b0-ac4e-4227-8f93-e8ef0a608eba")
+	)
+	(label "SPI2_RX_A"
+		(at 187.96 105.41 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "80aa4127-927f-4ec5-9fef-0d5fc5b1b6c9")
+	)
+	(label "CAN_24V_OUT"
+		(at 139.7 39.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "80da0997-5a53-4015-831e-ee97a3c832d3")
+	)
+	(label "+5V_Y"
+		(at 101.6 81.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "82c0cfa9-9893-43fc-85e8-7b1b41e2c40d")
+	)
+	(label "+12V_A"
+		(at 259.08 107.95 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "830c3b9d-8392-4caa-9cbb-8bbf10b2493d")
+	)
+	(label "+12V_A"
+		(at 187.96 43.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "83db525c-6117-4ee2-a9ec-806d4f9ce4da")
+	)
+	(label "RELAY1_NO"
+		(at 35.56 147.32 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8465009d-29f5-4ab4-a125-36abf27030c7")
+	)
+	(label "RELAY3_COM"
+		(at 101.6 133.35 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "85ab99f0-30e8-4148-8570-0ecc0b374ca6")
+	)
+	(label "CAN_GND"
+		(at 35.56 45.72 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "881f5d1d-04c1-4395-b3ea-60c3b1758d84")
+	)
+	(label "ISENSE_PH_U_Y"
+		(at 57.15 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "88496d5d-cc4c-475a-952b-5c1eb903bcf9")
+	)
+	(label "PH_W_VSENSE_U"
+		(at 101.6 90.17 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "899c8a8c-547c-4e0c-8d23-30f1481e7cf1")
+	)
+	(label "GND_A"
+		(at 229.87 107.95 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8a0cb76a-2958-4dc7-93f2-d2e9167c0fac")
+	)
+	(label "SPI2_RX_A"
+		(at 139.7 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8bd97c5f-fe3d-4bfd-9937-a5655a7a4109")
+	)
+	(label "SPI2_TX_A"
+		(at 200.66 105.41 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8e134f5b-1300-4293-b588-5bd3639dea95")
+	)
+	(label "+12V_A"
+		(at 187.96 102.87 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "8eb348f9-c08a-40b6-9d3d-39b79ca3f326")
+	)
+	(label "+12V_A"
+		(at 187.96 95.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "95a84f9f-b7bc-4a2e-bb9b-fa6627de5d38")
+	)
+	(label "GND_U"
+		(at 101.6 87.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "980cc339-bbee-4720-83fe-9de5af26a390")
+	)
+	(label "GND_A"
+		(at 139.7 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9b47b213-142a-4668-8b1c-0d15bd1402ff")
+	)
+	(label "GND_A"
+		(at 176.53 143.51 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9ce9789a-2ffc-404d-ad5a-a663f9fe61b7")
+	)
+	(label "RELAY3_NO"
+		(at 101.6 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "9de7d7cf-7fef-4c51-99f6-0cf5b98193fc")
+	)
+	(label "SPI1_SCK_A"
+		(at 101.6 49.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a12d3168-704d-4661-83aa-3201bbb1ef69")
+	)
+	(label "ISENSE_PH_W_Y"
+		(at 57.15 74.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a180e0de-5cf2-45db-a471-a22a9c4a2803")
+	)
+	(label "+12V_A"
+		(at 242.57 107.95 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a39fbda2-ff09-495e-a2ce-b32b4e5cf751")
+	)
+	(label "CAN_JUMPER_B"
+		(at 35.56 27.94 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a64ac6a3-bf9d-4b99-bce3-2a3c63ef5cc7")
+	)
+	(label "RELAY_2_A"
+		(at 176.53 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a698ae6b-3429-4c0c-84fb-ff89463141e4")
+	)
+	(label "ISENSE_GND_Y"
+		(at 101.6 68.58 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a6e76b6c-fd18-475c-8207-4911077dbcf8")
+	)
+	(label "SPI1_CAN_CS_A"
+		(at 101.6 41.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b121af78-a05b-4e0a-8dd9-62234f3fcf77")
+	)
+	(label "SPI1_SCK_A"
+		(at 200.66 33.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b53fa656-e00e-4b31-aac7-fe330e62bd8e")
+	)
+	(label "RELAY1_COM"
+		(at 101.6 148.59 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b53ff95d-bb96-43c0-9e5b-b480a79c4447")
+	)
+	(label "CAN_GND"
+		(at 139.7 29.21 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b781c45c-fd1c-4c54-9d36-494f219538f6")
+	)
+	(label "+12V_A"
+		(at 176.53 140.97 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "be153ab0-1141-4b00-ad49-5af2b02b45d3")
+	)
+	(label "RELAY3_NO"
+		(at 35.56 127 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "be486ec0-2783-4fa0-bf47-a3d38bb73577")
+	)
+	(label "CAN_LOW"
+		(at 35.56 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "bf3018c8-f663-44f1-b6f1-56ff93cd3617")
+	)
+	(label "+12V_A"
+		(at 187.96 35.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c3433c80-150f-4471-973b-06a8392b7b38")
+	)
+	(label "GND_A"
+		(at 187.96 100.33 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c7bd01ba-1bc5-46d2-a6e0-3c88f5fe88bf")
+	)
+	(label "PH_V_VSENSE_U"
+		(at 48.26 97.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c7c12942-8a05-48c7-8a74-9244fae340e6")
+	)
+	(label "+3.3V_A"
+		(at 139.7 97.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c94a82b8-7706-4af3-8d6d-4c075ee0f9b4")
+	)
+	(label "+5V_Y"
+		(at 57.15 64.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cb4d7f41-5fce-4d63-8cc4-7c4cdf5042f5")
+	)
+	(label "RELAY3_COM"
+		(at 35.56 134.62 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cbc6a71e-1e12-4404-9ca5-775512bc5ead")
+	)
+	(label "RELAY1_NO"
+		(at 101.6 146.05 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cce1cca6-77a2-47df-9488-b3abd5f27078")
+	)
+	(label "SPI2_ADC2_CS_A"
+		(at 139.7 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cd51b6c0-8111-444f-8381-cfb1364abba3")
+	)
+	(label "+12V_A"
+		(at 107.95 168.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d168b100-2a74-43df-9d80-8b3917a45996")
+	)
+	(label "GND_A"
+		(at 187.96 85.09 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d6b77734-57dd-4cff-953f-0bc3eaf889d0")
+	)
+	(label "PH_V_VSENSE_U"
+		(at 101.6 92.71 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d7374d4a-2121-4c91-b178-afca0d92540f")
+	)
+	(label "SPI2_SCK_A"
+		(at 200.66 102.87 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dc939f81-6f03-4c0d-a0d8-8b4f2eecccf7")
+	)
+	(label "+3.3V_A"
+		(at 187.96 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e0e22601-3f25-4a43-8799-31518fd80e7b")
+	)
+	(label "ISENSE_GND_Y"
+		(at 57.15 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e122ff79-6bc1-43a9-8832-553bb50cdcdc")
+	)
+	(label "RELAY_2_A"
+		(at 139.7 137.16 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e2a54f2d-3b90-4c66-be74-f152d69a4d11")
+	)
+	(label "RELAY_3_A"
+		(at 139.7 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e35f7afd-aefb-4549-bbb1-6b2f5db935aa")
+	)
+	(label "RELAY1_COM"
+		(at 48.26 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e3ca5073-3648-4925-adc1-19e4fb9f89cb")
+	)
+	(label "+3.3V_A"
+		(at 187.96 33.02 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e8bd6955-872c-416b-9f66-72f41a3a9797")
+	)
+	(label "RELAY_3_A"
+		(at 176.53 133.35 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ea680361-af51-47ba-b048-61b1412de2ee")
+	)
+	(label "+12V_A"
+		(at 139.7 95.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ea6c5e32-2d9d-4c97-8e6d-04f77450367a")
+	)
+	(label "GND_U"
+		(at 48.26 90.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ed819bea-c54a-474b-b5dd-ae8130d2d80f")
+	)
+	(label "PH_U_VSENSE_U"
+		(at 101.6 95.25 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f3ce56c7-0a88-4d8b-a1de-4580ca70d4bb")
+	)
+	(label "ISENSE_PH_V_Y"
+		(at 101.6 73.66 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f870e83a-cc6b-4862-9014-148ebdc93f0d")
+	)
+	(label "+12V_A"
+		(at 50.8 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fca544ed-e0ee-44c3-a9c5-17592a213e3a")
+	)
+	(label "SPI2_TX_A"
+		(at 139.7 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fd660a55-3ff4-40c6-9d94-bcf39f0d16a6")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 107.95 176.53 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "01aec31f-79b1-4b9e-887d-396ef2f1fadb")
+	)
+	(hierarchical_label "FAULT"
+		(shape input)
+		(at 187.96 53.34 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0311fa4d-0858-488c-866f-599459cf18f3")
+	)
+	(hierarchical_label "PH_U_L"
+		(shape input)
+		(at 50.8 182.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "03c57658-bfe8-41cb-9501-a533dbf812c4")
+	)
+	(hierarchical_label "PH_V_H"
+		(shape input)
+		(at 107.95 179.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "06e52848-5fbd-45e6-89ca-b6194f7ec536")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 95.25 184.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "09ac612e-66f1-4e95-8020-9adc6b5cfbf5")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 50.8 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0acea070-ed50-4b29-95d0-9697871a9a4b")
+	)
+	(hierarchical_label "PH_W_H"
+		(shape input)
+		(at 158.75 179.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "19a4901a-605f-4895-95f6-efd26eabcdfb")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 50.8 175.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1bb6598f-4741-4f8f-8172-6f3a8726a1f1")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 95.25 179.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1da3cf9c-e983-430c-b2a2-d484332c6dbf")
+	)
+	(hierarchical_label "+3.3V_A"
+		(shape input)
+		(at 50.8 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "263068b1-8e29-428c-8d69-730ea68a3ace")
+	)
+	(hierarchical_label "FAULT"
+		(shape input)
+		(at 146.05 171.45 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "27d04378-506a-4b4a-acc8-de8250876f04")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 50.8 185.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2a9face0-9226-47ae-8644-dd08a8ce0a55")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 146.05 179.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "304f833e-3aa0-4369-ac47-17ee3f1db317")
+	)
+	(hierarchical_label "READY"
+		(shape input)
+		(at 95.25 176.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "35f58f88-c118-4cde-9ab9-b86dc192b9c4")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 95.25 173.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3d14e31e-5f15-46f9-93f5-04407d8025bd")
+	)
+	(hierarchical_label "READY"
+		(shape input)
+		(at 146.05 176.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4a8c0531-378b-4aff-85c2-85345d4c006b")
+	)
+	(hierarchical_label "RESET"
+		(shape input)
+		(at 146.05 181.61 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "53531cd0-6c3d-4899-8019-bba0930d3424")
+	)
+	(hierarchical_label "PH_W_H"
+		(shape input)
+		(at 200.66 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "58611ffa-72a6-4c50-991e-3fe3bed16e48")
+	)
+	(hierarchical_label "READY"
+		(shape input)
+		(at 38.1 175.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5ccfed43-99fd-4e7e-8cf2-a1d586910912")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 146.05 184.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "69ac8c5b-046d-4de6-b014-120ae22c0440")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 38.1 167.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6ff9a66e-3215-4b05-92eb-41e7748ed4b9")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 38.1 182.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7503d834-d617-4ed6-9566-9845637051e0")
+	)
+	(hierarchical_label "RESET"
+		(shape input)
+		(at 187.96 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7ab1a592-b0dd-44e6-864d-ad66cf183ca9")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 146.05 186.69 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8125a868-6d8f-4b2e-aa61-02b502ad06ac")
+	)
+	(hierarchical_label "+3.3V_A"
+		(shape input)
+		(at 107.95 173.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "87c7f2e0-3371-41a9-8c68-e4f7b260e2e2")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 95.25 168.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8a351b40-d4ed-4426-a356-31ee993bd7a2")
+	)
+	(hierarchical_label "FAULT"
+		(shape input)
+		(at 95.25 171.45 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8b7c745d-689b-4b44-a5d7-5794de4482df")
+	)
+	(hierarchical_label "PH_W_L"
+		(shape input)
+		(at 158.75 184.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9703a19e-46a3-4126-9e23-f3ae467a3fa0")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 50.8 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9a579bd5-9ac6-4000-81fd-9ef440c61647")
+	)
+	(hierarchical_label "PH_V_L"
+		(shape input)
+		(at 107.95 184.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9b024cbb-d0d5-41ed-88ca-5326cee9eac9")
+	)
+	(hierarchical_label "PH_W_L"
+		(shape input)
+		(at 187.96 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a03c53b3-33ba-4885-ae91-8ef066cf5f3c")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 107.95 171.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "aa9ae71e-30da-4bb3-99fd-c39a3a272ab2")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 38.1 177.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ab0002cc-2eed-4927-9ac7-e84504baa27d")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 107.95 186.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ac8d6f56-ac0e-408d-859e-553c36905a36")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 38.1 172.72 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ad0ba053-247e-4235-8fc6-7771f491b984")
+	)
+	(hierarchical_label "RESET"
+		(shape input)
+		(at 38.1 180.34 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b5cff9fe-eeae-4a81-83cb-9b72c1a0a033")
+	)
+	(hierarchical_label "PH_U_L"
+		(shape input)
+		(at 200.66 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bb70bfcf-50c8-4872-b652-e9f292fc34cd")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 107.95 181.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "be3cbc83-b3b6-411b-9443-aa4bf212a2d4")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 146.05 173.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c237b11b-fd34-4949-8d9e-3b96493cb7ab")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 95.25 186.69 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c3564891-cce0-424c-bd9e-6984b0eb0668")
+	)
+	(hierarchical_label "PH_U_H"
+		(shape input)
+		(at 50.8 177.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c996a62f-c5b1-4bce-a217-656585d65dbb")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 158.75 176.53 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "cb07afd8-f534-4391-96ff-ee9727cc3200")
+	)
+	(hierarchical_label "READY"
+		(shape input)
+		(at 187.96 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d59b2c06-0738-445d-bf99-5520d6b57dcf")
+	)
+	(hierarchical_label "PH_V_H"
+		(shape input)
+		(at 200.66 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d656e287-c33d-4ace-94ee-60e641ded5e2")
+	)
+	(hierarchical_label "PH_V_L"
+		(shape input)
+		(at 200.66 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d8e5c7ce-66d6-4fba-a1f7-0777cac96cf2")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 158.75 186.69 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dc61d9cb-5f05-43b3-bb10-d71e116d79d6")
+	)
+	(hierarchical_label "RESET"
+		(shape input)
+		(at 95.25 181.61 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dee75fba-741b-4aba-8b97-4cbb403871b6")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 38.1 185.42 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e67f58ff-b540-49a2-825e-e13cbf4a689e")
+	)
+	(hierarchical_label "FAULT"
+		(shape input)
+		(at 38.1 170.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ea04b91e-7b56-4fd3-ae70-33f0b4e928a6")
+	)
+	(hierarchical_label "PH_U_H"
+		(shape input)
+		(at 200.66 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ee2ef8b6-e2e2-4293-9238-3e36436230a7")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 158.75 181.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ee406311-4f31-4ab9-b33e-85ee09aff51a")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 158.75 171.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f038c3aa-bd42-4a22-b8de-c60d912c8cb2")
+	)
+	(hierarchical_label "+3.3V_A"
+		(shape input)
+		(at 158.75 173.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fc52fc7b-0573-431a-96e8-711ab7a27841")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 146.05 168.91 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fd6756ad-bc44-4bb8-8f2c-aa2a9af915e8")
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
+		(at 40.64 38.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "06a55784-7834-45ce-84ce-57706c279ede")
+		(property "Reference" "J14"
+			(at 42.164 23.368 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_02x10_Counter_Clockwise"
+			(at 40.6401 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x10_P2.54mm_Vertical"
+			(at 40.64 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 40.64 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2ee9f649-68fe-459b-8e19-64c6b5dd5f52")
+		)
+		(pin "5"
+			(uuid "9b563392-f693-42b7-ae4f-06d500ecae10")
+		)
+		(pin "4"
+			(uuid "c7733587-4c48-4d0c-9c3c-fbca5313ba6f")
+		)
+		(pin "9"
+			(uuid "72be6661-66cc-431a-a3f5-8f06581867c4")
+		)
+		(pin "3"
+			(uuid "ca591a1e-ee7d-4ee8-b328-98117bfef194")
+		)
+		(pin "13"
+			(uuid "56933591-93e7-465d-94dd-66eb87d9a661")
+		)
+		(pin "17"
+			(uuid "165dfab6-c190-49a3-a9fb-6420c971b1cf")
+		)
+		(pin "16"
+			(uuid "b848d609-979c-40b8-908b-0dc0bb7ded3b")
+		)
+		(pin "11"
+			(uuid "a4411a96-dfd0-4472-8b3a-d3f7c510b3b0")
+		)
+		(pin "10"
+			(uuid "0b0d3343-f88b-442f-8582-248f23a9e8d8")
+		)
+		(pin "15"
+			(uuid "0826436f-f2d6-4ae5-92e0-f30263df4d63")
+		)
+		(pin "6"
+			(uuid "83639044-80c4-4b23-bc6c-eecb1706dddf")
+		)
+		(pin "7"
+			(uuid "e4f4517a-e76c-4764-b0bf-b33be2e3d99c")
+		)
+		(pin "20"
+			(uuid "116e4334-405c-42c7-a1d3-a19c0e33c037")
+		)
+		(pin "1"
+			(uuid "557bb0f5-3816-45d8-8715-94afa4575526")
+		)
+		(pin "12"
+			(uuid "d0e85fd2-97df-4cef-87da-ed72b7d7606c")
+		)
+		(pin "14"
+			(uuid "59efa485-0a3b-427a-84ad-01f90089159d")
+		)
+		(pin "18"
+			(uuid "5d678c4d-097f-43b1-b2ac-847556f09755")
+		)
+		(pin "19"
+			(uuid "9438768a-6949-465c-a9d8-040130cafa5a")
+		)
+		(pin "8"
+			(uuid "077dae83-55d2-4580-9740-76b2c94aafc2")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x08_Counter_Clockwise")
+		(at 151.13 176.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1bdd19f8-9e36-4645-9430-5d476a52acca")
+		(property "Reference" "J3"
+			(at 152.4 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_02x08_Counter_Clockwise"
+			(at 152.4 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x08_P2.54mm_Vertical"
+			(at 151.13 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 151.13 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x08, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 151.13 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "16"
+			(uuid "8513eb26-d34d-4b6c-bb53-738ff97126d6")
+		)
+		(pin "9"
+			(uuid "801af865-5e76-4dbf-80a6-2e0a51e34c91")
+		)
+		(pin "1"
+			(uuid "300dc6f8-92f1-4294-8313-8de768ceff45")
+		)
+		(pin "3"
+			(uuid "b6d12350-ba64-47b5-b99f-6e2db3a36b93")
+		)
+		(pin "13"
+			(uuid "76756ae9-f067-45f3-9847-d554a72758a4")
+		)
+		(pin "15"
+			(uuid "24441065-1cae-4523-ad04-68c3c4f10105")
+		)
+		(pin "2"
+			(uuid "b6f74abf-28cb-423e-944e-dfe0fca9b910")
+		)
+		(pin "14"
+			(uuid "3c15d918-f16b-4b46-9008-2c95dbdbf006")
+		)
+		(pin "12"
+			(uuid "223081d8-90b2-4b7c-97c8-d15c5ad6d113")
+		)
+		(pin "10"
+			(uuid "b04f1cd7-fb65-4cd2-96e1-eabc1053ba4c")
+		)
+		(pin "11"
+			(uuid "48c37baa-28a5-4377-8aee-85167bcd2ef7")
+		)
+		(pin "4"
+			(uuid "1ef3c00f-4e0e-42e2-9b28-00cc15cf4fa3")
+		)
+		(pin "5"
+			(uuid "688ba87d-875b-4f07-875e-397d7089401e")
+		)
+		(pin "6"
+			(uuid "a4edb805-582d-45d2-a0ff-83f8bfc2c42e")
+		)
+		(pin "7"
+			(uuid "8119bfc4-3bf1-48e8-9645-774a87db2cdd")
+		)
+		(pin "8"
+			(uuid "eb62791e-e4af-4613-a75c-68315fe5c484")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 259.08 161.29 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1d431001-f3b9-4681-bacf-65305454773b")
+		(property "Reference" "C152"
+			(at 251.4599 157.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 253.9999 157.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 250.19 65.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 250.19 -34.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 259.08 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 250.19 -234.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 250.19 -334.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 250.19 -434.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 250.19 -534.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 250.19 -634.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8d12fb5d-872f-48f0-ad20-b6bb8ee1d467")
+		)
+		(pin "2"
+			(uuid "5e2d4cd9-5df0-46b9-82e6-dee476efacc7")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C152")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x08_Counter_Clockwise")
+		(at 43.18 175.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2e6066d9-342e-47ed-9939-f3b3a67ccb5d")
+		(property "Reference" "J1"
+			(at 44.45 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_02x08_Counter_Clockwise"
+			(at 44.45 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x08_P2.54mm_Vertical"
+			(at 43.18 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 43.18 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x08, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 43.18 175.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "16"
+			(uuid "52a9a156-e91f-4533-9028-ecbf153497f6")
+		)
+		(pin "9"
+			(uuid "3c441c3b-bb62-4756-9cd0-a644132fd7a7")
+		)
+		(pin "1"
+			(uuid "a8696ad0-1c68-4cd6-a4f8-eed338899080")
+		)
+		(pin "3"
+			(uuid "4e728e51-94a0-4455-86b6-407a748fcc17")
+		)
+		(pin "13"
+			(uuid "15826262-e283-43c1-8410-524b52db5943")
+		)
+		(pin "15"
+			(uuid "d7bb0a24-d1ad-45d4-a249-d5a7c9a6eaeb")
+		)
+		(pin "2"
+			(uuid "eb6248b4-8c64-4c88-b329-1cad2a11594e")
+		)
+		(pin "14"
+			(uuid "ab301cfd-90b5-412f-9ccb-e1d8f984db3d")
+		)
+		(pin "12"
+			(uuid "3e195127-869c-43c0-af61-6dbe0b1fe2e6")
+		)
+		(pin "10"
+			(uuid "1d67a7fa-10ea-4428-806f-7a63862f0720")
+		)
+		(pin "11"
+			(uuid "2aaa3860-6380-481a-b927-e7c0b52f32cc")
+		)
+		(pin "4"
+			(uuid "0a61607b-2f49-4fbf-9177-2d122adcf178")
+		)
+		(pin "5"
+			(uuid "f5dcd08f-36f1-4585-b2d4-ad7aef548e59")
+		)
+		(pin "6"
+			(uuid "04d032f5-cd54-48d4-941c-b3e25a8a5393")
+		)
+		(pin "7"
+			(uuid "6bcedfab-1301-452a-bea9-54b317409fde")
+		)
+		(pin "8"
+			(uuid "2c9e0b3b-ef8c-45ff-b115-efd0d497678c")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
+		(at 40.64 137.16 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "41088e86-5f82-4b10-887d-9cb3a896e942")
+		(property "Reference" "J5"
+			(at 42.164 122.428 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_02x10_Counter_Clockwise"
+			(at 40.6401 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x10_P2.54mm_Vertical"
+			(at 40.64 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 40.64 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c70a079a-616d-4044-a35c-a314043e710b")
+		)
+		(pin "5"
+			(uuid "b189ea9c-3889-46aa-ae22-4fb6e1312840")
+		)
+		(pin "4"
+			(uuid "df5ddf9b-4a8a-4c99-8dde-f70cb5abb6ef")
+		)
+		(pin "9"
+			(uuid "1d0d64b3-c7de-40b4-b90c-771aee6a4c9e")
+		)
+		(pin "3"
+			(uuid "a072dcd4-3711-4680-b5f2-50f327ddcedb")
+		)
+		(pin "13"
+			(uuid "2faad2bb-5a6d-4bd4-aced-37b0069f26be")
+		)
+		(pin "17"
+			(uuid "997c5810-0588-47a9-8961-887d9e215dcc")
+		)
+		(pin "16"
+			(uuid "5e991a12-306b-41ab-993d-efbbf62bd551")
+		)
+		(pin "11"
+			(uuid "169cf273-0f9e-4dc3-8ad7-10b90f612700")
+		)
+		(pin "10"
+			(uuid "f57919df-2d88-4648-a3a2-60485501bb21")
+		)
+		(pin "15"
+			(uuid "fd78a530-4ced-4eab-9fbe-d451214f38cc")
+		)
+		(pin "6"
+			(uuid "518f6fc0-42c1-4991-8e8f-f3525c9ae638")
+		)
+		(pin "7"
+			(uuid "cdae97b8-4eec-4513-ad94-67941d58e495")
+		)
+		(pin "20"
+			(uuid "37cafffd-669d-49d8-9501-4b726e1cd7e6")
+		)
+		(pin "1"
+			(uuid "2dc42113-e951-4f92-a9bf-f1c833fd991c")
+		)
+		(pin "12"
+			(uuid "b869b421-0b5e-4937-93b7-1bd58ec143a5")
+		)
+		(pin "14"
+			(uuid "6158d6f2-241b-4990-aa2a-3fdcd4e92f3e")
+		)
+		(pin "18"
+			(uuid "5683f626-a846-4952-9f0f-c9bae9d06b3e")
+		)
+		(pin "19"
+			(uuid "f18a9926-af47-435e-9ac2-9cba0c8ae9f2")
+		)
+		(pin "8"
+			(uuid "248b94e6-6f44-4dc6-8772-7a31f988740b")
+		)
+		(instances
+			(project ""
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-06BE")
+		(at 57.15 74.93 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4eccfca2-b6cd-4d84-974e-c82d256cef10")
+		(property "Reference" "J4"
+			(at 46.99 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-06BE"
+			(at 46.99 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R150806BE"
+			(at 40.64 -19.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/TBP01R1-508.pdf"
+			(at 40.64 -119.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "TBP01R1-508 Series - 2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 57.15 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8.5"
+			(at 40.64 -319.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-06BE"
+			(at 40.64 -419.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-06BE?qs=PzGy0jfpSMtbefrSiaRjjA%3D%3D"
+			(at 40.64 -519.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 40.64 -619.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-06BE"
+			(at 40.64 -719.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "9723ba80-97b4-4d87-ba9a-20d7d6d9ffc5")
+		)
+		(pin "2"
+			(uuid "4722cbf4-d24c-40c2-b7b2-bbf576c9893c")
+		)
+		(pin "4"
+			(uuid "c23daad4-1f88-4216-a25c-57e1cdbe6e3c")
+		)
+		(pin "1"
+			(uuid "8e5bb456-92fa-4f15-a45e-db03061aa4ac")
+		)
+		(pin "3"
+			(uuid "5467eb7b-a92c-472c-8d30-b43ca9df9267")
+		)
+		(pin "6"
+			(uuid "868ee129-616c-4131-89b1-c7d8c75d5a68")
+		)
+		(instances
+			(project ""
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
+		(at 181.61 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "50128f2a-fa63-4c24-8adc-73e386589b07")
+		(property "Reference" "J11"
+			(at 183.134 123.698 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_02x10_Counter_Clockwise"
+			(at 181.6101 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x10_P2.54mm_Vertical"
+			(at 181.61 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 181.61 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 181.61 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5de02072-894e-44ed-94a3-ee3015e034ea")
+		)
+		(pin "5"
+			(uuid "7cde9df6-9ae6-4d97-af6d-00e5f6988201")
+		)
+		(pin "4"
+			(uuid "118b96d8-c4ee-415e-8be9-7f10ebb7f6a9")
+		)
+		(pin "9"
+			(uuid "3dd9972b-a298-4abd-865f-ec54f992b16a")
+		)
+		(pin "3"
+			(uuid "f273f944-00b6-4ce7-8e3e-dea247792167")
+		)
+		(pin "13"
+			(uuid "4404ab1c-a4a5-4832-9987-2593d893f781")
+		)
+		(pin "17"
+			(uuid "89f4ba60-ab98-4d0f-b011-36a2f69b5eda")
+		)
+		(pin "16"
+			(uuid "bbcabfb9-c062-4141-8d05-a2979df3369a")
+		)
+		(pin "11"
+			(uuid "dfee3417-bcce-4248-8364-0d482e5b884a")
+		)
+		(pin "10"
+			(uuid "c6117ca9-f73a-4c35-914f-ac9259cf664d")
+		)
+		(pin "15"
+			(uuid "115edbbd-9ce9-411f-852f-887d3286b1e7")
+		)
+		(pin "6"
+			(uuid "5f18f5be-5b09-42cb-a2eb-d89889f08c22")
+		)
+		(pin "7"
+			(uuid "dc8517eb-eee8-4729-84e4-94e83340a5ab")
+		)
+		(pin "20"
+			(uuid "71d2f34c-2d6e-4c06-ad7e-33e0d01e7ff6")
+		)
+		(pin "1"
+			(uuid "5f63ab59-da99-43b1-afb0-a8177d60d6d4")
+		)
+		(pin "12"
+			(uuid "e25cb066-552e-4116-a058-132dd24b7265")
+		)
+		(pin "14"
+			(uuid "ad399749-b491-4f92-ae04-dd3ea7ba56a7")
+		)
+		(pin "18"
+			(uuid "c7b7923d-0f9a-4227-885f-1cf39f678d01")
+		)
+		(pin "19"
+			(uuid "39293cc2-a8aa-4294-b429-0b57d1e5c14e")
+		)
+		(pin "8"
+			(uuid "977a4012-bdfa-4ea3-b676-47dd806d5f75")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 254 33.02 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5456e0be-d494-4282-bb25-3c432bec6c64")
+		(property "Reference" "H3"
+			(at 256.54 31.7499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 256.54 34.2899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_4.3mm_M4"
+			(at 254 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 254 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 254 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 254 25.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6fff46d9-e3e6-4820-a199-3c81f8cc4bd1")
+		(property "Reference" "H1"
+			(at 256.54 24.1299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 256.54 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 254 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 254 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 254 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project ""
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 242.57 138.43 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "72f62d0c-41ac-4c88-9c6e-6769b2037326")
+		(property "Reference" "C158"
+			(at 234.9499 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 237.4899 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 233.68 42.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 233.68 -57.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 242.57 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 233.68 -257.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 233.68 -357.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 233.68 -457.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 233.68 -557.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 233.68 -657.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "400e946f-15e7-4290-a111-0d02425420ec")
+		)
+		(pin "2"
+			(uuid "36f5fe15-f1f0-40c9-9725-07df9d938f6f")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C158")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 259.08 127 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "81c7af34-7213-496e-a80b-fbfbbd45c42f")
+		(property "Reference" "C155"
+			(at 251.4599 123.19 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 253.9999 123.19 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 250.19 30.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 250.19 -69.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 259.08 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 250.19 -269.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 250.19 -369.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 250.19 -469.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 250.19 -569.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 250.19 -669.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e982ffb6-1445-413b-a226-188a48c48c02")
+		)
+		(pin "2"
+			(uuid "c6a00129-2c72-496b-bb8d-c709a56191fd")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C155")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 274.32 149.86 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8208f0f8-4566-407b-86fe-58789dfadff5")
+		(property "Reference" "C149"
+			(at 266.6999 146.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 269.2399 146.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 265.43 53.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 265.43 -46.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 274.32 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 265.43 -246.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 265.43 -346.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 265.43 -446.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 265.43 -546.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 265.43 -646.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d313d84d-77ac-4c92-9ab4-9b28c2466d5e")
+		)
+		(pin "2"
+			(uuid "eb102058-aa3d-497f-8039-7119adf83968")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C149")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 274.32 138.43 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8ba1f2e5-a763-485d-90be-f300cd15080b")
+		(property "Reference" "C150"
+			(at 266.6999 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 269.2399 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 265.43 42.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 265.43 -57.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 274.32 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 265.43 -257.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 265.43 -357.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 265.43 -457.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 265.43 -557.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 265.43 -657.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "aa18f642-3cc4-4748-bbdd-5f7b2390cd9b")
+		)
+		(pin "2"
+			(uuid "efd2b273-7851-4dd0-bb4a-7798a7efeade")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C150")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 274.32 161.29 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9501d9e6-c09e-4b49-8fa7-02f5e69eadc5")
+		(property "Reference" "C148"
+			(at 266.6999 157.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 269.2399 157.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 265.43 65.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 265.43 -34.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 274.32 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 265.43 -234.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 265.43 -334.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 265.43 -434.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 265.43 -534.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 265.43 -634.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "04287177-b43b-4834-9459-e3af4ce17b14")
+		)
+		(pin "2"
+			(uuid "337dc753-1847-4e14-9692-0d081c2e9e1e")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C148")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 254 52.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9a807867-e7b8-43cc-bb5b-05c03a565c0c")
+		(property "Reference" "H5"
+			(at 256.54 50.7999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 256.54 53.3399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_4.3mm_M4"
+			(at 254 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 254 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 254 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "H5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 242.57 127 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9d10d733-d156-4854-8f31-ef58892f15a6")
+		(property "Reference" "C159"
+			(at 234.9499 123.19 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 237.4899 123.19 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 233.68 30.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 233.68 -69.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 242.57 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 233.68 -269.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 233.68 -369.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 233.68 -469.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 233.68 -569.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 233.68 -669.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1941178d-f682-45a8-bd50-93db76747f10")
+		)
+		(pin "2"
+			(uuid "0638af06-0ebc-4844-b4c5-01957e07cdfa")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C159")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 274.32 127 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a3bb3bd2-e838-4bc1-865a-5d2670b702c8")
+		(property "Reference" "C151"
+			(at 266.6999 123.19 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 269.2399 123.19 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 265.43 30.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 265.43 -69.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 274.32 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 265.43 -269.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 265.43 -369.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 265.43 -469.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 265.43 -569.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 265.43 -669.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "051e8ceb-1a6d-4e08-857e-2b30996fd87e")
+		)
+		(pin "2"
+			(uuid "da17f457-a1ce-4760-b5bb-e60c24548e97")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C151")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 254 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a7ed4077-06f4-4ef1-9cc9-2ca7e02a4973")
+		(property "Reference" "H7"
+			(at 256.54 59.6899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 256.54 62.2299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 254 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 254 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 254 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "H7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 259.08 138.43 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a89c3d74-96fb-477f-ba60-b77b5ae745f3")
+		(property "Reference" "C154"
+			(at 251.4599 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 253.9999 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 250.19 42.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 250.19 -57.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 259.08 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 250.19 -257.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 250.19 -357.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 250.19 -457.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 250.19 -557.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 250.19 -657.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5f2cadcb-c4e1-4cc7-a811-45c3d0a94ca0")
+		)
+		(pin "2"
+			(uuid "bf448bf6-ee73-46dc-aae5-84cd68716163")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C154")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x08_Counter_Clockwise")
+		(at 100.33 176.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ab72dde8-65c5-428e-a1b3-bcc0e67084e4")
+		(property "Reference" "J2"
+			(at 101.6 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_02x08_Counter_Clockwise"
+			(at 101.6 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x08_P2.54mm_Vertical"
+			(at 100.33 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 100.33 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x08, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 100.33 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "16"
+			(uuid "276a0538-697d-4381-a7a1-87f35f360977")
+		)
+		(pin "9"
+			(uuid "f7879d84-a3cf-43cd-915e-fdb234c53279")
+		)
+		(pin "1"
+			(uuid "0956a5f9-8507-436c-86c1-56ae3d2c67a9")
+		)
+		(pin "3"
+			(uuid "f7b82f8b-8cd6-48ff-a3fe-afbd29cd8a04")
+		)
+		(pin "13"
+			(uuid "c8bbf72a-207c-4e90-90f8-a0c63ad4bf1f")
+		)
+		(pin "15"
+			(uuid "c2c3b1c6-b55f-468f-9036-3b6427c8fe29")
+		)
+		(pin "2"
+			(uuid "211da6b9-89b5-42e8-ab99-4fc45260316d")
+		)
+		(pin "14"
+			(uuid "e3456c09-3e47-45d2-a944-1bfa6b7181e2")
+		)
+		(pin "12"
+			(uuid "61156923-895c-4b69-be33-459010bd48c3")
+		)
+		(pin "10"
+			(uuid "dba73658-0f91-4ad2-a037-93b4b5c7126f")
+		)
+		(pin "11"
+			(uuid "4f8ca331-ba5e-4915-b7f0-49da1f6a5d7b")
+		)
+		(pin "4"
+			(uuid "fd108091-a563-49fd-8fe6-70843349de1f")
+		)
+		(pin "5"
+			(uuid "3089a2fe-906e-4019-bd08-2119e82d8e3b")
+		)
+		(pin "6"
+			(uuid "3ced67c3-97b7-47dd-8533-fb86b4fbf4bc")
+		)
+		(pin "7"
+			(uuid "0427169a-7ec3-44e4-bbb8-ce8d964c3c58")
+		)
+		(pin "8"
+			(uuid "1d97a737-5e91-4759-8da6-728fd026aa14")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 242.57 149.86 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ba127831-789c-443c-aace-2be427cb470a")
+		(property "Reference" "C157"
+			(at 234.9499 146.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 237.4899 146.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 233.68 53.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 233.68 -46.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 242.57 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 233.68 -246.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 233.68 -346.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 233.68 -446.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 233.68 -546.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 233.68 -646.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e0990c24-5bdc-4fbf-8c93-aa35e9831ac2")
+		)
+		(pin "2"
+			(uuid "c0d6e613-98d1-4aa8-bc84-bd1aed9ce202")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C157")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 254 45.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c5f09dd4-8cee-46fa-a90b-83f700343b08")
+		(property "Reference" "H4"
+			(at 256.54 44.4499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 256.54 46.9899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_4.3mm_M4"
+			(at 254 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 254 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 254 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
+		(at 193.04 43.18 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d260ecf3-75a6-4a6e-823c-bbed045eb8fb")
+		(property "Reference" "J13"
+			(at 194.564 28.448 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_02x10_Counter_Clockwise"
+			(at 193.0401 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x10_P2.54mm_Vertical"
+			(at 193.04 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 193.04 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 193.04 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f669f3fe-9323-491e-87d1-e6dc6dfc150c")
+		)
+		(pin "5"
+			(uuid "7a353b82-30b2-428d-9c57-803ea6c0c9ae")
+		)
+		(pin "4"
+			(uuid "c59eacdb-db96-461e-b2f3-baf10603b03e")
+		)
+		(pin "9"
+			(uuid "f4260eaa-cb2f-42c4-a9af-424401a591e5")
+		)
+		(pin "3"
+			(uuid "12ea089c-47ac-45dc-8939-9f6586508d2c")
+		)
+		(pin "13"
+			(uuid "a617a841-218f-4046-8452-bfb39e01dace")
+		)
+		(pin "17"
+			(uuid "288b5ef8-cf15-4470-89af-6c5dd1a0f073")
+		)
+		(pin "16"
+			(uuid "e9dbaab3-5512-46da-b156-67f3f322349b")
+		)
+		(pin "11"
+			(uuid "fd6db07e-800d-4260-ab27-b82c22cc6c86")
+		)
+		(pin "10"
+			(uuid "2a38271b-cdf0-47aa-a3cc-9baabc24005e")
+		)
+		(pin "15"
+			(uuid "71a328b4-f5cf-4a8c-8509-86a94e4d0cd3")
+		)
+		(pin "6"
+			(uuid "52a5fc04-9868-4b2e-b5a9-398a41336361")
+		)
+		(pin "7"
+			(uuid "0a96277d-775b-4aae-86f8-a0c0acf66978")
+		)
+		(pin "20"
+			(uuid "31932be6-1965-4566-9f44-4ef0c48e6b61")
+		)
+		(pin "1"
+			(uuid "7adcdee9-e51c-46b3-a156-a4e6b938c5f9")
+		)
+		(pin "12"
+			(uuid "dff06ec9-9d90-46b9-8aa4-d4b9ca92a7f3")
+		)
+		(pin "14"
+			(uuid "066c5cdf-a9fc-4cb8-a003-fe2a100d28be")
+		)
+		(pin "18"
+			(uuid "c3ccb079-ebb5-45ba-b1cc-dd720810faf4")
+		)
+		(pin "19"
+			(uuid "f2072158-84e2-4502-9781-2472c8a1471a")
+		)
+		(pin "8"
+			(uuid "18068907-be9d-4452-90fa-f13ff2e9a334")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R2-508-06BE")
+		(at 48.26 102.87 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d5bfa2d8-3ef7-424e-b9f9-7d81c23e34ea")
+		(property "Reference" "J6"
+			(at 38.1 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R2-508-06BE"
+			(at 38.1 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:TBP01R250806BE"
+			(at 31.75 7.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp01r2-508.pdf"
+			(at 31.75 -92.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "6 Position Terminal Block Header, Male Pins, Shrouded (4 Side) 0.200\" (5.08mm) Vertical Through Hole"
+			(at 48.26 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "12.4"
+			(at 31.75 -292.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R2-508-06BE"
+			(at 31.75 -392.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP01R2-508-06BE?qs=PzGy0jfpSMsphIICa8uwtQ%3D%3D"
+			(at 31.75 -492.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 31.75 -592.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R2-508-06BE"
+			(at 31.75 -692.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "dcf1f9e9-7493-4961-b4ba-f2a8e9e21b5c")
+		)
+		(pin "5"
+			(uuid "9c78d838-753c-48d8-b953-733ca8357fd6")
+		)
+		(pin "4"
+			(uuid "f1e970ff-3c6f-43c0-9516-1e78a37ba815")
+		)
+		(pin "1"
+			(uuid "f9b54092-728f-4a48-956f-d52c90b132f7")
+		)
+		(pin "3"
+			(uuid "8197eead-5b4c-4882-98c1-275ee9e70ca3")
+		)
+		(pin "6"
+			(uuid "e5b508a0-baf0-435c-89ca-39884ebeb513")
+		)
+		(instances
+			(project ""
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 242.57 161.29 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "dac68dca-2e06-4a94-9d6e-0cd176574944")
+		(property "Reference" "C156"
+			(at 234.9499 157.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 237.4899 157.48 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 233.68 65.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 233.68 -34.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 242.57 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 233.68 -234.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 233.68 -334.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 233.68 -434.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 233.68 -534.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 233.68 -634.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "874bc87f-8a15-4f95-a21d-7ae3c0ea85ed")
+		)
+		(pin "2"
+			(uuid "8ad42117-a0d5-4880-acad-d16cd940150e")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C156")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
+		(at 193.04 92.71 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e22e20b6-26a8-4107-9501-fb0de93b8984")
+		(property "Reference" "J12"
+			(at 194.564 77.978 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_02x10_Counter_Clockwise"
+			(at 193.0401 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x10_P2.54mm_Vertical"
+			(at 193.04 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 193.04 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 193.04 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "71c2f8c3-863f-4649-aab8-e160738fe77a")
+		)
+		(pin "5"
+			(uuid "ba49d0de-46df-4662-9e40-04d95d059025")
+		)
+		(pin "4"
+			(uuid "c51777fe-9cc8-42da-ad12-5b1b8971255d")
+		)
+		(pin "9"
+			(uuid "8407d65e-f7b6-4573-82f2-fe91fb2342a5")
+		)
+		(pin "3"
+			(uuid "8a0ff0f0-a77e-4768-ae9d-cae9f09ae36f")
+		)
+		(pin "13"
+			(uuid "e1f52d9b-beb8-4387-a8a5-3e2c1aaa8281")
+		)
+		(pin "17"
+			(uuid "becb9c26-e21e-4369-a789-e45f71600116")
+		)
+		(pin "16"
+			(uuid "93db1b6a-0209-4401-96b9-bf513bb89a41")
+		)
+		(pin "11"
+			(uuid "51f2930e-f843-4387-a1c9-0a507d8a48af")
+		)
+		(pin "10"
+			(uuid "36a5be9f-37af-4c79-bbd8-a2f18416093a")
+		)
+		(pin "15"
+			(uuid "c547ee35-55fc-4d01-a6be-b2c486c192a8")
+		)
+		(pin "6"
+			(uuid "b5e297fd-48f8-4559-9278-910a722760d1")
+		)
+		(pin "7"
+			(uuid "c4d52668-f4d6-4c76-b5b7-23ece79f5a93")
+		)
+		(pin "20"
+			(uuid "79baee56-b471-4c22-9a31-e37bf0fd90d4")
+		)
+		(pin "1"
+			(uuid "899a24c2-f440-4523-b341-c37b39a76740")
+		)
+		(pin "12"
+			(uuid "add74952-b6bb-42e3-8910-828b7ab64a07")
+		)
+		(pin "14"
+			(uuid "53f13ce8-be24-42b4-8bbd-aba0db2b0b50")
+		)
+		(pin "18"
+			(uuid "0bf7d426-6179-4702-81f0-1af324eb806a")
+		)
+		(pin "19"
+			(uuid "2ecbbb65-136f-46d4-abbc-3fb5a6461365")
+		)
+		(pin "8"
+			(uuid "43fe41d9-f644-4bf2-ae05-50a23c7c6a34")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 259.08 149.86 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e8e4a40b-2f1c-4b21-b56a-44596f0044fb")
+		(property "Reference" "C153"
+			(at 251.4599 146.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 253.9999 146.05 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "InverterCom:CAPAE660X800N"
+			(at 250.19 53.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 250.19 -46.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 259.08 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 250.19 -246.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 250.19 -346.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 250.19 -446.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 250.19 -546.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 250.19 -646.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0a8a8eb8-6915-4e9e-b6b3-c5766ebf115e")
+		)
+		(pin "2"
+			(uuid "63504a00-42be-4377-99c4-49913d5f50ab")
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "C153")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 254 67.31 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "fd84f701-796c-400b-ac10-e67f03118345")
+		(property "Reference" "H8"
+			(at 256.54 66.0399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 256.54 68.5799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_4.3mm_M4"
+			(at 254 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 254 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 254 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "H8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 127)
+		(size 38.1 31.75)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "3f1e0dfd-3bb5-4a06-942c-ceeb344b0f52")
+		(property "Sheetname" "OutputRelays"
+			(at 101.6 126.2884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "OutputRelays.kicad_sch"
+			(at 101.6 159.3346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "GND_A" input
+			(at 139.7 147.32 0)
+			(uuid "b67a16fd-5418-4d3e-8d28-d0bcf75e0a9d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RLY1_COM" input
+			(at 101.6 148.59 180)
+			(uuid "27b5a721-0f01-4f54-8555-9bdfd000985c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RLY1_IN_A" input
+			(at 139.7 139.7 0)
+			(uuid "aa294c23-5263-495a-94bb-ad77ea7227f1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RLY1_NO" input
+			(at 101.6 146.05 180)
+			(uuid "78d3e3ff-91fc-4efa-88d1-f734805480bc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RLY2_COM" input
+			(at 101.6 140.97 180)
+			(uuid "c9fe358b-f32b-4afe-8c09-4f797da16430")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RLY2_IN_A" input
+			(at 139.7 137.16 0)
+			(uuid "6c5b96c8-f313-4e92-bd32-d23694ab0b41")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RLY2_NO" input
+			(at 101.6 138.43 180)
+			(uuid "32bb52fb-6452-4530-9860-11e458aa53e1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RLY3_COM" input
+			(at 101.6 133.35 180)
+			(uuid "1f28abc2-fc14-4888-8086-821e20b24872")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RLY3_IN_A" input
+			(at 139.7 134.62 0)
+			(uuid "4380828d-9230-4299-baf7-705db6fe4aa4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RLY3_NO" input
+			(at 101.6 130.81 180)
+			(uuid "0f1b19d7-8699-4ec8-a407-c26b7fd84ebb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "+12V_A" input
+			(at 139.7 149.86 0)
+			(uuid "9db27ea6-d3bd-4eb6-b0a3-98b944e43612")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(page "21")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 63.5)
+		(size 38.1 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "4bd65640-a238-4824-8612-422b719a050e")
+		(property "Sheetname" "ADC_1"
+			(at 101.6 62.7884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ADC1.kicad_sch"
+			(at 101.6 102.1846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+3.3V_A" input
+			(at 139.7 97.79 0)
+			(uuid "2ee25538-2150-452d-9f75-c56c04413ef5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ADC1_CS_A" input
+			(at 139.7 81.28 0)
+			(uuid "bd223ff6-9e38-4fcc-a6c7-a20c76f3747a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ADC2_CS_A" input
+			(at 139.7 78.74 0)
+			(uuid "f23bb215-845d-484d-9bed-0917866b4683")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GND_A" input
+			(at 139.7 92.71 0)
+			(uuid "cc5c2151-aef2-4a80-aa28-ecdf74bc3fa0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ISENSE_+5V_C" input
+			(at 101.6 81.28 180)
+			(uuid "48b43c85-cc82-45cf-9690-bf0bf3c76bcb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ISENSE_DC_LINK_C" input
+			(at 101.6 78.74 180)
+			(uuid "9bb33b36-3105-467c-8ef1-042754e6543e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ISENSE_GND_C" input
+			(at 101.6 68.58 180)
+			(uuid "95d20b1a-5bc5-4e02-ae0c-8d040dbd4cac")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ISENSE_PH_U_C" input
+			(at 101.6 76.2 180)
+			(uuid "2f28b29c-8090-43dd-84b3-8a03a81bd175")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ISENSE_PH_V_C" input
+			(at 101.6 73.66 180)
+			(uuid "17750842-8784-4eeb-823a-f900e65f11c6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ISENSE_PH_W_C" input
+			(at 101.6 71.12 180)
+			(uuid "fa763035-3510-4a2b-999d-3359fe2f3c5b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VSENSE_DC_LINK_B" input
+			(at 101.6 97.79 180)
+			(uuid "47499f40-f2c8-49ad-b0fe-352362bb0da7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VSENSE_GND_B" input
+			(at 101.6 87.63 180)
+			(uuid "f81bd3c4-8400-47fe-9bfc-9371d0ae1942")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VSENSE_PH_U_B" input
+			(at 101.6 95.25 180)
+			(uuid "2b16277a-42bb-4c1d-87d4-a86a7fb42ac8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VSENSE_PH_V_B" input
+			(at 101.6 92.71 180)
+			(uuid "436dbc16-f35e-4ae5-afe6-8001dbcbf396")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "VSENSE_PH_W_B" input
+			(at 101.6 90.17 180)
+			(uuid "71fe1682-85bc-467d-9f20-2b98d7f90c23")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "+12V_A" input
+			(at 139.7 95.25 0)
+			(uuid "3269d5cb-5669-410d-9eeb-0a9bceeb6dd9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_RX_A" input
+			(at 139.7 88.9 0)
+			(uuid "4f7709a6-eb75-4dcc-80a9-d95b8942ccbe")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_SCK_A" input
+			(at 139.7 83.82 0)
+			(uuid "937e3d5f-a159-4be8-bce1-24bd91d77266")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_TX_A" input
+			(at 139.7 86.36 0)
+			(uuid "0ae848ad-56fb-415a-927c-4a554715973f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 101.6 25.4)
+		(size 38.1 26.67)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "f159466c-bbb2-406f-b1ae-5de2b34cdfbb")
+		(property "Sheetname" "CAN"
+			(at 101.6 24.6884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CAN.kicad_sch"
+			(at 101.6 52.6546 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+3.3V_A" input
+			(at 101.6 29.21 180)
+			(uuid "eb039006-c48c-4369-92d4-dd65f3479309")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_GND" input
+			(at 139.7 29.21 0)
+			(uuid "90e5dca7-990a-4a7e-b83d-0c52ba78d06d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_H_B" input
+			(at 139.7 31.75 0)
+			(uuid "1e5ee48a-2d26-4fc2-a0da-5fc417ea27c3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_INT_A" input
+			(at 101.6 39.37 180)
+			(uuid "d50fba3b-ae87-47e4-9af5-aab89f95cd28")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_L_B" input
+			(at 139.7 34.29 0)
+			(uuid "00bd5242-8ffd-4e21-8fd7-b1e198c803c9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_SPI_CS_A" input
+			(at 101.6 41.91 180)
+			(uuid "38b4f5b8-9562-4c8c-a602-e70392507af2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_SPI_RX_A" input
+			(at 101.6 44.45 180)
+			(uuid "b0d179e3-b089-4fe7-877d-bcee3923335a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_SPI_SCK_A" input
+			(at 101.6 49.53 180)
+			(uuid "091fbadb-9454-4e18-997a-219d884e7886")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_SPI_TX_A" input
+			(at 101.6 46.99 180)
+			(uuid "8283bc4c-005b-4d24-9fba-75509a896063")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GND_A" input
+			(at 101.6 34.29 180)
+			(uuid "4c7d1064-019e-45d2-9e99-47115564a6d9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "+12V_A" input
+			(at 101.6 31.75 180)
+			(uuid "7206ca7d-cc3f-4f33-a302-7984a4ee04af")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CAN_5V" input
+			(at 139.7 36.83 0)
+			(uuid "9fc4c08b-ab14-4a1e-ab3f-9a6b2b04c08a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_24V" input
+			(at 139.7 39.37 0)
+			(uuid "5285eeb7-4286-488b-9568-1a59ea400b14")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_JUMPER_A" input
+			(at 139.7 43.18 0)
+			(uuid "c9e99d7b-0fee-4118-a7e4-3013877eec4e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_JUMPER_B" input
+			(at 139.7 45.72 0)
+			(uuid "87e2375e-1d5e-485a-b732-a0f42895c134")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "MainBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(page "22")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

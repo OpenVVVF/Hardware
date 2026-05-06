@@ -1,0 +1,140 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "ADCM-S05R5SA224XB"
+   (description "Supercapacitors / Ultracapacitors CAP 0.22F 5.5V THT")
+   (family "CAP")
+   (package "ADCMS05R5SA224XB")
+   (attribute "Datasheet Link" "https://abracon.com/datasheets/ADCM-S05R5S.pdf")
+   (attribute "Geometry.Height" "16mm")
+   (attribute "Mouser Part Number" "")
+   (attribute "Mouser Price/Stock" "")
+   (attribute "Manufacturer_Name" "ABRACON")
+   (attribute "Manufacturer_Part_Number" "ADCM-S05R5SA224XB")
+   (gate
+    (symbol "ADCM-S05R5SA224XB")
+    (pin "+" 1 PS)
+    (pin "-" 2 PS)
+   )
+  )
+  (symbol "ADCM-S05R5SA224XB"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 200 -100) (pt 230 -100) (pt 230 100) (pt 200 100) (closed))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 180 50) (pt 140 50))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 160 70) (pt 160 30))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 100 0) (pt 200 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 300 0) (pt 400 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (closed true) (pt 300 100) (pt 300 -100) (pt 270 -100) (pt 270 100) (pt 300 100))
+   )
+   (terminal
+    (body (symbol "PINSHORT") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+   (terminal
+    (body (symbol "PINSHORT") (pt 500 0) (rot 0) (mir X) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "ADCMS05R5SA224XB"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 3.22 4.5)
+      (pt -12.22 4.5)
+      (pt -12.22 -4.5)
+      (pt 3.22 -4.5)
+      (pt 3.22 4.5))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -1.96 3.5)
+      (pt -7.72 3.5)
+      (arc (pt -7.720 3.500) (pt -4.220 -3.500) (pt -11.220 3.500) (start 180.0) (sweep 90.0))
+      (pt -7.72 -3.5)
+      (pt -1.28 -3.5)
+      (arc (pt -1.280 -3.500) (pt 2.220 -3.500) (pt -4.780 3.500) (start 180.0) (sweep -90.0))
+      (pt -1.28 3.5)
+      (pt -1.96 3.5))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt -1.96 3.5)
+      (pt -7.72 3.5)
+      (arc (pt -7.720 3.500) (pt -4.220 -3.500) (pt -11.220 3.500) (start 180.0) (sweep 90.0))
+      (pt -7.72 -3.5)
+      (pt -1.28 -3.5)
+      (arc (pt -1.280 -3.500) (pt 2.220 -3.500) (pt -4.780 3.500) (start 180.0) (sweep -90.0))
+      (pt -1.28 3.5)
+      (pt -1.96 3.5))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 2.8 0)
+      (arc (pt 2.800 0.000) (pt 2.800 -0.050) (pt 2.700 0.050) (start 180.0) (sweep -.0))
+      (pt 2.7 0)
+      (arc (pt 2.700 0.000) (pt 2.800 -0.050) (pt 2.700 0.050) (start 180.0) (sweep 180.0))
+      (pt 2.8 0))))
+   (leg 1 (pt 0.000 0.000) (padstack 0))
+   (leg 2 (pt -9.000 0.000) (padstack 2))
+   (padstack 0
+    (hole 0.7)
+    (plated true)
+    (pad (layer TCOP) (square 1.200))
+    (pad (layer INNER) (round 1.200))
+    (pad (layer BCOP) (square 1.200))
+   )
+   (padstack 2
+    (hole 0.7)
+    (plated true)
+    (pad (layer TCOP) (round 1.200))
+    (pad (layer INNER) (round 1.200))
+    (pad (layer BCOP) (round 1.200))
+   )
+   (model "ADCM-S05R5SA224XB.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

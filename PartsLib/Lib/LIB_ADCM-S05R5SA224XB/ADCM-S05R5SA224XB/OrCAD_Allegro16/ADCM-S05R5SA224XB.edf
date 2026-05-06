@@ -1,0 +1,154 @@
+
+(EDIF
+  (rename &ADCM_S05R5SA224XB "ADCM_S05R5SA224XB")
+  (EDIFVersion 2 0 0)
+  (EDIFLevel 0)
+  (keywordMap (keywordLevel 0))
+  (status
+    (written
+      (timestamp 2026 04 30 01 52 28)
+      (dataOrigin "20336016/1553794/2.50/2/3/Capacitor Polarised")
+      (program "SamacSys ECAD Model ADCM_S05R5SA224XB"
+        (version "1.2"))))
+  (library
+  (rename &ADCM_S05R5SA224XB "ADCM_S05R5SA224XB")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition (scale 1 (e 254 -6) (unit DISTANCE)))
+      (userData GRIDRESOLUTION (integer 50 50))
+      (figureGroup DEFAULT (pathWidth 10) (textHeight 100))
+      (figureGroup PROPERTY (pathWidth 10) (textHeight 90))
+      (figureGroup PINNUMBER (pathWidth 10) (textHeight 90))
+      (figureGroup PINNAME (pathWidth 10) (textHeight 90))
+      (figureGroup COMMENT (pathWidth 10) (textHeight 90))
+      (figureGroup PIN (pathWidth 10) (textHeight 90))
+      (figureGroup GRAPHIC (pathWidth 10) (textHeight 100))
+    )
+    (cell
+      (rename &ADCM_S05R5SA224XB "ADCM_S05R5SA224XB")
+      (cellType GENERIC)
+      (view
+        (rename NORMAL "Normal")
+        (viewType SCHEMATIC)
+        (interface
+          (designator "C")
+          (property (rename PACKAGENAME "PackageName") (string "ADCM_S05R5SA224XB"))
+          (property (rename ISHETEROGENEOUS "IsHeterogeneous") (string "False"))
+          (property (rename DEVICESINVIEW "DevicesInView") (string "1"))
+          (property (rename DEVICESINPACKAGE "DevicesInPackage") (string "1"))
+          (property (rename DEVICEDESIGNATOR "DeviceDesignator") (string "A"))
+          (property (rename DEVICENUMBERING "DeviceNumbering") (string "Alpha"))
+          (property (rename PCB_32_FOOTPRINT "PCB Footprint") (string "ADCMS05R5SA224XB"))
+          (property (rename &Mouser_Part_Number "Mouser Part Number") (string ""))
+          (property (rename &Mouser_Price_Stock "Mouser Price/Stock") (string ""))
+          (property (rename &Manufacturer_Name "Manufacturer_Name") (string "ABRACON"))
+          (property (rename &Manufacturer_Part_Number "Manufacturer_Part_Number") (string "ADCM-S05R5SA224XB"))
+          (property (rename &Description "Description") (string "Supercapacitors / Ultracapacitors CAP 0.22F 5.5V THT"))
+          (property (rename &Datasheet_Link "Datasheet Link") (string "https://abracon.com/datasheets/ADCM-S05R5S.pdf"))
+          (property (rename &Height "Height") (string "16 mm"))
+          (property (rename &_60__32_VALUE_32__62_ "Value") (string "ADCM_S05R5SA224XB"))
+          (property (rename VALUE "Value") (string "Value"))
+          (port
+            (rename &P "P")
+            (designator "1")
+            (property (rename ORDER "Order") (string "0") (owner "OrCAD"))
+          )
+          (port
+            (rename &M "M")
+            (designator "2")
+            (property (rename ORDER "Order") (string "1") (owner "OrCAD"))
+          )
+          (symbol
+            (portImplementation
+              (name &P)
+              (keywordDisplay DESIGNATOR (display PINNUMBER))
+              (figure PIN (path (pointList (pt -100 -100) (pt 0 -100))))
+              (connectLocation (figure GRAPHIC (dot (pt -100 -100))))
+            )
+            (portImplementation
+              (name &M)
+              (keywordDisplay DESIGNATOR (display PINNUMBER))
+              (figure PIN (path (pointList (pt 300 -100) (pt 400 -100))))
+              (connectLocation (figure GRAPHIC (dot (pt 400 -100))))
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 100 0)
+                  (pt 100 -200)
+                  (pt 130 -200)
+                  (pt 130 0)
+                  (pt 100 0)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 80 -50)
+                  (pt 40 -50)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 60 -30)
+                  (pt 60 -70)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 0 -100)
+                  (pt 100 -100)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 200 -100)
+                  (pt 300 -100)
+                )
+              )
+            )
+              (figure GRAPHIC
+                (figureGroupOverride GRAPHIC
+	              (fillPattern 1 1
+                    (boolean
+                      (boolean
+                        (true)
+                      )
+                    )
+                  )
+                )
+              (polygon
+                (pointList
+                  (pt 200 0)
+                  (pt 200 -200)
+                  (pt 170 -200)
+                  (pt 170 0)
+                  (pt 200 0)
+                )
+              )
+            )
+            (keywordDisplay DESIGNATOR (display PROPERTY (justify 24) (orientation R0) (origin (pt 250 80))))
+            (propertyDisplay &_60__32_VALUE_32__62_ (display PROPERTY (justify 24) (orientation R0) (origin (pt 250 -20))))
+          )
+        )
+      )
+    )
+  )
+)
