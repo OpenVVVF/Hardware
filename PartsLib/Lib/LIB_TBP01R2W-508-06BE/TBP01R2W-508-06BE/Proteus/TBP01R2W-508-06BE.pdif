@@ -1,0 +1,128 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "TBP01R2W-508-06BE"
+   (description "2~24 Poles, Pluggable, Receptacle, Vertical 5.08 Pitch, Terminal Block Connector")
+   (family "CON")
+   (package "SHDR6W100P0X508_1X6_4064X850X1240P")
+   (attribute "Datasheet Link" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r2w-508.pdf")
+   (attribute "Geometry.Height" "12.4mm")
+   (attribute "Mouser Part Number" "490-TBP01R2W-50806BE")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R2W-508-06BE?qs=PzGy0jfpSMstd7VozfoB7g%3D%3D")
+   (attribute "Manufacturer_Name" "Same Sky")
+   (attribute "Manufacturer_Part_Number" "TBP01R2W-508-06BE")
+   (gate
+    (symbol "TBP01R2W-508-06BE")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+    (pin "3" 3 PS)
+    (pin "4" 4 PS)
+    (pin "5" 5 PS)
+    (pin "6" 6 PS)
+   )
+  )
+  (symbol "TBP01R2W-508-06BE"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -600) (pt 200 -600) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -400) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -500) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "SHDR6W100P0X508_1X6_4064X850X1240P"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt -7.87 -4.15)
+      (pt -7.87 5.25)
+      (pt 33.87 5.25)
+      (pt 33.87 -4.15)
+      (pt -7.87 -4.15))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -7.62 -3.9)
+      (pt -7.62 5)
+      (pt 33.62 5)
+      (pt 33.62 -3.9)
+      (pt -7.62 -3.9))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 0 -3.9)
+      (pt 33.62 -3.9)
+      (pt 33.62 5)
+      (pt -7.62 5)
+      (pt -7.62 0))))
+   (leg 1 (pt 0 0) (padstack 1))
+   (leg 2 (pt 5.08 0) (padstack 0))
+   (leg 3 (pt 10.16 0) (padstack 0))
+   (leg 4 (pt 15.24 0) (padstack 0))
+   (leg 5 (pt 20.32 0) (padstack 0))
+   (leg 6 (pt 25.4 0) (padstack 0))
+   (padstack 0
+    (hole 1.6)
+    (plated true)
+    (pad (layer TCOP) (round 2.4))
+    (pad (layer INNER) (round 2.4))
+    (pad (layer BCOP) (round 2.4))
+   )
+   (padstack 1
+    (hole 1.6)
+    (plated true)
+    (pad (layer TCOP) (square 2.4))
+    (pad (layer INNER) (round 2.4))
+    (pad (layer BCOP) (square 2.4))
+   )
+   (model "TBP01R2W-508-06BE.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

@@ -1,0 +1,248 @@
+(footprint "SHDR6W100P0X508_1X6_4064X850X1240P"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "TBP01R2W-508-06BE")
+	(tags "Connector")
+	(property "Reference" "J**"
+		(at -10 0 0)
+		(layer "F.SilkS")
+		(uuid "5125412c-00ba-4cc2-8df4-a30ddf298c81")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "SHDR6W100P0X508_1X6_4064X850X1240P"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "f333c1b6-2375-4e4b-849f-8044352c3a38")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6cf854a7-be38-481f-a930-12adb0ebf9d2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5ebe6b00-e9f2-4814-94be-5616c85654c5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole exclude_from_pos_files)
+	(fp_line
+		(start -7.62 -5)
+		(end -7.62 0)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "70037841-8d84-402d-b817-bc461b68f20e")
+	)
+	(fp_line
+		(start 0 3.9)
+		(end 33.62 3.9)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "fc4d6910-7a2a-43fc-8e83-a495b5761f64")
+	)
+	(fp_line
+		(start 33.62 -5)
+		(end -7.62 -5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "1155b071-7f21-4aa7-bb5c-64b044dd62a1")
+	)
+	(fp_line
+		(start 33.62 3.9)
+		(end 33.62 -5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "34669f2b-3c53-4eda-98d1-b7577f291393")
+	)
+	(fp_line
+		(start -7.87 -5.25)
+		(end 33.87 -5.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "32c843bf-0797-43c1-a606-5c74be0ce065")
+	)
+	(fp_line
+		(start -7.87 4.15)
+		(end -7.87 -5.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "d5531ee6-78ca-4e32-ab63-9684f05daa02")
+	)
+	(fp_line
+		(start -7.62 -5)
+		(end 33.62 -5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "5943c53e-be00-435b-9d89-2fb5590f6a8a")
+	)
+	(fp_line
+		(start -7.62 3.9)
+		(end -7.62 -5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "b9d77ef2-7216-42e9-b4dc-0c4c01455c51")
+	)
+	(fp_line
+		(start 33.62 -5)
+		(end 33.62 3.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "092466c2-b6c9-47b0-8590-bbbdc1dd37f1")
+	)
+	(fp_line
+		(start 33.62 3.9)
+		(end -7.62 3.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "d724db70-1664-44e6-b801-ae98eef9fb88")
+	)
+	(fp_line
+		(start 33.87 -5.25)
+		(end 33.87 4.15)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "a4c42501-09b6-41c8-96dc-a8e065a90869")
+	)
+	(fp_line
+		(start 33.87 4.15)
+		(end -7.87 4.15)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "c765386b-56d3-4fe7-a5f8-b5bae537dc34")
+	)
+	(pad "1" thru_hole rect
+		(at 0 0 90)
+		(size 2.4 2.4)
+		(drill 1.6)
+		(layers "*.Cu" "*.Mask" "F.SilkS")
+		(remove_unused_layers no)
+		(thermal_bridge_angle 45)
+		(uuid "c3dd29b5-be4a-488a-9493-923c7cbcfc20")
+	)
+	(pad "2" thru_hole circle
+		(at 5.08 0 90)
+		(size 2.4 2.4)
+		(drill 1.6)
+		(layers "*.Cu" "*.Mask" "F.SilkS")
+		(remove_unused_layers no)
+		(uuid "d31d2262-f6c8-4e4f-96af-0bab6e7973ed")
+	)
+	(pad "3" thru_hole circle
+		(at 10.16 0 90)
+		(size 2.4 2.4)
+		(drill 1.6)
+		(layers "*.Cu" "*.Mask" "F.SilkS")
+		(remove_unused_layers no)
+		(uuid "350504ea-ca88-4aa8-a03a-a15437a54d01")
+	)
+	(pad "4" thru_hole circle
+		(at 15.24 0 90)
+		(size 2.4 2.4)
+		(drill 1.6)
+		(layers "*.Cu" "*.Mask" "F.SilkS")
+		(remove_unused_layers no)
+		(uuid "ffd65c37-01b0-404c-978d-43f968e45610")
+	)
+	(pad "5" thru_hole circle
+		(at 20.32 0 90)
+		(size 2.4 2.4)
+		(drill 1.6)
+		(layers "*.Cu" "*.Mask" "F.SilkS")
+		(remove_unused_layers no)
+		(uuid "2078307e-d910-4b5a-bb66-9904a88aecd8")
+	)
+	(pad "6" thru_hole circle
+		(at 25.4 0 90)
+		(size 2.4 2.4)
+		(drill 1.6)
+		(layers "*.Cu" "*.Mask" "F.SilkS")
+		(remove_unused_layers no)
+		(uuid "b758e6bd-05e2-43fd-a8ac-5dfa623eb1dd")
+	)
+	(embedded_fonts no)
+	(model "./PartsLib/3D/TBP01R2W-508-06BE.stp"
+		(offset
+			(xyz 0 -4 21)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -90 -90)
+		)
+	)
+	(model "./PartsLib/3D/TBP01P1W-508-06BE.stp"
+		(offset
+			(xyz 0 -4 22)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -90 -90)
+		)
+	)
+)
