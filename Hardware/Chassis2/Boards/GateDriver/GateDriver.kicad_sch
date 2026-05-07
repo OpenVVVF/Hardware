@@ -1786,6 +1786,180 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Power_Management:BTS462TATMA1"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -5.08 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "BTS462TATMA1"
+				(at 2.54 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
+				(at 0 -20.32 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
+				(at 0 -22.86 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "infineon power load switch"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO?252*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "BTS462TATMA1_0_0"
+				(rectangle
+					(start -5.08 5.08)
+					(end 5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "Vbb"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "OUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(text "CONNECTOR FROM THIS GATE DRIVER\nTO MAIN CONTROL BOARD BELOW"
 		(exclude_from_sim no)
@@ -3155,6 +3329,46 @@
 		)
 		(uuid "ffdd28d7-ac2d-4818-a539-d7cbf2b7004d")
 	)
+	(label "+12V_ENABLE"
+		(at 67.31 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "016e6b20-0b10-4f7a-9986-5f60ce912086")
+	)
+	(label "+12V_ENABLE"
+		(at 81.28 34.29 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0751f160-a1eb-405b-8fd3-ee1fe9b3c117")
+	)
+	(label "+12V_IN"
+		(at 81.28 31.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1c2b6f8b-66b7-4a4d-904b-e747fcaa69fa")
+	)
+	(label "+12V_IN"
+		(at 74.93 74.93 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "93915e57-cf66-4bfa-816b-953dfd44fbe6")
+	)
 	(hierarchical_label "+12V_A"
 		(shape input)
 		(at 271.78 83.82 0)
@@ -3188,16 +3402,16 @@
 		)
 		(uuid "06435ac2-a2b6-4569-a9e5-e279526fe5f5")
 	)
-	(hierarchical_label "PH_V_L_G"
+	(hierarchical_label "GND_A"
 		(shape input)
-		(at 196.85 25.4 270)
+		(at 74.93 90.17 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "0663bb89-24f4-4278-a33e-a3604e7ddf9f")
+		(uuid "09596217-0af1-40c5-b0e2-052fda8bf648")
 	)
 	(hierarchical_label "PH_U_H_C"
 		(shape input)
@@ -3221,6 +3435,17 @@
 		)
 		(uuid "0bd73f5d-67b9-49fd-9c6d-be753d73f8d2")
 	)
+	(hierarchical_label "PH_V_L_G"
+		(shape input)
+		(at 199.39 25.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0be8e1cb-c15e-4323-84c8-02f237550b74")
+	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
 		(at 156.21 88.9 0)
@@ -3231,28 +3456,6 @@
 			(justify left)
 		)
 		(uuid "121b150c-d290-44f2-9eb6-75558d58ddfd")
-	)
-	(hierarchical_label "PH_U_L_C"
-		(shape input)
-		(at 138.43 22.86 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "12e1b7cf-60e5-4bae-9de3-82b6e4ca4919")
-	)
-	(hierarchical_label "PH_V_H_G"
-		(shape input)
-		(at 204.47 25.4 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "13f024c6-9bbf-4a23-8afb-37201a865b6d")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -3275,6 +3478,17 @@
 			(justify left)
 		)
 		(uuid "14f7aef7-c08b-4bc1-9811-9075e6979cce")
+	)
+	(hierarchical_label "PH_W_L_E"
+		(shape input)
+		(at 252.73 24.13 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "167d1fad-f7a6-4305-ac92-ff526ba60d01")
 	)
 	(hierarchical_label "+12V_A"
 		(shape input)
@@ -3331,6 +3545,17 @@
 		)
 		(uuid "1c8fde37-7eeb-4545-9688-d5c8be7121d6")
 	)
+	(hierarchical_label "PH_V_H_G"
+		(shape input)
+		(at 201.93 25.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1f63c39e-bbfe-4647-8b57-50b5addf9735")
+	)
 	(hierarchical_label "PH_W_L"
 		(shape input)
 		(at 81.28 44.45 0)
@@ -3364,6 +3589,17 @@
 		)
 		(uuid "24d277a2-a2a8-4d5a-92d7-de39bb9654eb")
 	)
+	(hierarchical_label "PH_V_L_E"
+		(shape input)
+		(at 196.85 25.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "288d59ad-55ae-4c51-81f9-b78e8b18ba9d")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 57.15 165.1 270)
@@ -3386,6 +3622,28 @@
 		)
 		(uuid "3057a926-875d-4b6c-ade3-bf053a2c48a5")
 	)
+	(hierarchical_label "PH_U_L_C"
+		(shape input)
+		(at 133.35 22.86 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "30e337f0-e387-4d93-9135-f79a230e8593")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 143.51 166.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3156676b-c8df-4102-b2aa-11064c9a4d2e")
+	)
 	(hierarchical_label "FAULT"
 		(shape input)
 		(at 87.63 115.57 180)
@@ -3396,6 +3654,17 @@
 			(justify right)
 		)
 		(uuid "33ddb689-e789-4e56-8f70-7ad00bc1b6d5")
+	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 99.06 152.4 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "35f91794-a6a8-4d29-9da2-7346742888a4")
 	)
 	(hierarchical_label "PH_U_H_G"
 		(shape input)
@@ -3418,6 +3687,17 @@
 			(justify left)
 		)
 		(uuid "3a3a16dd-e935-4862-b764-9fa80337c37b")
+	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 130.81 140.97 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3c555392-c756-4ea8-8ace-941901aa55a5")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -3463,6 +3743,17 @@
 		)
 		(uuid "455a21fb-4060-479d-8a30-b3d0cc91053d")
 	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 130.81 166.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4660f3be-5ee0-4b8b-a82b-ea15bfbcfeac")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 81.28 46.99 0)
@@ -3484,17 +3775,6 @@
 			(justify left)
 		)
 		(uuid "49a1ed6d-0b21-4be5-bfb6-990752cdcb8f")
-	)
-	(hierarchical_label "PH_U_L_G"
-		(shape input)
-		(at 135.89 22.86 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4a40ccb9-e62f-45e0-a81e-e854e3e3c33a")
 	)
 	(hierarchical_label "PH_V_L"
 		(shape input)
@@ -3520,7 +3800,7 @@
 	)
 	(hierarchical_label "+12V_A"
 		(shape input)
-		(at 26.67 189.23 180)
+		(at 99.06 139.7 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3529,27 +3809,60 @@
 		)
 		(uuid "5510f490-a3d1-411c-aae5-616aed55eada")
 	)
-	(hierarchical_label "PH_U_H_E"
+	(hierarchical_label "PH_W_H_E"
 		(shape input)
-		(at 140.97 22.86 270)
+		(at 260.35 24.13 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "55f211c8-5b8d-4eb0-8e8a-3e44c88d0ede")
+		(uuid "569270da-be89-4a4c-8f10-2d5af6a18fec")
 	)
-	(hierarchical_label "PH_U_L_E"
+	(hierarchical_label "+12V_A"
 		(shape input)
-		(at 133.35 22.86 270)
+		(at 99.06 191.77 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "5aa4179e-0939-4bf3-9146-d5b102ba9acf")
+		(uuid "5ab0f961-752a-4cfe-9bf1-19b713a56b1a")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 111.76 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5e5b873d-bcd0-431e-8842-f5c8594d3acb")
+	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 82.55 82.55 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5ef27a21-055d-4e51-8cd0-d9499673c208")
+	)
+	(hierarchical_label "PH_V_H_E"
+		(shape input)
+		(at 204.47 25.4 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5f1255a0-2cd0-454a-9097-d62e849c3794")
 	)
 	(hierarchical_label "PH_V_L"
 		(shape input)
@@ -3606,6 +3919,28 @@
 		)
 		(uuid "6db07a60-7a3b-4fe2-ab03-6a32320b87a3")
 	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 143.51 179.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7131d9c0-bcb6-4fc6-956a-88fa15148567")
+	)
+	(hierarchical_label "PH_U_H_E"
+		(shape input)
+		(at 143.51 22.86 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7544f32a-927e-47b1-8785-767553954794")
+	)
 	(hierarchical_label "PH_W_L_C"
 		(shape input)
 		(at 271.78 97.79 0)
@@ -3641,7 +3976,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 39.37 189.23 0)
+		(at 111.76 139.7 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3649,6 +3984,17 @@
 			(justify left)
 		)
 		(uuid "7c27e44d-bf4b-48af-9495-7a155789f8b5")
+	)
+	(hierarchical_label "PH_U_L_E"
+		(shape input)
+		(at 135.89 22.86 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "84c197d3-ef80-4c9d-86ff-7911fbfbe1a0")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -3672,6 +4018,17 @@
 		)
 		(uuid "9599775d-c752-49dd-868c-3f295bb88f80")
 	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 130.81 193.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "96fc101a-4e72-420a-af0a-f640aed079de")
+	)
 	(hierarchical_label "PH_V_H"
 		(shape input)
 		(at 68.58 49.53 180)
@@ -3694,6 +4051,17 @@
 		)
 		(uuid "98dadb2e-3741-4445-b786-bd294434b7d4")
 	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 143.51 193.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "992f4c21-2d86-4725-98fd-8cbe40d8e75a")
+	)
 	(hierarchical_label "PH_W_H"
 		(shape input)
 		(at 237.49 40.64 90)
@@ -3704,17 +4072,6 @@
 			(justify left)
 		)
 		(uuid "9945f5a6-ad12-45ce-8909-8e936eee4618")
-	)
-	(hierarchical_label "PH_W_L_C"
-		(shape input)
-		(at 255.27 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "99a58382-89d3-4f01-bf8d-a5314f830650")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -3782,16 +4139,27 @@
 		)
 		(uuid "a21f265a-87a8-4491-824d-edda94cfbe33")
 	)
-	(hierarchical_label "GND_A"
+	(hierarchical_label "PH_U_H_G"
 		(shape input)
-		(at 81.28 34.29 0)
+		(at 140.97 22.86 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
-		(uuid "a91dcf19-5f1c-470d-8185-d9cc96aaac06")
+		(uuid "a5b54110-423c-4c59-b788-5a1985b523cd")
+	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 99.06 165.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a6e740b9-0b23-4c7d-9617-4bb732f83484")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -3815,6 +4183,17 @@
 		)
 		(uuid "ab1fade3-12b5-4a56-9690-cd8178e7b1a3")
 	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 111.76 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "aef1006b-8a5e-4be8-9a26-220ec397faa9")
+	)
 	(hierarchical_label "+12V_A"
 		(shape input)
 		(at 213.36 45.72 0)
@@ -3826,27 +4205,16 @@
 		)
 		(uuid "b180f750-fc9d-443f-beb9-6e4610120fd4")
 	)
-	(hierarchical_label "PH_U_H_G"
+	(hierarchical_label "PH_V_L_C"
 		(shape input)
-		(at 143.51 22.86 270)
+		(at 194.31 25.4 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "b19c6004-0e6f-42fe-8738-786fc6b547be")
-	)
-	(hierarchical_label "PH_W_L_E"
-		(shape input)
-		(at 250.19 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b1db6400-def1-400f-aba7-863e447830f2")
+		(uuid "b43b1bc9-c773-417c-ae0f-5f716339ccd6")
 	)
 	(hierarchical_label "PH_V_L_G"
 		(shape input)
@@ -3859,27 +4227,16 @@
 		)
 		(uuid "b7864845-57ca-447b-99e9-9b06cbebbe3d")
 	)
-	(hierarchical_label "PH_V_H_E"
+	(hierarchical_label "PH_W_L_C"
 		(shape input)
-		(at 201.93 25.4 270)
+		(at 250.19 24.13 270)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "b7b9ab17-6167-48ea-bdfa-2cc4c4af92bb")
-	)
-	(hierarchical_label "PH_W_H_E"
-		(shape input)
-		(at 257.81 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b9543c74-3dfc-4776-baaa-a25257d47e66")
+		(uuid "bb10ec97-6d71-41eb-85d9-12c63c0bd5a1")
 	)
 	(hierarchical_label "PH_U_H"
 		(shape input)
@@ -3958,6 +4315,28 @@
 		)
 		(uuid "c8152066-f74d-4b24-99af-1bd0efefd0d6")
 	)
+	(hierarchical_label "PH_U_L_G"
+		(shape input)
+		(at 138.43 22.86 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ce996313-1923-4045-8be4-78f4ee7cb444")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 111.76 191.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d1ac9455-ae3b-4936-be23-b46dbf5244b1")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 166.37 31.75 0)
@@ -3969,6 +4348,17 @@
 		)
 		(uuid "d305545e-9b9c-4677-8b90-722df126a378")
 	)
+	(hierarchical_label "PH_W_H_G"
+		(shape input)
+		(at 257.81 24.13 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d465c242-d4bd-48ab-8ab6-d748d69eead6")
+	)
 	(hierarchical_label "PH_V_H_G"
 		(shape input)
 		(at 213.36 62.23 0)
@@ -3979,28 +4369,6 @@
 			(justify left)
 		)
 		(uuid "d4d84327-6446-4cda-ae1d-30364af0114c")
-	)
-	(hierarchical_label "PH_W_L_G"
-		(shape input)
-		(at 252.73 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d744f344-28a4-49c7-857c-c0a5272ce0e1")
-	)
-	(hierarchical_label "PH_V_L_C"
-		(shape input)
-		(at 199.39 25.4 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "db0f429e-d6ed-4800-ae34-6dfc594592a4")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -4046,16 +4414,16 @@
 		)
 		(uuid "e580be17-5041-4ffb-9774-31afb8f944e6")
 	)
-	(hierarchical_label "+12V_A"
+	(hierarchical_label "GND_A"
 		(shape input)
-		(at 81.28 31.75 0)
+		(at 143.51 140.97 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "e8b90eae-772b-4724-84c9-acf3333b5df8")
+		(uuid "ee4f396c-abf2-49d1-b705-25be9f8c316e")
 	)
 	(hierarchical_label "PH_V_L_E"
 		(shape input)
@@ -4068,6 +4436,17 @@
 		)
 		(uuid "f02e5a5c-ecef-4f19-b1b5-aa1eef4d7aba")
 	)
+	(hierarchical_label "PH_W_L_G"
+		(shape input)
+		(at 255.27 24.13 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f63986d1-8446-4b1f-a867-8f27ecdbc678")
+	)
 	(hierarchical_label "PH_V_L_C"
 		(shape input)
 		(at 213.36 97.79 0)
@@ -4079,27 +4458,136 @@
 		)
 		(uuid "fa12724b-e0c6-4c85-8c8c-bcbc8a7edc87")
 	)
-	(hierarchical_label "PH_V_L_E"
+	(hierarchical_label "+12V_A"
 		(shape input)
-		(at 194.31 25.4 270)
+		(at 130.81 179.07 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "fea8ca3c-2ee3-4fd0-83b1-f3c3a164ab49")
+		(uuid "fb32eb4e-bea9-43d7-830e-29fb1cb1c2dc")
 	)
-	(hierarchical_label "PH_W_H_G"
-		(shape input)
-		(at 260.35 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 130.81 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1475fd75-7751-4818-ab4d-c3b6338d864e")
+		(property "Reference" "C78"
+			(at 137.16 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 			)
-			(justify right)
 		)
-		(uuid "ff907cf9-df16-493d-b0cb-0fca4a581ab0")
+		(property "Value" "UCM1H101MCL1GS"
+			(at 137.16 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 139.7 237.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 139.7 337.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 130.81 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 139.7 537.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 139.7 637.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 139.7 737.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 139.7 837.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 139.7 937.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "49f51339-a07d-46ac-816b-d6caaf005e32")
+		)
+		(pin "1"
+			(uuid "22a2f547-973a-481a-8022-6e350e993203")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C78")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "InverterCom:LTST-C230CKT")
@@ -4535,7 +5023,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCM1H101MCL1GS")
-		(at 26.67 189.23 0)
+		(at 99.06 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4544,7 +5032,7 @@
 		(fields_autoplaced yes)
 		(uuid "37429ea1-7b2d-4cd6-9de3-40dc8ab86d16")
 		(property "Reference" "C1"
-			(at 33.02 181.61 0)
+			(at 105.41 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4552,7 +5040,7 @@
 			)
 		)
 		(property "Value" "UCM1H101MCL1GS"
-			(at 33.02 184.15 0)
+			(at 105.41 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4560,7 +5048,7 @@
 			)
 		)
 		(property "Footprint" "CAPAE660X800N"
-			(at 35.56 285.42 0)
+			(at 107.95 235.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4570,7 +5058,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
-			(at 35.56 385.42 0)
+			(at 107.95 335.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4580,7 +5068,7 @@
 			)
 		)
 		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
-			(at 26.67 189.23 0)
+			(at 99.06 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4589,7 +5077,7 @@
 			)
 		)
 		(property "Height" "8"
-			(at 35.56 585.42 0)
+			(at 107.95 535.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4599,7 +5087,7 @@
 			)
 		)
 		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
-			(at 35.56 685.42 0)
+			(at 107.95 635.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4609,7 +5097,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
-			(at 35.56 785.42 0)
+			(at 107.95 735.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4619,7 +5107,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at 35.56 885.42 0)
+			(at 107.95 835.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4629,7 +5117,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
-			(at 35.56 985.42 0)
+			(at 107.95 935.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4776,6 +5264,126 @@
 			(project ""
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 99.06 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "51e763fb-877c-4952-bb33-b9a33674634c")
+		(property "Reference" "C74"
+			(at 105.41 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 105.41 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 107.95 248.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 107.95 348.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 99.06 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 107.95 548.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 107.95 648.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 107.95 748.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 107.95 848.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 107.95 948.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f4edc35e-30c3-4084-bc4b-9928e05ebcfb")
+		)
+		(pin "1"
+			(uuid "05eec8cf-9fdb-4db7-96b2-ce968d552663")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C74")
 					(unit 1)
 				)
 			)
@@ -5178,6 +5786,126 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 99.06 191.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "662c6e23-2439-46d9-95c6-482c7383e4ee")
+		(property "Reference" "C77"
+			(at 105.41 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 105.41 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 107.95 287.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 107.95 387.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 99.06 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 107.95 587.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 107.95 687.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 107.95 787.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 107.95 887.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 107.95 987.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "70f4ff43-5eef-456c-85f5-30bd9484d8a3")
+		)
+		(pin "1"
+			(uuid "0008d495-efc0-4ff4-af9b-d8ced32bdac0")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C77")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 93.98 124.46 90)
 		(unit 1)
@@ -5360,6 +6088,204 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "LED1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Power_Management:BTS462TATMA1")
+		(at 74.93 82.55 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8d4b23e0-204b-453a-9183-b6b9ab6ad029")
+		(property "Reference" "U5"
+			(at 88.9 76.1298 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BTS462TATMA1"
+			(at 88.9 78.6698 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
+			(at 74.93 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
+			(at 74.93 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
+			(at 74.93 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "486b91c9-a415-48f6-91c8-457650a08f4f")
+		)
+		(pin "3"
+			(uuid "8e8ee5ef-d630-47e0-ad59-b01f9a25cac2")
+		)
+		(pin "1"
+			(uuid "4ece7b5d-64ab-40a1-8651-2429e422ab2e")
+		)
+		(pin "2"
+			(uuid "253ba77c-6bcf-4ee2-a76e-9675cebea281")
+		)
+		(pin "5"
+			(uuid "6e605bbf-8939-4fc9-9328-bc40ac680251")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "U5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 130.81 193.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "940e382c-49ab-45b4-a429-9789e34bf1a1")
+		(property "Reference" "C82"
+			(at 137.16 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 137.16 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 139.7 289.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 139.7 389.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 130.81 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 139.7 589.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 139.7 689.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 139.7 789.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 139.7 889.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 139.7 989.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "765df7d6-44c0-4746-90ef-22537da1c597")
+		)
+		(pin "1"
+			(uuid "9d05d313-3a2f-445c-acaa-d1f7729d581a")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C82")
 					(unit 1)
 				)
 			)
@@ -5758,6 +6684,366 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 130.81 179.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c5ceba1c-233c-4dd8-915b-93a65e3211a2")
+		(property "Reference" "C81"
+			(at 137.16 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 137.16 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 139.7 275.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 139.7 375.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 130.81 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 139.7 575.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 139.7 675.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 139.7 775.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 139.7 875.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 139.7 975.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f9b2b80e-4bdf-4a13-bff8-e796e796ab17")
+		)
+		(pin "1"
+			(uuid "4709324c-57b1-4dfb-89f7-418ce7a788a4")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C81")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 99.06 165.1 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c7505f0d-bd95-47d1-a74f-b90e7ac6a214")
+		(property "Reference" "C75"
+			(at 105.41 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 105.41 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 107.95 261.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 107.95 361.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 99.06 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 107.95 561.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 107.95 661.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 107.95 761.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 107.95 861.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 107.95 961.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "8d189690-271f-48e4-8a1b-f2e981da387d")
+		)
+		(pin "1"
+			(uuid "7658d7b3-b923-4955-941f-a0652b274fa8")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C75")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:UCM1H101MCL1GS")
+		(at 130.81 166.37 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ca3938a6-7ee1-464a-a60a-a33fd2b6184f")
+		(property "Reference" "C80"
+			(at 137.16 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UCM1H101MCL1GS"
+			(at 137.16 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CAPAE660X800N"
+			(at 139.7 262.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.nichicon.co.jp/english/products/pdfs/e-ucm.pdf"
+			(at 139.7 362.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "Nichicon 100uF 50 V Aluminium Electrolytic Capacitor SMD, CM Series 2000h 6.3 (Dia.) x 7.7mm"
+			(at 130.81 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "8"
+			(at 139.7 562.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "647-UCM1H101MCL1GS"
+			(at 139.7 662.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Nichicon/UCM1H101MCL1GS?qs=DSgADHjnLTkk%252B%2Fewo0WoDQ%3D%3D"
+			(at 139.7 762.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Nichicon"
+			(at 139.7 862.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "UCM1H101MCL1GS"
+			(at 139.7 962.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "218881cc-aa83-41d7-b1e9-27870eaadd9d")
+		)
+		(pin "1"
+			(uuid "b9781c17-2e69-45c5-9b2c-f8fe9bb06401")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(reference "C80")
 					(unit 1)
 				)
 			)
