@@ -750,10 +750,6 @@
 		(color 0 0 0 0)
 		(uuid "ed744044-c98c-4bc0-97f2-d35286696279")
 	)
-	(no_connect
-		(at 99.06 59.69)
-		(uuid "4f163051-0ac9-4dd2-9749-c7be586ddf55")
-	)
 	(wire
 		(pts
 			(xy 72.39 39.37) (xy 85.09 39.37)
@@ -1337,6 +1333,17 @@
 		)
 		(uuid "daa898d2-856e-4aa1-86c5-b0a3e5955f90")
 	)
+	(hierarchical_label "ADC1_INT_A"
+		(shape input)
+		(at 99.06 59.69 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dce1b126-049a-4df6-be62-74ec03ff22ea")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 68.58 39.37 180)
@@ -1739,7 +1746,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "68a01867-4870-4d85-81c2-dddaef73e166")
-		(property "Reference" "C4"
+		(property "Reference" "C40"
 			(at 88.9 41.9099 0)
 			(effects
 				(font
@@ -1793,7 +1800,7 @@
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/0caf4ddd-5aa9-47fe-b3d8-386937cdff66"
-					(reference "C4")
+					(reference "C40")
 					(unit 1)
 				)
 			)
@@ -1874,7 +1881,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a5488d09-f1bc-4757-bc78-02f00ff45374")
-		(property "Reference" "C3"
+		(property "Reference" "C41"
 			(at 76.2 41.9099 0)
 			(effects
 				(font
@@ -1928,7 +1935,7 @@
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/0caf4ddd-5aa9-47fe-b3d8-386937cdff66"
-					(reference "C3")
+					(reference "C41")
 					(unit 1)
 				)
 			)

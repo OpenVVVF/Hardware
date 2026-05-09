@@ -1,0 +1,27 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#SamacSys ECAD Model EC7BW-110S12
+#/7899140/1553794/2.50/6/4/Power Supply
+DEF EC7BW-110S12 PS 0 30 Y Y 1 F N
+F0 "PS" 1450 300 50 H V L CNN
+F1 "EC7BW-110S12" 1450 200 50 H V L CNN
+F2 "EC7BW110S12" 1450 100 50 H I L CNN
+F3 "https://componentsearchengine.com/Datasheets/1/EC7BW-110S12.pdf" 1450 0 50 H I L CNN
+F4 "Isolated DC/DC Converters DC-DC Converter, 20 Watt, 4:1 Input Range, for Railway System, 43-160VDC Input, 12VDC Output, 90% Efficiency" 1450 -100 50 H I L CNN "Description"
+F5 "10.7" 1450 -200 50 H I L CNN "Height"
+F6 "418-EC7BW-110S12" 1450 -300 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.com/Search/Refine.aspx?Keyword=418-EC7BW-110S12" 1450 -400 50 H I L CNN "Mouser Price/Stock"
+F8 "Cincon" 1450 -500 50 H I L CNN "Manufacturer_Name"
+F9 "EC7BW-110S12" 1450 -600 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X +VIN 1 1600 0 200 L 50 50 0 0 P
+X -VIN 2 1600 -100 200 L 50 50 0 0 P
+X +VOUT 3 0 0 200 R 50 50 0 0 P
+X TRIM 4 0 -200 200 R 50 50 0 0 P
+X -VOUT 5 0 -100 200 R 50 50 0 0 P
+X REMOTE_ON/OFF 6 1600 -200 200 L 50 50 0 0 P
+P 5 0 1 6 200 100 1400 100 1400 -300 200 -300 200 100 N
+ENDDRAW
+ENDDEF
+#
+#End Library

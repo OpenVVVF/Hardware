@@ -1,0 +1,116 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "22-04-1041"
+   (description "Headers & Wire Housings .098 HDR VERT 4P")
+   (family "CON")
+   (package "SHDR4W64P0X250_1X4_950X580X1210P")
+   (attribute "Datasheet Link" "https://www.molex.com/pdm_docs/sd/022041041_sd.pdf")
+   (attribute "Geometry.Height" "12.1mm")
+   (attribute "Mouser Part Number" "538-22-04-1041")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Molex/22-04-1041?qs=KHty%2FoMxDPmNq3PD4JOsMQ%3D%3D")
+   (attribute "Manufacturer_Name" "Molex")
+   (attribute "Manufacturer_Part_Number" "22-04-1041")
+   (gate
+    (symbol "22-04-1041")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+    (pin "3" 3 PS)
+    (pin "4" 4 PS)
+   )
+  )
+  (symbol "22-04-1041"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -400) (pt 200 -400) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "SHDR4W64P0X250_1X4_950X580X1210P"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt 1.45 -3.45)
+      (pt -8.95 -3.45)
+      (pt -8.95 3.25)
+      (pt 1.45 3.25)
+      (pt 1.45 -3.45))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 1.2 -3.2)
+      (pt -8.7 -3.2)
+      (pt -8.7 3)
+      (pt 1.2 3)
+      (pt 1.2 -3.2))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 0 -3.2)
+      (pt -8.7 -3.2)
+      (pt -8.7 3)
+      (pt 1.2 3)
+      (pt 1.2 0))))
+   (leg 1 (pt 0 0) (padstack 1))
+   (leg 2 (pt -2.5 0) (padstack 0))
+   (leg 3 (pt -5 0) (padstack 0))
+   (leg 4 (pt -7.5 0) (padstack 0))
+   (padstack 0
+    (hole 1.1)
+    (plated true)
+    (pad (layer TCOP) (round 1.65))
+    (pad (layer INNER) (round 1.65))
+    (pad (layer BCOP) (round 1.65))
+   )
+   (padstack 1
+    (hole 1.1)
+    (plated true)
+    (pad (layer TCOP) (square 1.65))
+    (pad (layer INNER) (round 1.65))
+    (pad (layer BCOP) (square 1.65))
+   )
+   (model "22-04-1041.stp"
+    (euler 90 0 0)
+    (offset -3.75 -0.2199999988079071 1.649999976158142)
+   )
+  )
+ )
+)
