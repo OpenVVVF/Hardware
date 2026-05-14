@@ -3845,6 +3845,17 @@
 		)
 		(uuid "722e1aa8-9441-40bb-aa4f-e4d0e784f4ff")
 	)
+	(hierarchical_label "DRIVER_RESET"
+		(shape input)
+		(at 238.76 62.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "73585040-f53d-478a-9b44-2e42d316af0e")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 48.26 21.59 180)
@@ -3855,17 +3866,6 @@
 			(justify right)
 		)
 		(uuid "7745eb93-3702-4de9-9eb0-40023f3986cd")
-	)
-	(hierarchical_label "RESET"
-		(shape input)
-		(at 238.76 62.23 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "78a9c5fd-0cc8-4ff9-8fab-eba6144289e6")
 	)
 	(hierarchical_label "FAULT"
 		(shape input)
@@ -3922,7 +3922,7 @@
 		)
 		(uuid "8ec2dcf5-4ec7-40cb-87df-119b0023e8b8")
 	)
-	(hierarchical_label "RESET"
+	(hierarchical_label "DRIVER_RESET"
 		(shape input)
 		(at 48.26 29.21 180)
 		(effects
