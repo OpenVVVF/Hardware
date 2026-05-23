@@ -1,0 +1,172 @@
+(footprint "RESC11050X120N"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "3550")
+	(tags "Resistor")
+	(property "Reference" "R**"
+		(at 0 -3.5 0)
+		(layer "F.SilkS")
+		(uuid "1c2e4e5a-e0bf-492f-a439-63d2dc5ff889")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "RESC11050X120N"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "51f32379-0ced-4112-b526-ad641be64597")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6cebee2c-84d9-4889-b073-63fb0430a978")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f513e749-d52a-4f1e-9ef9-86fb4c4397ec")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start 0 -2.4)
+		(end 0 2.4)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "831d0ee6-6da0-4d19-a421-799b0b969460")
+	)
+	(fp_line
+		(start -6.25 -2.9)
+		(end 6.25 -2.9)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "e4187753-178f-444a-8625-6965f765efb1")
+	)
+	(fp_line
+		(start -6.25 2.9)
+		(end -6.25 -2.9)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "de826cfe-fb3a-4e54-8a8a-bcddb09f670a")
+	)
+	(fp_line
+		(start -5.5 -2.5)
+		(end 5.5 -2.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "8062f3bc-c662-4965-aec6-73644e718251")
+	)
+	(fp_line
+		(start -5.5 2.5)
+		(end -5.5 -2.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "f108e47c-8c24-4501-80af-80fddc57b3dc")
+	)
+	(fp_line
+		(start 5.5 -2.5)
+		(end 5.5 2.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "e322de1b-dff0-4f7c-a34c-b9e83e1986fe")
+	)
+	(fp_line
+		(start 5.5 2.5)
+		(end -5.5 2.5)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "3ad85785-b23f-45db-b66a-dcd35c01433c")
+	)
+	(fp_line
+		(start 6.25 -2.9)
+		(end 6.25 2.9)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "ab324ac3-acdb-4f8b-b03d-b6ba20bae2bf")
+	)
+	(fp_line
+		(start 6.25 2.9)
+		(end -6.25 2.9)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "Dwgs.User")
+		(uuid "6f0fbe1a-569c-4f6f-b1b7-94cbb118265b")
+	)
+	(pad "1" smd rect
+		(at -4.45 0)
+		(size 3.1 5.25)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(thermal_bridge_angle 45)
+		(uuid "394e6131-2c97-4397-8348-dcd203489570")
+	)
+	(pad "2" smd rect
+		(at 4.45 0)
+		(size 3.1 5.25)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(thermal_bridge_angle 45)
+		(uuid "83f7d6c3-6923-4ff9-aec8-762f769910a7")
+	)
+	(embedded_fonts no)
+	(model "./PartsLib/3D/3550150RJT.stp"
+		(offset
+			(xyz 0 0 1)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -0)
+		)
+	)
+)

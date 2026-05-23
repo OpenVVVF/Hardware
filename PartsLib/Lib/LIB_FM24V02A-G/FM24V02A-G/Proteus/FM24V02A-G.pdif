@@ -1,0 +1,144 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "FM24V02A-G"
+   (description "Cypress Semiconductor FM24V02A-G Serial-I2C FRAM Memory, 256kbit, 2  3.6 V SOIC 8-Pin")
+   (family "ANA")
+   (package "SOIC127P602X173-8N")
+   (attribute "Datasheet Link" "https://ms.componentsearchengine.com/Datasheets/2/FM24V02A-G.pdf")
+   (attribute "Geometry.Height" "1.727mm")
+   (attribute "Mouser Part Number" "727-FM24V02A-G")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Cypress-Semiconductor/FM24V02A-G/?qs=ILgNtqsyH23xixHZ0uhhNg%3D%3D")
+   (attribute "Manufacturer_Name" "Infineon")
+   (attribute "Manufacturer_Part_Number" "FM24V02A-G")
+   (gate
+    (symbol "FM24V02A-G")
+    (pin "A0" 1 PS)
+    (pin "A1" 2 PS)
+    (pin "A2" 3 PS)
+    (pin "VSS" 4 PS)
+    (pin "VDD" 8 PS)
+    (pin "WP" 7 PS)
+    (pin "SCL" 6 PS)
+    (pin "SDA" 5 PS)
+   )
+  )
+  (symbol "FM24V02A-G"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 800 100) (pt 800 -400) (pt 200 -400) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1000 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1000 -100) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1000 -200) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1000 -300) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "SOIC127P602X173-8N"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt -3.75 2.739)
+      (pt 3.75 2.739)
+      (pt 3.75 -2.739)
+      (pt -3.75 -2.739)
+      (pt -3.75 2.739))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -1.949 2.444)
+      (pt 1.949 2.444)
+      (pt 1.949 -2.444)
+      (pt -1.949 -2.444)
+      (pt -1.949 2.444))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt -1.949 1.174)
+      (pt -0.679 2.444))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt -1.599 2.444)
+      (pt 1.599 2.444)
+      (pt 1.599 -2.444)
+      (pt -1.599 -2.444)
+      (pt -1.599 2.444))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -3.5 2.58)
+      (pt -1.949 2.58))))
+   (leg 1 (pt -2.725 1.905) (padstack 0))
+   (leg 2 (pt -2.725 0.635) (padstack 0))
+   (leg 3 (pt -2.725 -0.635) (padstack 0))
+   (leg 4 (pt -2.725 -1.905) (padstack 0))
+   (leg 5 (pt 2.725 -1.905) (padstack 0))
+   (leg 6 (pt 2.725 -0.635) (padstack 0))
+   (leg 7 (pt 2.725 0.635) (padstack 0))
+   (leg 8 (pt 2.725 1.905) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 0.65 1.551 0 0 0))
+   )
+   (model "FM24V02A-G.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

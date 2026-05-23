@@ -1,0 +1,65 @@
+(Japanese_coding: sjis)
+(function "ECS_21207339"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2025-11-25-09:50:34)
+    (utime 2026-02-04-14:20:06)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "SQP20AJB-68R")
+)
+
+
+(pinAssign "ECS_21207339"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2025-11-25-09:50:34)
+    (utime 2026-02-04-14:20:06)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_21207339")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "SQP20AJB-68R")
+)
+
+
+(part "SQP20AJB-68R"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2025-11-25-09:50:34)
+    (utime 2026-02-04-14:20:06)
+    (packageRef "SQP20AJB-68R")
+    (pinAssignRef "ECS_21207339")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "R")
+    (property "description" "68 Ohms +/-5% 20W Through Hole Resistor Axial Flame Proof, Pulse Withstanding, Safety Cement")
+    (property "Mouser_Part_Number" "603-SQP20AJB-68R")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/YAGEO/SQP20AJB-68R?qs=gt1LBUVyoHl26g7iELFF7A%3D%3D")
+    (property "Manufacturer_Name" "Yageo Group")
+    (property "Manufacturer_Part_Number" "SQP20AJB-68R")
+    (property "Datasheet_Link" "https://www.yageogroup.com/content/datasheet/asset/file/YAGEO-SQP_NSP_DATASHEET")
+)
+
+

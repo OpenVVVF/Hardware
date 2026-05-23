@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_11858776"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-10-12-08:53:47)
+    (utime 2024-04-10-10:47:41)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "3550150RJT")
+)
+
+
+(pinAssign "ECS_11858776"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-10-12-08:53:47)
+    (utime 2024-04-10-10:47:41)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_11858776")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "3550150RJT")
+)
+
+
+(part "3550150RJT"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2023-10-12-08:53:47)
+    (utime 2024-04-10-10:47:41)
+    (packageRef "3550150RJT")
+    (pinAssignRef "ECS_11858776")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "R")
+    (property "description" "Thick Film Resistors - SMD 3550 150R 5%")
+    (property "Mouser_Part_Number" "279-3550150RJT")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/TE-Connectivity-Holsworthy/3550150RJT?qs=gZXFycFWdAPP9JL3CHAw6w%3D%3D")
+    (property "Manufacturer_Name" "TE Connectivity")
+    (property "Manufacturer_Part_Number" "3550150RJT")
+    (property "Datasheet_Link" "")
+    (property "compAreaTopHeight" 1.2)
+)
+
+
