@@ -4539,12 +4539,6 @@
 		(uuid "55ca6aff-3fc0-407e-ba54-47affbe5f1d5")
 	)
 	(junction
-		(at 166.37 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5733fed7-ff77-497e-9c63-5406d7352021")
-	)
-	(junction
 		(at 210.82 31.75)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4555,6 +4549,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a7975121-5f64-4274-b5fd-d34171cfd226")
+	)
+	(junction
+		(at 148.59 135.89)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d157a914-2f5e-4b33-a24a-054481ec0402")
 	)
 	(no_connect
 		(at 85.09 58.42)
@@ -4634,6 +4634,16 @@
 	)
 	(wire
 		(pts
+			(xy 148.59 135.89) (xy 148.59 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "161bfd4e-34e8-48fb-851d-74d47dc958c0")
+	)
+	(wire
+		(pts
 			(xy 142.24 147.32) (xy 142.24 156.21)
 		)
 		(stroke
@@ -4704,26 +4714,6 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 138.43) (xy 148.59 147.32)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3cc975b1-4b6c-4630-a63b-c24562ea946f")
-	)
-	(wire
-		(pts
-			(xy 142.24 129.54) (xy 142.24 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4f622996-2b60-42f5-bd34-255a0925d24c")
-	)
-	(wire
-		(pts
 			(xy 77.47 102.87) (xy 80.01 102.87)
 		)
 		(stroke
@@ -4744,6 +4734,16 @@
 	)
 	(wire
 		(pts
+			(xy 148.59 135.89) (xy 172.72 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "727be0ae-562e-4f69-a245-9f2cae207e4f")
+	)
+	(wire
+		(pts
 			(xy 219.71 31.75) (xy 226.06 31.75)
 		)
 		(stroke
@@ -4761,16 +4761,6 @@
 			(type default)
 		)
 		(uuid "7696923b-fd58-481c-9217-43410da28e13")
-	)
-	(wire
-		(pts
-			(xy 166.37 129.54) (xy 172.72 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7d3fb939-3990-46a5-8dfe-44fd6a719c8b")
 	)
 	(wire
 		(pts
@@ -4804,7 +4794,7 @@
 	)
 	(wire
 		(pts
-			(xy 172.72 129.54) (xy 172.72 162.56)
+			(xy 172.72 135.89) (xy 172.72 162.56)
 		)
 		(stroke
 			(width 0)
@@ -5004,16 +4994,6 @@
 	)
 	(wire
 		(pts
-			(xy 166.37 129.54) (xy 166.37 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e9b22c2b-0c20-46c0-93c6-536097e7c092")
-	)
-	(wire
-		(pts
 			(xy 246.38 91.44) (xy 247.65 91.44)
 		)
 		(stroke
@@ -5044,7 +5024,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 129.54) (xy 166.37 129.54)
+			(xy 124.46 135.89) (xy 148.59 135.89)
 		)
 		(stroke
 			(width 0)
@@ -5054,7 +5034,7 @@
 	)
 	(wire
 		(pts
-			(xy 124.46 138.43) (xy 124.46 147.32)
+			(xy 124.46 135.89) (xy 124.46 147.32)
 		)
 		(stroke
 			(width 0)
@@ -7079,148 +7059,6 @@
 			(project "MainBoard"
 				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
 					(reference "C50")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:3550150RJT")
-		(at 148.59 138.43 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "17c41461-0eab-4e31-b846-2490ae84b346")
-		(property "Reference" "R6"
-			(at 157.48 132.08 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "3550150RJT"
-			(at 157.48 134.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "RESC11050X120N"
-			(at 162.56 234.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" ""
-			(at 162.56 334.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "Thick Film Resistors - SMD 3550 150R 5%"
-			(at 148.59 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "1.2"
-			(at 162.56 534.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "279-3550150RJT"
-			(at 162.56 634.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/TE-Connectivity-Holsworthy/3550150RJT?qs=gZXFycFWdAPP9JL3CHAw6w%3D%3D"
-			(at 162.56 734.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "TE Connectivity"
-			(at 162.56 834.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "3550150RJT"
-			(at 162.56 934.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "2"
-			(uuid "262d0a3c-5371-4aef-aa26-f80afd8459d5")
-		)
-		(pin "1"
-			(uuid "363f4cb1-48f0-4c79-9466-d3d30915f2e7")
-		)
-		(instances
-			(project "MainBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -12018,148 +11856,6 @@
 			(project "MainBoard"
 				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
 					(reference "C36")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:3550150RJT")
-		(at 124.46 138.43 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f2148d04-6c97-42b0-abb1-23f1f2cf8fe3")
-		(property "Reference" "R5"
-			(at 133.35 132.08 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "3550150RJT"
-			(at 133.35 134.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "RESC11050X120N"
-			(at 138.43 234.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" ""
-			(at 138.43 334.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "Thick Film Resistors - SMD 3550 150R 5%"
-			(at 124.46 138.43 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "1.2"
-			(at 138.43 534.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "279-3550150RJT"
-			(at 138.43 634.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/TE-Connectivity-Holsworthy/3550150RJT?qs=gZXFycFWdAPP9JL3CHAw6w%3D%3D"
-			(at 138.43 734.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "TE Connectivity"
-			(at 138.43 834.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "3550150RJT"
-			(at 138.43 934.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "2"
-			(uuid "e4dd62ad-f09e-42c4-b317-8c360c357df7")
-		)
-		(pin "1"
-			(uuid "ad14c80b-e37d-4c7f-95d1-46ab2492045b")
-		)
-		(instances
-			(project "MainBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "R5")
 					(unit 1)
 				)
 			)
