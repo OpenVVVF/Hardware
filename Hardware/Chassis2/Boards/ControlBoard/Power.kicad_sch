@@ -461,6 +461,196 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Power_Management:BTS462TATMA1"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -5.08 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "BTS462TATMA1"
+				(at 2.54 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
+				(at 0 -20.32 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
+				(at 0 -22.86 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "infineon power load switch"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TO?252*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "BTS462TATMA1_0_0"
+				(rectangle
+					(start -5.08 5.08)
+					(end 5.08 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin power_in line
+					(at 0 -7.62 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 0 0)
+					(length 2.54)
+					(name "IN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "Vbb"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 5.08 -2.54 180)
+					(length 2.54)
+					(hide yes)
+					(name "NC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "OUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(text "3.3V POWER, 3W MAX"
 		(exclude_from_sim no)
@@ -487,6 +677,28 @@
 		)
 		(uuid "00b1ad0f-b282-4fb1-986b-2c87879ccbc5")
 	)
+	(hierarchical_label "CANBUS_12V_ENABLE_A"
+		(shape input)
+		(at 39.37 105.41 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "03b076c8-d7bb-4a73-848c-3bcdb77d23c1")
+	)
+	(hierarchical_label "+12V_SWITCHED_A"
+		(shape input)
+		(at 30.48 30.48 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "06375f65-0206-4a49-9378-495778a32d0a")
+	)
 	(hierarchical_label "+5V_A"
 		(shape input)
 		(at 30.48 38.1 180)
@@ -500,6 +712,28 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
+		(at 46.99 113.03 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "17962843-87dc-4363-bc88-32cc46371863")
+	)
+	(hierarchical_label "+12V_OUT_A"
+		(shape input)
+		(at 46.99 59.69 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2c209380-eb47-46a8-9ae9-222403fe6131")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
 		(at 81.28 40.64 180)
 		(effects
 			(font
@@ -508,6 +742,17 @@
 			(justify right)
 		)
 		(uuid "388c18e8-2f56-477b-8ee2-1ea087e43e75")
+	)
+	(hierarchical_label "+12V_CANBUS_A"
+		(shape input)
+		(at 54.61 105.41 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "42aaea2f-49f0-4c67-8589-4475a3914dc5")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -520,17 +765,6 @@
 		)
 		(uuid "42beaf35-0114-4b4a-9b68-1e308e33dbc7")
 	)
-	(hierarchical_label "+12V_OUT_A"
-		(shape input)
-		(at 30.48 30.48 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "44fef0fd-0d6c-48f0-b917-3a18c41c102f")
-	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 30.48 35.56 180)
@@ -542,6 +776,17 @@
 		)
 		(uuid "47f1d342-a0ad-4354-8182-d013474644a2")
 	)
+	(hierarchical_label "+12V_OUT_A"
+		(shape input)
+		(at 46.99 97.79 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5c746e43-bdc5-4725-81b4-611d5d0e2655")
+	)
 	(hierarchical_label "+3.3V_OUT_A"
 		(shape input)
 		(at 81.28 38.1 180)
@@ -552,6 +797,28 @@
 			(justify right)
 		)
 		(uuid "78b8d025-2f81-4549-a849-fac183a656c4")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 46.99 74.93 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8a1ee97d-7f08-49c9-af31-400aa585d1b7")
+	)
+	(hierarchical_label "+12V_SWITCHED_A"
+		(shape input)
+		(at 54.61 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8d4939bf-34f2-4b71-81c3-27ee0117c0f8")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -585,6 +852,197 @@
 			(justify right)
 		)
 		(uuid "bd369d05-815d-4592-a124-8d58aa01d472")
+	)
+	(hierarchical_label "SIGNAL_12V_ENABLE_A"
+		(shape input)
+		(at 39.37 67.31 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fa172b02-5ece-45e3-92e4-fd1a8fd7474a")
+	)
+	(symbol
+		(lib_id "Power_Management:BTS462TATMA1")
+		(at 46.99 67.31 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0ec1ad0c-3f8b-4a5f-b7a5-8fc91c12fa99")
+		(property "Reference" "U7"
+			(at 60.96 60.8898 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BTS462TATMA1"
+			(at 60.96 63.4298 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
+			(at 46.99 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
+			(at 46.99 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
+			(at 46.99 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "f95cc845-5e19-4927-bc50-37dc552efdf7")
+		)
+		(pin "3"
+			(uuid "a6d296d7-9a31-4093-876a-e3f1125b8c14")
+		)
+		(pin "1"
+			(uuid "fb4a030c-463f-4987-a3a5-eac2e3ca4985")
+		)
+		(pin "2"
+			(uuid "f96973b5-559e-4065-a16b-ae5a279637ef")
+		)
+		(pin "5"
+			(uuid "a0a3d8a0-8684-4a7a-987b-84f9ce5e9616")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/f43d716c-803e-4298-9377-543b8fb7319f"
+					(reference "U7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Power_Management:BTS462TATMA1")
+		(at 46.99 105.41 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2ef9ca2d-e68f-48ac-9549-5b1b2b122aa6")
+		(property "Reference" "U8"
+			(at 60.96 98.9898 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BTS462TATMA1"
+			(at 60.96 101.5298 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
+			(at 46.99 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
+			(at 46.99 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
+			(at 46.99 105.41 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "81ac05a7-ea98-4298-8908-b2a8453f794f")
+		)
+		(pin "3"
+			(uuid "f44c7705-793b-430b-a0a8-122b14c0f653")
+		)
+		(pin "1"
+			(uuid "efb77002-7016-4fb8-af00-a4452ca01787")
+		)
+		(pin "2"
+			(uuid "e68f323e-0cef-4dd7-871d-843d020c5b28")
+		)
+		(pin "5"
+			(uuid "20333747-31a8-48ec-bac0-85da76fced9c")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/f43d716c-803e-4298-9377-543b8fb7319f"
+					(reference "U8")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "InverterCom:RKE-1205S_H")

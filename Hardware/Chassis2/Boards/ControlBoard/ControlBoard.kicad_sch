@@ -1895,6 +1895,16 @@
 	)
 	(wire
 		(pts
+			(xy 213.36 21.59) (xy 217.17 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "17943290-4552-4da7-a41c-657d3290faa2")
+	)
+	(wire
+		(pts
 			(xy 105.41 72.39) (xy 105.41 74.93)
 		)
 		(stroke
@@ -2095,6 +2105,16 @@
 	)
 	(wire
 		(pts
+			(xy 213.36 24.13) (xy 217.17 24.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6752da42-92dd-4f89-9fb1-d16b4e666809")
+	)
+	(wire
+		(pts
 			(xy 222.25 134.62) (xy 222.25 137.16)
 		)
 		(stroke
@@ -2162,6 +2182,16 @@
 			(type default)
 		)
 		(uuid "74ced302-cf66-4d7a-bd99-0bf4c89657ce")
+	)
+	(wire
+		(pts
+			(xy 213.36 19.05) (xy 217.17 19.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "756ebbb3-ea25-4bf6-9ab4-72ba7293db58")
 	)
 	(wire
 		(pts
@@ -2252,6 +2282,16 @@
 			(type default)
 		)
 		(uuid "93514db0-05a1-4977-813d-b3f0ecab7bd2")
+	)
+	(wire
+		(pts
+			(xy 213.36 29.21) (xy 217.17 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93d2680f-2287-46d3-9808-7bb75f9a5667")
 	)
 	(wire
 		(pts
@@ -2415,6 +2455,16 @@
 	)
 	(wire
 		(pts
+			(xy 213.36 16.51) (xy 217.17 16.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbf016bf-1b80-40d2-9cf5-588fb68ca548")
+	)
+	(wire
+		(pts
 			(xy 114.3 100.33) (xy 105.41 100.33)
 		)
 		(stroke
@@ -2452,6 +2502,16 @@
 			(type default)
 		)
 		(uuid "d2c2f99b-05cf-41e4-8e04-0f9c98008e3f")
+	)
+	(wire
+		(pts
+			(xy 213.36 26.67) (xy 217.17 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5a5a00b-ad2a-4d07-b39c-5441527b53cf")
 	)
 	(wire
 		(pts
@@ -2744,7 +2804,7 @@
 		(uuid "18abd520-8860-4740-a310-9237127987c0")
 	)
 	(label "+3.3V_A"
-		(at 260.35 40.64 0)
+		(at 262.89 45.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2782,6 +2842,16 @@
 			(justify left bottom)
 		)
 		(uuid "225b4be4-e821-4edd-9df9-5c39e52efa9d")
+	)
+	(label "+12V_CANBUS_A"
+		(at 213.36 29.21 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "23536a41-74df-4ceb-9ba8-e258e7e92aad")
 	)
 	(label "VSENSE_GND_Y"
 		(at 40.64 154.94 0)
@@ -2873,16 +2943,6 @@
 		)
 		(uuid "3c3bd105-d660-4aff-9941-db408d1bddd7")
 	)
-	(label "+12V_A"
-		(at 168.91 135.89 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "3c97b4f6-290a-46de-9e1b-d9bcffb910b7")
-	)
 	(label "DOUT3_A"
 		(at 130.81 26.67 0)
 		(effects
@@ -2964,7 +3024,7 @@
 		(uuid "4dfd2916-3dcc-4a95-8d4f-27a4ea2e57fe")
 	)
 	(label "ANALOG_GND"
-		(at 260.35 43.18 0)
+		(at 262.89 48.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2982,6 +3042,16 @@
 			(justify right bottom)
 		)
 		(uuid "53bd6004-89fd-4be5-bb7e-a6c792f54069")
+	)
+	(label "CANBUS_ENABLE_12V_A"
+		(at 194.31 50.8 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "5542d097-73f0-4f78-aeaa-b7ca66edec8d")
 	)
 	(label "DOUT2_A"
 		(at 130.81 29.21 0)
@@ -3002,16 +3072,6 @@
 			(justify right bottom)
 		)
 		(uuid "57dada46-318a-4367-a536-433446742bc3")
-	)
-	(label "+12V_A"
-		(at 143.51 135.89 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5c0345be-0337-4d87-9b9a-a31e3d73fe76")
 	)
 	(label "+3.3V_A"
 		(at 171.45 135.89 90)
@@ -3042,6 +3102,16 @@
 			(justify left bottom)
 		)
 		(uuid "5df63a79-7979-4dec-8e55-f0555cea9807")
+	)
+	(label "CANBUS_ENABLE_12V_A"
+		(at 260.35 29.21 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6134ffed-7ff3-4648-aeb9-8684c5fe27c5")
 	)
 	(label "RESET"
 		(at 176.53 30.48 270)
@@ -3103,6 +3173,16 @@
 		)
 		(uuid "69f721c4-ef15-4cbc-ac3e-ca693bb11bb2")
 	)
+	(label "+12V_SWITCHED_A"
+		(at 213.36 26.67 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6a8d52c0-21a5-430a-95c5-2ee7ed28d68e")
+	)
 	(label "DOUT1_A"
 		(at 130.81 31.75 0)
 		(effects
@@ -3114,7 +3194,7 @@
 		(uuid "6b233bca-9f48-4c86-bb4e-d54b3a5cafe5")
 	)
 	(label "HS_TMP_2"
-		(at 234.95 36.83 180)
+		(at 237.49 41.91 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3122,6 +3202,16 @@
 			(justify right bottom)
 		)
 		(uuid "6d721753-a063-4305-bc70-2b10c77afb41")
+	)
+	(label "+12V_CANBUS_A"
+		(at 168.91 135.89 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6e2fb048-2420-4c66-89d5-d841e4d422ec")
 	)
 	(label "CAN1_JUMPER_B"
 		(at 96.52 187.96 180)
@@ -3184,7 +3274,7 @@
 		(uuid "7a07c30b-830e-4e57-a678-95fdbf3372a7")
 	)
 	(label "+12V_A"
-		(at 234.95 19.05 180)
+		(at 213.36 19.05 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3232,6 +3322,16 @@
 			(justify right bottom)
 		)
 		(uuid "82cdbb9b-bcb3-45a7-8f12-14c8f93f7a1c")
+	)
+	(label "+12V_CANBUS_A"
+		(at 143.51 135.89 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8330635f-54bf-45ce-b269-72759d3ffcd2")
 	)
 	(label "THROTTLE_B_IN"
 		(at 69.85 74.93 180)
@@ -3294,7 +3394,7 @@
 		(uuid "895b906b-2156-48fc-83a1-2b1548c976ec")
 	)
 	(label "GND_A"
-		(at 234.95 24.13 180)
+		(at 213.36 24.13 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3423,8 +3523,18 @@
 		)
 		(uuid "9c60cbfc-d42b-47ca-88d5-327d2436971b")
 	)
+	(label "ONBOARD_12V_ENABLE_A"
+		(at 260.35 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9ea3457b-3a02-47aa-a068-8df7a7b15330")
+	)
 	(label "+3.3V_A"
-		(at 234.95 16.51 180)
+		(at 213.36 16.51 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3443,16 +3553,6 @@
 		)
 		(uuid "a34c8dff-c6a7-450f-b6d1-f5ab10b047f2")
 	)
-	(label "+5V_A"
-		(at 38.1 97.79 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a416f2d1-42c5-4f98-a0d3-d03876240ef2")
-	)
 	(label "ANALOG_GND"
 		(at 90.17 78.74 0)
 		(effects
@@ -3462,6 +3562,16 @@
 			(justify left bottom)
 		)
 		(uuid "a58e0dee-26d2-48fd-a967-39f893cb514b")
+	)
+	(label "ONBOARD_12V_ENABLE_A"
+		(at 191.77 50.8 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a65a35a7-ec3b-451d-98a6-8ed39252ab49")
 	)
 	(label "VSENSE_PH_U_Y"
 		(at 40.64 149.86 0)
@@ -3564,7 +3674,7 @@
 		(uuid "b665df2b-f36f-4df0-91a5-83691865fb59")
 	)
 	(label "HS_TMP_1"
-		(at 234.95 39.37 180)
+		(at 237.49 44.45 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3574,7 +3684,7 @@
 		(uuid "b8a77e3e-afbe-42ef-91c3-abf61b57d638")
 	)
 	(label "+5V_A"
-		(at 234.95 21.59 180)
+		(at 213.36 21.59 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3682,6 +3792,16 @@
 			(justify right bottom)
 		)
 		(uuid "c3e728fe-7c49-451d-9533-a02474e1ef53")
+	)
+	(label "+12V_SWITCHED_A"
+		(at 38.1 97.79 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c55d9e69-a6e5-4f90-8f7d-273a479901dc")
 	)
 	(label "CAN1_+5V"
 		(at 96.52 190.5 180)
@@ -3944,7 +4064,7 @@
 		(uuid "f93767ee-9c26-493e-b780-c2838c2770f8")
 	)
 	(label "HS_TMP_3"
-		(at 234.95 34.29 180)
+		(at 237.49 39.37 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6581,6 +6701,26 @@
 				(justify right)
 			)
 		)
+		(pin "PERIPHERAL_POWER_ENABLE" input
+			(at 191.77 50.8 90)
+			(uuid "f410170e-0437-418d-85cf-688eee0e700f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CANBUS_12V_POWER_ENABLE" input
+			(at 194.31 50.8 90)
+			(uuid "2b6b54a0-07b8-4d02-a608-a5cace0efadc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
@@ -6590,7 +6730,7 @@
 		)
 	)
 	(sheet
-		(at 234.95 31.75)
+		(at 237.49 36.83)
 		(size 25.4 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6606,7 +6746,7 @@
 		)
 		(uuid "24425313-707e-4fda-86d9-7786b794e109")
 		(property "Sheetname" "TemperatureSensors"
-			(at 234.95 31.0384 0)
+			(at 237.49 36.1184 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6617,7 +6757,7 @@
 			)
 		)
 		(property "Sheetfile" "TemperatureSensors.kicad_sch"
-			(at 234.95 45.0346 0)
+			(at 237.49 50.1146 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6628,7 +6768,7 @@
 			)
 		)
 		(pin "GND_V" input
-			(at 260.35 43.18 0)
+			(at 262.89 48.26 0)
 			(uuid "76eee62a-1f9b-4965-8d04-68bf7bbae4a7")
 			(effects
 				(font
@@ -6638,7 +6778,7 @@
 			)
 		)
 		(pin "HEATSINK_TMP2_V" input
-			(at 234.95 34.29 180)
+			(at 237.49 39.37 180)
 			(uuid "516256cf-fa50-47d1-b22c-994d6ef93770")
 			(effects
 				(font
@@ -6648,7 +6788,7 @@
 			)
 		)
 		(pin "HEATSINK_TMP3_V" input
-			(at 234.95 36.83 180)
+			(at 237.49 41.91 180)
 			(uuid "e19dfab4-45cb-4d7e-b775-66308a158e32")
 			(effects
 				(font
@@ -6658,7 +6798,7 @@
 			)
 		)
 		(pin "HEATSINK_TMP_V" input
-			(at 234.95 39.37 180)
+			(at 237.49 44.45 180)
 			(uuid "815a1814-9a54-4092-824c-ec21ba387131")
 			(effects
 				(font
@@ -6668,7 +6808,7 @@
 			)
 		)
 		(pin "+3.3V_V" input
-			(at 260.35 40.64 0)
+			(at 262.89 45.72 0)
 			(uuid "b1eaa7b0-bfd5-426c-8170-200dc2b126ee")
 			(effects
 				(font
@@ -7257,16 +7397,6 @@
 				(justify left top)
 			)
 		)
-		(pin "+5V" input
-			(at 38.1 97.79 180)
-			(uuid "b4fe7af9-e7a8-43cd-a7ab-419e74a8d2d6")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "DC_LINK_CURSENS" input
 			(at 64.77 113.03 0)
 			(uuid "1a30f3e8-5c9f-46cf-be79-eeba3770c5c5")
@@ -7355,6 +7485,16 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "+12V_A" input
+			(at 38.1 97.79 180)
+			(uuid "a6c2aaf4-289b-4bea-b45e-2e61f5542319")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -7833,8 +7973,8 @@
 		)
 	)
 	(sheet
-		(at 234.95 15.24)
-		(size 25.4 11.43)
+		(at 217.17 15.24)
+		(size 43.18 16.51)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -7849,7 +7989,7 @@
 		)
 		(uuid "f43d716c-803e-4298-9377-543b8fb7319f")
 		(property "Sheetname" "Power"
-			(at 234.95 14.5284 0)
+			(at 217.17 14.5284 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7860,7 +8000,7 @@
 			)
 		)
 		(property "Sheetfile" "Power.kicad_sch"
-			(at 234.95 27.2546 0)
+			(at 217.17 32.3346 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7871,7 +8011,7 @@
 			)
 		)
 		(pin "GND_A" input
-			(at 234.95 24.13 180)
+			(at 217.17 24.13 180)
 			(uuid "cb7fc43d-4cce-4fd1-8ad9-1f8442b6d13f")
 			(effects
 				(font
@@ -7881,7 +8021,7 @@
 			)
 		)
 		(pin "+3.3V_OUT_A" input
-			(at 234.95 16.51 180)
+			(at 217.17 16.51 180)
 			(uuid "1637c9eb-2d36-4fb6-9193-e2e35aa4fd3e")
 			(effects
 				(font
@@ -7891,7 +8031,7 @@
 			)
 		)
 		(pin "+12V_OUT_A" input
-			(at 234.95 19.05 180)
+			(at 217.17 19.05 180)
 			(uuid "55fd8345-fc44-4e92-b725-40fd061d85e0")
 			(effects
 				(font
@@ -7901,7 +8041,7 @@
 			)
 		)
 		(pin "+5V_A" input
-			(at 234.95 21.59 180)
+			(at 217.17 21.59 180)
 			(uuid "98ad4e83-ca10-4bf3-9da2-c04c079af2e2")
 			(effects
 				(font
@@ -7913,6 +8053,46 @@
 		(pin "+12V_IN" input
 			(at 260.35 16.51 0)
 			(uuid "94c70301-b10e-47d7-b339-563370375d3f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "+12V_SWITCHED_A" input
+			(at 217.17 26.67 180)
+			(uuid "1b1a46c8-410f-49c7-92b6-ccd4c54ab367")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SIGNAL_12V_ENABLE_A" input
+			(at 260.35 26.67 0)
+			(uuid "c79a8baa-161c-43b5-bc64-2c52a0b7ed25")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "+12V_CANBUS_A" input
+			(at 217.17 29.21 180)
+			(uuid "282cf983-3603-47d4-b5e7-57832b4a205f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CANBUS_12V_ENABLE_A" input
+			(at 260.35 29.21 0)
+			(uuid "41fd75d1-ed75-4491-bb84-74f8a0029dc0")
 			(effects
 				(font
 					(size 1.27 1.27)
