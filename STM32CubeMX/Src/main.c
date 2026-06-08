@@ -189,7 +189,7 @@ int main(void)
 
     char ontime_str[64];
     OnTime_Format(ontime_str, sizeof(ontime_str));
-    MCP2221A_Printf("[SEXUPDATE V2] Total on-time: %s | Boot #%lu | Session tick=%lu ms\r\n",
+    MCP2221A_Printf("[SEXUPDATE V4] Total on-time: %s | Boot #%lu | Session tick=%lu ms\r\n",
                      ontime_str,
                      (unsigned long)OnTime_GetBootCount(),
                      (unsigned long)HAL_GetTick());

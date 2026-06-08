@@ -3,6 +3,14 @@
 BUILD_DIR="build"
 BINARY_ELF="$BUILD_DIR/STM32CubeMX.elf"
 BINARY_BIN="$BUILD_DIR/STM32CubeMX.bin"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Use venv python if available (has EasyMCP2221 installed)
+if [ -f "$SCRIPT_DIR/.venv/bin/python" ]; then
+    PYTHON="$SCRIPT_DIR/.venv/bin/python"
+else
+    PYTHON="python3"
+fi
 
 echo "=========================================="
 echo "  Build + UART Flash (via MCP2221A)"
@@ -61,18 +69,18 @@ echo "---------------------------------------"
 echo "  UART FLASH SEQUENCE"
 echo "---------------------------------------"
 echo ""
-echo "  STEP 1: Hold BOOTSEL button"
-echo "  STEP 2: Press and release RESET"
-echo "  STEP 3: Release BOOTSEL"
-echo ""
-read -p "Press ENTER when the board is in bootloader mode..."
+echo "  Python: $PYTHON"
 echo ""
 
-python3 flash_uart.py "$BINARY_BIN"
+$PYTHON flash_uart.py "$BINARY_BIN"
 
 if [ $? -ne 0 ]; then
     echo ""
     echo "FLASH FAILED."
+    echo ""
+    echo "Troubleshooting:"
+    echo "  - Make sure MCP2221A is plugged in"
+    echo "  - Try manual mode: $PYTHON flash_uart.py $BINARY_BIN --manual"
     exit 1
 fi
 
@@ -80,6 +88,3 @@ echo ""
 echo "---------------------------------------"
 echo "  ALL DONE"
 echo "---------------------------------------"
-echo ""
-echo "  STEP 4: Make sure BOOTSEL is released"
-echo "  STEP 5: Press RESET to run application"
