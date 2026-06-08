@@ -114,7 +114,10 @@ int main(void)
   HAL_GPIO_TogglePin(CANBUS_POWER_ENABLE_GPIO_Port, CANBUS_POWER_ENABLE_Pin);
   HAL_GPIO_TogglePin(GATE_DRIVER_POWER_ENABLE_GPIO_Port, GATE_DRIVER_POWER_ENABLE_Pin);
   HAL_GPIO_TogglePin(PERIPHERAL_POWER_ENABLE_GPIO_Port, PERIPHERAL_POWER_ENABLE_Pin);
-
+  HAL_GPIO_TogglePin(USER_DOUT_1_GPIO_Port, USER_DOUT_1_Pin);
+  HAL_GPIO_TogglePin(USER_DOUT_2_GPIO_Port, USER_DOUT_2_Pin);
+  HAL_GPIO_TogglePin(USER_DOUT_3_GPIO_Port, USER_DOUT_3_Pin);
+  HAL_GPIO_TogglePin(USER_DOUT_4_GPIO_Port, USER_DOUT_4_Pin);
   MCP2221A_Init(&huart3);
 
   /* ---------- CY15B102Q F-RAM init & sanity test ---------- */
@@ -181,13 +184,6 @@ int main(void)
     HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
 //    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
     HAL_Delay(1000);
-    HAL_GPIO_TogglePin(USER_DOUT_1_GPIO_Port, USER_DOUT_1_Pin);
-    HAL_Delay(400);
-    HAL_GPIO_TogglePin(USER_DOUT_2_GPIO_Port, USER_DOUT_2_Pin);
-    HAL_Delay(200);
-    HAL_GPIO_TogglePin(USER_DOUT_3_GPIO_Port, USER_DOUT_3_Pin);
-    HAL_Delay(70);
-    HAL_GPIO_TogglePin(USER_DOUT_4_GPIO_Port, USER_DOUT_4_Pin);
 
     OnTime_Update();
 
