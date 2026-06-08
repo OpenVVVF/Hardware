@@ -28,7 +28,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "mcp2221a_driver.h"
+#include "cy15b102q_driver.h"
+#include "ontime_logger.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -107,7 +109,66 @@ int main(void)
   MX_FDCAN2_Init();
   MX_SPI4_Init();
   /* USER CODE BEGIN 2 */
+  HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
+  HAL_Delay(1000);
+  HAL_GPIO_TogglePin(CANBUS_POWER_ENABLE_GPIO_Port, CANBUS_POWER_ENABLE_Pin);
+  HAL_GPIO_TogglePin(GATE_DRIVER_POWER_ENABLE_GPIO_Port, GATE_DRIVER_POWER_ENABLE_Pin);
+  HAL_GPIO_TogglePin(PERIPHERAL_POWER_ENABLE_GPIO_Port, PERIPHERAL_POWER_ENABLE_Pin);
 
+  MCP2221A_Init(&huart3);
+
+  /* ---------- CY15B102Q F-RAM init & sanity test ---------- */
+  CY15B102Q_HandleTypeDef fram = {
+      .hspi      = &hspi4,
+      .cs_port   = FRAM_CS_GPIO_Port,
+      .cs_pin    = FRAM_CS_Pin,
+      .wp_port   = FRAM_WP_GPIO_Port,
+      .wp_pin    = FRAM_WP_Pin,
+      .hold_port = FRAM_HOLD_GPIO_Port,
+      .hold_pin  = FRAM_HOLD_Pin,
+  };
+
+  if (CY15B102Q_Init(&fram) != HAL_OK)
+  {
+      MCP2221A_PrintLn("[F-RAM] ERROR: Device ID mismatch / not detected");
+  }
+  else
+  {
+      uint8_t status = CY15B102Q_ReadStatus(&fram);
+      MCP2221A_Printf("[F-RAM] Status=0x%02X\r\n", status);
+
+      uint32_t test_addr = 0x01000U;   /* keep clear of on-time record at 0x00000 */
+      uint8_t tx_buf[16] = {0xDE,0xAD,0xBE,0xEF,0xCA,0xFE,0xBA,0xBE,
+                            0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
+      uint8_t rx_buf[16] = {0};
+
+      CY15B102Q_Write(&fram, test_addr, tx_buf, 16);
+      CY15B102Q_Read(&fram, test_addr, rx_buf, 16);
+
+      bool ok = true;
+      for (int i = 0; i < 16; i++)
+      {
+          if (rx_buf[i] != tx_buf[i]) ok = false;
+      }
+
+      if (ok)
+      {
+          MCP2221A_PrintLn("[F-RAM] WRITE + READ test PASSED");
+      }
+      else
+      {
+          MCP2221A_PrintLn("[F-RAM] WRITE + READ test FAILED");
+      }
+
+      /* ---------- Persistent on-time logger ---------- */
+      bool ontime_valid = OnTime_Init(&fram);
+      char ontime_str[64];
+      OnTime_Format(ontime_str, sizeof(ontime_str));
+      MCP2221A_Printf("[ONTIME] Boot #%lu | Previous total: %s | Valid=%s\r\n",
+                       (unsigned long)OnTime_GetBootCount(),
+                       ontime_str,
+                       ontime_valid ? "YES" : "NO (fresh start)");
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -118,7 +179,24 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
-    HAL_Delay(5000);
+//    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
+    HAL_Delay(1000);
+    HAL_GPIO_TogglePin(USER_DOUT_1_GPIO_Port, USER_DOUT_1_Pin);
+    HAL_Delay(400);
+    HAL_GPIO_TogglePin(USER_DOUT_2_GPIO_Port, USER_DOUT_2_Pin);
+    HAL_Delay(200);
+    HAL_GPIO_TogglePin(USER_DOUT_3_GPIO_Port, USER_DOUT_3_Pin);
+    HAL_Delay(70);
+    HAL_GPIO_TogglePin(USER_DOUT_4_GPIO_Port, USER_DOUT_4_Pin);
+
+    OnTime_Update();
+
+    char ontime_str[64];
+    OnTime_Format(ontime_str, sizeof(ontime_str));
+    MCP2221A_Printf("[ONTIME] Total on-time: %s | Boot #%lu | Session tick=%lu ms\r\n",
+                     ontime_str,
+                     (unsigned long)OnTime_GetBootCount(),
+                     (unsigned long)HAL_GetTick());
   }
   /* USER CODE END 3 */
 }
@@ -145,19 +223,18 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_DIV1;
-  RCC_OscInitStruct.HSICalibrationValue = 64;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 17;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = 1;
+  RCC_OscInitStruct.PLL.PLLN = 68;
   RCC_OscInitStruct.PLL.PLLP = 1;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 3;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_3;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
-  RCC_OscInitStruct.PLL.PLLFRACN = 1536;
+  RCC_OscInitStruct.PLL.PLLFRACN = 6144;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -170,7 +247,7 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_D3PCLK1|RCC_CLOCKTYPE_D1PCLK1;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.SYSCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2;
@@ -192,15 +269,16 @@ void PeriphCommonClock_Config(void)
 
   /** Initializes the peripherals clock
   */
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  PeriphClkInitStruct.PLL2.PLL2M = 4;
-  PeriphClkInitStruct.PLL2.PLL2N = 12;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_FDCAN;
+  PeriphClkInitStruct.PLL2.PLL2M = 1;
+  PeriphClkInitStruct.PLL2.PLL2N = 24;
   PeriphClkInitStruct.PLL2.PLL2P = 2;
   PeriphClkInitStruct.PLL2.PLL2Q = 2;
   PeriphClkInitStruct.PLL2.PLL2R = 2;
   PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_3;
   PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2VCOWIDE;
   PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+  PeriphClkInitStruct.FdcanClockSelection = RCC_FDCANCLKSOURCE_PLL2;
   PeriphClkInitStruct.AdcClockSelection = RCC_ADCCLKSOURCE_PLL2;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {

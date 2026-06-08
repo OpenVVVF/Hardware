@@ -44,7 +44,9 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
+    Src/mcp2221a_driver.c
+    Src/cy15b102q_driver.c
+    Src/ontime_logger.c
 )
 
 # Add include paths
@@ -54,7 +56,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined symbols
+    HSE_VALUE=8000000U
 )
 
 # Remove wrong libob.a library dependency when using cpp files
