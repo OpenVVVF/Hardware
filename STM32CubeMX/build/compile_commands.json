@@ -103,6 +103,12 @@
 },
 {
   "directory": "/home/tliao/Desktop/InverterGen5/STM32CubeMX/build",
+  "command": "/opt/st/stm32cubeclt_1.21.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc -DDEBUG -DHSE_VALUE=8000000U -DSTM32H723xx -DUSE_HAL_DRIVER -DUSE_PWR_LDO_SUPPLY -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Inc -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/STM32H7xx_HAL_Driver/Inc -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/CMSIS/Include  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections -fstack-usage -O0 -g3 -std=gnu11 -o CMakeFiles/STM32CubeMX.dir/Src/can_display.c.obj -c /home/tliao/Desktop/InverterGen5/STM32CubeMX/Src/can_display.c",
+  "file": "/home/tliao/Desktop/InverterGen5/STM32CubeMX/Src/can_display.c",
+  "output": "CMakeFiles/STM32CubeMX.dir/Src/can_display.c.obj"
+},
+{
+  "directory": "/home/tliao/Desktop/InverterGen5/STM32CubeMX/build",
   "command": "/opt/st/stm32cubeclt_1.21.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc -DDEBUG -DSTM32H723xx -DUSE_HAL_DRIVER -DUSE_PWR_LDO_SUPPLY -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Inc -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/STM32H7xx_HAL_Driver/Inc -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I/home/tliao/Desktop/InverterGen5/STM32CubeMX/cmake/stm32cubemx/../../Drivers/CMSIS/Include  -mcpu=cortex-m7 -mfpu=fpv5-d16 -mfloat-abi=hard  -Wall -fdata-sections -ffunction-sections -fstack-usage -O0 -g3 -std=gnu11 -o cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Src/system_stm32h7xx.c.obj -c /home/tliao/Desktop/InverterGen5/STM32CubeMX/Src/system_stm32h7xx.c",
   "file": "/home/tliao/Desktop/InverterGen5/STM32CubeMX/Src/system_stm32h7xx.c",
   "output": "cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Src/system_stm32h7xx.c.obj"

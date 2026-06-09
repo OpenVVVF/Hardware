@@ -32,6 +32,7 @@
 #include "cy15b102q_driver.h"
 #include "ontime_logger.h"
 #include "gate_driver.h"
+#include "can_display.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -127,33 +128,38 @@ int main(void)
   HAL_GPIO_TogglePin(USER_DOUT_4_GPIO_Port, USER_DOUT_4_Pin);
   MCP2221A_Init(&huart3);
 
-  /* ---------- Gate driver init & PWM start ---------- */
-  GateDriver_Init();
+  /* ---------- CAN display init (defaults match Python script) ---------- */
+  DisplayState display;
+  CAN_Display_GetDefaultState(&display);
+  MCP2221A_PrintLn("[CAN] Display cycle starts in 2 s");
 
-  /* Default: 10 kHz, 50 % duty on Phase U, V/W hard-idle */
-  PWM_SetFrequency(1000);
-  PWM_SetDutyCycle(0, 50.0f); /* Phase U */
-  PWM_SetDutyCycle(1, 50.0f);  /* Phase V */
-  PWM_SetDutyCycle(2, 50.0f);  /* Phase W */
-  PWM_StartPhase(0);          /* Only start Phase U */
-
-  /* ---------- PWM diagnostics ---------- */
-  uint32_t bdtr = TIM1->BDTR;
-  uint32_t sr   = TIM1->SR;
-  MCP2221A_Printf("[PWM] BDTR=0x%04lX | MOE=%lu | BKF=%lu | BIF=%lu\r\n",
-                   bdtr, (bdtr >> 15) & 1, (bdtr >> 7) & 1, (sr >> 7) & 1);
-  MCP2221A_Printf("[PWM] GATE_DRV FAULT=%s READY=%s\r\n",
-                   GateDriver_IsFault() ? "YES" : "NO",
-                   GateDriver_IsReady() ? "YES" : "NO");
-
-  if ((bdtr & TIM_BDTR_MOE) == 0)
-  {
-      MCP2221A_PrintLn("[PWM] MOE low – clearing break and re-enabling");
-      PWM_ClearFault();
-      MCP2221A_Printf("[PWM] BDTR after clear=0x%04lX\r\n", TIM1->BDTR);
-  }
-
-  MCP2221A_PrintLn("[PWM] Started: 10 kHz, Phase-U @ 50 %, V/W hard-idle");
+  /* ---------- Gate driver init & PWM start (temporarily disabled) ---------- */
+//  GateDriver_Init();
+//
+//  /* Default: 10 kHz, 50 % duty on Phase U, V/W hard-idle */
+//  PWM_SetFrequency(1000);
+//  PWM_SetDutyCycle(0, 50.0f); /* Phase U */
+//  PWM_SetDutyCycle(1, 50.0f);  /* Phase V */
+//  PWM_SetDutyCycle(2, 50.0f);  /* Phase W */
+//  PWM_StartPhase(0);          /* Only start Phase U */
+//
+//  /* ---------- PWM diagnostics ---------- */
+//  uint32_t bdtr = TIM1->BDTR;
+//  uint32_t sr   = TIM1->SR;
+//  MCP2221A_Printf("[PWM] BDTR=0x%04lX | MOE=%lu | BKF=%lu | BIF=%lu\r\n",
+//                   bdtr, (bdtr >> 15) & 1, (bdtr >> 7) & 1, (sr >> 7) & 1);
+//  MCP2221A_Printf("[PWM] GATE_DRV FAULT=%s READY=%s\r\n",
+//                   GateDriver_IsFault() ? "YES" : "NO",
+//                   GateDriver_IsReady() ? "YES" : "NO");
+//
+//  if ((bdtr & TIM_BDTR_MOE) == 0)
+//  {
+//      MCP2221A_PrintLn("[PWM] MOE low – clearing break and re-enabling");
+//      PWM_ClearFault();
+//      MCP2221A_Printf("[PWM] BDTR after clear=0x%04lX\r\n", TIM1->BDTR);
+//  }
+//
+//  MCP2221A_PrintLn("[PWM] Started: 10 kHz, Phase-U @ 50 %, V/W hard-idle");
 
   /* ---------- CY15B102Q F-RAM init & sanity test ---------- */
   CY15B102Q_HandleTypeDef fram = {
@@ -249,9 +255,42 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
 //    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
-    HAL_Delay(500);
+    HAL_Delay(100);
 
     OnTime_Update();
+
+    /* ---------- CAN display: wait 2 s, then wakeup + immediate cycle ---------- */
+    static bool display_woken = false;
+    static uint32_t last_can_tick = 0;
+    uint32_t now = HAL_GetTick();
+
+    if (!display_woken && now >= 2000)
+    {
+        MCP2221A_PrintLn("[CAN] Pre-wakeup status:");
+        CAN_Display_LogStatus();
+        CAN_Display_SendWakeup();
+        display_woken = true;
+        MCP2221A_PrintLn("[CAN] Display wakeup burst sent on FDCAN2");
+        /* Python has a 10 ms gap between last wakeup frame (30 ms) and first cycle (40 ms) */
+        HAL_Delay(10);
+        CAN_Display_SendCycle(&display);
+        last_can_tick = HAL_GetTick();
+        CAN_Display_LogStatus();
+    }
+
+    if (display_woken && (now - last_can_tick) >= 100)
+    {
+        CAN_Display_SendCycle(&display);
+        last_can_tick = now;
+    }
+
+    /* Log CAN status every 5 s */
+    static uint32_t last_can_stat_tick = 0;
+    if (now - last_can_stat_tick >= 5000)
+    {
+        CAN_Display_LogStatus();
+        last_can_stat_tick = now;
+    }
 
     char ontime_str[64];
     OnTime_Format(ontime_str, sizeof(ontime_str));
