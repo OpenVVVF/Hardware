@@ -40,7 +40,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define ADC_VREF_MV               3300
+#define ADC_FULL_SCALE            65535
+/* Sensor raw sensitivity = 625 mV / 600 A = 1.0417 mV/A.
+   Board has a 2/3 divider (10 k + 20 k) so ADC sees 694 µV/A. */
+#define SENSOR_SENSITIVITY_UV_A   694
+#define ADC_BURST_COUNT           64
+#define ADC_OVERSAMPLE_RATIO      16
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,7 +57,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+static int32_t adc_zero_offset_counts = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -172,6 +178,37 @@ int main(void)
                        ontime_str,
                        ontime_valid ? "YES" : "NO (fresh start)");
   }
+
+  /* ---------- ADC1/ADC2 calibration & dual-mode slave enable ---------- */
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+      Error_Handler();
+  }
+  if (HAL_ADCEx_Calibration_Start(&hadc2, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  /* Keep ADC2 (slave) enabled so dual-mode regular simultaneous works */
+  if (HAL_ADC_Start(&hadc2) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
+  MCP2221A_PrintLn("[ADC] ADC1/ADC2 calibrated, dual-mode regular simultaneous ready");
+
+  /* ---------- Measure 0 A offset (assumes no current at boot) ---------- */
+  int64_t offset_sum = 0;
+  for (int i = 0; i < ADC_BURST_COUNT; i++)
+  {
+      HAL_ADC_Start(&hadc1);
+      HAL_ADC_PollForConversion(&hadc1, 10);
+      int32_t raw_sense = (int32_t)HAL_ADC_GetValue(&hadc1);
+      int32_t raw_ref   = (int32_t)HAL_ADC_GetValue(&hadc2);
+      offset_sum += (raw_ref - raw_sense); /* flipped sign to match desired polarity */
+  }
+  adc_zero_offset_counts = (int32_t)(offset_sum / ADC_BURST_COUNT);
+  MCP2221A_Printf("[ADC] 0A offset sum = %d counts\r\n", (int)adc_zero_offset_counts);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -183,7 +220,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
 //    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
-    HAL_Delay(1000);
+    HAL_Delay(500);
 
     OnTime_Update();
 
@@ -193,6 +230,25 @@ int main(void)
                      ontime_str,
                      (unsigned long)OnTime_GetBootCount(),
                      (unsigned long)HAL_GetTick());
+
+    /* ---------- LA37S600S05KM Phase-U current sensor test ---------- */
+    int64_t sum_diff = 0;
+    for (int i = 0; i < ADC_BURST_COUNT; i++)
+    {
+        HAL_ADC_Start(&hadc1);
+        HAL_ADC_PollForConversion(&hadc1, 10);
+        int32_t raw_sense = (int32_t)HAL_ADC_GetValue(&hadc1);
+        int32_t raw_ref   = (int32_t)HAL_ADC_GetValue(&hadc2);
+        sum_diff += (raw_ref - raw_sense); /* flipped sign for correct polarity */
+    }
+    int32_t avg_sum  = (int32_t)(sum_diff / ADC_BURST_COUNT);
+    int32_t avg_diff = (avg_sum - adc_zero_offset_counts) / ADC_OVERSAMPLE_RATIO;
+
+    int64_t v_diff_uV  = (avg_diff * (int64_t)ADC_VREF_MV * 1000LL) / ADC_FULL_SCALE;
+    int32_t current_mA = (int32_t)((v_diff_uV * 1000LL) / SENSOR_SENSITIVITY_UV_A);
+
+    MCP2221A_Printf("[PH_U] avg_diff=%d | Vdiff=%ld uV | I=%d mA\r\n",
+                     (int)avg_diff, (long)v_diff_uV, (int)current_mA);
   }
   /* USER CODE END 3 */
 }
