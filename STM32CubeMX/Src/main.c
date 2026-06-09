@@ -130,13 +130,30 @@ int main(void)
   /* ---------- Gate driver init & PWM start ---------- */
   GateDriver_Init();
 
-  /* Default: 10 kHz, 50 % duty on Phase U, V/W off */
+  /* Default: 10 kHz, 50 % duty on Phase U, V/W hard-idle */
   PWM_SetFrequency(1000);
   PWM_SetDutyCycle(0, 50.0f); /* Phase U */
-  PWM_SetDutyCycle(1, 0.0f);  /* Phase V */
-  PWM_SetDutyCycle(2, 0.0f);  /* Phase W */
-  PWM_Start();
-  MCP2221A_PrintLn("[PWM] Started: 10 kHz, Phase-U @ 50 %, V/W off");
+  PWM_SetDutyCycle(1, 50.0f);  /* Phase V */
+  PWM_SetDutyCycle(2, 50.0f);  /* Phase W */
+  PWM_StartPhase(0);          /* Only start Phase U */
+
+  /* ---------- PWM diagnostics ---------- */
+  uint32_t bdtr = TIM1->BDTR;
+  uint32_t sr   = TIM1->SR;
+  MCP2221A_Printf("[PWM] BDTR=0x%04lX | MOE=%lu | BKF=%lu | BIF=%lu\r\n",
+                   bdtr, (bdtr >> 15) & 1, (bdtr >> 7) & 1, (sr >> 7) & 1);
+  MCP2221A_Printf("[PWM] GATE_DRV FAULT=%s READY=%s\r\n",
+                   GateDriver_IsFault() ? "YES" : "NO",
+                   GateDriver_IsReady() ? "YES" : "NO");
+
+  if ((bdtr & TIM_BDTR_MOE) == 0)
+  {
+      MCP2221A_PrintLn("[PWM] MOE low – clearing break and re-enabling");
+      PWM_ClearFault();
+      MCP2221A_Printf("[PWM] BDTR after clear=0x%04lX\r\n", TIM1->BDTR);
+  }
+
+  MCP2221A_PrintLn("[PWM] Started: 10 kHz, Phase-U @ 50 %, V/W hard-idle");
 
   /* ---------- CY15B102Q F-RAM init & sanity test ---------- */
   CY15B102Q_HandleTypeDef fram = {

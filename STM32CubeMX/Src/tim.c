@@ -21,16 +21,29 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-#define TIM1_CLOCK_HZ 275000000UL
+#define TIM1_CLOCK_HZ       275000000UL
+#define PWM_DEADTIME_NS     1000U   /* target ~3 us (max with DIV1 = ~3.67 us) */
+#define TIM_MAX_ARR         65535U
 
+/* CKD = DIV1  =>  t_DTS = 1 / 275 MHz = 3.636 ns
+   Use DTG[7:5] = 111 encoding: DT = (32 + DTG[4:0]) * 16 * t_DTS  */
 static uint8_t PWM_ComputeDeadTime(uint32_t deadtime_ns)
 {
-    /* t_DTS = 1/275 MHz = 3.636 ns with TIM_CLOCKDIVISION_DIV1
-       Use DTG[7:5] = 110 encoding: DT = (32 + DTG[4:0]) * 8 * t_DTS */
     uint32_t val = (deadtime_ns * 275ULL + 4000ULL) / 8000ULL;
     if (val < 32) val = 32;
     if (val > 63) val = 63;
-    return (uint8_t)(0xC0 | (val - 32));
+    return (uint8_t)(0xE0 | (val - 32));
+}
+
+static uint32_t PWM_PhaseToChannel(uint8_t phase)
+{
+    switch (phase)
+    {
+        case 0: return TIM_CHANNEL_1;
+        case 1: return TIM_CHANNEL_2;
+        case 2: return TIM_CHANNEL_3;
+        default: return 0;
+    }
 }
 /* USER CODE END 0 */
 
@@ -99,7 +112,7 @@ void MX_TIM1_Init(void)
   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_ENABLE;
   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_ENABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = PWM_ComputeDeadTime(1000); /* 1 us deadtime */
+  sBreakDeadTimeConfig.DeadTime = PWM_ComputeDeadTime(PWM_DEADTIME_NS);
   sBreakDeadTimeConfig.BreakState = TIM_BREAK_ENABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_LOW;
   sBreakDeadTimeConfig.BreakFilter = 0;
@@ -136,7 +149,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* tim_pwmHandle)
     */
     GPIO_InitStruct.Pin = GATE_DRIVER_FAULT_PWM_BREAK_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;  /* /FLT is open-drain */
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
     HAL_GPIO_Init(GATE_DRIVER_FAULT_PWM_BREAK_GPIO_Port, &GPIO_InitStruct);
@@ -214,47 +227,65 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* tim_pwmHandle)
 void PWM_SetFrequency(uint32_t freq_hz)
 {
     if (freq_hz == 0) return;
-    uint32_t arr = TIM1_CLOCK_HZ / (2UL * freq_hz);
+
+    /* Center-aligned: f = f_tim / ((PSC+1) * 2 * ARR)
+       ARR is 16-bit (max 65535), so we may need to raise PSC. */
+    uint32_t target = TIM1_CLOCK_HZ / (2UL * freq_hz);
+    uint32_t psc = 0;
+    uint32_t arr = target;
+
+    while (arr > TIM_MAX_ARR)
+    {
+        psc++;
+        arr = target / (psc + 1);
+        if (psc > TIM_MAX_ARR) return; /* cannot achieve */
+    }
+
+    __HAL_TIM_SET_PRESCALER(&htim1, psc);
     __HAL_TIM_SET_AUTORELOAD(&htim1, arr);
 }
 
 void PWM_SetDutyCycle(uint8_t phase, float duty_percent)
 {
+    if (phase > 2) return;
     if (duty_percent < 0.0f) duty_percent = 0.0f;
     if (duty_percent > 100.0f) duty_percent = 100.0f;
 
     uint32_t arr = __HAL_TIM_GET_AUTORELOAD(&htim1);
     uint32_t pulse = (uint32_t)((duty_percent * (float)arr) / 100.0f);
 
-    uint32_t channel;
-    switch (phase)
-    {
-        case 0: channel = TIM_CHANNEL_1; break;
-        case 1: channel = TIM_CHANNEL_2; break;
-        case 2: channel = TIM_CHANNEL_3; break;
-        default: return;
-    }
+    uint32_t channel = PWM_PhaseToChannel(phase);
     __HAL_TIM_SET_COMPARE(&htim1, channel, pulse);
+}
+
+void PWM_StartPhase(uint8_t phase)
+{
+    if (phase > 2) return;
+    uint32_t channel = PWM_PhaseToChannel(phase);
+    HAL_TIM_PWM_Start(&htim1, channel);
+    HAL_TIMEx_PWMN_Start(&htim1, channel);
+}
+
+void PWM_StopPhase(uint8_t phase)
+{
+    if (phase > 2) return;
+    uint32_t channel = PWM_PhaseToChannel(phase);
+    HAL_TIM_PWM_Stop(&htim1, channel);
+    HAL_TIMEx_PWMN_Stop(&htim1, channel);
 }
 
 void PWM_Start(void)
 {
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+    PWM_StartPhase(0);
+    PWM_StartPhase(1);
+    PWM_StartPhase(2);
 }
 
 void PWM_Stop(void)
 {
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
-    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
-    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+    PWM_StopPhase(0);
+    PWM_StopPhase(1);
+    PWM_StopPhase(2);
 }
 
 void PWM_ClearFault(void)

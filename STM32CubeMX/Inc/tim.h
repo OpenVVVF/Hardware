@@ -45,6 +45,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE BEGIN Prototypes */
 void PWM_SetFrequency(uint32_t freq_hz);
 void PWM_SetDutyCycle(uint8_t phase, float duty_percent);
+void PWM_StartPhase(uint8_t phase);
+void PWM_StopPhase(uint8_t phase);
 void PWM_Start(void);
 void PWM_Stop(void);
 void PWM_ClearFault(void);
