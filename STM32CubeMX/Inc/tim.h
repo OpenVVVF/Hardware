@@ -43,7 +43,11 @@ void MX_TIM1_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN Prototypes */
-
+void PWM_SetFrequency(uint32_t freq_hz);
+void PWM_SetDutyCycle(uint8_t phase, float duty_percent);
+void PWM_Start(void);
+void PWM_Stop(void);
+void PWM_ClearFault(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

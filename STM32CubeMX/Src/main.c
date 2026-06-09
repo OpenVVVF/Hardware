@@ -31,6 +31,7 @@
 #include "mcp2221a_driver.h"
 #include "cy15b102q_driver.h"
 #include "ontime_logger.h"
+#include "gate_driver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -126,6 +127,17 @@ int main(void)
   HAL_GPIO_TogglePin(USER_DOUT_4_GPIO_Port, USER_DOUT_4_Pin);
   MCP2221A_Init(&huart3);
 
+  /* ---------- Gate driver init & PWM start ---------- */
+  GateDriver_Init();
+
+  /* Default: 10 kHz, 50 % duty on Phase U, V/W off */
+  PWM_SetFrequency(1000);
+  PWM_SetDutyCycle(0, 50.0f); /* Phase U */
+  PWM_SetDutyCycle(1, 0.0f);  /* Phase V */
+  PWM_SetDutyCycle(2, 0.0f);  /* Phase W */
+  PWM_Start();
+  MCP2221A_PrintLn("[PWM] Started: 10 kHz, Phase-U @ 50 %, V/W off");
+
   /* ---------- CY15B102Q F-RAM init & sanity test ---------- */
   CY15B102Q_HandleTypeDef fram = {
       .hspi      = &hspi4,
@@ -220,7 +232,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
 //    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
-    HAL_Delay(50);
+    HAL_Delay(500);
 
     OnTime_Update();
 
@@ -232,23 +244,30 @@ int main(void)
                      (unsigned long)HAL_GetTick());
 
     /* ---------- LA37S600S05KM Phase-U current sensor test ---------- */
-    int64_t sum_diff = 0;
-    for (int i = 0; i < ADC_BURST_COUNT; i++)
+    /* Commented out while running single-phase resistive load PWM test */
+//    int64_t sum_diff = 0;
+//    for (int i = 0; i < ADC_BURST_COUNT; i++)
+//    {
+//        HAL_ADC_Start(&hadc1);
+//        HAL_ADC_PollForConversion(&hadc1, 10);
+//        int32_t raw_sense = (int32_t)HAL_ADC_GetValue(&hadc1);
+//        int32_t raw_ref   = (int32_t)HAL_ADC_GetValue(&hadc2);
+//        sum_diff += (raw_ref - raw_sense); /* flipped sign for correct polarity */
+//    }
+//    int32_t avg_sum  = (int32_t)(sum_diff / ADC_BURST_COUNT);
+//    int32_t avg_diff = (avg_sum - adc_zero_offset_counts) / ADC_OVERSAMPLE_RATIO;
+//
+//    int64_t v_diff_uV  = (avg_diff * (int64_t)ADC_VREF_MV * 1000LL) / ADC_FULL_SCALE;
+//    int32_t current_mA = (int32_t)((v_diff_uV * 1000LL) / SENSOR_SENSITIVITY_UV_A);
+//
+//    MCP2221A_Printf("[PH_U] avg_diff=%d | Vdiff=%ld uV | I=%d mA\r\n",
+//                     (int)avg_diff, (long)v_diff_uV, (int)current_mA);
+
+    /* Simple gate-driver fault monitor */
+    if (GateDriver_IsFault())
     {
-        HAL_ADC_Start(&hadc1);
-        HAL_ADC_PollForConversion(&hadc1, 10);
-        int32_t raw_sense = (int32_t)HAL_ADC_GetValue(&hadc1);
-        int32_t raw_ref   = (int32_t)HAL_ADC_GetValue(&hadc2);
-        sum_diff += (raw_ref - raw_sense); /* flipped sign for correct polarity */
+        MCP2221A_PrintLn("[GATE_DRV] FAULT asserted – PWM disabled by hardware BKIN");
     }
-    int32_t avg_sum  = (int32_t)(sum_diff / ADC_BURST_COUNT);
-    int32_t avg_diff = (avg_sum - adc_zero_offset_counts) / ADC_OVERSAMPLE_RATIO;
-
-    int64_t v_diff_uV  = (avg_diff * (int64_t)ADC_VREF_MV * 1000LL) / ADC_FULL_SCALE;
-    int32_t current_mA = (int32_t)((v_diff_uV * 1000LL) / SENSOR_SENSITIVITY_UV_A);
-
-    MCP2221A_Printf("[PH_U] avg_diff=%d | Vdiff=%ld uV | I=%d mA\r\n",
-                     (int)avg_diff, (long)v_diff_uV, (int)current_mA);
   }
   /* USER CODE END 3 */
 }

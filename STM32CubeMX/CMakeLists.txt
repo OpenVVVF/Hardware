@@ -47,6 +47,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/mcp2221a_driver.c
     Src/cy15b102q_driver.c
     Src/ontime_logger.c
+    Src/gate_driver.c
 )
 
 # Add include paths

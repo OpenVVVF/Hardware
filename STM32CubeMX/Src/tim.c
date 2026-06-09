@@ -21,7 +21,17 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
+#define TIM1_CLOCK_HZ 275000000UL
 
+static uint8_t PWM_ComputeDeadTime(uint32_t deadtime_ns)
+{
+    /* t_DTS = 1/275 MHz = 3.636 ns with TIM_CLOCKDIVISION_DIV1
+       Use DTG[7:5] = 110 encoding: DT = (32 + DTG[4:0]) * 8 * t_DTS */
+    uint32_t val = (deadtime_ns * 275ULL + 4000ULL) / 8000ULL;
+    if (val < 32) val = 32;
+    if (val > 63) val = 63;
+    return (uint8_t)(0xC0 | (val - 32));
+}
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim1;
@@ -86,10 +96,10 @@ void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_ENABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_ENABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.DeadTime = PWM_ComputeDeadTime(1000); /* 1 us deadtime */
   sBreakDeadTimeConfig.BreakState = TIM_BREAK_ENABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_LOW;
   sBreakDeadTimeConfig.BreakFilter = 0;
@@ -200,6 +210,58 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* tim_pwmHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+void PWM_SetFrequency(uint32_t freq_hz)
+{
+    if (freq_hz == 0) return;
+    uint32_t arr = TIM1_CLOCK_HZ / (2UL * freq_hz);
+    __HAL_TIM_SET_AUTORELOAD(&htim1, arr);
+}
+
+void PWM_SetDutyCycle(uint8_t phase, float duty_percent)
+{
+    if (duty_percent < 0.0f) duty_percent = 0.0f;
+    if (duty_percent > 100.0f) duty_percent = 100.0f;
+
+    uint32_t arr = __HAL_TIM_GET_AUTORELOAD(&htim1);
+    uint32_t pulse = (uint32_t)((duty_percent * (float)arr) / 100.0f);
+
+    uint32_t channel;
+    switch (phase)
+    {
+        case 0: channel = TIM_CHANNEL_1; break;
+        case 1: channel = TIM_CHANNEL_2; break;
+        case 2: channel = TIM_CHANNEL_3; break;
+        default: return;
+    }
+    __HAL_TIM_SET_COMPARE(&htim1, channel, pulse);
+}
+
+void PWM_Start(void)
+{
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+}
+
+void PWM_Stop(void)
+{
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+}
+
+void PWM_ClearFault(void)
+{
+    __HAL_TIM_CLEAR_FLAG(&htim1, TIM_FLAG_BREAK);
+    __HAL_TIM_MOE_ENABLE(&htim1);
+}
 
 /* USER CODE END 1 */
 
