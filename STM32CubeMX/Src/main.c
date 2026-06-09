@@ -45,7 +45,7 @@
 /* Sensor raw sensitivity = 625 mV / 600 A = 1.0417 mV/A.
    Board has a 2/3 divider (10 k + 20 k) so ADC sees 694 µV/A. */
 #define SENSOR_SENSITIVITY_UV_A   694
-#define ADC_BURST_COUNT           64
+#define ADC_BURST_COUNT           8
 #define ADC_OVERSAMPLE_RATIO      16
 /* USER CODE END PD */
 
@@ -220,7 +220,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     HAL_GPIO_TogglePin(DEBUG_GREEN_LED_GPIO_Port, DEBUG_GREEN_LED_Pin);
 //    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
-    HAL_Delay(500);
+    HAL_Delay(50);
 
     OnTime_Update();
 
