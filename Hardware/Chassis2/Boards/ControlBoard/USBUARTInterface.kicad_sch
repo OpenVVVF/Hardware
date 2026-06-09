@@ -1369,6 +1369,16 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "gp0 and 1 are default\nto uart tx/rx indicators"
+		(exclude_from_sim no)
+		(at 34.036 44.958 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5c50673d-5b52-478a-bea1-0028b76cce63")
+	)
 	(text "USB to uart interface"
 		(exclude_from_sim no)
 		(at 96.012 18.288 0)
@@ -1430,6 +1440,10 @@
 		(uuid "90cead28-dd8c-4226-93e9-014053cdcd1f")
 	)
 	(no_connect
+		(at 50.8 52.07)
+		(uuid "a45c5ae3-c923-4537-8f8f-c901726787ab")
+	)
+	(no_connect
 		(at 78.74 59.69)
 		(uuid "a89e3c79-e1ff-4824-8afe-505bedbee24c")
 	)
@@ -1446,6 +1460,10 @@
 		(uuid "dbef6f5c-8267-455b-8781-acadd48f2e8b")
 	)
 	(no_connect
+		(at 50.8 49.53)
+		(uuid "e66829c8-ea22-4b3b-8a47-f23fb9e7b42a")
+	)
+	(no_connect
 		(at 110.49 46.99)
 		(uuid "eb8a4736-eacb-47dd-80db-04fc78f3e55f")
 	)
@@ -1458,16 +1476,6 @@
 			(type default)
 		)
 		(uuid "02ca6157-1f75-47f7-a465-ccb119622b5e")
-	)
-	(wire
-		(pts
-			(xy 43.18 52.07) (xy 50.8 52.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "09eb3410-86c1-4ca8-9adf-412cb8f786f0")
 	)
 	(wire
 		(pts
@@ -1521,6 +1529,16 @@
 	)
 	(wire
 		(pts
+			(xy 50.8 68.58) (xy 50.8 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e5e27cd-f621-42f7-804a-59b86f5da416")
+	)
+	(wire
+		(pts
 			(xy 48.26 57.15) (xy 50.8 57.15)
 		)
 		(stroke
@@ -1541,27 +1559,17 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 46.99) (xy 43.18 52.07)
+			(xy 78.74 69.85) (xy 78.74 62.23)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9658793a-cc0c-4701-a055-c055b1470e2e")
+		(uuid "8d28f5f4-d0c5-4388-a1fe-426c1d4d0efc")
 	)
 	(wire
 		(pts
-			(xy 45.72 49.53) (xy 45.72 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "add60335-1fb9-47b6-9ed3-67c45b4b529d")
-	)
-	(wire
-		(pts
-			(xy 38.1 46.99) (xy 43.18 46.99)
+			(xy 45.72 68.58) (xy 50.8 68.58)
 		)
 		(stroke
 			(width 0)
@@ -1631,17 +1639,7 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 49.53) (xy 45.72 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f5c254f8-5b53-4bfc-836a-b5033aa2ebbc")
-	)
-	(wire
-		(pts
-			(xy 45.72 39.37) (xy 38.1 39.37)
+			(xy 78.74 69.85) (xy 80.01 69.85)
 		)
 		(stroke
 			(width 0)
@@ -1708,16 +1706,6 @@
 			(justify left bottom)
 		)
 		(uuid "575dc3b8-9188-4e13-a5c3-b023ef9940a6")
-	)
-	(label "+5V_A"
-		(at 78.74 54.61 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "80ce1602-6f7a-4c7a-a013-c5ce0561fcda")
 	)
 	(label "USB_N"
 		(at 110.49 49.53 180)
@@ -1826,12 +1814,12 @@
 	)
 	(hierarchical_label "BOOTSEL"
 		(shape input)
-		(at 30.48 39.37 180)
+		(at 87.63 69.85 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "42ac190b-42c0-4667-be3a-00e3b6145fd9")
 	)
@@ -1845,6 +1833,17 @@
 			(justify right)
 		)
 		(uuid "46cac6a3-c8ef-4de1-b15d-8abe6b323947")
+	)
+	(hierarchical_label "+3.3V_A"
+		(shape input)
+		(at 78.74 54.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5b28947d-e26c-49e0-a6b9-18b54933c605")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -1914,7 +1913,7 @@
 	)
 	(hierarchical_label "RESET"
 		(shape input)
-		(at 30.48 46.99 180)
+		(at 38.1 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2391,7 +2390,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 34.29 39.37 270)
+		(at 83.82 69.85 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2401,7 +2400,7 @@
 		(dnp no)
 		(uuid "5df8fc08-ab6e-4b10-9023-1cc084c7e5fe")
 		(property "Reference" "R35"
-			(at 35.56 33.782 0)
+			(at 82.55 75.438 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2412,7 +2411,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 33.02 33.02 0)
+			(at 85.09 76.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2423,7 +2422,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 34.29 37.592 90)
+			(at 83.82 71.628 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2434,7 +2433,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 34.29 39.37 0)
+			(at 83.82 69.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2445,7 +2444,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 34.29 39.37 0)
+			(at 83.82 69.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2731,7 +2730,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 34.29 46.99 270)
+		(at 41.91 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2741,7 +2740,7 @@
 		(dnp no)
 		(uuid "7ea4d8cd-02d1-44c1-93ee-241d95df9df0")
 		(property "Reference" "R36"
-			(at 35.56 41.402 0)
+			(at 43.18 62.992 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2752,7 +2751,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 33.02 40.64 0)
+			(at 40.64 62.23 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2763,7 +2762,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 34.29 45.212 90)
+			(at 41.91 66.802 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2774,7 +2773,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 34.29 46.99 0)
+			(at 41.91 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2785,7 +2784,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 34.29 46.99 0)
+			(at 41.91 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
