@@ -24,7 +24,9 @@ import argparse
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-BAUDRATE = 460800
+# 230400 is more reliable than 460800 with the H7 ROM bootloader over UART.
+# The H7 bootloader runs on HSI and has a narrow auto-baud window at 460800.
+BAUDRATE = 230400
 FLASH_ADDR = "0x08000000"
 
 
@@ -103,16 +105,27 @@ class MCP2221GPIO:
         # time.sleep(0.05)
 
     def enter_bootloader(self):
-        """Assert BOOT0=HIGH then pulse RESET to enter bootloader."""
+        """Assert BOOT0=HIGH, wait for it to settle, then pulse RESET."""
+        # 1. Set BOOT0 high while reset is still released.
+        #    This gives BOOT0 time to settle before the H7 samples it.
+        self.mcp.GPIO_write(gp0=True, gp1=True)
+        time.sleep(0.05)          # 50 ms: let BOOT0 settle fully
+
+        # 2. Assert reset.
         self.mcp.GPIO_write(gp0=True, gp1=False)
-        time.sleep(0.1)
-        self.mcp.GPIO_write(gp1=True)
-        time.sleep(0.1)
+        time.sleep(0.05)          # 50 ms: hold NRST low (H7 needs > 1 ms, be generous)
+
+        # 3. Release reset.
+        #    The H7 bootloader needs ~150-250 ms for HSI stabilization,
+        #    RSS initialization, and UART auto-baud before it can reliably
+        #    ACK READ commands to System Flash (e.g. 0x1FF095F0).
+        self.mcp.GPIO_write(gp0=True, gp1=True)
+        time.sleep(0.25)
 
     def exit_bootloader(self):
         """Assert BOOT0=LOW then pulse RESET to run application."""
         self.mcp.GPIO_write(gp0=False, gp1=False)
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.mcp.GPIO_write(gp1=True)
         time.sleep(0.1)
 
@@ -227,7 +240,16 @@ def main():
     print("")
 
     # -----------------------------------------------------------------------
-    # Step 1: Enter bootloader
+    # Step 1: Drain stale serial data BEFORE touching reset/BOOT0.
+    # -----------------------------------------------------------------------
+    # We drain first so that opening/closing the port does not glitch the
+    # bootloader after reset. This clears out application printf() spam
+    # without disturbing the H7 ROM bootloader's auto-baud state machine.
+    if not args.no_drain:
+        drain_serial_port(port, BAUDRATE)
+
+    # -----------------------------------------------------------------------
+    # Step 2: Enter bootloader
     # -----------------------------------------------------------------------
     if auto_mode:
         print(" Entering bootloader via MCP2221A GPIO...")
@@ -237,16 +259,13 @@ def main():
         print(" STEP 2: Press RESET (or power-cycle)")
         input(" Press ENTER when done...")
 
-    # Drain stale application data from the serial buffers before the CLI
-    # opens the port.  This often eliminates the need for a long delay.
-    if not args.no_drain:
-        drain_serial_port(port, BAUDRATE)
-
-    print("")
-
     # -----------------------------------------------------------------------
-    # Step 2: Flash + Verify
+    # Step 3: Flash + Verify
     # -----------------------------------------------------------------------
+    # Small extra delay to let the MCP2221A UART bridge fully settle after
+    # the GPIO transitions before the CLI re-opens the port.
+    time.sleep(0.1)
+
     print(" Flashing...")
     ret, stdout, stderr = run_cli(cli, [
         "-c", f"port={port}", f"br={BAUDRATE}",
@@ -270,7 +289,7 @@ def main():
     print(" Flash & Verify OK!")
 
     # -----------------------------------------------------------------------
-    # Step 3: Exit bootloader and run application
+    # Step 4: Exit bootloader and run application
     # -----------------------------------------------------------------------
     if auto_mode:
         print("")

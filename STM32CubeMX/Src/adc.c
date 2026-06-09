@@ -79,7 +79,7 @@ void MX_ADC1_Init(void)
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
   sConfig.OffsetSignedSaturation = DISABLE;
@@ -134,7 +134,7 @@ void MX_ADC2_Init(void)
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
   sConfig.OffsetSignedSaturation = DISABLE;
@@ -192,7 +192,7 @@ void MX_ADC3_Init(void)
   sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC3_SAMPLETIME_2CYCLES_5;
-  sConfig.SingleDiff = ADC_DIFFERENTIAL_ENDED;
+  sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
   sConfig.OffsetSign = ADC3_OFFSET_SIGN_NEGATIVE;
@@ -230,16 +230,22 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     /**ADC1 GPIO Configuration
     PA0     ------> ADC1_INP16
     PA1     ------> ADC1_INP17
+    PA5     ------> ADC1_INP19
     PA6     ------> ADC1_INP3
     PA7     ------> ADC1_INN3
+    PA7     ------> ADC1_INP7
     PC4     ------> ADC1_INP4
     PC5     ------> ADC1_INN4
+    PC5     ------> ADC1_INP8
     PB0     ------> ADC1_INN5
+    PB0     ------> ADC1_INP9
     PB1     ------> ADC1_INP5
     PF11     ------> ADC1_INP2
     PF12     ------> ADC1_INN2
+    PF12     ------> ADC1_INP6
     */
-    GPIO_InitStruct.Pin = AIN_TMP_SENSE_3_Pin|AIN_TMP_SENSE_2_Pin|AIN_PH_V_CURSENS_Pin|AIN_PH_V_CURSENS_REF_Pin;
+    GPIO_InitStruct.Pin = AIN_TMP_SENSE_3_Pin|AIN_TMP_SENSE_2_Pin|AIN_TMP_SENSE_1_Pin|AIN_PH_V_CURSENS_Pin
+                          |AIN_PH_V_CURSENS_REF_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -276,6 +282,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     __HAL_RCC_GPIOF_CLK_ENABLE();
     /**ADC2 GPIO Configuration
     PC0     ------> ADC2_INP10
@@ -283,22 +290,30 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     PA2     ------> ADC2_INP14
     PA3     ------> ADC2_INP15
     PA4     ------> ADC2_INP18
-    PA5     ------> ADC2_INP19
     PA6     ------> ADC2_INP3
     PA7     ------> ADC2_INN3
+    PA7     ------> ADC2_INP7
+    PC5     ------> ADC2_INP8
+    PB0     ------> ADC2_INP9
     PF13     ------> ADC2_INP2
     PF14     ------> ADC2_INN2
+    PF14     ------> ADC2_INP6
     */
-    GPIO_InitStruct.Pin = AIN_ENCODER_SIN_HALL_U_Pin|AIN_ENCODER_COS_HALL_V_Pin;
+    GPIO_InitStruct.Pin = AIN_ENCODER_SIN_HALL_U_Pin|AIN_ENCODER_COS_HALL_V_Pin|AIN_PH_U_CURSENS_REF_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = AIN_HALL_W_Pin|AIN_THROTTLE_A_Pin|AIN_THROTTLE_B_Pin|AIN_TMP_SENSE_1_Pin
-                          |AIN_PH_V_CURSENS_Pin|AIN_PH_V_CURSENS_REF_Pin;
+    GPIO_InitStruct.Pin = AIN_HALL_W_Pin|AIN_THROTTLE_A_Pin|AIN_THROTTLE_B_Pin|AIN_PH_V_CURSENS_Pin
+                          |AIN_PH_V_CURSENS_REF_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = AIN_PH_W_CURSENS_REFB0_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(AIN_PH_W_CURSENS_REFB0_GPIO_Port, &GPIO_InitStruct);
 
     GPIO_InitStruct.Pin = AIN_PH_W_CURSENSF13_Pin|AIN_PH_W_CURSENS_REFF14_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
@@ -322,6 +337,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     /**ADC3 GPIO Configuration
     PF4     ------> ADC3_INP9
     PC2_C     ------> ADC3_INN1
+    PC2_C     ------> ADC3_INP0
     PC3_C     ------> ADC3_INP1
     */
     GPIO_InitStruct.Pin = AIN_MOTOR_TMP_Pin;
@@ -356,16 +372,22 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     /**ADC1 GPIO Configuration
     PA0     ------> ADC1_INP16
     PA1     ------> ADC1_INP17
+    PA5     ------> ADC1_INP19
     PA6     ------> ADC1_INP3
     PA7     ------> ADC1_INN3
+    PA7     ------> ADC1_INP7
     PC4     ------> ADC1_INP4
     PC5     ------> ADC1_INN4
+    PC5     ------> ADC1_INP8
     PB0     ------> ADC1_INN5
+    PB0     ------> ADC1_INP9
     PB1     ------> ADC1_INP5
     PF11     ------> ADC1_INP2
     PF12     ------> ADC1_INN2
+    PF12     ------> ADC1_INP6
     */
-    HAL_GPIO_DeInit(GPIOA, AIN_TMP_SENSE_3_Pin|AIN_TMP_SENSE_2_Pin|AIN_PH_V_CURSENS_Pin|AIN_PH_V_CURSENS_REF_Pin);
+    HAL_GPIO_DeInit(GPIOA, AIN_TMP_SENSE_3_Pin|AIN_TMP_SENSE_2_Pin|AIN_TMP_SENSE_1_Pin|AIN_PH_V_CURSENS_Pin
+                          |AIN_PH_V_CURSENS_REF_Pin);
 
     HAL_GPIO_DeInit(GPIOC, AIN_PH_U_CURSENS_Pin|AIN_PH_U_CURSENS_REF_Pin);
 
@@ -394,16 +416,21 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     PA2     ------> ADC2_INP14
     PA3     ------> ADC2_INP15
     PA4     ------> ADC2_INP18
-    PA5     ------> ADC2_INP19
     PA6     ------> ADC2_INP3
     PA7     ------> ADC2_INN3
+    PA7     ------> ADC2_INP7
+    PC5     ------> ADC2_INP8
+    PB0     ------> ADC2_INP9
     PF13     ------> ADC2_INP2
     PF14     ------> ADC2_INN2
+    PF14     ------> ADC2_INP6
     */
-    HAL_GPIO_DeInit(GPIOC, AIN_ENCODER_SIN_HALL_U_Pin|AIN_ENCODER_COS_HALL_V_Pin);
+    HAL_GPIO_DeInit(GPIOC, AIN_ENCODER_SIN_HALL_U_Pin|AIN_ENCODER_COS_HALL_V_Pin|AIN_PH_U_CURSENS_REF_Pin);
 
-    HAL_GPIO_DeInit(GPIOA, AIN_HALL_W_Pin|AIN_THROTTLE_A_Pin|AIN_THROTTLE_B_Pin|AIN_TMP_SENSE_1_Pin
-                          |AIN_PH_V_CURSENS_Pin|AIN_PH_V_CURSENS_REF_Pin);
+    HAL_GPIO_DeInit(GPIOA, AIN_HALL_W_Pin|AIN_THROTTLE_A_Pin|AIN_THROTTLE_B_Pin|AIN_PH_V_CURSENS_Pin
+                          |AIN_PH_V_CURSENS_REF_Pin);
+
+    HAL_GPIO_DeInit(AIN_PH_W_CURSENS_REFB0_GPIO_Port, AIN_PH_W_CURSENS_REFB0_Pin);
 
     HAL_GPIO_DeInit(GPIOF, AIN_PH_W_CURSENSF13_Pin|AIN_PH_W_CURSENS_REFF14_Pin);
 
@@ -422,6 +449,7 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
     /**ADC3 GPIO Configuration
     PF4     ------> ADC3_INP9
     PC2_C     ------> ADC3_INN1
+    PC2_C     ------> ADC3_INP0
     PC3_C     ------> ADC3_INP1
     */
     HAL_GPIO_DeInit(AIN_MOTOR_TMP_GPIO_Port, AIN_MOTOR_TMP_Pin);
