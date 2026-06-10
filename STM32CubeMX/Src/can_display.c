@@ -19,7 +19,6 @@
 #define CAN_ID_109  0x109U
 #define CAN_ID_10A  0x10AU
 #define CAN_ID_10B  0x10BU
-#define CAN_ID_200  0x200U
 
 /* Screen lookup tables ------------------------------------------------------*/
 static const uint8_t screen_prefix[5][2] = {
@@ -64,42 +63,13 @@ static HAL_StatusTypeDef CAN_Display_SendFrame(uint32_t can_id, const uint8_t *d
     return status;
 }
 
-/* Documentation says the display needs at least 4 back-to-back identical
-   transmissions of a frame ID before it registers the change. */
-#define DISPLAY_FRAME_REPEAT  4U
-
-static void CAN_Display_SendFrameRepeated(uint32_t can_id, const uint8_t *data, uint8_t dlc)
+static void CAN_Display_SendLogFrame(uint32_t can_id, const uint8_t *data)
 {
-    for (uint8_t i = 0; i < DISPLAY_FRAME_REPEAT; i++)
+    while (HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan2) == 0)
     {
-        /* Wait for TX FIFO space so we don't drop frames */
-        while (HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan2) == 0)
-        {
-            /* busy-wait; at 500 kbps a frame is ~260 us */
-        }
-        CAN_Display_SendFrame(can_id, data, dlc);
+        /* wait for TX FIFO space */
     }
-}
-
-void CAN_Display_LogStatus(void)
-{
-    FDCAN_ProtocolStatusTypeDef status;
-    HAL_FDCAN_GetProtocolStatus(&hfdcan2, &status);
-
-    uint32_t free = HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan2);
-    uint32_t psr = hfdcan2.Instance->PSR;
-    uint32_t ecr = hfdcan2.Instance->ECR;
-
-    MCP2221A_Printf(
-        "[CAN STAT] BusOff=%u ErrPass=%u Warn=%u TxFIFO=%lu "
-        "TEC=%lu REC=%lu PSR=0x%02lX\r\n",
-        (unsigned int)status.BusOff,
-        (unsigned int)status.ErrorPassive,
-        (unsigned int)status.Warning,
-        (unsigned long)free,
-        (unsigned long)((ecr >> 16) & 0xFF),
-        (unsigned long)((ecr >> 8) & 0x7F),
-        (unsigned long)(psr & 0xFF));
+    CAN_Display_SendFrame(can_id, data, 8);
 }
 
 /* Exported functions --------------------------------------------------------*/
@@ -132,109 +102,82 @@ void CAN_Display_GetDefaultState(DisplayState *state)
     state->raw_104_b4_b7[3] = 0x40;
 }
 
+/* Replay the exact custom.csv log the user captured. */
 void CAN_Display_SendWakeup(void)
 {
-    const uint8_t hb[8] = {0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    for (int i = 0; i < 4; i++)
-    {
-        CAN_Display_SendFrame(CAN_ID_101, hb, 8);
-        HAL_Delay(10);
-    }
+    /* 0x101 × 4 */
+    const uint8_t f1[8] = {0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    CAN_Display_SendLogFrame(0x101, f1);
+    CAN_Display_SendLogFrame(0x101, f1);
+    CAN_Display_SendLogFrame(0x101, f1);
+    CAN_Display_SendLogFrame(0x101, f1);
+
+    /* 0x631 × 9 */
+    const uint8_t f631_1[8] = {0x01, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02};
+    const uint8_t f631_2[8] = {0x02, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02};
+    const uint8_t f631_3[8] = {0x05, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02};
+    const uint8_t f631_4[8] = {0x03, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02};
+    CAN_Display_SendLogFrame(0x631, f631_1);
+    CAN_Display_SendLogFrame(0x631, f631_2);
+    CAN_Display_SendLogFrame(0x631, f631_3);
+    CAN_Display_SendLogFrame(0x631, f631_4);
+    CAN_Display_SendLogFrame(0x631, f631_4);
+    CAN_Display_SendLogFrame(0x631, f631_4);
+    CAN_Display_SendLogFrame(0x631, f631_4);
+    CAN_Display_SendLogFrame(0x631, f631_4);
+    CAN_Display_SendLogFrame(0x631, f631_4);
+
+    /* 0x10B × 4 */
+    const uint8_t f10b_1[8] = {0x7D, 0x00, 0x40, 0x1F, 0xFF, 0x7F, 0xFF, 0x7F};
+    const uint8_t f10b_2[8] = {0x7D, 0x00, 0x40, 0x1F, 0x00, 0x7F, 0xFF, 0x7F};
+    CAN_Display_SendLogFrame(0x10B, f10b_1);
+    CAN_Display_SendLogFrame(0x10B, f10b_1);
+    CAN_Display_SendLogFrame(0x10B, f10b_1);
+    CAN_Display_SendLogFrame(0x10B, f10b_2);
+
+    /* 0x104 × 4 */
+    const uint8_t f104_1[8] = {0xEC, 0x7A, 0x0C, 0x00, 0x03, 0x80, 0x01, 0x40};
+    const uint8_t f104_2[8] = {0xFF, 0xFF, 0x0A, 0x00, 0x00, 0x00, 0xFF, 0xFF};
+    CAN_Display_SendLogFrame(0x104, f104_1);
+    CAN_Display_SendLogFrame(0x104, f104_1);
+    CAN_Display_SendLogFrame(0x104, f104_1);
+    CAN_Display_SendLogFrame(0x104, f104_2);
+
+    /* 0x101 */
+    const uint8_t f101_2[8] = {0x21, 0x3C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    CAN_Display_SendLogFrame(0x101, f101_2);
+
+    /* 0x102 */
+    const uint8_t f102[8] = {0x82, 0x30, 0x42, 0x44, 0x00, 0xFF, 0x11, 0x00};
+    CAN_Display_SendLogFrame(0x102, f102);
 }
 
 void CAN_Display_SendCycle(const DisplayState *state)
 {
-    uint8_t payload[8];
-    const uint8_t *prefix;
-    const uint8_t *p102;
+    (void)state;
+    /* Nothing — we replay the exact log once in SendWakeup().
+       If you want a repeating cycle, add frames here. */
+}
 
-    /* Determine active screen (switch overrides main for 2 cycles) */
-    if (state->switch_countdown > 0)
-    {
-        prefix = screen_prefix[state->switch_screen];
-        p102   = screen_102[state->switch_screen];
-    }
-    else
-    {
-        prefix = screen_prefix[state->screen];
-        p102   = screen_102[state->screen];
-    }
+void CAN_Display_LogStatus(void)
+{
+    FDCAN_ProtocolStatusTypeDef status;
+    HAL_FDCAN_GetProtocolStatus(&hfdcan2, &status);
 
-    /* 0x101 - heartbeat / prefix  (×4 back-to-back) */
-    payload[0] = prefix[0];
-    payload[1] = prefix[1];
-    payload[2] = 0x04;
-    payload[3] = 0x00;
-    payload[4] = 0x4B;
-    payload[5] = 0x00;
-    payload[6] = 0x00;
-    payload[7] = 0x00;
-    CAN_Display_SendFrameRepeated(CAN_ID_101, payload, 8);
+    uint32_t free = HAL_FDCAN_GetTxFifoFreeLevel(&hfdcan2);
+    uint32_t psr = hfdcan2.Instance->PSR;
+    uint32_t ecr = hfdcan2.Instance->ECR;
 
-    /* 0x102 - screen state  (×4 back-to-back) */
-    CAN_Display_SendFrameRepeated(CAN_ID_102, p102, 8);
-
-    /* 0x10A - SOC / range (or raw override)  (×4 back-to-back) */
-    if (state->use_raw_10a)
-    {
-        CAN_Display_SendFrameRepeated(CAN_ID_10A, state->raw_10a, 8);
-    }
-    else
-    {
-        uint8_t soc_b = (state->soc > 100) ? 100 : state->soc;
-        uint16_t range_units = state->range_miles_x100;
-        if (range_units > 65535) range_units = 65535;
-        payload[0] = 0x96;
-        payload[1] = 0x20;
-        payload[2] = soc_b;
-        payload[3] = (uint8_t)(range_units & 0xFF);
-        payload[4] = (uint8_t)((range_units >> 8) & 0xFF);
-        payload[5] = 0x00;
-        payload[6] = 0x00;
-        payload[7] = 0x00;
-        CAN_Display_SendFrameRepeated(CAN_ID_10A, payload, 8);
-    }
-
-    /* 0x109 - mode / battery status  (×4 back-to-back) */
-    payload[0] = 0x01;
-    payload[1] = 0x01;
-    payload[2] = 0x00;
-    payload[3] = 0x0F;
-    payload[4] = 0xFF;
-    payload[5] = 0xFF;
-    payload[6] = (uint8_t)(state->mode & 0xFF);
-    payload[7] = state->batt_status;
-    CAN_Display_SendFrameRepeated(CAN_ID_109, payload, 8);
-
-    /* 0x200 - temperature  (×4 back-to-back) */
-    payload[0] = 0x12;
-    payload[1] = 0x47;
-    payload[2] = 0x64;
-    payload[3] = state->temp;
-    payload[4] = 0x0B;
-    payload[5] = 0xB1;
-    payload[6] = 0xFF;
-    payload[7] = 0xF8;
-    CAN_Display_SendFrameRepeated(CAN_ID_200, payload, 8);
-
-    /* 0x104 - odometer / speed  (×4 back-to-back) */
-    /* Convert miles to km tenths: ((miles + 0.5) / 0.621371) * 10 */
-    uint64_t odo_km_tenths = (uint64_t)(((double)(state->odo_miles + 0.5) / 0.621371) * 10.0);
-    payload[0] = (uint8_t)((odo_km_tenths >> 0) & 0xFF);
-    payload[1] = (uint8_t)((odo_km_tenths >> 8) & 0xFF);
-    payload[2] = (uint8_t)((odo_km_tenths >> 16) & 0xFF);
-    payload[3] = (uint8_t)((odo_km_tenths >> 24) & 0xFF);
-    payload[4] = state->raw_104_b4_b7[0];
-    payload[5] = state->raw_104_b4_b7[1];
-    payload[6] = state->raw_104_b4_b7[2];
-    payload[7] = state->raw_104_b4_b7[3];
-    CAN_Display_SendFrameRepeated(CAN_ID_104, payload, 8);
-
-    /* 0x10B - efficiency (only if explicitly set, matching Python default)  (×4 back-to-back) */
-    if (state->use_raw_10b)
-    {
-        CAN_Display_SendFrameRepeated(CAN_ID_10B, state->raw_10b, 8);
-    }
+    MCP2221A_Printf(
+        "[CAN STAT] BusOff=%u ErrPass=%u Warn=%u TxFIFO=%lu "
+        "TEC=%lu REC=%lu PSR=0x%02lX\r\n",
+        (unsigned int)status.BusOff,
+        (unsigned int)status.ErrorPassive,
+        (unsigned int)status.Warning,
+        (unsigned long)free,
+        (unsigned long)((ecr >> 16) & 0xFF),
+        (unsigned long)((ecr >> 8) & 0x7F),
+        (unsigned long)(psr & 0xFF));
 }
 
 /* Convenience setters -------------------------------------------------------*/

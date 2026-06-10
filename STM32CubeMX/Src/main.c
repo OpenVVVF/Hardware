@@ -268,20 +268,10 @@ int main(void)
     {
         MCP2221A_PrintLn("[CAN] Pre-wakeup status:");
         CAN_Display_LogStatus();
-        CAN_Display_SendWakeup();
+        CAN_Display_SendWakeup();  /* replays the exact custom.csv log */
         display_woken = true;
-        MCP2221A_PrintLn("[CAN] Display wakeup burst sent on FDCAN2");
-        /* Python has a 10 ms gap between last wakeup frame (30 ms) and first cycle (40 ms) */
-        HAL_Delay(10);
-        CAN_Display_SendCycle(&display);
-        last_can_tick = HAL_GetTick();
+        MCP2221A_PrintLn("[CAN] Log replay complete");
         CAN_Display_LogStatus();
-    }
-
-    if (display_woken && (now - last_can_tick) >= 100)
-    {
-        CAN_Display_SendCycle(&display);
-        last_can_tick = now;
     }
 
     /* Log CAN status every 5 s */
