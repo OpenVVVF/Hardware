@@ -33,6 +33,7 @@
 #include "ontime_logger.h"
 #include "gate_driver.h"
 #include "can_display.h"
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,11 +67,31 @@ static int32_t adc_zero_offset_counts = 0;
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+static uint16_t ADC2_ReadChannel(uint32_t channel);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+static uint16_t ADC2_ReadChannel(uint32_t channel)
+{
+    ADC_ChannelConfTypeDef sConfig = {0};
+    sConfig.Channel = channel;
+    sConfig.Rank = ADC_REGULAR_RANK_1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_32CYCLES_5;
+    sConfig.SingleDiff = ADC_SINGLE_ENDED;
+    sConfig.OffsetNumber = ADC_OFFSET_NONE;
+    sConfig.Offset = 0;
+    sConfig.OffsetSignedSaturation = DISABLE;
+    HAL_ADC_ConfigChannel(&hadc2, &sConfig);
+
+    /* Dual-mode regular simultaneous: starting ADC1 also starts ADC2 */
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 10);
+    (void)HAL_ADC_GetValue(&hadc1); /* discard ADC1 result */
+    uint16_t val = (uint16_t)HAL_ADC_GetValue(&hadc2);
+    return val;
+}
 
 /* USER CODE END 0 */
 
@@ -281,6 +302,52 @@ int main(void)
         CAN_Display_LogStatus();
         last_can_stat_tick = now;
     }
+
+    /* ---------- Read encoder ADCs (raw + capped dynamic cal + degrees) ---------- */
+    /* Hard limits — measured bounds that outliers cannot expand past */
+#define ENC_SIN_MIN_CAP  427U
+#define ENC_SIN_MAX_CAP  65388U
+#define ENC_COS_MIN_CAP  608U
+#define ENC_COS_MAX_CAP  64743U
+
+    static uint16_t sin_min = ENC_SIN_MIN_CAP, sin_max = ENC_SIN_MAX_CAP;
+    static uint16_t cos_min = ENC_COS_MIN_CAP, cos_max = ENC_COS_MAX_CAP;
+
+    uint16_t raw_sin = ADC2_ReadChannel(ADC_CHANNEL_10);
+    uint16_t raw_cos = ADC2_ReadChannel(ADC_CHANNEL_11);
+
+    /* Clamp to measured bounds to reject outliers */
+    uint16_t csin = raw_sin;
+    uint16_t ccos = raw_cos;
+    if (csin < ENC_SIN_MIN_CAP) csin = ENC_SIN_MIN_CAP;
+    if (csin > ENC_SIN_MAX_CAP) csin = ENC_SIN_MAX_CAP;
+    if (ccos < ENC_COS_MIN_CAP) ccos = ENC_COS_MIN_CAP;
+    if (ccos > ENC_COS_MAX_CAP) ccos = ENC_COS_MAX_CAP;
+
+    /* Dynamic bounds can only tighten inside the hard limits */
+    if (csin < sin_min) sin_min = csin;
+    if (csin > sin_max) sin_max = csin;
+    if (ccos < cos_min) cos_min = ccos;
+    if (ccos > cos_max) cos_max = ccos;
+
+    /* Calculate degrees using calibrated min/max */
+    float angle_deg = 0.0f;
+    if ((sin_max > sin_min) && (cos_max > cos_min))
+    {
+        float sin_norm = ((float)(csin - sin_min) / (float)(sin_max - sin_min)) * 2.0f - 1.0f;
+        float cos_norm = ((float)(ccos - cos_min) / (float)(cos_max - cos_min)) * 2.0f - 1.0f;
+        angle_deg = atan2f(sin_norm, cos_norm) * (180.0f / (float)M_PI);
+        if (angle_deg < 0.0f) angle_deg += 360.0f;
+    }
+
+    int32_t deg_i = (int32_t)angle_deg;
+    uint32_t deg_f = (uint32_t)((angle_deg - (float)deg_i) * 100.0f + 0.5f);
+    if (deg_f >= 100) { deg_f = 0; deg_i++; }
+    MCP2221A_Printf("[ENC] SIN=%5u COS=%5u | DEG=%3ld.%02lu | BOUNDS S[%5u-%5u] C[%5u-%5u]\r\n",
+                     (unsigned)raw_sin, (unsigned)raw_cos,
+                     (long)deg_i, (unsigned long)deg_f,
+                     (unsigned)sin_min, (unsigned)sin_max,
+                     (unsigned)cos_min, (unsigned)cos_max);
 
     char ontime_str[64];
     OnTime_Format(ontime_str, sizeof(ontime_str));
