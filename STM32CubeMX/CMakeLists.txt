@@ -46,14 +46,25 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/mcp2221a_driver.c
     Src/cy15b102q_driver.c
-    Src/ontime_logger.c
     Src/gate_driver.c
     Src/can_display.c
+    Src/App/rte_log.c
+    Src/App/nvm.c
+    Src/App/fault_manager.c
+    Src/Sensors/adc_backend.c
+    Src/Sensors/measurement_system.c
+    Src/HWInterface/pwm_driver.c
+    Src/Drivers/max22530_driver.c
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined include paths
+    Inc
+    Inc/App
+    Inc/Control
+    Inc/Sensors
+    Inc/HWInterface
+    Inc/Drivers
 )
 
 # Add project symbols (macros)

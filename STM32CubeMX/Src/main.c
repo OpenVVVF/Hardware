@@ -30,9 +30,13 @@
 /* USER CODE BEGIN Includes */
 #include "mcp2221a_driver.h"
 #include "cy15b102q_driver.h"
-#include "ontime_logger.h"
+#include "nvm.h"
 #include "gate_driver.h"
 #include "can_display.h"
+#include "rte_log.h"
+#include "fault_manager.h"
+#include "measurement_system.h"
+#include "adc_backend.h"
 #include <math.h>
 /* USER CODE END Includes */
 
@@ -61,38 +65,18 @@
 
 /* USER CODE BEGIN PV */
 static int32_t adc_zero_offset_counts = 0;
+static FaultManager_t g_fault_manager;
+static MeasurementSystem_t g_measurement_system;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
-static uint16_t ADC2_ReadChannel(uint32_t channel);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-static uint16_t ADC2_ReadChannel(uint32_t channel)
-{
-    ADC_ChannelConfTypeDef sConfig = {0};
-    sConfig.Channel = channel;
-    sConfig.Rank = ADC_REGULAR_RANK_1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_32CYCLES_5;
-    sConfig.SingleDiff = ADC_SINGLE_ENDED;
-    sConfig.OffsetNumber = ADC_OFFSET_NONE;
-    sConfig.Offset = 0;
-    sConfig.OffsetSignedSaturation = DISABLE;
-    HAL_ADC_ConfigChannel(&hadc2, &sConfig);
-
-    /* Dual-mode regular simultaneous: starting ADC1 also starts ADC2 */
-    HAL_ADC_Start(&hadc1);
-    HAL_ADC_PollForConversion(&hadc1, 10);
-    (void)HAL_ADC_GetValue(&hadc1); /* discard ADC1 result */
-    uint16_t val = (uint16_t)HAL_ADC_GetValue(&hadc2);
-    return val;
-}
-
 /* USER CODE END 0 */
 
 /**
@@ -149,10 +133,14 @@ int main(void)
   HAL_GPIO_TogglePin(USER_DOUT_4_GPIO_Port, USER_DOUT_4_Pin);
   MCP2221A_Init(&huart3);
 
+  RTE_LogInit();
+  FaultManager_Init(&g_fault_manager);
+  RTE_LOGI("FAULT", "Fault manager initialised");
+
   /* ---------- CAN display init (defaults match Python script) ---------- */
   DisplayState display;
   CAN_Display_GetDefaultState(&display);
-  MCP2221A_PrintLn("[CAN] Display cycle starts in 2 s");
+  RTE_LOGI("CAN", "Display cycle starts in 2 s");
 
   /* ---------- Gate driver init & PWM start (temporarily disabled) ---------- */
 //  GateDriver_Init();
@@ -195,12 +183,12 @@ int main(void)
 
   if (CY15B102Q_Init(&fram) != HAL_OK)
   {
-      MCP2221A_PrintLn("[F-RAM] ERROR: Device ID mismatch / not detected");
+      RTE_LOGE("NVM", "F-RAM device ID mismatch / not detected");
   }
   else
   {
       uint8_t status = CY15B102Q_ReadStatus(&fram);
-      MCP2221A_Printf("[F-RAM] Status=0x%02X\r\n", status);
+      RTE_LOGI("NVM", "F-RAM status=0x%02X", status);
 
       uint32_t test_addr = 0x01000U;   /* keep clear of on-time record at 0x00000 */
       uint8_t tx_buf[16] = {0xDE,0xAD,0xBE,0xEF,0xCA,0xFE,0xBA,0xBE,
@@ -218,21 +206,21 @@ int main(void)
 
       if (ok)
       {
-          MCP2221A_PrintLn("[F-RAM] WRITE + READ test PASSED");
+          RTE_LOGI("NVM", "F-RAM write/read test PASSED");
       }
       else
       {
-          MCP2221A_PrintLn("[F-RAM] WRITE + READ test FAILED");
+          RTE_LOGE("NVM", "F-RAM write/read test FAILED");
       }
 
       /* ---------- Persistent on-time logger ---------- */
-      bool ontime_valid = OnTime_Init(&fram);
+      bool ontime_valid = NVM_Init(&fram);
       char ontime_str[64];
-      OnTime_Format(ontime_str, sizeof(ontime_str));
-      MCP2221A_Printf("[ONTIME] Boot #%lu | Previous total: %s | Valid=%s\r\n",
-                       (unsigned long)OnTime_GetBootCount(),
-                       ontime_str,
-                       ontime_valid ? "YES" : "NO (fresh start)");
+      NVM_Format(ontime_str, sizeof(ontime_str));
+      RTE_LOGI("NVM", "Boot #%lu | Previous total: %s | Valid=%s",
+               (unsigned long)NVM_GetBootCount(),
+               ontime_str,
+               ontime_valid ? "YES" : "NO (fresh start)");
   }
 
   /* ---------- ADC1/ADC2 calibration & dual-mode slave enable ---------- */
@@ -251,7 +239,7 @@ int main(void)
       Error_Handler();
   }
 
-  MCP2221A_PrintLn("[ADC] ADC1/ADC2 calibrated, dual-mode regular simultaneous ready");
+  RTE_LOGI("ADC", "ADC1/ADC2 calibrated, dual-mode regular simultaneous ready");
 
   /* ---------- Measure 0 A offset (assumes no current at boot) ---------- */
   int64_t offset_sum = 0;
@@ -264,7 +252,34 @@ int main(void)
       offset_sum += (raw_ref - raw_sense); /* flipped sign to match desired polarity */
   }
   adc_zero_offset_counts = (int32_t)(offset_sum / ADC_BURST_COUNT);
-  MCP2221A_Printf("[ADC] 0A offset sum = %d counts\r\n", (int)adc_zero_offset_counts);
+  RTE_LOGI("ADC", "0A offset sum = %d counts", (int)adc_zero_offset_counts);
+
+  /* ---------- Isolated voltage-sense ADC on SPI1 ---------- */
+  if (AdcBackend_Init() != HAL_OK) {
+      RTE_LOGE("MAX22530", "Isolated VDC ADC not responding");
+  } else {
+      MAX22530_HandleTypeDef *vdc_adc = AdcBackend_GetVdcAdc();
+      RTE_LOGI("MAX22530", "VDC ADC detected");
+      for (uint8_t ch = 1U; ch <= 4U; ch++) {
+          RTE_LOGI("MAX22530", "  ch%u = %4u counts (%5.3f V)",
+                   (unsigned)ch,
+                   (unsigned)MAX22530_ReadAdcCounts(vdc_adc, ch),
+                   (double)MAX22530_ReadVoltage(vdc_adc, ch));
+      }
+  }
+
+  /* ---------- Measurement system ---------- */
+  MeasurementSystem_Init(&g_measurement_system);
+  MeasurementSystem_AddChannel(&g_measurement_system,
+      &(ChannelConfig_t){0, 0, SENSOR_TYPE_VOLTAGE_DIVIDER, 1500.0f, 0.0f, 0.1f, "V_DC_BUS", 0.0f});
+  MeasurementSystem_AddChannel(&g_measurement_system,
+      &(ChannelConfig_t){0, 0, SENSOR_TYPE_DIRECT, 1.0f, 0.0f, 0.5f, "ENCODER_SIN", 0.0f});
+  MeasurementSystem_AddChannel(&g_measurement_system,
+      &(ChannelConfig_t){0, 0, SENSOR_TYPE_DIRECT, 1.0f, 0.0f, 0.5f, "ENCODER_COS", 0.0f});
+  MeasurementSystem_AddChannel(&g_measurement_system,
+      &(ChannelConfig_t){0, 0, SENSOR_TYPE_TEMPERATURE, 1.0f, 0.0f, 0.1f, "MOTOR_TEMP", 0.0f});
+  RTE_LOGI("SENS", "Measurement system initialised with %u channels",
+           (unsigned)g_measurement_system.channel_count);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -278,20 +293,42 @@ int main(void)
 //    HAL_GPIO_TogglePin(DEBUG_ORANGE_LED_GPIO_Port, DEBUG_ORANGE_LED_Pin);
     HAL_Delay(100);
 
-    OnTime_Update();
+    /* ---------- Update persistent on-time once per loop ---------- */
+    static uint32_t last_nvm_tick = 0;
+    uint32_t now = HAL_GetTick();
+    NVM_Update(&fram, now - last_nvm_tick);
+    last_nvm_tick = now;
+
+    /* ---------- Fault manager ---------- */
+    FaultManager_Update(&g_fault_manager);
+    static uint32_t last_fault_dump_tick = 0;
+    if (now - last_fault_dump_tick >= 1000)
+    {
+        last_fault_dump_tick = now;
+        FaultRecord_t faults[MAX_ACTIVE_FAULTS];
+        uint8_t fault_count = FaultManager_GetActiveFaults(&g_fault_manager, faults, MAX_ACTIVE_FAULTS);
+        if (fault_count > 0)
+        {
+            RTE_LOGW("FAULT", "Active faults: %u", (unsigned)fault_count);
+            for (uint8_t i = 0; i < fault_count; i++)
+            {
+                const char *sev_str = (faults[i].Severity == FAULT_SEVERITY_LATCHED) ? "LATCHED" :
+                                      (faults[i].Severity == FAULT_SEVERITY_SELF_CLEARING) ? "SELFCLR" : "WARN";
+                RTE_LOGW("FAULT", "  [%u] %s (%s)", (unsigned)i, faults[i].Description, sev_str);
+            }
+        }
+    }
 
     /* ---------- CAN display: wait 2 s, then wakeup + immediate cycle ---------- */
     static bool display_woken = false;
-    static uint32_t last_can_tick = 0;
-    uint32_t now = HAL_GetTick();
 
     if (!display_woken && now >= 2000)
     {
-        MCP2221A_PrintLn("[CAN] Pre-wakeup status:");
+        RTE_LOGI("CAN", "Pre-wakeup status:");
         CAN_Display_LogStatus();
         CAN_Display_SendWakeup();  /* replays the exact custom.csv log */
         display_woken = true;
-        MCP2221A_PrintLn("[CAN] Log replay complete");
+        RTE_LOGI("CAN", "Log replay complete");
         CAN_Display_LogStatus();
     }
 
@@ -303,58 +340,24 @@ int main(void)
         last_can_stat_tick = now;
     }
 
-    /* ---------- Read encoder ADCs (raw + capped dynamic cal + degrees) ---------- */
-    /* Hard limits — measured bounds that outliers cannot expand past */
-#define ENC_SIN_MIN_CAP  427U
-#define ENC_SIN_MAX_CAP  65388U
-#define ENC_COS_MIN_CAP  608U
-#define ENC_COS_MAX_CAP  64743U
+    /* ---------- Read sensors through measurement system ---------- */
+    MeasurementSystem_Update(&g_measurement_system);
 
-    static uint16_t sin_min = ENC_SIN_MIN_CAP, sin_max = ENC_SIN_MAX_CAP;
-    static uint16_t cos_min = ENC_COS_MIN_CAP, cos_max = ENC_COS_MAX_CAP;
-
-    uint16_t raw_sin = ADC2_ReadChannel(ADC_CHANNEL_10);
-    uint16_t raw_cos = ADC2_ReadChannel(ADC_CHANNEL_11);
-
-    /* Clamp to measured bounds to reject outliers */
-    uint16_t csin = raw_sin;
-    uint16_t ccos = raw_cos;
-    if (csin < ENC_SIN_MIN_CAP) csin = ENC_SIN_MIN_CAP;
-    if (csin > ENC_SIN_MAX_CAP) csin = ENC_SIN_MAX_CAP;
-    if (ccos < ENC_COS_MIN_CAP) ccos = ENC_COS_MIN_CAP;
-    if (ccos > ENC_COS_MAX_CAP) ccos = ENC_COS_MAX_CAP;
-
-    /* Dynamic bounds can only tighten inside the hard limits */
-    if (csin < sin_min) sin_min = csin;
-    if (csin > sin_max) sin_max = csin;
-    if (ccos < cos_min) cos_min = ccos;
-    if (ccos > cos_max) cos_max = ccos;
-
-    /* Calculate degrees using calibrated min/max */
-    float angle_deg = 0.0f;
-    if ((sin_max > sin_min) && (cos_max > cos_min))
-    {
-        float sin_norm = ((float)(csin - sin_min) / (float)(sin_max - sin_min)) * 2.0f - 1.0f;
-        float cos_norm = ((float)(ccos - cos_min) / (float)(cos_max - cos_min)) * 2.0f - 1.0f;
-        angle_deg = atan2f(sin_norm, cos_norm) * (180.0f / (float)M_PI);
-        if (angle_deg < 0.0f) angle_deg += 360.0f;
-    }
-
+    float angle_deg = MeasurementSystem_GetRotorPositionDegrees(&g_measurement_system);
     int32_t deg_i = (int32_t)angle_deg;
     uint32_t deg_f = (uint32_t)((angle_deg - (float)deg_i) * 100.0f + 0.5f);
     if (deg_f >= 100) { deg_f = 0; deg_i++; }
-    MCP2221A_Printf("[ENC] SIN=%5u COS=%5u | DEG=%3ld.%02lu | BOUNDS S[%5u-%5u] C[%5u-%5u]\r\n",
-                     (unsigned)raw_sin, (unsigned)raw_cos,
-                     (long)deg_i, (unsigned long)deg_f,
-                     (unsigned)sin_min, (unsigned)sin_max,
-                     (unsigned)cos_min, (unsigned)cos_max);
+    RTE_LOGI("ENC", "DEG=%3ld.%02lu | VDC=%6.2f V | MTMP=%5.3f V",
+             (long)deg_i, (unsigned long)deg_f,
+             (double)MeasurementSystem_Read(&g_measurement_system, "V_DC_BUS"),
+             (double)MeasurementSystem_Read(&g_measurement_system, "MOTOR_TEMP"));
 
     char ontime_str[64];
-    OnTime_Format(ontime_str, sizeof(ontime_str));
-    MCP2221A_Printf("[SEXUPDATE V4] Total on-time: %s | Boot #%lu | Session tick=%lu ms\r\n",
-                     ontime_str,
-                     (unsigned long)OnTime_GetBootCount(),
-                     (unsigned long)HAL_GetTick());
+    NVM_Format(ontime_str, sizeof(ontime_str));
+    RTE_LOGI("SYS", "Total on-time: %s | Boot #%lu | Session tick=%lu ms",
+             ontime_str,
+             (unsigned long)NVM_GetBootCount(),
+             (unsigned long)HAL_GetTick());
 
     /* ---------- LA37S600S05KM Phase-U current sensor test ---------- */
     /* Commented out while running single-phase resistive load PWM test */
@@ -376,11 +379,7 @@ int main(void)
 //    MCP2221A_Printf("[PH_U] avg_diff=%d | Vdiff=%ld uV | I=%d mA\r\n",
 //                     (int)avg_diff, (long)v_diff_uV, (int)current_mA);
 
-    /* Simple gate-driver fault monitor */
-    if (GateDriver_IsFault())
-    {
-        MCP2221A_PrintLn("[GATE_DRV] FAULT asserted – PWM disabled by hardware BKIN");
-    }
+
   }
   /* USER CODE END 3 */
 }
