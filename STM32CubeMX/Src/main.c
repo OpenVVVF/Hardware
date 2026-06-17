@@ -55,6 +55,27 @@
  * Updated every PWM period in the TIM1 update ISR for smooth rotation. */
 #define SPWM_FUNDAMENTAL_FREQ_HZ  3.0f
 #define SPWM_MODULATION_INDEX     0.115f
+
+/* Piano-note UART control. Keys 0-9 select a note; PWM freq = note * multiplier.
+ * The user's "multiplied by half" means the motor hears note/2 while PWM = note*0.5.
+ * Note table is one octave high so PWM starts near 800 Hz (key 4 -> G6/2 = 784 Hz). */
+#define PIANO_NOTE_MULTIPLIER     0.5f
+#define PIANO_DEFAULT_KEY         4   /* G6 -> PWM 784 Hz */
+
+static const float piano_notes[10] = {
+    1046.50f, /* 0: C6 */
+    1174.66f, /* 1: D6 */
+    1318.51f, /* 2: E6 */
+    1396.91f, /* 3: F6 */
+    1567.98f, /* 4: G6 */
+    1760.00f, /* 5: A6 */
+    1975.53f, /* 6: B6 */
+    2093.00f, /* 7: C7 */
+    2349.32f, /* 8: D7 */
+    2637.02f  /* 9: E7 */
+};
+
+static uint8_t uart_rx_byte = 0;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -73,6 +94,7 @@ void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
 static uint16_t ADC2_ReadChannel(uint32_t channel);
+static void ApplyPianoNote(uint8_t key);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -96,6 +118,19 @@ static uint16_t ADC2_ReadChannel(uint32_t channel)
     (void)HAL_ADC_GetValue(&hadc1); /* discard ADC1 result */
     uint16_t val = (uint16_t)HAL_ADC_GetValue(&hadc2);
     return val;
+}
+
+static void ApplyPianoNote(uint8_t key)
+{
+    if (key > 9) return;
+
+    float note_hz = piano_notes[key];
+    float pwm_hz  = note_hz * PIANO_NOTE_MULTIPLIER;
+
+    PWM_SetFrequency((uint32_t)(pwm_hz + 0.5f));
+
+    MCP2221A_Printf("[PIANO] key=%u note=%.2f Hz -> PWM=%.2f Hz\r\n",
+                     key, (double)note_hz, (double)pwm_hz);
 }
 
 /* USER CODE END 0 */
@@ -162,15 +197,19 @@ int main(void)
   /* ---------- Gate driver init & PWM start ---------- */
   GateDriver_Init();
 
-  /* Default: 5 kHz switching, 1 us deadtime, all phases at 50 %
-     (50 % is the idle/center point for a 3-phase inverter). */
-  PWM_SetFrequency((4321)*0.5);
+  /* Default: 1 us deadtime, all phases at 50 %
+     (50 % is the idle/center point for a 3-phase inverter).
+     PWM carrier frequency starts from the default piano note. */
+  ApplyPianoNote(PIANO_DEFAULT_KEY);
   PWM_SetDeadTime(PWM_DEFAULT_DEADTIME_NS);
   PWM_SetThreePhaseDuty(0.0f, 0.0f, 0.0f);
   PWM_Start();               /* Start all three complementary pairs */
 
   /* Start continuous 3-phase SPWM, updated every PWM period in the TIM1 ISR. */
   PWM_StartSPWM(SPWM_FUNDAMENTAL_FREQ_HZ, SPWM_MODULATION_INDEX);
+
+  /* Start single-character UART command reception (no Enter required). */
+  HAL_UART_Receive_IT(&huart3, &uart_rx_byte, 1);
 
   /* ---------- PWM diagnostics ---------- */
   PWM_PrintState();
@@ -487,6 +526,23 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART3)
+    {
+        uint8_t ch = uart_rx_byte;
+
+        if (ch >= '0' && ch <= '9')
+        {
+            ApplyPianoNote((uint8_t)(ch - '0'));
+        }
+        /* else: ignore non-digit characters */
+
+        /* Re-arm single-byte receive for the next keystroke (no Enter needed). */
+        HAL_UART_Receive_IT(&huart3, &uart_rx_byte, 1);
+    }
+}
 
 /* USER CODE END 4 */
 
