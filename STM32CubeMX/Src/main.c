@@ -33,6 +33,7 @@
 #include "ontime_logger.h"
 #include "gate_driver.h"
 #include "can_display.h"
+#include "melody.h"
 #include <math.h>
 /* USER CODE END Includes */
 
@@ -127,9 +128,9 @@ static void ApplyPianoNote(uint8_t key)
     float note_hz = piano_notes[key];
     float pwm_hz  = note_hz * PIANO_NOTE_MULTIPLIER;
 
-    PWM_SetFrequency((uint32_t)(pwm_hz + 0.5f));
+    Melody_SetManualNote(note_hz);
 
-    MCP2221A_Printf("[PIANO] key=%u note=%.2f Hz -> PWM=%.2f Hz\r\n",
+    MCP2221A_Printf("[PIANO] key=%u note=%.2f Hz -> PWM=%.2f Hz (melody paused)\r\n",
                      key, (double)note_hz, (double)pwm_hz);
 }
 
@@ -198,9 +199,8 @@ int main(void)
   GateDriver_Init();
 
   /* Default: 1 us deadtime, all phases at 50 %
-     (50 % is the idle/center point for a 3-phase inverter).
-     PWM carrier frequency starts from the default piano note. */
-  ApplyPianoNote(PIANO_DEFAULT_KEY);
+     (50 % is the idle/center point for a 3-phase inverter). */
+  PWM_SetFrequency(8000U);   /* initial idle carrier, inside allowed range */
   PWM_SetDeadTime(PWM_DEFAULT_DEADTIME_NS);
   PWM_SetThreePhaseDuty(0.0f, 0.0f, 0.0f);
   PWM_Start();               /* Start all three complementary pairs */
@@ -210,6 +210,9 @@ int main(void)
 
   /* Start single-character UART command reception (no Enter required). */
   HAL_UART_Receive_IT(&huart3, &uart_rx_byte, 1);
+
+  /* Start playing Hedwig's Theme on the PWM carrier. */
+  Melody_Start();
 
   /* ---------- PWM diagnostics ---------- */
   PWM_PrintState();
@@ -224,8 +227,9 @@ int main(void)
       PWM_PrintState();
   }
 
-  MCP2221A_PrintLn("[PWM] Started: 5 kHz, 1 us deadtime, 3-phase SPWM running");
-  MCP2221A_PrintLn("[PWM] Scope: each phase's high/low pins are complementary.");
+  MCP2221A_PrintLn("[PWM] Started: 1 us deadtime, 3-phase SPWM running");
+  MCP2221A_PrintLn("[PWM] Playing Hedwig's Theme (Harry Potter)");
+  MCP2221A_PrintLn("[PWM] Press 0-9 to pause melody and play a piano note.");
   PWM_PrintSPWMState();
 
   /* ---------- CY15B102Q F-RAM init & sanity test ---------- */

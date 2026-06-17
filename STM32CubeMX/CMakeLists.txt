@@ -49,6 +49,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/ontime_logger.c
     Src/gate_driver.c
     Src/can_display.c
+    Src/melody.c
 )
 
 # Add include paths

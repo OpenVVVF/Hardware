@@ -20,11 +20,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
 #include "mcp2221a_driver.h"
+#include "melody.h"
 
 /* USER CODE BEGIN 0 */
 #define TIM1_CLOCK_HZ       275000000UL
 #define TIM_MAX_ARR         65535U
 #define TWO_PI              6.283185307f
+#define MELODY_REST_PWM_HZ  8000U
 
 /* Phase-to-timer-channel mapping.
  * Index 0 = phase U, 1 = phase V, 2 = phase W.
@@ -342,6 +344,33 @@ void PWM_SetSPWMParams(float fundamental_freq_hz, float modulation_index)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance != TIM1 || !spwm_running) return;
+
+    /* Update melody timing ~once per millisecond, independent of PWM carrier. */
+    static float melody_ms_accum = 0.0f;
+    melody_ms_accum += 1000.0f / pwm_switching_freq_hz;
+    if (melody_ms_accum >= 1.0f)
+    {
+        melody_ms_accum -= 1.0f;
+        Melody_Update(1);
+    }
+
+    /* Apply current melody (or manual) note to the PWM carrier.
+       PWM carrier = note * 0.5 so the motor emits the note frequency. */
+    static float last_note_hz = -1.0f;
+    float note_hz = Melody_GetCurrentNoteHz();
+    if (note_hz != last_note_hz)
+    {
+        last_note_hz = note_hz;
+        if (note_hz > 0.0f)
+        {
+            PWM_SetFrequency((uint32_t)(note_hz * 0.5f + 0.5f));
+        }
+        else
+        {
+            /* REST: high-frequency idle carrier so the gap is not a low/obnoxious tone. */
+            PWM_SetFrequency(MELODY_REST_PWM_HZ);
+        }
+    }
 
     float angle = spwm_angle;
     float m = spwm_modulation_index;
