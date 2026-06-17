@@ -50,6 +50,11 @@
 #define SENSOR_SENSITIVITY_UV_A   694
 #define ADC_BURST_COUNT           8
 #define ADC_OVERSAMPLE_RATIO      16
+
+/* Open-loop 3-phase SPWM parameters.
+ * Updated every PWM period in the TIM1 update ISR for smooth rotation. */
+#define SPWM_FUNDAMENTAL_FREQ_HZ  3.0f
+#define SPWM_MODULATION_INDEX     0.115f
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -154,33 +159,35 @@ int main(void)
   CAN_Display_GetDefaultState(&display);
   MCP2221A_PrintLn("[CAN] Display cycle starts in 2 s");
 
-  /* ---------- Gate driver init & PWM start (temporarily disabled) ---------- */
-//  GateDriver_Init();
-//
-//  /* Default: 10 kHz, 50 % duty on Phase U, V/W hard-idle */
-//  PWM_SetFrequency(1000);
-//  PWM_SetDutyCycle(0, 50.0f); /* Phase U */
-//  PWM_SetDutyCycle(1, 50.0f);  /* Phase V */
-//  PWM_SetDutyCycle(2, 50.0f);  /* Phase W */
-//  PWM_StartPhase(0);          /* Only start Phase U */
-//
-//  /* ---------- PWM diagnostics ---------- */
-//  uint32_t bdtr = TIM1->BDTR;
-//  uint32_t sr   = TIM1->SR;
-//  MCP2221A_Printf("[PWM] BDTR=0x%04lX | MOE=%lu | BKF=%lu | BIF=%lu\r\n",
-//                   bdtr, (bdtr >> 15) & 1, (bdtr >> 7) & 1, (sr >> 7) & 1);
-//  MCP2221A_Printf("[PWM] GATE_DRV FAULT=%s READY=%s\r\n",
-//                   GateDriver_IsFault() ? "YES" : "NO",
-//                   GateDriver_IsReady() ? "YES" : "NO");
-//
-//  if ((bdtr & TIM_BDTR_MOE) == 0)
-//  {
-//      MCP2221A_PrintLn("[PWM] MOE low – clearing break and re-enabling");
-//      PWM_ClearFault();
-//      MCP2221A_Printf("[PWM] BDTR after clear=0x%04lX\r\n", TIM1->BDTR);
-//  }
-//
-//  MCP2221A_PrintLn("[PWM] Started: 10 kHz, Phase-U @ 50 %, V/W hard-idle");
+  /* ---------- Gate driver init & PWM start ---------- */
+  GateDriver_Init();
+
+  /* Default: 5 kHz switching, 1 us deadtime, all phases at 50 %
+     (50 % is the idle/center point for a 3-phase inverter). */
+  PWM_SetFrequency((4321)*0.5);
+  PWM_SetDeadTime(PWM_DEFAULT_DEADTIME_NS);
+  PWM_SetThreePhaseDuty(0.0f, 0.0f, 0.0f);
+  PWM_Start();               /* Start all three complementary pairs */
+
+  /* Start continuous 3-phase SPWM, updated every PWM period in the TIM1 ISR. */
+  PWM_StartSPWM(SPWM_FUNDAMENTAL_FREQ_HZ, SPWM_MODULATION_INDEX);
+
+  /* ---------- PWM diagnostics ---------- */
+  PWM_PrintState();
+  MCP2221A_Printf("[PWM] GATE_DRV FAULT=%s READY=%s\r\n",
+                   GateDriver_IsFault() ? "YES" : "NO",
+                   GateDriver_IsReady() ? "YES" : "NO");
+
+  if ((TIM1->BDTR & TIM_BDTR_MOE) == 0)
+  {
+      MCP2221A_PrintLn("[PWM] MOE low – clearing break and re-enabling");
+      PWM_ClearFault();
+      PWM_PrintState();
+  }
+
+  MCP2221A_PrintLn("[PWM] Started: 5 kHz, 1 us deadtime, 3-phase SPWM running");
+  MCP2221A_PrintLn("[PWM] Scope: each phase's high/low pins are complementary.");
+  PWM_PrintSPWMState();
 
   /* ---------- CY15B102Q F-RAM init & sanity test ---------- */
   CY15B102Q_HandleTypeDef fram = {
@@ -282,7 +289,6 @@ int main(void)
 
     /* ---------- CAN display: wait 2 s, then wakeup + immediate cycle ---------- */
     static bool display_woken = false;
-    static uint32_t last_can_tick = 0;
     uint32_t now = HAL_GetTick();
 
     if (!display_woken && now >= 2000)
@@ -301,6 +307,14 @@ int main(void)
     {
         CAN_Display_LogStatus();
         last_can_stat_tick = now;
+    }
+
+    /* Log SPWM state every 2 s so you can verify modulation index is applied */
+    static uint32_t last_spwm_log_tick = 0;
+    if (now - last_spwm_log_tick >= 2000)
+    {
+        PWM_PrintSPWMState();
+        last_spwm_log_tick = now;
     }
 
     /* ---------- Read encoder ADCs (raw + capped dynamic cal + degrees) ---------- */
@@ -375,6 +389,8 @@ int main(void)
 //
 //    MCP2221A_Printf("[PH_U] avg_diff=%d | Vdiff=%ld uV | I=%d mA\r\n",
 //                     (int)avg_diff, (long)v_diff_uV, (int)current_mA);
+
+    /* SPWM runs continuously in the TIM1 update ISR; no main-loop duty update needed. */
 
     /* Simple gate-driver fault monitor */
     if (GateDriver_IsFault())
