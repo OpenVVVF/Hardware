@@ -55,6 +55,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Drivers/UART/mcp2221a_driver.c
     Src/Inverter/Drivers/Storage/cy15b102q_driver.c
     Src/Inverter/Drivers/Logging/ontime_logger.c
+    Src/Inverter/Drivers/PWM/pwm.c
 )
 
 # Add include paths
@@ -65,6 +66,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     Inc/Inverter/Drivers/UART
     Inc/Inverter/Drivers/Storage
     Inc/Inverter/Drivers/Logging
+    Inc/Inverter/Drivers/PWM
 )
 
 # Add project symbols (macros)

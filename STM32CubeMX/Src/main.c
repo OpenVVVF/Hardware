@@ -47,6 +47,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -69,6 +70,7 @@ void PeriphCommonClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -104,7 +106,6 @@ int main(void)
   MX_FDCAN1_Init();
   MX_FDCAN2_Init();
   MX_SPI4_Init();
-
   /* USER CODE BEGIN 2 */
   InverterMain_Run();
   /* USER CODE END 2 */
@@ -222,7 +223,6 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
 #ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
