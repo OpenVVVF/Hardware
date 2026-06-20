@@ -49,8 +49,8 @@ static constexpr uint16_t DEFINE_QUEUE_CAP      = 512;
 static constexpr uint8_t  KEY_MAXLEN            = 32;
 static constexpr uint8_t  STR_MAXLEN            = 48;
 
-static constexpr uint32_t DEFAULT_PERIOD_US     = 10000;   // 100 Hz
-static constexpr uint32_t DEFINE_REANNOUNCE_US  = 1000000; // 1 Hz
+static constexpr uint32_t DEFAULT_PERIOD_US     = 10000;  // 100 Hz
+static constexpr uint32_t DEFINE_REANNOUNCE_US  = 100000; // 10 Hz
 
 static constexpr size_t   DEFINE_PAYLOAD_MAX    = 240;
 static constexpr size_t   DATA_PAYLOAD_MAX      = 600;
@@ -152,7 +152,8 @@ struct RingQueue {
 // ============================================================
 static UART_HandleTypeDef* g_uart = &huart3;
 
-static uint8_t g_tx_buf[TX_BUF_SIZE];
+/* Place in RAM_D1 (AXI SRAM) so DMA1/DMA2 can access it. DTCMRAM is CPU-only. */
+static uint8_t g_tx_buf[TX_BUF_SIZE] __attribute__((section(".dma_buffers")));
 static volatile size_t g_tx_head = 0;
 static volatile size_t g_tx_tail = 0;
 static volatile size_t g_tx_dma_len = 0;
@@ -203,10 +204,24 @@ static void start_tx_dma_if_idle_unsafe() {
 
 static bool uart_write_bytes(const uint8_t* data, size_t len) {
     if (g_uart == nullptr || data == nullptr || len == 0) return false;
-    return HAL_UART_Transmit(g_uart,
-                             const_cast<uint8_t*>(data),
-                             (uint16_t)len,
-                             100) == HAL_OK;
+
+    uint32_t irq_state = crit_enter();
+
+    size_t free = TX_BUF_SIZE - 1 - tx_ring_count_unsafe();
+    if (len > free) {
+        crit_exit(irq_state);
+        return false;
+    }
+
+    for (size_t i = 0; i < len; ++i) {
+        g_tx_buf[g_tx_head] = data[i];
+        g_tx_head = (g_tx_head + 1) % TX_BUF_SIZE;
+    }
+
+    start_tx_dma_if_idle_unsafe();
+
+    crit_exit(irq_state);
+    return true;
 }
 
 // ============================================================
@@ -752,3 +767,8 @@ size_t txBytesQueued() {
 }
 
 } // namespace Telemetry
+
+extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef* huart)
+{
+    Telemetry::onUartTxComplete(huart);
+}

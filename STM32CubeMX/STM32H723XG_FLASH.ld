@@ -197,6 +197,14 @@ SECTIONS
     . = ALIGN(8);
   } >DTCMRAM
 
+  /* Buffers accessed by DMA1/DMA2 must live in AXI SRAM, not DTCMRAM. */
+  .dma_buffers (NOLOAD) :
+  {
+    . = ALIGN(32);
+    *(.dma_buffers)
+    *(.dma_buffers*)
+    . = ALIGN(32);
+  } >RAM_D1
 
 
   /* Remove information from the standard libraries */

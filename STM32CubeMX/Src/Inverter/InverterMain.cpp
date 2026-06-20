@@ -6,6 +6,8 @@
 #include "cy15b102q_driver.h"
 #include "ontime_logger.h"
 
+#include <cmath>
+
 namespace InverterMain {
 
 static CY15B102Q_HandleTypeDef g_fram = {
@@ -27,17 +29,32 @@ static void init()
 
     /* Telemetry over the MCP2221A USB-UART bridge (USART3). */
     Telemetry::init();
-    Telemetry::set_period_us(100000);  /* 10 Hz data frames */
+    Telemetry::set_period_us(10000);  /* 100 Hz data frames */
 }
 
 static void loop()
 {
-    OnTime_Update();
+    static uint32_t s_last_ontime_ms = 0;
+    static float    s_sine_angle = 0.0f;
 
-    Telemetry::log("inv_ontime_ms", static_cast<float>(OnTime_GetTotalMs()));
-    Telemetry::log("inv_boot_count", static_cast<float>(OnTime_GetBootCount()));
+    const uint32_t now_ms = HAL_GetTick();
 
-    Telemetry::updateSensors();
+    /* On-time logger: update F-RAM only once per second. */
+    if ((now_ms - s_last_ontime_ms) >= 1000U) {
+        OnTime_Update();
+        Telemetry::log("inv_ontime_ms",  static_cast<float>(OnTime_GetTotalMs()));
+        Telemetry::log("inv_boot_count", static_cast<float>(OnTime_GetBootCount()));
+        s_last_ontime_ms = now_ms;
+    }
+
+    /* 100 Hz test sine wave (1 Hz tone). */
+    Telemetry::log("test_sine", std::sin(s_sine_angle));
+    if (Telemetry::updateSensors()) {
+        s_sine_angle += 2.0f * 3.14159265f / 100.0f;
+        if (s_sine_angle >= 2.0f * 3.14159265f) {
+            s_sine_angle -= 2.0f * 3.14159265f;
+        }
+    }
 }
 
 } // namespace InverterMain
