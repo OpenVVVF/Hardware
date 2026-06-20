@@ -20,23 +20,6 @@
 #define CAN_ID_10A  0x10AU
 #define CAN_ID_10B  0x10BU
 
-/* Screen lookup tables ------------------------------------------------------*/
-static const uint8_t screen_prefix[5][2] = {
-    [DISP_SCREEN_IDLE]   = {0x21, 0x14},
-    [DISP_SCREEN_MENU]   = {0x3E, 0x3C},
-    [DISP_SCREEN_ARROW]  = {0x21, 0x0F},
-    [DISP_SCREEN_RIDE]   = {0x16, 0x14},
-    [DISP_SCREEN_CHARGE] = {0x65, 0x64},
-};
-
-static const uint8_t screen_102[5][8] = {
-    [DISP_SCREEN_IDLE]   = {0x00, 0x32, 0x00, 0x44, 0x1B, 0xFF, 0x17, 0x00},
-    [DISP_SCREEN_MENU]   = {0x82, 0x30, 0x42, 0x44, 0xC1, 0xFF, 0x11, 0x00},
-    [DISP_SCREEN_ARROW]  = {0x00, 0x32, 0x00, 0x44, 0x1B, 0xFF, 0x17, 0x00},
-    [DISP_SCREEN_RIDE]   = {0x00, 0x20, 0x00, 0x44, 0x1B, 0xFF, 0x11, 0x00},
-    [DISP_SCREEN_CHARGE] = {0x00, 0x32, 0x00, 0x44, 0x1B, 0xFF, 0x17, 0x00},
-};
-
 /* Private helpers -----------------------------------------------------------*/
 static HAL_StatusTypeDef CAN_Display_SendFrame(uint32_t can_id, const uint8_t *data, uint8_t dlc)
 {
