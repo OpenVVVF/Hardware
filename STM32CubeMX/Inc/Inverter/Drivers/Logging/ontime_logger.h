@@ -11,6 +11,10 @@
 #ifndef ONTIME_LOGGER_H
 #define ONTIME_LOGGER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "cy15b102q_driver.h"
 #include <stdint.h>
 #include <stddef.h>
@@ -57,5 +61,9 @@ uint32_t OnTime_GetBootCount(void);
  * @param  len  Buffer size (recommended >= 64).
  */
 void OnTime_Format(char *buf, size_t len);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* ONTIME_LOGGER_H */

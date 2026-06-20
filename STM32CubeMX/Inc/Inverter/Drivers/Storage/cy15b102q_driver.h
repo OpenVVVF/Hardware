@@ -21,6 +21,10 @@
 #ifndef CY15B102Q_DRIVER_H
 #define CY15B102Q_DRIVER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "stm32h7xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -125,5 +129,9 @@ void CY15B102Q_Sleep(CY15B102Q_HandleTypeDef *dev);
  * @brief  Wake the device from sleep (any SPI transaction wakes it).
  */
 void CY15B102Q_Wake(CY15B102Q_HandleTypeDef *dev);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* CY15B102Q_DRIVER_H */

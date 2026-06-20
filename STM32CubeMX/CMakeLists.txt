@@ -50,6 +50,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/InverterMain.cpp
+    Src/Inverter/Telemetry.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c
     Src/Inverter/Drivers/UART/mcp2221a_driver.c
