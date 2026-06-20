@@ -1,12 +1,11 @@
 #include "Inverter/InverterMain.h"
 #include "Inverter/Telemetry.h"
+#include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
 
 #include "main.h"
 #include "spi.h"
 #include "cy15b102q_driver.h"
 #include "ontime_logger.h"
-
-#include <cmath>
 
 namespace InverterMain {
 
@@ -30,12 +29,14 @@ static void init()
     /* Telemetry over the MCP2221A USB-UART bridge (USART3). */
     Telemetry::init();
     Telemetry::set_period_us(10000);  /* 100 Hz data frames */
+
+    /* Phase-current sensor test harness. */
+    Inverter::CurrentSensorTest_Init();
 }
 
 static void loop()
 {
     static uint32_t s_last_ontime_ms = 0;
-    static float    s_sine_angle = 0.0f;
 
     const uint32_t now_ms = HAL_GetTick();
 
@@ -47,14 +48,14 @@ static void loop()
         s_last_ontime_ms = now_ms;
     }
 
-    /* 100 Hz test sine wave (1 Hz tone). */
-    Telemetry::log("test_sine", std::sin(s_sine_angle));
-    if (Telemetry::updateSensors()) {
-        s_sine_angle += 2.0f * 3.14159265f / 100.0f;
-        if (s_sine_angle >= 2.0f * 3.14159265f) {
-            s_sine_angle -= 2.0f * 3.14159265f;
-        }
+    /* Phase-current sensor test: read U, V, W at 100 Hz and publish over telemetry. */
+    static uint32_t s_last_current_ms = 0;
+    if ((now_ms - s_last_current_ms) >= 10U) {
+        Inverter::CurrentSensorTest_RunOnce();
+        s_last_current_ms = now_ms;
     }
+
+    Telemetry::updateSensors();
 }
 
 } // namespace InverterMain

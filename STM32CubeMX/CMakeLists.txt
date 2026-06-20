@@ -57,6 +57,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Drivers/Storage/cy15b102q_driver.c
     Src/Inverter/Drivers/Logging/ontime_logger.c
     Src/Inverter/Drivers/PWM/pwm.c
+    Src/Inverter/Drivers/Sensors/CurrentSensor.cpp
+    Src/Inverter/Drivers/Sensors/CurrentSensorTest.cpp
 )
 
 # Add include paths
@@ -68,6 +70,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     Inc/Inverter/Drivers/Storage
     Inc/Inverter/Drivers/Logging
     Inc/Inverter/Drivers/PWM
+    Inc/Inverter/Drivers/Sensors
 )
 
 # Add project symbols (macros)
