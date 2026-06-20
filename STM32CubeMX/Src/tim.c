@@ -375,6 +375,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     float angle = spwm_angle;
     float m = spwm_modulation_index;
 
+    /* Volume compensation: lower PWM carrier frequencies tend to sound louder
+       on the motor/inverter, so taper modulation index with carrier freq. */
+    {
+        float f_pwm = pwm_switching_freq_hz;
+        if (f_pwm > 0.0f)
+        {
+            /* Reference around the middle of the expected carrier range. */
+            float comp = sqrtf(f_pwm / 1800.0f);
+            if (comp < 0.5f) comp = 0.5f;
+            if (comp > 1.5f) comp = 1.5f;
+            m *= comp;
+            if (m > 1.0f) m = 1.0f;
+        }
+    }
+
     /* Three-phase sinusoidal duty cycles, centred at 50 %. */
     float u = 50.0f + 50.0f * m * sinf(angle);
     float v = 50.0f + 50.0f * m * sinf(angle - TWO_PI / 3.0f);

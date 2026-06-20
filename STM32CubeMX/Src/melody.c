@@ -109,7 +109,7 @@
 #define NOTE_D8   4699.0f
 #define NOTE_DS8  4978.0f
 
-#define OCTAVE_SHIFT  6.0f
+#define OCTAVE_SHIFT  5.5f
 #define TEMPO         72
 
 /* Whole note duration in ms: (60000 * 4) / tempo */
