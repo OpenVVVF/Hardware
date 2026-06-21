@@ -99,13 +99,17 @@ bool CurrentSensor::read(float& current_a, float& vout_v, float& vref_v) {
         raw_ref = readSingleAdc(cfg_.output.hadc);
     }
 
+    computeFromRaw(raw_out, raw_ref, current_a, vout_v, vref_v);
+    return true;
+}
+
+void CurrentSensor::computeFromRaw(uint32_t raw_out, uint32_t raw_ref,
+                                   float& current_a, float& vout_v, float& vref_v) const {
     vout_v = rawToVoltage(raw_out) / cfg_.voltage_divider;
     vref_v = rawToVoltage(raw_ref) / cfg_.voltage_divider;
 
     const float diff_v = vout_v - vref_v;
     current_a = diff_v / cfg_.sensitivity_va;
-
-    return true;
 }
 
 } // namespace Inverter

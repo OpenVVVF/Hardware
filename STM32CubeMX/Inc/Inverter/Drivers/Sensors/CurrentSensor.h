@@ -47,15 +47,19 @@ public:
     void init(const CurrentSensorConfig& cfg);
 
     /**
-     * @brief Read the sensor.
+     * @brief Convert raw ADC codes to current/voltages.
+     *
+     * Does not perform any ADC I/O; useful when the samples were captured
+     * outside of this class (e.g. during a coordinated multi-phase snapshot).
+     */
+    void computeFromRaw(uint32_t raw_out, uint32_t raw_ref,
+                        float& current_a, float& vout_v, float& vref_v) const;
+
+    /**
+     * @brief Sample this sensor by itself.
      *
      * Returns sensor-side voltages (before the divider) and the computed current.
      * Current is (vout - vref) / sensitivity_va.
-     *
-     * @param[out] current_a  Computed current in amperes.
-     * @param[out] vout_v     Output voltage at the sensor pin (before divider).
-     * @param[out] vref_v     Reference voltage at the sensor pin (before divider).
-     * @return true on success.
      */
     bool read(float& current_a, float& vout_v, float& vref_v);
 
