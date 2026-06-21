@@ -200,8 +200,8 @@ float PhaseCurrentADC::countsToCurrent(uint32_t sig, uint32_t ref) const {
 }
 
 bool PhaseCurrentADC::calibrateOffsets() {
-    constexpr uint32_t DISCARD_SAMPLES = 500;
-    constexpr uint32_t AVG_SAMPLES     = 1000;
+    constexpr uint32_t DISCARD_SAMPLES = 2000;
+    constexpr uint32_t AVG_SAMPLES     = 2500;
 
     m_new_data = false;
     for (uint32_t i = 0; i < DISCARD_SAMPLES; ++i) {
