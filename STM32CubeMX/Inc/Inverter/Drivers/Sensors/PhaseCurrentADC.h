@@ -8,24 +8,24 @@ namespace Inverter {
 /**
  * @brief PWM-synchronous phase-current ADC for FOC.
  *
- * Uses ADC1 and ADC2 in independent scan conversion, both triggered by the same
- * TIM1 TRGO edge and transferred by separate DMA streams.  Each ADC result is
- * read from its own DR, avoiding the STM32H7 dual-mode common-data-register
- * packing mis-alignment that can swap/delay ADC2 samples.
+ * Uses ADC1+ADC2 in dual-mode injected-simultaneous conversion, triggered by
+ * TIM1 TRGO and read from the injected data registers in the ADC ISR.
  *
- * ADC1 sequence: U signal (CH4) -> V signal (CH3)
- * ADC2 sequence: U reference (CH8) -> V reference (CH7)
+ * ADC1 injected sequence: U signal (CH4) -> V signal (CH3)
+ * ADC2 injected sequence: U reference (CH8) -> V reference (CH7)
  *
- * Ranks are paired across the two ADCs so each TIM1 trigger samples both U and V
- * differentially: signal and reference are captured together.  Index 0 is the U
- * pair, index 1 is the V pair.  W current is computed as -(iu + iv).
+ * The two ADCs sample simultaneously rank-by-rank, so U signal/ref and V
+ * signal/ref are captured together (true differential measurement).
+ * W current is computed as -(iu + iv).
+ *
+ * ADC2's regular group remains free for other uses (e.g. the encoder DMA).
  */
 class PhaseCurrentADC {
 public:
     PhaseCurrentADC() = default;
 
     /**
-     * @brief Initialize hardware: ADC channels, TIM1 TRGO, DMA.
+     * @brief Initialize hardware: ADC injected channels, TIM1 TRGO, ADC IRQ.
      *
      * Must be called after MX_ADC1_Init(), MX_ADC2_Init(), MX_TIM1_Init()
      * and MX_DMA_Init() have run.
@@ -33,8 +33,9 @@ public:
     bool init();
 
     /**
-     * @brief Start timer-triggered DMA conversions and run a one-shot zero-current
-     * offset calibration.  The motor must be at standstill with no phase current.
+     * @brief Start timer-triggered injected conversions and run a one-shot
+     * zero-current offset calibration.  The motor must be at standstill with
+     * no phase current.
      */
     bool start();
 
@@ -54,10 +55,9 @@ public:
     bool sample(float& iu, float& iv, float& iw);
 
     /**
-     * @brief Raw ADC callbacks, called from the DMA ISR.
+     * @brief Called from the ADC ISR when an injected sequence completes.
      */
-    void onDmaHalfComplete();
-    void onDmaComplete();
+    void onInjectedConversionComplete();
 
     /**
      * @brief Diagnostic read-back of the latest raw ADC counts.
@@ -71,7 +71,6 @@ public:
 
 private:
     bool configureAdcChannels();
-    bool initDma();
     bool initTrigger();
     bool calibrateOffsets();
     void updateFilter(float raw_u, float raw_v);
@@ -83,8 +82,7 @@ private:
     static constexpr float    SENSITIVITY_VA  = 1.042e-3f; /**< LA37S600. */
 
     /* Lightweight moving-average filter applied at the ADC sample rate to
-     * reduce sensor/ADC noise before the slower telemetry/FOC loop reads it.
-     * A length of 8 gives ~sqrt(8) noise reduction with ~0.8 ms latency. */
+     * reduce sensor/ADC noise before the slower telemetry/FOC loop reads it. */
     static constexpr size_t FILTER_LEN = 8;
 
     volatile uint32_t m_raw_u_sig = 0;
@@ -110,7 +108,7 @@ private:
 };
 
 /**
- * @brief Global instance used by the DMA ISR.
+ * @brief Global instance used by the ADC ISR.
  */
 PhaseCurrentADC& phaseCurrentADC();
 

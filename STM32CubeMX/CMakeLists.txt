@@ -59,6 +59,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Drivers/PWM/pwm.c
     Src/Inverter/Drivers/Sensors/CurrentSensor.cpp
     Src/Inverter/Drivers/Sensors/CurrentSensorTest.cpp
+    Src/Inverter/Drivers/Sensors/EncoderADC.cpp
     Src/Inverter/Drivers/Sensors/PhaseCurrentADC.cpp
 )
 

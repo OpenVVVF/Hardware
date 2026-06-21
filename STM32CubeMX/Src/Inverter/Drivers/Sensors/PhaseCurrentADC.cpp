@@ -3,151 +3,107 @@
 #include "main.h"
 #include "adc.h"
 #include "tim.h"
-#include "dma.h"
 
 namespace Inverter {
 
 static PhaseCurrentADC s_instance;
-static DMA_HandleTypeDef hdma_adc1;
-static DMA_HandleTypeDef hdma_adc2;
-
-/* DMA cannot read DTCMRAM on H7; place the ADC DMA buffers in AXI SRAM.
- * Each TIM1 trigger starts a 2-channel scan on ADC1 and ADC2.  The two ADCs
- * are triggered from the same TIM1_TRGO edge, and each ADC has its own DMA
- * stream reading its own DR.  This avoids the STM32H7 dual-mode CDR packing
- * mis-alignment that was causing the reference channels to drift by ~20 counts.
- *
- *   ADC1 buffer: [U_sig, V_sig]
- *   ADC2 buffer: [U_ref, V_ref]
- */
-static uint16_t s_adc1_dma_buffer[2] __attribute__((section(".dma_buffers")));
-static uint16_t s_adc2_dma_buffer[2] __attribute__((section(".dma_buffers")));
 
 PhaseCurrentADC& phaseCurrentADC() {
     return s_instance;
+}
+
+static ADC_InjectionConfTypeDef makeInjectedConfig(uint32_t channel, uint32_t rank,
+                                                    uint32_t trigger, uint32_t edge) {
+    ADC_InjectionConfTypeDef cfg = {};
+    cfg.InjectedChannel = channel;
+    cfg.InjectedRank = rank;
+    cfg.InjectedSamplingTime = ADC_SAMPLETIME_32CYCLES_5;
+    cfg.InjectedSingleDiff = ADC_SINGLE_ENDED;
+    cfg.InjectedOffsetNumber = ADC_OFFSET_NONE;
+    cfg.InjectedOffset = 0;
+    cfg.InjectedOffsetSignedSaturation = DISABLE;
+    cfg.InjectedNbrOfConversion = 2;
+    cfg.InjectedDiscontinuousConvMode = DISABLE;
+    cfg.AutoInjectedConv = DISABLE;
+    cfg.QueueInjectedContext = DISABLE;
+    cfg.ExternalTrigInjecConv = trigger;
+    cfg.ExternalTrigInjecConvEdge = edge;
+    cfg.InjecOversamplingMode = ENABLE;
+    cfg.InjecOversampling.Ratio = 16;
+    cfg.InjecOversampling.RightBitShift = ADC_RIGHTBITSHIFT_4;
+    return cfg;
 }
 
 bool PhaseCurrentADC::configureAdcChannels() {
     HAL_ADC_Stop(&hadc1);
     HAL_ADC_Stop(&hadc2);
 
-    ADC_ChannelConfTypeDef sConfig = {};
-    sConfig.SamplingTime = ADC_SAMPLETIME_32CYCLES_5;
-    sConfig.SingleDiff = ADC_SINGLE_ENDED;
-    sConfig.OffsetNumber = ADC_OFFSET_NONE;
-    sConfig.Offset = 0;
-    sConfig.OffsetSignedSaturation = DISABLE;
-    sConfig.OffsetSign = ADC3_OFFSET_SIGN_NEGATIVE;
+    /* Scan mode must be enabled for the injected sequencer to use ranks 1 and 2. */
+    hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+    hadc2.Init.ScanConvMode = ADC_SCAN_ENABLE;
 
-    /* ADC1 sequence: U current signal (CH4), then V current signal (CH3). */
-    sConfig.Channel = ADC_CHANNEL_4;
-    sConfig.Rank = ADC_REGULAR_RANK_1;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+    /* We want one interrupt per completed injected sequence (both ranks). */
+    hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
+    hadc2.Init.EOCSelection = ADC_EOC_SEQ_CONV;
+
+    /* Disable injected context queue so software-trigger (slave) start works. */
+    if (HAL_ADCEx_DisableInjectedQueue(&hadc1) != HAL_OK) {
         return false;
     }
-    sConfig.Channel = ADC_CHANNEL_3;
-    sConfig.Rank = ADC_REGULAR_RANK_2;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+    if (HAL_ADCEx_DisableInjectedQueue(&hadc2) != HAL_OK) {
         return false;
     }
 
-    /* ADC2 sequence: U current reference (CH8), then V current reference (CH7).
-     * Ranks are paired with ADC1 so index 0 = U and index 1 = V. */
-    sConfig.Channel = ADC_CHANNEL_8;
-    sConfig.Rank = ADC_REGULAR_RANK_1;
-    if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK) {
+    /* ADC1 injected master: U signal then V signal, triggered by TIM1_TRGO.
+     * The reference channels are on ADC2 so each signal/reference pair is
+     * sampled simultaneously (true differential measurement). */
+    ADC_InjectionConfTypeDef inj1_r1 = makeInjectedConfig(
+        ADC_CHANNEL_4, ADC_INJECTED_RANK_1,
+        ADC_EXTERNALTRIGINJEC_T1_TRGO, ADC_EXTERNALTRIGINJECCONV_EDGE_RISING);
+    ADC_InjectionConfTypeDef inj1_r2 = makeInjectedConfig(
+        ADC_CHANNEL_3, ADC_INJECTED_RANK_2,
+        ADC_EXTERNALTRIGINJEC_T1_TRGO, ADC_EXTERNALTRIGINJECCONV_EDGE_RISING);
+
+    if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &inj1_r1) != HAL_OK) {
         return false;
     }
-    sConfig.Channel = ADC_CHANNEL_7;
-    sConfig.Rank = ADC_REGULAR_RANK_2;
-    if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK) {
+    if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &inj1_r2) != HAL_OK) {
         return false;
     }
 
-    /* Enable 2-rank scan sequences (discontinuous mode disabled). */
-    MODIFY_REG(hadc1.Instance->SQR1, ADC_SQR1_L, 1U);
-    MODIFY_REG(hadc2.Instance->SQR1, ADC_SQR1_L, 1U);
-    CLEAR_BIT(hadc1.Instance->CFGR, ADC_CFGR_DISCEN | ADC_CFGR_DISCNUM);
-    CLEAR_BIT(hadc2.Instance->CFGR, ADC_CFGR_DISCEN | ADC_CFGR_DISCNUM);
+    /* ADC2 injected slave: U reference then V reference, no external trigger.
+     * It is hardware-slaved to ADC1 in injected-simultaneous mode. */
+    ADC_InjectionConfTypeDef inj2_r1 = makeInjectedConfig(
+        ADC_CHANNEL_8, ADC_INJECTED_RANK_1,
+        ADC_INJECTED_SOFTWARE_START, ADC_EXTERNALTRIGINJECCONV_EDGE_NONE);
+    ADC_InjectionConfTypeDef inj2_r2 = makeInjectedConfig(
+        ADC_CHANNEL_7, ADC_INJECTED_RANK_2,
+        ADC_INJECTED_SOFTWARE_START, ADC_EXTERNALTRIGINJECCONV_EDGE_NONE);
 
-    /* Fix CubeMX oversampling: 16x average instead of 16x sum. */
-    MODIFY_REG(hadc1.Instance->CFGR2, ADC_CFGR2_OVSS, ADC_RIGHTBITSHIFT_4);
-    MODIFY_REG(hadc2.Instance->CFGR2, ADC_CFGR2_OVSS, ADC_RIGHTBITSHIFT_4);
+    if (HAL_ADCEx_InjectedConfigChannel(&hadc2, &inj2_r1) != HAL_OK) {
+        return false;
+    }
+    if (HAL_ADCEx_InjectedConfigChannel(&hadc2, &inj2_r2) != HAL_OK) {
+        return false;
+    }
 
-    /* Use circular DMA for each ADC's own data register.  HAL_ADC_Start_DMA()
-     * writes this value into the DMNGT bits. */
-    hadc1.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
-    hadc2.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
-
-    /* Run ADC1 and ADC2 independently.  Both still trigger from the same
-     * TIM1_TRGO edge, so the signal/reference pairs are sampled together,
-     * but each ADC result is read from its own DR instead of the packed CDR. */
+    /* Use injected-simultaneous dual mode only.  Regular groups remain independent,
+     * so ADC2 regular can run the encoder DMA. */
     ADC_MultiModeTypeDef multimode = {};
-    multimode.Mode = ADC_MODE_INDEPENDENT;
+    multimode.Mode = ADC_DUALMODE_INJECSIMULT;
+    multimode.DualModeData = ADC_DUALMODEDATAFORMAT_DISABLED;
+    multimode.TwoSamplingDelay = ADC_TWOSAMPLINGDELAY_5CYCLES;
     if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK) {
         return false;
     }
-
-    /* Route both ADCs to the same TIM1 trigger source. */
-    MODIFY_REG(hadc1.Instance->CFGR, ADC_CFGR_EXTEN | ADC_CFGR_EXTSEL,
-               ADC_EXTERNALTRIGCONVEDGE_RISING | ADC_EXTERNALTRIG_T1_TRGO);
-    MODIFY_REG(hadc2.Instance->CFGR, ADC_CFGR_EXTEN | ADC_CFGR_EXTSEL,
-               ADC_EXTERNALTRIGCONVEDGE_RISING | ADC_EXTERNALTRIG_T1_TRGO);
-
-    return true;
-}
-
-static bool initSingleDma(DMA_HandleTypeDef* hdma, DMA_Stream_TypeDef* instance,
-                          uint32_t request, IRQn_Type irqn) {
-    hdma->Instance = instance;
-    hdma->Init.Request = request;
-    hdma->Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma->Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma->Init.MemInc = DMA_MINC_ENABLE;
-    hdma->Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-    hdma->Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-    hdma->Init.Mode = DMA_CIRCULAR;
-    hdma->Init.Priority = DMA_PRIORITY_HIGH;
-    hdma->Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-
-    if (HAL_DMA_Init(hdma) != HAL_OK) {
-        return false;
-    }
-
-    HAL_NVIC_SetPriority(irqn, 5, 0);
-    HAL_NVIC_EnableIRQ(irqn);
-
-    return true;
-}
-
-bool PhaseCurrentADC::initDma() {
-    __HAL_RCC_DMA1_CLK_ENABLE();
-    __HAL_RCC_DMA2_CLK_ENABLE();
-
-    if (!initSingleDma(&hdma_adc1, DMA1_Stream1, DMA_REQUEST_ADC1,
-                       DMA1_Stream1_IRQn)) {
-        return false;
-    }
-    __HAL_LINKDMA(&hadc1, DMA_Handle, hdma_adc1);
-
-    if (!initSingleDma(&hdma_adc2, DMA2_Stream0, DMA_REQUEST_ADC2,
-                       DMA2_Stream0_IRQn)) {
-        return false;
-    }
-    __HAL_LINKDMA(&hadc2, DMA_Handle, hdma_adc2);
 
     return true;
 }
 
 bool PhaseCurrentADC::initTrigger() {
     /* Use TIM1 channel 4 to generate a narrow pulse around the bottom of the
-     * center-aligned PWM triangle.  This gives a deterministic, once-per-period
-     * ADC trigger at the quiet point where the low-side shunts conduct.
-     *
-     * TIM1_CH4 is not routed to a pin (CC4E stays 0); only the internal OC4REF
-     * signal is used.  PWM mode 1 with CCR4 = PULSE_TICKS makes OC4REF high
-     * while CNT < PULSE_TICKS, so there is a single rising edge just before the
-     * counter underflows (CNT = 0). */
+     * center-aligned PWM triangle.  OC4REF is routed to TRGO and triggers the
+     * ADC1 injected group.  ADC2 injected follows in dual mode. */
     static constexpr uint32_t PULSE_TICKS = 10U;
 
     TIM_OC_InitTypeDef sConfigOC = {};
@@ -162,16 +118,17 @@ bool PhaseCurrentADC::initTrigger() {
         return false;
     }
 
-    /* Route OC4REF to TRGO.  Both ADCs trigger on the rising edge of TRGO. */
     MODIFY_REG(htim1.Instance->CR2, TIM_CR2_MMS, TIM_TRGO_OC4REF);
-
     return true;
 }
 
 bool PhaseCurrentADC::init() {
     if (!configureAdcChannels()) return false;
-    if (!initDma()) return false;
     if (!initTrigger()) return false;
+
+    HAL_NVIC_SetPriority(ADC_IRQn, 4, 0);
+    HAL_NVIC_EnableIRQ(ADC_IRQn);
+
     return true;
 }
 
@@ -185,19 +142,20 @@ bool PhaseCurrentADC::start() {
         /* non-fatal: continue */
     }
 
-    if (HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(s_adc1_dma_buffer), 2) != HAL_OK) {
+    /* Start injected conversions: slave first, then master. */
+    if (HAL_ADCEx_InjectedStart_IT(&hadc2) != HAL_OK) {
         return false;
     }
-    if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(s_adc2_dma_buffer), 2) != HAL_OK) {
-        HAL_ADC_Stop_DMA(&hadc1);
+    if (HAL_ADCEx_InjectedStart_IT(&hadc1) != HAL_OK) {
+        HAL_ADCEx_InjectedStop_IT(&hadc2);
         return false;
     }
 
-    /* Start the TIM1 counter so its TRGO events trigger the ADCs.
+    /* Start the TIM1 counter so its TRGO events trigger the injected group.
      * This does not enable PWM outputs; it just runs the timer. */
     if (HAL_TIM_Base_Start(&htim1) != HAL_OK) {
-        HAL_ADC_Stop_DMA(&hadc1);
-        HAL_ADC_Stop_DMA(&hadc2);
+        HAL_ADCEx_InjectedStop_IT(&hadc1);
+        HAL_ADCEx_InjectedStop_IT(&hadc2);
         return false;
     }
 
@@ -208,25 +166,17 @@ bool PhaseCurrentADC::start() {
     }
     if (htim1.Instance->CNT == cnt_before) {
         HAL_TIM_Base_Stop(&htim1);
-        HAL_ADC_Stop_DMA(&hadc1);
-        HAL_ADC_Stop_DMA(&hadc2);
+        HAL_ADCEx_InjectedStop_IT(&hadc1);
+        HAL_ADCEx_InjectedStop_IT(&hadc2);
         return false;
     }
 
-    /* In center-aligned mode the TIM1 update event fires at both the overflow
-     * and the underflow.  The ADC trigger now comes from OC4REF near the bottom
-     * of the triangle, so the ADC sampling point is deterministic.  We still set
-     * RCR=1 so the TIM1 update interrupt (used by SPWM) runs only once per PWM
-     * period; writing RCR after the counter starts aligns that update to the
-     * underflow. */
     htim1.Instance->RCR = 1U;
 
-    /* Measure and subtract the residual zero-current offset of each phase.
-     * This removes board-level divider mismatch. */
     if (!calibrateOffsets()) {
         HAL_TIM_Base_Stop(&htim1);
-        HAL_ADC_Stop_DMA(&hadc1);
-        HAL_ADC_Stop_DMA(&hadc2);
+        HAL_ADCEx_InjectedStop_IT(&hadc1);
+        HAL_ADCEx_InjectedStop_IT(&hadc2);
         return false;
     }
 
@@ -237,8 +187,8 @@ bool PhaseCurrentADC::start() {
 bool PhaseCurrentADC::stop() {
     if (!m_running) return true;
     HAL_TIM_Base_Stop(&htim1);
-    HAL_ADC_Stop_DMA(&hadc1);
-    HAL_ADC_Stop_DMA(&hadc2);
+    HAL_ADCEx_InjectedStop_IT(&hadc1);
+    HAL_ADCEx_InjectedStop_IT(&hadc2);
     m_running = false;
     return true;
 }
@@ -253,8 +203,6 @@ bool PhaseCurrentADC::calibrateOffsets() {
     constexpr uint32_t DISCARD_SAMPLES = 500;
     constexpr uint32_t AVG_SAMPLES     = 1000;
 
-    /* Let the RCR=1 preload take effect and skip the first few samples in case
-     * they were taken before the trigger aligned to the PWM underflow. */
     m_new_data = false;
     for (uint32_t i = 0; i < DISCARD_SAMPLES; ++i) {
         while (!m_new_data) {
@@ -291,22 +239,18 @@ bool PhaseCurrentADC::calibrateOffsets() {
     return true;
 }
 
-void PhaseCurrentADC::onDmaHalfComplete() {
-    /* Index 0: U signal and U reference, captured on the same trigger. */
-    m_raw_u_sig = s_adc1_dma_buffer[0];
-    m_raw_u_ref = s_adc2_dma_buffer[0];
-    m_iu = countsToCurrent(m_raw_u_sig, m_raw_u_ref);
-}
+void PhaseCurrentADC::onInjectedConversionComplete() {
+    /* Read the simultaneously-sampled injected pairs.
+     * ADC1 carries the signal channels, ADC2 carries the reference channels. */
+    m_raw_u_sig = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_1);
+    m_raw_v_sig = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_2);
+    m_raw_u_ref = HAL_ADCEx_InjectedGetValue(&hadc2, ADC_INJECTED_RANK_1);
+    m_raw_v_ref = HAL_ADCEx_InjectedGetValue(&hadc2, ADC_INJECTED_RANK_2);
 
-void PhaseCurrentADC::onDmaComplete() {
-    /* Index 1: V signal and V reference, captured on the same trigger. */
-    m_raw_v_sig = s_adc1_dma_buffer[1];
-    m_raw_v_ref = s_adc2_dma_buffer[1];
+    m_iu = countsToCurrent(m_raw_u_sig, m_raw_u_ref);
     m_iv = countsToCurrent(m_raw_v_sig, m_raw_v_ref);
 
-    /* Apply offset correction and update the output noise filter. */
     updateFilter(m_iu - m_offset_u, m_iv - m_offset_v);
-
     m_new_data = true;
 }
 
@@ -336,7 +280,6 @@ bool PhaseCurrentADC::sample(float& iu, float& iv, float& iw) {
         return false;
     }
 
-    /* Read the filtered results atomically w.r.t. the DMA ISR. */
     __disable_irq();
     iu = m_filtered_u;
     iv = m_filtered_v;
@@ -349,22 +292,13 @@ bool PhaseCurrentADC::sample(float& iu, float& iv, float& iw) {
 
 } // namespace Inverter
 
-extern "C" void DMA1_Stream1_IRQHandler(void) {
-    HAL_DMA_IRQHandler(&Inverter::hdma_adc1);
+extern "C" void ADC_IRQHandler(void) {
+    HAL_ADC_IRQHandler(&hadc1);
+    HAL_ADC_IRQHandler(&hadc2);
 }
 
-extern "C" void DMA2_Stream0_IRQHandler(void) {
-    HAL_DMA_IRQHandler(&Inverter::hdma_adc2);
-}
-
-extern "C" void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc) {
+extern "C" void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc) {
     if (hadc->Instance == ADC1) {
-        Inverter::phaseCurrentADC().onDmaHalfComplete();
-    }
-}
-
-extern "C" void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    if (hadc->Instance == ADC1) {
-        Inverter::phaseCurrentADC().onDmaComplete();
+        Inverter::phaseCurrentADC().onInjectedConversionComplete();
     }
 }

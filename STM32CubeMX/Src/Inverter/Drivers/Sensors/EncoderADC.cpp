@@ -1,0 +1,250 @@
+#include "Inverter/Drivers/Sensors/EncoderADC.h"
+
+#include "main.h"
+#include "adc.h"
+#include "dma.h"
+
+#include <math.h>
+
+/* CORDIC function code for phase/atan2 in the STM32H7 CORDIC. */
+static constexpr uint32_t CORDIC_FUNC_PHASE = 2U;
+/* 2^31 scaling used for CORDIC q1.31 inputs/outputs. */
+static constexpr float CORDIC_Q31_SCALE = 2147483648.0f;
+
+static void initCordic() {
+    __HAL_RCC_CORDIC_CLK_ENABLE();
+
+    CORDIC->CSR = (CORDIC_FUNC_PHASE << CORDIC_CSR_FUNC_Pos)
+                | (6U << CORDIC_CSR_PRECISION_Pos)
+                | (0U << CORDIC_CSR_SCALE_Pos)
+                | (0U << CORDIC_CSR_NARGS_Pos)
+                | (0U << CORDIC_CSR_NRES_Pos)
+                | (0U << CORDIC_CSR_ARGSIZE_Pos)
+                | (0U << CORDIC_CSR_RESSIZE_Pos);
+}
+
+static float cordicAtan2(float y, float x) {
+    /* Convert inputs to q1.31.  Clamp +/-1.0 to INT32_MAX to avoid overflow. */
+    int32_t y_q31 = (int32_t)(y * (CORDIC_Q31_SCALE - 1.0f));
+    int32_t x_q31 = (int32_t)(x * (CORDIC_Q31_SCALE - 1.0f));
+
+    CORDIC->WDATA = static_cast<uint32_t>(y_q31);
+    CORDIC->WDATA = static_cast<uint32_t>(x_q31);
+
+    while ((CORDIC->CSR & CORDIC_CSR_RRDY) == 0U) {
+        __NOP();
+    }
+
+    int32_t res = static_cast<int32_t>(CORDIC->RDATA);
+    return static_cast<float>(res) * (M_PI / CORDIC_Q31_SCALE);
+}
+
+namespace Inverter {
+
+static EncoderADC s_instance;
+static DMA_HandleTypeDef hdma_adc2_enc;
+static TIM_HandleTypeDef htim2_enc;
+
+/* DMA buffer must live in AXI SRAM, not DTCMRAM. */
+static uint16_t s_enc_dma_buffer[2] __attribute__((section(".dma_buffers")));
+
+EncoderADC& encoderADC() {
+    return s_instance;
+}
+
+bool EncoderADC::configureAdcChannels() {
+    /* Make sure no regular conversion is running before reconfiguring. */
+    if (LL_ADC_REG_IsConversionOngoing(hadc2.Instance)) {
+        LL_ADC_REG_StopConversion(hadc2.Instance);
+        while (LL_ADC_REG_IsConversionOngoing(hadc2.Instance)) {
+            __NOP();
+        }
+    }
+
+    /* Scan sequence: sin (CH10) then cos (CH11). */
+    ADC_ChannelConfTypeDef sConfig = {};
+    sConfig.SamplingTime = ADC_SAMPLETIME_32CYCLES_5;
+    sConfig.SingleDiff = ADC_SINGLE_ENDED;
+    sConfig.OffsetNumber = ADC_OFFSET_NONE;
+    sConfig.Offset = 0;
+    sConfig.OffsetSignedSaturation = DISABLE;
+    sConfig.OffsetSign = ADC3_OFFSET_SIGN_NEGATIVE;
+
+    sConfig.Channel = ADC_CHANNEL_10;
+    sConfig.Rank = ADC_REGULAR_RANK_1;
+    if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK) {
+        return false;
+    }
+
+    sConfig.Channel = ADC_CHANNEL_11;
+    sConfig.Rank = ADC_REGULAR_RANK_2;
+    if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK) {
+        return false;
+    }
+
+    /* 2-rank scan sequence. */
+    MODIFY_REG(hadc2.Instance->SQR1, ADC_SQR1_L, 1U);
+    CLEAR_BIT(hadc2.Instance->CFGR, ADC_CFGR_DISCEN | ADC_CFGR_DISCNUM);
+
+    /* Disable regular oversampling for the encoder (not needed, keep it fast). */
+    CLEAR_BIT(hadc2.Instance->CFGR2, ADC_CFGR2_ROVSE);
+
+    /* Trigger from TIM2 TRGO, rising edge. */
+    MODIFY_REG(hadc2.Instance->CFGR, ADC_CFGR_EXTEN | ADC_CFGR_EXTSEL,
+               ADC_EXTERNALTRIGCONVEDGE_RISING | ADC_EXTERNALTRIG_T2_TRGO);
+
+    /* Tell HAL_ADC_Start_DMA() to use circular DMA mode. */
+    hadc2.Init.ScanConvMode = ADC_SCAN_ENABLE;
+    hadc2.Init.ContinuousConvMode = DISABLE;
+    hadc2.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DMA_CIRCULAR;
+
+    return true;
+}
+
+bool EncoderADC::initTimer() {
+    __HAL_RCC_TIM2_CLK_ENABLE();
+
+    htim2_enc.Instance = TIM2;
+    htim2_enc.Init.Prescaler = 0;
+    htim2_enc.Init.CounterMode = TIM_COUNTERMODE_UP;
+    /* APB1 = 137.5 MHz.  13750 ticks -> 10 kHz TRGO. */
+    htim2_enc.Init.Period = 13749U;
+    htim2_enc.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim2_enc.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+    if (HAL_TIM_Base_Init(&htim2_enc) != HAL_OK) {
+        return false;
+    }
+
+    TIM_MasterConfigTypeDef sMasterConfig = {};
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+    sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim2_enc, &sMasterConfig) != HAL_OK) {
+        return false;
+    }
+
+    return true;
+}
+
+bool EncoderADC::initDma() {
+    __HAL_RCC_DMA2_CLK_ENABLE();
+
+    hdma_adc2_enc.Instance = DMA2_Stream0;
+    hdma_adc2_enc.Init.Request = DMA_REQUEST_ADC2;
+    hdma_adc2_enc.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc2_enc.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc2_enc.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_adc2_enc.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc2_enc.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_adc2_enc.Init.Mode = DMA_CIRCULAR;
+    hdma_adc2_enc.Init.Priority = DMA_PRIORITY_MEDIUM;
+    hdma_adc2_enc.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+
+    if (HAL_DMA_Init(&hdma_adc2_enc) != HAL_OK) {
+        return false;
+    }
+
+    __HAL_LINKDMA(&hadc2, DMA_Handle, hdma_adc2_enc);
+
+    HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+
+    return true;
+}
+
+bool EncoderADC::init() {
+    initCordic();
+
+    if (!configureAdcChannels()) return false;
+    if (!initTimer()) return false;
+    if (!initDma()) return false;
+    return true;
+}
+
+bool EncoderADC::start() {
+    if (m_running) return true;
+
+    /* Calibrate only if ADC2 is not already running for current sense. */
+    if (LL_ADC_IsEnabled(hadc2.Instance) == 0U) {
+        if (HAL_ADCEx_Calibration_Start(&hadc2, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK) {
+            /* non-fatal: continue */
+        }
+    }
+
+    if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(s_enc_dma_buffer), 2) != HAL_OK) {
+        return false;
+    }
+
+    if (HAL_TIM_Base_Start(&htim2_enc) != HAL_OK) {
+        HAL_ADC_Stop_DMA(&hadc2);
+        return false;
+    }
+
+    m_running = true;
+    return true;
+}
+
+float EncoderADC::computeAngle(uint16_t raw_sin, uint16_t raw_cos) {
+    /* Clamp to hard limits to reject outliers. */
+    uint16_t csin = raw_sin;
+    uint16_t ccos = raw_cos;
+    if (csin < SIN_MIN_CAP) csin = SIN_MIN_CAP;
+    if (csin > SIN_MAX_CAP) csin = SIN_MAX_CAP;
+    if (ccos < COS_MIN_CAP) ccos = COS_MIN_CAP;
+    if (ccos > COS_MAX_CAP) ccos = COS_MAX_CAP;
+
+    /* Tighten dynamic bounds inside the hard limits. */
+    if (csin < m_sin_min) m_sin_min = csin;
+    if (csin > m_sin_max) m_sin_max = csin;
+    if (ccos < m_cos_min) m_cos_min = ccos;
+    if (ccos > m_cos_max) m_cos_max = ccos;
+
+    float angle_deg = 0.0f;
+    if ((m_sin_max > m_sin_min) && (m_cos_max > m_cos_min)) {
+        float sin_norm = (static_cast<float>(csin - m_sin_min) /
+                          static_cast<float>(m_sin_max - m_sin_min)) * 2.0f - 1.0f;
+        float cos_norm = (static_cast<float>(ccos - m_cos_min) /
+                          static_cast<float>(m_cos_max - m_cos_min)) * 2.0f - 1.0f;
+        angle_deg = cordicAtan2(sin_norm, cos_norm) * (180.0f / static_cast<float>(M_PI));
+        if (angle_deg < 0.0f) {
+            angle_deg += 360.0f;
+        }
+    }
+
+    return angle_deg;
+}
+
+void EncoderADC::onDmaComplete() {
+    uint16_t raw_sin = s_enc_dma_buffer[0];
+    uint16_t raw_cos = s_enc_dma_buffer[1];
+
+    m_raw_sin = raw_sin;
+    m_raw_cos = raw_cos;
+    m_angle = computeAngle(raw_sin, raw_cos);
+    m_new_data = true;
+}
+
+bool EncoderADC::sample(float& angle_deg) {
+    if (!m_new_data) {
+        return false;
+    }
+
+    __disable_irq();
+    angle_deg = m_angle;
+    m_new_data = false;
+    __enable_irq();
+
+    return true;
+}
+
+} // namespace Inverter
+
+extern "C" void DMA2_Stream0_IRQHandler(void) {
+    HAL_DMA_IRQHandler(&Inverter::hdma_adc2_enc);
+}
+
+extern "C" void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+    if (hadc->Instance == ADC2) {
+        Inverter::encoderADC().onDmaComplete();
+    }
+}
