@@ -15,7 +15,7 @@ void CurrentSensorTest_Init() {
     /* Allow the LA37S600 sensors and their 5 V rail to settle.
      * Hall sensors can drift for several hundred ms after power-on, so give
      * them a full second before the zero-current calibration runs. */
-    HAL_Delay(1000);
+    HAL_Delay(100);
 
     /* Set up PWM-synchronized U/V current ADC and start conversions. */
     PhaseCurrentADC& adc = phaseCurrentADC();
