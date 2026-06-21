@@ -6,39 +6,6 @@
 
 #include <math.h>
 
-/* CORDIC function code for phase/atan2 in the STM32H7 CORDIC. */
-static constexpr uint32_t CORDIC_FUNC_PHASE = 2U;
-/* 2^31 scaling used for CORDIC q1.31 inputs/outputs. */
-static constexpr float CORDIC_Q31_SCALE = 2147483648.0f;
-
-static void initCordic() {
-    __HAL_RCC_CORDIC_CLK_ENABLE();
-
-    CORDIC->CSR = (CORDIC_FUNC_PHASE << CORDIC_CSR_FUNC_Pos)
-                | (6U << CORDIC_CSR_PRECISION_Pos)
-                | (0U << CORDIC_CSR_SCALE_Pos)
-                | (0U << CORDIC_CSR_NARGS_Pos)
-                | (0U << CORDIC_CSR_NRES_Pos)
-                | (0U << CORDIC_CSR_ARGSIZE_Pos)
-                | (0U << CORDIC_CSR_RESSIZE_Pos);
-}
-
-static float cordicAtan2(float y, float x) {
-    /* Convert inputs to q1.31.  Clamp +/-1.0 to INT32_MAX to avoid overflow. */
-    int32_t y_q31 = (int32_t)(y * (CORDIC_Q31_SCALE - 1.0f));
-    int32_t x_q31 = (int32_t)(x * (CORDIC_Q31_SCALE - 1.0f));
-
-    CORDIC->WDATA = static_cast<uint32_t>(y_q31);
-    CORDIC->WDATA = static_cast<uint32_t>(x_q31);
-
-    while ((CORDIC->CSR & CORDIC_CSR_RRDY) == 0U) {
-        __NOP();
-    }
-
-    int32_t res = static_cast<int32_t>(CORDIC->RDATA);
-    return static_cast<float>(res) * (M_PI / CORDIC_Q31_SCALE);
-}
-
 namespace Inverter {
 
 static EncoderADC s_instance;
@@ -153,8 +120,6 @@ bool EncoderADC::initDma() {
 }
 
 bool EncoderADC::init() {
-    initCordic();
-
     if (!configureAdcChannels()) return false;
     if (!initTimer()) return false;
     if (!initDma()) return false;
@@ -205,7 +170,7 @@ float EncoderADC::computeAngle(uint16_t raw_sin, uint16_t raw_cos) {
                           static_cast<float>(m_sin_max - m_sin_min)) * 2.0f - 1.0f;
         float cos_norm = (static_cast<float>(ccos - m_cos_min) /
                           static_cast<float>(m_cos_max - m_cos_min)) * 2.0f - 1.0f;
-        angle_deg = cordicAtan2(sin_norm, cos_norm) * (180.0f / static_cast<float>(M_PI));
+        angle_deg = atan2f(sin_norm, cos_norm) * (180.0f / static_cast<float>(M_PI));
         if (angle_deg < 0.0f) {
             angle_deg += 360.0f;
         }
