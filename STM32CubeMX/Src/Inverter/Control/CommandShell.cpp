@@ -1,6 +1,7 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
+#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -56,7 +57,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Ready. Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | help");
+    Telemetry::log("print", "[SHELL] Ready. Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | help");
     return true;
 }
 
@@ -225,8 +226,19 @@ void CommandShell::poll() {
                                   "[SHELL] offsets U=%s V=%s", uoff, voff);
                     Telemetry::log("print", msg);
                 }
+                else if (std::strcmp(argv[0], "polepairs") == 0) {
+                    PolePairEstimator& pp = PolePairEstimator::instance();
+                    char est[16], revs[16], cycles[16];
+                    fmtFloat3(est, sizeof(est), pp.estimate());
+                    fmtFloat2(revs, sizeof(revs), pp.revolutions());
+                    fmtFloat2(cycles, sizeof(cycles), pp.electricalCycles());
+                    char msg[80];
+                    std::snprintf(msg, sizeof(msg),
+                                  "[SHELL] pp=%s revs=%s cycles=%s", est, revs, cycles);
+                    Telemetry::log("print", msg);
+                }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] start f m | stop | freq f | mod m | status | clearfault | cal | raw | help");
+                    Telemetry::log("print", "[SHELL] start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

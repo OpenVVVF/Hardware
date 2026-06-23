@@ -76,6 +76,8 @@ public:
     uint32_t lastRawVRef() const { return m_raw_v_ref; }
     float    lastOffsetU() const { return m_offset_u; }
     float    lastOffsetV() const { return m_offset_v; }
+    float    lastFilteredU() const { return m_filtered_u; }
+    float    lastFilteredV() const { return m_filtered_v; }
 
 private:
     bool configureAdcChannels();

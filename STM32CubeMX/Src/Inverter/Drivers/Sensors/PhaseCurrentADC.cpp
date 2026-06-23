@@ -1,4 +1,6 @@
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
+#include "Inverter/Drivers/Sensors/EncoderADC.h"
+#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -266,6 +268,10 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
     m_iv = countsToCurrent(m_raw_v_sig, m_raw_v_ref);
 
     updateFilter(m_iu - m_offset_u, m_iv - m_offset_v);
+
+    /* Feed the pole-pair estimator at the ADC sample rate. */
+    PolePairEstimator::instance().onSample(m_filtered_u, encoderADC().lastAngle());
+
     m_new_data = true;
 }
 

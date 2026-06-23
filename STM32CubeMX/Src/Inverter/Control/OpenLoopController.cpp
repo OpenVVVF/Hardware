@@ -3,6 +3,7 @@
 #include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
+#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -144,6 +145,10 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     char msg[48];
     std::snprintf(msg, sizeof(msg), "[OL] START f=%s m=%s", fbuf, mbuf);
     Telemetry::log("print", msg);
+
+    /* Start accumulating encoder revolutions vs current zero crossings so
+     * the pole-pair estimate refines while the motor runs. */
+    PolePairEstimator::instance().setEnabled(true);
     return true;
 }
 
@@ -167,6 +172,10 @@ void OpenLoopController::stop() {
      * to be at zero current. This removes any drift accumulated during
      * the run and avoids the need for a manual `cal` after each stop. */
     (void)phaseCurrentADC().recalibrateOffsets();
+
+    /* Stop pole-pair estimation so coast-down noise/decay does not corrupt
+     * the accumulated result.  The last estimate is preserved. */
+    PolePairEstimator::instance().setEnabled(false);
 
     m_running = false;
     Telemetry::log("print", "[OL] STOPPED");
