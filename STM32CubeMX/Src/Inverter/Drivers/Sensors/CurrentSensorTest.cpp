@@ -13,12 +13,12 @@ void CurrentSensorTest_Init() {
                       PERIPHERAL_POWER_ENABLE_Pin,
                       GPIO_PIN_SET);
 
-    /* Allow the LA37S600 sensors and their 5 V rail to settle.
-     * Hall sensors can drift for several hundred ms after power-on, so give
-     * them a full second before the zero-current calibration runs. */
-    HAL_Delay(100);
+    /* Allow the LA37S600 sensors and their 5 V rail to settle. */
+    HAL_Delay(500);
 
-    /* Set up PWM-synchronized U/V current ADC and start conversions. */
+    /* Set up PWM-synchronized U/V current ADC and start conversions.
+     * PhaseCurrentADC::start() now waits 2 s for the sensor to warm up
+     * before running the zero-current calibration. */
     PhaseCurrentADC& adc = phaseCurrentADC();
     adc.init();
     adc.start();
@@ -30,7 +30,7 @@ void CurrentSensorTest_Init() {
 }
 
 void CurrentSensorTest_RunOnce() {
-    static bool s_logged_offsets = false;
+    static uint32_t s_last_offset_ms = 0;
     float iu = 0.0f, iv = 0.0f, iw = 0.0f;
     if (phaseCurrentADC().sample(iu, iv, iw)) {
         Telemetry::log("ph_u_a", iu);
@@ -44,8 +44,10 @@ void CurrentSensorTest_RunOnce() {
         Telemetry::log("ph_u_ref", static_cast<float>(adc.lastRawURef()));
         Telemetry::log("ph_v_ref", static_cast<float>(adc.lastRawVRef()));
 
-        if (!s_logged_offsets) {
-            s_logged_offsets = true;
+        /* Log offsets periodically so drift/recalibration is visible. */
+        const uint32_t now_ms = HAL_GetTick();
+        if ((now_ms - s_last_offset_ms) >= 1000U) {
+            s_last_offset_ms = now_ms;
             Telemetry::log("ph_u_offset", adc.lastOffsetU());
             Telemetry::log("ph_v_offset", adc.lastOffsetV());
         }

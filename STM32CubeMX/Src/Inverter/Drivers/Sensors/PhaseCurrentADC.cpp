@@ -1,8 +1,11 @@
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
+#include "Inverter/Telemetry.h"
 
 #include "main.h"
 #include "adc.h"
 #include "tim.h"
+
+#include <cstdio>
 
 namespace Inverter {
 
@@ -181,6 +184,7 @@ bool PhaseCurrentADC::start() {
     }
 
     m_running = true;
+    Telemetry::log("print", "[CUR] start cal done");
     return true;
 }
 
@@ -191,6 +195,17 @@ bool PhaseCurrentADC::stop() {
     HAL_ADCEx_InjectedStop_IT(&hadc2);
     m_running = false;
     return true;
+}
+
+bool PhaseCurrentADC::recalibrateOffsets() {
+    if (!m_running) {
+        return false;
+    }
+    const bool ok = calibrateOffsets();
+    if (ok) {
+        Telemetry::log("print", "[CUR] recal done");
+    }
+    return ok;
 }
 
 float PhaseCurrentADC::countsToCurrent(uint32_t sig, uint32_t ref) const {

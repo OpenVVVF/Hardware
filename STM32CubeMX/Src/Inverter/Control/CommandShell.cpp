@@ -1,5 +1,6 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -55,7 +56,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Ready. Commands: start f m | stop | freq f | mod m | status | clearfault | help");
+    Telemetry::log("print", "[SHELL] Ready. Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | help");
     return true;
 }
 
@@ -185,8 +186,47 @@ void CommandShell::poll() {
                     PWM_ClearFault();
                     Telemetry::log("print", "[SHELL] fault cleared");
                 }
+                else if (std::strcmp(argv[0], "cal") == 0) {
+                    if (ol.isRunning()) {
+                        Telemetry::log("print", "[SHELL] stop motor before calibrating");
+                    } else if (phaseCurrentADC().recalibrateOffsets()) {
+                        PhaseCurrentADC& adc = phaseCurrentADC();
+                        char uoff[16], voff[16];
+                        fmtFloat3(uoff, sizeof(uoff), adc.lastOffsetU());
+                        fmtFloat3(voff, sizeof(voff), adc.lastOffsetV());
+                        char msg[64];
+                        std::snprintf(msg, sizeof(msg),
+                                      "[SHELL] calibrated offsets U=%s V=%s", uoff, voff);
+                        Telemetry::log("print", msg);
+                    } else {
+                        Telemetry::log("print", "[SHELL] calibration failed");
+                    }
+                }
+                else if (std::strcmp(argv[0], "raw") == 0) {
+                    PhaseCurrentADC& adc = phaseCurrentADC();
+                    const int32_t u_diff = static_cast<int32_t>(adc.lastRawUSig()) -
+                                           static_cast<int32_t>(adc.lastRawURef());
+                    const int32_t v_diff = static_cast<int32_t>(adc.lastRawVSig()) -
+                                           static_cast<int32_t>(adc.lastRawVRef());
+                    char msg[64];
+                    std::snprintf(msg, sizeof(msg),
+                                  "[SHELL] raw U sig=%lu ref=%lu diff=%ld",
+                                  adc.lastRawUSig(), adc.lastRawURef(), u_diff);
+                    Telemetry::log("print", msg);
+                    std::snprintf(msg, sizeof(msg),
+                                  "[SHELL] raw V sig=%lu ref=%lu diff=%ld",
+                                  adc.lastRawVSig(), adc.lastRawVRef(), v_diff);
+                    Telemetry::log("print", msg);
+
+                    char uoff[16], voff[16];
+                    fmtFloat3(uoff, sizeof(uoff), adc.lastOffsetU());
+                    fmtFloat3(voff, sizeof(voff), adc.lastOffsetV());
+                    std::snprintf(msg, sizeof(msg),
+                                  "[SHELL] offsets U=%s V=%s", uoff, voff);
+                    Telemetry::log("print", msg);
+                }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] start f m | stop | freq f | mod m | status | clearfault | help");
+                    Telemetry::log("print", "[SHELL] start f m | stop | freq f | mod m | status | clearfault | cal | raw | help");
                 }
                 else {
                     /* Silently drop noise/garbage lines instead of echoing them. */

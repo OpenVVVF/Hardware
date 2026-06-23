@@ -45,6 +45,14 @@ public:
     bool stop();
 
     /**
+     * @brief Re-run the zero-current offset calibration.
+     *
+     * Only safe when the motor is stopped and no phase current is flowing.
+     * Returns false if the ADC is not running.
+     */
+    bool recalibrateOffsets();
+
+    /**
      * @brief Convert the latest raw samples to amperes.
      *
      * @param[out] iu  Phase U current in A.
@@ -83,7 +91,7 @@ private:
 
     /* Lightweight moving-average filter applied at the ADC sample rate to
      * reduce sensor/ADC noise before the slower telemetry/FOC loop reads it. */
-    static constexpr size_t FILTER_LEN = 8;
+    static constexpr size_t FILTER_LEN = 32;
 
     volatile uint32_t m_raw_u_sig = 0;
     volatile uint32_t m_raw_v_sig = 0;

@@ -2,6 +2,7 @@
 
 #include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
+#include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -81,6 +82,13 @@ bool OpenLoopController::init() {
     PWM_ClearFault();
     PWM_Start();
 
+    /* Recalibrate current-sensor offsets now that the gate-driver power rail
+     * is up. The sensors share/isolated supplies can shift the zero-current
+     * point once that rail is enabled, which is why the pre-power calibration
+     * was leaving a residual offset. */
+    HAL_Delay(100);
+    (void)phaseCurrentADC().recalibrateOffsets();
+
     m_initialized = true;
     m_running = false;
     m_freq_hz = 0.0f;
@@ -154,6 +162,11 @@ void OpenLoopController::stop() {
 
     /* Now that current has decayed, disable the gate-driver outputs. */
     GateDriver_DisableOutputs();
+
+    /* Recalibrate current-sensor offsets while the motor is guaranteed
+     * to be at zero current. This removes any drift accumulated during
+     * the run and avoids the need for a manual `cal` after each stop. */
+    (void)phaseCurrentADC().recalibrateOffsets();
 
     m_running = false;
     Telemetry::log("print", "[OL] STOPPED");
