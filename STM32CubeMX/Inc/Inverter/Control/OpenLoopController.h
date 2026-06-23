@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace Inverter {
 
 /**
@@ -53,6 +55,8 @@ public:
     float modulationIndex() const { return m_mod_idx; }
 
 private:
+    void rampModulation(float from_m, float to_m, uint32_t ramp_ms);
+
     bool m_initialized = false;
     bool m_running = false;
     float m_freq_hz = 0.0f;

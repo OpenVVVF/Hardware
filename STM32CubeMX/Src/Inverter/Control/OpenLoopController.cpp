@@ -30,6 +30,28 @@ namespace Inverter {
 
 static OpenLoopController s_instance;
 
+void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_ms) {
+    const int steps = 20;
+    const int step_ms = static_cast<int>(ramp_ms / steps);
+    if (step_ms <= 0) {
+        PWM_SetSPWMParams(m_freq_hz, to_m);
+        return;
+    }
+
+    for (int i = 1; i <= steps; ++i) {
+        if (GateDriver_IsFault()) {
+            PWM_StopSPWM();
+            GateDriver_DisableOutputs();
+            m_running = false;
+            Telemetry::log("print", "[OL] FAULT during ramp - stopped");
+            return;
+        }
+        float m = from_m + (to_m - from_m) * static_cast<float>(i) / static_cast<float>(steps);
+        PWM_SetSPWMParams(m_freq_hz, m);
+        HAL_Delay(step_ms);
+    }
+}
+
 OpenLoopController& openLoopController() {
     return s_instance;
 }
@@ -46,20 +68,18 @@ bool OpenLoopController::init() {
     /* Park all phases at 50 % (zero voltage vector). */
     PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
 
-    /* Start TIM1 so the ADC current-sense trigger keeps running, but keep
-     * the gate driver in reset so the power stage stays off. */
-    PWM_ClearFault();
-    PWM_Start();
+    /* Gate-driver reset is active low: keep the power stage disabled from
+     * the very beginning so there is never a brief switching burst at boot. */
+    HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin, GPIO_PIN_RESET);
 
     /* Explicitly enable the gate-driver power rail (active high). */
     HAL_GPIO_WritePin(GATE_DRIVER_POWER_ENABLE_GPIO_Port, GATE_DRIVER_POWER_ENABLE_Pin, GPIO_PIN_SET);
-    HAL_Delay(100);
+    HAL_Delay(50);
 
-    GateDriver_Init();
-
-    /* Hold the gate driver in reset (active low) so its outputs are disabled
-     * until a start command is issued. */
-    GateDriver_DisableOutputs();
+    /* Start TIM1 so the ADC current-sense trigger keeps running.
+     * The gate driver is still in reset, so the MOSFETs remain off. */
+    PWM_ClearFault();
+    PWM_Start();
 
     m_initialized = true;
     m_running = false;
@@ -105,8 +125,10 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     m_freq_hz = (freq_hz < 0.0f) ? 0.0f : freq_hz;
     m_mod_idx = (modulation_index < 0.0f) ? 0.0f : modulation_index;
 
-    PWM_StartSPWM(m_freq_hz, m_mod_idx);
+    /* Start the angle ramp at zero modulation, then ramp voltage up. */
+    PWM_StartSPWM(m_freq_hz, 0.0f);
     m_running = true;
+    rampModulation(0.0f, m_mod_idx, 100U);
 
     char fbuf[16], mbuf[16];
     fmtFloat2(fbuf, sizeof(fbuf), m_freq_hz);
@@ -118,11 +140,19 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
 }
 
 void OpenLoopController::stop() {
+    if (m_running) {
+        /* Ramp the modulation index down to zero before turning the outputs
+         * off. This lets the motor current decay smoothly and avoids the
+         * audible hitch from an abrupt open-circuit or zero-vector step. */
+        rampModulation(m_mod_idx, 0.0f, 100U);
+    }
+
     PWM_StopSPWM();
 
-    /* Park at 50 % (zero vector) and disable the gate-driver outputs.
-     * TIM1 keeps running so current-sense triggering stays alive. */
+    /* Park at 50 % (zero vector). TIM1 keeps running for current sense. */
     PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
+
+    /* Now that current has decayed, disable the gate-driver outputs. */
     GateDriver_DisableOutputs();
 
     m_running = false;
@@ -140,10 +170,13 @@ void OpenLoopController::setFrequency(float freq_hz) {
 
 void OpenLoopController::setModulationIndex(float modulation_index) {
     if (modulation_index < 0.0f) modulation_index = 0.0f;
-    m_mod_idx = modulation_index;
 
     if (m_running) {
-        PWM_SetSPWMParams(m_freq_hz, m_mod_idx);
+        float old_m = m_mod_idx;
+        m_mod_idx = modulation_index;
+        rampModulation(old_m, m_mod_idx, 100U);
+    } else {
+        m_mod_idx = modulation_index;
     }
 }
 
