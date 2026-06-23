@@ -65,7 +65,11 @@ private:
 
     State    m_state = State::IDLE;
     float    m_mod = 0.0f;
-    bool     m_movement_detected = false;
+
+    /* Breakaway detection. */
+    bool     m_breakaway_detected = false;
+    float    m_breakaway_mod = 0.0f;
+    float    m_breakaway_mech_cycles = 0.0f;
 
     /* Encoder angle tracking (for movement/stall detection). */
     float    m_last_angle = 0.0f;

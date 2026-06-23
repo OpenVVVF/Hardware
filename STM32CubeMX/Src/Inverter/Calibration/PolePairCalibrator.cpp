@@ -46,8 +46,8 @@ bool PolePairCalibrator::start() {
         return false;
     }
 
-    /* Start open-loop at 1 Hz, zero modulation. */
-    if (!openLoopController().start(1.0f, 0.0f)) {
+    /* Start open-loop at 2 Hz, zero modulation. */
+    if (!openLoopController().start(2.0f, 0.0f)) {
         Telemetry::log("print", "[CAL PP] ERROR: failed to start open-loop controller");
         return false;
     }
@@ -55,7 +55,9 @@ bool PolePairCalibrator::start() {
     PWM_ResetSPWMElectricalCycles();
 
     m_mod = 0.0f;
-    m_movement_detected = false;
+    m_breakaway_detected = false;
+    m_breakaway_mod = 0.0f;
+    m_breakaway_mech_cycles = 0.0f;
     m_last_ratio = 0.0f;
     m_unwrapped_angle = 0.0f;
     m_last_angle = encoderADC().lastAngle();
@@ -64,7 +66,7 @@ bool PolePairCalibrator::start() {
     m_last_move_ms = HAL_GetTick();
     m_state = State::RAMP;
 
-    Telemetry::log("print", "[CAL PP] started at 1 Hz, ramping modulation until encoder moves");
+    Telemetry::log("print", "[CAL PP] started at 2 Hz, fast ramp to breakaway");
     return true;
 }
 
@@ -116,26 +118,29 @@ void PolePairCalibrator::update() {
 
     sampleEncoderAngle();
 
-    constexpr float CAL_MAX_MOD = 0.40f;
-    constexpr float RAMP_STEP = 0.002f;
-    constexpr uint32_t RAMP_PERIOD_MS = 100U;
-    constexpr float MOVEMENT_DETECT_CYCLES = 0.50f;
-    constexpr float START_COUNT_CYCLES = 1.0f;
+    constexpr float CAL_MAX_MOD = 0.50f;
+    constexpr float RAMP_STEP = 0.01f;
+    constexpr uint32_t RAMP_PERIOD_MS = 50U;
+    constexpr float BREAKAWAY_DETECT_CYCLES = 0.15f;
+    constexpr float TORQUE_MARGIN = 1.30f;
     constexpr float TARGET_MECH_CYCLES = 1.0f;
     constexpr float MIN_PARTIAL_CYCLES = 0.5f;
     constexpr uint32_t STALL_TIMEOUT_MS = 3000U;
     constexpr uint32_t MAX_COUNT_MS = 120000U;
-    constexpr uint32_t RAMP_PAUSE_TIMEOUT_MS = 2000U;
 
     const uint32_t now_ms = HAL_GetTick();
     const float mech_cycles = PolePairEstimator::instance().mechanicalCycles();
     const float angle_cycles = std::fabs(encoderCycles());
 
     if (m_state == State::RAMP) {
-        /* Slowly raise modulation until the shaft is reliably turning.
-         * Once we have moved through a significant arc, freeze the ramp so
-         * we do not over-excite the motor while it finishes its first cycle. */
-        if (!m_movement_detected) {
+        /* Any encoder movement (either direction) resets the stall timer. */
+        if (std::fabs(angle_cycles - m_cycles_at_last_move) > 0.01f) {
+            m_cycles_at_last_move = angle_cycles;
+            m_last_move_ms = now_ms;
+        }
+
+        if (!m_breakaway_detected) {
+            /* Fast ramp until the shaft moves through ~0.15 cycles. */
             if ((now_ms - m_last_ramp_ms) >= RAMP_PERIOD_MS) {
                 m_last_ramp_ms = now_ms;
                 m_mod += RAMP_STEP;
@@ -144,47 +149,48 @@ void PolePairCalibrator::update() {
                 }
                 openLoopController().setModulationIndexDirect(m_mod);
             }
+
+            if (angle_cycles >= BREAKAWAY_DETECT_CYCLES) {
+                m_breakaway_detected = true;
+                m_breakaway_mod = m_mod;
+                m_breakaway_mech_cycles = mech_cycles;
+
+                float boosted = m_mod * TORQUE_MARGIN;
+                if (boosted > CAL_MAX_MOD) {
+                    boosted = CAL_MAX_MOD;
+                }
+                m_mod = boosted;
+                openLoopController().setModulationIndexDirect(m_mod);
+
+                char ba_buf[16];
+                fmtFloat3(ba_buf, sizeof(ba_buf), m_breakaway_mod);
+                char run_buf[16];
+                fmtFloat3(run_buf, sizeof(run_buf), m_mod);
+                char msg[80];
+                std::snprintf(msg, sizeof(msg),
+                              "[CAL PP] breakaway at mod=%s, holding at %s",
+                              ba_buf, run_buf);
+                Telemetry::log("print", msg);
+            }
+
+            if (m_mod >= CAL_MAX_MOD &&
+                (now_ms - m_last_move_ms) > STALL_TIMEOUT_MS) {
+                m_state = State::FAIL;
+                Telemetry::log("print", "[CAL PP] FAIL: encoder did not move");
+                openLoopController().stop();
+            }
         } else {
-            if ((now_ms - m_last_move_ms) > RAMP_PAUSE_TIMEOUT_MS) {
-                m_movement_detected = false;
-                Telemetry::log("print", "[CAL PP] resuming modulation ramp");
+            /* Breakaway found.  Wait for the next zero-crossing so the
+             * measurement window starts exactly at a robust cycle boundary. */
+            if (mech_cycles > m_breakaway_mech_cycles) {
+                m_mech_count_start = mech_cycles;
+                m_elec_count_start = PWM_GetSPWMElectricalCycles();
+                m_count_start_ms = now_ms;
+                m_last_move_ms = now_ms;
+                m_cycles_at_last_move = angle_cycles;
+                m_state = State::COUNT;
+                Telemetry::log("print", "[CAL PP] zero crossing, counting one cycle");
             }
-        }
-
-        /* Any encoder movement (either direction) resets the stall timer. */
-        if (std::fabs(angle_cycles - m_cycles_at_last_move) > 0.01f) {
-            m_cycles_at_last_move = angle_cycles;
-            m_last_move_ms = now_ms;
-        }
-
-        if (!m_movement_detected && angle_cycles >= MOVEMENT_DETECT_CYCLES) {
-            m_movement_detected = true;
-            Telemetry::log("print", "[CAL PP] movement detected, holding excitation");
-        }
-
-        if (mech_cycles >= START_COUNT_CYCLES) {
-            /* Small torque margin to pull through sticky spots during count. */
-            m_mod += 0.02f;
-            if (m_mod > CAL_MAX_MOD) {
-                m_mod = CAL_MAX_MOD;
-            }
-            openLoopController().setModulationIndexDirect(m_mod);
-
-            m_mech_count_start = mech_cycles;
-            m_elec_count_start = PWM_GetSPWMElectricalCycles();
-            m_count_start_ms = now_ms;
-            m_last_move_ms = now_ms;
-            m_cycles_at_last_move = angle_cycles;
-            m_state = State::COUNT;
-            Telemetry::log("print", "[CAL PP] encoder moving, counting cycles");
-        }
-
-        if (m_mod >= CAL_MAX_MOD &&
-            (now_ms - m_last_move_ms) > STALL_TIMEOUT_MS &&
-            mech_cycles < START_COUNT_CYCLES) {
-            m_state = State::FAIL;
-            Telemetry::log("print", "[CAL PP] FAIL: encoder did not move");
-            openLoopController().stop();
         }
     }
     else if (m_state == State::COUNT) {
