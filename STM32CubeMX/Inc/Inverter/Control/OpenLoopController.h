@@ -41,58 +41,35 @@ public:
     void setFrequency(float freq_hz);
 
     /**
-     * @brief Change modulation index while running.
+     * @brief Change modulation index while running (smooth 100 ms ramp).
      */
     void setModulationIndex(float modulation_index);
+
+    /**
+     * @brief Change modulation index while running without a ramp.
+     *
+     * Intended for internal calibration loops that update modulation in small
+     * steps each iteration.
+     */
+    void setModulationIndexDirect(float modulation_index);
 
     /**
      * @brief Safety poll: stop if gate driver faults. Call at ~100 Hz.
      */
     void update();
 
-    /**
-     * @brief Run an automated pole-pair calibration.
-     *
-     * Starts at 1 Hz, ramps modulation until the encoder reliably turns, then
-     * counts commanded electrical cycles vs encoder mechanical cycles and
-     * reports the ratio.  Non-blocking; progress is handled in update().
-     */
-    bool startCalibration();
-
     bool isRunning() const { return m_running; }
-    bool isCalibrating() const { return m_cal_state != CalState::IDLE; }
     float frequencyHz() const { return m_freq_hz; }
     float modulationIndex() const { return m_mod_idx; }
 
 private:
     void rampModulation(float from_m, float to_m, uint32_t ramp_ms);
     void applyModulation(float modulation_index);
-    void runCalibration();
-    void reportCalibrationRatio(const char* label);
-
-    enum class CalState {
-        IDLE,
-        RAMP,
-        COUNT,
-        DONE,
-        FAIL
-    };
 
     bool m_initialized = false;
     bool m_running = false;
     float m_freq_hz = 0.0f;
     float m_mod_idx = 0.0f;
-
-    /* Calibration state. */
-    CalState m_cal_state = CalState::IDLE;
-    float m_cal_mod = 0.0f;
-    float m_cal_mech_start = 0.0f;
-    float m_cal_mech_count_start = 0.0f;
-    uint32_t m_cal_elec_count_start = 0;
-    uint32_t m_cal_last_ramp_ms = 0;
-    uint32_t m_cal_count_start_ms = 0;
-    uint32_t m_cal_last_move_ms = 0;
-    float m_cal_last_mech = 0.0f;
 };
 
 /**

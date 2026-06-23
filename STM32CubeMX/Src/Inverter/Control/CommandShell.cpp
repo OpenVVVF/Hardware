@@ -1,5 +1,6 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Calibration/PolePairCalibrator.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/PolePairEstimator.h"
 #include "Inverter/Telemetry.h"
@@ -57,7 +58,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | motorcal | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | calpolepairs | help");
     return true;
 }
 
@@ -257,15 +258,18 @@ void CommandShell::poll() {
                         Telemetry::log("print", "[SHELL] usage: encodercal start | stop");
                     }
                 }
-                else if (std::strcmp(argv[0], "motorcal") == 0) {
-                    if (ol.isRunning() && !ol.isCalibrating()) {
-                        Telemetry::log("print", "[SHELL] stop the motor before starting motorcal");
+                else if (std::strcmp(argv[0], "calpolepairs") == 0) {
+                    PolePairCalibrator& cal = PolePairCalibrator::instance();
+                    if (ol.isRunning()) {
+                        Telemetry::log("print", "[SHELL] stop the motor before starting calpolepairs");
+                    } else if (cal.isActive()) {
+                        Telemetry::log("print", "[SHELL] calibration already running");
                     } else {
-                        ol.startCalibration();
+                        cal.start();
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | motorcal | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | calpolepairs | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

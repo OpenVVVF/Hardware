@@ -53,6 +53,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Telemetry.cpp
     Src/Inverter/Control/OpenLoopController.cpp
     Src/Inverter/Control/CommandShell.cpp
+    Src/Inverter/Calibration/PolePairCalibrator.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c
     Src/Inverter/Drivers/UART/mcp2221a_driver.c
@@ -70,6 +71,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     Inc/Inverter
     Inc/Inverter/Control
+    Inc/Inverter/Calibration
     Inc/Inverter/Drivers/GateDriver
     Inc/Inverter/Drivers/CAN
     Inc/Inverter/Drivers/UART

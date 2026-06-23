@@ -3,6 +3,7 @@
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/CommandShell.h"
+#include "Inverter/Calibration/PolePairCalibrator.h"
 
 #include "main.h"
 #include "spi.h"
@@ -63,9 +64,10 @@ static void loop()
         s_last_current_ms = now_ms;
     }
 
-    /* Open-loop safety and command processing. */
+    /* Open-loop safety, calibration state machines, and command processing. */
     Inverter::commandShell().poll();
     Inverter::openLoopController().update();
+    Inverter::polePairCalibrator().update();
 
     /* Telemetry for open-loop setpoints. */
     Telemetry::log("ol_freq_hz", Inverter::openLoopController().frequencyHz());
