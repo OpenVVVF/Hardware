@@ -1,6 +1,8 @@
 #include "Inverter/InverterMain.h"
 #include "Inverter/Telemetry.h"
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
+#include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Control/CommandShell.h"
 
 #include "main.h"
 #include "spi.h"
@@ -32,6 +34,12 @@ static void init()
 
     /* Phase-current sensor test harness. */
     Inverter::CurrentSensorTest_Init();
+
+    /* Open-loop motor control (PWM + gate driver). Default off. */
+    Inverter::openLoopController().init();
+
+    /* UART command shell for start/stop/freq/mod. */
+    Inverter::commandShell().init();
 }
 
 static void loop()
@@ -54,6 +62,15 @@ static void loop()
         Inverter::CurrentSensorTest_RunOnce();
         s_last_current_ms = now_ms;
     }
+
+    /* Open-loop safety and command processing. */
+    Inverter::commandShell().poll();
+    Inverter::openLoopController().update();
+
+    /* Telemetry for open-loop setpoints. */
+    Telemetry::log("ol_freq_hz", Inverter::openLoopController().frequencyHz());
+    Telemetry::log("ol_mod_idx", Inverter::openLoopController().modulationIndex());
+    Telemetry::log("ol_running", Inverter::openLoopController().isRunning() ? 1.0f : 0.0f);
 
     Telemetry::updateSensors();
 }

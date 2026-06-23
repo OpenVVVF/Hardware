@@ -29,6 +29,8 @@ extern "C" {
 void GateDriver_Init(void);
 void GateDriver_ResetPulse(void);
 void GateDriver_EnablePower(bool enable);
+void GateDriver_EnableOutputs(void);
+void GateDriver_DisableOutputs(void);
 bool GateDriver_IsFault(void);
 bool GateDriver_IsReady(void);
 

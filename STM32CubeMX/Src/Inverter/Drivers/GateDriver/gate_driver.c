@@ -52,6 +52,19 @@ void GateDriver_EnablePower(bool enable)
                       enable ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
+void GateDriver_EnableOutputs(void)
+{
+    /* Release reset (active low). Give the driver time to wake up. */
+    HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin, GPIO_PIN_SET);
+    HAL_Delay(10);
+}
+
+void GateDriver_DisableOutputs(void)
+{
+    /* Assert reset (active low) to force all gate-drive outputs inactive. */
+    HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin, GPIO_PIN_RESET);
+}
+
 bool GateDriver_IsFault(void)
 {
     /* /FLT is open-drain active low */

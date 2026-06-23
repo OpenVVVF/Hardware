@@ -106,11 +106,14 @@ void PWM_SetThreePhaseDuty(float duty_u, float duty_v, float duty_w)
     PWM_SetDutyCycle(2, duty_w);
 }
 
+/* SVPWM linear over-modulation limit: 2/sqrt(3) */
+#define SVPWM_M_MAX 1.154700538f
+
 void PWM_StartSPWM(float fundamental_freq_hz, float modulation_index)
 {
     if (fundamental_freq_hz < 0.0f) fundamental_freq_hz = 0.0f;
     if (modulation_index < 0.0f) modulation_index = 0.0f;
-    if (modulation_index > 1.0f) modulation_index = 1.0f;
+    if (modulation_index > SVPWM_M_MAX) modulation_index = SVPWM_M_MAX;
 
     spwm_fundamental_freq_hz = fundamental_freq_hz;
     spwm_modulation_index = modulation_index;
@@ -133,7 +136,7 @@ void PWM_SetSPWMParams(float fundamental_freq_hz, float modulation_index)
 {
     if (fundamental_freq_hz < 0.0f) fundamental_freq_hz = 0.0f;
     if (modulation_index < 0.0f) modulation_index = 0.0f;
-    if (modulation_index > 1.0f) modulation_index = 1.0f;
+    if (modulation_index > SVPWM_M_MAX) modulation_index = SVPWM_M_MAX;
 
     spwm_fundamental_freq_hz = fundamental_freq_hz;
     spwm_modulation_index = modulation_index;
@@ -147,12 +150,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     float angle = spwm_angle;
     float m = spwm_modulation_index;
 
-    /* Three-phase sinusoidal duty cycles, centred at 50 %. */
-    float u = 50.0f + 50.0f * m * sinf(angle);
-    float v = 50.0f + 50.0f * m * sinf(angle - TWO_PI / 3.0f);
-    float w = 50.0f + 50.0f * m * sinf(angle + TWO_PI / 3.0f);
+    /* Three-phase sinusoidal references, 120° apart. */
+    float u = m * sinf(angle);
+    float v = m * sinf(angle - TWO_PI / 3.0f);
+    float w = m * sinf(angle + TWO_PI / 3.0f);
 
-    PWM_SetThreePhaseDuty(u, v, w);
+    /* Min-max SVPWM zero-sequence injection to extend linear range to 2/sqrt(3). */
+    float v_max = (u > v) ? ((u > w) ? u : w) : ((v > w) ? v : w);
+    float v_min = (u < v) ? ((u < w) ? u : w) : ((v < w) ? v : w);
+    float v0 = -0.5f * (v_max + v_min);
+
+    /* Convert to centered duty cycles [0, 100]. */
+    float du = 50.0f + 50.0f * (u + v0);
+    float dv = 50.0f + 50.0f * (v + v0);
+    float dw = 50.0f + 50.0f * (w + v0);
+
+    if (du < 0.0f) du = 0.0f; else if (du > 100.0f) du = 100.0f;
+    if (dv < 0.0f) dv = 0.0f; else if (dv > 100.0f) dv = 100.0f;
+    if (dw < 0.0f) dw = 0.0f; else if (dw > 100.0f) dw = 100.0f;
+
+    PWM_SetThreePhaseDuty(du, dv, dw);
 
     /* Advance angle by one PWM period. */
     angle += TWO_PI * spwm_fundamental_freq_hz / pwm_switching_freq_hz;
