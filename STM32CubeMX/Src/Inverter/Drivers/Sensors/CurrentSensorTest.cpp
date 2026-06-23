@@ -64,8 +64,9 @@ void CurrentSensorTest_RunOnce() {
     /* Pole-pair estimate: refines continuously while the motor is running. */
     PolePairEstimator& pp = PolePairEstimator::instance();
     Telemetry::log("pp_estimate", pp.estimate());
-    Telemetry::log("pp_revs", pp.revolutions());
-    Telemetry::log("pp_cycles", pp.electricalCycles());
+    Telemetry::log("pp_window", pp.windowEstimate());
+    Telemetry::log("pp_mech_cycles", pp.mechanicalCycles());
+    Telemetry::log("pp_elec_cycles", pp.electricalCycles());
 }
 
 } // namespace Inverter

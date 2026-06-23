@@ -34,6 +34,7 @@ static volatile float spwm_angle = 0.0f;
 static volatile float spwm_fundamental_freq_hz = 1.0f;
 static volatile float spwm_modulation_index = 0.0;
 static volatile uint8_t spwm_running = 0;
+static volatile uint32_t spwm_elec_cycles = 0;
 
 /* CKD = DIV1  =>  t_DTS = 1 / 275 MHz = 3.636 ns
    Use DTG[7:5] = 111 encoding: DT = (32 + DTG[4:0]) * 16 * t_DTS  */
@@ -173,8 +174,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
     /* Advance angle by one PWM period. */
     angle += TWO_PI * spwm_fundamental_freq_hz / pwm_switching_freq_hz;
-    if (angle >= TWO_PI) angle -= TWO_PI;
+    if (angle >= TWO_PI) {
+        angle -= TWO_PI;
+        ++spwm_elec_cycles;
+    }
     spwm_angle = angle;
+}
+
+uint32_t PWM_GetSPWMElectricalCycles(void)
+{
+    return spwm_elec_cycles;
+}
+
+void PWM_ResetSPWMElectricalCycles(void)
+{
+    spwm_elec_cycles = 0;
 }
 
 void PWM_StartPhase(uint8_t phase)

@@ -1,29 +1,41 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 namespace Inverter {
 
 /**
- * @brief Estimate motor pole pairs from current zero crossings and encoder angle.
+ * @brief Estimate motor pole pairs from current zero crossings and raw sin/cos.
  *
- * Assumes the encoder produces one 0..360 degree cycle per mechanical
- * revolution.  The phase-U current has one positive zero crossing per
- * electrical cycle, so over many revolutions:
+ * Uses a sliding window over the last N mechanical cycles:
  *
- *     pole_pairs = electrical_cycles / mechanical_revolutions
+ *     pole_pairs = electrical_zero_crossings_in_window / mechanical_cycles_in_window
  *
- * The estimate is low-pass filtered and refined continuously while the motor
- * is running.
+ * This is much more robust than a time-based frequency ratio because it is
+ * independent of encoder calibration, DC offset drift, and speed ripple.
+ *
+ * IMPORTANT: the estimate is only the true pole-pair count if the encoder
+ * sin/cos sensor produces exactly one cycle per mechanical revolution.  If
+ * the encoder magnet has N cycles/rev, the reported value is PP / N.
  */
 class PolePairEstimator {
 public:
     PolePairEstimator() = default;
 
     /**
-     * @brief Enable/disable estimation.  Enabling resets accumulators.
+     * @brief Set the commanded electrical frequency (Hz).
+     *
+     * Only used as a temporary hint before enough mechanical cycles have been
+     * accumulated.
      */
-    void setEnabled(bool enabled);
+    void setElectricalFrequency(float f_hz);
+
+    /**
+     * @brief Enable/disable estimation.  Enabling resets accumulators and
+     * captures the current raw sin/cos values as DC offsets.
+     */
+    void setEnabled(bool enabled, uint16_t raw_sin = 0, uint16_t raw_cos = 0);
 
     /**
      * @brief Reset all accumulators and the filtered estimate.
@@ -34,11 +46,8 @@ public:
      * @brief Process one current/encoder sample pair.
      *
      * Intended to be called from the current-sense ISR at the ADC sample rate.
-     *
-     * @param iu            Phase U current after offset subtraction (A).
-     * @param enc_angle_deg Encoder angle in degrees, 0..360.
      */
-    void onSample(float iu, float enc_angle_deg);
+    void onSample(float iu, uint16_t raw_sin, uint16_t raw_cos);
 
     /**
      * @brief Current filtered pole-pair estimate.  0 if not enough data yet.
@@ -46,10 +55,28 @@ public:
     float estimate() const { return m_filtered_pp; }
 
     /**
-     * @brief Accumulated mechanical revolutions and electrical cycles.
+     * @brief Accumulated mechanical and electrical cycle counts.
      */
-    float revolutions() const { return m_mech_deg_total / 360.0f; }
+    float mechanicalCycles() const { return m_mech_cycles; }
     float electricalCycles() const { return m_elec_cycles; }
+
+    /**
+     * @brief Latest windowed raw estimate before low-pass filtering.
+     */
+    float windowEstimate() const { return m_window_pp; }
+
+    /**
+     * @brief Manual encoder cycle counting for sensor calibration.
+     *
+     * While active, positive zero crossings of the filtered sin/cos signal are
+     * counted independently of the pole-pair estimate.  This lets you rotate
+     * the shaft by hand exactly one revolution and read off how many sin/cos
+     * periods the encoder produces per mechanical revolution.
+     */
+    void startManualEncoderCal();
+    void stopManualEncoderCal();
+    float manualEncoderCycles() const { return m_manual_mech_cycles; }
+    bool isManualEncoderCalActive() const { return m_manual_cal; }
 
     /**
      * @brief Global instance.
@@ -57,16 +84,41 @@ public:
     static PolePairEstimator& instance();
 
 private:
-    bool   m_enabled = false;
-    float  m_last_angle_deg = 0.0f;
-    float  m_mech_deg_total = 0.0f;
-    float  m_elec_cycles = 0.0f;
+    static constexpr size_t WINDOW_CYCLES = 5;
 
-    int    m_current_state = 0;   /**< -1 = below -threshold, +1 = above +threshold. */
-    int    m_prev_state = 0;
+    bool    m_enabled = false;
+    float   m_f_elec_hz = 0.0f;
 
-    float  m_raw_pp = 0.0f;
-    float  m_filtered_pp = 0.0f;
+    /* DC offsets for raw sin/cos. */
+    float   m_sin_offset = 0.0f;
+    float   m_cos_offset = 0.0f;
+
+    /* Low-pass filtered sin/cos and current used for robust crossing detection. */
+    float   m_sin_filt = 0.0f;
+    float   m_cos_filt = 0.0f;
+    float   m_iu_filt = 0.0f;
+
+    /* Mechanical cycle detection. */
+    int     m_mech_state = 0;
+    int     m_prev_mech_state = 0;
+    float   m_mech_cycles = 0.0f;
+
+    /* Manual encoder cycle calibration. */
+    bool    m_manual_cal = false;
+    float   m_manual_mech_cycles = 0.0f;
+
+    /* Electrical cycle detection. */
+    int     m_current_state = 0;
+    int     m_prev_current_state = 0;
+    float   m_iu_peak = 0.0f;
+    float   m_elec_cycles = 0.0f;
+
+    /* Sliding window: electrical cycle count at each completed mech cycle. */
+    float   m_elec_at_mech[WINDOW_CYCLES] = {};
+    size_t  m_mech_window_idx = 0;
+
+    float   m_window_pp = 0.0f;
+    float   m_filtered_pp = 0.0f;
 };
 
 } // namespace Inverter

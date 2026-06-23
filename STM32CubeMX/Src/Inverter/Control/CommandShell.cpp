@@ -57,7 +57,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Ready. Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | motorcal | help");
     return true;
 }
 
@@ -228,17 +228,44 @@ void CommandShell::poll() {
                 }
                 else if (std::strcmp(argv[0], "polepairs") == 0) {
                     PolePairEstimator& pp = PolePairEstimator::instance();
-                    char est[16], revs[16], cycles[16];
+                    char est[16], mech[16], elec[16];
                     fmtFloat3(est, sizeof(est), pp.estimate());
-                    fmtFloat2(revs, sizeof(revs), pp.revolutions());
-                    fmtFloat2(cycles, sizeof(cycles), pp.electricalCycles());
+                    fmtFloat2(mech, sizeof(mech), pp.mechanicalCycles());
+                    fmtFloat2(elec, sizeof(elec), pp.electricalCycles());
                     char msg[80];
                     std::snprintf(msg, sizeof(msg),
-                                  "[SHELL] pp=%s revs=%s cycles=%s", est, revs, cycles);
+                                  "[SHELL] pp=%s mech=%s elec=%s", est, mech, elec);
                     Telemetry::log("print", msg);
                 }
+                else if (std::strcmp(argv[0], "encodercal") == 0) {
+                    PolePairEstimator& pp = PolePairEstimator::instance();
+                    if (argc < 2) {
+                        Telemetry::log("print", "[SHELL] usage: encodercal start | stop");
+                    } else if (std::strcmp(argv[1], "start") == 0) {
+                        pp.startManualEncoderCal();
+                        Telemetry::log("print", "[SHELL] encoder cal started; rotate shaft exactly 1 rev, then 'encodercal stop'");
+                    } else if (std::strcmp(argv[1], "stop") == 0) {
+                        pp.stopManualEncoderCal();
+                        char cycles[16];
+                        fmtFloat2(cycles, sizeof(cycles), pp.manualEncoderCycles());
+                        char msg[96];
+                        std::snprintf(msg, sizeof(msg),
+                                      "[SHELL] encoder cycles in 1 rev = %s; true PP = pp_estimate * %s",
+                                      cycles, cycles);
+                        Telemetry::log("print", msg);
+                    } else {
+                        Telemetry::log("print", "[SHELL] usage: encodercal start | stop");
+                    }
+                }
+                else if (std::strcmp(argv[0], "motorcal") == 0) {
+                    if (ol.isRunning() && !ol.isCalibrating()) {
+                        Telemetry::log("print", "[SHELL] stop the motor before starting motorcal");
+                    } else {
+                        ol.startCalibration();
+                    }
+                }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | motorcal | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

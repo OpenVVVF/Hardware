@@ -19,6 +19,9 @@ void PWM_StartSPWM(float fundamental_freq_hz, float modulation_index);
 void PWM_StopSPWM(void);
 void PWM_SetSPWMParams(float fundamental_freq_hz, float modulation_index);
 
+uint32_t PWM_GetSPWMElectricalCycles(void);
+void PWM_ResetSPWMElectricalCycles(void);
+
 void PWM_StartPhase(uint8_t phase);
 void PWM_StopPhase(uint8_t phase);
 void PWM_Start(void);

@@ -242,17 +242,8 @@ bool PhaseCurrentADC::calibrateOffsets() {
     m_offset_u = sum_u / static_cast<float>(AVG_SAMPLES);
     m_offset_v = sum_v / static_cast<float>(AVG_SAMPLES);
 
-    /* Restart the output filter so it begins from the calibrated zero point. */
-    m_filter_sum_u = 0.0f;
-    m_filter_sum_v = 0.0f;
-    m_filter_idx = 0;
-    m_filter_count = 0;
-    for (size_t i = 0; i < FILTER_LEN; ++i) {
-        m_filter_buf_u[i] = 0.0f;
-        m_filter_buf_v[i] = 0.0f;
-    }
-    m_filtered_u = 0.0f;
-    m_filtered_v = 0.0f;
+    /* The synchronous output values are recomputed each ISR from (m_iu - offset),
+     * so no separate filter state needs to be reset here. */
     return true;
 }
 
@@ -267,33 +258,15 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
     m_iu = countsToCurrent(m_raw_u_sig, m_raw_u_ref);
     m_iv = countsToCurrent(m_raw_v_sig, m_raw_v_ref);
 
-    updateFilter(m_iu - m_offset_u, m_iv - m_offset_v);
+    m_current_u = m_iu - m_offset_u;
+    m_current_v = m_iv - m_offset_v;
 
-    /* Feed the pole-pair estimator at the ADC sample rate. */
-    PolePairEstimator::instance().onSample(m_filtered_u, encoderADC().lastAngle());
+    /* Feed the pole-pair estimator at the ADC sample rate.  Pass raw encoder
+     * sin/cos so the estimate does not depend on the encoder angle bounds. */
+    PolePairEstimator::instance().onSample(
+        m_current_u, encoderADC().lastRawSin(), encoderADC().lastRawCos());
 
     m_new_data = true;
-}
-
-void PhaseCurrentADC::updateFilter(float raw_u, float raw_v) {
-    if (m_filter_count < FILTER_LEN) {
-        m_filter_buf_u[m_filter_count] = raw_u;
-        m_filter_buf_v[m_filter_count] = raw_v;
-        m_filter_sum_u += raw_u;
-        m_filter_sum_v += raw_v;
-        ++m_filter_count;
-    } else {
-        m_filter_sum_u -= m_filter_buf_u[m_filter_idx];
-        m_filter_sum_v -= m_filter_buf_v[m_filter_idx];
-        m_filter_buf_u[m_filter_idx] = raw_u;
-        m_filter_buf_v[m_filter_idx] = raw_v;
-        m_filter_sum_u += raw_u;
-        m_filter_sum_v += raw_v;
-        m_filter_idx = (m_filter_idx + 1) % FILTER_LEN;
-    }
-
-    m_filtered_u = m_filter_sum_u / static_cast<float>(m_filter_count);
-    m_filtered_v = m_filter_sum_v / static_cast<float>(m_filter_count);
 }
 
 bool PhaseCurrentADC::sample(float& iu, float& iv, float& iw) {
@@ -302,8 +275,8 @@ bool PhaseCurrentADC::sample(float& iu, float& iv, float& iw) {
     }
 
     __disable_irq();
-    iu = m_filtered_u;
-    iv = m_filtered_v;
+    iu = m_current_u;
+    iv = m_current_v;
     m_new_data = false;
     __enable_irq();
 

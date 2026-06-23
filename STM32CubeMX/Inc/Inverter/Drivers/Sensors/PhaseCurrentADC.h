@@ -76,24 +76,26 @@ public:
     uint32_t lastRawVRef() const { return m_raw_v_ref; }
     float    lastOffsetU() const { return m_offset_u; }
     float    lastOffsetV() const { return m_offset_v; }
-    float    lastFilteredU() const { return m_filtered_u; }
-    float    lastFilteredV() const { return m_filtered_v; }
+
+    /**
+     * @brief Latest synchronous current samples (after offset subtraction).
+     *
+     * These are the same values a future FOC loop would consume: one sample
+     * taken at the PWM bottom for each PWM period, not a time-averaged value.
+     */
+    float    lastU() const { return m_current_u; }
+    float    lastV() const { return m_current_v; }
 
 private:
     bool configureAdcChannels();
     bool initTrigger();
     bool calibrateOffsets();
-    void updateFilter(float raw_u, float raw_v);
     float countsToCurrent(uint32_t sig, uint32_t ref) const;
 
     static constexpr uint32_t ADC_BITS        = 16;
     static constexpr float    ADC_VREF        = 3.3f;
     static constexpr float    DIVIDER         = 2.0f / 3.0f;
     static constexpr float    SENSITIVITY_VA  = 1.042e-3f; /**< LA37S600. */
-
-    /* Lightweight moving-average filter applied at the ADC sample rate to
-     * reduce sensor/ADC noise before the slower telemetry/FOC loop reads it. */
-    static constexpr size_t FILTER_LEN = 32;
 
     volatile uint32_t m_raw_u_sig = 0;
     volatile uint32_t m_raw_v_sig = 0;
@@ -104,14 +106,11 @@ private:
     float             m_offset_u = 0.0f;
     float             m_offset_v = 0.0f;
 
-    float             m_filter_buf_u[FILTER_LEN] = {};
-    float             m_filter_buf_v[FILTER_LEN] = {};
-    float             m_filter_sum_u = 0.0f;
-    float             m_filter_sum_v = 0.0f;
-    float             m_filtered_u = 0.0f;
-    float             m_filtered_v = 0.0f;
-    size_t            m_filter_idx = 0;
-    size_t            m_filter_count = 0;
+    /* Latest synchronous current after offset subtraction.  No additional
+     * time-domain averaging is applied so this is exactly what a FOC loop
+     * running at the PWM sample rate would see. */
+    volatile float    m_current_u = 0.0f;
+    volatile float    m_current_v = 0.0f;
 
     volatile bool     m_new_data = false;
     bool              m_running = false;
