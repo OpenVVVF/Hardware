@@ -229,7 +229,9 @@ void CommandShell::poll() {
                     Telemetry::log("print", "[SHELL] start f m | stop | freq f | mod m | status | clearfault | cal | raw | help");
                 }
                 else {
-                    /* Silently drop noise/garbage lines instead of echoing them. */
+                    /* Unknown but printable command: tell the user instead of
+                     * silently dropping, so typos are obvious. */
+                    Telemetry::log("print", "[SHELL] unknown command");
                 }
             }
         }
