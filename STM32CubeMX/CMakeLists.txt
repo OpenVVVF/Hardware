@@ -65,6 +65,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Drivers/Sensors/EncoderADC.cpp
     Src/Inverter/Drivers/Sensors/PhaseCurrentADC.cpp
     Src/Inverter/Drivers/Sensors/PolePairEstimator.cpp
+    Src/Inverter/Drivers/Sensors/MAX22530.cpp
 )
 
 # Add include paths

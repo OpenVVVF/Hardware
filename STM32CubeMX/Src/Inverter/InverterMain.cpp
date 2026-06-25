@@ -1,6 +1,7 @@
 #include "Inverter/InverterMain.h"
 #include "Inverter/Telemetry.h"
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
+#include "Inverter/Drivers/Sensors/MAX22530.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
@@ -22,6 +23,13 @@ static CY15B102Q_HandleTypeDef g_fram = {
     .hold_pin  = FRAM_HOLD_Pin,
 };
 
+static Inverter::MAX22530 s_vsense_iso(
+    &hspi2,
+    SPI2_CS_GPIO_Port, SPI2_CS_Pin,
+    VSENSE_ISO_ADC_INTERRUPT_GPIO_Port, VSENSE_ISO_ADC_INTERRUPT_Pin,
+    EXTI1_IRQn,
+    "iso");
+
 static void init()
 {
     /* Initialize F-RAM for persistent on-time logging. */
@@ -41,6 +49,16 @@ static void init()
 
     /* UART command shell for start/stop/freq/mod. */
     Inverter::commandShell().init();
+
+    /* Enable the peripheral power rail that supplies the isolated ADC (VDDPL).
+     * The MAX22530 field-side DC-DC and ADC need this before conversions start. */
+    HAL_GPIO_WritePin(PERIPHERAL_POWER_ENABLE_GPIO_Port,
+                      PERIPHERAL_POWER_ENABLE_Pin,
+                      GPIO_PIN_SET);
+    HAL_Delay(200);
+
+    /* Isolated high-voltage ADC on SPI2 (VSENSE_ISO_ADC_INTERRUPT = PD1). */
+    s_vsense_iso.init();
 }
 
 static void loop()
@@ -62,6 +80,13 @@ static void loop()
     if ((now_ms - s_last_current_ms) >= 10U) {
         Inverter::CurrentSensorTest_RunOnce();
         s_last_current_ms = now_ms;
+    }
+
+    /* Isolated ADC on SPI2: read latest values at 100 Hz. */
+    static uint32_t s_last_vsense_ms = 0;
+    if ((now_ms - s_last_vsense_ms) >= 10U) {
+        s_vsense_iso.update();
+        s_last_vsense_ms = now_ms;
     }
 
     /* Open-loop safety, calibration state machines, and command processing. */
