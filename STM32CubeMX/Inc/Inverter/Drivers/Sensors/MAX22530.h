@@ -14,10 +14,10 @@ namespace Inverter {
  * hardware-interrupt GPIO in the constructor so multiple chips can coexist.
  *
  * The interrupt pin is configured as a falling-edge EXTI line (INT is
- * open-drain active-low).  The SPI burst read happens in the EXTI ISR so that
- * the interrupt status register is cleared promptly and the ADC is sampled on
- * every end-of-conversion event.  update() in the main loop just acknowledges
- * the new-sample flag.
+ * open-drain active-low).  The EXTI ISR starts a SPI DMA burst read; a DMA
+ * completion callback parses the result and clears the interrupt status
+ * register so the next end-of-conversion event can trigger.  update() in the
+ * main loop just acknowledges the new-sample flag.
  */
 class MAX22530 {
 public:
@@ -47,14 +47,23 @@ public:
     bool init();
 
     /**
-     * @brief ISR callback.  Called from the EXTI HAL callback.
+     * @brief EXTI ISR callback.  Starts the SPI DMA burst read.
      */
     void onInterrupt();
 
     /**
+     * @brief DMA completion callback.  Parses the received burst and releases
+     * the chip-select.
+     */
+    void onDmaComplete();
+
+    /**
+     * @brief DMA error callback.  Releases the chip-select.
+     */
+    void onDmaError();
+
+    /**
      * @brief Main-loop housekeeping.  Clears the new-sample flag.
-     *
-     * The actual SPI read is done in onInterrupt().
      */
     void update();
 
@@ -70,12 +79,20 @@ public:
         return (channel < 4) ? m_voltages[channel] : 0.0f;
     }
 
+    /**
+     * @brief Diagnostic counters (for debugging zero-read issues).
+     */
+    uint32_t irqCount() const          { return m_irq_cnt; }
+    uint32_t dmaCompleteCount() const  { return m_dma_cnt; }
+    uint32_t dmaErrorCount() const     { return m_err_cnt; }
+    uint32_t dmaStartFailCount() const { return m_dma_start_fail_cnt; }
+    bool     dmaBusy() const           { return m_dma_busy; }
+
     static MAX22530* instanceForPin(uint16_t pin);
 
 private:
     bool readRegister(uint8_t reg, uint16_t& out);
     bool writeRegister(uint8_t reg, uint16_t value);
-    bool burstReadAdc(uint16_t raw[4]);
 
     SPI_HandleTypeDef* m_hspi;
     GPIO_TypeDef*      m_cs_port;
@@ -85,7 +102,13 @@ private:
     IRQn_Type          m_int_irqn;
 
     volatile bool      m_data_ready = false;
+    volatile bool      m_dma_busy   = false;
     volatile float     m_voltages[4] = {};
+
+    volatile uint32_t  m_irq_cnt            = 0;
+    volatile uint32_t  m_dma_cnt            = 0;
+    volatile uint32_t  m_err_cnt            = 0;
+    volatile uint32_t  m_dma_start_fail_cnt = 0;
 };
 
 } // namespace Inverter

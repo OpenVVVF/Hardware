@@ -31,6 +31,16 @@ constexpr uint32_t SPI_TIMEOUT_MS       = 25U;
 /* One instance per EXTI line (pin number 0..15). */
 MAX22530* s_instances_by_pin[16] = { nullptr };
 
+/* For a single SPI2 peripheral there is only one driver instance that will
+ * ever use DMA.  Keep a direct pointer so the HAL DMA callbacks know where to
+ * dispatch without scanning the pin table. */
+MAX22530* s_spi2_instance = nullptr;
+
+/* DMA buffers must live in AXI SRAM, not DTCMRAM. */
+constexpr uint8_t BURST_LEN = 11U;
+static uint8_t s_dma_tx[BURST_LEN] __attribute__((section(".dma_buffers")));
+static uint8_t s_dma_rx[BURST_LEN] __attribute__((section(".dma_buffers")));
+
 int pinIndex(uint16_t pin) {
     if (pin == 0) return -1;
     return __builtin_ctz(pin);
@@ -52,11 +62,25 @@ MAX22530::MAX22530(SPI_HandleTypeDef* hspi,
     if (idx >= 0 && idx < 16) {
         s_instances_by_pin[idx] = this;
     }
+
+    /* Pre-load the DMA TX buffer with the ADC1 burst-read command.
+     * The rest of the bytes are don't-care MOSI clocks. */
+    s_dma_tx[0] = static_cast<uint8_t>((REG_ADC1 << 2) | 1U);
+    for (int i = 1; i < BURST_LEN; ++i) {
+        s_dma_tx[i] = 0x00;
+    }
 }
 
 bool MAX22530::init() {
     if (!m_hspi || !m_cs_port || !m_int_port) {
         return false;
+    }
+
+    /* The SPI handle is only fully initialized after MX_SPI2_Init() runs, which
+     * happens after C++ static constructors.  Register the DMA callback target
+     * here, once the peripheral instance field is valid. */
+    if (m_hspi->Instance == SPI2) {
+        s_spi2_instance = this;
     }
 
     HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_SET);
@@ -129,15 +153,45 @@ bool MAX22530::init() {
 
 void MAX22530::onInterrupt() {
     /* The INT pin is open-drain active-low and stays low until the interrupt
-     * status register is read.  Perform the burst read in the ISR so the line
-     * is released before the next end-of-conversion event (~200 us later). */
-    uint16_t raw[4] = {};
-    if (burstReadAdc(raw)) {
-        for (int i = 0; i < 4; ++i) {
-            m_voltages[i] = (static_cast<float>(raw[i] & ADC_DATA_MASK) * VREF) / ADC_COUNTS;
-        }
-        m_data_ready = true;
+     * status register is read.  Start a SPI DMA burst read so the line is
+     * released as soon as the transfer finishes; the CPU is not tied up during
+     * the ~15 us transfer. */
+    ++m_irq_cnt;
+
+    if (m_dma_busy) {
+        return;
     }
+
+    HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_RESET);
+    m_dma_busy = true;
+
+    if (HAL_SPI_TransmitReceive_DMA(m_hspi, s_dma_tx, s_dma_rx, BURST_LEN) != HAL_OK) {
+        ++m_dma_start_fail_cnt;
+        HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_SET);
+        m_dma_busy = false;
+    }
+}
+
+void MAX22530::onDmaComplete() {
+    ++m_dma_cnt;
+    HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_SET);
+    m_dma_busy = false;
+
+    /* Burst read layout: byte 0 = MISO dummy, bytes 1-2 = ADC1, 3-4 = ADC2,
+     * 5-6 = ADC3, 7-8 = ADC4, 9-10 = INTERRUPT_STATUS. */
+    for (int i = 0; i < 4; ++i) {
+        const uint16_t raw = static_cast<uint16_t>((s_dma_rx[2 * i + 1] << 8) |
+                                                    s_dma_rx[2 * i + 2]);
+        m_voltages[i] = (static_cast<float>(raw & ADC_DATA_MASK) * VREF) / ADC_COUNTS;
+    }
+
+    m_data_ready = true;
+}
+
+void MAX22530::onDmaError() {
+    ++m_err_cnt;
+    HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_SET);
+    m_dma_busy = false;
 }
 
 MAX22530* MAX22530::instanceForPin(uint16_t pin) {
@@ -179,29 +233,6 @@ bool MAX22530::writeRegister(uint8_t reg, uint16_t value) {
     return (status == HAL_OK);
 }
 
-bool MAX22530::burstReadAdc(uint16_t raw[4]) {
-    /* Burst read starts at ADC1 and returns ADC1, ADC2, ADC3, ADC4, and
-     * INTERRUPT_STATUS in one transaction. */
-    const uint8_t cmd = static_cast<uint8_t>((REG_ADC1 << 2) | 1U);
-    uint8_t tx[11] = { cmd, 0 };
-    uint8_t rx[11] = {};
-
-    HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_RESET);
-    const HAL_StatusTypeDef hal_status =
-        HAL_SPI_TransmitReceive(m_hspi, tx, rx, 11, SPI_TIMEOUT_MS);
-    HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_SET);
-
-    if (hal_status != HAL_OK) {
-        return false;
-    }
-
-    raw[0] = static_cast<uint16_t>((rx[1] << 8) | rx[2]);
-    raw[1] = static_cast<uint16_t>((rx[3] << 8) | rx[4]);
-    raw[2] = static_cast<uint16_t>((rx[5] << 8) | rx[6]);
-    raw[3] = static_cast<uint16_t>((rx[7] << 8) | rx[8]);
-    /* rx[9..10] = INTERRUPT_STATUS; reading it clears the INT pin. */
-    return true;
-}
 
 void MAX22530::update() {
     /* The SPI read already happened in onInterrupt(); just acknowledge the
@@ -222,6 +253,18 @@ extern "C" void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     const int idx = pinIndex(GPIO_Pin);
     if (idx >= 0 && idx < 16 && s_instances_by_pin[idx]) {
         s_instances_by_pin[idx]->onInterrupt();
+    }
+}
+
+extern "C" void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef* hspi) {
+    if (hspi != nullptr && hspi->Instance == SPI2 && s_spi2_instance != nullptr) {
+        s_spi2_instance->onDmaComplete();
+    }
+}
+
+extern "C" void HAL_SPI_ErrorCallback(SPI_HandleTypeDef* hspi) {
+    if (hspi != nullptr && hspi->Instance == SPI2 && s_spi2_instance != nullptr) {
+        s_spi2_instance->onDmaError();
     }
 }
 
