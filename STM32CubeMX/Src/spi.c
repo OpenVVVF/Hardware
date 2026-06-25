@@ -22,13 +22,16 @@
 
 /* USER CODE BEGIN 0 */
 
+/* Manual DMA handles for MAX22530 isolated ADC on SPI2.
+ * CubeMX does not generate these for this peripheral, so keep them in the
+ * user section to survive regeneration. */
+DMA_HandleTypeDef hdma_spi2_rx;
+DMA_HandleTypeDef hdma_spi2_tx;
+
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi4;
-
-DMA_HandleTypeDef hdma_spi2_rx;
-DMA_HandleTypeDef hdma_spi2_tx;
 
 /* SPI2 init function */
 void MX_SPI2_Init(void)
@@ -162,7 +165,10 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    /* SPI2 DMA Init */
+  /* USER CODE BEGIN SPI2_MspInit 1 */
+
+    /* SPI2 DMA Init for MAX22530 isolated ADC.
+     * Placed in the user section so CubeMX regeneration keeps it. */
     __HAL_RCC_DMA1_CLK_ENABLE();
 
     /* SPI2_RX Init */
@@ -211,8 +217,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
      * TxRx complete callback after the DMA streams finish. */
     HAL_NVIC_SetPriority(SPI2_IRQn, 14, 0);
     HAL_NVIC_EnableIRQ(SPI2_IRQn);
-
-  /* USER CODE BEGIN SPI2_MspInit 1 */
 
   /* USER CODE END SPI2_MspInit 1 */
   }
