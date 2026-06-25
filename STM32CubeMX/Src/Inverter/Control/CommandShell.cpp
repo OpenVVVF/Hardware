@@ -1,6 +1,7 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
+#include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/PolePairEstimator.h"
 #include "Inverter/Telemetry.h"
@@ -58,7 +59,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | calpolepairs | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | vzero | polepairs | encodercal start/stop | calpolepairs | help");
     return true;
 }
 
@@ -227,6 +228,18 @@ void CommandShell::poll() {
                                   "[SHELL] offsets U=%s V=%s", uoff, voff);
                     Telemetry::log("print", msg);
                 }
+                else if (std::strcmp(argv[0], "vzero") == 0) {
+                    DcLinkVoltageSensor& vdc = dcLinkVoltageSensor();
+                    if (vdc.zeroCalibrate()) {
+                        char vbuf[16];
+                        fmtFloat3(vbuf, sizeof(vbuf), vdc.voltage());
+                        char msg[48];
+                        std::snprintf(msg, sizeof(msg), "[SHELL] Vdc zero calibrated: %s V", vbuf);
+                        Telemetry::log("print", msg);
+                    } else {
+                        Telemetry::log("print", "[SHELL] Vdc zero cal failed (no sample)");
+                    }
+                }
                 else if (std::strcmp(argv[0], "polepairs") == 0) {
                     PolePairEstimator& pp = PolePairEstimator::instance();
                     char est[16], mech[16], elec[16];
@@ -269,7 +282,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | polepairs | encodercal start/stop | calpolepairs | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | cal | raw | vzero | polepairs | encodercal start/stop | calpolepairs | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

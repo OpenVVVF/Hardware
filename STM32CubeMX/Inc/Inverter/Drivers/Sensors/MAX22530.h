@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cstddef>
 
 #include "main.h"
 #include "spi.h"
@@ -16,7 +15,7 @@ namespace Inverter {
  *
  * The interrupt pin is configured as a falling-edge EXTI line (INT is
  * open-drain active-low).  The ISR only sets a ready flag; the SPI burst read
- * and telemetry publish are done from update() in thread/main-loop context.
+ * is done from update() in thread/main-loop context.
  */
 class MAX22530 {
 public:
@@ -29,13 +28,11 @@ public:
      * @param int_port    Interrupt GPIO port.
      * @param int_pin     Interrupt GPIO pin (single bit, maps to EXTI line).
      * @param int_irqn    NVIC IRQ number for the EXTI line (e.g. EXTI1_IRQn).
-     * @param name_prefix Telemetry key prefix (e.g. "iso" -> "iso_adc1_v").
      */
     MAX22530(SPI_HandleTypeDef* hspi,
              GPIO_TypeDef* cs_port, uint16_t cs_pin,
              GPIO_TypeDef* int_port, uint16_t int_pin,
-             IRQn_Type int_irqn,
-             const char* name_prefix);
+             IRQn_Type int_irqn);
 
     /**
      * @brief Initialize the chip and interrupt line.
@@ -54,7 +51,7 @@ public:
 
     /**
      * @brief Non-blocking update.  Reads the latest ADC values if new data
-     * arrived and publishes them over telemetry.
+     * arrived.
      *
      * Call periodically from the main loop.
      */
@@ -72,18 +69,12 @@ public:
         return (channel < 4) ? m_voltages[channel] : 0.0f;
     }
 
-    /**
-     * @brief Raw interrupt status from the last burst read.
-     */
-    uint16_t interruptStatus() const { return m_int_status; }
-
     static MAX22530* instanceForPin(uint16_t pin);
 
 private:
     bool readRegister(uint8_t reg, uint16_t& out);
     bool writeRegister(uint8_t reg, uint16_t value);
-    bool burstReadAdc(uint16_t raw[4], uint16_t& status);
-    void publish();
+    bool burstReadAdc(uint16_t raw[4]);
 
     SPI_HandleTypeDef* m_hspi;
     GPIO_TypeDef*      m_cs_port;
@@ -91,15 +82,9 @@ private:
     GPIO_TypeDef*      m_int_port;
     uint16_t           m_int_pin;
     IRQn_Type          m_int_irqn;
-    char               m_prefix[8];
 
     volatile bool      m_data_ready = false;
-    volatile uint32_t  m_interrupt_count = 0;
-    uint32_t           m_last_data_ms = 0;
-    bool               m_first_data = true;
-    bool               m_warned_no_int = false;
     float              m_voltages[4] = {};
-    uint16_t           m_int_status = 0;
 };
 
 } // namespace Inverter
