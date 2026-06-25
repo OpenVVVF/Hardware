@@ -45,7 +45,8 @@ bool DcLinkVoltageSensor::init() {
 }
 
 void DcLinkVoltageSensor::update() {
-    /* A true dataReady() here means update() will perform a fresh SPI burst read. */
+    /* A true dataReady() means the ISR has collected a new ADC sample since
+     * the last loop iteration. */
     const bool had_new = m_adc.dataReady();
     m_adc.update();
 

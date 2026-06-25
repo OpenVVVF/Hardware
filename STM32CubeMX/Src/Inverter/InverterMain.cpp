@@ -76,12 +76,9 @@ static void loop()
         s_last_current_ms = now_ms;
     }
 
-    /* Isolated DC-link voltage sensor: read latest value at 100 Hz. */
-    static uint32_t s_last_vsense_ms = 0;
-    if ((now_ms - s_last_vsense_ms) >= 10U) {
-        Inverter::dcLinkVoltageSensor().update();
-        s_last_vsense_ms = now_ms;
-    }
+    /* Isolated DC-link voltage sensor: sample on every loop so the logged
+     * value is always the latest conversion from the EXTI ISR. */
+    Inverter::dcLinkVoltageSensor().update();
 
     /* Open-loop safety, calibration state machines, and command processing. */
     Inverter::commandShell().poll();

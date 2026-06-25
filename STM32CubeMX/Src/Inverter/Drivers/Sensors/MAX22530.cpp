@@ -119,16 +119,25 @@ bool MAX22530::init() {
     gpio.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(m_int_port, &gpio);
 
-    /* Lower numeric priority = higher urgency.  Motor/encoder run at 5,
-     * so use 12 to keep this ISR clearly in the background. */
-    HAL_NVIC_SetPriority(m_int_irqn, 12, 0);
+    /* Lower numeric priority = higher urgency.  PWM and current-sense ISRs
+     * run at 4-5; keep this one clearly in the background. */
+    HAL_NVIC_SetPriority(m_int_irqn, 14, 0);
     HAL_NVIC_EnableIRQ(m_int_irqn);
 
     return true;
 }
 
 void MAX22530::onInterrupt() {
-    m_data_ready = true;
+    /* The INT pin is open-drain active-low and stays low until the interrupt
+     * status register is read.  Perform the burst read in the ISR so the line
+     * is released before the next end-of-conversion event (~200 us later). */
+    uint16_t raw[4] = {};
+    if (burstReadAdc(raw)) {
+        for (int i = 0; i < 4; ++i) {
+            m_voltages[i] = (static_cast<float>(raw[i] & ADC_DATA_MASK) * VREF) / ADC_COUNTS;
+        }
+        m_data_ready = true;
+    }
 }
 
 MAX22530* MAX22530::instanceForPin(uint16_t pin) {
@@ -195,19 +204,9 @@ bool MAX22530::burstReadAdc(uint16_t raw[4]) {
 }
 
 void MAX22530::update() {
-    if (!m_data_ready) {
-        return;
-    }
+    /* The SPI read already happened in onInterrupt(); just acknowledge the
+     * new-sample flag for callers that use dataReady(). */
     m_data_ready = false;
-
-    uint16_t raw[4] = {};
-    if (!burstReadAdc(raw)) {
-        return;
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        m_voltages[i] = (static_cast<float>(raw[i] & ADC_DATA_MASK) * VREF) / ADC_COUNTS;
-    }
 }
 
 /* -------------------------------------------------------------------------- */

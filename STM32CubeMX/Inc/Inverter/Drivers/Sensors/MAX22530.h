@@ -14,8 +14,10 @@ namespace Inverter {
  * hardware-interrupt GPIO in the constructor so multiple chips can coexist.
  *
  * The interrupt pin is configured as a falling-edge EXTI line (INT is
- * open-drain active-low).  The ISR only sets a ready flag; the SPI burst read
- * is done from update() in thread/main-loop context.
+ * open-drain active-low).  The SPI burst read happens in the EXTI ISR so that
+ * the interrupt status register is cleared promptly and the ADC is sampled on
+ * every end-of-conversion event.  update() in the main loop just acknowledges
+ * the new-sample flag.
  */
 class MAX22530 {
 public:
@@ -50,10 +52,9 @@ public:
     void onInterrupt();
 
     /**
-     * @brief Non-blocking update.  Reads the latest ADC values if new data
-     * arrived.
+     * @brief Main-loop housekeeping.  Clears the new-sample flag.
      *
-     * Call periodically from the main loop.
+     * The actual SPI read is done in onInterrupt().
      */
     void update();
 
@@ -84,7 +85,7 @@ private:
     IRQn_Type          m_int_irqn;
 
     volatile bool      m_data_ready = false;
-    float              m_voltages[4] = {};
+    volatile float     m_voltages[4] = {};
 };
 
 } // namespace Inverter
