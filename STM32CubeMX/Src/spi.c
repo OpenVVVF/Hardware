@@ -51,9 +51,6 @@ void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  /* MAX22530 SCLK: SPI2 kernel clock is PLL1Q (183.333 MHz).  /32 -> ~5.7 MHz,
-   * close to the 8 MHz example in the datasheet and fast enough for the
-   * 11-byte burst read. */
   hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
