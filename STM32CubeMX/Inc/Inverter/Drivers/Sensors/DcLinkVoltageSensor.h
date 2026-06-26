@@ -21,7 +21,7 @@ public:
      */
     DcLinkVoltageSensor(MAX22530& adc,
                         const char* telemetry_key = "vdc_v",
-                        float scale = 1501.5f);
+                        float scale = 1516.0f);
 
     /**
      * @brief Initialize the underlying ADC.

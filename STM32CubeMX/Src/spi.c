@@ -22,9 +22,11 @@
 
 /* USER CODE BEGIN 0 */
 
-/* Manual DMA handles for MAX22530 isolated ADC on SPI2.
- * CubeMX does not generate these for this peripheral, so keep them in the
- * user section to survive regeneration. */
+/* WARNING: This is manually-managed DMA code for the MAX22530 isolated ADC on
+ * SPI2.  If you ever enable SPI2 DMA in CubeMX, remove this user-section code
+ * first or CubeMX will generate duplicate DMA init/IRQ handlers and the build
+ * will fail.
+ */
 DMA_HandleTypeDef hdma_spi2_rx;
 DMA_HandleTypeDef hdma_spi2_tx;
 
@@ -163,6 +165,9 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USER CODE BEGIN SPI2_MspInit 1 */
+
+    /* WARNING: see the user-section warning at the top of spi.c.  Do not enable
+     * SPI2 DMA in CubeMX while this manual DMA init is present. */
 
     /* SPI2 DMA Init for MAX22530 isolated ADC.
      * Placed in the user section so CubeMX regeneration keeps it. */

@@ -6,12 +6,17 @@ namespace Inverter {
 
 namespace {
 
-/* MAX22530 register map */
+/* MAX22530 register map.  FADC1..4 are the filtered (rolling average) data
+ * registers; the device averages the most recent 4 ADC readings. */
 constexpr uint8_t REG_PROD_ID           = 0x00;
 constexpr uint8_t REG_ADC1              = 0x01;
 constexpr uint8_t REG_ADC2              = 0x02;
 constexpr uint8_t REG_ADC3              = 0x03;
 constexpr uint8_t REG_ADC4              = 0x04;
+constexpr uint8_t REG_FADC1             = 0x05;
+constexpr uint8_t REG_FADC2             = 0x06;
+constexpr uint8_t REG_FADC3             = 0x07;
+constexpr uint8_t REG_FADC4             = 0x08;
 constexpr uint8_t REG_INTERRUPT_STATUS  = 0x12;
 constexpr uint8_t REG_INTERRUPT_ENABLE  = 0x13;
 constexpr uint8_t REG_CONTROL           = 0x14;
@@ -63,9 +68,10 @@ MAX22530::MAX22530(SPI_HandleTypeDef* hspi,
         s_instances_by_pin[idx] = this;
     }
 
-    /* Pre-load the DMA TX buffer with the ADC1 burst-read command.
-     * The rest of the bytes are don't-care MOSI clocks. */
-    s_dma_tx[0] = static_cast<uint8_t>((REG_ADC1 << 2) | 1U);
+    /* Pre-load the DMA TX buffer with the FADC1 burst-read command to get the
+     * filtered (rolling average) ADC values.  The rest of the bytes are
+     * don't-care MOSI clocks. */
+    s_dma_tx[0] = static_cast<uint8_t>((REG_FADC1 << 2) | 1U);
     for (int i = 1; i < BURST_LEN; ++i) {
         s_dma_tx[i] = 0x00;
     }
