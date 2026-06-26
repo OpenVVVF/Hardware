@@ -31,6 +31,11 @@ public:
      */
     void onRxComplete();
 
+    /**
+     * @brief Recover from a UART error (overrun/noise/frame) and restart RX.
+     */
+    void recover();
+
 private:
     static constexpr size_t RX_BUF_SIZE = 256;
     static constexpr size_t LINE_SIZE   = 128;

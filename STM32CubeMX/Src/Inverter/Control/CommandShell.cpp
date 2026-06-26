@@ -87,6 +87,17 @@ void CommandShell::onRxComplete() {
     HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
 }
 
+void CommandShell::recover() {
+    if (!m_initialized) return;
+
+    /* Clear error/idle flags and restart reception. */
+    __HAL_UART_CLEAR_FLAG(&huart3, UART_CLEAR_PEF | UART_CLEAR_FEF |
+                                  UART_CLEAR_NEF | UART_CLEAR_OREF |
+                                  UART_CLEAR_IDLEF);
+    HAL_NVIC_ClearPendingIRQ(USART3_IRQn);
+    HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
+}
+
 void CommandShell::poll() {
     if (!m_initialized) {
         return;

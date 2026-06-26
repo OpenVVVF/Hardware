@@ -1,4 +1,5 @@
 #include "Inverter/Control/FaultManager.h"
+#include "Inverter/Control/CommandShell.h"
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
 
 #include "main.h"
@@ -50,6 +51,10 @@ static constexpr uint32_t UART_STARTUP_WINDOW_MS = 500U;
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef* huart) {
     if (huart != nullptr && huart->Instance == USART3) {
+        /* Restart RX so the shell does not stop accepting commands after
+         * an overrun/noise/frame error. */
+        Inverter::commandShell().recover();
+
         if (HAL_GetTick() >= UART_STARTUP_WINDOW_MS) {
             Inverter::FaultManager::instance().raise(
                 Inverter::FaultSource::UartError, Inverter::FaultReason::UartHalError);

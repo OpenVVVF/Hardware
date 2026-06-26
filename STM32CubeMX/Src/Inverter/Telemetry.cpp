@@ -33,8 +33,16 @@ struct TelemetryHeader {
 static_assert(sizeof(TelemetryHeader) == 16, "TelemetryHeader must be 16 bytes");
 
 enum ValueType : uint8_t {
-    VT_F32 = 1,
-    VT_STR = 2
+    VT_F32      = 1,
+    VT_STR      = 2,   // complete short string
+    VT_STR_FRAG = 3,   // fragment of a longer string
+};
+
+// Fragment flags carried inside a VT_STR_FRAG payload
+enum StrFrag : uint8_t {
+    SF_START    = 0x01,
+    SF_END      = 0x02,
+    SF_COMPLETE = 0x03, // START | END
 };
 
 // ============================================================
@@ -142,6 +150,11 @@ struct RingQueue {
         out = buf[head];
         head = (uint16_t)(head + 1) % CAP;
         return true;
+    }
+
+    inline const T* front() const {
+        if (empty()) return nullptr;
+        return &buf[head];
     }
 
     inline void reset() { head = tail = 0; }
@@ -267,7 +280,7 @@ struct LogItem {
     uint8_t  type = 0;
     union {
         float f32;
-        struct { uint8_t len; char bytes[STR_MAXLEN]; } str;
+        struct { uint8_t frag; uint8_t len; char bytes[STR_MAXLEN]; } str;
     } v;
 };
 
@@ -428,7 +441,7 @@ static void drain_log_queue_to_cache() {
                 g_dyn[i].has_last_f32 = true;
                 break;
             }
-        } else if (it.type == VT_STR) {
+        } else if (it.type == VT_STR || it.type == VT_STR_FRAG) {
             (void)g_str_q.push(it);
         }
     }
@@ -477,14 +490,19 @@ static size_t build_data_payload(uint8_t* payload, size_t cap) {
 
     // Event strings last
     while (!g_str_q.empty()) {
-        LogItem it{};
-        if (!g_str_q.pop(it)) break;
+        const LogItem* front = g_str_q.front();
+        if (!front) break;
 
-        const size_t need = 2 + 1 + 1 + it.v.str.len;
+        const bool is_frag = (front->type == VT_STR_FRAG);
+        const size_t need = 2 + 1 + (is_frag ? 1 : 0) + 1 + front->v.str.len;
         if ((size_t)(w - payload) + need > cap) break;
 
+        LogItem it{};
+        (void)g_str_q.pop(it);
+
         put_u16(w, it.id);
-        *w++ = VT_STR;
+        *w++ = it.type;
+        if (is_frag) *w++ = it.v.str.frag;
         *w++ = it.v.str.len;
         if (it.v.str.len) {
             std::memcpy(w, it.v.str.bytes, it.v.str.len);
@@ -575,6 +593,9 @@ static bool log_core0(const char* key, float value) {
 static bool log_core0(const char* key, const char* value) {
     if (!key || !value) return false;
 
+    const size_t total_len = std::strlen(value);
+    if (total_len == 0) return false;
+
     const uint32_t h = fnv1a(key);
     int idx = find_dyn_key(key, h);
 
@@ -586,16 +607,42 @@ static bool log_core0(const char* key, const char* value) {
         return false;
     }
 
-    LogItem it{};
-    it.id = g_dyn[idx].id;
-    it.type = VT_STR;
+    const uint16_t id = g_dyn[idx].id;
 
-    const size_t len = std::min<size_t>(std::strlen(value), STR_MAXLEN);
-    it.v.str.len = (uint8_t)len;
-    std::memcpy(it.v.str.bytes, value, len);
-    if (len < STR_MAXLEN) it.v.str.bytes[len] = '\0';
+    if (total_len <= STR_MAXLEN) {
+        LogItem it{};
+        it.id = id;
+        it.type = VT_STR;
+        it.v.str.frag = SF_COMPLETE;
+        it.v.str.len = (uint8_t)total_len;
+        std::memcpy(it.v.str.bytes, value, total_len);
+        return g_log_q.push(it);
+    }
 
-    return g_log_q.push(it);
+    // Fragment long strings into multiple queued chunks.
+    size_t offset = 0;
+    bool ok = true;
+    const size_t n = (total_len + STR_MAXLEN - 1) / STR_MAXLEN;
+    for (size_t i = 0; i < n; ++i) {
+        const size_t chunk_len = std::min<size_t>(STR_MAXLEN, total_len - offset);
+        uint8_t frag = 0;
+        if (i == 0) frag |= SF_START;
+        if (i == n - 1) frag |= SF_END;
+
+        LogItem it{};
+        it.id = id;
+        it.type = VT_STR_FRAG;
+        it.v.str.frag = frag;
+        it.v.str.len = (uint8_t)chunk_len;
+        std::memcpy(it.v.str.bytes, value + offset, chunk_len);
+
+        if (!g_log_q.push(it)) {
+            ok = false;
+            break;
+        }
+        offset += chunk_len;
+    }
+    return ok;
 }
 
 // ============================================================
@@ -660,7 +707,9 @@ bool log(const char* key, const char* value) {
 bool printf(const char* fmt, ...) {
     if (!fmt) return false;
 
-    char buf[STR_MAXLEN + 1];
+    // Allow much longer formatted strings; log_core0 will fragment as needed.
+    static constexpr size_t PRINTF_BUF_SIZE = 1024;
+    char buf[PRINTF_BUF_SIZE];
 
     va_list ap;
     va_start(ap, fmt);
@@ -668,7 +717,7 @@ bool printf(const char* fmt, ...) {
     va_end(ap);
 
     if (n <= 0) return false;
-    buf[STR_MAXLEN] = '\0';
+    buf[sizeof(buf) - 1] = '\0';
 
     return Telemetry::log("print", buf);
 }
