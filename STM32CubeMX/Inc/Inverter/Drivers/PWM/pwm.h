@@ -27,6 +27,7 @@ void PWM_StopPhase(uint8_t phase);
 void PWM_Start(void);
 void PWM_Stop(void);
 void PWM_ClearFault(void);
+void PWM_ClearBreakFlag(void);
 
 void PWM_PrintState(void);
 void PWM_PrintSPWMState(void);

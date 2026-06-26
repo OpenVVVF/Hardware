@@ -55,6 +55,13 @@ bool CommandShell::init() {
     m_line_len = 0;
     m_initialized = true;
 
+    /* Clear any stale error/idle flags left from the power-up / debugger
+     * transient before unmasking the UART interrupt. */
+    __HAL_UART_CLEAR_FLAG(&huart3, UART_CLEAR_PEF | UART_CLEAR_FEF |
+                                  UART_CLEAR_NEF | UART_CLEAR_OREF |
+                                  UART_CLEAR_IDLEF);
+    HAL_NVIC_ClearPendingIRQ(USART3_IRQn);
+
     HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
     if (status != HAL_OK) {
         Telemetry::log("print", "[SHELL] ERROR: HAL_UART_Receive_IT failed");
@@ -188,12 +195,14 @@ void CommandShell::poll() {
                     FaultManager::instance().printSummary();
                 }
                 else if (std::strcmp(argv[0], "clearfault") == 0) {
-                    /* Re-enable gate-driver power before reset in case a Critical
-                     * fault turned it off. */
+                    /* Re-enable gate-driver power so the board can be started again,
+                     * but keep the gate-driver outputs disabled and the TIM1 master
+                     * output off.  Switching must only resume after an explicit
+                     * 'start' command. */
                     GateDriver_EnablePower(true);
                     HAL_Delay(50);
-                    GateDriver_ResetPulse();
-                    PWM_ClearFault();
+                    GateDriver_DisableOutputs();
+                    PWM_ClearBreakFlag();
                     FaultManager::instance().clearAll();
 
                     /* The isolated ADC may have a latched comparator interrupt and/or
@@ -206,7 +215,7 @@ void CommandShell::poll() {
                     __HAL_GPIO_EXTI_CLEAR_IT(VSENSE_ISO_ADC_INTERRUPT_Pin);
                     HAL_NVIC_ClearPendingIRQ(EXTI1_IRQn);
 
-                    Telemetry::log("print", "[SHELL] faults cleared, gate driver power cycled");
+                    Telemetry::log("print", "[SHELL] faults cleared; gate driver powered but outputs disabled");
                 }
                 else if (std::strcmp(argv[0], "cal") == 0) {
                     if (ol.isRunning()) {

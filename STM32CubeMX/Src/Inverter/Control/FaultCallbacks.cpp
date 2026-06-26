@@ -42,11 +42,18 @@ void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc) {
     }
 }
 
-/* USART3 shell/telemetry transport errors. */
+/* USART3 shell/telemetry transport errors.
+ * Suppress warnings during the first 500 ms after reset/flash; the USB/UART
+ * bridge and host side often produce a transient framing/noise event while
+ * power stabilizes. */
+static constexpr uint32_t UART_STARTUP_WINDOW_MS = 500U;
+
 void HAL_UART_ErrorCallback(UART_HandleTypeDef* huart) {
     if (huart != nullptr && huart->Instance == USART3) {
-        Inverter::FaultManager::instance().raise(
-            Inverter::FaultSource::UartError, Inverter::FaultReason::UartHalError);
+        if (HAL_GetTick() >= UART_STARTUP_WINDOW_MS) {
+            Inverter::FaultManager::instance().raise(
+                Inverter::FaultSource::UartError, Inverter::FaultReason::UartHalError);
+        }
     }
 }
 

@@ -227,6 +227,11 @@ void PWM_ClearFault(void)
     __HAL_TIM_MOE_ENABLE(&htim1);
 }
 
+void PWM_ClearBreakFlag(void)
+{
+    __HAL_TIM_CLEAR_FLAG(&htim1, TIM_FLAG_BREAK);
+}
+
 void PWM_PrintState(void)
 {
     uint32_t bdtr = TIM1->BDTR;

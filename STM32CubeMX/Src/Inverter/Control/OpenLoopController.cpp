@@ -188,32 +188,21 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
 }
 
 void OpenLoopController::stop() {
-    if (m_running) {
-        /* Ramp the modulation index down to zero before turning the outputs
-         * off. This lets the motor current decay smoothly and avoids the
-         * audible hitch from an abrupt open-circuit or zero-vector step. */
-        rampModulation(m_mod_idx, 0.0f, 100U);
-    }
-
+    /* Immediate coast: turn off the PWM outputs and assert the gate-driver
+     * reset line so all six IGBTs stop switching right away. */
     PWM_StopSPWM();
-
-    /* Park at 50 % (zero vector). TIM1 keeps running for current sense. */
-    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
-
-    /* Now that current has decayed, disable the gate-driver outputs. */
     GateDriver_DisableOutputs();
 
-    /* Recalibrate current-sensor offsets while the motor is guaranteed
-     * to be at zero current. This removes any drift accumulated during
-     * the run and avoids the need for a manual `cal` after each stop. */
-    (void)phaseCurrentADC().recalibrateOffsets();
+    /* Park at 50 % (zero vector) so the next start begins from a safe state.
+     * TIM1 keeps running for current sense. */
+    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
 
     /* Stop pole-pair estimation so coast-down noise/decay does not corrupt
      * the accumulated result.  The last estimate is preserved. */
     PolePairEstimator::instance().setEnabled(false);
 
     m_running = false;
-    Telemetry::log("print", "[OL] STOPPED");
+    Telemetry::log("print", "[OL] STOPPED (coast)");
 }
 
 void OpenLoopController::setFrequency(float freq_hz) {
