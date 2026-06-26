@@ -1,4 +1,5 @@
 #include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Control/FaultManager.h"
 
 #include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
@@ -31,6 +32,12 @@ void fmtFloat3(char* buf, size_t cap, float v) {
 
 namespace Inverter {
 
+static void pollGateDriverFault() {
+    if (GateDriver_IsFault()) {
+        FaultManager::instance().raise(FaultSource::GateDriver);
+    }
+}
+
 static OpenLoopController s_instance;
 
 OpenLoopController& openLoopController() {
@@ -46,7 +53,8 @@ void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_
     }
 
     for (int i = 1; i <= steps; ++i) {
-        if (GateDriver_IsFault()) {
+        pollGateDriverFault();
+        if (FaultManager::instance().isActive()) {
             PWM_StopSPWM();
             GateDriver_DisableOutputs();
             m_running = false;
@@ -117,6 +125,15 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
         stop();
     }
 
+    /* Refresh latched fault state from hardware inputs. */
+    pollGateDriverFault();
+
+    if (FaultManager::instance().isActive()) {
+        Telemetry::log("print", "[OL] ERROR: active faults, cannot start");
+        FaultManager::instance().printSummary();
+        return false;
+    }
+
     /* Park at 50 % (zero vector) before enabling the gate driver. */
     PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
     PWM_ClearFault();
@@ -136,6 +153,8 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     if (!ready || fault) {
         Telemetry::log("print", "[OL] ERROR: gate driver not ready or fault latched");
         GateDriver_DisableOutputs();
+        FaultManager::instance().raise(FaultSource::GateDriver,
+                                       "gate driver not ready at start");
         return false;
     }
 
@@ -148,6 +167,12 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     PWM_StartSPWM(m_freq_hz, 0.0f);
     m_running = true;
     rampModulation(0.0f, m_mod_idx, 100U);
+
+    if (!m_running) {
+        /* rampModulation aborted because a fault appeared during the ramp. */
+        GateDriver_DisableOutputs();
+        return false;
+    }
 
     char fbuf[16], mbuf[16];
     fmtFloat2(fbuf, sizeof(fbuf), m_freq_hz);
@@ -225,8 +250,11 @@ void OpenLoopController::update() {
         return;
     }
 
-    if (GateDriver_IsFault()) {
+    pollGateDriverFault();
+
+    if (FaultManager::instance().isActive()) {
         Telemetry::log("print", "[OL] FAULT detected - stopping");
+        FaultManager::instance().printSummary();
         stop();
     }
 }

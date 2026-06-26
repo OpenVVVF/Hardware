@@ -1,4 +1,5 @@
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
+#include "Inverter/Control/FaultManager.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/PolePairEstimator.h"
 #include "Inverter/Telemetry.h"
@@ -8,6 +9,7 @@
 #include "tim.h"
 
 #include <cstdio>
+#include <cmath>
 
 namespace Inverter {
 
@@ -260,6 +262,15 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
 
     m_current_u = m_iu - m_offset_u;
     m_current_v = m_iv - m_offset_v;
+
+    /* Software overcurrent protection.  Default threshold is very high so it
+     * only trips when explicitly configured. */
+    if (m_oc_threshold_a > 0.0f) {
+        if (std::fabs(m_current_u) > m_oc_threshold_a ||
+            std::fabs(m_current_v) > m_oc_threshold_a) {
+            FaultManager::instance().raise(FaultSource::PhaseOvercurrent);
+        }
+    }
 
     /* Feed the pole-pair estimator at the ADC sample rate.  Pass raw encoder
      * sin/cos so the estimate does not depend on the encoder angle bounds. */

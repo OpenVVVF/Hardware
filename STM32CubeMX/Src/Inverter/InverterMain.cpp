@@ -1,9 +1,10 @@
 #include "Inverter/InverterMain.h"
 #include "Inverter/Telemetry.h"
-#include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
-#include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
+#include "Inverter/Control/FaultManager.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/CommandShell.h"
+#include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
+#include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
 
 #include "main.h"
@@ -81,6 +82,7 @@ static void loop()
     Inverter::dcLinkVoltageSensor().update();
 
     /* Open-loop safety, calibration state machines, and command processing. */
+    Inverter::FaultManager::instance().service();
     Inverter::commandShell().poll();
     Inverter::openLoopController().update();
     Inverter::polePairCalibrator().update();

@@ -49,12 +49,38 @@ public:
      */
     bool zeroCalibrate();
 
+    /**
+     * @brief Set the scaled overvoltage threshold [V].
+     *
+     * The MAX22530 channel-1 comparator is configured in digital-status mode
+     * (out-of-window) using the filtered ADC result.  A fault is raised when
+     * vdc_v exceeds this value.
+     */
+    bool setOvervoltageThreshold(float v);
+
+    /**
+     * @brief Set the scaled undervoltage threshold [V].
+     *
+     * A fault is raised when vdc_v drops below this value.
+     */
+    bool setUndervoltageThreshold(float v);
+
+    float overvoltageThreshold() const { return m_ov_threshold_v; }
+    float undervoltageThreshold() const { return m_uv_threshold_v; }
+
+    /** @brief Direct access to the underlying ADC driver for diagnostics. */
+    MAX22530& adc() { return m_adc; }
+
 private:
+    bool applyComparatorThresholds();
+
     MAX22530&   m_adc;
     const char* m_key;
     float       m_scale;
     float       m_zero_offset_v;
     float       m_voltage;
+    float       m_ov_threshold_v;
+    float       m_uv_threshold_v;
     bool        m_initialized;
     bool        m_has_sample;
 };

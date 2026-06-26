@@ -86,6 +86,15 @@ public:
     float    lastU() const { return m_current_u; }
     float    lastV() const { return m_current_v; }
 
+    /**
+     * @brief Set the phase-current overcurrent threshold [A].
+     *
+     * Default is very high (effectively disabled).  The check is applied to
+     * the absolute value of U and V currents in the ADC ISR.
+     */
+    void setOvercurrentThreshold(float amps) { m_oc_threshold_a = amps; }
+    float overcurrentThreshold() const { return m_oc_threshold_a; }
+
 private:
     bool configureAdcChannels();
     bool initTrigger();
@@ -111,6 +120,8 @@ private:
      * running at the PWM sample rate would see. */
     volatile float    m_current_u = 0.0f;
     volatile float    m_current_v = 0.0f;
+
+    float             m_oc_threshold_a = 1000.0f; /**< default: effectively disabled */
 
     volatile bool     m_new_data = false;
     bool              m_running = false;
