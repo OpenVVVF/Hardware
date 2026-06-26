@@ -5,6 +5,7 @@
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Logging/SupplyMonitor.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -60,7 +61,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear | cal | raw | vzero | maxcfg ov/uv/status/filterclear/raw/filtered | ocset amps | polepairs | encodercal start/stop | calpolepairs | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | help");
     return true;
 }
 
@@ -187,10 +188,25 @@ void CommandShell::poll() {
                     FaultManager::instance().printSummary();
                 }
                 else if (std::strcmp(argv[0], "clearfault") == 0) {
-                    FaultManager::instance().clearAll();
+                    /* Re-enable gate-driver power before reset in case a Critical
+                     * fault turned it off. */
+                    GateDriver_EnablePower(true);
+                    HAL_Delay(50);
                     GateDriver_ResetPulse();
                     PWM_ClearFault();
-                    Telemetry::log("print", "[SHELL] faults cleared");
+                    FaultManager::instance().clearAll();
+
+                    /* The isolated ADC may have a latched comparator interrupt and/or
+                     * a stale rolling-average filter from the fault event.  Clear both
+                     * and drop any pending EXTI1 interrupt so the old event does not
+                     * immediately re-trigger the latched fault. */
+                    MAX22530& adc = dcLinkVoltageSensor().adc();
+                    (void)adc.clearInterruptStatus();
+                    (void)adc.clearFilter(0);
+                    __HAL_GPIO_EXTI_CLEAR_IT(VSENSE_ISO_ADC_INTERRUPT_Pin);
+                    HAL_NVIC_ClearPendingIRQ(EXTI1_IRQn);
+
+                    Telemetry::log("print", "[SHELL] faults cleared, gate driver power cycled");
                 }
                 else if (std::strcmp(argv[0], "cal") == 0) {
                     if (ol.isRunning()) {
@@ -286,14 +302,26 @@ void CommandShell::poll() {
                 }
                 else if (std::strcmp(argv[0], "fault") == 0) {
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: fault list | clear");
+                        Telemetry::log("print", "[SHELL] usage: fault list | clear | test <name>");
                     } else if (std::strcmp(argv[1], "list") == 0) {
                         FaultManager::instance().printSummary();
                     } else if (std::strcmp(argv[1], "clear") == 0) {
                         FaultManager::instance().clearAll();
                         Telemetry::log("print", "[SHELL] latched faults cleared");
+                    } else if (std::strcmp(argv[1], "test") == 0) {
+                        if (argc < 3) {
+                            Telemetry::log("print", "[SHELL] usage: fault test <FaultName>");
+                        } else {
+                            FaultSource src = FaultManager::sourceFromName(argv[2]);
+                            if (src == FaultSource::None) {
+                                Telemetry::log("print", "[SHELL] unknown fault name; use 'fault list' to see names");
+                            } else {
+                                FaultManager::instance().testFault(src);
+                                Telemetry::log("print", "[SHELL] injected test fault");
+                            }
+                        }
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: fault list | clear");
+                        Telemetry::log("print", "[SHELL] usage: fault list | clear | test <name>");
                     }
                 }
                 else if (std::strcmp(argv[0], "ocset") == 0) {
@@ -310,12 +338,36 @@ void CommandShell::poll() {
                         Telemetry::log("print", msg);
                     }
                 }
+                else if (std::strcmp(argv[0], "hwocset") == 0) {
+                    if (argc < 2) {
+                        Telemetry::log("print", "[SHELL] usage: hwocset <amps>  (0 disables ADC watchdog)");
+                    } else {
+                        float amps = std::strtof(argv[1], nullptr);
+                        if (amps < 0.0f) amps = 0.0f;
+                        if (phaseCurrentADC().setHardwareOvercurrentThreshold(amps)) {
+                            char abuf[16];
+                            fmtFloat3(abuf, sizeof(abuf), amps);
+                            char msg[80];
+                            std::snprintf(msg, sizeof(msg), "[SHELL] hardware overcurrent threshold set to %s A", abuf);
+                            Telemetry::log("print", msg);
+                        } else {
+                            Telemetry::log("print", "[SHELL] failed to set hardware overcurrent threshold (stop motor first)");
+                        }
+                    }
+                }
+                else if (std::strcmp(argv[0], "supply") == 0) {
+                    if (argc < 2 || std::strcmp(argv[1], "status") != 0) {
+                        Telemetry::log("print", "[SHELL] usage: supply status");
+                    } else {
+                        supplyMonitorPrintStatus();
+                    }
+                }
                 else if (std::strcmp(argv[0], "maxcfg") == 0) {
                     DcLinkVoltageSensor& vdc = dcLinkVoltageSensor();
                     MAX22530& adc = vdc.adc();
 
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: maxcfg ov <V> | uv <V> | status | filterclear | raw | filtered");
+                        Telemetry::log("print", "[SHELL] usage: maxcfg ov <V> | uv <V> | thresholds | status | filterclear | raw | filtered");
                     } else if (std::strcmp(argv[1], "ov") == 0) {
                         if (argc < 3) {
                             Telemetry::log("print", "[SHELL] usage: maxcfg ov <volts>");
@@ -349,9 +401,14 @@ void CommandShell::poll() {
                     } else if (std::strcmp(argv[1], "status") == 0) {
                         uint16_t cout_status = 0;
                         (void)adc.getComparatorStatus(cout_status);
+                        uint16_t couthi = 0, coutlo = 0;
+                        (void)adc.readComparatorThreshold(0, couthi, coutlo);
                         char msg[80];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX int_status=0x%04X cout_status=0x%04X",
-                                      adc.lastInterruptStatus(), cout_status);
+                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX int_status=0x%04X cout_status=0x%04X int_enable=0x%04X",
+                                      adc.lastInterruptStatus(), cout_status, adc.lastInterruptEnable());
+                        Telemetry::log("print", msg);
+                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX ch1 thresholds: HI=0x%03X LO=0x%03X",
+                                      couthi, coutlo);
                         Telemetry::log("print", msg);
                         std::snprintf(msg, sizeof(msg), "[SHELL] MAX irq=%lu dma=%lu err=%lu fail=%lu crc_err=%lu",
                                       static_cast<unsigned long>(adc.irqCount()),
@@ -359,6 +416,13 @@ void CommandShell::poll() {
                                       static_cast<unsigned long>(adc.dmaErrorCount()),
                                       static_cast<unsigned long>(adc.dmaStartFailCount()),
                                       static_cast<unsigned long>(adc.crcErrorCount()));
+                        Telemetry::log("print", msg);
+                    } else if (std::strcmp(argv[1], "thresholds") == 0) {
+                        char ov[16], uv[16];
+                        fmtFloat3(ov, sizeof(ov), vdc.overvoltageThreshold());
+                        fmtFloat3(uv, sizeof(uv), vdc.undervoltageThreshold());
+                        char msg[80];
+                        std::snprintf(msg, sizeof(msg), "[SHELL] Vbus OV=%s V UV=%s V (scaled)", ov, uv);
                         Telemetry::log("print", msg);
                     } else if (std::strcmp(argv[1], "filterclear") == 0) {
                         if (adc.clearFilter(0)) {
@@ -385,11 +449,11 @@ void CommandShell::poll() {
                                       counts, static_cast<unsigned long>(counts), vbuf);
                         Telemetry::log("print", msg);
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: maxcfg ov <V> | uv <V> | status | filterclear | raw | filtered");
+                        Telemetry::log("print", "[SHELL] usage: maxcfg ov <V> | uv <V> | thresholds | status | filterclear | raw | filtered");
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear | cal | raw | vzero | maxcfg ov/uv/status/filterclear/raw/filtered | ocset amps | polepairs | encodercal start/stop | calpolepairs | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

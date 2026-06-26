@@ -95,6 +95,23 @@ public:
     void setOvercurrentThreshold(float amps) { m_oc_threshold_a = amps; }
     float overcurrentThreshold() const { return m_oc_threshold_a; }
 
+    /**
+     * @brief Set the hardware ADC analog-watchdog overcurrent threshold [A].
+     *
+     * A value of 0 disables the watchdog.  The watchdog window is centered on
+     * the mid-scale ADC code and watches both injected channels on ADC1.
+     * Reconfiguration requires the ADC to be stopped, so this must be called
+     * while the motor is not running.
+     * @return true on success, false if the ADC could not be reconfigured.
+     */
+    bool setHardwareOvercurrentThreshold(float amps);
+    float hardwareOvercurrentThreshold() const { return m_hw_oc_threshold_a; }
+
+    /**
+     * @brief Configure the ADC analog watchdog from the stored threshold.
+     */
+    bool configureAnalogWatchdog();
+
 private:
     bool configureAdcChannels();
     bool initTrigger();
@@ -122,6 +139,7 @@ private:
     volatile float    m_current_v = 0.0f;
 
     float             m_oc_threshold_a = 1000.0f; /**< default: effectively disabled */
+    float             m_hw_oc_threshold_a = 0.0f; /**< 0 = ADC watchdog disabled */
 
     volatile bool     m_new_data = false;
     bool              m_running = false;

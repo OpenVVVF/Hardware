@@ -28,7 +28,8 @@ void HAL_TIMEx_BreakCallback(TIM_HandleTypeDef* htim) {
          * and the break flag asserts even though there is no run-time fault.
          * Only latch a fault once the gate driver has left reset and is ready. */
         if (GateDriver_IsReady()) {
-            Inverter::FaultManager::instance().raise(Inverter::FaultSource::PwmBreak);
+            Inverter::FaultManager::instance().raise(
+                Inverter::FaultSource::PwmBreak, Inverter::FaultReason::DesatBreak);
         }
     }
 }
@@ -36,14 +37,16 @@ void HAL_TIMEx_BreakCallback(TIM_HandleTypeDef* htim) {
 /* ADC HAL errors on ADC1/ADC2 (phase-current sensing path). */
 void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc) {
     if (hadc != nullptr && (hadc->Instance == ADC1 || hadc->Instance == ADC2)) {
-        Inverter::FaultManager::instance().raise(Inverter::FaultSource::AdcError);
+        Inverter::FaultManager::instance().raise(
+            Inverter::FaultSource::AdcError, Inverter::FaultReason::AdcHalError);
     }
 }
 
 /* USART3 shell/telemetry transport errors. */
 void HAL_UART_ErrorCallback(UART_HandleTypeDef* huart) {
     if (huart != nullptr && huart->Instance == USART3) {
-        Inverter::FaultManager::instance().raise(Inverter::FaultSource::UartError);
+        Inverter::FaultManager::instance().raise(
+            Inverter::FaultSource::UartError, Inverter::FaultReason::UartHalError);
     }
 }
 

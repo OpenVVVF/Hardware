@@ -51,6 +51,19 @@ public:
      */
     void onDmaComplete();
 
+    /**
+     * @brief DMA error callback for the encoder ADC stream.
+     */
+    void onDmaError();
+
+    /**
+     * @brief Main-loop health check for sample timeout.
+     *
+     * Amplitude-collapse and out-of-range faults are evaluated inside
+     * onDmaComplete(); this call only catches a completely stalled DMA stream.
+     */
+    void diagnose();
+
 private:
     bool configureAdcChannels();
     bool initTimer();
@@ -74,6 +87,20 @@ private:
     volatile float    m_angle = 0.0f;
     volatile bool     m_new_data = false;
     bool              m_running = false;
+
+    /* Fault-detection state. */
+    static constexpr uint32_t SAMPLE_TIMEOUT_MS = 5U;
+    static constexpr uint16_t MIN_AMP_RANGE     = 1000U;
+    static constexpr float    AMP_COLLAPSE_THRESHOLD = 500.0f;
+    static constexpr uint16_t AMP_COLLAPSE_COUNT  = 500U;
+    static constexpr uint16_t RAIL_MARGIN         = 200U;
+    static constexpr uint16_t RAIL_COUNT          = 50U;
+
+    volatile uint32_t m_last_sample_ms = 0;
+    volatile uint16_t m_amp_low_count  = 0;
+    volatile uint16_t m_rail_count     = 0;
+    float             m_mag_ema        = 0.0f;
+    bool              m_mag_ema_init   = false;
 };
 
 /**

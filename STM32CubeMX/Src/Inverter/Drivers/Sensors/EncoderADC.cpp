@@ -1,10 +1,11 @@
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
+#include "Inverter/Control/FaultManager.h"
 
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace Inverter {
 
@@ -187,6 +188,52 @@ void EncoderADC::onDmaComplete() {
     m_raw_cos = raw_cos;
     m_angle = computeAngle(raw_sin, raw_cos);
     m_new_data = true;
+    m_last_sample_ms = HAL_GetTick();
+
+    /* Only evaluate signal-quality faults after the encoder has rotated enough
+     * for the dynamic bounds to be meaningful. */
+    const bool range_ok = (m_sin_max - m_sin_min > MIN_AMP_RANGE) &&
+                          (m_cos_max - m_cos_min > MIN_AMP_RANGE);
+    if (range_ok) {
+        const float sin_mid = 0.5f * static_cast<float>(m_sin_min + m_sin_max);
+        const float cos_mid = 0.5f * static_cast<float>(m_cos_min + m_cos_max);
+        const float dx = static_cast<float>(raw_sin) - sin_mid;
+        const float dy = static_cast<float>(raw_cos) - cos_mid;
+        const float mag = std::sqrt(dx * dx + dy * dy);
+
+        if (!m_mag_ema_init) {
+            m_mag_ema = mag;
+            m_mag_ema_init = true;
+        } else {
+            constexpr float ALPHA = 0.05f;
+            m_mag_ema += ALPHA * (mag - m_mag_ema);
+        }
+
+        if (m_mag_ema < AMP_COLLAPSE_THRESHOLD) {
+            if (++m_amp_low_count >= AMP_COLLAPSE_COUNT) {
+                FaultManager::instance().raise(
+                    FaultSource::EncoderAmplitude, FaultReason::EncoderAmplitudeLow);
+                m_amp_low_count = 0;
+            }
+        } else {
+            m_amp_low_count = 0;
+        }
+
+        const bool at_rail =
+            (raw_sin < SIN_MIN_CAP + RAIL_MARGIN) ||
+            (raw_sin > SIN_MAX_CAP - RAIL_MARGIN) ||
+            (raw_cos < COS_MIN_CAP + RAIL_MARGIN) ||
+            (raw_cos > COS_MAX_CAP - RAIL_MARGIN);
+        if (at_rail) {
+            if (++m_rail_count >= RAIL_COUNT) {
+                FaultManager::instance().raise(
+                    FaultSource::EncoderOutOfRange, FaultReason::EncoderAtRail);
+                m_rail_count = 0;
+            }
+        } else {
+            m_rail_count = 0;
+        }
+    }
 }
 
 bool EncoderADC::sample(float& angle_deg) {
@@ -202,7 +249,25 @@ bool EncoderADC::sample(float& angle_deg) {
     return true;
 }
 
+void EncoderADC::onDmaError() {
+    FaultManager::instance().raise(FaultSource::EncoderDma,
+                                   FaultReason::EncoderDmaError);
+}
+
+void EncoderADC::diagnose() {
+    if (m_running && (HAL_GetTick() - m_last_sample_ms) > SAMPLE_TIMEOUT_MS) {
+        FaultManager::instance().raise(FaultSource::EncoderTimeout,
+                                       FaultReason::EncoderSampleTimeout);
+    }
+}
+
 } // namespace Inverter
+
+extern "C" void HAL_DMA_ErrorCallback(DMA_HandleTypeDef* hdma) {
+    if (hdma != nullptr && hdma->Instance == DMA2_Stream0) {
+        Inverter::encoderADC().onDmaError();
+    }
+}
 
 extern "C" void DMA2_Stream0_IRQHandler(void) {
     HAL_DMA_IRQHandler(&Inverter::hdma_adc2_enc);

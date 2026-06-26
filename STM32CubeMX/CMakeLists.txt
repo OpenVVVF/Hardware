@@ -58,9 +58,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Calibration/PolePairCalibrator.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c
+    Src/Inverter/Drivers/CAN/FdcanFault.cpp
     Src/Inverter/Drivers/UART/mcp2221a_driver.c
     Src/Inverter/Drivers/Storage/cy15b102q_driver.c
     Src/Inverter/Drivers/Logging/ontime_logger.c
+    Src/Inverter/Drivers/Logging/SupplyMonitor.cpp
     Src/Inverter/Drivers/PWM/pwm.c
     Src/Inverter/Drivers/Sensors/CurrentSensor.cpp
     Src/Inverter/Drivers/Sensors/CurrentSensorTest.cpp

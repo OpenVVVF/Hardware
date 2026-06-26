@@ -130,6 +130,38 @@ void CY15B102Q_Sleep(CY15B102Q_HandleTypeDef *dev);
  */
 void CY15B102Q_Wake(CY15B102Q_HandleTypeDef *dev);
 
+/**
+ * @brief  Fault codes reported by the F-RAM driver.
+ *
+ * Carried as a small integer so the application can map them to its own
+ * fault manager without copying strings in the SPI path.
+ */
+typedef enum {
+    CY15B102Q_FAULT_OK = 0,
+    CY15B102Q_FAULT_INIT_ID_MISMATCH,
+    CY15B102Q_FAULT_READ_FAILED,
+    CY15B102Q_FAULT_WRITE_FAILED,
+    CY15B102Q_FAULT_COMMAND_FAILED,
+} CY15B102Q_FaultCode;
+
+/**
+ * @brief  Weak callback invoked from the driver when an SPI transaction fails.
+ *         The application can override this (e.g. in C++ with extern "C") to
+ *         raise a latched fault.
+ * @param  code  Typed fault code.
+ */
+void CY15B102Q_FaultCallback(CY15B102Q_FaultCode code);
+
+/**
+ * @brief  Return the number of F-RAM SPI errors detected since boot.
+ */
+uint32_t CY15B102Q_GetErrorCount(void);
+
+/**
+ * @brief  Clear the F-RAM SPI error counter.
+ */
+void CY15B102Q_ClearErrorCount(void);
+
 #ifdef __cplusplus
 }
 #endif

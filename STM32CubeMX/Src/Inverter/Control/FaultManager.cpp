@@ -1,39 +1,96 @@
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Telemetry.h"
+#include "Inverter/Drivers/GateDriver/gate_driver.h"
+#include "Inverter/Drivers/PWM/pwm.h"
+
+#include "main.h"
+#include "tim.h"
 
 #include <cstdio>
 #include <cstring>
+#include <cctype>
 
 namespace Inverter {
 
-namespace {
+/* Out-of-class definition for pre-C++17 ODR. */
+constexpr Inverter::FaultMeta Inverter::FaultManager::s_meta[];
 
-struct Entry {
-    FaultSource src;
-    const char* name;
-};
-
-static const Entry entries[] = {
-    { FaultSource::GateDriver,       "GateDriver" },
-    { FaultSource::PwmBreak,         "PwmBreak" },
-    { FaultSource::Max22530Ov,       "Max22530Ov" },
-    { FaultSource::Max22530Uv,       "Max22530Uv" },
-    { FaultSource::Max22530Adc,      "Max22530Adc" },
-    { FaultSource::Max22530Comm,     "Max22530Comm" },
-    { FaultSource::Max22530Field,    "Max22530Field" },
-    { FaultSource::PhaseOvercurrent, "PhaseOvercurrent" },
-    { FaultSource::AdcError,         "AdcError" },
-    { FaultSource::UartError,        "UartError" },
-};
-
-} // namespace
+const char* faultReasonString(FaultReason r) {
+    switch (r) {
+        case FaultReason::Unspecified:          return "unspecified";
+        case FaultReason::UserInjected:         return "injected by user";
+        case FaultReason::DesatBreak:           return "DESAT break (/FLT low)";
+        case FaultReason::GateDriverNotReady:   return "gate driver not ready";
+        case FaultReason::PhaseOvercurrentSoftware: return "software overcurrent";
+        case FaultReason::AdcWatchdogTrip:      return "ADC1 injected out of window";
+        case FaultReason::AdcHalError:          return "ADC HAL error";
+        case FaultReason::UartHalError:         return "UART error";
+        case FaultReason::EncoderAmplitudeLow:  return "encoder magnitude collapsed";
+        case FaultReason::EncoderAtRail:        return "encoder signal at rail";
+        case FaultReason::EncoderDmaError:      return "encoder ADC DMA error";
+        case FaultReason::EncoderSampleTimeout: return "no encoder sample";
+        case FaultReason::CanBusOff:            return "FDCAN2 bus-off";
+        case FaultReason::CanErrorPassive:      return "FDCAN2 error-passive";
+        case FaultReason::CanErrorLogOverflow:  return "FDCAN2 error-log overflow";
+        case FaultReason::CanHalError:          return "FDCAN2 HAL error";
+        case FaultReason::VosNotReady:          return "VOS not ready";
+        case FaultReason::PvdTriggered:         return "PVD triggered";
+        case FaultReason::AvdTriggered:         return "AVD triggered";
+        case FaultReason::Max22530CrcMismatch:  return "CRC mismatch";
+        case FaultReason::Max22530SpiFrameError:return "SPI frame/CRC error";
+        case FaultReason::Max22530SpiDmaError:  return "SPI DMA error";
+        case FaultReason::Max22530AdcDiagnostic:return "ADC functionality diagnostic";
+        case FaultReason::Max22530FieldLoss:    return "field-side data loss";
+        case FaultReason::Max22530Overvoltage:  return "comparator high threshold";
+        case FaultReason::Max22530Undervoltage: return "comparator low threshold";
+        case FaultReason::FramInitIdMismatch:   return "device ID mismatch";
+        case FaultReason::FramReadFailed:       return "read failed";
+        case FaultReason::FramWriteFailed:      return "write failed";
+        case FaultReason::FramCommandFailed:    return "command failed";
+        case FaultReason::Count:                break;
+    }
+    return "unknown";
+}
 
 FaultManager& FaultManager::instance() {
     static FaultManager s_instance;
     return s_instance;
 }
 
-void FaultManager::raise(FaultSource src, const char* reason) {
+const FaultMeta* FaultManager::metaFor(FaultSource src) {
+    const uint32_t bit = static_cast<uint32_t>(src);
+    for (size_t i = 0; i < metaCount(); ++i) {
+        if (static_cast<uint32_t>(s_meta[i].source) == bit) {
+            return &s_meta[i];
+        }
+    }
+    return nullptr;
+}
+
+const FaultMeta* FaultManager::metaTable() {
+    return s_meta;
+}
+
+FaultSource FaultManager::sourceFromName(const char* name) {
+    if (name == nullptr || name[0] == '\0') {
+        return FaultSource::None;
+    }
+    for (size_t i = 0; i < metaCount(); ++i) {
+        const char* a = name;
+        const char* b = s_meta[i].name;
+        while (*a && *b &&
+               std::tolower(static_cast<unsigned char>(*a)) ==
+               std::tolower(static_cast<unsigned char>(*b))) {
+            ++a; ++b;
+        }
+        if (*a == '\0' && *b == '\0') {
+            return s_meta[i].source;
+        }
+    }
+    return FaultSource::None;
+}
+
+void FaultManager::raise(FaultSource src, FaultReason reason) {
     const uint32_t bits = static_cast<uint32_t>(src);
     if (bits == 0) {
         return;
@@ -43,18 +100,15 @@ void FaultManager::raise(FaultSource src, const char* reason) {
     const uint32_t old = m_active;
     m_active |= bits;
     const uint32_t newly = m_active & ~old;
-    /* Defer telemetry logging to the main loop unless a reason string was
-     * supplied from a main-thread context. */
-    if (newly != 0 && (reason == nullptr || reason[0] == '\0')) {
-        m_pending_log |= newly;
+    m_pending_log |= newly;
+
+    uint32_t b = newly;
+    while (b != 0) {
+        const int idx = __builtin_ctz(b);
+        m_reason[idx] = reason;
+        b &= b - 1U;
     }
     __enable_irq();
-
-    if (reason != nullptr && reason[0] != '\0' && newly != 0) {
-        char msg[80];
-        std::snprintf(msg, sizeof(msg), "[FAULT] %s", reason);
-        Telemetry::log("print", msg);
-    }
 }
 
 void FaultManager::clear(FaultSource src) {
@@ -71,6 +125,11 @@ void FaultManager::clear(FaultSource src) {
 void FaultManager::clearAll() {
     __disable_irq();
     m_active = 0;
+    m_pending_log = 0;
+    m_safety_executed = false;
+    for (size_t i = 0; i < SOURCE_COUNT; ++i) {
+        m_reason[i] = FaultReason::Unspecified;
+    }
     __enable_irq();
 }
 
@@ -79,6 +138,20 @@ bool FaultManager::isActive(FaultSource mask) const {
     const bool active = (m_active & static_cast<uint32_t>(mask)) != 0;
     __enable_irq();
     return active;
+}
+
+bool FaultManager::isSeverityActive(FaultSeverity severity) const {
+    const uint32_t flags = activeFlags();
+    if (flags == 0) {
+        return false;
+    }
+    for (size_t i = 0; i < metaCount(); ++i) {
+        if (s_meta[i].severity == severity &&
+            (flags & static_cast<uint32_t>(s_meta[i].source)) != 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 uint32_t FaultManager::activeFlags() const {
@@ -96,10 +169,25 @@ void FaultManager::printSummary() {
         return;
     }
 
-    for (const auto& e : entries) {
-        if ((flags & static_cast<uint32_t>(e.src)) != 0) {
-            char msg[64];
-            std::snprintf(msg, sizeof(msg), "[FAULT] %s", e.name);
+    for (size_t i = 0; i < metaCount(); ++i) {
+        const auto& m = s_meta[i];
+        if ((flags & static_cast<uint32_t>(m.source)) != 0) {
+            const int idx = __builtin_ctz(static_cast<uint32_t>(m.source));
+            const char* reason = faultReasonString(m_reason[idx]);
+            char sev_char = '?';
+            switch (m.severity) {
+                case FaultSeverity::Warning:  sev_char = 'W'; break;
+                case FaultSeverity::High:     sev_char = 'H'; break;
+                case FaultSeverity::Critical: sev_char = 'C'; break;
+            }
+            char msg[128];
+            if (m_reason[idx] != FaultReason::Unspecified) {
+                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s: %s (%s)",
+                              sev_char, m.category, m.name, m.description, reason);
+            } else {
+                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s: %s",
+                              sev_char, m.category, m.name, m.description);
+            }
             Telemetry::log("print", msg);
         }
     }
@@ -115,13 +203,60 @@ void FaultManager::service() {
         return;
     }
 
-    for (const auto& e : entries) {
-        if ((pending & static_cast<uint32_t>(e.src)) != 0) {
-            char msg[64];
-            std::snprintf(msg, sizeof(msg), "[FAULT] %s triggered", e.name);
+    for (size_t i = 0; i < metaCount(); ++i) {
+        const auto& m = s_meta[i];
+        if ((pending & static_cast<uint32_t>(m.source)) != 0) {
+            const int idx = __builtin_ctz(static_cast<uint32_t>(m.source));
+            const char* reason = faultReasonString(m_reason[idx]);
+            char sev_char = '?';
+            switch (m.severity) {
+                case FaultSeverity::Warning:  sev_char = 'W'; break;
+                case FaultSeverity::High:     sev_char = 'H'; break;
+                case FaultSeverity::Critical: sev_char = 'C'; break;
+            }
+            char msg[128];
+            if (m_reason[idx] != FaultReason::Unspecified) {
+                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s triggered: %s",
+                              sev_char, m.category, m.name, reason);
+            } else {
+                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s triggered",
+                              sev_char, m.category, m.name);
+            }
             Telemetry::log("print", msg);
         }
     }
+}
+
+void FaultManager::executeSafetyActions() {
+    if (!isSeverityActive(FaultSeverity::Critical)) {
+        /* Reset the one-shot so the next critical fault logs/shuts down again. */
+        __disable_irq();
+        m_safety_executed = false;
+        __enable_irq();
+        return;
+    }
+
+    if (m_safety_executed) {
+        return;
+    }
+    m_safety_executed = true;
+
+    /* Triple-redundant shutdown:
+     * 1. Force TIM1 break -> hardware disables all PWM outputs (MOE clear).
+     * 2. Assert gate-driver reset line.
+     * 3. Turn off gate-driver power rail. */
+    if (TIM1 != nullptr) {
+        TIM1->EGR |= TIM_EGR_BG;
+    }
+    PWM_StopSPWM();
+    GateDriver_DisableOutputs();
+    GateDriver_EnablePower(false);
+
+    Telemetry::log("print", "[SAFETY] Critical fault -> PWM break, gate driver reset, power off");
+}
+
+void FaultManager::testFault(FaultSource src, FaultReason reason) {
+    raise(src, reason);
 }
 
 } // namespace Inverter

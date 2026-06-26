@@ -11,6 +11,35 @@
 #define CY15B102Q_SPI_TIMEOUT  100U
 
 /* -------------------------------------------------------------------------- */
+/*  Error tracking                                                            */
+/* -------------------------------------------------------------------------- */
+
+static volatile uint32_t s_error_count = 0U;
+
+/* Weak default fault callback; the application overrides this to raise a
+ * latched fault in its fault manager. */
+__attribute__((weak)) void CY15B102Q_FaultCallback(CY15B102Q_FaultCode code)
+{
+    (void)code;
+}
+
+static void report_fram_error(CY15B102Q_FaultCode code)
+{
+    ++s_error_count;
+    CY15B102Q_FaultCallback(code);
+}
+
+uint32_t CY15B102Q_GetErrorCount(void)
+{
+    return s_error_count;
+}
+
+void CY15B102Q_ClearErrorCount(void)
+{
+    s_error_count = 0U;
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Low-level pin helpers                                                     */
 /* -------------------------------------------------------------------------- */
 
@@ -54,7 +83,12 @@ HAL_StatusTypeDef CY15B102Q_Init(CY15B102Q_HandleTypeDef *dev)
         }
     }
 
-    return found ? HAL_OK : HAL_ERROR;
+    if (!found) {
+        report_fram_error(CY15B102Q_FAULT_INIT_ID_MISMATCH);
+        return HAL_ERROR;
+    }
+
+    return HAL_OK;
 }
 
 uint8_t CY15B102Q_ReadStatus(CY15B102Q_HandleTypeDef *dev)
@@ -63,9 +97,13 @@ uint8_t CY15B102Q_ReadStatus(CY15B102Q_HandleTypeDef *dev)
     uint8_t rx = 0xFFU;
 
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
-    HAL_SPI_Receive(dev->hspi, &rx, 1U, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st1 = HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st2 = HAL_SPI_Receive(dev->hspi, &rx, 1U, CY15B102Q_SPI_TIMEOUT);
     cs_high(dev);
+
+    if (st1 != HAL_OK || st2 != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_READ_FAILED);
+    }
 
     return rx;
 }
@@ -74,7 +112,9 @@ void CY15B102Q_WriteEnable(CY15B102Q_HandleTypeDef *dev)
 {
     uint8_t tx = CY15B102Q_WREN;
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
+    if (HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT) != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_COMMAND_FAILED);
+    }
     cs_high(dev);
 }
 
@@ -82,7 +122,9 @@ void CY15B102Q_WriteDisable(CY15B102Q_HandleTypeDef *dev)
 {
     uint8_t tx = CY15B102Q_WRDI;
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
+    if (HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT) != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_COMMAND_FAILED);
+    }
     cs_high(dev);
 }
 
@@ -100,9 +142,13 @@ void CY15B102Q_Read(CY15B102Q_HandleTypeDef *dev, uint32_t addr,
     cmd[3] = (uint8_t)(addr & 0xFFU);
 
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, cmd, 4U, CY15B102Q_SPI_TIMEOUT);
-    HAL_SPI_Receive(dev->hspi, buf, (uint16_t)len, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st1 = HAL_SPI_Transmit(dev->hspi, cmd, 4U, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st2 = HAL_SPI_Receive(dev->hspi, buf, (uint16_t)len, CY15B102Q_SPI_TIMEOUT);
     cs_high(dev);
+
+    if (st1 != HAL_OK || st2 != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_READ_FAILED);
+    }
 }
 
 void CY15B102Q_Write(CY15B102Q_HandleTypeDef *dev, uint32_t addr,
@@ -122,9 +168,13 @@ void CY15B102Q_Write(CY15B102Q_HandleTypeDef *dev, uint32_t addr,
     cmd[3] = (uint8_t)(addr & 0xFFU);
 
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, cmd, 4U, CY15B102Q_SPI_TIMEOUT);
-    HAL_SPI_Transmit(dev->hspi, (uint8_t *)buf, (uint16_t)len, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st1 = HAL_SPI_Transmit(dev->hspi, cmd, 4U, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st2 = HAL_SPI_Transmit(dev->hspi, (uint8_t *)buf, (uint16_t)len, CY15B102Q_SPI_TIMEOUT);
     cs_high(dev);
+
+    if (st1 != HAL_OK || st2 != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_WRITE_FAILED);
+    }
 }
 
 uint64_t CY15B102Q_ReadID(CY15B102Q_HandleTypeDef *dev)
@@ -133,9 +183,13 @@ uint64_t CY15B102Q_ReadID(CY15B102Q_HandleTypeDef *dev)
     uint8_t rx[9] = {0};
 
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
-    HAL_SPI_Receive(dev->hspi, rx, 9U, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st1 = HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
+    HAL_StatusTypeDef st2 = HAL_SPI_Receive(dev->hspi, rx, 9U, CY15B102Q_SPI_TIMEOUT);
     cs_high(dev);
+
+    if (st1 != HAL_OK || st2 != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_READ_FAILED);
+    }
 
     uint64_t id = 0;
     for (int i = 0; i < 9; i++) {
@@ -148,7 +202,9 @@ void CY15B102Q_Sleep(CY15B102Q_HandleTypeDef *dev)
 {
     uint8_t tx = CY15B102Q_SLEEP;
     cs_low(dev);
-    HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT);
+    if (HAL_SPI_Transmit(dev->hspi, &tx, 1U, CY15B102Q_SPI_TIMEOUT) != HAL_OK) {
+        report_fram_error(CY15B102Q_FAULT_COMMAND_FAILED);
+    }
     cs_high(dev);
 }
 

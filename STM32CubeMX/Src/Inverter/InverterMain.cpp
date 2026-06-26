@@ -5,6 +5,9 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
+#include "Inverter/Drivers/Sensors/EncoderADC.h"
+#include "Inverter/Drivers/CAN/FdcanFault.h"
+#include "Inverter/Drivers/Logging/SupplyMonitor.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
 
 #include "main.h"
@@ -24,6 +27,27 @@ static CY15B102Q_HandleTypeDef g_fram = {
     .hold_pin  = FRAM_HOLD_Pin,
 };
 
+extern "C" void CY15B102Q_FaultCallback(CY15B102Q_FaultCode code) {
+    Inverter::FaultReason reason = Inverter::FaultReason::FramCommandFailed;
+    switch (code) {
+        case CY15B102Q_FAULT_INIT_ID_MISMATCH:
+            reason = Inverter::FaultReason::FramInitIdMismatch;
+            break;
+        case CY15B102Q_FAULT_READ_FAILED:
+            reason = Inverter::FaultReason::FramReadFailed;
+            break;
+        case CY15B102Q_FAULT_WRITE_FAILED:
+            reason = Inverter::FaultReason::FramWriteFailed;
+            break;
+        case CY15B102Q_FAULT_COMMAND_FAILED:
+        default:
+            reason = Inverter::FaultReason::FramCommandFailed;
+            break;
+    }
+    Inverter::FaultManager::instance().raise(
+        Inverter::FaultSource::FramComm, reason);
+}
+
 static void init()
 {
     /* Initialize F-RAM for persistent on-time logging. */
@@ -34,6 +58,12 @@ static void init()
     /* Telemetry over the MCP2221A USB-UART bridge (USART3). */
     Telemetry::init();
     Telemetry::set_period_us(10000);  /* 100 Hz data frames */
+
+    /* CAN error-status notifications (FDCAN2 is the active interface). */
+    (void)Inverter::fdcanFaultInit();
+
+    /* Supply rail monitoring (PVD/AVD/VOSRDY). */
+    (void)Inverter::supplyMonitorInit();
 
     /* Phase-current sensor test harness. */
     Inverter::CurrentSensorTest_Init();
@@ -76,14 +106,17 @@ static void loop()
         Inverter::CurrentSensorTest_RunOnce();
         s_last_current_ms = now_ms;
     }
+    Inverter::encoderADC().diagnose();
 
     /* Isolated DC-link voltage sensor: sample on every loop so the logged
      * value is always the latest conversion from the EXTI ISR. */
     Inverter::dcLinkVoltageSensor().update();
+    Inverter::supplyMonitorUpdate();
 
     /* Open-loop safety, calibration state machines, and command processing. */
     Inverter::FaultManager::instance().service();
     Inverter::commandShell().poll();
+    Inverter::FaultManager::instance().executeSafetyActions();
     Inverter::openLoopController().update();
     Inverter::polePairCalibrator().update();
 

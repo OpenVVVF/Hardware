@@ -125,6 +125,12 @@ public:
     /** @brief Read the COUT_STATUS register. */
     bool getComparatorStatus(uint16_t& status);
 
+    /** @brief Read back the COUTHI_/COUTLO_ threshold counts for a channel. */
+    bool readComparatorThreshold(uint8_t channel, uint16_t& high_counts, uint16_t& low_counts);
+
+    /** @brief Read (and thereby clear) the INTERRUPT_STATUS register. */
+    bool clearInterruptStatus();
+
     /** @brief EXTI ISR callback.  Starts the SPI DMA burst read. */
     void onInterrupt();
 
@@ -147,6 +153,9 @@ public:
 
     /** @brief Last INTERRUPT_STATUS word latched from a DMA burst read. */
     uint16_t lastInterruptStatus() const { return m_int_status; }
+
+    /** @brief Last INTERRUPT_ENABLE mask written to the device. */
+    uint16_t lastInterruptEnable() const { return m_int_enable; }
 
     /** @brief Diagnostic counters. */
     uint32_t irqCount() const          { return m_irq_cnt; }
@@ -181,6 +190,7 @@ private:
     volatile bool      m_dma_busy   = false;
     volatile float     m_voltages[4] = {};
     volatile uint16_t  m_int_status = 0;
+    uint16_t           m_int_enable = 0; /**< last written INTERRUPT_ENABLE mask */
     bool               m_crc_enabled = false;
     uint8_t            m_burst_len = 11U;
 

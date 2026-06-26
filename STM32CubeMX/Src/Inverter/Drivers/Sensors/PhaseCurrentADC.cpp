@@ -132,6 +132,7 @@ bool PhaseCurrentADC::initTrigger() {
 bool PhaseCurrentADC::init() {
     if (!configureAdcChannels()) return false;
     if (!initTrigger()) return false;
+    if (!configureAnalogWatchdog()) return false;
 
     HAL_NVIC_SetPriority(ADC_IRQn, 4, 0);
     HAL_NVIC_EnableIRQ(ADC_IRQn);
@@ -201,6 +202,52 @@ bool PhaseCurrentADC::stop() {
     return true;
 }
 
+bool PhaseCurrentADC::configureAnalogWatchdog() {
+    if (m_hw_oc_threshold_a <= 0.0f) {
+        /* Disabled: configure AWD in "none" mode to clear any previous window. */
+        ADC_AnalogWDGConfTypeDef awd = {};
+        awd.WatchdogNumber = ADC_ANALOGWATCHDOG_1;
+        awd.WatchdogMode   = ADC_ANALOGWATCHDOG_NONE;
+        awd.ITMode         = DISABLE;
+        (void)HAL_ADC_AnalogWDGConfig(&hadc1, &awd);
+        return true;
+    }
+
+    /* Compute the +/- raw ADC code corresponding to the requested current.
+     * The LA37S600 sensor output is ratiometric around VREF/2 at 0 A. */
+    constexpr float COUNTS_FULL = static_cast<float>((1U << ADC_BITS) - 1U);
+    constexpr float COUNTS_PER_AMP = (DIVIDER * SENSITIVITY_VA * COUNTS_FULL) / ADC_VREF;
+    constexpr float MID = COUNTS_FULL * 0.5f;
+
+    const float delta = m_hw_oc_threshold_a * COUNTS_PER_AMP;
+    float high_f = MID + delta;
+    float low_f  = MID - delta;
+    if (high_f > COUNTS_FULL) high_f = COUNTS_FULL;
+    if (low_f  < 0.0f)       low_f  = 0.0f;
+
+    ADC_AnalogWDGConfTypeDef awd = {};
+    awd.WatchdogNumber = ADC_ANALOGWATCHDOG_1;
+    awd.WatchdogMode   = ADC_ANALOGWATCHDOG_ALL_INJEC;
+    awd.ITMode         = ENABLE;
+    awd.HighThreshold  = static_cast<uint32_t>(high_f);
+    awd.LowThreshold   = static_cast<uint32_t>(low_f);
+
+    return HAL_ADC_AnalogWDGConfig(&hadc1, &awd) == HAL_OK;
+}
+
+bool PhaseCurrentADC::setHardwareOvercurrentThreshold(float amps) {
+    if (amps < 0.0f) amps = 0.0f;
+
+    /* The ADC watchdog is a safety-critical window: changing it while the
+     * motor is running could create a glitch or a blind spot.  Require stop. */
+    if (m_running) {
+        return false;
+    }
+
+    m_hw_oc_threshold_a = amps;
+    return configureAnalogWatchdog();
+}
+
 bool PhaseCurrentADC::recalibrateOffsets() {
     if (!m_running) {
         return false;
@@ -268,7 +315,8 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
     if (m_oc_threshold_a > 0.0f) {
         if (std::fabs(m_current_u) > m_oc_threshold_a ||
             std::fabs(m_current_v) > m_oc_threshold_a) {
-            FaultManager::instance().raise(FaultSource::PhaseOvercurrent);
+            FaultManager::instance().raise(FaultSource::PhaseOvercurrent,
+                                           FaultReason::PhaseOvercurrentSoftware);
         }
     }
 
@@ -305,5 +353,13 @@ extern "C" void ADC_IRQHandler(void) {
 extern "C" void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc) {
     if (hadc->Instance == ADC1) {
         Inverter::phaseCurrentADC().onInjectedConversionComplete();
+    }
+}
+
+extern "C" void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef* hadc) {
+    if (hadc != nullptr && hadc->Instance == ADC1) {
+        Inverter::FaultManager::instance().raise(
+            Inverter::FaultSource::AdcWatchdog,
+            Inverter::FaultReason::AdcWatchdogTrip);
     }
 }

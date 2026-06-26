@@ -32,9 +32,11 @@ void fmtFloat3(char* buf, size_t cap, float v) {
 
 namespace Inverter {
 
-static void pollGateDriverFault() {
-    if (GateDriver_IsFault()) {
-        FaultManager::instance().raise(FaultSource::GateDriver);
+static void pollGateDriverStatus() {
+    /* /RDY low means the gate-driver supply is below UVLO on either side. */
+    if (!GateDriver_IsReady()) {
+        FaultManager::instance().raise(FaultSource::GateDriverUvlo,
+                                       FaultReason::GateDriverNotReady);
     }
 }
 
@@ -53,14 +55,9 @@ void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_
     }
 
     for (int i = 1; i <= steps; ++i) {
-        pollGateDriverFault();
-        if (FaultManager::instance().isActive()) {
-            PWM_StopSPWM();
-            GateDriver_DisableOutputs();
-            m_running = false;
-            Telemetry::log("print", "[OL] FAULT during ramp - stopped");
-            return;
-        }
+        /* High/Warning faults do not abort a running ramp under Option A.
+         * Critical faults are handled by FaultManager::executeSafetyActions()
+         * which forces a TIM1 break and disables the gate driver power. */
         float m = from_m + (to_m - from_m) * static_cast<float>(i) / static_cast<float>(steps);
         PWM_SetSPWMParams(m_freq_hz, m);
         HAL_Delay(step_ms);
@@ -126,10 +123,11 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     }
 
     /* Refresh latched fault state from hardware inputs. */
-    pollGateDriverFault();
+    pollGateDriverStatus();
 
-    if (FaultManager::instance().isActive()) {
-        Telemetry::log("print", "[OL] ERROR: active faults, cannot start");
+    if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
+        FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
+        Telemetry::log("print", "[OL] ERROR: active Critical/High faults, cannot start");
         FaultManager::instance().printSummary();
         return false;
     }
@@ -153,8 +151,8 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     if (!ready || fault) {
         Telemetry::log("print", "[OL] ERROR: gate driver not ready or fault latched");
         GateDriver_DisableOutputs();
-        FaultManager::instance().raise(FaultSource::GateDriver,
-                                       "gate driver not ready at start");
+        FaultManager::instance().raise(FaultSource::GateDriverUvlo,
+                                       FaultReason::GateDriverNotReady);
         return false;
     }
 
@@ -250,10 +248,10 @@ void OpenLoopController::update() {
         return;
     }
 
-    pollGateDriverFault();
+    pollGateDriverStatus();
 
-    if (FaultManager::instance().isActive()) {
-        Telemetry::log("print", "[OL] FAULT detected - stopping");
+    if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical)) {
+        Telemetry::log("print", "[OL] Critical fault detected - stopping");
         FaultManager::instance().printSummary();
         stop();
     }

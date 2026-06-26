@@ -216,6 +216,7 @@ bool MAX22530::init() {
     if (!writeRegister(REG_INTERRUPT_ENABLE, INT_EEOC)) {
         return false;
     }
+    m_int_enable = INT_EEOC;
 
     /* Clear any stale status so the INT line starts high. */
     uint16_t int_status = 0;
@@ -517,11 +518,41 @@ bool MAX22530::setComparatorThreshold(uint8_t channel, float high_v, float low_v
         int_en |= neg_bit;
     }
 
-    return writeRegister(REG_INTERRUPT_ENABLE, int_en);
+    if (!writeRegister(REG_INTERRUPT_ENABLE, int_en)) {
+        return false;
+    }
+    m_int_enable = int_en;
+
+    /* Clear any comparator events that occurred before the interrupt was
+     * enabled so they are not mistaken for a new fault. */
+    (void)clearInterruptStatus();
+    return true;
 }
 
 bool MAX22530::getComparatorStatus(uint16_t& status) {
     return readRegister(REG_COUT_STATUS, status);
+}
+
+bool MAX22530::readComparatorThreshold(uint8_t channel,
+                                       uint16_t& high_counts,
+                                       uint16_t& low_counts) {
+    if (channel > 3) {
+        return false;
+    }
+    if (!readRegister(REG_COUTHI1 + channel, high_counts)) {
+        return false;
+    }
+    if (!readRegister(REG_COUTLO1 + channel, low_counts)) {
+        return false;
+    }
+    high_counts &= COUTHI_THRESHOLD_MASK;
+    low_counts  &= COUTHI_THRESHOLD_MASK;
+    return true;
+}
+
+bool MAX22530::clearInterruptStatus() {
+    uint16_t dummy = 0;
+    return readRegister(REG_INTERRUPT_STATUS, dummy);
 }
 
 uint16_t MAX22530::voltageToCounts(float v) const {
@@ -587,7 +618,8 @@ bool MAX22530::parseBurst(const uint8_t rx[MAX_BURST_LEN], uint8_t len) {
         if (expected != rx[len - 1]) {
             ++m_crc_error_cnt;
             if (++m_comm_err_seq >= COMM_ERR_THRESHOLD) {
-                FaultManager::instance().raise(FaultSource::Max22530Comm);
+                FaultManager::instance().raise(FaultSource::Max22530Comm,
+                                               FaultReason::Max22530CrcMismatch);
             }
             return false; /* Do not trust a corrupted frame. */
         }
@@ -616,28 +648,35 @@ void MAX22530::raiseFaultsFromInterruptStatus(uint16_t status) {
     const bool spi_fault = (status & (INT_SPIFRM | INT_SPICRC)) != 0;
     if (spi_fault) {
         if (++m_comm_err_seq >= COMM_ERR_THRESHOLD) {
-            FaultManager::instance().raise(FaultSource::Max22530Comm);
+            FaultManager::instance().raise(FaultSource::Max22530Comm,
+                                           FaultReason::Max22530SpiFrameError);
         }
     } else {
         m_comm_err_seq = 0;
     }
 
     if (status & INT_ADCF) {
-        FaultManager::instance().raise(FaultSource::Max22530Adc);
+        FaultManager::instance().raise(FaultSource::Max22530Adc,
+                                       FaultReason::Max22530AdcDiagnostic);
     }
     if (status & INT_FLD) {
-        FaultManager::instance().raise(FaultSource::Max22530Field);
+        FaultManager::instance().raise(FaultSource::Max22530Field,
+                                       FaultReason::Max22530FieldLoss);
     }
 
     /* Channel 1 (index 0) is used for DC-link Vbus in this design.
      * Ignore comparator bits in a frame that itself had an SPI error; the
-     * status word may be corrupted. */
+     * status word may be corrupted.  Also mask by the interrupt-enable mask so
+     * a disabled comparator direction cannot raise a latched fault. */
     if (!spi_fault) {
-        if (status & INT_CO_POS_1) {
-            FaultManager::instance().raise(FaultSource::Max22530Ov);
+        const uint16_t comp_status = status & m_int_enable;
+        if (comp_status & INT_CO_POS_1) {
+            FaultManager::instance().raise(FaultSource::Max22530Ov,
+                                           FaultReason::Max22530Overvoltage);
         }
-        if (status & INT_CO_NEG_1) {
-            FaultManager::instance().raise(FaultSource::Max22530Uv);
+        if (comp_status & INT_CO_NEG_1) {
+            FaultManager::instance().raise(FaultSource::Max22530Uv,
+                                           FaultReason::Max22530Undervoltage);
         }
     }
 }
@@ -647,7 +686,8 @@ void MAX22530::onDmaError() {
     HAL_GPIO_WritePin(m_cs_port, m_cs_pin, GPIO_PIN_SET);
     m_dma_busy = false;
     if (++m_comm_err_seq >= COMM_ERR_THRESHOLD) {
-        FaultManager::instance().raise(FaultSource::Max22530Comm);
+        FaultManager::instance().raise(FaultSource::Max22530Comm,
+                                       FaultReason::Max22530SpiDmaError);
     }
 }
 
