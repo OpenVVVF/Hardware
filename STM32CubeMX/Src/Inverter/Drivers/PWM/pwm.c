@@ -191,6 +191,11 @@ void PWM_ResetSPWMElectricalCycles(void)
     spwm_elec_cycles = 0;
 }
 
+float PWM_GetFrequency(void)
+{
+    return pwm_switching_freq_hz;
+}
+
 void PWM_StartPhase(uint8_t phase)
 {
     if (phase > 2) return;

@@ -13,6 +13,9 @@
 
 namespace Inverter {
 
+/* TIM1 input clock used to compute the ADC trigger delay in timer ticks. */
+static constexpr uint32_t TIM1_CLOCK_HZ = 275000000UL;
+
 static PhaseCurrentADC s_instance;
 
 PhaseCurrentADC& phaseCurrentADC() {
@@ -108,14 +111,40 @@ bool PhaseCurrentADC::configureAdcChannels() {
 }
 
 bool PhaseCurrentADC::initTrigger() {
-    /* Use TIM1 channel 4 to generate a narrow pulse around the bottom of the
-     * center-aligned PWM triangle.  OC4REF is routed to TRGO and triggers the
-     * ADC1 injected group.  ADC2 injected follows in dual mode. */
-    static constexpr uint32_t PULSE_TICKS = 10U;
+    return configureTrigger();
+}
+
+bool PhaseCurrentADC::updateTrigger() {
+    return configureTrigger();
+}
+
+bool PhaseCurrentADC::configureTrigger() {
+    /* Use TIM1 channel 4 to generate a trigger pulse a short fixed time after
+     * the bottom of the center-aligned PWM triangle.  Keeping the delay fixed
+     * in microseconds (rather than a fixed number of timer ticks) keeps the
+     * sampling point consistent and reliably after switching transients even
+     * when the PWM prescaler changes.  OC4REF is routed to TRGO and triggers
+     * the ADC1 injected group; ADC2 injected follows in dual mode. */
+    static constexpr uint32_t TRIGGER_DELAY_US = 1U;
+    static constexpr uint32_t MIN_PULSE_TICKS  = 10U;
+
+    const uint32_t psc = htim1.Instance->PSC;
+    const uint32_t ticks_per_us = TIM1_CLOCK_HZ / 1000000U / (psc + 1U);
+    uint32_t pulse = TRIGGER_DELAY_US * ticks_per_us;
+    if (pulse < MIN_PULSE_TICKS) {
+        pulse = MIN_PULSE_TICKS;
+    }
+
+    /* Guard against a frequency so high that the delay exceeds the counter
+     * range; clamp to the current auto-reload value. */
+    const uint32_t arr = __HAL_TIM_GET_AUTORELOAD(&htim1);
+    if (pulse > arr) {
+        pulse = arr;
+    }
 
     TIM_OC_InitTypeDef sConfigOC = {};
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = PULSE_TICKS;
+    sConfigOC.Pulse = pulse;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;

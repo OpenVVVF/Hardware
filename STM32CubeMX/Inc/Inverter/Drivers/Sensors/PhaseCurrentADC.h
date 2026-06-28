@@ -112,9 +112,19 @@ public:
      */
     bool configureAnalogWatchdog();
 
+    /**
+     * @brief Recompute TIM1 CCR4 so the ADC trigger stays a fixed delay after
+     * the PWM bottom whenever the switching frequency (and therefore ARR/PSC)
+     * is changed.
+     *
+     * @return true if the timer channel was reconfigured successfully.
+     */
+    bool updateTrigger();
+
 private:
     bool configureAdcChannels();
     bool initTrigger();
+    bool configureTrigger();
     bool calibrateOffsets();
     float countsToCurrent(uint32_t sig, uint32_t ref) const;
 

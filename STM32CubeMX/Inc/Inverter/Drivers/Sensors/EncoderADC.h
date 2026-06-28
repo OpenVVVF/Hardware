@@ -88,8 +88,10 @@ private:
     volatile bool     m_new_data = false;
     bool              m_running = false;
 
-    /* Fault-detection state. */
-    static constexpr uint32_t SAMPLE_TIMEOUT_MS = 5U;
+    /* Fault-detection state.  The timeout is intentionally generous so that
+     * brief main-loop stalls (e.g. clearfault's 50 ms delay) do not latch a
+     * spurious EncoderTimeout while the DMA stream is still healthy. */
+    static constexpr uint32_t SAMPLE_TIMEOUT_MS = 100U;
     static constexpr uint16_t MIN_AMP_RANGE     = 1000U;
     static constexpr float    AMP_COLLAPSE_THRESHOLD = 500.0f;
     static constexpr uint16_t AMP_COLLAPSE_COUNT  = 500U;
