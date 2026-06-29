@@ -2,9 +2,9 @@
 
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
-#include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
+#include "Inverter/Drivers/GateDriver/gate_driver.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -71,6 +71,30 @@ float pairCurrentInactive(float iu, float iv, float iw, ResistanceCalibrator::Pa
     return 0.0f;
 }
 
+uint32_t pinNumber(uint32_t pin_mask) {
+    return static_cast<uint32_t>(__builtin_ctz(pin_mask));
+}
+
+/* Set a phase pin to either alternate function or GPIO output with a
+ * specified level. */
+void setPin(uint32_t pin, bool alternate_function, bool output_high) {
+    const uint32_t num = pinNumber(pin);
+    const uint32_t mask = 3U << (num * 2U);
+
+    uint32_t moder = GPIOE->MODER;
+    moder &= ~mask;
+    moder |= (alternate_function ? 2U : 1U) << (num * 2U);
+    GPIOE->MODER = moder;
+
+    if (!alternate_function) {
+        if (output_high) {
+            GPIOE->BSRR = pin;
+        } else {
+            GPIOE->BSRR = pin << 16U;
+        }
+    }
+}
+
 } // namespace
 
 const char* ResistanceCalibrator::pairName(Pair pair) {
@@ -127,15 +151,10 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
     m_bus_pct_b = bus_pct * 0.5f;
     m_max_current_a = (max_current_a < 0.0f) ? 0.0f : max_current_a;
     m_timeout_ms = timeout_ms;
-    m_original_freq_hz = PWM_GetFrequency();
-    if (m_original_freq_hz == 0) {
-        m_original_freq_hz = 10000U;
-    }
     m_pair_index = 0;
     m_num_pairs = run_all ? 3U : 1U;
     m_pairs[0] = pair;
     if (run_all) {
-        /* Fixed order: requested pair, then the other two. */
         m_pairs[1] = (pair == Pair::UV) ? Pair::UW :
                      (pair == Pair::UW) ? Pair::VW : Pair::UV;
         m_pairs[2] = (pair == Pair::UV) ? Pair::VW :
@@ -169,52 +188,173 @@ void ResistanceCalibrator::enterState(State state) {
     m_state_enter_ms = HAL_GetTick();
 }
 
-void ResistanceCalibrator::configurePair(Pair pair, float bus_pct) {
-    /* Drive all three phases.  The inactive phase is held at 50 % (neutral)
-     * so the gate-driver inputs remain actively driven; this avoids the
-     * floating-input / spurious-conduction issues seen with a true high-Z
-     * phase on this gate driver. */
-    PWM_StartPhase(0);
-    PWM_StartPhase(1);
-    PWM_StartPhase(2);
+bool ResistanceCalibrator::enableGateDriver() {
+    GateDriver_EnableOutputs();
 
-    const float d = bus_pct * 0.5f; /* duty deviation in percent */
-    float du = 50.0f;
-    float dv = 50.0f;
-    float dw = 50.0f;
+    bool ready = false;
+    bool fault = true;
+    for (int i = 0; i < 100; ++i) {
+        ready = GateDriver_IsReady();
+        fault = GateDriver_IsFault();
+        if (ready && !fault) {
+            return true;
+        }
+        HAL_Delay(5);
+    }
+
+    Telemetry::log("print", "[RES CAL] FAIL: gate driver not ready or fault latched");
+    GateDriver_DisableOutputs();
+    return false;
+}
+
+void ResistanceCalibrator::configureHardware(float bus_pct) {
+    const Pair pair = m_pairs[m_pair_index];
+
+    /* duty of the high phase: bus_pct % of Vdc appears line-to-line. */
+    const uint32_t pulse = static_cast<uint32_t>((bus_pct * static_cast<float>(CAL_ARR)) / 100.0f);
+
+    uint8_t high_phase = 0;
+    uint8_t low_phase = 0;
+    uint8_t hz_phase = 0;
 
     switch (pair) {
         case Pair::UV:
-            du = 50.0f + d;
-            dv = 50.0f - d;
-            dw = 50.0f;
+            high_phase = 0; low_phase = 1; hz_phase = 2;
             break;
         case Pair::UW:
-            du = 50.0f + d;
-            dw = 50.0f - d;
-            dv = 50.0f;
+            high_phase = 0; low_phase = 2; hz_phase = 1;
             break;
         case Pair::VW:
-            dv = 50.0f + d;
-            dw = 50.0f - d;
-            du = 50.0f;
+            high_phase = 1; low_phase = 2; hz_phase = 0;
             break;
     }
 
-    PWM_SetThreePhaseDuty(du, dv, dw);
+    /* Disable all timer outputs while reconfiguring. */
+    TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE |
+                    TIM_CCER_CC2E | TIM_CCER_CC2NE |
+                    TIM_CCER_CC3E | TIM_CCER_CC3NE);
+
+    /* Default all compare registers to 0. */
+    TIM1->CCR1 = 0;
+    TIM1->CCR2 = 0;
+    TIM1->CCR3 = 0;
+
+    /* Set the high-phase compare value. */
+    switch (high_phase) {
+        case 0: TIM1->CCR1 = pulse; break;
+        case 1: TIM1->CCR2 = pulse; break;
+        case 2: TIM1->CCR3 = pulse; break;
+    }
+
+    /* Pin/function mapping note:
+     * The main.h pin names are swapped relative to the TIM1 channel assignment:
+     *   PH_x_LOW_Pin  is connected to TIM1_CHx  and drives the HIGH-SIDE MOSFET.
+     *   PH_x_HIGH_Pin is connected to TIM1_CHxN and drives the LOW-SIDE MOSFET.
+     * Therefore:
+     *   high-side ON  -> PH_x_LOW_Pin high  / TIM1_CHx active
+     *   low-side  ON  -> PH_x_HIGH_Pin high / TIM1_CHxN active
+     *
+     * Configure pins:
+     *  - high phase: both pins in AF for complementary PWM with dead time
+     *  - low phase:  high-side pin GPIO low, low-side pin GPIO high (DC on)
+     *  - high-Z:     both pins GPIO low
+     *
+     * CCER is enabled only for the active phases; for the low phase the timer
+     * outputs are ignored because the pins are in GPIO mode. */
+
+    /* Phase U */
+    if (hz_phase == 0) {
+        setPin(PH_U_LOW_Pin,  false, false); /* high-side off */
+        setPin(PH_U_HIGH_Pin, false, false); /* low-side off */
+    } else if (low_phase == 0) {
+        setPin(PH_U_LOW_Pin,  false, false); /* high-side off */
+        setPin(PH_U_HIGH_Pin, false, true);  /* low-side on */
+    } else { /* high_phase == 0 */
+        setPin(PH_U_LOW_Pin,  true, false);  /* high-side PWM (TIM1_CH1) */
+        setPin(PH_U_HIGH_Pin, true, false);  /* low-side complementary (TIM1_CH1N) */
+    }
+
+    /* Phase V */
+    if (hz_phase == 1) {
+        setPin(PH_V_LOW_Pin,  false, false);
+        setPin(PH_V_HIGH_Pin, false, false);
+    } else if (low_phase == 1) {
+        setPin(PH_V_LOW_Pin,  false, false);
+        setPin(PH_V_HIGH_Pin, false, true);
+    } else { /* high_phase == 1 */
+        setPin(PH_V_LOW_Pin,  true, false);
+        setPin(PH_V_HIGH_Pin, true, false);
+    }
+
+    /* Phase W */
+    if (hz_phase == 2) {
+        setPin(PH_W_LOW_Pin,  false, false);
+        setPin(PH_W_HIGH_Pin, false, false);
+    } else if (low_phase == 2) {
+        setPin(PH_W_LOW_Pin,  false, false);
+        setPin(PH_W_HIGH_Pin, false, true);
+    } else { /* high_phase == 2 */
+        setPin(PH_W_LOW_Pin,  true, false);
+        setPin(PH_W_HIGH_Pin, true, false);
+    }
+
+    /* Enable complementary outputs for the active phases only. */
+    switch (pair) {
+        case Pair::UV:
+            TIM1->CCER |= TIM_CCER_CC1E | TIM_CCER_CC1NE |
+                          TIM_CCER_CC2E | TIM_CCER_CC2NE;
+            break;
+        case Pair::UW:
+            TIM1->CCER |= TIM_CCER_CC1E | TIM_CCER_CC1NE |
+                          TIM_CCER_CC3E | TIM_CCER_CC3NE;
+            break;
+        case Pair::VW:
+            TIM1->CCER |= TIM_CCER_CC2E | TIM_CCER_CC2NE |
+                          TIM_CCER_CC3E | TIM_CCER_CC3NE;
+            break;
+    }
 }
 
-void ResistanceCalibrator::cleanup() {
-    /* Park all phases at 50 % before disabling gate driver. */
-    PWM_StartPhase(0);
-    PWM_StartPhase(1);
-    PWM_StartPhase(2);
-    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
+void ResistanceCalibrator::restoreHardware() {
+    /* 1. Disable all timer outputs -> stop switching immediately. */
+    TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE |
+                    TIM_CCER_CC2E | TIM_CCER_CC2NE |
+                    TIM_CCER_CC3E | TIM_CCER_CC3NE);
 
-    openLoopController().stop();
+    /* 2. Force all gate-driver inputs low so all MOSFETs are off. */
+    GPIOE->BSRR = (PH_U_HIGH_Pin | PH_V_HIGH_Pin | PH_W_HIGH_Pin |
+                   PH_U_LOW_Pin  | PH_V_LOW_Pin  | PH_W_LOW_Pin) << 16U;
 
-    /* Restore the original switching frequency. */
-    PWM_SetFrequency(m_original_freq_hz);
+    uint32_t moder = GPIOE->MODER;
+    const uint32_t all_pins_mask =
+        (3U << (pinNumber(PH_U_HIGH_Pin) * 2U)) | (3U << (pinNumber(PH_U_LOW_Pin) * 2U)) |
+        (3U << (pinNumber(PH_V_HIGH_Pin) * 2U)) | (3U << (pinNumber(PH_V_LOW_Pin) * 2U)) |
+        (3U << (pinNumber(PH_W_HIGH_Pin) * 2U)) | (3U << (pinNumber(PH_W_LOW_Pin) * 2U));
+    moder &= ~all_pins_mask;
+    moder |= (1U << (pinNumber(PH_U_HIGH_Pin) * 2U)) | (1U << (pinNumber(PH_U_LOW_Pin) * 2U)) |
+             (1U << (pinNumber(PH_V_HIGH_Pin) * 2U)) | (1U << (pinNumber(PH_V_LOW_Pin) * 2U)) |
+             (1U << (pinNumber(PH_W_HIGH_Pin) * 2U)) | (1U << (pinNumber(PH_W_LOW_Pin) * 2U));
+    GPIOE->MODER = moder;
+
+    /* 3. Disable gate driver outputs. */
+    GateDriver_DisableOutputs();
+
+    /* 4. Restore timer registers but leave CCER at 0 (all outputs off). */
+    TIM1->CCR1 = m_saved_ccr1;
+    TIM1->CCR2 = m_saved_ccr2;
+    TIM1->CCR3 = m_saved_ccr3;
+    TIM1->PSC  = m_saved_psc;
+    TIM1->ARR  = m_saved_arr;
+    TIM1->BDTR = (m_saved_bdtr & ~TIM_BDTR_DTG) | (TIM1->BDTR & TIM_BDTR_DTG);
+    TIM1->BDTR = m_saved_bdtr;
+    TIM1->CCER = 0U; /* explicitly off */
+
+    /* 5. Restore GPIO to original alternate-function modes. */
+    GPIOE->MODER = m_saved_gpioe_moder;
+
+    /* 6. Leave the SPWM update interrupt disabled until open-loop starts again. */
+    TIM1->DIER &= ~TIM_DIER_UIE;
+    HAL_NVIC_DisableIRQ(TIM1_UP_IRQn);
 }
 
 void ResistanceCalibrator::finishPairMeasurement() {
@@ -235,7 +375,7 @@ void ResistanceCalibrator::finishPairMeasurement() {
     const float vdc_a = m_sum_vdc[0] / static_cast<float>(m_sample_count[0]);
     const float vdc_b = m_sum_vdc[1] / static_cast<float>(m_sample_count[1]);
 
-    /* The inactive (neutral) phase should carry essentially zero current. */
+    /* The inactive (high-Z) phase should carry essentially zero current. */
     const float max_inactive_a = std::max(
         MAX_INACTIVE_CURRENT_MIN_A, std::fabs(i_a) * MAX_INACTIVE_CURRENT_RATIO);
     const float max_inactive_b = std::max(
@@ -254,19 +394,27 @@ void ResistanceCalibrator::finishPairMeasurement() {
         return;
     }
 
-    const float delta_i = i_a - i_b;
-    if (std::fabs(delta_i) < 0.01f) {
-        enterState(State::FAIL);
-        Telemetry::log("print", "[RES CAL] FAIL: current did not change between points");
-        return;
-    }
-
     /* Line-to-line voltage at point A and B. */
     const float v_ll_a = (m_bus_pct_a / 100.0f) * vdc_a;
     const float v_ll_b = (m_bus_pct_b / 100.0f) * vdc_b;
     const float delta_v = v_ll_a - v_ll_b;
+    const float delta_i = i_a - i_b;
+    const float abs_delta_i = std::fabs(delta_i);
 
-    const float r_ll = delta_v / delta_i;
+    if (abs_delta_i < 0.01f) {
+        enterState(State::FAIL);
+        char ia_buf[16], ib_buf[16];
+        fmtFloat3(ia_buf, sizeof(ia_buf), i_a);
+        fmtFloat3(ib_buf, sizeof(ib_buf), i_b);
+        char msg[128];
+        std::snprintf(msg, sizeof(msg),
+                      "[RES CAL] FAIL: %s current did not change (Ia=%s A  Ib=%s A)",
+                      pairName(pair), ia_buf, ib_buf);
+        Telemetry::log("print", msg);
+        return;
+    }
+
+    const float r_ll = std::fabs(delta_v) / abs_delta_i;
     if (r_ll <= 0.0f || !std::isfinite(r_ll)) {
         enterState(State::FAIL);
         Telemetry::log("print", "[RES CAL] FAIL: computed resistance is non-positive; increase bus_pct");
@@ -279,52 +427,56 @@ void ResistanceCalibrator::finishPairMeasurement() {
     m_results[idx] = r_phase;
     m_result_valid[idx] = true;
 
-    char rbuf[16];
-    fmtFloat4(rbuf, sizeof(rbuf), r_phase * 1000.0f);
+    char rll_buf[16], rph_buf[16];
+    fmtFloat4(rll_buf, sizeof(rll_buf), r_ll * 1000.0f);
+    fmtFloat4(rph_buf, sizeof(rph_buf), r_phase * 1000.0f);
     char ia_buf[16], ib_buf[16];
     fmtFloat3(ia_buf, sizeof(ia_buf), i_a);
     fmtFloat3(ib_buf, sizeof(ib_buf), i_b);
     char vbuf[16];
     fmtFloat3(vbuf, sizeof(vbuf), (vdc_a + vdc_b) * 0.5f);
-    char msg[128];
+    char msg[160];
     std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] %s: R_phase=%s mohm  I=%s/%s A  Vdc=%s V",
-                  pairName(pair), rbuf, ia_buf, ib_buf, vbuf);
+                  "[RES CAL] %s: R_ll=%s mohm  R_phase=%s mohm  I=%s/%s A  Vdc=%s V",
+                  pairName(pair), rll_buf, rph_buf, ia_buf, ib_buf, vbuf);
     Telemetry::log("print", msg);
 
     enterState(State::NEXT_PAIR);
 }
 
 void ResistanceCalibrator::reportResults() {
-    float sum = 0.0f;
+    float sum_ll = 0.0f;
+    float sum_ph = 0.0f;
     uint32_t count = 0;
     for (int i = 0; i < 3; ++i) {
         if (m_result_valid[i]) {
-            sum += m_results[i];
+            sum_ll += m_results[i] * 2.0f; /* m_results stores phase resistance */
+            sum_ph += m_results[i];
             ++count;
         }
     }
-    m_average_r_phase = (count > 0) ? (sum / static_cast<float>(count)) : 0.0f;
+    m_average_r_phase = (count > 0) ? (sum_ph / static_cast<float>(count)) : 0.0f;
+    const float avg_r_ll = (count > 0) ? (sum_ll / static_cast<float>(count)) : 0.0f;
 
     char uv[16], uw[16], vw[16], avg[16];
-    fmtFloat4(uv, sizeof(uv), m_results[0] * 1000.0f);
-    fmtFloat4(uw, sizeof(uw), m_results[1] * 1000.0f);
-    fmtFloat4(vw, sizeof(vw), m_results[2] * 1000.0f);
-    fmtFloat4(avg, sizeof(avg), m_average_r_phase * 1000.0f);
+    fmtFloat4(uv, sizeof(uv), m_results[0] * 2000.0f); /* line-line */
+    fmtFloat4(uw, sizeof(uw), m_results[1] * 2000.0f);
+    fmtFloat4(vw, sizeof(vw), m_results[2] * 2000.0f);
+    fmtFloat4(avg, sizeof(avg), avg_r_ll * 1000.0f);
 
-    char msg[128];
+    char msg[160];
     std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] DONE: R_uv=%s R_uw=%s R_vw=%s avg=%s mohm",
+                  "[RES CAL] DONE: Rll_uv=%s Rll_uw=%s Rll_vw=%s Rll_avg=%s mohm",
                   m_result_valid[0] ? uv : "--",
                   m_result_valid[1] ? uw : "--",
                   m_result_valid[2] ? vw : "--",
                   avg);
     Telemetry::log("print", msg);
 
-    Telemetry::log("r_uv", m_results[0]);
-    Telemetry::log("r_uw", m_results[1]);
-    Telemetry::log("r_vw", m_results[2]);
-    Telemetry::log("r_avg", m_average_r_phase);
+    Telemetry::log("r_ll_uv", m_results[0] * 2.0f);
+    Telemetry::log("r_ll_uw", m_results[1] * 2.0f);
+    Telemetry::log("r_ll_vw", m_results[2] * 2.0f);
+    Telemetry::log("r_phase_avg", m_average_r_phase);
 }
 
 void ResistanceCalibrator::update() {
@@ -339,26 +491,43 @@ void ResistanceCalibrator::update() {
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
         FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
         Telemetry::log("print", "[RES CAL] FAIL: fault detected");
-        cleanup();
+        restoreHardware();
         enterState(State::FAIL);
         return;
     }
 
     if (m_state == State::ENABLE) {
-        /* Drop switching frequency during calibration to double the duty
-         * resolution, which matters when applying sub-1 % bus voltages. */
-        PWM_SetFrequency(CAL_SWITCHING_FREQ_HZ);
+        /* Save current timer and GPIO state. */
+        m_saved_arr = TIM1->ARR;
+        m_saved_psc = TIM1->PSC;
+        m_saved_ccer = TIM1->CCER;
+        m_saved_ccr1 = TIM1->CCR1;
+        m_saved_ccr2 = TIM1->CCR2;
+        m_saved_ccr3 = TIM1->CCR3;
+        m_saved_bdtr = TIM1->BDTR;
+        m_saved_gpioe_moder = GPIOE->MODER;
 
-        /* Bring the gate driver up using the open-loop controller at zero
-         * frequency/modulation, then stop the SPWM ISR so our DC vector is
-         * not overwritten. */
-        if (!openLoopController().start(0.0f, 0.0f)) {
-            Telemetry::log("print", "[RES CAL] FAIL: could not enable gate driver");
+        /* Disable the SPWM update interrupt; we will drive the timer directly. */
+        TIM1->DIER &= ~TIM_DIER_UIE;
+        HAL_NVIC_DisableIRQ(TIM1_UP_IRQn);
+
+        /* Set calibration frequency (~8 kHz).
+         * TIM1CLK = 275 MHz, center-aligned => f_sw = 275 MHz / (2 * ARR).
+         * ARR = 17186 => ~8.0 kHz. */
+        TIM1->PSC = 0U;
+        TIM1->ARR = CAL_ARR;
+
+        /* Static 1 us dead time during calibration.
+         * DTG = 0xC3 -> 110 encoding, (32 + 3) * 8 * t_DTS = ~1018 ns. */
+        TIM1->BDTR = (TIM1->BDTR & ~TIM_BDTR_DTG) | 0xC3U;
+
+        if (!enableGateDriver()) {
+            restoreHardware();
             enterState(State::FAIL);
             return;
         }
-        PWM_StopSPWM();
-        configurePair(m_pairs[0], m_bus_pct_a);
+
+        configureHardware(m_bus_pct_a);
         enterState(State::SETTLE_A);
         return;
     }
@@ -366,7 +535,7 @@ void ResistanceCalibrator::update() {
     const uint32_t elapsed_ms = now_ms - m_state_enter_ms;
     if (elapsed_ms > m_timeout_ms) {
         Telemetry::log("print", "[RES CAL] FAIL: timeout");
-        cleanup();
+        restoreHardware();
         enterState(State::FAIL);
         return;
     }
@@ -380,6 +549,14 @@ void ResistanceCalibrator::update() {
             m_sum_i_active[pt] = 0.0f;
             m_sum_i_inactive[pt] = 0.0f;
             m_sum_vdc[pt] = 0.0f;
+            char vbuf[16];
+            fmtFloat4(vbuf, sizeof(vbuf),
+                      (pt == 0 ? m_bus_pct_a : m_bus_pct_b) * 0.01f * dcLinkVoltageSensor().voltage());
+            char msg[80];
+            std::snprintf(msg, sizeof(msg),
+                          "[RES CAL] %s point %c: target Vll=%s V",
+                          pairName(pair), (pt == 0) ? 'A' : 'B', vbuf);
+            Telemetry::log("print", msg);
             enterState((m_state == State::SETTLE_A) ? State::MEASURE_A : State::MEASURE_B);
         }
         return;
@@ -396,9 +573,6 @@ void ResistanceCalibrator::update() {
             m_sum_vdc[pt] += dcLinkVoltageSensor().voltage();
             ++m_sample_count[pt];
 
-            /* Immediate abort if a single sample exceeds the configured max.
-             * This protects the power supply / motor from a shorted phase or
-             * an accidentally excessive bus_pct. */
             if (m_max_current_a > 0.0f && std::fabs(i_active) > m_max_current_a) {
                 char abuf[16], mbuf[16];
                 fmtFloat3(abuf, sizeof(abuf), i_active);
@@ -408,7 +582,7 @@ void ResistanceCalibrator::update() {
                               "[RES CAL] FAIL: overcurrent %s A > limit %s A",
                               abuf, mbuf);
                 Telemetry::log("print", msg);
-                cleanup();
+                restoreHardware();
                 enterState(State::FAIL);
                 return;
             }
@@ -416,7 +590,7 @@ void ResistanceCalibrator::update() {
 
         if (elapsed_ms >= MEASURE_TIME_MS && m_sample_count[pt] >= MIN_SAMPLES) {
             if (m_state == State::MEASURE_A) {
-                configurePair(pair, m_bus_pct_b);
+                configureHardware(m_bus_pct_b);
                 enterState(State::SETTLE_B);
             } else {
                 finishPairMeasurement();
@@ -428,12 +602,12 @@ void ResistanceCalibrator::update() {
     if (m_state == State::NEXT_PAIR) {
         ++m_pair_index;
         if (m_pair_index >= m_num_pairs) {
-            cleanup();
+            restoreHardware();
             reportResults();
             enterState(State::DONE);
             return;
         }
-        configurePair(m_pairs[m_pair_index], m_bus_pct_a);
+        configureHardware(m_bus_pct_a);
         enterState(State::SETTLE_A);
         return;
     }

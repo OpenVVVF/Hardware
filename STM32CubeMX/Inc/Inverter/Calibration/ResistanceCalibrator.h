@@ -7,10 +7,12 @@ namespace Inverter {
 /**
  * @brief Phase-to-phase stator resistance calibration.
  *
- * Applies a fixed percentage of the DC bus across two motor phases while the
- * third phase is driven to the neutral (50 %) point.  Two voltage points are
- * measured per pair; the resistance is computed from the slope dV/dI, which
- * cancels inverter dead-time and MOSFET-drop offsets.
+ * Uses direct TIM1 and GPIO register access to apply a DC voltage across two
+ * motor phases while the third phase is placed in true high impedance (both
+ * high-side and low-side MOSFETs off).  PWM runs at 8 kHz during calibration
+ * for low current ripple.  Two voltage points are measured per pair and the
+ * resistance is computed from dV/dI to cancel inverter dead-time and switch-drop
+ * offsets.
  *
  * By default the routine runs three staged measurements: UV, then UW, then VW.
  * A single pair can be requested instead.
@@ -28,8 +30,8 @@ public:
     /**
      * @brief Start a resistance calibration.
      *
-     * @param bus_pct       Percentage of Vdc to apply line-to-line at the high
-     *                      point.  The low point is half of this value.
+     * @param bus_pct       Percentage of Vdc to apply across the active pair
+     *                      at the high point.  The low point is half of this.
      * @param pair          First (or only) pair to measure.
      * @param run_all       If true, measure all three pairs starting from @p pair.
      *                      If false, measure only @p pair.
@@ -75,10 +77,11 @@ private:
     };
 
     void enterState(State state);
-    void configurePair(Pair pair, float bus_pct);
+    bool enableGateDriver();
+    void configureHardware(float bus_pct);
+    void restoreHardware();
     void finishPairMeasurement();
     void reportResults();
-    void cleanup();
 
     static const char* pairName(Pair pair);
     static int pairIndex(Pair pair);
@@ -93,7 +96,6 @@ private:
     float  m_bus_pct_b = 0.0f; /**< Low-point bus percentage (half of A). */
     float  m_max_current_a = 50.0f;
     uint32_t m_timeout_ms = 5000U;
-    uint32_t m_original_freq_hz = 10000U;
 
     uint32_t m_state_enter_ms = 0;
 
@@ -107,8 +109,18 @@ private:
     bool     m_result_valid[3] = {false, false, false};
     float    m_average_r_phase = 0.0f;
 
+    /* Saved hardware state for restore. */
+    uint32_t m_saved_arr = 0;
+    uint32_t m_saved_psc = 0;
+    uint32_t m_saved_ccer = 0;
+    uint32_t m_saved_ccr1 = 0;
+    uint32_t m_saved_ccr2 = 0;
+    uint32_t m_saved_ccr3 = 0;
+    uint32_t m_saved_bdtr = 0;
+    uint32_t m_saved_gpioe_moder = 0;
+
     static constexpr float MAX_BUS_PCT = 25.0f;
-    static constexpr uint32_t CAL_SWITCHING_FREQ_HZ = 5000U;
+    static constexpr uint32_t CAL_ARR = 17186U; /**< ~8 kHz center-aligned with 275 MHz timer clock. */
     static constexpr uint32_t SETTLE_TIME_MS = 200U;
     static constexpr uint32_t MEASURE_TIME_MS = 200U;
     static constexpr uint32_t MIN_SAMPLES = 500U;

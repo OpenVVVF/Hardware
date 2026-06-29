@@ -76,16 +76,6 @@ void PWM_SetFrequency(uint32_t freq_hz)
                             (2.0f * (float)(arr + 1U) * (float)(psc + 1U));
 }
 
-uint32_t PWM_GetFrequency(void)
-{
-    uint32_t psc = htim1.Instance->PSC;
-    uint32_t arr = __HAL_TIM_GET_AUTORELOAD(&htim1);
-    if (arr == 0 || psc > TIM_MAX_ARR) {
-        return 0;
-    }
-    return TIM1_CLOCK_HZ / (2UL * (arr + 1U) * (psc + 1U));
-}
-
 void PWM_SetDeadTime(uint32_t deadtime_ns)
 {
     /* Update DTG field in BDTR while preserving break/dead-time configuration.
