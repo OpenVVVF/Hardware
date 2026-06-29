@@ -9,7 +9,6 @@
 #include "Inverter/Drivers/CAN/FdcanFault.h"
 #include "Inverter/Drivers/Logging/SupplyMonitor.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
-#include "Inverter/Control/ResistanceCalibrator.h"
 
 #include "main.h"
 #include "spi.h"
@@ -107,14 +106,7 @@ static void loop()
         Inverter::CurrentSensorTest_RunOnce();
         s_last_current_ms = now_ms;
     }
-    /* Encoder health check - skip during resistance calibration. The lowered
-     * PWM frequency and DC current through the motor can disturb the shared
-     * ADC2 regular conversions, producing a transient EncoderTimeout that is
-     * irrelevant to the resistance measurement. The calibrator masks encoder
-     * faults while active and clears them on cleanup. */
-    if (!Inverter::resistanceCalibrator().isActive()) {
-        Inverter::encoderADC().diagnose();
-    }
+    Inverter::encoderADC().diagnose();
 
     /* Isolated DC-link voltage sensor: sample on every loop so the logged
      * value is always the latest conversion from the EXTI ISR. */
@@ -125,7 +117,6 @@ static void loop()
     Inverter::FaultManager::instance().service();
     Inverter::commandShell().poll();
     Inverter::FaultManager::instance().executeSafetyActions();
-    Inverter::resistanceCalibrator().service();
     Inverter::openLoopController().update();
     Inverter::polePairCalibrator().update();
 

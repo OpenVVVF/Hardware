@@ -1,7 +1,6 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
-#include "Inverter/Control/ResistanceCalibrator.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
@@ -69,7 +68,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [max_a] [points] | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | help");
     return true;
 }
 
@@ -158,8 +157,6 @@ void CommandShell::poll() {
                 if (std::strcmp(argv[0], "start") == 0) {
                     if (argc < 3) {
                         Telemetry::log("print", "[SHELL] usage: start <freq_hz> <mod_idx>");
-                    } else if (resistanceCalibrator().isActive()) {
-                        Telemetry::log("print", "[SHELL] resistance calibration active, stop it first");
                     } else {
                         float f = std::strtof(argv[1], nullptr);
                         float m = std::strtof(argv[2], nullptr);
@@ -311,51 +308,6 @@ void CommandShell::poll() {
                         Telemetry::log("print", msg);
                     } else {
                         Telemetry::log("print", "[SHELL] usage: encodercal start | stop");
-                    }
-                }
-                else if (std::strcmp(argv[0], "rescal") == 0) {
-                    ResistanceCalibrator& cal = resistanceCalibrator();
-                    if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: rescal start [max_a] [points] | status | abort");
-                    } else if (std::strcmp(argv[1], "start") == 0) {
-                        if (ol.isRunning()) {
-                            Telemetry::log("print", "[SHELL] stop the motor before resistance cal");
-                        } else if (cal.isActive()) {
-                            Telemetry::log("print", "[SHELL] resistance calibration already running");
-                        } else {
-                            ResistanceCalibrator::Config cfg;
-                            if (argc >= 3) {
-                                cfg.max_current_a = std::strtof(argv[2], nullptr);
-                            }
-                            if (argc >= 4) {
-                                int pts = static_cast<int>(std::strtol(argv[3], nullptr, 10));
-                                if (pts > 0 && pts <= 8) {
-                                    cfg.num_points = static_cast<uint32_t>(pts);
-                                }
-                            }
-                            cal.start(cfg);
-                        }
-                    } else if (std::strcmp(argv[1], "status") == 0) {
-                        char msg[96];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] rescal state=%s", cal.stateName());
-                        Telemetry::log("print", msg);
-                        const auto& r = cal.lastResult();
-                        if (r.valid) {
-                            char ru[16], rv[16], rw[16], ravg[16];
-                            fmtFloat3(ru, sizeof(ru), r.r_u);
-                            fmtFloat3(rv, sizeof(rv), r.r_v);
-                            fmtFloat3(rw, sizeof(rw), r.r_w);
-                            fmtFloat3(ravg, sizeof(ravg), r.r_avg);
-                            std::snprintf(msg, sizeof(msg),
-                                          "[SHELL] R_u=%s R_v=%s R_w=%s R_avg=%s Ohm",
-                                          ru, rv, rw, ravg);
-                            Telemetry::log("print", msg);
-                        }
-                    } else if (std::strcmp(argv[1], "abort") == 0) {
-                        cal.abort();
-                        Telemetry::log("print", "[SHELL] resistance calibration aborted");
-                    } else {
-                        Telemetry::log("print", "[SHELL] usage: rescal start [max_a] [points] | status | abort");
                     }
                 }
                 else if (std::strcmp(argv[0], "calpolepairs") == 0) {
@@ -521,7 +473,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [max_a] [points] | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

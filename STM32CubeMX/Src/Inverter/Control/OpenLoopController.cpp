@@ -76,13 +76,8 @@ bool OpenLoopController::init() {
         return true;
     }
 
-    /* 4 kHz switching, 1 us dead time. */
-    PWM_SetFrequency(4000U);
-
-    /* Re-align the ADC trigger to the selected PWM period so sampling stays
-     * a fixed delay after the PWM bottom. */
-    (void)phaseCurrentADC().updateTrigger();
-
+    /* 10 kHz switching, 1 us dead time. */
+    PWM_SetFrequency(10000U);
     PWM_SetDeadTime(1000U);
 
     /* Park all phases at 50 % (zero voltage vector). */
