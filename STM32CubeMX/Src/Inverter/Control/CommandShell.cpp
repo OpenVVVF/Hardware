@@ -69,7 +69,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal stop | rescal status | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
     return true;
 }
 
@@ -375,8 +375,47 @@ void CommandShell::poll() {
                         }
                     } else if (std::strcmp(argv[1], "stop") == 0) {
                         resistanceCalibrator().stop();
+                    } else if (std::strcmp(argv[1], "ictrl") == 0) {
+                        if (argc < 3) {
+                            Telemetry::log("print", "[SHELL] usage: rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a]");
+                        } else {
+                            float current_a = 0.0f;
+                            float oc_limit_a = 0.0f;
+                            ResistanceCalibrator::Pair pair = ResistanceCalibrator::Pair::UV;
+                            bool run_all = true;
+
+                            if (std::strcmp(argv[2], "uv") == 0 ||
+                                std::strcmp(argv[2], "uw") == 0 ||
+                                std::strcmp(argv[2], "vw") == 0) {
+                                if (argc < 4) {
+                                    Telemetry::log("print", "[SHELL] usage: rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a]");
+                                    continue;
+                                }
+                                run_all = false;
+                                if (std::strcmp(argv[2], "uv") == 0) {
+                                    pair = ResistanceCalibrator::Pair::UV;
+                                } else if (std::strcmp(argv[2], "uw") == 0) {
+                                    pair = ResistanceCalibrator::Pair::UW;
+                                } else {
+                                    pair = ResistanceCalibrator::Pair::VW;
+                                }
+                                current_a = std::strtof(argv[3], nullptr);
+                                if (argc >= 5) {
+                                    oc_limit_a = std::strtof(argv[4], nullptr);
+                                }
+                            } else {
+                                current_a = std::strtof(argv[2], nullptr);
+                                if (argc >= 4) {
+                                    oc_limit_a = std::strtof(argv[3], nullptr);
+                                }
+                            }
+
+                            if (!resistanceCalibrator().startCurrentCtrl(current_a, pair, run_all, 15000U, oc_limit_a)) {
+                                Telemetry::log("print", "[SHELL] rescal ictrl failed");
+                            }
+                        }
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal stop | rescal status");
+                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status");
                     }
                 }
                 else if (std::strcmp(argv[0], "fault") == 0) {
@@ -532,7 +571,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal stop | rescal status | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

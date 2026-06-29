@@ -150,10 +150,11 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
         bus_pct = MAX_BUS_PCT;
     }
 
-    /* Evenly spaced voltage points from bus_pct/NUM_VOLT_POINTS up to bus_pct. */
-    for (uint8_t i = 0; i < NUM_VOLT_POINTS; ++i) {
-        m_bus_pcts[i] = bus_pct * static_cast<float>(i + 1U) /
-                        static_cast<float>(NUM_VOLT_POINTS);
+    m_mode = Mode::VOLTAGE_STEP;
+    /* Evenly spaced duty points from bus_pct/NUM_POINTS up to bus_pct. */
+    for (uint8_t i = 0; i < NUM_POINTS; ++i) {
+        m_targets[i] = bus_pct * static_cast<float>(i + 1U) /
+                       static_cast<float>(NUM_POINTS);
     }
     m_max_current_a = (max_current_a < 0.0f) ? 0.0f : max_current_a;
     m_timeout_ms = timeout_ms;
@@ -171,12 +172,12 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
     m_results[0] = m_results[1] = m_results[2] = 0.0f;
     m_result_valid[0] = m_result_valid[1] = m_result_valid[2] = false;
     m_average_r_phase = 0.0f;
-    for (uint8_t i = 0; i < NUM_VOLT_POINTS; ++i) {
-        m_sample_count[i] = 0;
-        m_sum_i_active[i] = 0.0f;
-        m_sum_i_inactive[i] = 0.0f;
-        m_sum_vdc[i] = 0.0f;
+    for (uint8_t i = 0; i < NUM_POINTS; ++i) {
+        resetMeasurementAccumulators(i);
     }
+    m_pi_integral = 0.0f;
+    m_pi_duty = 0.0f;
+    m_pi_last_ms = 0;
 
     enterState(State::ENABLE);
 
@@ -188,7 +189,74 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
     std::snprintf(msg, sizeof(msg),
                   "[RES CAL] starting (%s) max %s %% bus, %u points, max I=%s A",
                   run_all ? "UV/UW/VW" : pairName(pair), buf,
-                  static_cast<unsigned>(NUM_VOLT_POINTS), ibuf);
+                  static_cast<unsigned>(NUM_POINTS), ibuf);
+    Telemetry::log("print", msg);
+    return true;
+}
+
+bool ResistanceCalibrator::startCurrentCtrl(float max_current_a, Pair pair,
+                                            bool run_all, uint32_t timeout_ms,
+                                            float oc_limit_a) {
+    if (isActive()) {
+        Telemetry::log("print", "[RES CAL] already running");
+        return false;
+    }
+
+    if (openLoopController().isRunning()) {
+        Telemetry::log("print", "[RES CAL] stop the motor before calibration");
+        return false;
+    }
+
+    if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
+        FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
+        Telemetry::log("print", "[RES CAL] active faults, cannot start");
+        return false;
+    }
+
+    if (max_current_a < 0.0f) max_current_a = 0.0f;
+    if (oc_limit_a <= 0.0f) oc_limit_a = max_current_a * 1.2f;
+    if (oc_limit_a < max_current_a) oc_limit_a = max_current_a;
+
+    m_mode = Mode::CURRENT_CTRL;
+    /* Evenly spaced current setpoints from max_current_a/NUM_POINTS up to max_current_a. */
+    for (uint8_t i = 0; i < NUM_POINTS; ++i) {
+        m_targets[i] = max_current_a * static_cast<float>(i + 1U) /
+                       static_cast<float>(NUM_POINTS);
+    }
+    m_max_current_a = oc_limit_a;
+    m_timeout_ms = timeout_ms;
+    m_pair_index = 0;
+    m_point_index = 0;
+    m_num_pairs = run_all ? 3U : 1U;
+    m_pairs[0] = pair;
+    if (run_all) {
+        m_pairs[1] = (pair == Pair::UV) ? Pair::UW :
+                     (pair == Pair::UW) ? Pair::VW : Pair::UV;
+        m_pairs[2] = (pair == Pair::UV) ? Pair::VW :
+                     (pair == Pair::UW) ? Pair::UV : Pair::UW;
+    }
+
+    m_results[0] = m_results[1] = m_results[2] = 0.0f;
+    m_result_valid[0] = m_result_valid[1] = m_result_valid[2] = false;
+    m_average_r_phase = 0.0f;
+    for (uint8_t i = 0; i < NUM_POINTS; ++i) {
+        resetMeasurementAccumulators(i);
+    }
+    m_pi_integral = 0.0f;
+    m_pi_duty = PI_MIN_DUTY;
+    m_pi_last_ms = 0;
+
+    enterState(State::ENABLE);
+
+    char buf[16];
+    fmtFloat3(buf, sizeof(buf), max_current_a);
+    char ibuf[16];
+    fmtFloat3(ibuf, sizeof(ibuf), m_max_current_a);
+    char msg[96];
+    std::snprintf(msg, sizeof(msg),
+                  "[RES CAL] I-ctrl (%s) target %s A, %u points, oc=%s A",
+                  run_all ? "UV/UW/VW" : pairName(pair), buf,
+                  static_cast<unsigned>(NUM_POINTS), ibuf);
     Telemetry::log("print", msg);
     return true;
 }
@@ -210,6 +278,14 @@ void ResistanceCalibrator::fail(const char* reason) {
     restoreHardware();
     Telemetry::log("print", reason);
     enterState(State::FAIL);
+}
+
+void ResistanceCalibrator::resetMeasurementAccumulators(uint8_t point) {
+    m_sample_count[point] = 0;
+    m_sum_i_active[point] = 0.0f;
+    m_sum_i_inactive[point] = 0.0f;
+    m_sum_vdc[point] = 0.0f;
+    m_sum_duty[point] = 0.0f;
 }
 
 bool ResistanceCalibrator::enableGateDriver() {
@@ -384,12 +460,12 @@ void ResistanceCalibrator::restoreHardware() {
 void ResistanceCalibrator::finishPairMeasurement() {
     const Pair pair = m_pairs[m_pair_index];
 
-    float v[NUM_VOLT_POINTS];
-    float i[NUM_VOLT_POINTS];
+    float v[NUM_POINTS];
+    float i[NUM_POINTS];
     float vdc_avg = 0.0f;
     float i_active_max = 0.0f;
 
-    for (uint8_t pt = 0; pt < NUM_VOLT_POINTS; ++pt) {
+    for (uint8_t pt = 0; pt < NUM_POINTS; ++pt) {
         if (m_sample_count[pt] < MIN_SAMPLES) {
             fail("[RES CAL] FAIL: not enough samples");
             return;
@@ -415,24 +491,25 @@ void ResistanceCalibrator::finishPairMeasurement() {
             return;
         }
 
-        v[pt] = (m_bus_pcts[pt] / 100.0f) * vdc;
+        const float duty = m_sum_duty[pt] / static_cast<float>(m_sample_count[pt]);
+        v[pt] = (duty / 100.0f) * vdc;
         i[pt] = i_active;
         vdc_avg += vdc;
         i_active_max = std::max(i_active_max, std::fabs(i_active));
     }
-    vdc_avg /= static_cast<float>(NUM_VOLT_POINTS);
+    vdc_avg /= static_cast<float>(NUM_POINTS);
 
     /* Print the raw (V, I) points used for the fit. */
     {
         char msg[192];
         int len = std::snprintf(msg, sizeof(msg), "[RES CAL] %s fit data: ", pairName(pair));
-        for (uint8_t pt = 0; pt < NUM_VOLT_POINTS; ++pt) {
+        for (uint8_t pt = 0; pt < NUM_POINTS; ++pt) {
             char vbuf[16], ibuf[16];
             fmtFloat3(vbuf, sizeof(vbuf), v[pt]);
             fmtFloat3(ibuf, sizeof(ibuf), i[pt]);
             len += std::snprintf(msg + len, sizeof(msg) - len,
                                  "(V=%sV I=%sA)%s", vbuf, ibuf,
-                                 (pt + 1U < NUM_VOLT_POINTS) ? ", " : "");
+                                 (pt + 1U < NUM_POINTS) ? ", " : "");
         }
         Telemetry::log("print", msg);
     }
@@ -443,14 +520,14 @@ void ResistanceCalibrator::finishPairMeasurement() {
     float sum_i = 0.0f;
     float sum_vi = 0.0f;
     float sum_ii = 0.0f;
-    for (uint8_t pt = 0; pt < NUM_VOLT_POINTS; ++pt) {
+    for (uint8_t pt = 0; pt < NUM_POINTS; ++pt) {
         sum_v  += v[pt];
         sum_i  += i[pt];
         sum_vi += v[pt] * i[pt];
         sum_ii += i[pt] * i[pt];
     }
 
-    const float n = static_cast<float>(NUM_VOLT_POINTS);
+    const float n = static_cast<float>(NUM_POINTS);
     const float denom = n * sum_ii - sum_i * sum_i;
 
     {
@@ -481,7 +558,7 @@ void ResistanceCalibrator::finishPairMeasurement() {
         Telemetry::log("print", msg);
     }
     if (r_ll <= 0.0f || !std::isfinite(r_ll)) {
-        fail("[RES CAL] FAIL: computed resistance is non-positive; increase bus_pct");
+        fail("[RES CAL] FAIL: computed resistance is non-positive; increase current/voltage");
         return;
     }
 
@@ -593,7 +670,14 @@ void ResistanceCalibrator::update() {
         }
 
         m_point_index = 0;
-        configureHardware(m_bus_pcts[m_point_index]);
+        if (m_mode == Mode::VOLTAGE_STEP) {
+            configureHardware(m_targets[m_point_index]);
+        } else {
+            m_pi_integral = 0.0f;
+            m_pi_duty = PI_MIN_DUTY;
+            m_pi_last_ms = now_ms;
+            configureHardware(m_pi_duty);
+        }
         enterState(State::SETTLE);
         return;
     }
@@ -611,18 +695,24 @@ void ResistanceCalibrator::update() {
     if (m_state == State::SETTLE) {
         if (elapsed_ms >= SETTLE_TIME_MS) {
             const uint8_t pt = m_point_index;
-            m_sample_count[pt] = 0;
-            m_sum_i_active[pt] = 0.0f;
-            m_sum_i_inactive[pt] = 0.0f;
-            m_sum_vdc[pt] = 0.0f;
-            char vbuf[16];
-            fmtFloat4(vbuf, sizeof(vbuf),
-                      m_bus_pcts[pt] * 0.01f * dcLinkVoltageSensor().voltage());
-            char msg[80];
-            std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] %s point %u/%u: target Vll=%s V",
-                          pairName(pair), static_cast<unsigned>(pt + 1U),
-                          static_cast<unsigned>(NUM_VOLT_POINTS), vbuf);
+            resetMeasurementAccumulators(pt);
+            char msg[96];
+            if (m_mode == Mode::VOLTAGE_STEP) {
+                char vbuf[16];
+                fmtFloat3(vbuf, sizeof(vbuf),
+                          m_targets[pt] * 0.01f * dcLinkVoltageSensor().voltage());
+                std::snprintf(msg, sizeof(msg),
+                              "[RES CAL] %s point %u/%u: target Vll=%s V",
+                              pairName(pair), static_cast<unsigned>(pt + 1U),
+                              static_cast<unsigned>(NUM_POINTS), vbuf);
+            } else {
+                char ibuf[16];
+                fmtFloat3(ibuf, sizeof(ibuf), m_targets[pt]);
+                std::snprintf(msg, sizeof(msg),
+                              "[RES CAL] %s point %u/%u: target I=%s A",
+                              pairName(pair), static_cast<unsigned>(pt + 1U),
+                              static_cast<unsigned>(NUM_POINTS), ibuf);
+            }
             Telemetry::log("print", msg);
             enterState(State::MEASURE);
         }
@@ -637,8 +727,34 @@ void ResistanceCalibrator::update() {
             const float i_active = pairCurrentActive(iu, iv, iw, pair);
             m_sum_i_active[pt] += i_active;
             m_sum_i_inactive[pt] += pairCurrentInactive(iu, iv, iw, pair);
-            m_sum_vdc[pt] += dcLinkVoltageSensor().voltage();
+            const float vdc = dcLinkVoltageSensor().voltage();
+            m_sum_vdc[pt] += vdc;
             ++m_sample_count[pt];
+
+            if (m_mode == Mode::CURRENT_CTRL) {
+                /* PI current controller: update duty every sample to regulate
+                 * active current to the target. */
+                const float dt_s = (m_pi_last_ms == 0) ? 0.001f :
+                    static_cast<float>(now_ms - m_pi_last_ms) * 0.001f;
+                m_pi_last_ms = now_ms;
+
+                const float error = m_targets[pt] - i_active;
+                m_pi_integral += PI_KI * error * dt_s;
+                /* Simple anti-windup: clamp integral when output saturates. */
+                float duty = PI_KP * error + m_pi_integral;
+                if (duty > MAX_BUS_PCT) {
+                    duty = MAX_BUS_PCT;
+                    if (m_pi_integral > 0.0f) m_pi_integral -= PI_KI * error * dt_s;
+                } else if (duty < PI_MIN_DUTY) {
+                    duty = PI_MIN_DUTY;
+                    if (m_pi_integral < 0.0f) m_pi_integral -= PI_KI * error * dt_s;
+                }
+                m_pi_duty = duty;
+                configureHardware(m_pi_duty);
+                m_sum_duty[pt] += m_pi_duty;
+            } else {
+                m_sum_duty[pt] += m_targets[pt];
+            }
 
             if (m_max_current_a > 0.0f && std::fabs(i_active) > m_max_current_a) {
                 char abuf[16], mbuf[16];
@@ -660,22 +776,31 @@ void ResistanceCalibrator::update() {
             const float iact_pt = m_sum_i_active[pt] / static_cast<float>(m_sample_count[pt]);
             const float iinact_pt = std::fabs(
                 m_sum_i_inactive[pt] / static_cast<float>(m_sample_count[pt]));
-            const float vll_pt = (m_bus_pcts[pt] / 100.0f) * vdc_pt;
-            char vbuf[16], ibuf[16], iabuf[16], pbuf[16];
+            const float duty_pt = m_sum_duty[pt] / static_cast<float>(m_sample_count[pt]);
+            const float vll_pt = (duty_pt / 100.0f) * vdc_pt;
+            char vbuf[16], ibuf[16], iabuf[16], pbuf[16], dbuf[16];
             fmtFloat3(vbuf, sizeof(vbuf), vll_pt);
             fmtFloat3(ibuf, sizeof(ibuf), iact_pt);
             fmtFloat3(iabuf, sizeof(iabuf), iinact_pt);
             fmtFloat3(pbuf, sizeof(pbuf), vdc_pt);
-            char msg[160];
+            fmtFloat3(dbuf, sizeof(dbuf), duty_pt);
+            char msg[192];
             std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] %s point %u/%u done: Vll=%s V  Vdc=%s V  Iact=%s A  Iinact=%s A",
+                          "[RES CAL] %s point %u/%u done: Vll=%s V  Vdc=%s V  duty=%s %%  Iact=%s A  Iinact=%s A",
                           pairName(pair), static_cast<unsigned>(pt + 1U),
-                          static_cast<unsigned>(NUM_VOLT_POINTS), vbuf, pbuf, ibuf, iabuf);
+                          static_cast<unsigned>(NUM_POINTS), vbuf, pbuf, dbuf, ibuf, iabuf);
             Telemetry::log("print", msg);
 
-            if (m_point_index + 1U < NUM_VOLT_POINTS) {
+            if (m_point_index + 1U < NUM_POINTS) {
                 ++m_point_index;
-                configureHardware(m_bus_pcts[m_point_index]);
+                if (m_mode == Mode::VOLTAGE_STEP) {
+                    configureHardware(m_targets[m_point_index]);
+                } else {
+                    m_pi_integral = 0.0f;
+                    m_pi_duty = PI_MIN_DUTY;
+                    m_pi_last_ms = now_ms;
+                    configureHardware(m_pi_duty);
+                }
                 enterState(State::SETTLE);
             } else {
                 enterState(State::FINISH_PAIR);
@@ -698,7 +823,14 @@ void ResistanceCalibrator::update() {
             return;
         }
         m_point_index = 0;
-        configureHardware(m_bus_pcts[m_point_index]);
+        if (m_mode == Mode::VOLTAGE_STEP) {
+            configureHardware(m_targets[m_point_index]);
+        } else {
+            m_pi_integral = 0.0f;
+            m_pi_duty = PI_MIN_DUTY;
+            m_pi_last_ms = now_ms;
+            configureHardware(m_pi_duty);
+        }
         enterState(State::SETTLE);
         return;
     }
