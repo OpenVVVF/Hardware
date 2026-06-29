@@ -369,7 +369,7 @@ void CommandShell::poll() {
                                 }
                             }
 
-                            if (!resistanceCalibrator().start(bus_pct, pair, run_all, 25000U, max_a)) {
+                            if (!resistanceCalibrator().start(bus_pct, pair, run_all, 15000U, max_a)) {
                                 Telemetry::log("print", "[SHELL] rescal start failed");
                             }
                         }
@@ -410,7 +410,7 @@ void CommandShell::poll() {
                                 }
                             }
 
-                            if (!resistanceCalibrator().startCurrentCtrl(current_a, pair, run_all, 25000U, oc_limit_a)) {
+                            if (!resistanceCalibrator().startCurrentCtrl(current_a, pair, run_all, 15000U, oc_limit_a)) {
                                 Telemetry::log("print", "[SHELL] rescal ictrl failed");
                             }
                         }
