@@ -207,14 +207,19 @@ void CommandShell::poll() {
                     FaultManager::instance().printSummary();
                 }
                 else if (std::strcmp(argv[0], "clearfault") == 0) {
-                    /* Re-enable gate-driver power so the board can be started again,
-                     * but keep the gate-driver outputs disabled and the TIM1 master
-                     * output off.  Switching must only resume after an explicit
-                     * 'start' command. */
+                    /* Re-enable gate-driver power so the board can be started again. */
                     GateDriver_EnablePower(true);
                     HAL_Delay(50);
+
+                    /* Assert reset to guarantee the NCD57100 DESAT fault latch is
+                     * cleared, then release it so /RDY and /FLT can be read. */
                     GateDriver_DisableOutputs();
+                    HAL_Delay(10);
+                    GateDriver_EnableOutputs();
+                    HAL_Delay(10);
+
                     PWM_ClearBreakFlag();
+                    PWM_ClearFault();
                     FaultManager::instance().clearAll();
 
                     /* The isolated ADC may have a latched comparator interrupt and/or
@@ -227,7 +232,16 @@ void CommandShell::poll() {
                     __HAL_GPIO_EXTI_CLEAR_IT(VSENSE_ISO_ADC_INTERRUPT_Pin);
                     HAL_NVIC_ClearPendingIRQ(EXTI1_IRQn);
 
-                    Telemetry::log("print", "[SHELL] faults cleared; gate driver powered but outputs disabled");
+                    bool ready = GateDriver_IsReady();
+                    bool fault = GateDriver_IsFault();
+                    uint32_t bdtr = TIM1->BDTR;
+                    char msg[96];
+                    std::snprintf(msg, sizeof(msg),
+                                  "[SHELL] clearfault done | ready=%s fault=%s MOE=%lu",
+                                  ready ? "Y" : "N",
+                                  fault ? "Y" : "N",
+                                  (bdtr >> 15) & 1UL);
+                    Telemetry::log("print", msg);
                 }
                 else if (std::strcmp(argv[0], "cal") == 0) {
                     if (ol.isRunning()) {

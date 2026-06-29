@@ -149,7 +149,17 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     }
 
     if (!ready || fault) {
-        Telemetry::log("print", "[OL] ERROR: gate driver not ready or fault latched");
+        uint32_t bdtr = TIM1->BDTR;
+        uint32_t sr   = TIM1->SR;
+        char msg[96];
+        std::snprintf(msg, sizeof(msg),
+                      "[OL] ERROR: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
+                      ready ? "Y" : "N",
+                      fault ? "Y" : "N",
+                      (bdtr >> 15) & 1UL,
+                      (sr >> 7) & 1UL,
+                      (sr >> 6) & 1UL);
+        Telemetry::log("print", msg);
         GateDriver_DisableOutputs();
         FaultManager::instance().raise(FaultSource::GateDriverUvlo,
                                        FaultReason::GateDriverNotReady);

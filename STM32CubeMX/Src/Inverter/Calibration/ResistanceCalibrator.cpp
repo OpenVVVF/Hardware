@@ -5,6 +5,7 @@
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
+#include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -218,12 +219,20 @@ bool ResistanceCalibrator::startCurrentCtrl(float max_current_a, Pair pair,
     if (oc_limit_a < max_current_a) oc_limit_a = max_current_a;
 
     m_mode = Mode::CURRENT_CTRL;
-    /* Evenly spaced current setpoints from max_current_a/NUM_POINTS up to max_current_a. */
+    /* Exponentially spaced current setpoints from CURRENT_CTRL_MIN_A up to
+     * max_current_a, concentrating points at the low-current IGBT knee. */
+    if (max_current_a <= CURRENT_CTRL_MIN_A) {
+        max_current_a = CURRENT_CTRL_MIN_A + 1.0f;
+    }
+    const float ratio = std::pow(max_current_a / CURRENT_CTRL_MIN_A,
+                                 1.0f / static_cast<float>(NUM_POINTS));
     for (uint8_t i = 0; i < NUM_POINTS; ++i) {
-        m_targets[i] = max_current_a * static_cast<float>(i + 1U) /
-                       static_cast<float>(NUM_POINTS);
+        m_targets[i] = CURRENT_CTRL_MIN_A * std::pow(ratio, static_cast<float>(i + 1U));
     }
     m_max_current_a = oc_limit_a;
+    if (oc_limit_a > 0.0f) {
+        phaseCurrentADC().setOvercurrentThreshold(oc_limit_a);
+    }
     m_timeout_ms = timeout_ms;
     m_pair_index = 0;
     m_point_index = 0;
@@ -289,6 +298,12 @@ void ResistanceCalibrator::resetMeasurementAccumulators(uint8_t point) {
 }
 
 bool ResistanceCalibrator::enableGateDriver() {
+    /* The timer master-output-enable (MOE) may have been cleared by a previous
+     * TIM1 break event.  Re-arm the timer outputs before releasing the gate
+     * driver, otherwise the drivers are enabled but nothing switches. */
+    PWM_ClearBreakFlag();
+    PWM_ClearFault();
+
     GateDriver_EnableOutputs();
 
     bool ready = false;
@@ -297,12 +312,30 @@ bool ResistanceCalibrator::enableGateDriver() {
         ready = GateDriver_IsReady();
         fault = GateDriver_IsFault();
         if (ready && !fault) {
+            uint32_t bdtr = TIM1->BDTR;
+            char okmsg[80];
+            std::snprintf(okmsg, sizeof(okmsg),
+                          "[RES CAL] gate driver ready | ready=Y fault=N MOE=%lu BIF=%lu BKF=%lu",
+                          (bdtr >> 15) & 1UL,
+                          (TIM1->SR >> 7) & 1UL,
+                          (TIM1->SR >> 6) & 1UL);
+            Telemetry::log("print", okmsg);
             return true;
         }
         HAL_Delay(5);
     }
 
-    Telemetry::log("print", "[RES CAL] FAIL: gate driver not ready or fault latched");
+    uint32_t bdtr = TIM1->BDTR;
+    uint32_t sr   = TIM1->SR;
+    char msg[96];
+    std::snprintf(msg, sizeof(msg),
+                  "[RES CAL] FAIL: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
+                  ready ? "Y" : "N",
+                  fault ? "Y" : "N",
+                  (bdtr >> 15) & 1UL,
+                  (sr >> 7) & 1UL,
+                  (sr >> 6) & 1UL);
+    Telemetry::log("print", msg);
     GateDriver_DisableOutputs();
     return false;
 }
@@ -413,6 +446,26 @@ void ResistanceCalibrator::configureHardware(float bus_pct) {
                           TIM_CCER_CC3E | TIM_CCER_CC3NE;
             break;
     }
+
+    /* A DESAT trip can latch between enableGateDriver() and the first PWM edge.
+     * Check immediately so we don't run the PI on stale/frozen current. */
+    if (GateDriver_IsFault()) {
+        uint32_t bdtr = TIM1->BDTR;
+        char msg[96];
+        std::snprintf(msg, sizeof(msg),
+                      "[RES CAL] FAIL: gate-driver fault after enabling PWM | MOE=%lu BIF=%lu BKF=%lu",
+                      (bdtr >> 15) & 1UL,
+                      (TIM1->SR >> 7) & 1UL,
+                      (TIM1->SR >> 6) & 1UL);
+        Telemetry::log("print", msg);
+        fail("[RES CAL] FAIL: DESAT/gate-driver fault latched after PWM enable");
+        return;
+    }
+    if ((TIM1->BDTR & TIM_BDTR_MOE) == 0U) {
+        Telemetry::log("print", "[RES CAL] FAIL: TIM1 MOE cleared after enabling PWM (break event)");
+        fail("[RES CAL] FAIL: TIM1 break event cleared MOE");
+        return;
+    }
 }
 
 void ResistanceCalibrator::restoreHardware() {
@@ -439,7 +492,8 @@ void ResistanceCalibrator::restoreHardware() {
     /* 3. Disable gate driver outputs. */
     GateDriver_DisableOutputs();
 
-    /* 4. Restore timer registers but leave CCER at 0 (all outputs off). */
+    /* 4. Restore timer registers including CCER (which keeps TIM1_CH4 and any
+     * other previous output enables intact so the ADC TRGO source is preserved). */
     TIM1->CCR1 = m_saved_ccr1;
     TIM1->CCR2 = m_saved_ccr2;
     TIM1->CCR3 = m_saved_ccr3;
@@ -447,7 +501,7 @@ void ResistanceCalibrator::restoreHardware() {
     TIM1->ARR  = m_saved_arr;
     TIM1->BDTR = (m_saved_bdtr & ~TIM_BDTR_DTG) | (TIM1->BDTR & TIM_BDTR_DTG);
     TIM1->BDTR = m_saved_bdtr;
-    TIM1->CCER = 0U; /* explicitly off */
+    TIM1->CCER = m_saved_ccer;
 
     /* 5. Restore GPIO to original alternate-function modes. */
     GPIOE->MODER = m_saved_gpioe_moder;
@@ -627,6 +681,7 @@ void ResistanceCalibrator::update() {
         return;
     }
 
+    ++m_update_calls;
     const uint32_t now_ms = HAL_GetTick();
 
     /* Abort on any active Critical or High fault. */
@@ -678,6 +733,13 @@ void ResistanceCalibrator::update() {
             m_pi_last_ms = now_ms;
             configureHardware(m_pi_duty);
         }
+
+        /* configureHardware() can transition to FAIL if DESAT/FLT trips
+         * immediately.  Do not enter SETTLE if it failed. */
+        if (m_state == State::FAIL) {
+            return;
+        }
+
         enterState(State::SETTLE);
         return;
     }
@@ -714,6 +776,10 @@ void ResistanceCalibrator::update() {
                               static_cast<unsigned>(NUM_POINTS), ibuf);
             }
             Telemetry::log("print", msg);
+            m_update_calls = 0;
+            m_sample_calls = 0;
+            m_last_rate_log_ms = now_ms;
+            m_last_sample_ms = now_ms;
             enterState(State::MEASURE);
         }
         return;
@@ -722,8 +788,23 @@ void ResistanceCalibrator::update() {
     if (m_state == State::MEASURE) {
         const uint8_t pt = m_point_index;
 
+        /* If the ADC trigger has stopped, the PI will wind up on stale data and
+         * we risk a hardware overcurrent.  Abort if no new sample arrives. */
+        if (now_ms - m_last_sample_ms > 100U) {
+            char msg[96];
+            std::snprintf(msg, sizeof(msg),
+                          "[RES CAL] FAIL: no new ADC sample for %lu ms (stale current)",
+                          static_cast<unsigned long>(now_ms - m_last_sample_ms));
+            Telemetry::log("print", msg);
+            restoreHardware();
+            enterState(State::FAIL);
+            return;
+        }
+
         float iu, iv, iw;
         if (phaseCurrentADC().sample(iu, iv, iw)) {
+            ++m_sample_calls;
+            m_last_sample_ms = now_ms;
             const float i_active = pairCurrentActive(iu, iv, iw, pair);
             m_sum_i_active[pt] += i_active;
             m_sum_i_inactive[pt] += pairCurrentInactive(iu, iv, iw, pair);
@@ -769,6 +850,27 @@ void ResistanceCalibrator::update() {
                 enterState(State::FAIL);
                 return;
             }
+        }
+
+        /* Diagnostic: log actual call and sample rates every 250 ms. */
+        if (now_ms - m_last_rate_log_ms >= 250U) {
+            const uint32_t dt_ms = now_ms - m_last_rate_log_ms;
+            const float update_hz = static_cast<float>(m_update_calls) * 1000.0f /
+                                    static_cast<float>(dt_ms);
+            const float sample_hz = static_cast<float>(m_sample_calls) * 1000.0f /
+                                    static_cast<float>(dt_ms);
+            char ubuf[16], sbuf[16];
+            fmtFloat3(ubuf, sizeof(ubuf), update_hz);
+            fmtFloat3(sbuf, sizeof(sbuf), sample_hz);
+            char msg[128];
+            std::snprintf(msg, sizeof(msg),
+                          "[RES CAL] %s timing: update=%s Hz  sample=%s Hz  n_samp=%lu",
+                          pairName(pair), ubuf, sbuf,
+                          static_cast<unsigned long>(m_sample_calls));
+            Telemetry::log("print", msg);
+            m_update_calls = 0;
+            m_sample_calls = 0;
+            m_last_rate_log_ms = now_ms;
         }
 
         if (elapsed_ms >= MEASURE_TIME_MS && m_sample_count[pt] >= MIN_SAMPLES) {

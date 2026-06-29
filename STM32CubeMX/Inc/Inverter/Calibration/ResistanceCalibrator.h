@@ -22,7 +22,7 @@ namespace Inverter {
  * R_ll is reported and the offset V_offset (dead-time, switch drops, wiring
  * drops) is discarded.
  *
- * By default the routine runs three staged measurements: UV, then UW, then VW.
+ * By default the routine runs staged measurements: UV, then UW, then VW.
  * A single pair can be requested instead.
  */
 class ResistanceCalibrator {
@@ -60,8 +60,8 @@ public:
      * @brief Start a current-controlled resistance calibration.
      *
      * @param max_current_a Maximum current setpoint [A].  The routine uses
-     *                      NUM_POINTS evenly spaced setpoints from
-     *                      max_current_a/NUM_POINTS up to max_current_a.
+     *                      NUM_POINTS exponentially spaced setpoints from
+     *                      CURRENT_CTRL_MIN_A up to max_current_a.
      * @param pair          First (or only) pair to measure.
      * @param run_all       If true, measure all three pairs starting from @p pair.
      * @param timeout_ms    Maximum time allowed per pair.
@@ -70,7 +70,7 @@ public:
      *         running or the open-loop controller is active.
      */
     bool startCurrentCtrl(float max_current_a, Pair pair = Pair::UV,
-                          bool run_all = true, uint32_t timeout_ms = 15000U,
+                          bool run_all = true, uint32_t timeout_ms = 30000U,
                           float oc_limit_a = 0.0f);
 
     /**
@@ -127,8 +127,9 @@ private:
     uint8_t m_pair_index = 0;
 
     Mode     m_mode = Mode::VOLTAGE_STEP;
-    static constexpr uint8_t NUM_POINTS = 3U;
-    float    m_targets[NUM_POINTS] = {0.0f, 0.0f, 0.0f}; /**< duty % (V step) or A (I ctrl). */
+    static constexpr uint8_t NUM_POINTS = 7U;
+    float    m_targets[NUM_POINTS] = {}; /**< duty % (V step) or A (I ctrl). */
+    static constexpr float CURRENT_CTRL_MIN_A = 4.0f; /**< lowest current setpoint. */
     float    m_max_current_a = 50.0f;
     uint32_t m_timeout_ms = 5000U;
 
@@ -136,11 +137,11 @@ private:
     uint32_t m_state_enter_ms = 0;
 
     /* Measurement accumulators.  Index = measurement point. */
-    uint32_t m_sample_count[NUM_POINTS] = {0, 0, 0};
-    float    m_sum_i_active[NUM_POINTS] = {0.0f, 0.0f, 0.0f};
-    float    m_sum_i_inactive[NUM_POINTS] = {0.0f, 0.0f, 0.0f};
-    float    m_sum_vdc[NUM_POINTS] = {0.0f, 0.0f, 0.0f};
-    float    m_sum_duty[NUM_POINTS] = {0.0f, 0.0f, 0.0f}; /**< commanded duty %. */
+    uint32_t m_sample_count[NUM_POINTS] = {};
+    float    m_sum_i_active[NUM_POINTS] = {};
+    float    m_sum_i_inactive[NUM_POINTS] = {};
+    float    m_sum_vdc[NUM_POINTS] = {};
+    float    m_sum_duty[NUM_POINTS] = {}; /**< commanded duty %. */
 
     float    m_results[3] = {0.0f, 0.0f, 0.0f};
     bool     m_result_valid[3] = {false, false, false};
@@ -150,6 +151,12 @@ private:
     float    m_pi_integral = 0.0f;
     float    m_pi_duty = 0.0f;
     uint32_t m_pi_last_ms = 0;
+
+    /* Timing instrumentation (diagnostic only). */
+    uint32_t m_update_calls = 0;      /**< update() calls in current log window. */
+    uint32_t m_sample_calls = 0;      /**< successful ADC samples in current window. */
+    uint32_t m_last_rate_log_ms = 0;  /**< last time rates were logged. */
+    uint32_t m_last_sample_ms = 0;    /**< last time a new ADC sample was seen. */
 
     /* Saved hardware state for restore. */
     uint32_t m_saved_arr = 0;
