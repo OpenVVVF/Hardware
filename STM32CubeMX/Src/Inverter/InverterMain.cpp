@@ -9,6 +9,7 @@
 #include "Inverter/Drivers/CAN/FdcanFault.h"
 #include "Inverter/Drivers/Logging/SupplyMonitor.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
+#include "Inverter/Calibration/ResistanceCalibrator.h"
 
 #include "main.h"
 #include "spi.h"
@@ -119,6 +120,7 @@ static void loop()
     Inverter::FaultManager::instance().executeSafetyActions();
     Inverter::openLoopController().update();
     Inverter::polePairCalibrator().update();
+    Inverter::resistanceCalibrator().update();
 
     /* Telemetry for open-loop setpoints. */
     Telemetry::log("ol_freq_hz", Inverter::openLoopController().frequencyHz());

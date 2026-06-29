@@ -2,6 +2,7 @@
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Calibration/PolePairCalibrator.h"
+#include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/PolePairEstimator.h"
@@ -68,7 +69,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal status | help");
     return true;
 }
 
@@ -320,6 +321,62 @@ void CommandShell::poll() {
                         cal.start();
                     }
                 }
+                else if (std::strcmp(argv[0], "rescal") == 0) {
+                    if (argc < 2 || std::strcmp(argv[1], "status") == 0) {
+                        ResistanceCalibrator& rc = ResistanceCalibrator::instance();
+                        char uv[16], uw[16], vw[16], avg[16];
+                        fmtFloat3(uv, sizeof(uv), rc.lastResult(ResistanceCalibrator::Pair::UV));
+                        fmtFloat3(uw, sizeof(uw), rc.lastResult(ResistanceCalibrator::Pair::UW));
+                        fmtFloat3(vw, sizeof(vw), rc.lastResult(ResistanceCalibrator::Pair::VW));
+                        fmtFloat3(avg, sizeof(avg), rc.lastAverage());
+                        char msg[128];
+                        std::snprintf(msg, sizeof(msg),
+                                      "[SHELL] rescal: R_uv=%s R_uw=%s R_vw=%s avg=%s ohm",
+                                      uv, uw, vw, avg);
+                        Telemetry::log("print", msg);
+                    } else if (std::strcmp(argv[1], "start") == 0) {
+                        if (argc < 3) {
+                            Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a]");
+                        } else {
+                            float bus_pct = 0.0f;
+                            float max_a = 50.0f;
+                            ResistanceCalibrator::Pair pair = ResistanceCalibrator::Pair::UV;
+                            bool run_all = true;
+
+                            if (std::strcmp(argv[2], "uv") == 0 ||
+                                std::strcmp(argv[2], "uw") == 0 ||
+                                std::strcmp(argv[2], "vw") == 0) {
+                                if (argc < 4) {
+                                    Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a]");
+                                    continue;
+                                }
+                                run_all = false;
+                                if (std::strcmp(argv[2], "uv") == 0) {
+                                    pair = ResistanceCalibrator::Pair::UV;
+                                } else if (std::strcmp(argv[2], "uw") == 0) {
+                                    pair = ResistanceCalibrator::Pair::UW;
+                                } else {
+                                    pair = ResistanceCalibrator::Pair::VW;
+                                }
+                                bus_pct = std::strtof(argv[3], nullptr);
+                                if (argc >= 5) {
+                                    max_a = std::strtof(argv[4], nullptr);
+                                }
+                            } else {
+                                bus_pct = std::strtof(argv[2], nullptr);
+                                if (argc >= 4) {
+                                    max_a = std::strtof(argv[3], nullptr);
+                                }
+                            }
+
+                            if (!resistanceCalibrator().start(bus_pct, pair, run_all, 5000U, max_a)) {
+                                Telemetry::log("print", "[SHELL] rescal start failed");
+                            }
+                        }
+                    } else {
+                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal status");
+                    }
+                }
                 else if (std::strcmp(argv[0], "fault") == 0) {
                     if (argc < 2) {
                         Telemetry::log("print", "[SHELL] usage: fault list | clear | test <name>");
@@ -473,7 +530,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of
