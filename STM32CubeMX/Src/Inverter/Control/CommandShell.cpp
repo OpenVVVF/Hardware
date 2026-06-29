@@ -69,7 +69,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal status | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal stop | rescal status | help");
     return true;
 }
 
@@ -369,12 +369,14 @@ void CommandShell::poll() {
                                 }
                             }
 
-                            if (!resistanceCalibrator().start(bus_pct, pair, run_all, 5000U, max_a)) {
+                            if (!resistanceCalibrator().start(bus_pct, pair, run_all, 15000U, max_a)) {
                                 Telemetry::log("print", "[SHELL] rescal start failed");
                             }
                         }
+                    } else if (std::strcmp(argv[1], "stop") == 0) {
+                        resistanceCalibrator().stop();
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal status");
+                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal stop | rescal status");
                     }
                 }
                 else if (std::strcmp(argv[0], "fault") == 0) {
@@ -530,7 +532,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal status | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

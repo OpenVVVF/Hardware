@@ -147,11 +147,15 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
         bus_pct = MAX_BUS_PCT;
     }
 
-    m_bus_pct_a = bus_pct;
-    m_bus_pct_b = bus_pct * 0.5f;
+    /* Evenly spaced voltage points from bus_pct/NUM_VOLT_POINTS up to bus_pct. */
+    for (uint8_t i = 0; i < NUM_VOLT_POINTS; ++i) {
+        m_bus_pcts[i] = bus_pct * static_cast<float>(i + 1U) /
+                        static_cast<float>(NUM_VOLT_POINTS);
+    }
     m_max_current_a = (max_current_a < 0.0f) ? 0.0f : max_current_a;
     m_timeout_ms = timeout_ms;
     m_pair_index = 0;
+    m_point_index = 0;
     m_num_pairs = run_all ? 3U : 1U;
     m_pairs[0] = pair;
     if (run_all) {
@@ -164,10 +168,12 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
     m_results[0] = m_results[1] = m_results[2] = 0.0f;
     m_result_valid[0] = m_result_valid[1] = m_result_valid[2] = false;
     m_average_r_phase = 0.0f;
-    m_sample_count[0] = m_sample_count[1] = 0;
-    m_sum_i_active[0] = m_sum_i_active[1] = 0.0f;
-    m_sum_i_inactive[0] = m_sum_i_inactive[1] = 0.0f;
-    m_sum_vdc[0] = m_sum_vdc[1] = 0.0f;
+    for (uint8_t i = 0; i < NUM_VOLT_POINTS; ++i) {
+        m_sample_count[i] = 0;
+        m_sum_i_active[i] = 0.0f;
+        m_sum_i_inactive[i] = 0.0f;
+        m_sum_vdc[i] = 0.0f;
+    }
 
     enterState(State::ENABLE);
 
@@ -177,8 +183,9 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
     fmtFloat3(ibuf, sizeof(ibuf), m_max_current_a);
     char msg[96];
     std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] starting (%s) at %s %% bus, max I=%s A",
-                  run_all ? "UV/UW/VW" : pairName(pair), buf, ibuf);
+                  "[RES CAL] starting (%s) max %s %% bus, %u points, max I=%s A",
+                  run_all ? "UV/UW/VW" : pairName(pair), buf,
+                  static_cast<unsigned>(NUM_VOLT_POINTS), ibuf);
     Telemetry::log("print", msg);
     return true;
 }
@@ -186,6 +193,20 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
 void ResistanceCalibrator::enterState(State state) {
     m_state = state;
     m_state_enter_ms = HAL_GetTick();
+}
+
+void ResistanceCalibrator::stop() {
+    if (m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL) {
+        Telemetry::log("print", "[RES CAL] stopped by user");
+        restoreHardware();
+        enterState(State::FAIL);
+    }
+}
+
+void ResistanceCalibrator::fail(const char* reason) {
+    restoreHardware();
+    Telemetry::log("print", reason);
+    enterState(State::FAIL);
 }
 
 bool ResistanceCalibrator::enableGateDriver() {
@@ -360,69 +381,110 @@ void ResistanceCalibrator::restoreHardware() {
 void ResistanceCalibrator::finishPairMeasurement() {
     const Pair pair = m_pairs[m_pair_index];
 
-    if (m_sample_count[0] < MIN_SAMPLES || m_sample_count[1] < MIN_SAMPLES) {
-        enterState(State::FAIL);
-        Telemetry::log("print", "[RES CAL] FAIL: not enough samples");
+    float v[NUM_VOLT_POINTS];
+    float i[NUM_VOLT_POINTS];
+    float vdc_avg = 0.0f;
+    float i_active_max = 0.0f;
+
+    for (uint8_t pt = 0; pt < NUM_VOLT_POINTS; ++pt) {
+        if (m_sample_count[pt] < MIN_SAMPLES) {
+            fail("[RES CAL] FAIL: not enough samples");
+            return;
+        }
+
+        const float vdc = m_sum_vdc[pt] / static_cast<float>(m_sample_count[pt]);
+        const float i_active = m_sum_i_active[pt] / static_cast<float>(m_sample_count[pt]);
+        const float i_inactive = std::fabs(
+            m_sum_i_inactive[pt] / static_cast<float>(m_sample_count[pt]));
+
+        /* The inactive (high-Z) phase should carry essentially zero current. */
+        const float max_inactive = std::max(
+            MAX_INACTIVE_CURRENT_MIN_A, std::fabs(i_active) * MAX_INACTIVE_CURRENT_RATIO);
+        if (i_inactive > max_inactive) {
+            char abuf[16], ibuf[16];
+            fmtFloat3(abuf, sizeof(abuf), std::fabs(i_active));
+            fmtFloat3(ibuf, sizeof(ibuf), i_inactive);
+            char msg[96];
+            std::snprintf(msg, sizeof(msg),
+                          "[RES CAL] FAIL: %s inactive current %s A exceeds limit (active %s A)",
+                          pairName(pair), ibuf, abuf);
+            fail(msg);
+            return;
+        }
+
+        v[pt] = (m_bus_pcts[pt] / 100.0f) * vdc;
+        i[pt] = i_active;
+        vdc_avg += vdc;
+        i_active_max = std::max(i_active_max, std::fabs(i_active));
+    }
+    vdc_avg /= static_cast<float>(NUM_VOLT_POINTS);
+
+    /* Print the raw (V, I) points used for the fit. */
+    {
+        char msg[192];
+        int len = std::snprintf(msg, sizeof(msg), "[RES CAL] %s fit data: ", pairName(pair));
+        for (uint8_t pt = 0; pt < NUM_VOLT_POINTS; ++pt) {
+            char vbuf[16], ibuf[16];
+            fmtFloat3(vbuf, sizeof(vbuf), v[pt]);
+            fmtFloat3(ibuf, sizeof(ibuf), i[pt]);
+            len += std::snprintf(msg + len, sizeof(msg) - len,
+                                 "(V=%sV I=%sA)%s", vbuf, ibuf,
+                                 (pt + 1U < NUM_VOLT_POINTS) ? ", " : "");
+        }
+        Telemetry::log("print", msg);
+    }
+
+    /* Linear regression: V = R_ll * I + V_offset.
+     * We want the slope R_ll; V_offset is discarded. */
+    float sum_v = 0.0f;
+    float sum_i = 0.0f;
+    float sum_vi = 0.0f;
+    float sum_ii = 0.0f;
+    for (uint8_t pt = 0; pt < NUM_VOLT_POINTS; ++pt) {
+        sum_v  += v[pt];
+        sum_i  += i[pt];
+        sum_vi += v[pt] * i[pt];
+        sum_ii += i[pt] * i[pt];
+    }
+
+    const float n = static_cast<float>(NUM_VOLT_POINTS);
+    const float denom = n * sum_ii - sum_i * sum_i;
+
+    {
+        char s1[16], s2[16], s3[16], s4[16], dbuf[16];
+        fmtFloat3(s1, sizeof(s1), sum_v);
+        fmtFloat3(s2, sizeof(s2), sum_i);
+        fmtFloat3(s3, sizeof(s3), sum_vi);
+        fmtFloat3(s4, sizeof(s4), sum_ii);
+        fmtFloat3(dbuf, sizeof(dbuf), denom);
+        char msg[192];
+        std::snprintf(msg, sizeof(msg),
+                      "[RES CAL] %s fit math: sumV=%s sumI=%s sumVI=%s sumII=%s denom=%s",
+                      pairName(pair), s1, s2, s3, s4, dbuf);
+        Telemetry::log("print", msg);
+    }
+
+    if (std::fabs(denom) < 1e-9f || !std::isfinite(denom)) {
+        fail("[RES CAL] FAIL: current did not vary enough between points");
         return;
     }
 
-    const float i_a = m_sum_i_active[0] / static_cast<float>(m_sample_count[0]);
-    const float i_b = m_sum_i_active[1] / static_cast<float>(m_sample_count[1]);
-    const float i_inactive_a = std::fabs(
-        m_sum_i_inactive[0] / static_cast<float>(m_sample_count[0]));
-    const float i_inactive_b = std::fabs(
-        m_sum_i_inactive[1] / static_cast<float>(m_sample_count[1]));
-    const float vdc_a = m_sum_vdc[0] / static_cast<float>(m_sample_count[0]);
-    const float vdc_b = m_sum_vdc[1] / static_cast<float>(m_sample_count[1]);
-
-    /* The inactive (high-Z) phase should carry essentially zero current. */
-    const float max_inactive_a = std::max(
-        MAX_INACTIVE_CURRENT_MIN_A, std::fabs(i_a) * MAX_INACTIVE_CURRENT_RATIO);
-    const float max_inactive_b = std::max(
-        MAX_INACTIVE_CURRENT_MIN_A, std::fabs(i_b) * MAX_INACTIVE_CURRENT_RATIO);
-
-    if (i_inactive_a > max_inactive_a || i_inactive_b > max_inactive_b) {
-        enterState(State::FAIL);
-        char abuf[16], ibuf[16];
-        fmtFloat3(abuf, sizeof(abuf), std::max(std::fabs(i_a), std::fabs(i_b)));
-        fmtFloat3(ibuf, sizeof(ibuf), std::max(i_inactive_a, i_inactive_b));
+    const float r_ll = (n * sum_vi - sum_v * sum_i) / denom;
+    {
+        char rbuf[16];
+        fmtFloat4(rbuf, sizeof(rbuf), r_ll * 1000.0f);
         char msg[96];
-        std::snprintf(msg, sizeof(msg),
-                      "[RES CAL] FAIL: %s inactive current %s A exceeds limit (active %s A)",
-                      pairName(pair), ibuf, abuf);
+        std::snprintf(msg, sizeof(msg), "[RES CAL] %s fit result: R_ll=%s mohm", pairName(pair), rbuf);
         Telemetry::log("print", msg);
-        return;
     }
-
-    /* Line-to-line voltage at point A and B. */
-    const float v_ll_a = (m_bus_pct_a / 100.0f) * vdc_a;
-    const float v_ll_b = (m_bus_pct_b / 100.0f) * vdc_b;
-    const float delta_v = v_ll_a - v_ll_b;
-    const float delta_i = i_a - i_b;
-    const float abs_delta_i = std::fabs(delta_i);
-
-    if (abs_delta_i < 0.01f) {
-        enterState(State::FAIL);
-        char ia_buf[16], ib_buf[16];
-        fmtFloat3(ia_buf, sizeof(ia_buf), i_a);
-        fmtFloat3(ib_buf, sizeof(ib_buf), i_b);
-        char msg[128];
-        std::snprintf(msg, sizeof(msg),
-                      "[RES CAL] FAIL: %s current did not change (Ia=%s A  Ib=%s A)",
-                      pairName(pair), ia_buf, ib_buf);
-        Telemetry::log("print", msg);
-        return;
-    }
-
-    const float r_ll = std::fabs(delta_v) / abs_delta_i;
     if (r_ll <= 0.0f || !std::isfinite(r_ll)) {
-        enterState(State::FAIL);
-        Telemetry::log("print", "[RES CAL] FAIL: computed resistance is non-positive; increase bus_pct");
+        fail("[RES CAL] FAIL: computed resistance is non-positive; increase bus_pct");
         return;
     }
+
+    const float v_offset = (sum_v - r_ll * sum_i) / n;
 
     const float r_phase = r_ll * 0.5f;
-
     const int idx = pairIndex(pair);
     m_results[idx] = r_phase;
     m_result_valid[idx] = true;
@@ -430,19 +492,19 @@ void ResistanceCalibrator::finishPairMeasurement() {
     char rll_buf[16], rph_buf[16];
     fmtFloat4(rll_buf, sizeof(rll_buf), r_ll * 1000.0f);
     fmtFloat4(rph_buf, sizeof(rph_buf), r_phase * 1000.0f);
-    char ia_buf[16], ib_buf[16];
-    fmtFloat3(ia_buf, sizeof(ia_buf), i_a);
-    fmtFloat3(ib_buf, sizeof(ib_buf), i_b);
-    char vbuf[16];
-    fmtFloat3(vbuf, sizeof(vbuf), (vdc_a + vdc_b) * 0.5f);
-    char msg[160];
+    char ibuf[16], vbuf[16], offbuf[16];
+    fmtFloat3(ibuf, sizeof(ibuf), i_active_max);
+    fmtFloat3(vbuf, sizeof(vbuf), vdc_avg);
+    fmtFloat3(offbuf, sizeof(offbuf), v_offset);
+    char msg[192];
     std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] %s: R_ll=%s mohm  R_phase=%s mohm  I=%s/%s A  Vdc=%s V",
-                  pairName(pair), rll_buf, rph_buf, ia_buf, ib_buf, vbuf);
+                  "[RES CAL] %s: R_ll=%s mohm  R_phase=%s mohm  Imax=%s A  Vdc=%s V  V_off=%s V",
+                  pairName(pair), rll_buf, rph_buf, ibuf, vbuf, offbuf);
     Telemetry::log("print", msg);
 
     enterState(State::NEXT_PAIR);
 }
+
 
 void ResistanceCalibrator::reportResults() {
     float sum_ll = 0.0f;
@@ -527,8 +589,9 @@ void ResistanceCalibrator::update() {
             return;
         }
 
-        configureHardware(m_bus_pct_a);
-        enterState(State::SETTLE_A);
+        m_point_index = 0;
+        configureHardware(m_bus_pcts[m_point_index]);
+        enterState(State::SETTLE);
         return;
     }
 
@@ -542,28 +605,29 @@ void ResistanceCalibrator::update() {
 
     const Pair pair = m_pairs[m_pair_index];
 
-    if (m_state == State::SETTLE_A || m_state == State::SETTLE_B) {
+    if (m_state == State::SETTLE) {
         if (elapsed_ms >= SETTLE_TIME_MS) {
-            const int pt = (m_state == State::SETTLE_A) ? 0 : 1;
+            const uint8_t pt = m_point_index;
             m_sample_count[pt] = 0;
             m_sum_i_active[pt] = 0.0f;
             m_sum_i_inactive[pt] = 0.0f;
             m_sum_vdc[pt] = 0.0f;
             char vbuf[16];
             fmtFloat4(vbuf, sizeof(vbuf),
-                      (pt == 0 ? m_bus_pct_a : m_bus_pct_b) * 0.01f * dcLinkVoltageSensor().voltage());
+                      m_bus_pcts[pt] * 0.01f * dcLinkVoltageSensor().voltage());
             char msg[80];
             std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] %s point %c: target Vll=%s V",
-                          pairName(pair), (pt == 0) ? 'A' : 'B', vbuf);
+                          "[RES CAL] %s point %u/%u: target Vll=%s V",
+                          pairName(pair), static_cast<unsigned>(pt + 1U),
+                          static_cast<unsigned>(NUM_VOLT_POINTS), vbuf);
             Telemetry::log("print", msg);
-            enterState((m_state == State::SETTLE_A) ? State::MEASURE_A : State::MEASURE_B);
+            enterState(State::MEASURE);
         }
         return;
     }
 
-    if (m_state == State::MEASURE_A || m_state == State::MEASURE_B) {
-        const int pt = (m_state == State::MEASURE_A) ? 0 : 1;
+    if (m_state == State::MEASURE) {
+        const uint8_t pt = m_point_index;
 
         float iu, iv, iw;
         if (phaseCurrentADC().sample(iu, iv, iw)) {
@@ -589,13 +653,36 @@ void ResistanceCalibrator::update() {
         }
 
         if (elapsed_ms >= MEASURE_TIME_MS && m_sample_count[pt] >= MIN_SAMPLES) {
-            if (m_state == State::MEASURE_A) {
-                configureHardware(m_bus_pct_b);
-                enterState(State::SETTLE_B);
+            const float vdc_pt = m_sum_vdc[pt] / static_cast<float>(m_sample_count[pt]);
+            const float iact_pt = m_sum_i_active[pt] / static_cast<float>(m_sample_count[pt]);
+            const float iinact_pt = std::fabs(
+                m_sum_i_inactive[pt] / static_cast<float>(m_sample_count[pt]));
+            const float vll_pt = (m_bus_pcts[pt] / 100.0f) * vdc_pt;
+            char vbuf[16], ibuf[16], iabuf[16], pbuf[16];
+            fmtFloat3(vbuf, sizeof(vbuf), vll_pt);
+            fmtFloat3(ibuf, sizeof(ibuf), iact_pt);
+            fmtFloat3(iabuf, sizeof(iabuf), iinact_pt);
+            fmtFloat3(pbuf, sizeof(pbuf), vdc_pt);
+            char msg[160];
+            std::snprintf(msg, sizeof(msg),
+                          "[RES CAL] %s point %u/%u done: Vll=%s V  Vdc=%s V  Iact=%s A  Iinact=%s A",
+                          pairName(pair), static_cast<unsigned>(pt + 1U),
+                          static_cast<unsigned>(NUM_VOLT_POINTS), vbuf, pbuf, ibuf, iabuf);
+            Telemetry::log("print", msg);
+
+            if (m_point_index + 1U < NUM_VOLT_POINTS) {
+                ++m_point_index;
+                configureHardware(m_bus_pcts[m_point_index]);
+                enterState(State::SETTLE);
             } else {
-                finishPairMeasurement();
+                enterState(State::FINISH_PAIR);
             }
         }
+        return;
+    }
+
+    if (m_state == State::FINISH_PAIR) {
+        finishPairMeasurement();
         return;
     }
 
@@ -607,8 +694,9 @@ void ResistanceCalibrator::update() {
             enterState(State::DONE);
             return;
         }
-        configureHardware(m_bus_pct_a);
-        enterState(State::SETTLE_A);
+        m_point_index = 0;
+        configureHardware(m_bus_pcts[m_point_index]);
+        enterState(State::SETTLE);
         return;
     }
 }

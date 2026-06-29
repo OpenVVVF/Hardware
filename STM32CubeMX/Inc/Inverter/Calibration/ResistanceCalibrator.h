@@ -10,9 +10,9 @@ namespace Inverter {
  * Uses direct TIM1 and GPIO register access to apply a DC voltage across two
  * motor phases while the third phase is placed in true high impedance (both
  * high-side and low-side MOSFETs off).  PWM runs at 8 kHz during calibration
- * for low current ripple.  Two voltage points are measured per pair and the
- * resistance is computed from dV/dI to cancel inverter dead-time and switch-drop
- * offsets.
+ * for low current ripple.  Multiple voltage points are measured per pair and a
+ * linear fit V = I*R_ll + V_offset is performed; the slope R_ll is reported and
+ * the offset V_offset (dead-time, switch drops, wiring drops) is discarded.
  *
  * By default the routine runs three staged measurements: UV, then UW, then VW.
  * A single pair can be requested instead.
@@ -30,8 +30,9 @@ public:
     /**
      * @brief Start a resistance calibration.
      *
-     * @param bus_pct       Percentage of Vdc to apply across the active pair
-     *                      at the high point.  The low point is half of this.
+     * @param bus_pct       Maximum percentage of Vdc to apply across the active
+     *                      pair.  The routine uses NUM_VOLT_POINTS evenly spaced
+     *                      points from bus_pct/NUM_VOLT_POINTS up to bus_pct.
      * @param pair          First (or only) pair to measure.
      * @param run_all       If true, measure all three pairs starting from @p pair.
      *                      If false, measure only @p pair.
@@ -41,13 +42,16 @@ public:
      *         running or the open-loop controller is active.
      */
     bool start(float bus_pct, Pair pair = Pair::UV, bool run_all = true,
-               uint32_t timeout_ms = 5000U, float max_current_a = 50.0f);
+               uint32_t timeout_ms = 15000U, float max_current_a = 50.0f);
 
     /**
      * @brief Non-blocking state-machine update.  Call at ~100 Hz from the main
      * loop.
      */
     void update();
+
+    /** @brief Abort a running calibration and turn off all switching. */
+    void stop();
 
     /** @brief True while a calibration is running. */
     bool isActive() const {
@@ -67,16 +71,16 @@ private:
     enum class State {
         IDLE,
         ENABLE,
-        SETTLE_A,
-        MEASURE_A,
-        SETTLE_B,
-        MEASURE_B,
+        SETTLE,
+        MEASURE,
+        FINISH_PAIR,
         NEXT_PAIR,
         DONE,
         FAIL
     };
 
     void enterState(State state);
+    void fail(const char* reason);
     bool enableGateDriver();
     void configureHardware(float bus_pct);
     void restoreHardware();
@@ -92,18 +96,19 @@ private:
     uint8_t m_num_pairs = 3;
     uint8_t m_pair_index = 0;
 
-    float  m_bus_pct_a = 0.0f; /**< High-point bus percentage. */
-    float  m_bus_pct_b = 0.0f; /**< Low-point bus percentage (half of A). */
+    static constexpr uint8_t NUM_VOLT_POINTS = 3U;
+    float  m_bus_pcts[NUM_VOLT_POINTS] = {0.0f, 0.0f, 0.0f};
     float  m_max_current_a = 50.0f;
     uint32_t m_timeout_ms = 5000U;
 
+    uint8_t  m_point_index = 0;
     uint32_t m_state_enter_ms = 0;
 
-    /* Measurement accumulators.  Index 0 = high point, 1 = low point. */
-    uint32_t m_sample_count[2] = {0, 0};
-    float    m_sum_i_active[2] = {0.0f, 0.0f};
-    float    m_sum_i_inactive[2] = {0.0f, 0.0f};
-    float    m_sum_vdc[2] = {0.0f, 0.0f};
+    /* Measurement accumulators.  Index = voltage point. */
+    uint32_t m_sample_count[NUM_VOLT_POINTS] = {0, 0, 0};
+    float    m_sum_i_active[NUM_VOLT_POINTS] = {0.0f, 0.0f, 0.0f};
+    float    m_sum_i_inactive[NUM_VOLT_POINTS] = {0.0f, 0.0f, 0.0f};
+    float    m_sum_vdc[NUM_VOLT_POINTS] = {0.0f, 0.0f, 0.0f};
 
     float    m_results[3] = {0.0f, 0.0f, 0.0f};
     bool     m_result_valid[3] = {false, false, false};
@@ -121,9 +126,9 @@ private:
 
     static constexpr float MAX_BUS_PCT = 25.0f;
     static constexpr uint32_t CAL_ARR = 17186U; /**< ~8 kHz center-aligned with 275 MHz timer clock. */
-    static constexpr uint32_t SETTLE_TIME_MS = 200U;
-    static constexpr uint32_t MEASURE_TIME_MS = 200U;
-    static constexpr uint32_t MIN_SAMPLES = 500U;
+    static constexpr uint32_t SETTLE_TIME_MS = 1000U;
+    static constexpr uint32_t MEASURE_TIME_MS = 1000U;
+    static constexpr uint32_t MIN_SAMPLES = 2000U;
     static constexpr float MAX_INACTIVE_CURRENT_RATIO = 0.05f; /**< 5 % of active current. */
     static constexpr float MAX_INACTIVE_CURRENT_MIN_A = 0.50f;  /**< floor for the ratio check. */
 };

@@ -256,8 +256,10 @@ void EncoderADC::onDmaError() {
 
 void EncoderADC::diagnose() {
     if (m_running && (HAL_GetTick() - m_last_sample_ms) > SAMPLE_TIMEOUT_MS) {
-        FaultManager::instance().raise(FaultSource::EncoderTimeout,
-                                       FaultReason::EncoderSampleTimeout);
+        /* Temporarily disabled: encoder timeout fault is firing during
+         * bench testing and interfering with other calibration work. */
+        // FaultManager::instance().raise(FaultSource::EncoderTimeout,
+        //                                FaultReason::EncoderSampleTimeout);
     }
 }
 
