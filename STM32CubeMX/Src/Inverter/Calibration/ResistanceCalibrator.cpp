@@ -218,10 +218,15 @@ bool ResistanceCalibrator::startCurrentCtrl(float max_current_a, Pair pair,
     if (oc_limit_a < max_current_a) oc_limit_a = max_current_a;
 
     m_mode = Mode::CURRENT_CTRL;
-    /* Evenly spaced current setpoints from max_current_a/NUM_POINTS up to max_current_a. */
+    /* Exponentially spaced current setpoints, focused on the low-current IGBT
+     * knee region.  Points run from CURRENT_CTRL_MIN_A up to max_current_a. */
+    if (max_current_a <= CURRENT_CTRL_MIN_A) {
+        max_current_a = CURRENT_CTRL_MIN_A + 1.0f;
+    }
+    const float ratio = std::pow(max_current_a / CURRENT_CTRL_MIN_A,
+                                 1.0f / static_cast<float>(NUM_POINTS));
     for (uint8_t i = 0; i < NUM_POINTS; ++i) {
-        m_targets[i] = max_current_a * static_cast<float>(i + 1U) /
-                       static_cast<float>(NUM_POINTS);
+        m_targets[i] = CURRENT_CTRL_MIN_A * std::pow(ratio, static_cast<float>(i + 1U));
     }
     m_max_current_a = oc_limit_a;
     m_timeout_ms = timeout_ms;
@@ -286,6 +291,14 @@ void ResistanceCalibrator::resetMeasurementAccumulators(uint8_t point) {
     m_sum_i_inactive[point] = 0.0f;
     m_sum_vdc[point] = 0.0f;
     m_sum_duty[point] = 0.0f;
+}
+
+float ResistanceCalibrator::estimateInitialDuty(float current_a, float vdc) const {
+    if (vdc <= 0.0f) return PI_MIN_DUTY;
+    float duty = ((V_IGBT_TOTAL_ESTIMATE_V + current_a * R_LL_ESTIMATE_OHM) / vdc) * 100.0f;
+    if (duty < PI_MIN_DUTY) duty = PI_MIN_DUTY;
+    if (duty > MAX_BUS_PCT) duty = MAX_BUS_PCT;
+    return duty;
 }
 
 bool ResistanceCalibrator::enableGateDriver() {
@@ -499,9 +512,9 @@ void ResistanceCalibrator::finishPairMeasurement() {
     }
     vdc_avg /= static_cast<float>(NUM_POINTS);
 
-    /* Print the raw (V, I) points used for the fit. */
+    /* Print the raw (V, I) points used for the fit in chunks. */
     {
-        char msg[192];
+        char msg[512];
         int len = std::snprintf(msg, sizeof(msg), "[RES CAL] %s fit data: ", pairName(pair));
         for (uint8_t pt = 0; pt < NUM_POINTS; ++pt) {
             char vbuf[16], ibuf[16];
@@ -568,6 +581,24 @@ void ResistanceCalibrator::finishPairMeasurement() {
     const int idx = pairIndex(pair);
     m_results[idx] = r_phase;
     m_result_valid[idx] = true;
+
+    /* Per-phase switch/cable voltage drop: Vdrop = V_ll/2 - I*R_phase.
+     * Store it for a compensation LUT and log it. */
+    {
+        char msg[512];
+        int len = std::snprintf(msg, sizeof(msg), "[RES CAL] %s Vdrop/phase: ", pairName(pair));
+        for (uint8_t pt = 0; pt < NUM_POINTS; ++pt) {
+            m_char_i[pt] = i[pt];
+            m_char_vdrop[pt] = 0.5f * v[pt] - i[pt] * r_phase;
+            char ibuf[16], vdbuf[16];
+            fmtFloat3(ibuf, sizeof(ibuf), m_char_i[pt]);
+            fmtFloat3(vdbuf, sizeof(vdbuf), m_char_vdrop[pt]);
+            len += std::snprintf(msg + len, sizeof(msg) - len,
+                                 "(I=%sA Vd=%sV)%s", ibuf, vdbuf,
+                                 (pt + 1U < NUM_POINTS) ? ", " : "");
+        }
+        Telemetry::log("print", msg);
+    }
 
     char rll_buf[16], rph_buf[16];
     fmtFloat4(rll_buf, sizeof(rll_buf), r_ll * 1000.0f);
@@ -674,7 +705,7 @@ void ResistanceCalibrator::update() {
             configureHardware(m_targets[m_point_index]);
         } else {
             m_pi_integral = 0.0f;
-            m_pi_duty = PI_MIN_DUTY;
+            m_pi_duty = estimateInitialDuty(m_targets[0], dcLinkVoltageSensor().voltage());
             m_pi_last_ms = now_ms;
             configureHardware(m_pi_duty);
         }
@@ -796,8 +827,9 @@ void ResistanceCalibrator::update() {
                 if (m_mode == Mode::VOLTAGE_STEP) {
                     configureHardware(m_targets[m_point_index]);
                 } else {
+                    /* Preserve last duty as feedforward for the next (higher)
+                     * current setpoint; reset integral to avoid windup. */
                     m_pi_integral = 0.0f;
-                    m_pi_duty = PI_MIN_DUTY;
                     m_pi_last_ms = now_ms;
                     configureHardware(m_pi_duty);
                 }
@@ -827,7 +859,7 @@ void ResistanceCalibrator::update() {
             configureHardware(m_targets[m_point_index]);
         } else {
             m_pi_integral = 0.0f;
-            m_pi_duty = PI_MIN_DUTY;
+            m_pi_duty = estimateInitialDuty(m_targets[0], dcLinkVoltageSensor().voltage());
             m_pi_last_ms = now_ms;
             configureHardware(m_pi_duty);
         }

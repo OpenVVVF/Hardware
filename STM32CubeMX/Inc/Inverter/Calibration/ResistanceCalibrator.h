@@ -54,7 +54,7 @@ public:
      *         running or the open-loop controller is active.
      */
     bool start(float bus_pct, Pair pair = Pair::UV, bool run_all = true,
-               uint32_t timeout_ms = 15000U, float max_current_a = 50.0f);
+               uint32_t timeout_ms = 25000U, float max_current_a = 50.0f);
 
     /**
      * @brief Start a current-controlled resistance calibration.
@@ -116,6 +116,7 @@ private:
     void finishPairMeasurement();
     void reportResults();
     void resetMeasurementAccumulators(uint8_t point);
+    float estimateInitialDuty(float current_a, float vdc) const;
 
     static const char* pairName(Pair pair);
     static int pairIndex(Pair pair);
@@ -127,8 +128,8 @@ private:
     uint8_t m_pair_index = 0;
 
     Mode     m_mode = Mode::VOLTAGE_STEP;
-    static constexpr uint8_t NUM_POINTS = 3U;
-    float    m_targets[NUM_POINTS] = {0.0f, 0.0f, 0.0f}; /**< duty % (V step) or A (I ctrl). */
+    static constexpr uint8_t NUM_POINTS = 15U;
+    float    m_targets[NUM_POINTS] = {}; /**< duty % (V step) or A (I ctrl). */
     float    m_max_current_a = 50.0f;
     uint32_t m_timeout_ms = 5000U;
 
@@ -136,11 +137,16 @@ private:
     uint32_t m_state_enter_ms = 0;
 
     /* Measurement accumulators.  Index = measurement point. */
-    uint32_t m_sample_count[NUM_POINTS] = {0, 0, 0};
-    float    m_sum_i_active[NUM_POINTS] = {0.0f, 0.0f, 0.0f};
-    float    m_sum_i_inactive[NUM_POINTS] = {0.0f, 0.0f, 0.0f};
-    float    m_sum_vdc[NUM_POINTS] = {0.0f, 0.0f, 0.0f};
-    float    m_sum_duty[NUM_POINTS] = {0.0f, 0.0f, 0.0f}; /**< commanded duty %. */
+    uint32_t m_sample_count[NUM_POINTS] = {};
+    float    m_sum_i_active[NUM_POINTS] = {};
+    float    m_sum_i_inactive[NUM_POINTS] = {};
+    float    m_sum_vdc[NUM_POINTS] = {};
+    float    m_sum_duty[NUM_POINTS] = {}; /**< commanded duty %. */
+
+    /* Last characterization curve: current vs per-phase voltage drop.
+     * Useful for building an IGBT/switch compensation table. */
+    float    m_char_i[NUM_POINTS] = {};
+    float    m_char_vdrop[NUM_POINTS] = {};
 
     float    m_results[3] = {0.0f, 0.0f, 0.0f};
     bool     m_result_valid[3] = {false, false, false};
@@ -163,15 +169,18 @@ private:
 
     static constexpr float MAX_BUS_PCT = 25.0f;
     static constexpr uint32_t CAL_ARR = 17186U; /**< ~8 kHz center-aligned with 275 MHz timer clock. */
-    static constexpr uint32_t SETTLE_TIME_MS = 1000U;
-    static constexpr uint32_t MEASURE_TIME_MS = 1000U;
-    static constexpr uint32_t MIN_SAMPLES = 2000U;
+    static constexpr uint32_t SETTLE_TIME_MS = 600U;
+    static constexpr uint32_t MEASURE_TIME_MS = 600U;
+    static constexpr uint32_t MIN_SAMPLES = 1000U;
     static constexpr float MAX_INACTIVE_CURRENT_RATIO = 0.05f; /**< 5 % of active current. */
     static constexpr float MAX_INACTIVE_CURRENT_MIN_A = 2.00f;  /**< floor for the ratio check. */
+    static constexpr float CURRENT_CTRL_MIN_A = 1.0f;           /**< lowest current setpoint. */
 
-    static constexpr float PI_KP = 0.05f; /**< % duty per A error. */
-    static constexpr float PI_KI = 10.0f; /**< % duty per A per second. */
+    static constexpr float PI_KP = 0.02f; /**< % duty per A error. */
+    static constexpr float PI_KI = 1.5f;  /**< % duty per A per second. */
     static constexpr float PI_MIN_DUTY = 0.05f; /**< 0.05 %, avoids zero-crossing issues. */
+    static constexpr float R_LL_ESTIMATE_OHM = 0.10f; /**< rough line-line R for feedforward. */
+    static constexpr float V_IGBT_TOTAL_ESTIMATE_V = 1.0f; /**< both switches, rough feedforward. */
 };
 
 ResistanceCalibrator& resistanceCalibrator();
