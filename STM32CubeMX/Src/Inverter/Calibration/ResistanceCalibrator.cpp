@@ -49,12 +49,15 @@ void fmtFloat4(char* buf, size_t cap, float v) {
 
 float pairCurrentActive(float iu, float iv, float iw, ResistanceCalibrator::Pair pair) {
     (void)iw;
+    /* The "active" phase is the high-side PWM phase.  Current physically flows
+     * OUT of that phase (into the low phase), so the measured current into the
+     * phase is negative.  Negate it so active current is positive. */
     switch (pair) {
         case ResistanceCalibrator::Pair::UV:
         case ResistanceCalibrator::Pair::UW:
-            return iu;
+            return -iu;
         case ResistanceCalibrator::Pair::VW:
-            return iv;
+            return -iv;
     }
     return 0.0f;
 }
