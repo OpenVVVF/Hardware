@@ -9,6 +9,7 @@
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
+#include "tim.h"
 #include <cstdio>
 #include <cmath>
 #include <cstring>
@@ -306,6 +307,17 @@ bool ResistanceCalibrator::enableGateDriver() {
 
     GateDriver_EnableOutputs();
 
+    /* Ensure all TIM1 phase channels and the ADC-trigger channel (CH4) are
+     * enabled.  During calibration we reconfigure pin modes instead of clearing
+     * CCER, so the ADC trigger (TIM1_TRGO = OC4REF) keeps running. */
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_4);
+
     bool ready = false;
     bool fault = true;
     for (int i = 0; i < 100; ++i) {
@@ -362,17 +374,14 @@ void ResistanceCalibrator::configureHardware(float bus_pct) {
             break;
     }
 
-    /* Disable all timer outputs while reconfiguring. */
-    TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE |
-                    TIM_CCER_CC2E | TIM_CCER_CC2NE |
-                    TIM_CCER_CC3E | TIM_CCER_CC3NE);
-
-    /* Default all compare registers to 0. */
+    /* Default all compare registers to 0, then set the high-phase pulse.
+     * We deliberately do NOT touch CCER.  The ADC injected group is triggered
+     * by TIM1_TRGO = OC4REF; gating phase channels via CCER can stop the
+     * current-sense ISR.  All phase channels stay enabled; the bridge state
+     * is controlled by pin mode and compare value. */
     TIM1->CCR1 = 0;
     TIM1->CCR2 = 0;
     TIM1->CCR3 = 0;
-
-    /* Set the high-phase compare value. */
     switch (high_phase) {
         case 0: TIM1->CCR1 = pulse; break;
         case 1: TIM1->CCR2 = pulse; break;
@@ -392,8 +401,8 @@ void ResistanceCalibrator::configureHardware(float bus_pct) {
      *  - low phase:  high-side pin GPIO low, low-side pin GPIO high (DC on)
      *  - high-Z:     both pins GPIO low
      *
-     * CCER is enabled only for the active phases; for the low phase the timer
-     * outputs are ignored because the pins are in GPIO mode. */
+     * CCER is left enabled for all channels.  The inactive phases have their
+     * pins in GPIO mode, so the timer outputs are ignored. */
 
     /* Phase U */
     if (hz_phase == 0) {
@@ -429,22 +438,6 @@ void ResistanceCalibrator::configureHardware(float bus_pct) {
     } else { /* high_phase == 2 */
         setPin(PH_W_LOW_Pin,  true, false);
         setPin(PH_W_HIGH_Pin, true, false);
-    }
-
-    /* Enable complementary outputs for the active phases only. */
-    switch (pair) {
-        case Pair::UV:
-            TIM1->CCER |= TIM_CCER_CC1E | TIM_CCER_CC1NE |
-                          TIM_CCER_CC2E | TIM_CCER_CC2NE;
-            break;
-        case Pair::UW:
-            TIM1->CCER |= TIM_CCER_CC1E | TIM_CCER_CC1NE |
-                          TIM_CCER_CC3E | TIM_CCER_CC3NE;
-            break;
-        case Pair::VW:
-            TIM1->CCER |= TIM_CCER_CC2E | TIM_CCER_CC2NE |
-                          TIM_CCER_CC3E | TIM_CCER_CC3NE;
-            break;
     }
 
     /* A DESAT trip can latch between enableGateDriver() and the first PWM edge.
