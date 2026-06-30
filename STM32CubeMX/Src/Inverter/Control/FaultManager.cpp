@@ -6,8 +6,6 @@
 #include "main.h"
 #include "tim.h"
 
-#include <cstdio>
-#include <cstring>
 #include <cctype>
 
 namespace Inverter {
@@ -165,7 +163,7 @@ void FaultManager::printSummary() {
     const uint32_t flags = activeFlags();
 
     if (flags == 0) {
-        Telemetry::log("print", "[FAULT] none active");
+        Telemetry::printf("[FAULT] none active");
         return;
     }
 
@@ -180,15 +178,13 @@ void FaultManager::printSummary() {
                 case FaultSeverity::High:     sev_char = 'H'; break;
                 case FaultSeverity::Critical: sev_char = 'C'; break;
             }
-            char msg[128];
             if (m_reason[idx] != FaultReason::Unspecified) {
-                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s: %s (%s)",
-                              sev_char, m.category, m.name, m.description, reason);
+                Telemetry::printf("[FAULT][%c][%s] %s: %s (%s)",
+                                  sev_char, m.category, m.name, m.description, reason);
             } else {
-                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s: %s",
-                              sev_char, m.category, m.name, m.description);
+                Telemetry::printf("[FAULT][%c][%s] %s: %s",
+                                  sev_char, m.category, m.name, m.description);
             }
-            Telemetry::log("print", msg);
         }
     }
 }
@@ -214,15 +210,13 @@ void FaultManager::service() {
                 case FaultSeverity::High:     sev_char = 'H'; break;
                 case FaultSeverity::Critical: sev_char = 'C'; break;
             }
-            char msg[128];
             if (m_reason[idx] != FaultReason::Unspecified) {
-                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s triggered: %s",
-                              sev_char, m.category, m.name, reason);
+                Telemetry::printf("[FAULT][%c][%s] %s triggered: %s",
+                                  sev_char, m.category, m.name, reason);
             } else {
-                std::snprintf(msg, sizeof(msg), "[FAULT][%c][%s] %s triggered",
-                              sev_char, m.category, m.name);
+                Telemetry::printf("[FAULT][%c][%s] %s triggered",
+                                  sev_char, m.category, m.name);
             }
-            Telemetry::log("print", msg);
         }
     }
 }
@@ -252,7 +246,7 @@ void FaultManager::executeSafetyActions() {
     GateDriver_DisableOutputs();
     GateDriver_EnablePower(false);
 
-    Telemetry::log("print", "[SAFETY] Critical fault -> PWM break, gate driver reset, power off");
+    Telemetry::printf("[SAFETY] Critical fault -> PWM break, gate driver reset, power off");
 }
 
 void FaultManager::testFault(FaultSource src, FaultReason reason) {

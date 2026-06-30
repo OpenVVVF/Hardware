@@ -6,8 +6,6 @@
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_hal_pwr_ex.h"
 
-#include <cstdio>
-
 namespace Inverter {
 
 /* PVD level: ~2.7 V falling-edge threshold for a 3.3 V VDD rail.
@@ -91,11 +89,8 @@ void supplyMonitorPrintStatus() {
     const bool vos  = __HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY) != 0U;
     const bool pvdo = __HAL_PWR_GET_FLAG(PWR_FLAG_PVDO) != 0U;
     const bool avdo = __HAL_PWR_GET_FLAG(PWR_FLAG_AVDO) != 0U;
-    char msg[80];
-    std::snprintf(msg, sizeof(msg),
-                  "[SHELL] supply: VOSRDY=%s PVD=%s AVD=%s",
-                  vos ? "Y" : "N", pvdo ? "Y" : "N", avdo ? "Y" : "N");
-    Telemetry::log("print", msg);
+    Telemetry::printf("[SHELL] supply: VOSRDY=%s PVD=%s AVD=%s",
+                      vos ? "Y" : "N", pvdo ? "Y" : "N", avdo ? "Y" : "N");
 }
 
 } // namespace Inverter

@@ -109,7 +109,7 @@ private:
     };
 
     void enterState(State state);
-    void fail(const char* reason);
+    void fail(const char* reason_fmt, ...);
     bool enableGateDriver();
     void configureHardware(float duty_pct);
     void restoreHardware();

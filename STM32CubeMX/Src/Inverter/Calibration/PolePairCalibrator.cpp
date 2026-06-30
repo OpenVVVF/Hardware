@@ -7,7 +7,6 @@
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
-#include <cstdio>
 #include <cmath>
 
 namespace Inverter {
@@ -22,33 +21,15 @@ PolePairCalibrator& polePairCalibrator() {
     return s_instance;
 }
 
-namespace {
-
-void fmtFloat2(char* buf, size_t cap, float v) {
-    int whole = static_cast<int>(v);
-    int frac = static_cast<int>((v - whole) * 100.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%02d", whole, frac);
-}
-
-void fmtFloat3(char* buf, size_t cap, float v) {
-    int whole = static_cast<int>(v);
-    int frac = static_cast<int>((v - whole) * 1000.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%03d", whole, frac);
-}
-
-} // namespace
-
 bool PolePairCalibrator::start() {
     if (openLoopController().isRunning()) {
-        Telemetry::log("print", "[CAL PP] stop the motor before starting calibration");
+        Telemetry::printf("[CAL PP] stop the motor before starting calibration");
         return false;
     }
 
     /* Start open-loop at 2 Hz, zero modulation. */
     if (!openLoopController().start(2.0f, 0.0f)) {
-        Telemetry::log("print", "[CAL PP] ERROR: failed to start open-loop controller");
+        Telemetry::printf("[CAL PP] ERROR: failed to start open-loop controller");
         return false;
     }
 
@@ -66,7 +47,7 @@ bool PolePairCalibrator::start() {
     m_last_move_ms = HAL_GetTick();
     m_state = State::RAMP;
 
-    Telemetry::log("print", "[CAL PP] started at 2 Hz, fast ramp to breakaway");
+    Telemetry::printf("[CAL PP] started at 2 Hz, fast ramp to breakaway");
     return true;
 }
 
@@ -91,19 +72,10 @@ void PolePairCalibrator::reportRatio(const char* label) {
                             : 0.0f;
     m_last_ratio = ratio;
 
-    char ratio_buf[16];
-    fmtFloat3(ratio_buf, sizeof(ratio_buf), ratio);
-    char mod_buf[16];
-    fmtFloat3(mod_buf, sizeof(mod_buf), m_mod);
-    char mech_buf[16];
-    fmtFloat2(mech_buf, sizeof(mech_buf), cycles_counted);
-    char msg[96];
-    std::snprintf(msg, sizeof(msg),
-                  "[CAL PP] %s: ratio=%s at mod=%s (elec=%lu mech=%s)",
-                  label, ratio_buf, mod_buf,
-                  static_cast<unsigned long>(elec_counted),
-                  mech_buf);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[CAL PP] %s: ratio=%.3f at mod=%.3f (elec=%lu mech=%.2f)",
+                      label, ratio, m_mod,
+                      static_cast<unsigned long>(elec_counted),
+                      cycles_counted);
 }
 
 void PolePairCalibrator::update() {
@@ -162,21 +134,14 @@ void PolePairCalibrator::update() {
                 m_mod = boosted;
                 openLoopController().setModulationIndexDirect(m_mod);
 
-                char ba_buf[16];
-                fmtFloat3(ba_buf, sizeof(ba_buf), m_breakaway_mod);
-                char run_buf[16];
-                fmtFloat3(run_buf, sizeof(run_buf), m_mod);
-                char msg[80];
-                std::snprintf(msg, sizeof(msg),
-                              "[CAL PP] breakaway at mod=%s, holding at %s",
-                              ba_buf, run_buf);
-                Telemetry::log("print", msg);
+                Telemetry::printf("[CAL PP] breakaway at mod=%.3f, holding at %.3f",
+                                  m_breakaway_mod, m_mod);
             }
 
             if (m_mod >= CAL_MAX_MOD &&
                 (now_ms - m_last_move_ms) > STALL_TIMEOUT_MS) {
                 m_state = State::FAIL;
-                Telemetry::log("print", "[CAL PP] FAIL: encoder did not move");
+                Telemetry::printf("[CAL PP] FAIL: encoder did not move");
                 openLoopController().stop();
             }
         } else {
@@ -189,7 +154,7 @@ void PolePairCalibrator::update() {
                 m_last_move_ms = now_ms;
                 m_cycles_at_last_move = angle_cycles;
                 m_state = State::COUNT;
-                Telemetry::log("print", "[CAL PP] zero crossing, counting one cycle");
+                Telemetry::printf("[CAL PP] zero crossing, counting one cycle");
             }
         }
     }
@@ -207,7 +172,7 @@ void PolePairCalibrator::update() {
                 reportRatio("partial");
             } else {
                 m_state = State::FAIL;
-                Telemetry::log("print", "[CAL PP] FAIL: encoder stalled during count");
+                Telemetry::printf("[CAL PP] FAIL: encoder stalled during count");
             }
             openLoopController().stop();
             return;
@@ -215,7 +180,7 @@ void PolePairCalibrator::update() {
 
         if ((now_ms - m_count_start_ms) > MAX_COUNT_MS) {
             m_state = State::FAIL;
-            Telemetry::log("print", "[CAL PP] FAIL: count took too long");
+            Telemetry::printf("[CAL PP] FAIL: count took too long");
             openLoopController().stop();
             return;
         }

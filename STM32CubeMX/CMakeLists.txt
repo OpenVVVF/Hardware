@@ -102,3 +102,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 
     # Add user defined libraries
 )
+
+# newlib-nano disables float formatting by default; pull in the float-aware
+# printf implementation so Telemetry::printf("%.3f", ...) works.
+target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -u _printf_float)

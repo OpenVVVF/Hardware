@@ -189,7 +189,7 @@ bool PhaseCurrentADC::start() {
     }
 
     m_running = true;
-    Telemetry::log("print", "[CUR] start cal done");
+    Telemetry::printf("[CUR] start cal done");
     return true;
 }
 
@@ -254,7 +254,7 @@ bool PhaseCurrentADC::recalibrateOffsets() {
     }
     const bool ok = calibrateOffsets();
     if (ok) {
-        Telemetry::log("print", "[CUR] recal done");
+        Telemetry::printf("[CUR] recal done");
     }
     return ok;
 }

@@ -17,26 +17,6 @@
 #include <cctype>
 #include <cstring>
 #include <cstdlib>
-#include <cstdio>
-
-namespace {
-
-/* newlib-nano vsnprintf may not link %f support, so format floats manually. */
-void fmtFloat2(char* buf, size_t cap, float v) {
-    int whole = (int)v;
-    int frac = (int)((v - whole) * 100.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%02d", whole, frac);
-}
-
-void fmtFloat3(char* buf, size_t cap, float v) {
-    int whole = (int)v;
-    int frac = (int)((v - whole) * 1000.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%03d", whole, frac);
-}
-
-} // namespace
 
 namespace Inverter {
 
@@ -65,11 +45,11 @@ bool CommandShell::init() {
 
     HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
     if (status != HAL_OK) {
-        Telemetry::log("print", "[SHELL] ERROR: HAL_UART_Receive_IT failed");
+        Telemetry::printf("[SHELL] ERROR: HAL_UART_Receive_IT failed");
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
     return true;
 }
 
@@ -157,7 +137,7 @@ void CommandShell::poll() {
 
                 if (std::strcmp(argv[0], "start") == 0) {
                     if (argc < 3) {
-                        Telemetry::log("print", "[SHELL] usage: start <freq_hz> <mod_idx>");
+                        Telemetry::printf("[SHELL] usage: start <freq_hz> <mod_idx>");
                     } else {
                         float f = std::strtof(argv[1], nullptr);
                         float m = std::strtof(argv[2], nullptr);
@@ -169,41 +149,29 @@ void CommandShell::poll() {
                 }
                 else if (std::strcmp(argv[0], "freq") == 0) {
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: freq <freq_hz>");
+                        Telemetry::printf("[SHELL] usage: freq <freq_hz>");
                     } else {
                         float f = std::strtof(argv[1], nullptr);
                         ol.setFrequency(f);
-                        char fbuf[16];
-                        fmtFloat2(fbuf, sizeof(fbuf), f);
-                        char msg[48];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] freq set to %s Hz", fbuf);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] freq set to %.2f Hz", f);
                     }
                 }
                 else if (std::strcmp(argv[0], "mod") == 0) {
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: mod <mod_idx>");
+                        Telemetry::printf("[SHELL] usage: mod <mod_idx>");
                     } else {
                         float m = std::strtof(argv[1], nullptr);
                         ol.setModulationIndex(m);
-                        char mbuf[16];
-                        fmtFloat3(mbuf, sizeof(mbuf), m);
-                        char msg[48];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] mod set to %s", mbuf);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] mod set to %.3f", m);
                     }
                 }
                 else if (std::strcmp(argv[0], "status") == 0) {
-                    char fbuf[16], mbuf[16], msg[80];
-                    fmtFloat2(fbuf, sizeof(fbuf), ol.frequencyHz());
-                    fmtFloat3(mbuf, sizeof(mbuf), ol.modulationIndex());
-                    std::snprintf(msg, sizeof(msg), "[SHELL] run=%s f=%s m=%s",
-                                  ol.isRunning() ? "Y" : "N", fbuf, mbuf);
-                    Telemetry::log("print", msg);
-                    std::snprintf(msg, sizeof(msg), "[SHELL] ready=%s gd_fault=%s",
-                                  GateDriver_IsReady() ? "Y" : "N",
-                                  GateDriver_IsFault() ? "Y" : "N");
-                    Telemetry::log("print", msg);
+                    Telemetry::printf("[SHELL] run=%s f=%.2f m=%.3f",
+                                      ol.isRunning() ? "Y" : "N",
+                                      ol.frequencyHz(), ol.modulationIndex());
+                    Telemetry::printf("[SHELL] ready=%s gd_fault=%s",
+                                      GateDriver_IsReady() ? "Y" : "N",
+                                      GateDriver_IsFault() ? "Y" : "N");
                     FaultManager::instance().printSummary();
                 }
                 else if (std::strcmp(argv[0], "clearfault") == 0) {
@@ -235,28 +203,20 @@ void CommandShell::poll() {
                     bool ready = GateDriver_IsReady();
                     bool fault = GateDriver_IsFault();
                     uint32_t bdtr = TIM1->BDTR;
-                    char msg[96];
-                    std::snprintf(msg, sizeof(msg),
-                                  "[SHELL] clearfault done | ready=%s fault=%s MOE=%lu",
-                                  ready ? "Y" : "N",
-                                  fault ? "Y" : "N",
-                                  (bdtr >> 15) & 1UL);
-                    Telemetry::log("print", msg);
+                    Telemetry::printf("[SHELL] clearfault done | ready=%s fault=%s MOE=%lu",
+                                      ready ? "Y" : "N",
+                                      fault ? "Y" : "N",
+                                      (bdtr >> 15) & 1UL);
                 }
                 else if (std::strcmp(argv[0], "cal") == 0) {
                     if (ol.isRunning()) {
-                        Telemetry::log("print", "[SHELL] stop motor before calibrating");
+                        Telemetry::printf("[SHELL] stop motor before calibrating");
                     } else if (phaseCurrentADC().recalibrateOffsets()) {
                         PhaseCurrentADC& adc = phaseCurrentADC();
-                        char uoff[16], voff[16];
-                        fmtFloat3(uoff, sizeof(uoff), adc.lastOffsetU());
-                        fmtFloat3(voff, sizeof(voff), adc.lastOffsetV());
-                        char msg[64];
-                        std::snprintf(msg, sizeof(msg),
-                                      "[SHELL] calibrated offsets U=%s V=%s", uoff, voff);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] calibrated offsets U=%.3f V=%.3f",
+                                          adc.lastOffsetU(), adc.lastOffsetV());
                     } else {
-                        Telemetry::log("print", "[SHELL] calibration failed");
+                        Telemetry::printf("[SHELL] calibration failed");
                     }
                 }
                 else if (std::strcmp(argv[0], "raw") == 0) {
@@ -265,72 +225,49 @@ void CommandShell::poll() {
                                            static_cast<int32_t>(adc.lastRawURef());
                     const int32_t v_diff = static_cast<int32_t>(adc.lastRawVSig()) -
                                            static_cast<int32_t>(adc.lastRawVRef());
-                    char msg[64];
-                    std::snprintf(msg, sizeof(msg),
-                                  "[SHELL] raw U sig=%lu ref=%lu diff=%ld",
-                                  adc.lastRawUSig(), adc.lastRawURef(), u_diff);
-                    Telemetry::log("print", msg);
-                    std::snprintf(msg, sizeof(msg),
-                                  "[SHELL] raw V sig=%lu ref=%lu diff=%ld",
-                                  adc.lastRawVSig(), adc.lastRawVRef(), v_diff);
-                    Telemetry::log("print", msg);
+                    Telemetry::printf("[SHELL] raw U sig=%lu ref=%lu diff=%ld",
+                                      adc.lastRawUSig(), adc.lastRawURef(), u_diff);
+                    Telemetry::printf("[SHELL] raw V sig=%lu ref=%lu diff=%ld",
+                                      adc.lastRawVSig(), adc.lastRawVRef(), v_diff);
 
-                    char uoff[16], voff[16];
-                    fmtFloat3(uoff, sizeof(uoff), adc.lastOffsetU());
-                    fmtFloat3(voff, sizeof(voff), adc.lastOffsetV());
-                    std::snprintf(msg, sizeof(msg),
-                                  "[SHELL] offsets U=%s V=%s", uoff, voff);
-                    Telemetry::log("print", msg);
+                    Telemetry::printf("[SHELL] offsets U=%.3f V=%.3f",
+                                      adc.lastOffsetU(), adc.lastOffsetV());
                 }
                 else if (std::strcmp(argv[0], "vzero") == 0) {
                     DcLinkVoltageSensor& vdc = dcLinkVoltageSensor();
                     if (vdc.zeroCalibrate()) {
-                        char vbuf[16];
-                        fmtFloat3(vbuf, sizeof(vbuf), vdc.voltage());
-                        char msg[48];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] Vdc zero calibrated: %s V", vbuf);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] Vdc zero calibrated: %.3f V", vdc.voltage());
                     } else {
-                        Telemetry::log("print", "[SHELL] Vdc zero cal failed (no sample)");
+                        Telemetry::printf("[SHELL] Vdc zero cal failed (no sample)");
                     }
                 }
                 else if (std::strcmp(argv[0], "polepairs") == 0) {
                     PolePairEstimator& pp = PolePairEstimator::instance();
-                    char est[16], mech[16], elec[16];
-                    fmtFloat3(est, sizeof(est), pp.estimate());
-                    fmtFloat2(mech, sizeof(mech), pp.mechanicalCycles());
-                    fmtFloat2(elec, sizeof(elec), pp.electricalCycles());
-                    char msg[80];
-                    std::snprintf(msg, sizeof(msg),
-                                  "[SHELL] pp=%s mech=%s elec=%s", est, mech, elec);
-                    Telemetry::log("print", msg);
+                    Telemetry::printf("[SHELL] pp=%.3f mech=%.2f elec=%.2f",
+                                      pp.estimate(), pp.mechanicalCycles(), pp.electricalCycles());
                 }
                 else if (std::strcmp(argv[0], "encodercal") == 0) {
                     PolePairEstimator& pp = PolePairEstimator::instance();
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: encodercal start | stop");
+                        Telemetry::printf("[SHELL] usage: encodercal start | stop");
                     } else if (std::strcmp(argv[1], "start") == 0) {
                         pp.startManualEncoderCal();
-                        Telemetry::log("print", "[SHELL] encoder cal started; rotate shaft exactly 1 rev, then 'encodercal stop'");
+                        Telemetry::printf("[SHELL] encoder cal started; rotate shaft exactly 1 rev, then 'encodercal stop'");
                     } else if (std::strcmp(argv[1], "stop") == 0) {
                         pp.stopManualEncoderCal();
-                        char cycles[16];
-                        fmtFloat2(cycles, sizeof(cycles), pp.manualEncoderCycles());
-                        char msg[96];
-                        std::snprintf(msg, sizeof(msg),
-                                      "[SHELL] encoder cycles in 1 rev = %s; true PP = pp_estimate * %s",
-                                      cycles, cycles);
-                        Telemetry::log("print", msg);
+                        const float cycles = pp.manualEncoderCycles();
+                        Telemetry::printf("[SHELL] encoder cycles in 1 rev = %.2f; true PP = pp_estimate * %.2f",
+                                          cycles, cycles);
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: encodercal start | stop");
+                        Telemetry::printf("[SHELL] usage: encodercal start | stop");
                     }
                 }
                 else if (std::strcmp(argv[0], "calpolepairs") == 0) {
                     PolePairCalibrator& cal = PolePairCalibrator::instance();
                     if (ol.isRunning()) {
-                        Telemetry::log("print", "[SHELL] stop the motor before starting calpolepairs");
+                        Telemetry::printf("[SHELL] stop the motor before starting calpolepairs");
                     } else if (cal.isActive()) {
-                        Telemetry::log("print", "[SHELL] calibration already running");
+                        Telemetry::printf("[SHELL] calibration already running");
                     } else {
                         cal.start();
                     }
@@ -338,19 +275,14 @@ void CommandShell::poll() {
                 else if (std::strcmp(argv[0], "rescal") == 0) {
                     if (argc < 2 || std::strcmp(argv[1], "status") == 0) {
                         ResistanceCalibrator& rc = ResistanceCalibrator::instance();
-                        char uv[16], uw[16], vw[16], avg[16];
-                        fmtFloat3(uv, sizeof(uv), rc.lastResult(ResistanceCalibrator::Pair::UV));
-                        fmtFloat3(uw, sizeof(uw), rc.lastResult(ResistanceCalibrator::Pair::UW));
-                        fmtFloat3(vw, sizeof(vw), rc.lastResult(ResistanceCalibrator::Pair::VW));
-                        fmtFloat3(avg, sizeof(avg), rc.lastAverage());
-                        char msg[128];
-                        std::snprintf(msg, sizeof(msg),
-                                      "[SHELL] rescal: R_uv=%s R_uw=%s R_vw=%s avg=%s ohm",
-                                      uv, uw, vw, avg);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] rescal: R_uv=%.3f R_uw=%.3f R_vw=%.3f avg=%.3f ohm",
+                                          rc.lastResult(ResistanceCalibrator::Pair::UV),
+                                          rc.lastResult(ResistanceCalibrator::Pair::UW),
+                                          rc.lastResult(ResistanceCalibrator::Pair::VW),
+                                          rc.lastAverage());
                     } else if (std::strcmp(argv[1], "start") == 0) {
                         if (argc < 3) {
-                            Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a]");
+                            Telemetry::printf("[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a]");
                         } else {
                             float bus_pct = 0.0f;
                             float max_a = 50.0f;
@@ -361,7 +293,7 @@ void CommandShell::poll() {
                                 std::strcmp(argv[2], "uw") == 0 ||
                                 std::strcmp(argv[2], "vw") == 0) {
                                 if (argc < 4) {
-                                    Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a]");
+                                    Telemetry::printf("[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a]");
                                     continue;
                                 }
                                 run_all = false;
@@ -384,14 +316,14 @@ void CommandShell::poll() {
                             }
 
                             if (!resistanceCalibrator().start(bus_pct, pair, run_all, 15000U, max_a)) {
-                                Telemetry::log("print", "[SHELL] rescal start failed");
+                                Telemetry::printf("[SHELL] rescal start failed");
                             }
                         }
                     } else if (std::strcmp(argv[1], "stop") == 0) {
                         resistanceCalibrator().stop();
                     } else if (std::strcmp(argv[1], "ictrl") == 0) {
                         if (argc < 3) {
-                            Telemetry::log("print", "[SHELL] usage: rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a]");
+                            Telemetry::printf("[SHELL] usage: rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a]");
                         } else {
                             float current_a = 0.0f;
                             float oc_limit_a = 0.0f;
@@ -402,7 +334,7 @@ void CommandShell::poll() {
                                 std::strcmp(argv[2], "uw") == 0 ||
                                 std::strcmp(argv[2], "vw") == 0) {
                                 if (argc < 4) {
-                                    Telemetry::log("print", "[SHELL] usage: rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a]");
+                                    Telemetry::printf("[SHELL] usage: rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a]");
                                     continue;
                                 }
                                 run_all = false;
@@ -425,71 +357,63 @@ void CommandShell::poll() {
                             }
 
                             if (!resistanceCalibrator().startCurrentCtrl(current_a, pair, run_all, 15000U, oc_limit_a)) {
-                                Telemetry::log("print", "[SHELL] rescal ictrl failed");
+                                Telemetry::printf("[SHELL] rescal ictrl failed");
                             }
                         }
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status");
+                        Telemetry::printf("[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status");
                     }
                 }
                 else if (std::strcmp(argv[0], "fault") == 0) {
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: fault list | clear | test <name>");
+                        Telemetry::printf("[SHELL] usage: fault list | clear | test <name>");
                     } else if (std::strcmp(argv[1], "list") == 0) {
                         FaultManager::instance().printSummary();
                     } else if (std::strcmp(argv[1], "clear") == 0) {
                         FaultManager::instance().clearAll();
-                        Telemetry::log("print", "[SHELL] latched faults cleared");
+                        Telemetry::printf("[SHELL] latched faults cleared");
                     } else if (std::strcmp(argv[1], "test") == 0) {
                         if (argc < 3) {
-                            Telemetry::log("print", "[SHELL] usage: fault test <FaultName>");
+                            Telemetry::printf("[SHELL] usage: fault test <FaultName>");
                         } else {
                             FaultSource src = FaultManager::sourceFromName(argv[2]);
                             if (src == FaultSource::None) {
-                                Telemetry::log("print", "[SHELL] unknown fault name; use 'fault list' to see names");
+                                Telemetry::printf("[SHELL] unknown fault name; use 'fault list' to see names");
                             } else {
                                 FaultManager::instance().testFault(src);
-                                Telemetry::log("print", "[SHELL] injected test fault");
+                                Telemetry::printf("[SHELL] injected test fault");
                             }
                         }
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: fault list | clear | test <name>");
+                        Telemetry::printf("[SHELL] usage: fault list | clear | test <name>");
                     }
                 }
                 else if (std::strcmp(argv[0], "ocset") == 0) {
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: ocset <amps>  (0 disables)");
+                        Telemetry::printf("[SHELL] usage: ocset <amps>  (0 disables)");
                     } else {
                         float amps = std::strtof(argv[1], nullptr);
                         if (amps < 0.0f) amps = 0.0f;
                         phaseCurrentADC().setOvercurrentThreshold(amps);
-                        char abuf[16];
-                        fmtFloat3(abuf, sizeof(abuf), amps);
-                        char msg[64];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] phase overcurrent threshold set to %s A", abuf);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] phase overcurrent threshold set to %.3f A", amps);
                     }
                 }
                 else if (std::strcmp(argv[0], "hwocset") == 0) {
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: hwocset <amps>  (0 disables ADC watchdog)");
+                        Telemetry::printf("[SHELL] usage: hwocset <amps>  (0 disables ADC watchdog)");
                     } else {
                         float amps = std::strtof(argv[1], nullptr);
                         if (amps < 0.0f) amps = 0.0f;
                         if (phaseCurrentADC().setHardwareOvercurrentThreshold(amps)) {
-                            char abuf[16];
-                            fmtFloat3(abuf, sizeof(abuf), amps);
-                            char msg[80];
-                            std::snprintf(msg, sizeof(msg), "[SHELL] hardware overcurrent threshold set to %s A", abuf);
-                            Telemetry::log("print", msg);
+                            Telemetry::printf("[SHELL] hardware overcurrent threshold set to %.3f A", amps);
                         } else {
-                            Telemetry::log("print", "[SHELL] failed to set hardware overcurrent threshold (stop motor first)");
+                            Telemetry::printf("[SHELL] failed to set hardware overcurrent threshold (stop motor first)");
                         }
                     }
                 }
                 else if (std::strcmp(argv[0], "supply") == 0) {
                     if (argc < 2 || std::strcmp(argv[1], "status") != 0) {
-                        Telemetry::log("print", "[SHELL] usage: supply status");
+                        Telemetry::printf("[SHELL] usage: supply status");
                     } else {
                         supplyMonitorPrintStatus();
                     }
@@ -499,35 +423,27 @@ void CommandShell::poll() {
                     MAX22530& adc = vdc.adc();
 
                     if (argc < 2) {
-                        Telemetry::log("print", "[SHELL] usage: maxcfg ov <V> | uv <V> | thresholds | status | filterclear | raw | filtered");
+                        Telemetry::printf("[SHELL] usage: maxcfg ov <V> | uv <V> | thresholds | status | filterclear | raw | filtered");
                     } else if (std::strcmp(argv[1], "ov") == 0) {
                         if (argc < 3) {
-                            Telemetry::log("print", "[SHELL] usage: maxcfg ov <volts>");
+                            Telemetry::printf("[SHELL] usage: maxcfg ov <volts>");
                         } else {
                             float v = std::strtof(argv[2], nullptr);
                             if (vdc.setOvervoltageThreshold(v)) {
-                                char vbuf[16];
-                                fmtFloat3(vbuf, sizeof(vbuf), v);
-                                char msg[64];
-                                std::snprintf(msg, sizeof(msg), "[SHELL] Vbus OV threshold set to %s V", vbuf);
-                                Telemetry::log("print", msg);
+                                Telemetry::printf("[SHELL] Vbus OV threshold set to %.3f V", v);
                             } else {
-                                Telemetry::log("print", "[SHELL] failed to set OV threshold");
+                                Telemetry::printf("[SHELL] failed to set OV threshold");
                             }
                         }
                     } else if (std::strcmp(argv[1], "uv") == 0) {
                         if (argc < 3) {
-                            Telemetry::log("print", "[SHELL] usage: maxcfg uv <volts>");
+                            Telemetry::printf("[SHELL] usage: maxcfg uv <volts>");
                         } else {
                             float v = std::strtof(argv[2], nullptr);
                             if (vdc.setUndervoltageThreshold(v)) {
-                                char vbuf[16];
-                                fmtFloat3(vbuf, sizeof(vbuf), v);
-                                char msg[64];
-                                std::snprintf(msg, sizeof(msg), "[SHELL] Vbus UV threshold set to %s V", vbuf);
-                                Telemetry::log("print", msg);
+                                Telemetry::printf("[SHELL] Vbus UV threshold set to %.3f V", v);
                             } else {
-                                Telemetry::log("print", "[SHELL] failed to set UV threshold");
+                                Telemetry::printf("[SHELL] failed to set UV threshold");
                             }
                         }
                     } else if (std::strcmp(argv[1], "status") == 0) {
@@ -535,62 +451,46 @@ void CommandShell::poll() {
                         (void)adc.getComparatorStatus(cout_status);
                         uint16_t couthi = 0, coutlo = 0;
                         (void)adc.readComparatorThreshold(0, couthi, coutlo);
-                        char msg[80];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX int_status=0x%04X cout_status=0x%04X int_enable=0x%04X",
-                                      adc.lastInterruptStatus(), cout_status, adc.lastInterruptEnable());
-                        Telemetry::log("print", msg);
-                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX ch1 thresholds: HI=0x%03X LO=0x%03X",
-                                      couthi, coutlo);
-                        Telemetry::log("print", msg);
-                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX irq=%lu dma=%lu err=%lu fail=%lu crc_err=%lu",
-                                      static_cast<unsigned long>(adc.irqCount()),
-                                      static_cast<unsigned long>(adc.dmaCompleteCount()),
-                                      static_cast<unsigned long>(adc.dmaErrorCount()),
-                                      static_cast<unsigned long>(adc.dmaStartFailCount()),
-                                      static_cast<unsigned long>(adc.crcErrorCount()));
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] MAX int_status=0x%04X cout_status=0x%04X int_enable=0x%04X",
+                                          adc.lastInterruptStatus(), cout_status, adc.lastInterruptEnable());
+                        Telemetry::printf("[SHELL] MAX ch1 thresholds: HI=0x%03X LO=0x%03X",
+                                          couthi, coutlo);
+                        Telemetry::printf("[SHELL] MAX irq=%lu dma=%lu err=%lu fail=%lu crc_err=%lu",
+                                          static_cast<unsigned long>(adc.irqCount()),
+                                          static_cast<unsigned long>(adc.dmaCompleteCount()),
+                                          static_cast<unsigned long>(adc.dmaErrorCount()),
+                                          static_cast<unsigned long>(adc.dmaStartFailCount()),
+                                          static_cast<unsigned long>(adc.crcErrorCount()));
                     } else if (std::strcmp(argv[1], "thresholds") == 0) {
-                        char ov[16], uv[16];
-                        fmtFloat3(ov, sizeof(ov), vdc.overvoltageThreshold());
-                        fmtFloat3(uv, sizeof(uv), vdc.undervoltageThreshold());
-                        char msg[80];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] Vbus OV=%s V UV=%s V (scaled)", ov, uv);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] Vbus OV=%.3f V UV=%.3f V (scaled)",
+                                          vdc.overvoltageThreshold(), vdc.undervoltageThreshold());
                     } else if (std::strcmp(argv[1], "filterclear") == 0) {
                         if (adc.clearFilter(0)) {
-                            Telemetry::log("print", "[SHELL] MAX channel 1 filter cleared");
+                            Telemetry::printf("[SHELL] MAX channel 1 filter cleared");
                         } else {
-                            Telemetry::log("print", "[SHELL] MAX filter clear failed");
+                            Telemetry::printf("[SHELL] MAX filter clear failed");
                         }
                     } else if (std::strcmp(argv[1], "raw") == 0) {
                         const uint16_t counts = adc.readRawCounts(0);
                         const float v = adc.readRawVoltage(0);
-                        char vbuf[16];
-                        fmtFloat3(vbuf, sizeof(vbuf), v);
-                        char msg[80];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX raw ch1 = 0x%03X (%lu counts), %s V",
-                                      counts, static_cast<unsigned long>(counts), vbuf);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] MAX raw ch1 = 0x%03X (%lu counts), %.3f V",
+                                          counts, static_cast<unsigned long>(counts), v);
                     } else if (std::strcmp(argv[1], "filtered") == 0) {
                         const uint16_t counts = adc.readFilteredCounts(0);
                         const float v = adc.readFilteredVoltage(0);
-                        char vbuf[16];
-                        fmtFloat3(vbuf, sizeof(vbuf), v);
-                        char msg[80];
-                        std::snprintf(msg, sizeof(msg), "[SHELL] MAX filtered ch1 = 0x%03X (%lu counts), %s V",
-                                      counts, static_cast<unsigned long>(counts), vbuf);
-                        Telemetry::log("print", msg);
+                        Telemetry::printf("[SHELL] MAX filtered ch1 = 0x%03X (%lu counts), %.3f V",
+                                          counts, static_cast<unsigned long>(counts), v);
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: maxcfg ov <V> | uv <V> | thresholds | status | filterclear | raw | filtered");
+                        Telemetry::printf("[SHELL] usage: maxcfg ov <V> | uv <V> | thresholds | status | filterclear | raw | filtered");
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of
                      * silently dropping, so typos are obvious. */
-                    Telemetry::log("print", "[SHELL] unknown command");
+                    Telemetry::printf("[SHELL] unknown command");
                 }
             }
         }

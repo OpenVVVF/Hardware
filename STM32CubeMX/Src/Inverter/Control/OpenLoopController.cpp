@@ -9,26 +9,6 @@
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
-#include <cstdio>
-
-namespace {
-
-/* newlib-nano vsnprintf may not link %f support, so format floats manually. */
-void fmtFloat2(char* buf, size_t cap, float v) {
-    int whole = (int)v;
-    int frac = (int)((v - whole) * 100.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%02d", whole, frac);
-}
-
-void fmtFloat3(char* buf, size_t cap, float v) {
-    int whole = (int)v;
-    int frac = (int)((v - whole) * 1000.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%03d", whole, frac);
-}
-
-} // namespace
 
 namespace Inverter {
 
@@ -108,13 +88,13 @@ bool OpenLoopController::init() {
     m_freq_hz = 0.0f;
     m_mod_idx = 0.0f;
 
-    Telemetry::log("print", "[OL] Init done. Outputs disabled until start.");
+    Telemetry::printf("[OL] Init done. Outputs disabled until start.");
     return true;
 }
 
 bool OpenLoopController::start(float freq_hz, float modulation_index) {
     if (!m_initialized) {
-        Telemetry::log("print", "[OL] ERROR: not initialized");
+        Telemetry::printf("[OL] ERROR: not initialized");
         return false;
     }
 
@@ -127,7 +107,7 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
 
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
         FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
-        Telemetry::log("print", "[OL] ERROR: active Critical/High faults, cannot start");
+        Telemetry::printf("[OL] ERROR: active Critical/High faults, cannot start");
         FaultManager::instance().printSummary();
         return false;
     }
@@ -151,15 +131,13 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     if (!ready || fault) {
         uint32_t bdtr = TIM1->BDTR;
         uint32_t sr   = TIM1->SR;
-        char msg[96];
-        std::snprintf(msg, sizeof(msg),
-                      "[OL] ERROR: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
-                      ready ? "Y" : "N",
-                      fault ? "Y" : "N",
-                      (bdtr >> 15) & 1UL,
-                      (sr >> 7) & 1UL,
-                      (sr >> 6) & 1UL);
-        Telemetry::log("print", msg);
+        Telemetry::printf(
+            "[OL] ERROR: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
+            ready ? "Y" : "N",
+            fault ? "Y" : "N",
+            (bdtr >> 15) & 1UL,
+            (sr >> 7) & 1UL,
+            (sr >> 6) & 1UL);
         GateDriver_DisableOutputs();
         FaultManager::instance().raise(FaultSource::GateDriverUvlo,
                                        FaultReason::GateDriverNotReady);
@@ -182,12 +160,7 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
         return false;
     }
 
-    char fbuf[16], mbuf[16];
-    fmtFloat2(fbuf, sizeof(fbuf), m_freq_hz);
-    fmtFloat3(mbuf, sizeof(mbuf), m_mod_idx);
-    char msg[48];
-    std::snprintf(msg, sizeof(msg), "[OL] START f=%s m=%s", fbuf, mbuf);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[OL] START f=%.2f m=%.3f", m_freq_hz, m_mod_idx);
 
     /* Start accumulating encoder mechanical cycles vs current zero crossings.
      * Pass the standstill raw sin/cos so the estimator can learn its DC
@@ -212,7 +185,7 @@ void OpenLoopController::stop() {
     PolePairEstimator::instance().setEnabled(false);
 
     m_running = false;
-    Telemetry::log("print", "[OL] STOPPED (coast)");
+    Telemetry::printf("[OL] STOPPED (coast)");
 }
 
 void OpenLoopController::setFrequency(float freq_hz) {
@@ -250,7 +223,7 @@ void OpenLoopController::update() {
     pollGateDriverStatus();
 
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical)) {
-        Telemetry::log("print", "[OL] Critical fault detected - stopping");
+        Telemetry::printf("[OL] Critical fault detected - stopping");
         FaultManager::instance().printSummary();
         stop();
     }

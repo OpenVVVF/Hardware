@@ -3,6 +3,7 @@
 #ifdef __cplusplus
   #include <cstdint>
   #include <cstddef>
+  #include <cstdarg>
 #else
   #include <stdint.h>
   #include <stddef.h>
@@ -42,6 +43,7 @@ void init();
 void init(UART_HandleTypeDef* uart);
 
 bool printf(const char* fmt, ...);
+bool vprintf(const char* fmt, va_list ap);
 
 bool log(const char* key, float value);
 bool log(const char* key, const char* value);

@@ -10,9 +10,8 @@
 
 #include "main.h"
 #include "tim.h"
-#include <cstdio>
+#include <cstdarg>
 #include <cmath>
-#include <cstring>
 
 namespace Inverter {
 
@@ -27,27 +26,6 @@ ResistanceCalibrator& resistanceCalibrator() {
 }
 
 namespace {
-
-void fmtFloat2(char* buf, size_t cap, float v) {
-    int whole = static_cast<int>(v);
-    int frac = static_cast<int>((v - whole) * 100.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%02d", whole, frac);
-}
-
-void fmtFloat3(char* buf, size_t cap, float v) {
-    int whole = static_cast<int>(v);
-    int frac = static_cast<int>((v - whole) * 1000.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%03d", whole, frac);
-}
-
-void fmtFloat4(char* buf, size_t cap, float v) {
-    int whole = static_cast<int>(v);
-    int frac = static_cast<int>((v - whole) * 10000.0f + 0.5f);
-    if (frac < 0) frac = -frac;
-    std::snprintf(buf, cap, "%d.%04d", whole, frac);
-}
 
 float pairCurrentActive(float iu, float iv, float iw, ResistanceCalibrator::Pair pair) {
     (void)iw;
@@ -127,28 +105,24 @@ float ResistanceCalibrator::lastResult(Pair pair) const {
 bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
                                  uint32_t timeout_ms, float max_current_a) {
     if (isActive()) {
-        Telemetry::log("print", "[RES CAL] already running");
+        Telemetry::printf("[RES CAL] already running");
         return false;
     }
 
     if (openLoopController().isRunning()) {
-        Telemetry::log("print", "[RES CAL] stop the motor before calibration");
+        Telemetry::printf("[RES CAL] stop the motor before calibration");
         return false;
     }
 
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
         FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
-        Telemetry::log("print", "[RES CAL] active faults, cannot start");
+        Telemetry::printf("[RES CAL] active faults, cannot start");
         return false;
     }
 
     if (bus_pct < 0.0f) bus_pct = 0.0f;
     if (bus_pct > MAX_BUS_PCT) {
-        char buf[16];
-        fmtFloat2(buf, sizeof(buf), MAX_BUS_PCT);
-        char msg[64];
-        std::snprintf(msg, sizeof(msg), "[RES CAL] clamped bus_pct to %s %%", buf);
-        Telemetry::log("print", msg);
+        Telemetry::printf("[RES CAL] clamped bus_pct to %.2f %%", static_cast<double>(MAX_BUS_PCT));
         bus_pct = MAX_BUS_PCT;
     }
 
@@ -183,16 +157,11 @@ bool ResistanceCalibrator::start(float bus_pct, Pair pair, bool run_all,
 
     enterState(State::ENABLE);
 
-    char buf[16];
-    fmtFloat4(buf, sizeof(buf), bus_pct);
-    char ibuf[16];
-    fmtFloat3(ibuf, sizeof(ibuf), m_max_current_a);
-    char msg[96];
-    std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] starting (%s) max %s %% bus, %u points, max I=%s A",
-                  run_all ? "UV/UW/VW" : pairName(pair), buf,
-                  static_cast<unsigned>(NUM_POINTS), ibuf);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[RES CAL] starting (%s) max %.4f %% bus, %u points, max I=%.3f A",
+                      run_all ? "UV/UW/VW" : pairName(pair),
+                      static_cast<double>(bus_pct),
+                      static_cast<unsigned>(NUM_POINTS),
+                      static_cast<double>(m_max_current_a));
     return true;
 }
 
@@ -200,18 +169,18 @@ bool ResistanceCalibrator::startCurrentCtrl(float max_current_a, Pair pair,
                                             bool run_all, uint32_t timeout_ms,
                                             float oc_limit_a) {
     if (isActive()) {
-        Telemetry::log("print", "[RES CAL] already running");
+        Telemetry::printf("[RES CAL] already running");
         return false;
     }
 
     if (openLoopController().isRunning()) {
-        Telemetry::log("print", "[RES CAL] stop the motor before calibration");
+        Telemetry::printf("[RES CAL] stop the motor before calibration");
         return false;
     }
 
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
         FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
-        Telemetry::log("print", "[RES CAL] active faults, cannot start");
+        Telemetry::printf("[RES CAL] active faults, cannot start");
         return false;
     }
 
@@ -258,16 +227,11 @@ bool ResistanceCalibrator::startCurrentCtrl(float max_current_a, Pair pair,
 
     enterState(State::ENABLE);
 
-    char buf[16];
-    fmtFloat3(buf, sizeof(buf), max_current_a);
-    char ibuf[16];
-    fmtFloat3(ibuf, sizeof(ibuf), m_max_current_a);
-    char msg[96];
-    std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] I-ctrl (%s) target %s A, %u points, oc=%s A",
-                  run_all ? "UV/UW/VW" : pairName(pair), buf,
-                  static_cast<unsigned>(NUM_POINTS), ibuf);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[RES CAL] I-ctrl (%s) target %.3f A, %u points, oc=%.3f A",
+                      run_all ? "UV/UW/VW" : pairName(pair),
+                      static_cast<double>(max_current_a),
+                      static_cast<unsigned>(NUM_POINTS),
+                      static_cast<double>(m_max_current_a));
     return true;
 }
 
@@ -278,15 +242,20 @@ void ResistanceCalibrator::enterState(State state) {
 
 void ResistanceCalibrator::stop() {
     if (m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL) {
-        Telemetry::log("print", "[RES CAL] stopped by user");
+        Telemetry::printf("[RES CAL] stopped by user");
         restoreHardware();
         enterState(State::FAIL);
     }
 }
 
-void ResistanceCalibrator::fail(const char* reason) {
+void ResistanceCalibrator::fail(const char* reason_fmt, ...) {
     restoreHardware();
-    Telemetry::log("print", reason);
+
+    va_list ap;
+    va_start(ap, reason_fmt);
+    Telemetry::vprintf(reason_fmt, ap);
+    va_end(ap);
+
     enterState(State::FAIL);
 }
 
@@ -325,13 +294,10 @@ bool ResistanceCalibrator::enableGateDriver() {
         fault = GateDriver_IsFault();
         if (ready && !fault) {
             uint32_t bdtr = TIM1->BDTR;
-            char okmsg[80];
-            std::snprintf(okmsg, sizeof(okmsg),
-                          "[RES CAL] gate driver ready | ready=Y fault=N MOE=%lu BIF=%lu BKF=%lu",
-                          (bdtr >> 15) & 1UL,
-                          (TIM1->SR >> 7) & 1UL,
-                          (TIM1->SR >> 6) & 1UL);
-            Telemetry::log("print", okmsg);
+            Telemetry::printf("[RES CAL] gate driver ready | ready=Y fault=N MOE=%lu BIF=%lu BKF=%lu",
+                              (bdtr >> 15) & 1UL,
+                              (TIM1->SR >> 7) & 1UL,
+                              (TIM1->SR >> 6) & 1UL);
             return true;
         }
         HAL_Delay(5);
@@ -339,15 +305,12 @@ bool ResistanceCalibrator::enableGateDriver() {
 
     uint32_t bdtr = TIM1->BDTR;
     uint32_t sr   = TIM1->SR;
-    char msg[96];
-    std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] FAIL: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
-                  ready ? "Y" : "N",
-                  fault ? "Y" : "N",
-                  (bdtr >> 15) & 1UL,
-                  (sr >> 7) & 1UL,
-                  (sr >> 6) & 1UL);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[RES CAL] FAIL: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
+                      ready ? "Y" : "N",
+                      fault ? "Y" : "N",
+                      (bdtr >> 15) & 1UL,
+                      (sr >> 7) & 1UL,
+                      (sr >> 6) & 1UL);
     GateDriver_DisableOutputs();
     return false;
 }
@@ -444,18 +407,15 @@ void ResistanceCalibrator::configureHardware(float bus_pct) {
      * Check immediately so we don't run the PI on stale/frozen current. */
     if (GateDriver_IsFault()) {
         uint32_t bdtr = TIM1->BDTR;
-        char msg[96];
-        std::snprintf(msg, sizeof(msg),
-                      "[RES CAL] FAIL: gate-driver fault after enabling PWM | MOE=%lu BIF=%lu BKF=%lu",
-                      (bdtr >> 15) & 1UL,
-                      (TIM1->SR >> 7) & 1UL,
-                      (TIM1->SR >> 6) & 1UL);
-        Telemetry::log("print", msg);
+        Telemetry::printf("[RES CAL] FAIL: gate-driver fault after enabling PWM | MOE=%lu BIF=%lu BKF=%lu",
+                          (bdtr >> 15) & 1UL,
+                          (TIM1->SR >> 7) & 1UL,
+                          (TIM1->SR >> 6) & 1UL);
         fail("[RES CAL] FAIL: DESAT/gate-driver fault latched after PWM enable");
         return;
     }
     if ((TIM1->BDTR & TIM_BDTR_MOE) == 0U) {
-        Telemetry::log("print", "[RES CAL] FAIL: TIM1 MOE cleared after enabling PWM (break event)");
+        Telemetry::printf("[RES CAL] FAIL: TIM1 MOE cleared after enabling PWM (break event)");
         fail("[RES CAL] FAIL: TIM1 break event cleared MOE");
         return;
     }
@@ -527,14 +487,10 @@ void ResistanceCalibrator::finishPairMeasurement() {
         const float max_inactive = std::max(
             MAX_INACTIVE_CURRENT_MIN_A, std::fabs(i_active) * MAX_INACTIVE_CURRENT_RATIO);
         if (i_inactive > max_inactive) {
-            char abuf[16], ibuf[16];
-            fmtFloat3(abuf, sizeof(abuf), std::fabs(i_active));
-            fmtFloat3(ibuf, sizeof(ibuf), i_inactive);
-            char msg[96];
-            std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] FAIL: %s inactive current %s A exceeds limit (active %s A)",
-                          pairName(pair), ibuf, abuf);
-            fail(msg);
+            fail("[RES CAL] FAIL: %s inactive current %.3f A exceeds limit (active %.3f A)",
+                 pairName(pair),
+                 static_cast<double>(i_inactive),
+                 static_cast<double>(std::fabs(i_active)));
             return;
         }
 
@@ -548,17 +504,22 @@ void ResistanceCalibrator::finishPairMeasurement() {
 
     /* Print the raw (V, I) points used for the fit. */
     {
-        char msg[192];
-        int len = std::snprintf(msg, sizeof(msg), "[RES CAL] %s fit data: ", pairName(pair));
-        for (uint8_t pt = 0; pt < NUM_POINTS; ++pt) {
-            char vbuf[16], ibuf[16];
-            fmtFloat3(vbuf, sizeof(vbuf), v[pt]);
-            fmtFloat3(ibuf, sizeof(ibuf), i[pt]);
-            len += std::snprintf(msg + len, sizeof(msg) - len,
-                                 "(V=%sV I=%sA)%s", vbuf, ibuf,
-                                 (pt + 1U < NUM_POINTS) ? ", " : "");
-        }
-        Telemetry::log("print", msg);
+        Telemetry::printf("[RES CAL] %s fit data: "
+                          "(V=%.3fV I=%.3fA), "
+                          "(V=%.3fV I=%.3fA), "
+                          "(V=%.3fV I=%.3fA), "
+                          "(V=%.3fV I=%.3fA), "
+                          "(V=%.3fV I=%.3fA), "
+                          "(V=%.3fV I=%.3fA), "
+                          "(V=%.3fV I=%.3fA)",
+                          pairName(pair),
+                          static_cast<double>(v[0]), static_cast<double>(i[0]),
+                          static_cast<double>(v[1]), static_cast<double>(i[1]),
+                          static_cast<double>(v[2]), static_cast<double>(i[2]),
+                          static_cast<double>(v[3]), static_cast<double>(i[3]),
+                          static_cast<double>(v[4]), static_cast<double>(i[4]),
+                          static_cast<double>(v[5]), static_cast<double>(i[5]),
+                          static_cast<double>(v[6]), static_cast<double>(i[6]));
     }
 
     /* Linear regression: V = R_ll * I + V_offset.
@@ -578,17 +539,13 @@ void ResistanceCalibrator::finishPairMeasurement() {
     const float denom = n * sum_ii - sum_i * sum_i;
 
     {
-        char s1[16], s2[16], s3[16], s4[16], dbuf[16];
-        fmtFloat3(s1, sizeof(s1), sum_v);
-        fmtFloat3(s2, sizeof(s2), sum_i);
-        fmtFloat3(s3, sizeof(s3), sum_vi);
-        fmtFloat3(s4, sizeof(s4), sum_ii);
-        fmtFloat3(dbuf, sizeof(dbuf), denom);
-        char msg[192];
-        std::snprintf(msg, sizeof(msg),
-                      "[RES CAL] %s fit math: sumV=%s sumI=%s sumVI=%s sumII=%s denom=%s",
-                      pairName(pair), s1, s2, s3, s4, dbuf);
-        Telemetry::log("print", msg);
+        Telemetry::printf("[RES CAL] %s fit math: sumV=%.3f sumI=%.3f sumVI=%.3f sumII=%.3f denom=%.3f",
+                          pairName(pair),
+                          static_cast<double>(sum_v),
+                          static_cast<double>(sum_i),
+                          static_cast<double>(sum_vi),
+                          static_cast<double>(sum_ii),
+                          static_cast<double>(denom));
     }
 
     if (std::fabs(denom) < 1e-9f || !std::isfinite(denom)) {
@@ -598,11 +555,9 @@ void ResistanceCalibrator::finishPairMeasurement() {
 
     const float r_ll = (n * sum_vi - sum_v * sum_i) / denom;
     {
-        char rbuf[16];
-        fmtFloat4(rbuf, sizeof(rbuf), r_ll * 1000.0f);
-        char msg[96];
-        std::snprintf(msg, sizeof(msg), "[RES CAL] %s fit result: R_ll=%s mohm", pairName(pair), rbuf);
-        Telemetry::log("print", msg);
+        Telemetry::printf("[RES CAL] %s fit result: R_ll=%.4f mohm",
+                          pairName(pair),
+                          static_cast<double>(r_ll * 1000.0f));
     }
     if (r_ll <= 0.0f || !std::isfinite(r_ll)) {
         fail("[RES CAL] FAIL: computed resistance is non-positive; increase current/voltage");
@@ -616,18 +571,13 @@ void ResistanceCalibrator::finishPairMeasurement() {
     m_results[idx] = r_phase;
     m_result_valid[idx] = true;
 
-    char rll_buf[16], rph_buf[16];
-    fmtFloat4(rll_buf, sizeof(rll_buf), r_ll * 1000.0f);
-    fmtFloat4(rph_buf, sizeof(rph_buf), r_phase * 1000.0f);
-    char ibuf[16], vbuf[16], offbuf[16];
-    fmtFloat3(ibuf, sizeof(ibuf), i_active_max);
-    fmtFloat3(vbuf, sizeof(vbuf), vdc_avg);
-    fmtFloat3(offbuf, sizeof(offbuf), v_offset);
-    char msg[192];
-    std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] %s: R_ll=%s mohm  R_phase=%s mohm  Imax=%s A  Vdc=%s V  V_off=%s V",
-                  pairName(pair), rll_buf, rph_buf, ibuf, vbuf, offbuf);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[RES CAL] %s: R_ll=%.4f mohm  R_phase=%.4f mohm  Imax=%.3f A  Vdc=%.3f V  V_off=%.3f V",
+                      pairName(pair),
+                      static_cast<double>(r_ll * 1000.0f),
+                      static_cast<double>(r_phase * 1000.0f),
+                      static_cast<double>(i_active_max),
+                      static_cast<double>(vdc_avg),
+                      static_cast<double>(v_offset));
 
     enterState(State::NEXT_PAIR);
 }
@@ -647,20 +597,11 @@ void ResistanceCalibrator::reportResults() {
     m_average_r_phase = (count > 0) ? (sum_ph / static_cast<float>(count)) : 0.0f;
     const float avg_r_ll = (count > 0) ? (sum_ll / static_cast<float>(count)) : 0.0f;
 
-    char uv[16], uw[16], vw[16], avg[16];
-    fmtFloat4(uv, sizeof(uv), m_results[0] * 2000.0f); /* line-line */
-    fmtFloat4(uw, sizeof(uw), m_results[1] * 2000.0f);
-    fmtFloat4(vw, sizeof(vw), m_results[2] * 2000.0f);
-    fmtFloat4(avg, sizeof(avg), avg_r_ll * 1000.0f);
-
-    char msg[160];
-    std::snprintf(msg, sizeof(msg),
-                  "[RES CAL] DONE: Rll_uv=%s Rll_uw=%s Rll_vw=%s Rll_avg=%s mohm",
-                  m_result_valid[0] ? uv : "--",
-                  m_result_valid[1] ? uw : "--",
-                  m_result_valid[2] ? vw : "--",
-                  avg);
-    Telemetry::log("print", msg);
+    Telemetry::printf("[RES CAL] DONE: Rll_uv=%.4f%s Rll_uw=%.4f%s Rll_vw=%.4f%s Rll_avg=%.4f mohm",
+                      static_cast<double>(m_results[0] * 2000.0f), m_result_valid[0] ? "" : "(--)",
+                      static_cast<double>(m_results[1] * 2000.0f), m_result_valid[1] ? "" : "(--)",
+                      static_cast<double>(m_results[2] * 2000.0f), m_result_valid[2] ? "" : "(--)",
+                      static_cast<double>(avg_r_ll * 1000.0f));
 
     Telemetry::log("r_ll_uv", m_results[0] * 2.0f);
     Telemetry::log("r_ll_uw", m_results[1] * 2.0f);
@@ -680,7 +621,7 @@ void ResistanceCalibrator::update() {
     /* Abort on any active Critical or High fault. */
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical) ||
         FaultManager::instance().isSeverityActive(FaultSeverity::High)) {
-        Telemetry::log("print", "[RES CAL] FAIL: fault detected");
+        Telemetry::printf("[RES CAL] FAIL: fault detected");
         restoreHardware();
         enterState(State::FAIL);
         return;
@@ -739,7 +680,7 @@ void ResistanceCalibrator::update() {
 
     const uint32_t elapsed_ms = now_ms - m_state_enter_ms;
     if (elapsed_ms > m_timeout_ms) {
-        Telemetry::log("print", "[RES CAL] FAIL: timeout");
+        Telemetry::printf("[RES CAL] FAIL: timeout");
         restoreHardware();
         enterState(State::FAIL);
         return;
@@ -751,24 +692,17 @@ void ResistanceCalibrator::update() {
         if (elapsed_ms >= SETTLE_TIME_MS) {
             const uint8_t pt = m_point_index;
             resetMeasurementAccumulators(pt);
-            char msg[96];
             if (m_mode == Mode::VOLTAGE_STEP) {
-                char vbuf[16];
-                fmtFloat3(vbuf, sizeof(vbuf),
-                          m_targets[pt] * 0.01f * dcLinkVoltageSensor().voltage());
-                std::snprintf(msg, sizeof(msg),
-                              "[RES CAL] %s point %u/%u: target Vll=%s V",
-                              pairName(pair), static_cast<unsigned>(pt + 1U),
-                              static_cast<unsigned>(NUM_POINTS), vbuf);
+                Telemetry::printf("[RES CAL] %s point %u/%u: target Vll=%.3f V",
+                                  pairName(pair), static_cast<unsigned>(pt + 1U),
+                                  static_cast<unsigned>(NUM_POINTS),
+                                  static_cast<double>(m_targets[pt] * 0.01f * dcLinkVoltageSensor().voltage()));
             } else {
-                char ibuf[16];
-                fmtFloat3(ibuf, sizeof(ibuf), m_targets[pt]);
-                std::snprintf(msg, sizeof(msg),
-                              "[RES CAL] %s point %u/%u: target I=%s A",
-                              pairName(pair), static_cast<unsigned>(pt + 1U),
-                              static_cast<unsigned>(NUM_POINTS), ibuf);
+                Telemetry::printf("[RES CAL] %s point %u/%u: target I=%.3f A",
+                                  pairName(pair), static_cast<unsigned>(pt + 1U),
+                                  static_cast<unsigned>(NUM_POINTS),
+                                  static_cast<double>(m_targets[pt]));
             }
-            Telemetry::log("print", msg);
             m_update_calls = 0;
             m_sample_calls = 0;
             m_last_rate_log_ms = now_ms;
@@ -784,11 +718,8 @@ void ResistanceCalibrator::update() {
         /* If the ADC trigger has stopped, the PI will wind up on stale data and
          * we risk a hardware overcurrent.  Abort if no new sample arrives. */
         if (now_ms - m_last_sample_ms > 100U) {
-            char msg[96];
-            std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] FAIL: no new ADC sample for %lu ms (stale current)",
-                          static_cast<unsigned long>(now_ms - m_last_sample_ms));
-            Telemetry::log("print", msg);
+            Telemetry::printf("[RES CAL] FAIL: no new ADC sample for %lu ms (stale current)",
+                              static_cast<unsigned long>(now_ms - m_last_sample_ms));
             restoreHardware();
             enterState(State::FAIL);
             return;
@@ -831,14 +762,9 @@ void ResistanceCalibrator::update() {
             }
 
             if (m_max_current_a > 0.0f && std::fabs(i_active) > m_max_current_a) {
-                char abuf[16], mbuf[16];
-                fmtFloat3(abuf, sizeof(abuf), i_active);
-                fmtFloat3(mbuf, sizeof(mbuf), m_max_current_a);
-                char msg[96];
-                std::snprintf(msg, sizeof(msg),
-                              "[RES CAL] FAIL: overcurrent %s A > limit %s A",
-                              abuf, mbuf);
-                Telemetry::log("print", msg);
+                Telemetry::printf("[RES CAL] FAIL: overcurrent %.3f A > limit %.3f A",
+                                  static_cast<double>(i_active),
+                                  static_cast<double>(m_max_current_a));
                 restoreHardware();
                 enterState(State::FAIL);
                 return;
@@ -852,15 +778,11 @@ void ResistanceCalibrator::update() {
                                     static_cast<float>(dt_ms);
             const float sample_hz = static_cast<float>(m_sample_calls) * 1000.0f /
                                     static_cast<float>(dt_ms);
-            char ubuf[16], sbuf[16];
-            fmtFloat3(ubuf, sizeof(ubuf), update_hz);
-            fmtFloat3(sbuf, sizeof(sbuf), sample_hz);
-            char msg[128];
-            std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] %s timing: update=%s Hz  sample=%s Hz  n_samp=%lu",
-                          pairName(pair), ubuf, sbuf,
-                          static_cast<unsigned long>(m_sample_calls));
-            Telemetry::log("print", msg);
+            Telemetry::printf("[RES CAL] %s timing: update=%.3f Hz  sample=%.3f Hz  n_samp=%lu",
+                              pairName(pair),
+                              static_cast<double>(update_hz),
+                              static_cast<double>(sample_hz),
+                              static_cast<unsigned long>(m_sample_calls));
             m_update_calls = 0;
             m_sample_calls = 0;
             m_last_rate_log_ms = now_ms;
@@ -873,18 +795,14 @@ void ResistanceCalibrator::update() {
                 m_sum_i_inactive[pt] / static_cast<float>(m_sample_count[pt]));
             const float duty_pt = m_sum_duty[pt] / static_cast<float>(m_sample_count[pt]);
             const float vll_pt = (duty_pt / 100.0f) * vdc_pt;
-            char vbuf[16], ibuf[16], iabuf[16], pbuf[16], dbuf[16];
-            fmtFloat3(vbuf, sizeof(vbuf), vll_pt);
-            fmtFloat3(ibuf, sizeof(ibuf), iact_pt);
-            fmtFloat3(iabuf, sizeof(iabuf), iinact_pt);
-            fmtFloat3(pbuf, sizeof(pbuf), vdc_pt);
-            fmtFloat3(dbuf, sizeof(dbuf), duty_pt);
-            char msg[192];
-            std::snprintf(msg, sizeof(msg),
-                          "[RES CAL] %s point %u/%u done: Vll=%s V  Vdc=%s V  duty=%s %%  Iact=%s A  Iinact=%s A",
-                          pairName(pair), static_cast<unsigned>(pt + 1U),
-                          static_cast<unsigned>(NUM_POINTS), vbuf, pbuf, dbuf, ibuf, iabuf);
-            Telemetry::log("print", msg);
+            Telemetry::printf("[RES CAL] %s point %u/%u done: Vll=%.3f V  Vdc=%.3f V  duty=%.3f %%  Iact=%.3f A  Iinact=%.3f A",
+                              pairName(pair), static_cast<unsigned>(pt + 1U),
+                              static_cast<unsigned>(NUM_POINTS),
+                              static_cast<double>(vll_pt),
+                              static_cast<double>(vdc_pt),
+                              static_cast<double>(duty_pt),
+                              static_cast<double>(iact_pt),
+                              static_cast<double>(iinact_pt));
 
             if (m_point_index + 1U < NUM_POINTS) {
                 ++m_point_index;

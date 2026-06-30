@@ -704,22 +704,32 @@ bool log(const char* key, const char* value) {
     return log_core0(key, value);
 }
 
-bool printf(const char* fmt, ...) {
+bool vprintf(const char* fmt, va_list ap) {
     if (!fmt) return false;
 
     // Allow much longer formatted strings; log_core0 will fragment as needed.
     static constexpr size_t PRINTF_BUF_SIZE = 1024;
     char buf[PRINTF_BUF_SIZE];
 
-    va_list ap;
-    va_start(ap, fmt);
-    const int n = vsnprintf(buf, sizeof(buf), fmt, ap);
-    va_end(ap);
+    va_list ap2;
+    va_copy(ap2, ap);
+    const int n = vsnprintf(buf, sizeof(buf), fmt, ap2);
+    va_end(ap2);
 
     if (n <= 0) return false;
     buf[sizeof(buf) - 1] = '\0';
 
     return Telemetry::log("print", buf);
+}
+
+bool printf(const char* fmt, ...) {
+    if (!fmt) return false;
+
+    va_list ap;
+    va_start(ap, fmt);
+    const bool ok = Telemetry::vprintf(fmt, ap);
+    va_end(ap);
+    return ok;
 }
 
 #if TELEMETRY_HAS_MEASUREMENT_SYSTEM
