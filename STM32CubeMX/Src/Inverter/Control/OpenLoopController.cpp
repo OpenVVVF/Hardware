@@ -5,7 +5,7 @@
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
-#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -147,7 +147,7 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     m_freq_hz = (freq_hz < 0.0f) ? 0.0f : freq_hz;
     m_mod_idx = (modulation_index < 0.0f) ? 0.0f : modulation_index;
 
-    PolePairEstimator::instance().setElectricalFrequency(m_freq_hz);
+    PoleEstimator::instance().setElectricalFrequency(m_freq_hz);
 
     /* Start the angle ramp at zero modulation, then ramp voltage up. */
     PWM_StartSPWM(m_freq_hz, 0.0f);
@@ -165,7 +165,7 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
     /* Start accumulating encoder mechanical cycles vs current zero crossings.
      * Pass the standstill raw sin/cos so the estimator can learn its DC
      * offsets without relying on the calibrated encoder angle. */
-    PolePairEstimator::instance().setEnabled(
+    PoleEstimator::instance().setEnabled(
         true, encoderADC().lastRawSin(), encoderADC().lastRawCos());
     return true;
 }
@@ -180,9 +180,9 @@ void OpenLoopController::stop() {
      * TIM1 keeps running for current sense. */
     PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
 
-    /* Stop pole-pair estimation so coast-down noise/decay does not corrupt
+    /* Stop pole estimation so coast-down noise/decay does not corrupt
      * the accumulated result.  The last estimate is preserved. */
-    PolePairEstimator::instance().setEnabled(false);
+    PoleEstimator::instance().setEnabled(false);
 
     m_running = false;
     Telemetry::printf("[OL] STOPPED (coast)");
@@ -192,7 +192,7 @@ void OpenLoopController::setFrequency(float freq_hz) {
     if (freq_hz < 0.0f) freq_hz = 0.0f;
     m_freq_hz = freq_hz;
 
-    PolePairEstimator::instance().setElectricalFrequency(m_freq_hz);
+    PoleEstimator::instance().setElectricalFrequency(m_freq_hz);
 
     if (m_running) {
         PWM_SetSPWMParams(m_freq_hz, m_mod_idx);

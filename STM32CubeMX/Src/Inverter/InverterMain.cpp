@@ -8,7 +8,7 @@
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/CAN/FdcanFault.h"
 #include "Inverter/Drivers/Logging/SupplyMonitor.h"
-#include "Inverter/Calibration/PolePairCalibrator.h"
+#include "Inverter/Calibration/PoleCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 
 #include "main.h"
@@ -119,7 +119,7 @@ static void loop()
     Inverter::commandShell().poll();
     Inverter::FaultManager::instance().executeSafetyActions();
     Inverter::openLoopController().update();
-    Inverter::polePairCalibrator().update();
+    Inverter::poleCalibrator().update();
     Inverter::resistanceCalibrator().update();
 
     /* Telemetry for open-loop setpoints. */

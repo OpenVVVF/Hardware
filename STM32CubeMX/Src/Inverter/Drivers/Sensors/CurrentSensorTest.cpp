@@ -1,7 +1,7 @@
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
-#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -61,12 +61,12 @@ void CurrentSensorTest_RunOnce() {
         Telemetry::log("enc_raw_cos", static_cast<float>(encoderADC().lastRawCos()));
     }
 
-    /* Pole-pair estimate: refines continuously while the motor is running. */
-    PolePairEstimator& pp = PolePairEstimator::instance();
-    Telemetry::log("pp_estimate", pp.estimate());
-    Telemetry::log("pp_window", pp.windowEstimate());
-    Telemetry::log("pp_mech_cycles", pp.mechanicalCycles());
-    Telemetry::log("pp_elec_cycles", pp.electricalCycles());
+    /* Pole estimate: refines continuously while the motor is running. */
+    PoleEstimator& poles = PoleEstimator::instance();
+    Telemetry::log("pole_estimate", poles.estimate());
+    Telemetry::log("pole_window", poles.windowEstimate());
+    Telemetry::log("pole_mech_cycles", poles.mechanicalCycles());
+    Telemetry::log("pole_elec_cycles", poles.electricalCycles());
 }
 
 } // namespace Inverter

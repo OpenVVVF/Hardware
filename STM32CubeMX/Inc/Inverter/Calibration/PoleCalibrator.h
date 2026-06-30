@@ -5,24 +5,24 @@
 namespace Inverter {
 
 /**
- * @brief Automated pole-pair calibration.
+ * @brief Automated pole calibration.
  *
  * Runs the motor open-loop at 1 Hz, ramps modulation until the encoder turns,
  * then counts commanded electrical cycles against encoder mechanical cycles to
- * determine the pole-pair ratio.
+ * determine the pole count.
  *
  * Movement is detected from the raw encoder angle (so partial rotation and
  * cogging vibration are handled).  Completed encoder cycles are counted from
  * the filtered sin/cos zero crossings, which is far more robust than integrating
  * the raw angle when the rotor vibrates near the wrap boundary.
  *
- * The reported ratio is the true pole-pair count only if the encoder sin/cos
+ * The reported pole count is the true pole count only if the encoder sin/cos
  * produces one cycle per mechanical revolution.  Use encodercal to measure
  * encoder cycles per revolution if needed.
  */
-class PolePairCalibrator {
+class PoleCalibrator {
 public:
-    PolePairCalibrator() = default;
+    PoleCalibrator() = default;
 
     /**
      * @brief Start the calibration.
@@ -44,11 +44,11 @@ public:
     bool isActive() const { return m_state != State::IDLE && m_state != State::DONE; }
 
     /**
-     * @brief Most recent ratio, or 0 if no calibration has finished.
+     * @brief Most recent pole count, or 0 if no calibration has finished.
      */
-    float lastRatio() const { return m_last_ratio; }
+    float lastPoles() const { return m_last_poles; }
 
-    static PolePairCalibrator& instance();
+    static PoleCalibrator& instance();
 
 private:
     enum class State {
@@ -61,7 +61,7 @@ private:
 
     void sampleEncoderAngle();
     float encoderCycles() const { return m_unwrapped_angle / 360.0f; }
-    void reportRatio(const char* label);
+    void reportPoles(const char* label);
 
     State    m_state = State::IDLE;
     float    m_mod = 0.0f;
@@ -85,9 +85,9 @@ private:
     uint32_t m_count_start_ms = 0;
     uint32_t m_last_move_ms = 0;
     float    m_cycles_at_last_move = 0.0f;
-    float    m_last_ratio = 0.0f;
+    float    m_last_poles = 0.0f;
 };
 
-PolePairCalibrator& polePairCalibrator();
+PoleCalibrator& poleCalibrator();
 
 } // namespace Inverter

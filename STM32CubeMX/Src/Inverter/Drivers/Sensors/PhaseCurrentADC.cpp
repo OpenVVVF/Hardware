@@ -1,7 +1,7 @@
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
-#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -320,9 +320,9 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
         }
     }
 
-    /* Feed the pole-pair estimator at the ADC sample rate.  Pass raw encoder
+    /* Feed the pole estimator at the ADC sample rate.  Pass raw encoder
      * sin/cos so the estimate does not depend on the encoder angle bounds. */
-    PolePairEstimator::instance().onSample(
+    PoleEstimator::instance().onSample(
         m_current_u, encoderADC().lastRawSin(), encoderADC().lastRawCos());
 
     m_new_data = true;

@@ -55,7 +55,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Control/CommandShell.cpp
     Src/Inverter/Control/FaultManager.cpp
     Src/Inverter/Control/FaultCallbacks.cpp
-    Src/Inverter/Calibration/PolePairCalibrator.cpp
+    Src/Inverter/Calibration/PoleCalibrator.cpp
     Src/Inverter/Calibration/ResistanceCalibrator.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c
@@ -70,7 +70,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Drivers/Sensors/DcLinkVoltageSensor.cpp
     Src/Inverter/Drivers/Sensors/EncoderADC.cpp
     Src/Inverter/Drivers/Sensors/PhaseCurrentADC.cpp
-    Src/Inverter/Drivers/Sensors/PolePairEstimator.cpp
+    Src/Inverter/Drivers/Sensors/PoleEstimator.cpp
     Src/Inverter/Drivers/Sensors/MAX22530.cpp
 )
 

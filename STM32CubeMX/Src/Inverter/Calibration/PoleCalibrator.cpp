@@ -1,8 +1,8 @@
-#include "Inverter/Calibration/PolePairCalibrator.h"
+#include "Inverter/Calibration/PoleCalibrator.h"
 
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
-#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Telemetry.h"
 
@@ -11,25 +11,25 @@
 
 namespace Inverter {
 
-static PolePairCalibrator s_instance;
+static PoleCalibrator s_instance;
 
-PolePairCalibrator& PolePairCalibrator::instance() {
+PoleCalibrator& PoleCalibrator::instance() {
     return s_instance;
 }
 
-PolePairCalibrator& polePairCalibrator() {
+PoleCalibrator& poleCalibrator() {
     return s_instance;
 }
 
-bool PolePairCalibrator::start() {
+bool PoleCalibrator::start() {
     if (openLoopController().isRunning()) {
-        Telemetry::printf("[CAL PP] stop the motor before starting calibration");
+        Telemetry::printf("[CAL POLES] stop the motor before starting calibration");
         return false;
     }
 
     /* Start open-loop at 2 Hz, zero modulation. */
     if (!openLoopController().start(2.0f, 0.0f)) {
-        Telemetry::printf("[CAL PP] ERROR: failed to start open-loop controller");
+        Telemetry::printf("[CAL POLES] ERROR: failed to start open-loop controller");
         return false;
     }
 
@@ -39,7 +39,7 @@ bool PolePairCalibrator::start() {
     m_breakaway_detected = false;
     m_breakaway_mod = 0.0f;
     m_breakaway_mech_cycles = 0.0f;
-    m_last_ratio = 0.0f;
+    m_last_poles = 0.0f;
     m_unwrapped_angle = 0.0f;
     m_last_angle = encoderADC().lastAngle();
     m_cycles_at_last_move = 0.0f;
@@ -47,11 +47,11 @@ bool PolePairCalibrator::start() {
     m_last_move_ms = HAL_GetTick();
     m_state = State::RAMP;
 
-    Telemetry::printf("[CAL PP] started at 2 Hz, fast ramp to breakaway");
+    Telemetry::printf("[CAL POLES] started at 2 Hz, fast ramp to breakaway");
     return true;
 }
 
-void PolePairCalibrator::sampleEncoderAngle() {
+void PoleCalibrator::sampleEncoderAngle() {
     const float angle = encoderADC().lastAngle();
     float delta = angle - m_last_angle;
     if (delta > 180.0f) {
@@ -63,22 +63,22 @@ void PolePairCalibrator::sampleEncoderAngle() {
     m_last_angle = angle;
 }
 
-void PolePairCalibrator::reportRatio(const char* label) {
-    const float mech_cycles = PolePairEstimator::instance().mechanicalCycles();
+void PoleCalibrator::reportPoles(const char* label) {
+    const float mech_cycles = PoleEstimator::instance().mechanicalCycles();
     const float cycles_counted = mech_cycles - m_mech_count_start;
     const uint32_t elec_counted = PWM_GetSPWMElectricalCycles() - m_elec_count_start;
-    const float ratio = (cycles_counted > 0.0f)
-                            ? static_cast<float>(elec_counted) / cycles_counted
+    const float poles = (cycles_counted > 0.0f)
+                            ? 2.0f * static_cast<float>(elec_counted) / cycles_counted
                             : 0.0f;
-    m_last_ratio = ratio;
+    m_last_poles = poles;
 
-    Telemetry::printf("[CAL PP] %s: ratio=%.3f at mod=%.3f (elec=%lu mech=%.2f)",
-                      label, ratio, m_mod,
+    Telemetry::printf("[CAL POLES] %s: poles=%.3f at mod=%.3f (elec=%lu mech=%.2f)",
+                      label, poles, m_mod,
                       static_cast<unsigned long>(elec_counted),
                       cycles_counted);
 }
 
-void PolePairCalibrator::update() {
+void PoleCalibrator::update() {
     if (m_state == State::IDLE || m_state == State::DONE || m_state == State::FAIL) {
         return;
     }
@@ -101,7 +101,7 @@ void PolePairCalibrator::update() {
     constexpr uint32_t MAX_COUNT_MS = 120000U;
 
     const uint32_t now_ms = HAL_GetTick();
-    const float mech_cycles = PolePairEstimator::instance().mechanicalCycles();
+    const float mech_cycles = PoleEstimator::instance().mechanicalCycles();
     const float angle_cycles = std::fabs(encoderCycles());
 
     if (m_state == State::RAMP) {
@@ -134,14 +134,14 @@ void PolePairCalibrator::update() {
                 m_mod = boosted;
                 openLoopController().setModulationIndexDirect(m_mod);
 
-                Telemetry::printf("[CAL PP] breakaway at mod=%.3f, holding at %.3f",
+                Telemetry::printf("[CAL POLES] breakaway at mod=%.3f, holding at %.3f",
                                   m_breakaway_mod, m_mod);
             }
 
             if (m_mod >= CAL_MAX_MOD &&
                 (now_ms - m_last_move_ms) > STALL_TIMEOUT_MS) {
                 m_state = State::FAIL;
-                Telemetry::printf("[CAL PP] FAIL: encoder did not move");
+                Telemetry::printf("[CAL POLES] FAIL: encoder did not move");
                 openLoopController().stop();
             }
         } else {
@@ -154,7 +154,7 @@ void PolePairCalibrator::update() {
                 m_last_move_ms = now_ms;
                 m_cycles_at_last_move = angle_cycles;
                 m_state = State::COUNT;
-                Telemetry::printf("[CAL PP] zero crossing, counting one cycle");
+                Telemetry::printf("[CAL POLES] zero crossing, counting one cycle");
             }
         }
     }
@@ -169,10 +169,10 @@ void PolePairCalibrator::update() {
         if ((now_ms - m_last_move_ms) > STALL_TIMEOUT_MS) {
             if (cycles_counted >= MIN_PARTIAL_CYCLES) {
                 m_state = State::DONE;
-                reportRatio("partial");
+                reportPoles("partial");
             } else {
                 m_state = State::FAIL;
-                Telemetry::printf("[CAL PP] FAIL: encoder stalled during count");
+                Telemetry::printf("[CAL POLES] FAIL: encoder stalled during count");
             }
             openLoopController().stop();
             return;
@@ -180,13 +180,13 @@ void PolePairCalibrator::update() {
 
         if ((now_ms - m_count_start_ms) > MAX_COUNT_MS) {
             m_state = State::FAIL;
-            Telemetry::printf("[CAL PP] FAIL: count took too long");
+            Telemetry::printf("[CAL POLES] FAIL: count took too long");
             openLoopController().stop();
             return;
         }
 
         if (cycles_counted >= TARGET_MECH_CYCLES) {
-            reportRatio("done");
+            reportPoles("done");
             m_state = State::DONE;
             openLoopController().stop();
         }

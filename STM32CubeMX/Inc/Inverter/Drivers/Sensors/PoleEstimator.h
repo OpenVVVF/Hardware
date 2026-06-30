@@ -6,22 +6,22 @@
 namespace Inverter {
 
 /**
- * @brief Estimate motor pole pairs from current zero crossings and raw sin/cos.
+ * @brief Estimate motor poles from current zero crossings and raw sin/cos.
  *
  * Uses a sliding window over the last N mechanical cycles:
  *
- *     pole_pairs = electrical_zero_crossings_in_window / mechanical_cycles_in_window
+ *     poles = 2 * electrical_zero_crossings_in_window / mechanical_cycles_in_window
  *
  * This is much more robust than a time-based frequency ratio because it is
  * independent of encoder calibration, DC offset drift, and speed ripple.
  *
- * IMPORTANT: the estimate is only the true pole-pair count if the encoder
+ * IMPORTANT: the estimate is only the true pole count if the encoder
  * sin/cos sensor produces exactly one cycle per mechanical revolution.  If
- * the encoder magnet has N cycles/rev, the reported value is PP / N.
+ * the encoder magnet has N cycles/rev, the reported value is poles / N.
  */
-class PolePairEstimator {
+class PoleEstimator {
 public:
-    PolePairEstimator() = default;
+    PoleEstimator() = default;
 
     /**
      * @brief Set the commanded electrical frequency (Hz).
@@ -50,9 +50,9 @@ public:
     void onSample(float iu, uint16_t raw_sin, uint16_t raw_cos);
 
     /**
-     * @brief Current filtered pole-pair estimate.  0 if not enough data yet.
+     * @brief Current filtered pole estimate.  0 if not enough data yet.
      */
-    float estimate() const { return m_filtered_pp; }
+    float estimate() const { return m_filtered_poles; }
 
     /**
      * @brief Accumulated mechanical and electrical cycle counts.
@@ -63,13 +63,13 @@ public:
     /**
      * @brief Latest windowed raw estimate before low-pass filtering.
      */
-    float windowEstimate() const { return m_window_pp; }
+    float windowEstimate() const { return m_window_poles; }
 
     /**
      * @brief Manual encoder cycle counting for sensor calibration.
      *
      * While active, positive zero crossings of the filtered sin/cos signal are
-     * counted independently of the pole-pair estimate.  This lets you rotate
+     * counted independently of the pole estimate.  This lets you rotate
      * the shaft by hand exactly one revolution and read off how many sin/cos
      * periods the encoder produces per mechanical revolution.
      */
@@ -81,7 +81,7 @@ public:
     /**
      * @brief Global instance.
      */
-    static PolePairEstimator& instance();
+    static PoleEstimator& instance();
 
 private:
     static constexpr size_t WINDOW_CYCLES = 5;
@@ -117,8 +117,8 @@ private:
     float   m_elec_at_mech[WINDOW_CYCLES] = {};
     size_t  m_mech_window_idx = 0;
 
-    float   m_window_pp = 0.0f;
-    float   m_filtered_pp = 0.0f;
+    float   m_window_poles = 0.0f;
+    float   m_filtered_poles = 0.0f;
 };
 
 } // namespace Inverter

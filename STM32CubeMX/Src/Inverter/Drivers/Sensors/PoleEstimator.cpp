@@ -1,20 +1,20 @@
-#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
 
 #include <cmath>
 
 namespace Inverter {
 
-static PolePairEstimator s_instance;
+static PoleEstimator s_instance;
 
-PolePairEstimator& PolePairEstimator::instance() {
+PoleEstimator& PoleEstimator::instance() {
     return s_instance;
 }
 
-void PolePairEstimator::setElectricalFrequency(float f_hz) {
+void PoleEstimator::setElectricalFrequency(float f_hz) {
     m_f_elec_hz = (f_hz > 0.0f) ? f_hz : 0.0f;
 }
 
-void PolePairEstimator::setEnabled(bool enabled, uint16_t raw_sin, uint16_t raw_cos) {
+void PoleEstimator::setEnabled(bool enabled, uint16_t raw_sin, uint16_t raw_cos) {
     if (enabled && !m_enabled) {
         reset();
         m_sin_offset = static_cast<float>(raw_sin);
@@ -23,7 +23,7 @@ void PolePairEstimator::setEnabled(bool enabled, uint16_t raw_sin, uint16_t raw_
     m_enabled = enabled;
 }
 
-void PolePairEstimator::reset() {
+void PoleEstimator::reset() {
     m_sin_offset = 0.0f;
     m_cos_offset = 0.0f;
     m_sin_filt = 0.0f;
@@ -42,20 +42,20 @@ void PolePairEstimator::reset() {
         m_elec_at_mech[i] = 0.0f;
     }
     m_mech_window_idx = 0;
-    m_window_pp = 0.0f;
-    m_filtered_pp = 0.0f;
+    m_window_poles = 0.0f;
+    m_filtered_poles = 0.0f;
 }
 
-void PolePairEstimator::startManualEncoderCal() {
+void PoleEstimator::startManualEncoderCal() {
     m_manual_mech_cycles = 0.0f;
     m_manual_cal = true;
 }
 
-void PolePairEstimator::stopManualEncoderCal() {
+void PoleEstimator::stopManualEncoderCal() {
     m_manual_cal = false;
 }
 
-void PolePairEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {
+void PoleEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {
     if (!m_enabled) {
         return;
     }
@@ -94,12 +94,12 @@ void PolePairEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {
         m_elec_at_mech[m_mech_window_idx % WINDOW_CYCLES] = m_elec_cycles;
         ++m_mech_window_idx;
 
-        /* Compute pole-pair ratio over the last WINDOW_CYCLES revolutions. */
+        /* Compute pole count over the last WINDOW_CYCLES revolutions. */
         if (m_mech_cycles >= static_cast<float>(WINDOW_CYCLES)) {
             const float elec_at_start = m_elec_at_mech[m_mech_window_idx % WINDOW_CYCLES];
             const float elec_in_window = m_elec_cycles - elec_at_start;
             if (elec_in_window > 0.5f) {
-                m_window_pp = elec_in_window / static_cast<float>(WINDOW_CYCLES);
+                m_window_poles = 2.0f * elec_in_window / static_cast<float>(WINDOW_CYCLES);
             }
         }
     }
@@ -136,21 +136,21 @@ void PolePairEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {
      * enough revolutions have passed; fall back to the cumulative ratio before
      * that.  We intentionally skip the commanded-frequency hint here because
      * the cycle ratio is far more robust to encoder calibration errors. */
-    float raw_pp = 0.0f;
-    if (m_window_pp > 0.0f) {
-        raw_pp = m_window_pp;
+    float raw_poles = 0.0f;
+    if (m_window_poles > 0.0f) {
+        raw_poles = m_window_poles;
     } else if (m_mech_cycles > 0.5f && m_elec_cycles > 0.5f) {
-        raw_pp = m_elec_cycles / m_mech_cycles;
+        raw_poles = 2.0f * m_elec_cycles / m_mech_cycles;
     } else {
         return;
     }
 
-    if (m_filtered_pp <= 0.0f) {
-        m_filtered_pp = raw_pp;
+    if (m_filtered_poles <= 0.0f) {
+        m_filtered_poles = raw_poles;
     } else {
         /* ~100 ms time constant at 10 kHz.  Very smooth once the window is full. */
         constexpr float ESTIMATE_ALPHA = 0.001f;
-        m_filtered_pp += ESTIMATE_ALPHA * (raw_pp - m_filtered_pp);
+        m_filtered_poles += ESTIMATE_ALPHA * (raw_poles - m_filtered_poles);
     }
 }
 

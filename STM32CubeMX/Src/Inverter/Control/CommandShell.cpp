@@ -1,11 +1,11 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
-#include "Inverter/Calibration/PolePairCalibrator.h"
+#include "Inverter/Calibration/PoleCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
-#include "Inverter/Drivers/Sensors/PolePairEstimator.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Drivers/Logging/SupplyMonitor.h"
 #include "Inverter/Telemetry.h"
 
@@ -49,7 +49,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
     return true;
 }
 
@@ -241,31 +241,31 @@ void CommandShell::poll() {
                         Telemetry::printf("[SHELL] Vdc zero cal failed (no sample)");
                     }
                 }
-                else if (std::strcmp(argv[0], "polepairs") == 0) {
-                    PolePairEstimator& pp = PolePairEstimator::instance();
-                    Telemetry::printf("[SHELL] pp=%.3f mech=%.2f elec=%.2f",
-                                      pp.estimate(), pp.mechanicalCycles(), pp.electricalCycles());
+                else if (std::strcmp(argv[0], "poles") == 0) {
+                    PoleEstimator& poles = PoleEstimator::instance();
+                    Telemetry::printf("[SHELL] poles=%.3f mech=%.2f elec=%.2f",
+                                      poles.estimate(), poles.mechanicalCycles(), poles.electricalCycles());
                 }
                 else if (std::strcmp(argv[0], "encodercal") == 0) {
-                    PolePairEstimator& pp = PolePairEstimator::instance();
+                    PoleEstimator& poles = PoleEstimator::instance();
                     if (argc < 2) {
                         Telemetry::printf("[SHELL] usage: encodercal start | stop");
                     } else if (std::strcmp(argv[1], "start") == 0) {
-                        pp.startManualEncoderCal();
+                        poles.startManualEncoderCal();
                         Telemetry::printf("[SHELL] encoder cal started; rotate shaft exactly 1 rev, then 'encodercal stop'");
                     } else if (std::strcmp(argv[1], "stop") == 0) {
-                        pp.stopManualEncoderCal();
-                        const float cycles = pp.manualEncoderCycles();
-                        Telemetry::printf("[SHELL] encoder cycles in 1 rev = %.2f; true PP = pp_estimate * %.2f",
+                        poles.stopManualEncoderCal();
+                        const float cycles = poles.manualEncoderCycles();
+                        Telemetry::printf("[SHELL] encoder cycles in 1 rev = %.2f; true poles = poles_estimate * %.2f",
                                           cycles, cycles);
                     } else {
                         Telemetry::printf("[SHELL] usage: encodercal start | stop");
                     }
                 }
-                else if (std::strcmp(argv[0], "calpolepairs") == 0) {
-                    PolePairCalibrator& cal = PolePairCalibrator::instance();
+                else if (std::strcmp(argv[0], "calpoles") == 0) {
+                    PoleCalibrator& cal = PoleCalibrator::instance();
                     if (ol.isRunning()) {
-                        Telemetry::printf("[SHELL] stop the motor before starting calpolepairs");
+                        Telemetry::printf("[SHELL] stop the motor before starting calpoles");
                     } else if (cal.isActive()) {
                         Telemetry::printf("[SHELL] calibration already running");
                     } else {
@@ -485,7 +485,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of
