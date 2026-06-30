@@ -36,8 +36,9 @@ public:
     };
 
     enum class Mode {
-        VOLTAGE_STEP, /**< Fixed duty points. */
-        CURRENT_CTRL  /**< PI current control. */
+        VOLTAGE_STEP,  /**< Fixed duty points. */
+        CURRENT_CTRL,  /**< PI current control. */
+        TOPOLOGY_DIFF  /**< Six-direction + three double-pair differencing. */
     };
 
     /**
@@ -74,6 +75,22 @@ public:
                           float oc_limit_a = 0.0f);
 
     /**
+     * @brief Start topology-differenced DC injection calibration.
+     *
+     * For each current setpoint, measures the six directed single-pair
+     * voltage commands and the three split-return double-pair voltage
+     * commands.  Fits the high-current slope of ΔV vs I to extract
+     * R_total, then builds an empirical inverter-drop LUT.
+     *
+     * @param max_current_a Maximum current setpoint [A].
+     * @param timeout_ms    Maximum time allowed for the whole sweep.
+     * @param oc_limit_a    Hard abort threshold [A]. 0 defaults to 1.2·max_current_a.
+     * @return true if calibration started, false otherwise.
+     */
+    bool startTopologyDiff(float max_current_a, uint32_t timeout_ms = 300000U,
+                           float oc_limit_a = 0.0f);
+
+    /**
      * @brief Non-blocking state-machine update.  Call at ~100 Hz from the main
      * loop.
      */
@@ -94,6 +111,22 @@ public:
     /** @brief Average of all successfully measured per-phase resistances [ohm]. */
     float lastAverage() const { return m_average_r_phase; }
 
+    /** @brief Total effective resistance from topology-diff mode [ohm]. */
+    float lastRtotal() const { return m_r_total; }
+
+    /** @brief Number of valid points in the inverter-drop LUT. */
+    uint8_t lastVceLutCount() const { return m_vce_lut_count; }
+
+    /** @brief Current [A] for inverter-drop LUT entry @p idx. */
+    float lastVceLutI(uint8_t idx) const {
+        return (idx < m_vce_lut_count) ? m_vce_lut_i[idx] : 0.0f;
+    }
+
+    /** @brief Inverter drop [V] for LUT entry @p idx. */
+    float lastVceLutV(uint8_t idx) const {
+        return (idx < m_vce_lut_count) ? m_vce_lut_v[idx] : 0.0f;
+    }
+
     static ResistanceCalibrator& instance();
 
 private:
@@ -108,17 +141,46 @@ private:
         FAIL
     };
 
+    /** Six directed phase pairs for the single-pair reference. */
+    enum class DirectedPair {
+        UV, /**< U high, V low. */
+        VU, /**< V high, U low. */
+        UW, /**< U high, W low. */
+        WU, /**< W high, U low. */
+        VW, /**< V high, W low. */
+        WV  /**< W high, V low. */
+    };
+
+    /** Three split-return double-pair topologies. */
+    enum class DoublePair {
+        U_VW, /**< U high, V and W low. */
+        V_UW, /**< V high, U and W low. */
+        W_UV  /**< W high, U and V low. */
+    };
+
     void enterState(State state);
     void fail(const char* reason);
     bool enableGateDriver();
     void configureHardware(float duty_pct);
+    void configureHardware(DirectedPair pair, float duty_pct);
+    void configureHardware(DoublePair pair, float duty_pct);
+    void configureHardwareImpl(const bool is_high[3], const bool is_low[3], float duty_pct);
     void restoreHardware();
     void finishPairMeasurement();
+    void finishTopologyDiff();
     void reportResults();
+    void reportTopologyDiffResults();
     void resetMeasurementAccumulators(uint8_t point);
+    void resetSubstepAccumulators();
+    void advanceTopologyDiffSubstep();
+    float activeCurrentForDirectedPair(float iu, float iv, float iw, DirectedPair dp) const;
+    float inactiveCurrentForDirectedPair(float iu, float iv, float iw, DirectedPair dp) const;
+    bool symmetryOkForDoublePair(float iu, float iv, float iw, DoublePair dp, float i_set) const;
 
     static const char* pairName(Pair pair);
     static int pairIndex(Pair pair);
+    static const char* directedPairName(DirectedPair dp);
+    static const char* doublePairName(DoublePair dp);
 
     State m_state = State::IDLE;
 
@@ -128,7 +190,9 @@ private:
 
     Mode     m_mode = Mode::VOLTAGE_STEP;
     static constexpr uint8_t NUM_POINTS = 7U;
+    static constexpr uint8_t TOPOLOGY_DIFF_POINTS = 15U;
     float    m_targets[NUM_POINTS] = {}; /**< duty % (V step) or A (I ctrl). */
+    float    m_td_targets[TOPOLOGY_DIFF_POINTS] = {}; /**< current setpoints [A]. */
     static constexpr float CURRENT_CTRL_MIN_A = 4.0f; /**< lowest current setpoint. */
     float    m_max_current_a = 50.0f;
     uint32_t m_timeout_ms = 5000U;
@@ -143,9 +207,36 @@ private:
     float    m_sum_vdc[NUM_POINTS] = {};
     float    m_sum_duty[NUM_POINTS] = {}; /**< commanded duty %. */
 
+    /* Topology-diff state. */
+    uint8_t  m_topology_point_index = 0;
+    uint8_t  m_substep_index = 0; /**< 0-5 single-pair, 6-8 double-pair. */
+    float    m_td_v1_sum = 0.0f;
+    float    m_td_v2_sum = 0.0f;
+    uint32_t m_td_v1_count = 0;
+    uint32_t m_td_v2_count = 0;
+
+    /* Substep accumulators (reset each substep). */
+    uint32_t m_sub_sample_count = 0;
+    float    m_sub_vdc_sum = 0.0f;
+    float    m_sub_duty_sum = 0.0f;
+    float    m_sub_i_active_sum = 0.0f;
+    float    m_sub_i_ret1_sum = 0.0f;
+    float    m_sub_i_ret2_sum = 0.0f;
+
+    /* Topology-diff per-point results. */
+    float    m_td_i[TOPOLOGY_DIFF_POINTS] = {};
+    float    m_td_v1[TOPOLOGY_DIFF_POINTS] = {};
+    float    m_td_v2[TOPOLOGY_DIFF_POINTS] = {};
+    bool     m_td_valid[TOPOLOGY_DIFF_POINTS] = {};
+
+    /* Extracted results. */
     float    m_results[3] = {0.0f, 0.0f, 0.0f};
     bool     m_result_valid[3] = {false, false, false};
     float    m_average_r_phase = 0.0f;
+    float    m_r_total = 0.0f;
+    float    m_vce_lut_i[TOPOLOGY_DIFF_POINTS] = {};
+    float    m_vce_lut_v[TOPOLOGY_DIFF_POINTS] = {};
+    uint8_t  m_vce_lut_count = 0;
 
     /* PI current-control state. */
     float    m_pi_integral = 0.0f;

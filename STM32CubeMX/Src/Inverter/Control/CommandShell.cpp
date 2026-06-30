@@ -36,6 +36,13 @@ void fmtFloat3(char* buf, size_t cap, float v) {
     std::snprintf(buf, cap, "%d.%03d", whole, frac);
 }
 
+void fmtFloat4(char* buf, size_t cap, float v) {
+    int whole = (int)v;
+    int frac = (int)((v - whole) * 10000.0f + 0.5f);
+    if (frac < 0) frac = -frac;
+    std::snprintf(buf, cap, "%d.%04d", whole, frac);
+}
+
 } // namespace
 
 namespace Inverter {
@@ -69,7 +76,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal topodiff <current_a> [oc_limit_a] | rescal lut | rescal stop | rescal status | help");
     return true;
 }
 
@@ -338,15 +345,17 @@ void CommandShell::poll() {
                 else if (std::strcmp(argv[0], "rescal") == 0) {
                     if (argc < 2 || std::strcmp(argv[1], "status") == 0) {
                         ResistanceCalibrator& rc = ResistanceCalibrator::instance();
-                        char uv[16], uw[16], vw[16], avg[16];
+                        char uv[16], uw[16], vw[16], avg[16], rt[16];
                         fmtFloat3(uv, sizeof(uv), rc.lastResult(ResistanceCalibrator::Pair::UV));
                         fmtFloat3(uw, sizeof(uw), rc.lastResult(ResistanceCalibrator::Pair::UW));
                         fmtFloat3(vw, sizeof(vw), rc.lastResult(ResistanceCalibrator::Pair::VW));
                         fmtFloat3(avg, sizeof(avg), rc.lastAverage());
-                        char msg[128];
+                        fmtFloat4(rt, sizeof(rt), rc.lastRtotal());
+                        char msg[160];
                         std::snprintf(msg, sizeof(msg),
-                                      "[SHELL] rescal: R_uv=%s R_uw=%s R_vw=%s avg=%s ohm",
-                                      uv, uw, vw, avg);
+                                      "[SHELL] rescal: R_uv=%s R_uw=%s R_vw=%s avg=%s ohm  R_total=%s ohm  LUT=%u",
+                                      uv, uw, vw, avg, rt,
+                                      static_cast<unsigned>(rc.lastVceLutCount()));
                         Telemetry::log("print", msg);
                     } else if (std::strcmp(argv[1], "start") == 0) {
                         if (argc < 3) {
@@ -428,8 +437,40 @@ void CommandShell::poll() {
                                 Telemetry::log("print", "[SHELL] rescal ictrl failed");
                             }
                         }
+                    } else if (std::strcmp(argv[1], "topodiff") == 0) {
+                        if (argc < 3) {
+                            Telemetry::log("print", "[SHELL] usage: rescal topodiff <current_a> [oc_limit_a]");
+                        } else {
+                            float current_a = std::strtof(argv[2], nullptr);
+                            float oc_limit_a = 0.0f;
+                            if (argc >= 4) {
+                                oc_limit_a = std::strtof(argv[3], nullptr);
+                            }
+                            if (!resistanceCalibrator().startTopologyDiff(current_a, 300000U, oc_limit_a)) {
+                                Telemetry::log("print", "[SHELL] rescal topodiff failed");
+                            }
+                        }
+                    } else if (std::strcmp(argv[1], "lut") == 0) {
+                        ResistanceCalibrator& rc = ResistanceCalibrator::instance();
+                        const uint8_t n = rc.lastVceLutCount();
+                        if (n == 0) {
+                            Telemetry::log("print", "[SHELL] rescal lut: no LUT available");
+                        } else {
+                            char msg[256];
+                            int len = std::snprintf(msg, sizeof(msg), "[SHELL] rescal lut: ");
+                            for (uint8_t i = 0; i < n; ++i) {
+                                char ibuf[16], vbuf[16];
+                                fmtFloat3(ibuf, sizeof(ibuf), rc.lastVceLutI(i));
+                                fmtFloat3(vbuf, sizeof(vbuf), rc.lastVceLutV(i));
+                                len += std::snprintf(msg + len, sizeof(msg) - len,
+                                                     "(I=%s Vce=%s)%s",
+                                                     ibuf, vbuf,
+                                                     (i + 1U < n) ? ", " : "");
+                            }
+                            Telemetry::log("print", msg);
+                        }
                     } else {
-                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status");
+                        Telemetry::log("print", "[SHELL] usage: rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal topodiff <current_a> [oc_limit_a] | rescal lut | rescal stop | rescal status");
                     }
                 }
                 else if (std::strcmp(argv[0], "fault") == 0) {
@@ -585,7 +626,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+                    Telemetry::log("print", "[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | polepairs | encodercal start/stop | calpolepairs | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal topodiff <current_a> [oc_limit_a] | rescal lut | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of
