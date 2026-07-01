@@ -76,6 +76,7 @@ public:
     uint32_t lastRawVRef() const { return m_raw_v_ref; }
     float    lastOffsetU() const { return m_offset_u; }
     float    lastOffsetV() const { return m_offset_v; }
+    bool     offsetValid() const { return m_offset_valid; }
 
     /**
      * @brief Latest synchronous current samples (after offset subtraction).
@@ -131,6 +132,7 @@ private:
     volatile float    m_iv = 0.0f;
     float             m_offset_u = 0.0f;
     float             m_offset_v = 0.0f;
+    bool              m_offset_valid = false;
 
     /* Latest synchronous current after offset subtraction.  No additional
      * time-domain averaging is applied so this is exactly what a FOC loop

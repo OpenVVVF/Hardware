@@ -7,15 +7,11 @@ namespace Inverter {
 /**
  * @brief Automated encoder offset calibration.
  *
- * Uses the motor pole count (from calpoles / PoleEstimator) to step the rotor
- * through every pole-pair alignment position over two mechanical revolutions,
- * measuring the encoder mechanical angle at each stop.  The average difference
- * between the measured mechanical angle and the expected electrical angle is
- * the encoder offset.
- *
- * The calibration first auto-detects a safe holding voltage by ramping
- * modulation until the rotor breaks away, then reuses that voltage for all
- * alignment steps.
+ * Rotates the stator field slowly through one or more full mechanical
+ * revolutions and averages the difference between the encoder mechanical
+ * angle and the commanded field mechanical angle.  Averaging over whole
+ * revolutions makes the result robust against cogging and pole-pair
+ * ambiguity.
  */
 class EncoderOffsetCalibrator {
 public:
@@ -64,14 +60,13 @@ public:
     /**
      * @brief Average encoder offset in mechanical degrees after a successful run.
      *
-     * The offset is the mechanical encoder angle that corresponds to electrical
-     * angle 0 deg (d-axis aligned with phase U).  It is wrapped into
-     * [0, 360 / pole_pairs).
+     * The offset is the mechanical encoder angle that corresponds to the
+     * U-high electrical vector.  It is wrapped into [0, 360).
      */
     float averageOffset() const { return m_average_offset; }
 
     /**
-     * @brief Number of successful offset samples collected so far.
+     * @brief Number of successful offset samples collected during the last run.
      */
     int sampleCount() const { return m_sample_count; }
 
@@ -79,10 +74,9 @@ public:
 
     enum class State {
         IDLE,
+        WARMUP,
         FIND_VOLTAGE,
-        SETTLE,
-        HOLD,
-        ROTATE,
+        OFFSET_ROTATE,
         DONE,
         FAIL
     };
@@ -93,9 +87,9 @@ private:
     void restoreHardware();
 
     void sampleEncoderAngle();
-    bool isEncoderSettled() const;
-    void holdCurrentAngle();
-    void measureAndLog();
+    void accumulateOffsetSample();
+    float encoderMechanicalAngle() const;
+    float fieldMechanicalAngle() const;
     static float wrapOffset(float offset, float period);
 
     State    m_state = State::IDLE;
@@ -103,37 +97,43 @@ private:
     float    m_pole_pairs = 0.0f;
     float    m_encoder_cycles_per_rev = 1.0f;
     float    m_mech_deg_per_motor_elec_cycle = 0.0f;
-    float    m_enc_deg_per_motor_elec_cycle = 0.0f;
     float    m_mod = 0.0f;
     float    m_breakaway_mod = 0.0f;
-
-    int      m_step = 0;
-    int      m_total_steps = 0;
 
     /* Encoder tracking. */
     float    m_last_angle = 0.0f;
     float    m_unwrapped_angle = 0.0f;
-    float    m_settle_angle = 0.0f;
-    uint32_t m_settle_start_ms = 0;
+    float    m_warmup_start_angle = 0.0f;
+    uint16_t m_last_raw_sin = 0U;
+    uint16_t m_last_raw_cos = 0U;
 
     /* Timing. */
     uint32_t m_state_start_ms = 0;
     uint32_t m_last_ramp_ms = 0;
     uint32_t m_last_move_ms = 0;
     uint32_t m_last_dbg_ms = 0;
+    uint32_t m_last_offset_sample_ms = 0;
     float    m_cycles_at_last_move = 0.0f;
 
     /* Rotation tracking. */
-    uint32_t m_elec_cycles_start = 0;
     float    m_rotate_start_angle = 0.0f;
+    bool     m_offset_acquisition_active = false;
+
+    /* Encoder/field direction detection.
+     * +1: encoder and field rotate in the same direction.
+     * -1: encoder and field rotate in opposite directions.
+     *  0: not determined yet (acquisition region). */
+    int      m_sign = 0;
+    float    m_first_encoder_mech = 0.0f;
+    float    m_first_field_mech = 0.0f;
+    float    m_last_encoder_mech = 0.0f;
+    float    m_last_field_mech = 0.0f;
 
     /* Results. */
-    float    m_sum_offset = 0.0f;
+    double   m_sum_offset = 0.0;
     int      m_sample_count = 0;
+    float    m_last_offset = 0.0f;
     float    m_average_offset = 0.0f;
-
-    static constexpr int MAX_STEPS = 32;
-    float    m_offsets[MAX_STEPS] = {};
 };
 
 EncoderOffsetCalibrator& encoderOffsetCalibrator();

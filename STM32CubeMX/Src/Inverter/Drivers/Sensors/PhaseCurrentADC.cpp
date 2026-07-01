@@ -181,6 +181,12 @@ bool PhaseCurrentADC::start() {
 
     htim1.Instance->RCR = 1U;
 
+    /* Wait for the isolated current-sensor outputs and their ratiometric
+     * references to settle after power-on.  Capturing the zero-current offset
+     * too early leaves a large residual that shows up as hundreds of amps on
+     * the telemetry log until the next recalibration. */
+    HAL_Delay(2000);
+
     if (!calibrateOffsets()) {
         HAL_TIM_Base_Stop(&htim1);
         HAL_ADCEx_InjectedStop_IT(&hadc1);
@@ -291,9 +297,20 @@ bool PhaseCurrentADC::calibrateOffsets() {
     m_offset_u = sum_u / static_cast<float>(AVG_SAMPLES);
     m_offset_v = sum_v / static_cast<float>(AVG_SAMPLES);
 
+    /* Sanity-check the captured zero-current offset.  A residual this large
+     * means the sensor/reference was still drifting during the capture. */
+    constexpr float MAX_SANE_OFFSET_A = 50.0f;
+    m_offset_valid = (std::fabs(m_offset_u) < MAX_SANE_OFFSET_A) &&
+                     (std::fabs(m_offset_v) < MAX_SANE_OFFSET_A);
+    if (!m_offset_valid) {
+        Telemetry::printf("[CUR] WARNING: bad offset U=%.2f V=%.2f A; sensor not settled",
+                          static_cast<double>(m_offset_u),
+                          static_cast<double>(m_offset_v));
+    }
+
     /* The synchronous output values are recomputed each ISR from (m_iu - offset),
      * so no separate filter state needs to be reset here. */
-    return true;
+    return m_offset_valid;
 }
 
 void PhaseCurrentADC::onInjectedConversionComplete() {

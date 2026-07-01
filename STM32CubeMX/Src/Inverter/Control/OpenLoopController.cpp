@@ -64,24 +64,11 @@ bool OpenLoopController::init() {
     PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
 
     /* Gate-driver reset is active low: keep the power stage disabled from
-     * the very beginning so there is never a brief switching burst at boot. */
+     * the very beginning so there is never a brief switching burst at boot.
+     * The gate-driver power rail was already enabled in InverterMain::init()
+     * before the current-sensor offset was captured, and it stays in reset
+     * here.  TIM1 PWM outputs are left disabled until start(). */
     HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin, GPIO_PIN_RESET);
-
-    /* Explicitly enable the gate-driver power rail (active high). */
-    HAL_GPIO_WritePin(GATE_DRIVER_POWER_ENABLE_GPIO_Port, GATE_DRIVER_POWER_ENABLE_Pin, GPIO_PIN_SET);
-    HAL_Delay(50);
-
-    /* Start TIM1 so the ADC current-sense trigger keeps running.
-     * The gate driver is still in reset, so the MOSFETs remain off. */
-    PWM_ClearFault();
-    PWM_Start();
-
-    /* Recalibrate current-sensor offsets now that the gate-driver power rail
-     * is up. The sensors share/isolated supplies can shift the zero-current
-     * point once that rail is enabled, which is why the pre-power calibration
-     * was leaving a residual offset. */
-    HAL_Delay(100);
-    (void)phaseCurrentADC().recalibrateOffsets();
 
     m_initialized = true;
     m_running = false;
@@ -143,6 +130,11 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
                                        FaultReason::GateDriverNotReady);
         return false;
     }
+
+    /* Gate driver is ready; enable the PWM output channels.  The next SPWM
+     * update will drive the gate driver.  MOE was already enabled by
+     * PWM_ClearFault() above. */
+    PWM_Start();
 
     m_freq_hz = (freq_hz < 0.0f) ? 0.0f : freq_hz;
     m_mod_idx = (modulation_index < 0.0f) ? 0.0f : modulation_index;

@@ -59,6 +59,7 @@ public:
     void update();
 
     bool isRunning() const { return m_running; }
+    bool isInitialized() const { return m_initialized; }
     float frequencyHz() const { return m_freq_hz; }
     float modulationIndex() const { return m_mod_idx; }
 

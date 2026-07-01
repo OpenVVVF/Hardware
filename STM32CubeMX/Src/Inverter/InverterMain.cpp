@@ -67,6 +67,18 @@ static void init()
     /* Supply rail monitoring (PVD/AVD/VOSRDY). */
     (void)Inverter::supplyMonitorInit();
 
+    /* Enable the gate-driver power rail early so the isolated current sensors
+     * and their references settle with the final supply configuration before
+     * the zero-current offset is captured.  Keep the gate driver in reset so
+     * the outputs stay disabled. */
+    HAL_GPIO_WritePin(GATE_DRIVER_POWER_ENABLE_GPIO_Port,
+                      GATE_DRIVER_POWER_ENABLE_Pin,
+                      GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port,
+                      GATE_DRIVER_RESET_Pin,
+                      GPIO_PIN_RESET);
+    HAL_Delay(500);
+
     /* Phase-current sensor test harness. */
     Inverter::CurrentSensorTest_Init();
 

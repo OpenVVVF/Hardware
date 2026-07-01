@@ -40,11 +40,32 @@ public:
     bool sample(float& angle_deg);
 
     /**
+     * @brief Atomically read the latest encoder angle and raw sin/cos values.
+     *
+     * Guarantees that the three returned values came from the same ADC DMA
+     * completion, which is necessary for diagnostics and calibration.
+     *
+     * @param[out] angle_deg  Encoder angle in degrees, 0..360.
+     * @param[out] raw_sin    Raw ADC count for the sin channel.
+     * @param[out] raw_cos    Raw ADC count for the cos channel.
+     * @return true if a new sample was available since the last call.
+     */
+    bool sample(float& angle_deg, uint16_t& raw_sin, uint16_t& raw_cos);
+
+    /**
      * @brief Latest raw ADC counts and computed angle.
      */
-    uint32_t lastRawSin() const { return m_raw_sin; }
-    uint32_t lastRawCos() const { return m_raw_cos; }
-    float    lastAngle() const { return m_angle; }
+    uint32_t lastRawSin() const { return m_snapshot.raw_sin; }
+    uint32_t lastRawCos() const { return m_snapshot.raw_cos; }
+    float    lastAngle() const { return m_snapshot.angle; }
+
+    /**
+     * @brief Current dynamic amplitude bounds used for normalization.
+     */
+    uint16_t sinMin() const { return m_sin_min; }
+    uint16_t sinMax() const { return m_sin_max; }
+    uint16_t cosMin() const { return m_cos_min; }
+    uint16_t cosMax() const { return m_cos_max; }
 
     /**
      * @brief DMA completion callback, called from DMA2_Stream0_IRQHandler.
@@ -64,6 +85,14 @@ public:
      */
     void diagnose();
 
+    /**
+     * @brief Reset dynamic bounds and fault counters.
+     *
+     * Call before a calibration so the encoder re-learns its amplitude envelope
+     * from the current hardware state.
+     */
+    void resetBounds();
+
 private:
     bool configureAdcChannels();
     bool initTimer();
@@ -76,21 +105,33 @@ private:
     static constexpr uint16_t COS_MIN_CAP = 608U;
     static constexpr uint16_t COS_MAX_CAP = 64743U;
 
-    /* Dynamic bounds start at the hard limits and tighten inward. */
-    uint16_t m_sin_min = SIN_MIN_CAP;
-    uint16_t m_sin_max = SIN_MAX_CAP;
-    uint16_t m_cos_min = COS_MIN_CAP;
-    uint16_t m_cos_max = COS_MAX_CAP;
+    /* Dynamic bounds start at the opposite hard limits so the first samples
+     * tighten them inward to the true signal range. */
+    uint16_t m_sin_min = SIN_MAX_CAP;
+    uint16_t m_sin_max = SIN_MIN_CAP;
+    uint16_t m_cos_min = COS_MAX_CAP;
+    uint16_t m_cos_max = COS_MIN_CAP;
 
-    volatile uint16_t m_raw_sin = 0;
-    volatile uint16_t m_raw_cos = 0;
-    volatile float    m_angle = 0.0f;
+    /**
+     * @brief Atomic snapshot of one encoder sample.
+     *
+     * The ISR writes all three fields and then sets m_new_data.  The main loop
+     * copies the whole snapshot with interrupts disabled, guaranteeing that
+     * angle, raw_sin, and raw_cos are all from the same ADC DMA completion.
+     */
+    struct Snapshot {
+        float    angle = 0.0f;
+        uint16_t raw_sin = 0U;
+        uint16_t raw_cos = 0U;
+    };
+
+    volatile Snapshot m_snapshot;
     volatile bool     m_new_data = false;
     bool              m_running = false;
 
     /* Fault-detection state. */
     static constexpr uint32_t SAMPLE_TIMEOUT_MS = 5U;
-    static constexpr uint16_t MIN_AMP_RANGE     = 1000U;
+    static constexpr uint16_t MIN_AMP_RANGE     = 20000U;
     static constexpr float    AMP_COLLAPSE_THRESHOLD = 500.0f;
     static constexpr uint16_t AMP_COLLAPSE_COUNT  = 500U;
     static constexpr uint16_t RAIL_MARGIN         = 200U;

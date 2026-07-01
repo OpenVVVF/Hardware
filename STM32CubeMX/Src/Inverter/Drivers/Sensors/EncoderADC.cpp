@@ -184,9 +184,12 @@ void EncoderADC::onDmaComplete() {
     uint16_t raw_sin = s_enc_dma_buffer[0];
     uint16_t raw_cos = s_enc_dma_buffer[1];
 
-    m_raw_sin = raw_sin;
-    m_raw_cos = raw_cos;
-    m_angle = computeAngle(raw_sin, raw_cos);
+    /* Compute angle before touching the snapshot so the ISR writes all three
+     * fields atomically relative to the main-loop readers. */
+    const float angle = computeAngle(raw_sin, raw_cos);
+    m_snapshot.angle = angle;
+    m_snapshot.raw_sin = raw_sin;
+    m_snapshot.raw_cos = raw_cos;
     m_new_data = true;
     m_last_sample_ms = HAL_GetTick();
 
@@ -242,11 +245,39 @@ bool EncoderADC::sample(float& angle_deg) {
     }
 
     __disable_irq();
-    angle_deg = m_angle;
+    angle_deg = m_snapshot.angle;
     m_new_data = false;
     __enable_irq();
 
     return true;
+}
+
+bool EncoderADC::sample(float& angle_deg, uint16_t& raw_sin, uint16_t& raw_cos) {
+    if (!m_new_data) {
+        return false;
+    }
+
+    __disable_irq();
+    angle_deg = m_snapshot.angle;
+    raw_sin = m_snapshot.raw_sin;
+    raw_cos = m_snapshot.raw_cos;
+    m_new_data = false;
+    __enable_irq();
+
+    return true;
+}
+
+void EncoderADC::resetBounds() {
+    __disable_irq();
+    m_sin_min = SIN_MAX_CAP;
+    m_sin_max = SIN_MIN_CAP;
+    m_cos_min = COS_MAX_CAP;
+    m_cos_max = COS_MIN_CAP;
+    m_mag_ema = 0.0f;
+    m_mag_ema_init = false;
+    m_amp_low_count = 0;
+    m_rail_count = 0;
+    __enable_irq();
 }
 
 void EncoderADC::onDmaError() {

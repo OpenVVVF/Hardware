@@ -1,55 +1,39 @@
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
-
 #include "Inverter/Control/OpenLoopController.h"
-#include "Inverter/Drivers/GateDriver/gate_driver.h"
+#include "Inverter/Control/FaultManager.h"
 #include "Inverter/Drivers/PWM/pwm.h"
+#include "Inverter/Drivers/GateDriver/gate_driver.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
-#include "tim.h"
-
-#include <cstdarg>
 #include <cmath>
+#include <cstdarg>
 
 namespace Inverter {
 
-namespace {
-
-const char* stateName(EncoderOffsetCalibrator::State state) {
-    switch (state) {
-        case EncoderOffsetCalibrator::State::IDLE:          return "IDLE";
-        case EncoderOffsetCalibrator::State::FIND_VOLTAGE:  return "FIND_VOLTAGE";
-        case EncoderOffsetCalibrator::State::SETTLE:        return "SETTLE";
-        case EncoderOffsetCalibrator::State::HOLD:          return "HOLD";
-        case EncoderOffsetCalibrator::State::ROTATE:        return "ROTATE";
-        case EncoderOffsetCalibrator::State::DONE:          return "DONE";
-        case EncoderOffsetCalibrator::State::FAIL:          return "FAIL";
-    }
-    return "?";
-}
-
-} // anonymous namespace
-
-/* Angle in radians where phase U is driven high (SVPWM sin reference). */
-static constexpr float VOLTAGE_ANGLE_U_HIGH_RAD = 1.57079632679f; /* pi/2 */
-
 static constexpr float CAL_MAX_MOD = 0.50f;
+static constexpr float HOLD_MAX_MOD = 0.50f;
+static constexpr float WARMUP_MAX_MOD = 0.25f;
 static constexpr float RAMP_STEP = 0.01f;
-static constexpr uint32_t RAMP_PERIOD_MS = 50U;
-static constexpr float BREAKAWAY_DETECT_CYCLES = 0.15f;
 static constexpr float TORQUE_MARGIN = 2.50f;
 
-static constexpr uint32_t SETTLE_TIMEOUT_MS = 8000U;
-static constexpr uint32_t MOVE_TIMEOUT_MS = 8000U;
-static constexpr uint32_t ROTATE_TIMEOUT_MS = 15000U;
-static constexpr uint32_t FIND_VOLTAGE_TIMEOUT_MS = 20000U;
-static constexpr float SETTLE_THRESHOLD_CYCLES = 0.05f;
-static constexpr float NOISE_THRESHOLD_CYCLES = 0.05f;
-static constexpr uint32_t SETTLE_STABLE_MS = 1000U;
-static constexpr uint32_t HOLD_SETTLE_MS = 1000U;
-static constexpr float ROTATION_FREQUENCY_HZ = 0.5f;
-static constexpr float ANGLE_STOP_TOLERANCE_RAD = 0.35f; /* ~20 deg */
+static constexpr uint32_t WARMUP_MS = 5000U;
+static constexpr float WARMUP_FREQUENCY_HZ = 1.0f;
+static constexpr float OFFSET_ROTATION_FREQUENCY_HZ = 1.0f;
+static constexpr float OFFSET_ROTATE_REVS = 2.0f;
+static constexpr float OFFSET_ACQUIRE_START_DEG = 45.0f;
+static constexpr uint32_t OFFSET_SAMPLE_PERIOD_MS = 10U;
+
+static constexpr float NOISE_THRESHOLD_CYCLES = 0.02f;
+static constexpr float BREAKAWAY_DETECT_CYCLES = 0.15f;
+static constexpr uint32_t RAMP_PERIOD_MS = 50U;
+static constexpr uint32_t MOVE_TIMEOUT_MS = 3000U;
+static constexpr uint32_t FIND_VOLTAGE_TIMEOUT_MS = 15000U;
+static constexpr uint32_t OFFSET_ROTATE_TIMEOUT_MS = 60000U;
+
+static constexpr float VOLTAGE_ANGLE_U_HIGH_RAD = 1.57079632679f;
+static constexpr float RAD_TO_DEG = 57.2957795131f;
 
 static EncoderOffsetCalibrator s_instance;
 
@@ -57,77 +41,63 @@ EncoderOffsetCalibrator& EncoderOffsetCalibrator::instance() {
     return s_instance;
 }
 
-EncoderOffsetCalibrator& encoderOffsetCalibrator() {
-    return s_instance;
+static const char* stateName(EncoderOffsetCalibrator::State state) {
+    switch (state) {
+        case EncoderOffsetCalibrator::State::IDLE:          return "IDLE";
+        case EncoderOffsetCalibrator::State::WARMUP:        return "WARMUP";
+        case EncoderOffsetCalibrator::State::FIND_VOLTAGE:  return "FIND_VOLTAGE";
+        case EncoderOffsetCalibrator::State::OFFSET_ROTATE: return "OFFSET_ROTATE";
+        case EncoderOffsetCalibrator::State::DONE:          return "DONE";
+        case EncoderOffsetCalibrator::State::FAIL:          return "FAIL";
+    }
+    return "?";
 }
 
 bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_rev, float breakaway_mod) {
-    if (openLoopController().isRunning()) {
-        Telemetry::printf("[CAL ENC] stop the motor before starting encoder offset calibration");
+    if (isActive()) {
+        Telemetry::printf("[CAL ENC] already active");
         return false;
     }
 
-    if (pole_count < 2.0f || std::fmod(pole_count, 2.0f) != 0.0f) {
-        Telemetry::printf("[CAL ENC] ERROR: invalid pole count %.1f", static_cast<double>(pole_count));
-        return false;
-    }
-
-    if (encoder_cycles_per_rev < 1.0f) {
-        Telemetry::printf("[CAL ENC] ERROR: invalid encoder cycles per rev %.3f (must be >= 1)",
-                          static_cast<double>(encoder_cycles_per_rev));
+    if (pole_count <= 0.0f || encoder_cycles_per_rev <= 0.0f) {
+        Telemetry::printf("[CAL ENC] ERROR: invalid pole_count/encoder_cycles");
         return false;
     }
 
     m_poles = pole_count;
-    m_pole_pairs = m_poles / 2.0f;
+    m_pole_pairs = pole_count / 2.0f;
     m_encoder_cycles_per_rev = encoder_cycles_per_rev;
     m_mech_deg_per_motor_elec_cycle = 360.0f / m_pole_pairs;
-    m_enc_deg_per_motor_elec_cycle = m_mech_deg_per_motor_elec_cycle * m_encoder_cycles_per_rev;
-
-    m_step = 0;
-    /* 2 mechanical cycles, one sample per pole-pair alignment position. */
-    m_total_steps = static_cast<int>(m_poles);
-    if (m_total_steps > MAX_STEPS) {
-        m_total_steps = MAX_STEPS;
-    }
-
-    m_mod = 0.0f;
     m_breakaway_mod = breakaway_mod;
 
-    m_last_angle = encoderADC().lastAngle();
-    m_unwrapped_angle = 0.0f;
-    m_settle_angle = 0.0f;
-    m_settle_start_ms = 0;
-
-    m_state_start_ms = 0;
-    m_last_ramp_ms = 0;
-    m_last_move_ms = HAL_GetTick();
-    m_last_dbg_ms = 0;
-    m_cycles_at_last_move = 0.0f;
-    m_elec_cycles_start = 0;
-    m_rotate_start_angle = 0.0f;
-
-    m_sum_offset = 0.0f;
-    m_sample_count = 0;
-    m_average_offset = 0.0f;
-    for (int i = 0; i < MAX_STEPS; ++i) {
-        m_offsets[i] = 0.0f;
+    if (m_pole_pairs <= 0.0f) {
+        Telemetry::printf("[CAL ENC] ERROR: pole_pairs must be > 0");
+        return false;
     }
 
-    /* Park outputs and enable gate driver. */
-    PWM_StopSPWM();
-    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
-    PWM_ClearFault();
-    GateDriver_EnableOutputs();
+    /* Make sure the open-loop controller is initialized and the timer is
+     * running, but do not enable the gate driver yet. */
+    if (!openLoopController().isInitialized()) {
+        openLoopController().init();
+    }
 
-    /* Ensure all TIM1 phase channels and the ADC trigger channel are enabled. */
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
-    HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_4);
+    /* Reset encoder dynamic bounds so the calibration starts from a known
+     * state.  The warmup must then rotate the shaft through at least one
+     * full mechanical revolution for the bounds to be trustworthy.
+     *
+     * Keep the encoder angle absolute (referenced to the encoder's own zero)
+     * rather than resetting it to zero.  The offset we want is
+     * encoder_absolute - field_absolute; if we zero the encoder here we
+     * subtract the rotor's arbitrary starting position and the result becomes
+     * random. */
+    encoderADC().resetBounds();
+    m_unwrapped_angle = encoderADC().lastAngle();
+    m_last_angle = encoderADC().lastAngle();
+
+    /* Enable gate-driver power and release reset so the drivers are ready. */
+    GateDriver_EnablePower(true);
+    HAL_Delay(50);
+    GateDriver_EnableOutputs();
 
     bool ready = false;
     bool fault = true;
@@ -137,29 +107,35 @@ bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_r
         if (ready && !fault) break;
         HAL_Delay(5);
     }
-
     if (!ready || fault) {
         restoreHardware();
         Telemetry::printf("[CAL ENC] ERROR: gate driver not ready or fault latched");
         return false;
     }
 
-    Telemetry::printf("[CAL ENC] started for %.0f poles (%.0f pole pairs), encoder_cycles=%.2f, %d samples",
+    /* Start the three PWM channels.  The output stage is still controlled by
+     * the gate-driver reset line; this just makes the timer pins active. */
+    PWM_ClearFault();
+    PWM_StartPhase(0);
+    PWM_StartPhase(1);
+    PWM_StartPhase(2);
+
+    Telemetry::printf("[CAL ENC] started for %.0f poles (%.0f pole pairs), encoder_cycles=%.2f",
                       static_cast<double>(m_poles),
                       static_cast<double>(m_pole_pairs),
-                      static_cast<double>(m_encoder_cycles_per_rev),
-                      m_total_steps);
+                      static_cast<double>(m_encoder_cycles_per_rev));
 
     if (m_breakaway_mod > 0.0f) {
         m_mod = m_breakaway_mod * TORQUE_MARGIN;
         if (m_mod > CAL_MAX_MOD) {
             m_mod = CAL_MAX_MOD;
         }
-        Telemetry::printf("[CAL ENC] using provided breakaway mod %.3f -> hold mod %.3f",
+        Telemetry::printf("[CAL ENC] using provided breakaway mod %.3f -> rotate mod %.3f",
                           static_cast<double>(breakaway_mod),
                           static_cast<double>(m_mod));
-        enterState(State::SETTLE);
+        enterState(State::WARMUP);
     } else {
+        m_mod = 0.0f;
         enterState(State::FIND_VOLTAGE);
     }
 
@@ -174,30 +150,38 @@ void EncoderOffsetCalibrator::enterState(State state) {
 
     switch (state) {
         case State::FIND_VOLTAGE:
-            /* Spin the rotor at 1 Hz while ramping modulation.  Movement of the
-             * encoder (as opposed to just electrical cycles) tells us the
-             * breakaway voltage. */
             PWM_ResetSPWMElectricalCycles();
             m_last_ramp_ms = HAL_GetTick();
-            m_mod = 0.0f;
-            PWM_StartSPWM(ROTATION_FREQUENCY_HZ, 0.0f);
+            m_cycles_at_last_move = 0.0f;
+            PWM_StartSPWM(OFFSET_ROTATION_FREQUENCY_HZ, 0.0f);
             break;
-        case State::SETTLE:
-            m_settle_start_ms = HAL_GetTick();
-            m_settle_angle = m_unwrapped_angle;
-            break;
-        case State::HOLD:
-            holdCurrentAngle();
-            break;
-        case State::ROTATE:
-            /* Rotate the electrical field.  We stop after at least one full
-             * cycle when the angle is at 90 deg (phase U high) and the rotor
-             * has moved past the midpoint between pole-pair alignments. */
+
+        case State::WARMUP: {
+            const float warmup_mod = (m_mod > WARMUP_MAX_MOD) ? WARMUP_MAX_MOD : m_mod;
+            m_warmup_start_angle = m_unwrapped_angle;
             PWM_ResetSPWMElectricalCycles();
-            m_elec_cycles_start = PWM_GetSPWMElectricalCycles();
-            m_rotate_start_angle = m_unwrapped_angle;
-            PWM_StartSPWM(ROTATION_FREQUENCY_HZ, m_mod);
+            PWM_StartSPWM(WARMUP_FREQUENCY_HZ, warmup_mod);
             break;
+        }
+
+        case State::OFFSET_ROTATE:
+            PWM_ResetSPWMElectricalCycles();
+            m_rotate_start_angle = m_unwrapped_angle / m_encoder_cycles_per_rev;
+            m_offset_acquisition_active = false;
+            m_sign = 0;
+            m_first_encoder_mech = 0.0f;
+            m_first_field_mech = 0.0f;
+            m_last_encoder_mech = 0.0f;
+            m_last_field_mech = 0.0f;
+            m_sum_offset = 0.0;
+            m_sample_count = 0;
+            m_last_offset = 0.0f;
+            m_last_offset_sample_ms = 0;
+            PWM_StartSPWM(OFFSET_ROTATION_FREQUENCY_HZ, m_mod);
+            break;
+
+        case State::DONE:
+        case State::FAIL:
         default:
             break;
     }
@@ -210,52 +194,50 @@ void EncoderOffsetCalibrator::restoreHardware() {
 }
 
 void EncoderOffsetCalibrator::fail(const char* reason_fmt, ...) {
+    va_list args;
+    va_start(args, reason_fmt);
+    Telemetry::vprintf(reason_fmt, args);
+    va_end(args);
+
     restoreHardware();
-
-    va_list ap;
-    va_start(ap, reason_fmt);
-    Telemetry::vprintf(reason_fmt, ap);
-    va_end(ap);
-
     m_state = State::FAIL;
 }
 
 void EncoderOffsetCalibrator::sampleEncoderAngle() {
+    uint16_t raw_sin = 0U;
+    uint16_t raw_cos = 0U;
     float angle = 0.0f;
-    if (encoderADC().sample(angle)) {
-        float delta = angle - m_last_angle;
-        if (delta > 180.0f) {
-            delta -= 360.0f;
-        } else if (delta < -180.0f) {
-            delta += 360.0f;
-        }
-        m_unwrapped_angle += delta;
-        m_last_angle = angle;
+    if (!encoderADC().sample(angle, raw_sin, raw_cos)) {
+        return;
     }
+
+    float delta = angle - m_last_angle;
+    if (delta > 180.0f) {
+        delta -= 360.0f;
+    } else if (delta < -180.0f) {
+        delta += 360.0f;
+    }
+    m_unwrapped_angle += delta;
+    m_last_angle = angle;
+    m_last_raw_sin = raw_sin;
+    m_last_raw_cos = raw_cos;
 }
 
-bool EncoderOffsetCalibrator::isEncoderSettled() const {
-    const float delta_cycles = std::fabs((m_unwrapped_angle - m_settle_angle) / 360.0f);
-    if (delta_cycles > SETTLE_THRESHOLD_CYCLES) {
-        return false;
-    }
-    const uint32_t now_ms = HAL_GetTick();
-    return (now_ms - m_settle_start_ms) >= SETTLE_STABLE_MS;
+float EncoderOffsetCalibrator::encoderMechanicalAngle() const {
+    return m_unwrapped_angle / m_encoder_cycles_per_rev;
 }
 
-void EncoderOffsetCalibrator::holdCurrentAngle() {
-    /* Always align to the same electrical vector: phase U high, V and W low.
-     * We use the maximum safe modulation for holding so cogging/friction cannot
-     * keep the rotor away from the true alignment.  The sinusoidal
-     * voltage-angle function keeps all three phases switching so bootstrap
-     * capacitors on the high-side gate drivers stay charged. */
-    PWM_StopSPWM();
-    PWM_SetVoltageAngle(VOLTAGE_ANGLE_U_HIGH_RAD, CAL_MAX_MOD);
+float EncoderOffsetCalibrator::fieldMechanicalAngle() const {
+    const float spwm_angle = PWM_GetSPWMAngle();
+    const uint32_t cycles = PWM_GetSPWMElectricalCycles();
+
+    /* Field mechanical angle relative to the U-high vector. */
+    float field_elec_deg = static_cast<float>(cycles) * 360.0f + spwm_angle * RAD_TO_DEG;
+    field_elec_deg -= VOLTAGE_ANGLE_U_HIGH_RAD * RAD_TO_DEG;
+    return field_elec_deg / m_pole_pairs;
 }
 
 float EncoderOffsetCalibrator::wrapOffset(float offset, float period) {
-    /* Mathematical modulo into [0, period).  Using floor avoids any
-     * sign ambiguity from std::fmod on negative inputs. */
     float wrapped = offset - period * std::floor(offset / period);
     if (wrapped < 0.0f) {
         wrapped += period;
@@ -266,26 +248,33 @@ float EncoderOffsetCalibrator::wrapOffset(float offset, float period) {
     return wrapped;
 }
 
-void EncoderOffsetCalibrator::measureAndLog() {
-    /* Convert encoder electrical angle to true mechanical angle, then take the
-     * offset as the mechanical angle modulo one motor pole-pair step. */
-    const float mech_angle = m_unwrapped_angle / m_encoder_cycles_per_rev;
-    const float wrapped = wrapOffset(mech_angle, m_mech_deg_per_motor_elec_cycle);
+void EncoderOffsetCalibrator::accumulateOffsetSample() {
+    const float encoder_mech_deg = encoderMechanicalAngle();
+    const float field_mech_deg = fieldMechanicalAngle();
 
-    if (m_sample_count < MAX_STEPS) {
-        m_offsets[m_sample_count] = wrapped;
+    /* The physical offset is the encoder angle when the stator field points
+     * at U-high.  If the encoder counts in the same direction as the field,
+     * that is encoder - field; if it counts opposite, it is encoder + field.
+     * The sign is determined from the first few degrees of rotation. */
+    float offset = (m_sign < 0)
+                       ? (encoder_mech_deg + field_mech_deg)
+                       : (encoder_mech_deg - field_mech_deg);
+
+    /* The offset is constant modulo 360°.  Keep successive samples in the
+     * same 360° branch so a 0/360 boundary does not corrupt the average. */
+    if (m_sample_count > 0) {
+        const float half_period = 180.0f;
+        while ((offset - m_last_offset) > half_period) {
+            offset -= 360.0f;
+        }
+        while ((m_last_offset - offset) > half_period) {
+            offset += 360.0f;
+        }
     }
-    m_sum_offset += wrapped;
-    ++m_sample_count;
 
-    Telemetry::printf("[CAL ENC] sample %d/%d: step_idx=%d enc_elec=%.3f enc_mech=%.3f step=%.3f offset=%.3f deg",
-                      m_sample_count,
-                      m_total_steps,
-                      m_step,
-                      static_cast<double>(m_unwrapped_angle),
-                      static_cast<double>(mech_angle),
-                      static_cast<double>(m_mech_deg_per_motor_elec_cycle),
-                      static_cast<double>(wrapped));
+    m_sum_offset += static_cast<double>(offset);
+    m_last_offset = offset;
+    ++m_sample_count;
 }
 
 void EncoderOffsetCalibrator::update() {
@@ -297,10 +286,43 @@ void EncoderOffsetCalibrator::update() {
     const uint32_t now_ms = HAL_GetTick();
 
     switch (m_state) {
+        case State::WARMUP: {
+            const float warmup_mod = (m_mod > WARMUP_MAX_MOD) ? WARMUP_MAX_MOD : m_mod;
+            PWM_SetSPWMParams(WARMUP_FREQUENCY_HZ, warmup_mod);
+
+            const float moved_mech =
+                std::fabs((m_unwrapped_angle / m_encoder_cycles_per_rev) - m_warmup_start_angle);
+
+            if ((now_ms - m_last_dbg_ms) >= 500U) {
+                m_last_dbg_ms = now_ms;
+                Telemetry::printf("[CAL ENC DBG] warmup: enc_mech=%.3f mod=%.3f moved=%.1f ms=%lu",
+                                  static_cast<double>(m_unwrapped_angle / m_encoder_cycles_per_rev),
+                                  static_cast<double>(warmup_mod),
+                                  static_cast<double>(moved_mech),
+                                  static_cast<unsigned long>(now_ms - m_state_start_ms));
+            }
+
+            /* Require both time and a full mechanical revolution so the encoder
+             * dynamic min/max bounds capture a complete sin/cos cycle. */
+            const bool time_done = (now_ms - m_state_start_ms) >= WARMUP_MS;
+            const bool rev_done = moved_mech >= 360.0f;
+            if (time_done && rev_done) {
+                PWM_StopSPWM();
+                Telemetry::printf("[CAL ENC DBG] warmup done: moved %.1f deg", static_cast<double>(moved_mech));
+                enterState(State::OFFSET_ROTATE);
+            } else if (time_done && !rev_done) {
+                /* The rotor did not make a full revolution during warmup.  Keep
+                 * going a little longer, but do not spin forever. */
+                if ((now_ms - m_state_start_ms) > (WARMUP_MS + 5000U)) {
+                    PWM_StopSPWM();
+                    fail("[CAL ENC] FAIL: warmup did not produce a full revolution (moved %.1f deg)",
+                         static_cast<double>(moved_mech));
+                }
+            }
+            break;
+        }
+
         case State::FIND_VOLTAGE: {
-            /* Spin at 1 Hz and ramp modulation until the encoder follows.
-             * This works even if the rotor is already aligned, because a
-             * rotating field will drag it once the voltage is high enough. */
             const float angle_cycles = m_unwrapped_angle / 360.0f;
             if (std::fabs(angle_cycles - m_cycles_at_last_move) > NOISE_THRESHOLD_CYCLES) {
                 m_cycles_at_last_move = angle_cycles;
@@ -313,7 +335,7 @@ void EncoderOffsetCalibrator::update() {
                 if (m_mod > CAL_MAX_MOD) {
                     m_mod = CAL_MAX_MOD;
                 }
-                PWM_SetSPWMParams(ROTATION_FREQUENCY_HZ, m_mod);
+                PWM_SetSPWMParams(OFFSET_ROTATION_FREQUENCY_HZ, m_mod);
                 Telemetry::printf("[CAL ENC DBG] ramp mod=%.3f angle_cycles=%.3f",
                                   static_cast<double>(m_mod),
                                   static_cast<double>(angle_cycles));
@@ -327,17 +349,16 @@ void EncoderOffsetCalibrator::update() {
                 }
                 m_mod = boosted;
                 PWM_StopSPWM();
-                Telemetry::printf("[CAL ENC] breakaway at mod=%.3f -> hold mod=%.3f (angle_cycles=%.3f)",
+                Telemetry::printf("[CAL ENC] breakaway at mod=%.3f -> rotate mod=%.3f",
                                   static_cast<double>(m_breakaway_mod),
-                                  static_cast<double>(m_mod),
-                                  static_cast<double>(angle_cycles));
-                enterState(State::SETTLE);
+                                  static_cast<double>(m_mod));
+                enterState(State::WARMUP);
                 return;
             }
 
             if (m_mod >= CAL_MAX_MOD && (now_ms - m_last_move_ms) > MOVE_TIMEOUT_MS) {
                 PWM_StopSPWM();
-                fail("[CAL ENC] FAIL: rotor did not move during 1 Hz voltage ramp");
+                fail("[CAL ENC] FAIL: rotor did not move during voltage ramp");
                 return;
             }
 
@@ -349,121 +370,85 @@ void EncoderOffsetCalibrator::update() {
             break;
         }
 
-        case State::SETTLE: {
-            holdCurrentAngle();
-            const float settle_delta_cycles = std::fabs((m_unwrapped_angle - m_settle_angle) / 360.0f);
-            if (settle_delta_cycles > SETTLE_THRESHOLD_CYCLES) {
-                /* Still moving; reset the stable timer. */
-                m_settle_start_ms = now_ms;
-                m_settle_angle = m_unwrapped_angle;
-            }
+        case State::OFFSET_ROTATE: {
+            const float encoder_mech = m_unwrapped_angle / m_encoder_cycles_per_rev;
+            const float moved_mech = std::fabs(encoder_mech - m_rotate_start_angle);
+
             if ((now_ms - m_last_dbg_ms) >= 500U) {
                 m_last_dbg_ms = now_ms;
-                Telemetry::printf("[CAL ENC DBG] settle: enc_elec=%.3f enc_mech=%.3f delta_cycles=%.3f stable_ms=%lu",
-                                  static_cast<double>(m_unwrapped_angle),
-                                  static_cast<double>(m_unwrapped_angle / m_encoder_cycles_per_rev),
-                                  static_cast<double>(settle_delta_cycles),
-                                  static_cast<unsigned long>(now_ms - m_settle_start_ms));
+                Telemetry::printf("[CAL ENC DBG] rotate: enc_mech=%.3f moved=%.1f samples=%d",
+                                  static_cast<double>(encoder_mech),
+                                  static_cast<double>(moved_mech),
+                                  m_sample_count);
             }
-            if ((now_ms - m_settle_start_ms) >= SETTLE_STABLE_MS) {
-                enterState(State::HOLD);
-                return;
-            }
-            if ((now_ms - m_state_start_ms) > SETTLE_TIMEOUT_MS) {
-                fail("[CAL ENC] FAIL: encoder did not settle (still moving %.2f cycles after %lu ms)",
-                     static_cast<double>(settle_delta_cycles),
-                     static_cast<unsigned long>(now_ms - m_state_start_ms));
-                return;
-            }
-            break;
-        }
 
-        case State::HOLD: {
-            holdCurrentAngle();
-            if ((now_ms - m_last_dbg_ms) >= 500U) {
-                m_last_dbg_ms = now_ms;
-                Telemetry::printf("[CAL ENC DBG] hold: enc_elec=%.3f enc_mech=%.3f hold_ms=%lu",
-                                  static_cast<double>(m_unwrapped_angle),
-                                  static_cast<double>(m_unwrapped_angle / m_encoder_cycles_per_rev),
-                                  static_cast<unsigned long>(now_ms - m_state_start_ms));
-            }
-            if ((now_ms - m_state_start_ms) >= HOLD_SETTLE_MS) {
-                measureAndLog();
-                ++m_step;
-                if (m_step >= m_total_steps) {
-                    m_average_offset = (m_sample_count > 0)
-                                           ? (m_sum_offset / static_cast<float>(m_sample_count))
-                                           : 0.0f;
-                    m_average_offset = wrapOffset(m_average_offset, m_mech_deg_per_motor_elec_cycle);
+            /* Wait until the rotor has clearly started following the field
+             * before including samples.  Use the initial transient region to
+             * determine whether the encoder counts with or against the field
+             * direction so the offset formula uses the correct sign. */
+            if (!m_offset_acquisition_active) {
+                const float enc = encoderMechanicalAngle();
+                const float fld = fieldMechanicalAngle();
 
-                    float min_off = m_offsets[0];
-                    float max_off = m_offsets[0];
-                    for (int i = 1; i < m_sample_count; ++i) {
-                        if (m_offsets[i] < min_off) min_off = m_offsets[i];
-                        if (m_offsets[i] > max_off) max_off = m_offsets[i];
+                if (m_sign == 0) {
+                    if (m_first_encoder_mech == 0.0f && m_first_field_mech == 0.0f) {
+                        m_first_encoder_mech = enc;
+                        m_first_field_mech = fld;
+                    } else {
+                        const float d_enc = enc - m_first_encoder_mech;
+                        const float d_fld = fld - m_first_field_mech;
+                        if (std::fabs(d_enc) >= 10.0f && std::fabs(d_fld) >= 10.0f) {
+                            m_sign = (d_enc * d_fld > 0.0f) ? 1 : -1;
+                            Telemetry::printf("[CAL ENC DBG] detected sign=%d (d_enc=%.2f d_fld=%.2f)",
+                                              m_sign,
+                                              static_cast<double>(d_enc),
+                                              static_cast<double>(d_fld));
+                        }
                     }
-                    restoreHardware();
-                    Telemetry::printf("[CAL ENC] DONE: avg=%.3f deg min=%.3f deg max=%.3f deg range=%.3f deg over %d samples",
-                                      static_cast<double>(m_average_offset),
-                                      static_cast<double>(min_off),
-                                      static_cast<double>(max_off),
-                                      static_cast<double>(max_off - min_off),
-                                      m_sample_count);
-                    m_state = State::DONE;
+                }
+
+                if (moved_mech >= OFFSET_ACQUIRE_START_DEG && m_sign != 0) {
+                    m_offset_acquisition_active = true;
+                    m_last_encoder_mech = enc;
+                    m_last_field_mech = fld;
+                    Telemetry::printf("[CAL ENC DBG] acquisition started");
+                }
+            } else {
+                if ((now_ms - m_last_offset_sample_ms) >= OFFSET_SAMPLE_PERIOD_MS) {
+                    m_last_offset_sample_ms = now_ms;
+                    accumulateOffsetSample();
+                }
+            }
+
+            const float target_mech = OFFSET_ROTATE_REVS * 360.0f;
+            if (moved_mech >= target_mech) {
+                PWM_StopSPWM();
+                if (m_sample_count == 0) {
+                    fail("[CAL ENC] FAIL: rotation finished with no samples");
                     return;
                 }
-                enterState(State::ROTATE);
+                const float avg_offset =
+                    wrapOffset(static_cast<float>(m_sum_offset / static_cast<double>(m_sample_count)),
+                               360.0f);
+                m_average_offset = avg_offset;
+                restoreHardware();
+                Telemetry::printf("[CAL ENC] DONE: avg=%.3f deg samples=%d revs=%.1f",
+                                  static_cast<double>(m_average_offset),
+                                  m_sample_count,
+                                  static_cast<double>(moved_mech / 360.0f));
+                Telemetry::printf("[CAL ENC] bounds: sin=[%u,%u] cos=[%u,%u]",
+                                  static_cast<unsigned int>(encoderADC().sinMin()),
+                                  static_cast<unsigned int>(encoderADC().sinMax()),
+                                  static_cast<unsigned int>(encoderADC().cosMin()),
+                                  static_cast<unsigned int>(encoderADC().cosMax()));
+                m_state = State::DONE;
                 return;
             }
-            if ((now_ms - m_state_start_ms) > SETTLE_TIMEOUT_MS) {
-                fail("[CAL ENC] FAIL: hold timed out");
-                return;
-            }
-            break;
-        }
 
-        case State::ROTATE: {
-            /* Rotate until we have completed at least one electrical cycle, the
-             * field is back at the U-high electrical angle (90 deg), and the
-             * rotor has moved past the midpoint to the next pole-pair position.
-             * Stopping at the U-high angle means holdCurrentAngle() does not
-             * cause an abrupt voltage-vector jump. */
-            const uint32_t cycles = PWM_GetSPWMElectricalCycles();
-            const float moved = std::fabs(m_unwrapped_angle - m_rotate_start_angle);
-            const float angle = PWM_GetSPWMAngle();
-            const bool angle_ok = std::fabs(angle - VOLTAGE_ANGLE_U_HIGH_RAD) <= ANGLE_STOP_TOLERANCE_RAD;
-            const bool moved_enough = moved >= (0.5f * m_enc_deg_per_motor_elec_cycle);
-            const bool one_cycle = (cycles - m_elec_cycles_start) >= 1U;
-
-            /* Log every 500 ms so we can see the rotation profile. */
-            if ((now_ms - m_last_dbg_ms) >= 500U) {
-                m_last_dbg_ms = now_ms;
-                Telemetry::printf("[CAL ENC DBG] rotate: cycles=%lu/%lu angle=%.2f rad moved_elec=%.2f moved_mech=%.2f angle_ok=%d moved_ok=%d",
-                                  static_cast<unsigned long>(cycles),
-                                  static_cast<unsigned long>(m_elec_cycles_start + 1U),
-                                  static_cast<double>(angle),
-                                  static_cast<double>(moved),
-                                  static_cast<double>(moved / m_encoder_cycles_per_rev),
-                                  static_cast<int>(angle_ok),
-                                  static_cast<int>(moved_enough));
-            }
-
-            if (one_cycle && angle_ok && moved_enough) {
+            if ((now_ms - m_state_start_ms) > OFFSET_ROTATE_TIMEOUT_MS) {
                 PWM_StopSPWM();
-                Telemetry::printf("[CAL ENC DBG] rotate done: cycles=%lu angle=%.2f rad moved_elec=%.2f moved_mech=%.2f deg",
-                                  static_cast<unsigned long>(cycles),
-                                  static_cast<double>(angle),
-                                  static_cast<double>(moved),
-                                  static_cast<double>(moved / m_encoder_cycles_per_rev));
-                enterState(State::SETTLE);
-                return;
-            }
-            if ((now_ms - m_state_start_ms) > ROTATE_TIMEOUT_MS) {
-                PWM_StopSPWM();
-                fail("[CAL ENC] FAIL: rotation timed out (moved %.2f deg, angle=%.2f rad, cycles=%lu)",
-                     static_cast<double>(moved),
-                     static_cast<double>(angle),
-                     static_cast<unsigned long>(cycles));
+                fail("[CAL ENC] FAIL: rotation timed out (moved %.1f deg)",
+                     static_cast<double>(moved_mech));
                 return;
             }
             break;
@@ -472,6 +457,10 @@ void EncoderOffsetCalibrator::update() {
         default:
             break;
     }
+}
+
+EncoderOffsetCalibrator& encoderOffsetCalibrator() {
+    return EncoderOffsetCalibrator::instance();
 }
 
 } // namespace Inverter

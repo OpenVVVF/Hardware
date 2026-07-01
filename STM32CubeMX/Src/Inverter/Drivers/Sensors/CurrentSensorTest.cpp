@@ -34,9 +34,15 @@ void CurrentSensorTest_RunOnce() {
     static uint32_t s_last_offset_ms = 0;
     float iu = 0.0f, iv = 0.0f, iw = 0.0f;
     if (phaseCurrentADC().sample(iu, iv, iw)) {
-        Telemetry::log("ph_u_a", iu);
-        Telemetry::log("ph_v_a", iv);
-        Telemetry::log("ph_w_a", iw);
+        /* Do not publish current values until the zero-current offset has
+         * been validated.  This prevents huge phantom startup spikes from
+         * appearing in the telemetry log when the sensor is still settling. */
+        if (phaseCurrentADC().offsetValid()) {
+            Telemetry::log("ph_u_a", iu);
+            Telemetry::log("ph_v_a", iv);
+            Telemetry::log("ph_w_a", iw);
+        }
+        Telemetry::log("ph_cal_valid", phaseCurrentADC().offsetValid() ? 1.0f : 0.0f);
 
         /* Diagnostics for tuning offset/noise. */
         PhaseCurrentADC& adc = phaseCurrentADC();
