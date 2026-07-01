@@ -1,5 +1,10 @@
 #pragma once
 
+#include "Inverter/Calibration/Common/CalibrationHardware.h"
+#include "Inverter/Calibration/Common/EncoderTracker.h"
+#include "Inverter/Calibration/Common/CurrentLimitedRamp.h"
+#include "Inverter/Calibration/Common/BreakawayFinder.h"
+
 #include <cstdint>
 
 namespace Inverter {
@@ -90,15 +95,11 @@ private:
     void fail(const char* reason_fmt, ...);
     void restoreHardware();
 
-    void sampleEncoderAngle();
+    void sample();
     void accumulateOffsetSample();
     float encoderMechanicalAngle() const;
     float fieldMechanicalAngle() const;
     static float wrapOffset(float offset, float period);
-    void resetRampState();
-    float computeRampedMod(uint32_t now_ms) const;
-    float updateCurrentLimitedSPWM(float frequency_hz, uint32_t now_ms);
-
     State    m_state = State::IDLE;
     float    m_poles = 0.0f;
     float    m_pole_pairs = 0.0f;
@@ -106,31 +107,23 @@ private:
     float    m_mech_deg_per_motor_elec_cycle = 0.0f;
     float    m_mod = 0.0f;
     float    m_breakaway_mod = 0.0f;
-    float    m_warmup_target_mod = 0.0f;
-    float    m_ramp_target_mod = 0.0f;
-    float    m_applied_mod = 0.0f;
-    uint32_t m_ramp_start_ms = 0;
-    uint32_t m_ramp_duration_ms = 0;
-    uint32_t m_ramp_pause_start_ms = 0;
-    bool     m_ramp_paused = false;
 
-    /* Encoder tracking. */
-    float    m_last_angle = 0.0f;
-    float    m_unwrapped_angle = 0.0f;
-    float    m_warmup_start_angle = 0.0f;
+    CalibrationHardware m_hw;
+    EncoderTracker      m_tracker;
+    CurrentLimitedRamp  m_ramp;
+    BreakawayFinder     m_breakaway;
+
     uint16_t m_last_raw_sin = 0U;
     uint16_t m_last_raw_cos = 0U;
 
     /* Timing. */
     uint32_t m_state_start_ms = 0;
-    uint32_t m_last_ramp_ms = 0;
-    uint32_t m_last_move_ms = 0;
     uint32_t m_last_dbg_ms = 0;
     uint32_t m_last_offset_sample_ms = 0;
-    float    m_cycles_at_last_move = 0.0f;
 
     /* Rotation tracking. */
-    float    m_rotate_start_angle = 0.0f;
+    float    m_rotate_start_encoder = 0.0f;
+    float    m_rotate_start_field = 0.0f;
     bool     m_offset_acquisition_active = false;
 
     /* Encoder/field direction detection.
@@ -142,6 +135,11 @@ private:
     float    m_first_field_mech = 0.0f;
     float    m_last_encoder_mech = 0.0f;
     float    m_last_field_mech = 0.0f;
+
+    /* Direction measured over the full warmup revolution. */
+    int      m_warmup_sign = 0;
+    float    m_warmup_enc_start = 0.0f;
+    float    m_warmup_fld_start = 0.0f;
 
     /* Results. */
     double   m_sum_offset = 0.0;

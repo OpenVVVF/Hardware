@@ -2,6 +2,7 @@
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
+#include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -341,6 +342,10 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
      * sin/cos so the estimate does not depend on the encoder angle bounds. */
     PoleEstimator::instance().onSample(
         m_current_u, encoderADC().lastRawSin(), encoderADC().lastRawCos());
+
+    /* Also feed the manual encoder-cycle calibrator. */
+    EncoderCycleCalibrator::instance().onSample(
+        encoderADC().lastRawSin(), encoderADC().lastRawCos());
 
     m_new_data = true;
 }

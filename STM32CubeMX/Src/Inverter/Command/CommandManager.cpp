@@ -85,6 +85,13 @@ void CommandManager::processLine(const char* line) {
             }
         }
 
+        if (spec.type == ArgSpec::STRING) {
+            std::strncpy(values[i].s_val, token, sizeof(values[i].s_val) - 1);
+            values[i].s_val[sizeof(values[i].s_val) - 1] = '\0';
+            values[i].present = true;
+            continue;
+        }
+
         float val;
         if (spec.type == ArgSpec::FLOAT) {
             val = static_cast<float>(atof(token));
@@ -99,7 +106,10 @@ void CommandManager::processLine(const char* line) {
             return;
         }
 
-        values[i] = {val, (int32_t)val, true};
+        values[i].f_val = val;
+        values[i].i_val = static_cast<int32_t>(val);
+        values[i].s_val[0] = '\0';
+        values[i].present = true;
     }
 
     char extra[32];

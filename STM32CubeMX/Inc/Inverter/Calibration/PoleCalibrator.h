@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Inverter/Calibration/Common/EncoderTracker.h"
+#include "Inverter/Calibration/Common/BreakawayFinder.h"
+
 #include <cstdint>
 
 namespace Inverter {
@@ -59,21 +62,19 @@ private:
         FAIL
     };
 
-    void sampleEncoderAngle();
-    float encoderCycles() const { return m_unwrapped_angle / 360.0f; }
     void reportPoles(const char* label);
 
     State    m_state = State::IDLE;
     float    m_mod = 0.0f;
 
     /* Breakaway detection. */
-    bool     m_breakaway_detected = false;
+    BreakawayFinder m_breakaway;
+    bool     m_breakaway_found = false;
     float    m_breakaway_mod = 0.0f;
     float    m_breakaway_mech_cycles = 0.0f;
 
     /* Encoder angle tracking (for movement/stall detection). */
-    float    m_last_angle = 0.0f;
-    float    m_unwrapped_angle = 0.0f;
+    EncoderTracker m_tracker;
 
     /* Mechanical cycle counter snapshot at count start. */
     float    m_mech_count_start = 0.0f;
@@ -81,10 +82,7 @@ private:
     /* Electrical cycle counter snapshot at count start. */
     uint32_t m_elec_count_start = 0;
 
-    uint32_t m_last_ramp_ms = 0;
     uint32_t m_count_start_ms = 0;
-    uint32_t m_last_move_ms = 0;
-    float    m_cycles_at_last_move = 0.0f;
     float    m_last_poles = 0.0f;
 };
 

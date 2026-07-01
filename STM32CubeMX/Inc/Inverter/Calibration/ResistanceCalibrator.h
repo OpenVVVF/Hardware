@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Inverter/Calibration/Common/CalibrationHardware.h"
+
 #include <cstdint>
 
 namespace Inverter {
@@ -100,6 +102,7 @@ private:
     enum class State {
         IDLE,
         ENABLE,
+        WAIT_READY,
         SETTLE,
         MEASURE,
         FINISH_PAIR,
@@ -110,7 +113,6 @@ private:
 
     void enterState(State state);
     void fail(const char* reason_fmt, ...);
-    bool enableGateDriver();
     void configureHardware(float duty_pct);
     void restoreHardware();
     void finishPairMeasurement();
@@ -121,6 +123,7 @@ private:
     static int pairIndex(Pair pair);
 
     State m_state = State::IDLE;
+    CalibrationHardware m_hw;
 
     Pair   m_pairs[3] = {Pair::UV, Pair::UW, Pair::VW};
     uint8_t m_num_pairs = 3;

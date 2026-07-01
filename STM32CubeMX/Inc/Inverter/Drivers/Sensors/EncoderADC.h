@@ -68,6 +68,14 @@ public:
     uint16_t cosMax() const { return m_cos_max; }
 
     /**
+     * @brief True once both sin and cos have seen enough variation to compute
+     * a meaningful angle.
+     */
+    bool boundsValid() const {
+        return (m_sin_max > m_sin_min) && (m_cos_max > m_cos_min);
+    }
+
+    /**
      * @brief DMA completion callback, called from DMA2_Stream0_IRQHandler.
      */
     void onDmaComplete();

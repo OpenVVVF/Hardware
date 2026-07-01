@@ -23,44 +23,31 @@ PoleCalibrator& poleCalibrator() {
 
 bool PoleCalibrator::start() {
     if (openLoopController().isRunning()) {
-        Telemetry::printf("[CAL POLES] stop the motor before starting calibration");
+        Telemetry::printf("[CAL] POLES: stop the motor before starting calibration");
         return false;
     }
 
     /* Start open-loop at 2 Hz, zero modulation. */
     if (!openLoopController().start(2.0f, 0.0f)) {
-        Telemetry::printf("[CAL POLES] ERROR: failed to start open-loop controller");
+        Telemetry::printf("[CAL] POLES: ERROR: failed to start open-loop controller");
         return false;
     }
 
     PWM_ResetSPWMElectricalCycles();
 
     m_mod = 0.0f;
-    m_breakaway_detected = false;
+    m_breakaway_found = false;
     m_breakaway_mod = 0.0f;
     m_breakaway_mech_cycles = 0.0f;
     m_last_poles = 0.0f;
-    m_unwrapped_angle = 0.0f;
-    m_last_angle = encoderADC().lastAngle();
-    m_cycles_at_last_move = 0.0f;
-    m_last_ramp_ms = HAL_GetTick();
-    m_last_move_ms = HAL_GetTick();
+
+    m_tracker.reset();
+    m_breakaway.start(0.01f, 50U, 0.50f, 0.15f, 1.30f, 3000U);
+
     m_state = State::RAMP;
 
-    Telemetry::printf("[CAL POLES] started at 2 Hz, fast ramp to breakaway");
+    Telemetry::printf("[CAL] POLES: started at 2 Hz, fast ramp to breakaway");
     return true;
-}
-
-void PoleCalibrator::sampleEncoderAngle() {
-    const float angle = encoderADC().lastAngle();
-    float delta = angle - m_last_angle;
-    if (delta > 180.0f) {
-        delta -= 360.0f;
-    } else if (delta < -180.0f) {
-        delta += 360.0f;
-    }
-    m_unwrapped_angle += delta;
-    m_last_angle = angle;
 }
 
 void PoleCalibrator::reportPoles(const char* label) {
@@ -72,7 +59,7 @@ void PoleCalibrator::reportPoles(const char* label) {
                             : 0.0f;
     m_last_poles = poles;
 
-    Telemetry::printf("[CAL POLES] %s: poles=%.3f at mod=%.3f (elec=%lu mech=%.2f)",
+    Telemetry::printf("[CAL] POLES: %s: poles=%.3f at mod=%.3f (elec=%lu mech=%.2f)",
                       label, poles, m_mod,
                       static_cast<unsigned long>(elec_counted),
                       cycles_counted);
@@ -88,13 +75,8 @@ void PoleCalibrator::update() {
         return;
     }
 
-    sampleEncoderAngle();
+    m_tracker.update();
 
-    constexpr float CAL_MAX_MOD = 0.50f;
-    constexpr float RAMP_STEP = 0.01f;
-    constexpr uint32_t RAMP_PERIOD_MS = 50U;
-    constexpr float BREAKAWAY_DETECT_CYCLES = 0.15f;
-    constexpr float TORQUE_MARGIN = 1.30f;
     constexpr float TARGET_MECH_CYCLES = 1.0f;
     constexpr float MIN_PARTIAL_CYCLES = 0.5f;
     constexpr uint32_t STALL_TIMEOUT_MS = 3000U;
@@ -102,77 +84,65 @@ void PoleCalibrator::update() {
 
     const uint32_t now_ms = HAL_GetTick();
     const float mech_cycles = PoleEstimator::instance().mechanicalCycles();
-    const float angle_cycles = std::fabs(encoderCycles());
+    const float angle_cycles = std::fabs(m_tracker.mechanicalCycles());
 
     if (m_state == State::RAMP) {
-        /* Any encoder movement (either direction) resets the stall timer. */
-        if (std::fabs(angle_cycles - m_cycles_at_last_move) > 0.01f) {
-            m_cycles_at_last_move = angle_cycles;
-            m_last_move_ms = now_ms;
-        }
+        if (!m_breakaway_found) {
+            float mod = 0.0f;
+            const auto status = m_breakaway.update(now_ms, angle_cycles, mod);
 
-        if (!m_breakaway_detected) {
-            /* Fast ramp until the shaft moves through ~0.15 cycles. */
-            if ((now_ms - m_last_ramp_ms) >= RAMP_PERIOD_MS) {
-                m_last_ramp_ms = now_ms;
-                m_mod += RAMP_STEP;
-                if (m_mod > CAL_MAX_MOD) {
-                    m_mod = CAL_MAX_MOD;
-                }
-                openLoopController().setModulationIndexDirect(m_mod);
-            }
-
-            if (angle_cycles >= BREAKAWAY_DETECT_CYCLES) {
-                m_breakaway_detected = true;
-                m_breakaway_mod = m_mod;
-                m_breakaway_mech_cycles = mech_cycles;
-
-                float boosted = m_mod * TORQUE_MARGIN;
-                if (boosted > CAL_MAX_MOD) {
-                    boosted = CAL_MAX_MOD;
-                }
-                m_mod = boosted;
+            if (status == BreakawayFinder::Status::RUNNING) {
+                m_mod = mod;
                 openLoopController().setModulationIndexDirect(m_mod);
 
-                Telemetry::printf("[CAL POLES] breakaway at mod=%.3f, holding at %.3f",
-                                  m_breakaway_mod, m_mod);
+                if (m_tracker.stalled(now_ms, STALL_TIMEOUT_MS) && m_mod >= 0.50f) {
+                    m_state = State::FAIL;
+                    Telemetry::printf("[CAL] POLES: FAIL: encoder did not move");
+                    openLoopController().stop();
+                }
+                return;
             }
 
-            if (m_mod >= CAL_MAX_MOD &&
-                (now_ms - m_last_move_ms) > STALL_TIMEOUT_MS) {
+            if (status == BreakawayFinder::Status::TIMEOUT) {
                 m_state = State::FAIL;
-                Telemetry::printf("[CAL POLES] FAIL: encoder did not move");
+                Telemetry::printf("[CAL] POLES: FAIL: encoder did not move");
                 openLoopController().stop();
+                return;
             }
-        } else {
-            /* Breakaway found.  Wait for the next zero-crossing so the
-             * measurement window starts exactly at a robust cycle boundary. */
-            if (mech_cycles > m_breakaway_mech_cycles) {
-                m_mech_count_start = mech_cycles;
-                m_elec_count_start = PWM_GetSPWMElectricalCycles();
-                m_count_start_ms = now_ms;
-                m_last_move_ms = now_ms;
-                m_cycles_at_last_move = angle_cycles;
-                m_state = State::COUNT;
-                Telemetry::printf("[CAL POLES] zero crossing, counting one cycle");
-            }
+
+            /* Breakaway found. */
+            m_breakaway_found = true;
+            m_breakaway_mod = m_breakaway.breakawayMod();
+            m_mod = mod;  /* already boosted by BreakawayFinder */
+            m_breakaway_mech_cycles = mech_cycles;
+            openLoopController().setModulationIndexDirect(m_mod);
+            Telemetry::printf("[CAL] POLES: breakaway at mod=%.3f, holding at %.3f",
+                              static_cast<double>(m_breakaway_mod),
+                              static_cast<double>(m_mod));
+            return;
         }
+
+        /* Wait for the next zero-crossing so the measurement window starts at a
+         * robust cycle boundary. */
+        if (mech_cycles > m_breakaway_mech_cycles) {
+            m_mech_count_start = mech_cycles;
+            m_elec_count_start = PWM_GetSPWMElectricalCycles();
+            m_count_start_ms = now_ms;
+            m_state = State::COUNT;
+            Telemetry::printf("[CAL] POLES: zero crossing, counting one cycle");
+        }
+        return;
     }
     else if (m_state == State::COUNT) {
-        if (std::fabs(angle_cycles - m_cycles_at_last_move) > 0.01f) {
-            m_cycles_at_last_move = angle_cycles;
-            m_last_move_ms = now_ms;
-        }
-
         const float cycles_counted = mech_cycles - m_mech_count_start;
 
-        if ((now_ms - m_last_move_ms) > STALL_TIMEOUT_MS) {
+        if (m_tracker.stalled(now_ms, STALL_TIMEOUT_MS)) {
             if (cycles_counted >= MIN_PARTIAL_CYCLES) {
                 m_state = State::DONE;
                 reportPoles("partial");
             } else {
                 m_state = State::FAIL;
-                Telemetry::printf("[CAL POLES] FAIL: encoder stalled during count");
+                Telemetry::printf("[CAL] POLES: FAIL: encoder stalled during count");
             }
             openLoopController().stop();
             return;
@@ -180,7 +150,7 @@ void PoleCalibrator::update() {
 
         if ((now_ms - m_count_start_ms) > MAX_COUNT_MS) {
             m_state = State::FAIL;
-            Telemetry::printf("[CAL POLES] FAIL: count took too long");
+            Telemetry::printf("[CAL] POLES: FAIL: count took too long");
             openLoopController().stop();
             return;
         }

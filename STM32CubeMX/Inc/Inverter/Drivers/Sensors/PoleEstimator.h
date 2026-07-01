@@ -66,19 +66,6 @@ public:
     float windowEstimate() const { return m_window_poles; }
 
     /**
-     * @brief Manual encoder cycle counting for sensor calibration.
-     *
-     * While active, positive zero crossings of the filtered sin/cos signal are
-     * counted independently of the pole estimate.  This lets you rotate
-     * the shaft by hand exactly one revolution and read off how many sin/cos
-     * periods the encoder produces per mechanical revolution.
-     */
-    void startManualEncoderCal();
-    void stopManualEncoderCal();
-    float manualEncoderCycles() const { return m_manual_mech_cycles; }
-    bool isManualEncoderCalActive() const { return m_manual_cal; }
-
-    /**
      * @brief Global instance.
      */
     static PoleEstimator& instance();
@@ -102,11 +89,6 @@ private:
     int     m_mech_state = 0;
     int     m_prev_mech_state = 0;
     float   m_mech_cycles = 0.0f;
-
-    /* Manual encoder cycle calibration. */
-    bool    m_manual_cal = false;
-    bool    m_manual_prev_enabled = false;
-    float   m_manual_mech_cycles = 0.0f;
 
     /* Electrical cycle detection. */
     int     m_current_state = 0;

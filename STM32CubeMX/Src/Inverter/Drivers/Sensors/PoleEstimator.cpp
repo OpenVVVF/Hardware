@@ -32,8 +32,6 @@ void PoleEstimator::reset() {
     m_mech_state = 0;
     m_prev_mech_state = 0;
     m_mech_cycles = 0.0f;
-    m_manual_cal = false;
-    m_manual_mech_cycles = 0.0f;
     m_current_state = 0;
     m_prev_current_state = 0;
     m_iu_peak = 0.0f;
@@ -44,21 +42,6 @@ void PoleEstimator::reset() {
     m_mech_window_idx = 0;
     m_window_poles = 0.0f;
     m_filtered_poles = 0.0f;
-}
-
-void PoleEstimator::startManualEncoderCal() {
-    m_manual_mech_cycles = 0.0f;
-    m_manual_cal = true;
-    /* The cycle-counting code lives inside onSample(), which bails out early if
-     * the estimator is disabled.  Force-enable it during a manual calibration so
-     * encoder zero crossings are counted even though the motor is not running. */
-    m_manual_prev_enabled = m_enabled;
-    m_enabled = true;
-}
-
-void PoleEstimator::stopManualEncoderCal() {
-    m_manual_cal = false;
-    m_enabled = m_manual_prev_enabled;
 }
 
 void PoleEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {
@@ -92,9 +75,6 @@ void PoleEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {
 
     if (m_prev_mech_state < 0 && m_mech_state > 0) {
         m_mech_cycles += 1.0f;
-        if (m_manual_cal) {
-            m_manual_mech_cycles += 1.0f;
-        }
 
         /* Store electrical cycle count at this mech cycle for the window. */
         m_elec_at_mech[m_mech_window_idx % WINDOW_CYCLES] = m_elec_cycles;

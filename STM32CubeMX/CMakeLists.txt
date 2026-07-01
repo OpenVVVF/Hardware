@@ -58,6 +58,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Calibration/PoleCalibrator.cpp
     Src/Inverter/Calibration/EncoderOffsetCalibrator.cpp
     Src/Inverter/Calibration/ResistanceCalibrator.cpp
+    Src/Inverter/Calibration/EncoderCycleCalibrator.cpp
+    Src/Inverter/Calibration/Common/CalibrationHardware.cpp
+    Src/Inverter/Calibration/Common/EncoderTracker.cpp
+    Src/Inverter/Calibration/Common/CurrentLimitedRamp.cpp
+    Src/Inverter/Calibration/Common/BreakawayFinder.cpp
     Src/Inverter/Command/CommandManager.cpp
     Src/Inverter/Command/CommandInitializer.cpp
     Src/Inverter/Command/Commands/OpenLoopCommands.cpp
@@ -88,6 +93,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     Inc/Inverter
     Inc/Inverter/Control
     Inc/Inverter/Calibration
+    Inc/Inverter/Calibration/Common
     Inc/Inverter/Command
     Inc/Inverter/Drivers/GateDriver
     Inc/Inverter/Drivers/CAN
@@ -116,3 +122,9 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 # newlib-nano disables float formatting by default; pull in the float-aware
 # printf implementation so Telemetry::printf("%.3f", ...) works.
 target_link_options(${CMAKE_PROJECT_NAME} PRIVATE -u _printf_float)
+
+# Generate a raw binary after linking so the .bin is always in sync with the .elf.
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin
+    COMMENT "Generating ${CMAKE_PROJECT_NAME}.bin"
+)
