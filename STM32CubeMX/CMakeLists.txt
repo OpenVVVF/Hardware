@@ -58,6 +58,14 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Calibration/PoleCalibrator.cpp
     Src/Inverter/Calibration/EncoderOffsetCalibrator.cpp
     Src/Inverter/Calibration/ResistanceCalibrator.cpp
+    Src/Inverter/Command/CommandManager.cpp
+    Src/Inverter/Command/CommandInitializer.cpp
+    Src/Inverter/Command/Commands/OpenLoopCommands.cpp
+    Src/Inverter/Command/Commands/SystemCommands.cpp
+    Src/Inverter/Command/Commands/CalibrationCommands.cpp
+    Src/Inverter/Command/Commands/FaultCommands.cpp
+    Src/Inverter/Command/Commands/SensorCommands.cpp
+    Src/Inverter/Command/Commands/HelpCommand.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c
     Src/Inverter/Drivers/CAN/FdcanFault.cpp
@@ -80,6 +88,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     Inc/Inverter
     Inc/Inverter/Control
     Inc/Inverter/Calibration
+    Inc/Inverter/Command
     Inc/Inverter/Drivers/GateDriver
     Inc/Inverter/Drivers/CAN
     Inc/Inverter/Drivers/UART
