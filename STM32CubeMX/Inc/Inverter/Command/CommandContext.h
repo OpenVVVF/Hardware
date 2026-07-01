@@ -5,8 +5,6 @@
 #ifndef COMMAND_CONTEXT_H
 #define COMMAND_CONTEXT_H
 
-#include <cstdint>
-
 struct CommandContext {
     /* Currently no shared state is required; commands access the global
      * inverter objects directly. */

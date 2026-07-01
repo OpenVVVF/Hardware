@@ -85,9 +85,20 @@ public:
     }
 };
 
-CommandInterface* makeStartCommand()    { static StartCommand inst; return &inst; }
-CommandInterface* makeStopCommand()     { static StopCommand inst; return &inst; }
-CommandInterface* makeFreqCommand()     { static FreqCommand inst; return &inst; }
-CommandInterface* makeModCommand()      { static ModCommand inst; return &inst; }
-CommandInterface* makeStatusCommand()   { static StatusCommand inst; return &inst; }
-CommandInterface* makeRampCurrentLimitCommand() { static RampCurrentLimitCommand inst; return &inst; }
+static StartCommand    sStartCmd;
+static StopCommand     sStopCmd;
+static FreqCommand     sFreqCmd;
+static ModCommand      sModCmd;
+static StatusCommand   sStatusCmd;
+static RampCurrentLimitCommand sRampCurrentLimitCmd;
+
+#include "Inverter/Command/CommandManager.h"
+
+void registerOpenLoopCommands(CommandManager& mgr) {
+    mgr.registerCommand(&sStartCmd);
+    mgr.registerCommand(&sStopCmd);
+    mgr.registerCommand(&sFreqCmd);
+    mgr.registerCommand(&sModCmd);
+    mgr.registerCommand(&sStatusCmd);
+    mgr.registerCommand(&sRampCurrentLimitCmd);
+}

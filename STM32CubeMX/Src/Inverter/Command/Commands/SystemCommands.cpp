@@ -140,9 +140,20 @@ public:
     }
 };
 
-CommandInterface* makeClearFaultCommand()    { static ClearFaultCommand inst; return &inst; }
-CommandInterface* makeCalCommand()           { static CalCommand inst; return &inst; }
-CommandInterface* makeRawCommand()           { static RawCommand inst; return &inst; }
-CommandInterface* makeVZeroCommand()         { static VZeroCommand inst; return &inst; }
-CommandInterface* makeSupplyStatusCommand()  { static SupplyStatusCommand inst; return &inst; }
-CommandInterface* makeRebootCommand()        { static RebootCommand inst; return &inst; }
+static ClearFaultCommand   sClearFaultCmd;
+static CalCommand          sCalCmd;
+static RawCommand          sRawCmd;
+static VZeroCommand        sVZeroCmd;
+static SupplyStatusCommand sSupplyStatusCmd;
+static RebootCommand       sRebootCmd;
+
+#include "Inverter/Command/CommandManager.h"
+
+void registerSystemCommands(CommandManager& mgr) {
+    mgr.registerCommand(&sClearFaultCmd);
+    mgr.registerCommand(&sCalCmd);
+    mgr.registerCommand(&sRawCmd);
+    mgr.registerCommand(&sVZeroCmd);
+    mgr.registerCommand(&sSupplyStatusCmd);
+    mgr.registerCommand(&sRebootCmd);
+}

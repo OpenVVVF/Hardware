@@ -149,12 +149,26 @@ public:
     }
 };
 
-CommandInterface* makeOcSetCommand()             { static OcSetCommand inst; return &inst; }
-CommandInterface* makeHwOcSetCommand()           { static HwOcSetCommand inst; return &inst; }
-CommandInterface* makeMaxCfgOvCommand()          { static MaxCfgOvCommand inst; return &inst; }
-CommandInterface* makeMaxCfgUvCommand()          { static MaxCfgUvCommand inst; return &inst; }
-CommandInterface* makeMaxCfgStatusCommand()      { static MaxCfgStatusCommand inst; return &inst; }
-CommandInterface* makeMaxCfgThresholdsCommand()  { static MaxCfgThresholdsCommand inst; return &inst; }
-CommandInterface* makeMaxCfgFilterClearCommand() { static MaxCfgFilterClearCommand inst; return &inst; }
-CommandInterface* makeMaxCfgRawCommand()         { static MaxCfgRawCommand inst; return &inst; }
-CommandInterface* makeMaxCfgFilteredCommand()    { static MaxCfgFilteredCommand inst; return &inst; }
+static OcSetCommand             sOcSetCmd;
+static HwOcSetCommand           sHwOcSetCmd;
+static MaxCfgOvCommand          sMaxCfgOvCmd;
+static MaxCfgUvCommand          sMaxCfgUvCmd;
+static MaxCfgStatusCommand      sMaxCfgStatusCmd;
+static MaxCfgThresholdsCommand  sMaxCfgThresholdsCmd;
+static MaxCfgFilterClearCommand sMaxCfgFilterClearCmd;
+static MaxCfgRawCommand         sMaxCfgRawCmd;
+static MaxCfgFilteredCommand    sMaxCfgFilteredCmd;
+
+#include "Inverter/Command/CommandManager.h"
+
+void registerSensorCommands(CommandManager& mgr) {
+    mgr.registerCommand(&sOcSetCmd);
+    mgr.registerCommand(&sHwOcSetCmd);
+    mgr.registerCommand(&sMaxCfgOvCmd);
+    mgr.registerCommand(&sMaxCfgUvCmd);
+    mgr.registerCommand(&sMaxCfgStatusCmd);
+    mgr.registerCommand(&sMaxCfgThresholdsCmd);
+    mgr.registerCommand(&sMaxCfgFilterClearCmd);
+    mgr.registerCommand(&sMaxCfgRawCmd);
+    mgr.registerCommand(&sMaxCfgFilteredCmd);
+}

@@ -43,6 +43,14 @@ public:
     }
 };
 
-CommandInterface* makeFaultListCommand()  { static FaultListCommand inst; return &inst; }
-CommandInterface* makeFaultClearCommand() { static FaultClearCommand inst; return &inst; }
-CommandInterface* makeFaultTestCommand()  { static FaultTestCommand inst; return &inst; }
+static FaultListCommand  sFaultListCmd;
+static FaultClearCommand sFaultClearCmd;
+static FaultTestCommand  sFaultTestCmd;
+
+#include "Inverter/Command/CommandManager.h"
+
+void registerFaultCommands(CommandManager& mgr) {
+    mgr.registerCommand(&sFaultListCmd);
+    mgr.registerCommand(&sFaultClearCmd);
+    mgr.registerCommand(&sFaultTestCmd);
+}

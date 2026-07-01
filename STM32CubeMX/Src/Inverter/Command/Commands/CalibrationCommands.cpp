@@ -244,19 +244,40 @@ public:
     }
 };
 
-CommandInterface* makePolesCommand()             { static PolesCommand inst; return &inst; }
-CommandInterface* makeEncoderCalStartCommand()   { static EncoderCalStartCommand inst; return &inst; }
-CommandInterface* makeEncoderCalStopCommand()    { static EncoderCalStopCommand inst; return &inst; }
-CommandInterface* makeCalPolesCommand()          { static CalPolesCommand inst; return &inst; }
-CommandInterface* makeEncOffsetStartCommand()    { static EncOffsetStartCommand inst; return &inst; }
-CommandInterface* makeEncOffsetStatusCommand()   { static EncOffsetStatusCommand inst; return &inst; }
-CommandInterface* makeResCalStartAllCommand()    { static ResCalStartAllCommand inst; return &inst; }
-CommandInterface* makeResCalStartUvCommand()     { static ResCalStartUvCommand inst; return &inst; }
-CommandInterface* makeResCalStartUwCommand()     { static ResCalStartUwCommand inst; return &inst; }
-CommandInterface* makeResCalStartVwCommand()     { static ResCalStartVwCommand inst; return &inst; }
-CommandInterface* makeResCalIctrlAllCommand()    { static ResCalIctrlAllCommand inst; return &inst; }
-CommandInterface* makeResCalIctrlUvCommand()     { static ResCalIctrlUvCommand inst; return &inst; }
-CommandInterface* makeResCalIctrlUwCommand()     { static ResCalIctrlUwCommand inst; return &inst; }
-CommandInterface* makeResCalIctrlVwCommand()     { static ResCalIctrlVwCommand inst; return &inst; }
-CommandInterface* makeResCalStopCommand()        { static ResCalStopCommand inst; return &inst; }
-CommandInterface* makeResCalStatusCommand()      { static ResCalStatusCommand inst; return &inst; }
+static PolesCommand             sPolesCmd;
+static EncoderCalStartCommand   sEncoderCalStartCmd;
+static EncoderCalStopCommand    sEncoderCalStopCmd;
+static CalPolesCommand          sCalPolesCmd;
+static EncOffsetStartCommand    sEncOffsetStartCmd;
+static EncOffsetStatusCommand   sEncOffsetStatusCmd;
+static ResCalStartAllCommand    sResCalStartAllCmd;
+static ResCalStartUvCommand     sResCalStartUvCmd;
+static ResCalStartUwCommand     sResCalStartUwCmd;
+static ResCalStartVwCommand     sResCalStartVwCmd;
+static ResCalIctrlAllCommand    sResCalIctrlAllCmd;
+static ResCalIctrlUvCommand     sResCalIctrlUvCmd;
+static ResCalIctrlUwCommand     sResCalIctrlUwCmd;
+static ResCalIctrlVwCommand     sResCalIctrlVwCmd;
+static ResCalStopCommand        sResCalStopCmd;
+static ResCalStatusCommand      sResCalStatusCmd;
+
+#include "Inverter/Command/CommandManager.h"
+
+void registerCalibrationCommands(CommandManager& mgr) {
+    mgr.registerCommand(&sPolesCmd);
+    mgr.registerCommand(&sEncoderCalStartCmd);
+    mgr.registerCommand(&sEncoderCalStopCmd);
+    mgr.registerCommand(&sCalPolesCmd);
+    mgr.registerCommand(&sEncOffsetStartCmd);
+    mgr.registerCommand(&sEncOffsetStatusCmd);
+    mgr.registerCommand(&sResCalStartAllCmd);
+    mgr.registerCommand(&sResCalStartUvCmd);
+    mgr.registerCommand(&sResCalStartUwCmd);
+    mgr.registerCommand(&sResCalStartVwCmd);
+    mgr.registerCommand(&sResCalIctrlAllCmd);
+    mgr.registerCommand(&sResCalIctrlUvCmd);
+    mgr.registerCommand(&sResCalIctrlUwCmd);
+    mgr.registerCommand(&sResCalIctrlVwCmd);
+    mgr.registerCommand(&sResCalStopCmd);
+    mgr.registerCommand(&sResCalStatusCmd);
+}

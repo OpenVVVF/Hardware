@@ -1,6 +1,8 @@
 // CommandManager.cpp
 #include "Inverter/Command/CommandManager.h"
 
+#include "Inverter/Telemetry.h"
+
 #include <cstdio>
 #include <cstring>
 #include <cctype>
@@ -22,13 +24,9 @@ void CommandManager::setContext(CommandContext& ctx) {
     context_ = &ctx;
 }
 
-bool CommandManager::nameEquals(const char* a, const char* b) {
-    return strcasecmp(a, b) == 0;
-}
-
 CommandInterface* CommandManager::findCommand(const char* name) {
     for (size_t i = 0; i < count_; i++) {
-        if (nameEquals(name, commands_[i]->getCommandName())) {
+        if (strcasecmp(name, commands_[i]->getCommandName()) == 0) {
             return commands_[i];
         }
     }

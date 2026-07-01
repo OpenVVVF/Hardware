@@ -9,8 +9,6 @@
 #include "CommandContext.h"
 #include <array>
 #include <cstddef>
-#include <cstdint>
-#include <Telemetry.h>
 
 class CommandManager {
 public:

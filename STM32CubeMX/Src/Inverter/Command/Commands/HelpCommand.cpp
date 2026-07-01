@@ -11,7 +11,8 @@ public:
     }
 };
 
-CommandInterface* makeHelpCommand() {
-    static HelpCommand inst;
-    return &inst;
+static HelpCommand sHelpCmd;
+
+void registerHelpCommand(CommandManager& mgr) {
+    mgr.registerCommand(&sHelpCmd);
 }
