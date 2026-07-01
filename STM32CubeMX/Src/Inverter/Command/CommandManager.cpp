@@ -60,7 +60,7 @@ void CommandManager::processLine(const char* line) {
     while (*line && isspace((unsigned char)*line)) line++;
     if (*line == '\0') return;
 
-    char cmdName[16];
+    char cmdName[64];
     const char* rest = nextToken(line, cmdName, sizeof(cmdName));
 
     CommandInterface* cmd = findCommand(cmdName);
@@ -104,7 +104,7 @@ void CommandManager::processLine(const char* line) {
         values[i] = {val, (int32_t)val, true};
     }
 
-    char extra[16];
+    char extra[32];
     rest = nextToken(rest, extra, sizeof(extra));
     if (extra[0] != '\0') {
         Telemetry::printf("[SHELL] Error: Too many arguments. Expected %d, got more.", argc);
