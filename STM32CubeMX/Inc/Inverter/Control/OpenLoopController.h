@@ -78,7 +78,7 @@ private:
     void applyModulation(float modulation_index);
     float maxPhaseCurrentMagnitude() const;
 
-    static constexpr float DEFAULT_RAMP_CURRENT_LIMIT_A = 30.0f;
+    static constexpr float DEFAULT_RAMP_CURRENT_LIMIT_A = 600.0f;
 
     bool m_initialized = false;
     bool m_running = false;

@@ -180,6 +180,12 @@ void CommandShell::poll() {
                     GateDriver_EnablePower(true);
                     HAL_Delay(50);
 
+                    /* Remember whether the gate-driver outputs were enabled before
+                     * the clear so we can restore that state afterwards.  The goal
+                     * is to clear latches without starting PWM switching. */
+                    const bool outputs_were_enabled =
+                        (HAL_GPIO_ReadPin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin) == GPIO_PIN_SET);
+
                     /* Assert reset to guarantee the NCD57100 DESAT fault latch is
                      * cleared, then release it so /RDY and /FLT can be read. */
                     GateDriver_DisableOutputs();
@@ -187,8 +193,11 @@ void CommandShell::poll() {
                     GateDriver_EnableOutputs();
                     HAL_Delay(10);
 
+                    /* Clear the timer break flag, but do NOT re-enable MOE here.
+                     * PWM_ClearFault() would turn the outputs back on; we want to
+                     * stay in the same switching state and let the user run start()
+                     * explicitly when they are ready. */
                     PWM_ClearBreakFlag();
-                    PWM_ClearFault();
                     FaultManager::instance().clearAll();
 
                     /* The isolated ADC may have a latched comparator interrupt and/or
@@ -201,13 +210,19 @@ void CommandShell::poll() {
                     __HAL_GPIO_EXTI_CLEAR_IT(VSENSE_ISO_ADC_INTERRUPT_Pin);
                     HAL_NVIC_ClearPendingIRQ(EXTI1_IRQn);
 
+                    /* Restore the previous gate-driver output state. */
+                    if (!outputs_were_enabled) {
+                        GateDriver_DisableOutputs();
+                    }
+
                     bool ready = GateDriver_IsReady();
                     bool fault = GateDriver_IsFault();
                     uint32_t bdtr = TIM1->BDTR;
-                    Telemetry::printf("[SHELL] clearfault done | ready=%s fault=%s MOE=%lu",
+                    Telemetry::printf("[SHELL] clearfault done | ready=%s fault=%s MOE=%lu outputs=%s",
                                       ready ? "Y" : "N",
                                       fault ? "Y" : "N",
-                                      (bdtr >> 15) & 1UL);
+                                      (bdtr >> 15) & 1UL,
+                                      outputs_were_enabled ? "Y" : "N");
                 }
                 else if (std::strcmp(argv[0], "cal") == 0) {
                     if (ol.isRunning()) {
