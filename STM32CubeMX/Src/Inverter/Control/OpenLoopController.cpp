@@ -26,7 +26,24 @@ OpenLoopController& openLoopController() {
     return s_instance;
 }
 
-void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_ms) {
+float OpenLoopController::maxPhaseCurrentMagnitude() const {
+    const float iu = phaseCurrentADC().lastU();
+    const float iv = phaseCurrentADC().lastV();
+    const float iw = -(iu + iv);
+    float max_i = std::fabs(iu);
+    if (std::fabs(iv) > max_i) max_i = std::fabs(iv);
+    if (std::fabs(iw) > max_i) max_i = std::fabs(iw);
+    return max_i;
+}
+
+void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_ms,
+                                        float current_limit_a) {
+    if (current_limit_a <= 0.0f) {
+        current_limit_a = DEFAULT_RAMP_CURRENT_LIMIT_A;
+    }
+    const float resume_threshold_a = 0.8f * current_limit_a;
+    constexpr uint32_t PAUSE_TIMEOUT_MS = 200U;
+
     const int steps = 20;
     const int step_ms = static_cast<int>(ramp_ms / steps);
     if (step_ms <= 0) {
@@ -39,9 +56,54 @@ void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_
          * Critical faults are handled by FaultManager::executeSafetyActions()
          * which forces a TIM1 break and disables the gate driver power. */
         float m = from_m + (to_m - from_m) * static_cast<float>(i) / static_cast<float>(steps);
+
+        /* Current-limited ramp: do not increase modulation if any phase
+         * current is above the limit.  Wait until it drops, but abort if it
+         * stays high too long. */
+        uint32_t pause_start_ms = 0;
+        bool paused = false;
+        while (true) {
+            const float i_max = maxPhaseCurrentMagnitude();
+            if (!paused && i_max <= current_limit_a) {
+                break;
+            }
+            if (paused && i_max <= resume_threshold_a) {
+                Telemetry::printf("[OL] ramp resumed: I=%.2f A limit=%.2f A",
+                                  static_cast<double>(i_max),
+                                  static_cast<double>(current_limit_a));
+                break;
+            }
+            if (!paused) {
+                paused = true;
+                pause_start_ms = HAL_GetTick();
+                Telemetry::printf("[OL] ramp paused: I=%.2f A limit=%.2f A",
+                                  static_cast<double>(i_max),
+                                  static_cast<double>(current_limit_a));
+            }
+            if ((HAL_GetTick() - pause_start_ms) >= PAUSE_TIMEOUT_MS) {
+                Telemetry::printf("[OL] ramp aborted: current stayed above limit");
+                stop();
+                FaultManager::instance().raise(FaultSource::PhaseOvercurrent,
+                                               FaultReason::PhaseOvercurrentSoftware);
+                return;
+            }
+            HAL_Delay(1);
+        }
+
         PWM_SetSPWMParams(m_freq_hz, m);
         HAL_Delay(step_ms);
     }
+
+    Telemetry::printf("[OL] ramp done");
+}
+
+void OpenLoopController::setRampCurrentLimit(float amps) {
+    if (amps < 0.0f) amps = 0.0f;
+    m_ramp_current_limit_a = amps;
+}
+
+float OpenLoopController::rampCurrentLimit() const {
+    return m_ramp_current_limit_a;
 }
 
 void OpenLoopController::applyModulation(float modulation_index) {
@@ -141,10 +203,12 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
 
     PoleEstimator::instance().setElectricalFrequency(m_freq_hz);
 
-    /* Start the angle ramp at zero modulation, then ramp voltage up. */
+    /* Start the angle ramp at zero modulation, then ramp voltage up slowly
+     * with a current limit so a low-resistance motor does not see a big
+     * inrush spike. */
     PWM_StartSPWM(m_freq_hz, 0.0f);
     m_running = true;
-    rampModulation(0.0f, m_mod_idx, 100U);
+    rampModulation(0.0f, m_mod_idx, 1000U, m_ramp_current_limit_a);
 
     if (!m_running) {
         /* rampModulation aborted because a fault appeared during the ramp. */
@@ -197,7 +261,7 @@ void OpenLoopController::setModulationIndex(float modulation_index) {
     if (m_running) {
         float old_m = m_mod_idx;
         m_mod_idx = modulation_index;
-        rampModulation(old_m, m_mod_idx, 100U);
+        rampModulation(old_m, m_mod_idx, 500U, m_ramp_current_limit_a);
     } else {
         m_mod_idx = modulation_index;
     }

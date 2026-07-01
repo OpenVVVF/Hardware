@@ -414,6 +414,16 @@ void CommandShell::poll() {
                         Telemetry::printf("[SHELL] usage: fault list | clear | test <name>");
                     }
                 }
+                else if (std::strcmp(argv[0], "rclimit") == 0) {
+                    if (argc < 2) {
+                        Telemetry::printf("[SHELL] usage: rclimit <amps>  (ramp current limit)");
+                    } else {
+                        float amps = std::strtof(argv[1], nullptr);
+                        if (amps < 0.0f) amps = 0.0f;
+                        openLoopController().setRampCurrentLimit(amps);
+                        Telemetry::printf("[SHELL] ramp current limit set to %.3f A", amps);
+                    }
+                }
                 else if (std::strcmp(argv[0], "ocset") == 0) {
                     if (argc < 2) {
                         Telemetry::printf("[SHELL] usage: ocset <amps>  (0 disables)");
@@ -511,7 +521,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | encoffset start <poles> <enc_cycles> [breakaway_mod] | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | rclimit amps | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | encoffset start <poles> <enc_cycles> [breakaway_mod] | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of

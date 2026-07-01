@@ -93,6 +93,9 @@ private:
     float encoderMechanicalAngle() const;
     float fieldMechanicalAngle() const;
     static float wrapOffset(float offset, float period);
+    void resetRampState();
+    float computeRampedMod(uint32_t now_ms) const;
+    float updateCurrentLimitedSPWM(float frequency_hz, uint32_t now_ms);
 
     State    m_state = State::IDLE;
     float    m_poles = 0.0f;
@@ -101,6 +104,13 @@ private:
     float    m_mech_deg_per_motor_elec_cycle = 0.0f;
     float    m_mod = 0.0f;
     float    m_breakaway_mod = 0.0f;
+    float    m_warmup_target_mod = 0.0f;
+    float    m_ramp_target_mod = 0.0f;
+    float    m_applied_mod = 0.0f;
+    uint32_t m_ramp_start_ms = 0;
+    uint32_t m_ramp_duration_ms = 0;
+    uint32_t m_ramp_pause_start_ms = 0;
+    bool     m_ramp_paused = false;
 
     /* Encoder tracking. */
     float    m_last_angle = 0.0f;

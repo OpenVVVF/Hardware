@@ -41,7 +41,7 @@ public:
     void setFrequency(float freq_hz);
 
     /**
-     * @brief Change modulation index while running (smooth 100 ms ramp).
+     * @brief Change modulation index while running (smooth current-limited ramp).
      */
     void setModulationIndex(float modulation_index);
 
@@ -63,14 +63,28 @@ public:
     float frequencyHz() const { return m_freq_hz; }
     float modulationIndex() const { return m_mod_idx; }
 
+    /**
+     * @brief Set the phase-current limit used during modulation ramps [A].
+     */
+    void setRampCurrentLimit(float amps);
+
+    /**
+     * @brief Current phase-current limit used during modulation ramps [A].
+     */
+    float rampCurrentLimit() const;
+
 private:
-    void rampModulation(float from_m, float to_m, uint32_t ramp_ms);
+    void rampModulation(float from_m, float to_m, uint32_t ramp_ms, float current_limit_a);
     void applyModulation(float modulation_index);
+    float maxPhaseCurrentMagnitude() const;
+
+    static constexpr float DEFAULT_RAMP_CURRENT_LIMIT_A = 30.0f;
 
     bool m_initialized = false;
     bool m_running = false;
     float m_freq_hz = 0.0f;
     float m_mod_idx = 0.0f;
+    float m_ramp_current_limit_a = DEFAULT_RAMP_CURRENT_LIMIT_A;
 };
 
 /**
