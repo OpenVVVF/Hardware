@@ -24,3 +24,7 @@ This file tracks known gaps and deferred work that should be addressed before hi
 
 - DC-link voltage scaling (default 1516.0) has been measured and is correct.
 - TIM1 timer clock assumption (`TIM1_CLOCK_HZ = 275000000UL`) and 10 kHz switching frequency are acceptable as-is.
+
+## Encoder Offset Calibration Notes
+
+- See `docs/EncoderOffsetCalibration.md` for a detailed write-up of a tracker-reference bug that caused `encoffset` to return ~58° instead of the true ~13°, and the fix (use raw absolute encoder angle + field-angle unwrapping, not the movement tracker).
