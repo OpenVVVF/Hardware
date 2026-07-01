@@ -58,7 +58,7 @@ public:
      */
     void update();
 
-    bool isRunning() const { return m_running; }
+    bool isRunning() const { return m_running || m_starting; }
     bool isInitialized() const { return m_initialized; }
     float frequencyHz() const { return m_freq_hz; }
     float modulationIndex() const { return m_mod_idx; }
@@ -74,17 +74,52 @@ public:
     float rampCurrentLimit() const;
 
 private:
-    void rampModulation(float from_m, float to_m, uint32_t ramp_ms, float current_limit_a);
+    enum class RampState {
+        IDLE,
+        RAMPING
+    };
+
+    enum class StartupState {
+        IDLE,
+        RESET_ASSERT,
+        RESET_RELEASE,
+        WAIT_READY,
+        STARTED
+    };
+
+    void startRamp(float from_m, float to_m, uint32_t ramp_ms,
+                   float current_limit_a, bool enable_pole_estimator_on_done);
+    void stepRamp(uint32_t now_ms);
+    void finishRamp();
+    void cancelRamp();
+    void stepStartup(uint32_t now_ms);
     void applyModulation(float modulation_index);
     float maxPhaseCurrentMagnitude() const;
 
     static constexpr float DEFAULT_RAMP_CURRENT_LIMIT_A = 600.0f;
+    static constexpr uint32_t RAMP_PAUSE_TIMEOUT_MS = 200U;
 
     bool m_initialized = false;
     bool m_running = false;
+    bool m_starting = false;
     float m_freq_hz = 0.0f;
-    float m_mod_idx = 0.0f;
+    float m_mod_idx = 0.0f;        /* commanded/target modulation index */
+    float m_applied_mod_idx = 0.0f; /* modulation actually applied by ramp */
     float m_ramp_current_limit_a = DEFAULT_RAMP_CURRENT_LIMIT_A;
+
+    RampState m_ramp_state = RampState::IDLE;
+    float m_ramp_from = 0.0f;
+    float m_ramp_to = 0.0f;
+    uint32_t m_ramp_start_ms = 0;
+    uint32_t m_ramp_duration_ms = 0;
+    float m_ramp_active_limit = 0.0f;
+    bool m_ramp_paused = false;
+    uint32_t m_ramp_pause_start_ms = 0;
+    bool m_ramp_enable_pole_estimator = false;
+
+    StartupState m_startup_state = StartupState::IDLE;
+    uint32_t m_startup_start_ms = 0;
+    uint32_t m_startup_wait_until_ms = 0;
 };
 
 /**

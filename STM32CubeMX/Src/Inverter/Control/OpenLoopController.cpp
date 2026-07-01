@@ -36,65 +36,103 @@ float OpenLoopController::maxPhaseCurrentMagnitude() const {
     return max_i;
 }
 
-void OpenLoopController::rampModulation(float from_m, float to_m, uint32_t ramp_ms,
-                                        float current_limit_a) {
-    if (current_limit_a <= 0.0f) {
-        current_limit_a = DEFAULT_RAMP_CURRENT_LIMIT_A;
-    }
-    const float resume_threshold_a = 0.8f * current_limit_a;
-    constexpr uint32_t PAUSE_TIMEOUT_MS = 200U;
+void OpenLoopController::startRamp(float from_m, float to_m, uint32_t ramp_ms,
+                                   float current_limit_a,
+                                   bool enable_pole_estimator_on_done) {
+    m_ramp_from = from_m;
+    m_ramp_to = to_m;
+    m_ramp_duration_ms = ramp_ms;
+    m_ramp_active_limit = (current_limit_a > 0.0f) ? current_limit_a : DEFAULT_RAMP_CURRENT_LIMIT_A;
+    m_ramp_enable_pole_estimator = m_ramp_enable_pole_estimator || enable_pole_estimator_on_done;
+    m_ramp_start_ms = HAL_GetTick();
+    m_ramp_paused = false;
+    m_ramp_pause_start_ms = 0;
+    m_ramp_state = RampState::RAMPING;
 
-    const int steps = 20;
-    const int step_ms = static_cast<int>(ramp_ms / steps);
-    if (step_ms <= 0) {
-        PWM_SetSPWMParams(m_freq_hz, to_m);
+    if (m_ramp_duration_ms == 0U || std::fabs(from_m - to_m) < 1e-4f) {
+        m_applied_mod_idx = to_m;
+        PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+        finishRamp();
+    }
+}
+
+void OpenLoopController::stepRamp(uint32_t now_ms) {
+    if (m_ramp_state != RampState::RAMPING) {
         return;
     }
 
-    for (int i = 1; i <= steps; ++i) {
-        /* High/Warning faults do not abort a running ramp under Option A.
-         * Critical faults are handled by FaultManager::executeSafetyActions()
-         * which forces a TIM1 break and disables the gate driver power. */
-        float m = from_m + (to_m - from_m) * static_cast<float>(i) / static_cast<float>(steps);
+    uint32_t elapsed = now_ms - m_ramp_start_ms;
+    if (elapsed > m_ramp_duration_ms) {
+        elapsed = m_ramp_duration_ms;
+    }
 
-        /* Current-limited ramp: do not increase modulation if any phase
-         * current is above the limit.  Wait until it drops, but abort if it
-         * stays high too long. */
-        uint32_t pause_start_ms = 0;
-        bool paused = false;
-        while (true) {
-            const float i_max = maxPhaseCurrentMagnitude();
-            if (!paused && i_max <= current_limit_a) {
-                break;
-            }
-            if (paused && i_max <= resume_threshold_a) {
-                Telemetry::printf("[OL] ramp resumed: I=%.2f A limit=%.2f A",
-                                  static_cast<double>(i_max),
-                                  static_cast<double>(current_limit_a));
-                break;
-            }
-            if (!paused) {
-                paused = true;
-                pause_start_ms = HAL_GetTick();
-                Telemetry::printf("[OL] ramp paused: I=%.2f A limit=%.2f A",
-                                  static_cast<double>(i_max),
-                                  static_cast<double>(current_limit_a));
-            }
-            if ((HAL_GetTick() - pause_start_ms) >= PAUSE_TIMEOUT_MS) {
-                Telemetry::printf("[OL] ramp aborted: current stayed above limit");
-                stop();
-                FaultManager::instance().raise(FaultSource::PhaseOvercurrent,
-                                               FaultReason::PhaseOvercurrentSoftware);
-                return;
-            }
-            HAL_Delay(1);
+    float desired_m = m_ramp_from + (m_ramp_to - m_ramp_from) *
+                          static_cast<float>(elapsed) /
+                          static_cast<float>(m_ramp_duration_ms);
+
+    const float current_limit = m_ramp_active_limit;
+    const float resume_threshold = 0.8f * current_limit;
+    const float i_max = maxPhaseCurrentMagnitude();
+    const bool trying_to_increase = (desired_m > m_applied_mod_idx);
+
+    if (i_max > current_limit && trying_to_increase) {
+        if (!m_ramp_paused) {
+            m_ramp_paused = true;
+            m_ramp_pause_start_ms = now_ms;
+            Telemetry::printf("[OL] ramp paused: I=%.2f A limit=%.2f A",
+                              static_cast<double>(i_max),
+                              static_cast<double>(current_limit));
         }
+        desired_m = m_applied_mod_idx;
+    } else if (m_ramp_paused && i_max <= resume_threshold) {
+        /* Extend the ramp timeline by the pause duration so the ramp does not
+         * jump forward when current drops. */
+        m_ramp_start_ms += (now_ms - m_ramp_pause_start_ms);
+        m_ramp_paused = false;
+        m_applied_mod_idx = desired_m;
+        Telemetry::printf("[OL] ramp resumed: I=%.2f A limit=%.2f A",
+                          static_cast<double>(i_max),
+                          static_cast<double>(current_limit));
+    } else if (!m_ramp_paused) {
+        m_applied_mod_idx = desired_m;
+    }
 
-        PWM_SetSPWMParams(m_freq_hz, m);
-        HAL_Delay(step_ms);
+    if (m_ramp_paused && (now_ms - m_ramp_pause_start_ms) >= RAMP_PAUSE_TIMEOUT_MS) {
+        Telemetry::printf("[OL] ramp aborted: current stayed above limit");
+        cancelRamp();
+        stop();
+        FaultManager::instance().raise(FaultSource::PhaseOvercurrent,
+                                       FaultReason::PhaseOvercurrentSoftware);
+        return;
+    }
+
+    PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+
+    if (elapsed >= m_ramp_duration_ms && !m_ramp_paused) {
+        finishRamp();
+    }
+}
+
+void OpenLoopController::finishRamp() {
+    m_ramp_state = RampState::IDLE;
+    m_ramp_paused = false;
+    m_applied_mod_idx = m_ramp_to;
+    PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+
+    if (m_ramp_enable_pole_estimator) {
+        m_ramp_enable_pole_estimator = false;
+        Telemetry::printf("[OL] START f=%.2f m=%.3f", m_freq_hz, m_mod_idx);
+        PoleEstimator::instance().setEnabled(
+            true, encoderADC().lastRawSin(), encoderADC().lastRawCos());
     }
 
     Telemetry::printf("[OL] ramp done");
+}
+
+void OpenLoopController::cancelRamp() {
+    m_ramp_state = RampState::IDLE;
+    m_ramp_paused = false;
+    m_ramp_enable_pole_estimator = false;
 }
 
 void OpenLoopController::setRampCurrentLimit(float amps) {
@@ -110,7 +148,9 @@ void OpenLoopController::applyModulation(float modulation_index) {
     if (modulation_index < 0.0f) modulation_index = 0.0f;
     if (modulation_index > 1.154700538f) modulation_index = 1.154700538f;
     m_mod_idx = modulation_index;
-    PWM_SetSPWMParams(m_freq_hz, m_mod_idx);
+    m_applied_mod_idx = modulation_index;
+    cancelRamp();
+    PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
 }
 
 bool OpenLoopController::init() {
@@ -134,8 +174,11 @@ bool OpenLoopController::init() {
 
     m_initialized = true;
     m_running = false;
+    m_starting = false;
     m_freq_hz = 0.0f;
     m_mod_idx = 0.0f;
+    m_applied_mod_idx = 0.0f;
+    cancelRamp();
 
     Telemetry::printf("[OL] Init done. Outputs disabled until start.");
     return true;
@@ -147,7 +190,7 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
         return false;
     }
 
-    if (m_running) {
+    if (m_running || m_starting) {
         stop();
     }
 
@@ -161,69 +204,82 @@ bool OpenLoopController::start(float freq_hz, float modulation_index) {
         return false;
     }
 
-    /* Park at 50 % (zero vector) before enabling the gate driver. */
-    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
-    PWM_ClearFault();
-
-    /* Release gate-driver reset and wait for it to become ready. */
-    GateDriver_EnableOutputs();
-
-    bool ready = false;
-    bool fault = true;
-    for (int i = 0; i < 100; ++i) {
-        ready = GateDriver_IsReady();
-        fault = GateDriver_IsFault();
-        if (ready && !fault) break;
-        HAL_Delay(5);
-    }
-
-    if (!ready || fault) {
-        uint32_t bdtr = TIM1->BDTR;
-        uint32_t sr   = TIM1->SR;
-        Telemetry::printf(
-            "[OL] ERROR: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
-            ready ? "Y" : "N",
-            fault ? "Y" : "N",
-            (bdtr >> 15) & 1UL,
-            (sr >> 7) & 1UL,
-            (sr >> 6) & 1UL);
-        GateDriver_DisableOutputs();
-        FaultManager::instance().raise(FaultSource::GateDriverUvlo,
-                                       FaultReason::GateDriverNotReady);
-        return false;
-    }
-
-    /* Gate driver is ready; enable the PWM output channels.  The next SPWM
-     * update will drive the gate driver.  MOE was already enabled by
-     * PWM_ClearFault() above. */
-    PWM_Start();
-
     m_freq_hz = (freq_hz < 0.0f) ? 0.0f : freq_hz;
     m_mod_idx = (modulation_index < 0.0f) ? 0.0f : modulation_index;
+    m_applied_mod_idx = 0.0f;
 
     PoleEstimator::instance().setElectricalFrequency(m_freq_hz);
 
-    /* Start the angle ramp at zero modulation, then ramp voltage up slowly
-     * with a current limit so a low-resistance motor does not see a big
-     * inrush spike. */
-    PWM_StartSPWM(m_freq_hz, 0.0f);
-    m_running = true;
-    rampModulation(0.0f, m_mod_idx, 1000U, m_ramp_current_limit_a);
+    /* Begin a non-blocking startup sequence.  The actual gate-driver ready wait
+     * and voltage ramp are stepped from update() so telemetry keeps running. */
+    m_starting = true;
+    m_running = false;
+    m_startup_state = StartupState::RESET_ASSERT;
+    m_startup_start_ms = HAL_GetTick();
 
-    if (!m_running) {
-        /* rampModulation aborted because a fault appeared during the ramp. */
-        GateDriver_DisableOutputs();
-        return false;
-    }
+    /* Park at 50 % (zero vector) and assert gate-driver reset before we do
+     * anything. */
+    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
+    PWM_ClearFault();
+    GateDriver_DisableOutputs();
+    m_startup_wait_until_ms = HAL_GetTick() + 10U;
 
-    Telemetry::printf("[OL] START f=%.2f m=%.3f", m_freq_hz, m_mod_idx);
-
-    /* Start accumulating encoder mechanical cycles vs current zero crossings.
-     * Pass the standstill raw sin/cos so the estimator can learn its DC
-     * offsets without relying on the calibrated encoder angle. */
-    PoleEstimator::instance().setEnabled(
-        true, encoderADC().lastRawSin(), encoderADC().lastRawCos());
+    Telemetry::printf("[OL] startup sequence started");
     return true;
+}
+
+void OpenLoopController::stepStartup(uint32_t now_ms) {
+    switch (m_startup_state) {
+        case StartupState::RESET_ASSERT:
+            if ((int32_t)(now_ms - m_startup_wait_until_ms) >= 0) {
+                HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin,
+                                  GPIO_PIN_SET);
+                m_startup_wait_until_ms = now_ms + 10U;
+                m_startup_state = StartupState::RESET_RELEASE;
+            }
+            break;
+
+        case StartupState::RESET_RELEASE:
+            if ((int32_t)(now_ms - m_startup_wait_until_ms) >= 0) {
+                m_startup_state = StartupState::WAIT_READY;
+            }
+            break;
+
+        case StartupState::WAIT_READY: {
+            bool ready = GateDriver_IsReady();
+            bool fault = GateDriver_IsFault();
+            if (ready && !fault) {
+                PWM_Start();
+                PWM_StartSPWM(m_freq_hz, 0.0f);
+                startRamp(0.0f, m_mod_idx, 1000U, m_ramp_current_limit_a, true);
+                m_startup_state = StartupState::STARTED;
+                m_running = true;
+                m_starting = false;
+            } else if (fault || (now_ms - m_startup_start_ms) > 500U) {
+                uint32_t bdtr = TIM1->BDTR;
+                uint32_t sr   = TIM1->SR;
+                Telemetry::printf(
+                    "[OL] ERROR: gate driver not ready or fault latched | ready=%s fault=%s MOE=%lu BIF=%lu BKF=%lu",
+                    ready ? "Y" : "N",
+                    fault ? "Y" : "N",
+                    (bdtr >> 15) & 1UL,
+                    (sr >> 7) & 1UL,
+                    (sr >> 6) & 1UL);
+                GateDriver_DisableOutputs();
+                FaultManager::instance().raise(FaultSource::GateDriverUvlo,
+                                               FaultReason::GateDriverNotReady);
+                m_starting = false;
+                m_running = false;
+                m_startup_state = StartupState::IDLE;
+            }
+            break;
+        }
+
+        case StartupState::STARTED:
+        case StartupState::IDLE:
+        default:
+            break;
+    }
 }
 
 void OpenLoopController::stop() {
@@ -241,6 +297,9 @@ void OpenLoopController::stop() {
     PoleEstimator::instance().setEnabled(false);
 
     m_running = false;
+    m_starting = false;
+    m_startup_state = StartupState::IDLE;
+    cancelRamp();
     Telemetry::printf("[OL] STOPPED (coast)");
 }
 
@@ -250,20 +309,19 @@ void OpenLoopController::setFrequency(float freq_hz) {
 
     PoleEstimator::instance().setElectricalFrequency(m_freq_hz);
 
-    if (m_running) {
-        PWM_SetSPWMParams(m_freq_hz, m_mod_idx);
+    if (m_running || m_starting) {
+        PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
     }
 }
 
 void OpenLoopController::setModulationIndex(float modulation_index) {
     if (modulation_index < 0.0f) modulation_index = 0.0f;
+    m_mod_idx = modulation_index;
 
-    if (m_running) {
-        float old_m = m_mod_idx;
-        m_mod_idx = modulation_index;
-        rampModulation(old_m, m_mod_idx, 500U, m_ramp_current_limit_a);
+    if (m_running || m_starting) {
+        startRamp(m_applied_mod_idx, m_mod_idx, 500U, m_ramp_current_limit_a, false);
     } else {
-        m_mod_idx = modulation_index;
+        m_applied_mod_idx = m_mod_idx;
     }
 }
 
@@ -272,6 +330,13 @@ void OpenLoopController::setModulationIndexDirect(float modulation_index) {
 }
 
 void OpenLoopController::update() {
+    const uint32_t now_ms = HAL_GetTick();
+
+    if (m_starting) {
+        stepStartup(now_ms);
+        return;
+    }
+
     if (!m_running) {
         return;
     }
@@ -282,7 +347,10 @@ void OpenLoopController::update() {
         Telemetry::printf("[OL] Critical fault detected - stopping");
         FaultManager::instance().printSummary();
         stop();
+        return;
     }
+
+    stepRamp(now_ms);
 }
 
 } // namespace Inverter

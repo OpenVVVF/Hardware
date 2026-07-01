@@ -76,6 +76,8 @@ public:
 
     enum class State {
         IDLE,
+        HW_INIT,
+        WAIT_READY,
         WARMUP,
         FIND_VOLTAGE,
         OFFSET_ROTATE,

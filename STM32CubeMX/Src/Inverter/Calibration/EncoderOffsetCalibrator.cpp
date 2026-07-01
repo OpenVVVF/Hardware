@@ -46,6 +46,8 @@ EncoderOffsetCalibrator& EncoderOffsetCalibrator::instance() {
 static const char* stateName(EncoderOffsetCalibrator::State state) {
     switch (state) {
         case EncoderOffsetCalibrator::State::IDLE:          return "IDLE";
+        case EncoderOffsetCalibrator::State::HW_INIT:       return "HW_INIT";
+        case EncoderOffsetCalibrator::State::WAIT_READY:    return "WAIT_READY";
         case EncoderOffsetCalibrator::State::WARMUP:        return "WARMUP";
         case EncoderOffsetCalibrator::State::FIND_VOLTAGE:  return "FIND_VOLTAGE";
         case EncoderOffsetCalibrator::State::OFFSET_ROTATE: return "OFFSET_ROTATE";
@@ -165,51 +167,9 @@ bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_r
     m_unwrapped_angle = encoderADC().lastAngle();
     m_last_angle = encoderADC().lastAngle();
 
-    /* Enable gate-driver power and release reset so the drivers are ready. */
-    GateDriver_EnablePower(true);
-    HAL_Delay(50);
-    GateDriver_EnableOutputs();
-
-    bool ready = false;
-    bool fault = true;
-    for (int i = 0; i < 100; ++i) {
-        ready = GateDriver_IsReady();
-        fault = GateDriver_IsFault();
-        if (ready && !fault) break;
-        HAL_Delay(5);
-    }
-    if (!ready || fault) {
-        restoreHardware();
-        Telemetry::printf("[CAL ENC] ERROR: gate driver not ready or fault latched");
-        return false;
-    }
-
-    /* Start the three PWM channels.  The output stage is still controlled by
-     * the gate-driver reset line; this just makes the timer pins active. */
-    PWM_ClearFault();
-    PWM_StartPhase(0);
-    PWM_StartPhase(1);
-    PWM_StartPhase(2);
-
-    Telemetry::printf("[CAL ENC] started for %.0f poles (%.0f pole pairs), encoder_cycles=%.2f",
-                      static_cast<double>(m_poles),
-                      static_cast<double>(m_pole_pairs),
-                      static_cast<double>(m_encoder_cycles_per_rev));
-
-    if (m_breakaway_mod > 0.0f) {
-        m_mod = m_breakaway_mod * TORQUE_MARGIN;
-        if (m_mod > CAL_MAX_MOD) {
-            m_mod = CAL_MAX_MOD;
-        }
-        Telemetry::printf("[CAL ENC] using provided breakaway mod %.3f -> rotate mod %.3f",
-                          static_cast<double>(breakaway_mod),
-                          static_cast<double>(m_mod));
-        enterState(State::WARMUP);
-    } else {
-        m_mod = 0.0f;
-        enterState(State::FIND_VOLTAGE);
-    }
-
+    /* Kick off a non-blocking hardware startup sequence.  The gate-driver
+     * power/ready waits are handled in update() so telemetry keeps flowing. */
+    enterState(State::HW_INIT);
     return true;
 }
 
@@ -220,6 +180,20 @@ void EncoderOffsetCalibrator::enterState(State state) {
     Telemetry::printf("[CAL ENC DBG] enter %s", stateName(state));
 
     switch (state) {
+        case State::HW_INIT:
+            /* Enable gate-driver power and hold the driver in reset while the
+             * supply stabilizes.  The 50 ms wait is performed in update(). */
+            GateDriver_EnablePower(true);
+            HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin,
+                              GPIO_PIN_RESET);
+            break;
+
+        case State::WAIT_READY:
+            /* Release gate-driver reset and wait for /RDY in update(). */
+            HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin,
+                              GPIO_PIN_SET);
+            break;
+
         case State::FIND_VOLTAGE:
             PWM_ResetSPWMElectricalCycles();
             m_last_ramp_ms = HAL_GetTick();
@@ -367,6 +341,50 @@ void EncoderOffsetCalibrator::update() {
     const uint32_t now_ms = HAL_GetTick();
 
     switch (m_state) {
+        case State::HW_INIT: {
+            /* Wait for gate-driver power to stabilize, then release reset and
+             * wait for /RDY. */
+            if ((now_ms - m_state_start_ms) >= 50U) {
+                enterState(State::WAIT_READY);
+            }
+            break;
+        }
+
+        case State::WAIT_READY: {
+            bool ready = GateDriver_IsReady();
+            bool fault = GateDriver_IsFault();
+            if (ready && !fault) {
+                PWM_ClearFault();
+                PWM_StartPhase(0);
+                PWM_StartPhase(1);
+                PWM_StartPhase(2);
+
+                Telemetry::printf("[CAL ENC] started for %.0f poles (%.0f pole pairs), encoder_cycles=%.2f",
+                                  static_cast<double>(m_poles),
+                                  static_cast<double>(m_pole_pairs),
+                                  static_cast<double>(m_encoder_cycles_per_rev));
+
+                if (m_breakaway_mod > 0.0f) {
+                    m_mod = m_breakaway_mod * TORQUE_MARGIN;
+                    if (m_mod > CAL_MAX_MOD) {
+                        m_mod = CAL_MAX_MOD;
+                    }
+                    Telemetry::printf("[CAL ENC] using provided breakaway mod %.3f -> rotate mod %.3f",
+                                      static_cast<double>(m_breakaway_mod),
+                                      static_cast<double>(m_mod));
+                    enterState(State::WARMUP);
+                } else {
+                    m_mod = 0.0f;
+                    enterState(State::FIND_VOLTAGE);
+                }
+            } else if (fault || (now_ms - m_state_start_ms) > 500U) {
+                restoreHardware();
+                fail("[CAL ENC] ERROR: gate driver not ready or fault latched | ready=%s fault=%s",
+                     ready ? "Y" : "N", fault ? "Y" : "N");
+            }
+            break;
+        }
+
         case State::WARMUP: {
             const float applied_mod = updateCurrentLimitedSPWM(WARMUP_FREQUENCY_HZ, now_ms);
             if (isFailed()) {
