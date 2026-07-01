@@ -100,6 +100,9 @@ void PWM_SetDutyCycle(uint8_t phase, float duty_percent)
     __HAL_TIM_SET_COMPARE(&htim1, channel, pulse);
 }
 
+/* SVPWM linear over-modulation limit: 2/sqrt(3) */
+#define SVPWM_M_MAX 1.154700538f
+
 void PWM_SetThreePhaseDuty(float duty_u, float duty_v, float duty_w)
 {
     PWM_SetDutyCycle(0, duty_u);
@@ -107,8 +110,30 @@ void PWM_SetThreePhaseDuty(float duty_u, float duty_v, float duty_w)
     PWM_SetDutyCycle(2, duty_w);
 }
 
-/* SVPWM linear over-modulation limit: 2/sqrt(3) */
-#define SVPWM_M_MAX 1.154700538f
+void PWM_SetVoltageAngle(float angle_rad, float modulation_index)
+{
+    if (modulation_index < 0.0f) modulation_index = 0.0f;
+    if (modulation_index > SVPWM_M_MAX) modulation_index = SVPWM_M_MAX;
+
+    float u = modulation_index * sinf(angle_rad);
+    float v = modulation_index * sinf(angle_rad - TWO_PI / 3.0f);
+    float w = modulation_index * sinf(angle_rad + TWO_PI / 3.0f);
+
+    /* Min-max SVPWM zero-sequence injection. */
+    float v_max = (u > v) ? ((u > w) ? u : w) : ((v > w) ? v : w);
+    float v_min = (u < v) ? ((u < w) ? u : w) : ((v < w) ? v : w);
+    float v0 = -0.5f * (v_max + v_min);
+
+    float du = 50.0f + 50.0f * (u + v0);
+    float dv = 50.0f + 50.0f * (v + v0);
+    float dw = 50.0f + 50.0f * (w + v0);
+
+    if (du < 0.0f) du = 0.0f; else if (du > 100.0f) du = 100.0f;
+    if (dv < 0.0f) dv = 0.0f; else if (dv > 100.0f) dv = 100.0f;
+    if (dw < 0.0f) dw = 0.0f; else if (dw > 100.0f) dw = 100.0f;
+
+    PWM_SetThreePhaseDuty(du, dv, dw);
+}
 
 void PWM_StartSPWM(float fundamental_freq_hz, float modulation_index)
 {
@@ -189,6 +214,11 @@ uint32_t PWM_GetSPWMElectricalCycles(void)
 void PWM_ResetSPWMElectricalCycles(void)
 {
     spwm_elec_cycles = 0;
+}
+
+float PWM_GetSPWMAngle(void)
+{
+    return spwm_running ? spwm_angle : 0.0f;
 }
 
 void PWM_StartPhase(uint8_t phase)

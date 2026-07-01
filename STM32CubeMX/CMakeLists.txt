@@ -56,6 +56,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Control/FaultManager.cpp
     Src/Inverter/Control/FaultCallbacks.cpp
     Src/Inverter/Calibration/PoleCalibrator.cpp
+    Src/Inverter/Calibration/EncoderOffsetCalibrator.cpp
     Src/Inverter/Calibration/ResistanceCalibrator.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c

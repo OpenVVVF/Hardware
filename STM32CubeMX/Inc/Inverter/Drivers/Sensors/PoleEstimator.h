@@ -105,6 +105,7 @@ private:
 
     /* Manual encoder cycle calibration. */
     bool    m_manual_cal = false;
+    bool    m_manual_prev_enabled = false;
     float   m_manual_mech_cycles = 0.0f;
 
     /* Electrical cycle detection. */

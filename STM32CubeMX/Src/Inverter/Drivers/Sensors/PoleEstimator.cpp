@@ -49,10 +49,16 @@ void PoleEstimator::reset() {
 void PoleEstimator::startManualEncoderCal() {
     m_manual_mech_cycles = 0.0f;
     m_manual_cal = true;
+    /* The cycle-counting code lives inside onSample(), which bails out early if
+     * the estimator is disabled.  Force-enable it during a manual calibration so
+     * encoder zero crossings are counted even though the motor is not running. */
+    m_manual_prev_enabled = m_enabled;
+    m_enabled = true;
 }
 
 void PoleEstimator::stopManualEncoderCal() {
     m_manual_cal = false;
+    m_enabled = m_manual_prev_enabled;
 }
 
 void PoleEstimator::onSample(float iu, uint16_t raw_sin, uint16_t raw_cos) {

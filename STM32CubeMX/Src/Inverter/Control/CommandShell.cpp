@@ -2,6 +2,7 @@
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Calibration/PoleCalibrator.h"
+#include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
@@ -49,7 +50,7 @@ bool CommandShell::init() {
         return false;
     }
 
-    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | encoffset start <poles> <enc_cycles> [breakaway_mod] | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
     return true;
 }
 
@@ -272,6 +273,31 @@ void CommandShell::poll() {
                         cal.start();
                     }
                 }
+                else if (std::strcmp(argv[0], "encoffset") == 0) {
+                    EncoderOffsetCalibrator& cal = EncoderOffsetCalibrator::instance();
+                    if (ol.isRunning()) {
+                        Telemetry::printf("[SHELL] stop the motor before starting encoffset");
+                    } else if (cal.isActive()) {
+                        Telemetry::printf("[SHELL] calibration already running");
+                    } else if (argc < 2) {
+                        Telemetry::printf("[SHELL] usage: encoffset start <poles> [breakaway_mod] | status");
+                    } else if (std::strcmp(argv[1], "status") == 0) {
+                        Telemetry::printf("[SHELL] encoffset: samples=%d avg=%.3f deg",
+                                          cal.sampleCount(),
+                                          static_cast<double>(cal.averageOffset()));
+                    } else if (std::strcmp(argv[1], "start") == 0) {
+                        if (argc < 4) {
+                            Telemetry::printf("[SHELL] usage: encoffset start <poles> <enc_cycles> [breakaway_mod]");
+                        } else {
+                            const float poles = std::strtof(argv[2], nullptr);
+                            const float enc_cycles = std::strtof(argv[3], nullptr);
+                            const float breakaway_mod = (argc >= 5) ? std::strtof(argv[4], nullptr) : 0.0f;
+                            cal.start(poles, enc_cycles, breakaway_mod);
+                        }
+                    } else {
+                        Telemetry::printf("[SHELL] usage: encoffset start <poles> <enc_cycles> [breakaway_mod] | status");
+                    }
+                }
                 else if (std::strcmp(argv[0], "rescal") == 0) {
                     if (argc < 2 || std::strcmp(argv[1], "status") == 0) {
                         ResistanceCalibrator& rc = ResistanceCalibrator::instance();
@@ -485,7 +511,7 @@ void CommandShell::poll() {
                     }
                 }
                 else if (std::strcmp(argv[0], "help") == 0) {
-                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
+                    Telemetry::printf("[SHELL] Commands: start f m | stop | freq f | mod m | status | clearfault | fault list/clear/test | cal | raw | vzero | maxcfg ov/uv/thresholds/status/filterclear/raw/filtered | ocset amps | hwocset amps | supply status | poles | encodercal start/stop | calpoles | encoffset start <poles> <enc_cycles> [breakaway_mod] | rescal start [uv|uw|vw] <bus_pct> [max_a] | rescal ictrl [uv|uw|vw] <current_a> [oc_limit_a] | rescal stop | rescal status | help");
                 }
                 else {
                     /* Unknown but printable command: tell the user instead of
