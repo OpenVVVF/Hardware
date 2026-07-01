@@ -61,7 +61,9 @@ public:
      * @brief Average encoder offset in mechanical degrees after a successful run.
      *
      * The offset is the mechanical encoder angle that corresponds to the
-     * U-high electrical vector.  It is wrapped into [0, 360).
+     * U-high electrical vector.  For a motor with N pole pairs this is only
+     * unique modulo 360/N mechanical degrees, so the result is wrapped into
+     * [0, 360 / pole_pairs).
      */
     float averageOffset() const { return m_average_offset; }
 

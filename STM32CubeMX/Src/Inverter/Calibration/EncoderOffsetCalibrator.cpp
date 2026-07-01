@@ -260,15 +260,16 @@ void EncoderOffsetCalibrator::accumulateOffsetSample() {
                        ? (encoder_mech_deg + field_mech_deg)
                        : (encoder_mech_deg - field_mech_deg);
 
-    /* The offset is constant modulo 360°.  Keep successive samples in the
-     * same 360° branch so a 0/360 boundary does not corrupt the average. */
+    /* The offset is only unique modulo (360° / pole_pairs) because the
+     * motor has multiple pole pairs.  Keep successive samples in the same
+     * branch so a boundary does not corrupt the average. */
     if (m_sample_count > 0) {
-        const float half_period = 180.0f;
+        const float half_period = 0.5f * m_mech_deg_per_motor_elec_cycle;
         while ((offset - m_last_offset) > half_period) {
-            offset -= 360.0f;
+            offset -= m_mech_deg_per_motor_elec_cycle;
         }
         while ((m_last_offset - offset) > half_period) {
-            offset += 360.0f;
+            offset += m_mech_deg_per_motor_elec_cycle;
         }
     }
 
@@ -429,7 +430,7 @@ void EncoderOffsetCalibrator::update() {
                 }
                 const float avg_offset =
                     wrapOffset(static_cast<float>(m_sum_offset / static_cast<double>(m_sample_count)),
-                               360.0f);
+                               m_mech_deg_per_motor_elec_cycle);
                 m_average_offset = avg_offset;
                 restoreHardware();
                 Telemetry::printf("[CAL ENC] DONE: avg=%.3f deg samples=%d revs=%.1f",
