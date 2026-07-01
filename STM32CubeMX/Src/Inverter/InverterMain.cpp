@@ -82,7 +82,10 @@ static void init()
     /* Phase-current sensor test harness. */
     Inverter::CurrentSensorTest_Init();
 
-    /* Open-loop motor control (PWM + gate driver). Default off. */
+    /* Open-loop motor control (PWM + gate driver). Default off.
+     * This also performs the final current-sensor offset recalibration after
+     * the gate-driver power rail is up and the PWM outputs are started, matching
+     * the hardware state used by a manual `cal`. */
     Inverter::openLoopController().init();
 
     /* UART command shell for start/stop/freq/mod. */

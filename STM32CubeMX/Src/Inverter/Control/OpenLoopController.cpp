@@ -169,8 +169,26 @@ bool OpenLoopController::init() {
      * the very beginning so there is never a brief switching burst at boot.
      * The gate-driver power rail was already enabled in InverterMain::init()
      * before the current-sensor offset was captured, and it stays in reset
-     * here.  TIM1 PWM outputs are left disabled until start(). */
+     * here. */
     HAL_GPIO_WritePin(GATE_DRIVER_RESET_GPIO_Port, GATE_DRIVER_RESET_Pin, GPIO_PIN_RESET);
+
+    /* Make sure the gate-driver power rail is explicitly enabled.  This is
+     * redundant with InverterMain::init() but preserves the old init sequence
+     * that produced accurate offsets. */
+    HAL_GPIO_WritePin(GATE_DRIVER_POWER_ENABLE_GPIO_Port,
+                      GATE_DRIVER_POWER_ENABLE_Pin,
+                      GPIO_PIN_SET);
+    HAL_Delay(50);
+
+    /* Start TIM1 PWM outputs while the gate driver is still in reset.
+     * The power stage cannot switch, but the gate-driver input pins and the
+     * isolated supplies see the same operating load/state as a later manual
+     * `cal`.  The current-sensor zero point shifts once this rail is loaded,
+     * so recalibrate now rather than relying on the pre-PWM offset. */
+    PWM_ClearFault();
+    PWM_Start();
+    HAL_Delay(100);
+    (void)phaseCurrentADC().recalibrateOffsets();
 
     m_initialized = true;
     m_running = false;

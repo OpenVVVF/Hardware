@@ -182,12 +182,6 @@ bool PhaseCurrentADC::start() {
 
     htim1.Instance->RCR = 1U;
 
-    /* Wait for the isolated current-sensor outputs and their ratiometric
-     * references to settle after power-on.  Capturing the zero-current offset
-     * too early leaves a large residual that shows up as hundreds of amps on
-     * the telemetry log until the next recalibration. */
-    HAL_Delay(2000);
-
     if (!calibrateOffsets()) {
         HAL_TIM_Base_Stop(&htim1);
         HAL_ADCEx_InjectedStop_IT(&hadc1);
@@ -196,7 +190,9 @@ bool PhaseCurrentADC::start() {
     }
 
     m_running = true;
-    Telemetry::printf("[CUR] start cal done");
+    Telemetry::printf("[CUR] start cal done U=%.3f V=%.3f",
+                      static_cast<double>(m_offset_u),
+                      static_cast<double>(m_offset_v));
     return true;
 }
 
