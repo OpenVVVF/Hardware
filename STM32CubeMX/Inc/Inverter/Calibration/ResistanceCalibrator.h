@@ -90,6 +90,12 @@ public:
                m_state != State::FAIL;
     }
 
+    /** @brief True if the last calibration finished successfully. */
+    bool isDone() const { return m_state == State::DONE; }
+
+    /** @brief True if the last calibration failed. */
+    bool isFailed() const { return m_state == State::FAIL; }
+
     /** @brief Most recent per-phase resistance for the given pair [ohm]. */
     float lastResult(Pair pair) const;
 
@@ -170,6 +176,7 @@ private:
     uint32_t m_saved_ccr3 = 0;
     uint32_t m_saved_bdtr = 0;
     uint32_t m_saved_gpioe_moder = 0;
+    float    m_saved_oc_threshold_a = 1000.0f;
 
     static constexpr float MAX_BUS_PCT = 25.0f;
     static constexpr uint32_t CAL_ARR = 17186U; /**< ~8 kHz center-aligned with 275 MHz timer clock. */

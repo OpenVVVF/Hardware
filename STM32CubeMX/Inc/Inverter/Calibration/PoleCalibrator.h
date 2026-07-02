@@ -32,8 +32,12 @@ public:
      *
      * The motor must be stopped.  Returns false if the gate driver cannot be
      * enabled or the open-loop controller cannot start.
+     *
+     * @param max_mod        Maximum modulation index used during breakaway ramp.
+     * @param torque_margin  Multiplier applied to the found breakaway modulation
+     *                       to ensure continuous rotation during counting.
      */
-    bool start();
+    bool start(float max_mod = 0.50f, float torque_margin = 1.30f);
 
     /**
      * @brief Non-blocking state-machine update.  Call at ~100 Hz from the main
@@ -47,9 +51,19 @@ public:
     bool isActive() const { return m_state != State::IDLE && m_state != State::DONE; }
 
     /**
+     * @brief Abort a running calibration and return to idle.
+     */
+    void stop();
+
+    /**
      * @brief Most recent pole count, or 0 if no calibration has finished.
      */
     float lastPoles() const { return m_last_poles; }
+
+    /**
+     * @brief Modulation at which the rotor broke away during the last run.
+     */
+    float lastBreakawayMod() const { return m_breakaway_mod; }
 
     static PoleCalibrator& instance();
 
@@ -72,6 +86,7 @@ private:
     bool     m_breakaway_found = false;
     float    m_breakaway_mod = 0.0f;
     float    m_breakaway_mech_cycles = 0.0f;
+    float    m_max_mod = 0.50f;
 
     /* Encoder angle tracking (for movement/stall detection). */
     EncoderTracker m_tracker;

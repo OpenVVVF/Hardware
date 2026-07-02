@@ -59,6 +59,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Calibration/EncoderOffsetCalibrator.cpp
     Src/Inverter/Calibration/ResistanceCalibrator.cpp
     Src/Inverter/Calibration/EncoderCycleCalibrator.cpp
+    Src/Inverter/Calibration/AutoCalibrationCoordinator.cpp
     Src/Inverter/Calibration/Common/CalibrationHardware.cpp
     Src/Inverter/Calibration/Common/EncoderTracker.cpp
     Src/Inverter/Calibration/Common/CurrentLimitedRamp.cpp

@@ -1,0 +1,272 @@
+#include "Inverter/Calibration/AutoCalibrationCoordinator.h"
+
+#include "Inverter/Calibration/PoleCalibrator.h"
+#include "Inverter/Calibration/EncoderOffsetCalibrator.h"
+#include "Inverter/Calibration/ResistanceCalibrator.h"
+#include "Inverter/Calibration/EncoderCycleCalibrator.h"
+#include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Drivers/Sensors/PoleEstimator.h"
+#include "Inverter/Telemetry.h"
+
+#include "main.h"
+#include <cstdarg>
+#include <cmath>
+
+namespace Inverter {
+
+static AutoCalibrationCoordinator s_instance;
+
+AutoCalibrationCoordinator& AutoCalibrationCoordinator::instance() {
+    return s_instance;
+}
+
+namespace {
+
+/* Conservative power limits suitable for unknown motors. */
+static constexpr float MAX_MODULATION = 0.35f;
+static constexpr float POLE_TORQUE_MARGIN = 1.30f;
+static constexpr float OFFSET_TORQUE_MARGIN = 1.30f;
+static constexpr float RES_MAX_CURRENT_A = 10.0f;
+static constexpr float RES_OC_LIMIT_A = 30.0f;
+static constexpr uint32_t RES_TIMEOUT_MS = 30000U;
+static constexpr uint32_t SETTLE_BEFORE_RES_MS = 500U;
+
+} // namespace
+
+const char* AutoCalibrationCoordinator::stateName() const {
+    switch (m_state) {
+        case State::IDLE:        return "IDLE";
+        case State::POLE:        return "POLE";
+        case State::OFFSET:      return "OFFSET";
+        case State::SETTLE:      return "SETTLE";
+        case State::RESISTANCE:  return "RESISTANCE";
+        case State::DONE:        return "DONE";
+        case State::FAIL:        return "FAIL";
+    }
+    return "?";
+}
+
+void AutoCalibrationCoordinator::enterState(State state) {
+    m_state = state;
+    m_state_enter_ms = HAL_GetTick();
+    Telemetry::printf("[CAL] AUTO: enter %s", stateName());
+}
+
+void AutoCalibrationCoordinator::fail(const char* reason_fmt, ...) {
+    va_list args;
+    va_start(args, reason_fmt);
+    Telemetry::vprintf(reason_fmt, args);
+    va_end(args);
+
+    /* Make sure any still-active sub-calibrator is stopped and the gate driver
+     * is left in a safe, known state. */
+    EncoderCycleCalibrator::instance().stop();
+    if (poleCalibrator().isActive()) {
+        poleCalibrator().stop();
+    }
+    if (encoderOffsetCalibrator().isActive()) {
+        encoderOffsetCalibrator().stop();
+    }
+    if (resistanceCalibrator().isActive()) {
+        resistanceCalibrator().stop();
+    }
+
+    enterState(State::FAIL);
+}
+
+void AutoCalibrationCoordinator::stop() {
+    if (!isActive()) {
+        return;
+    }
+
+    EncoderCycleCalibrator::instance().stop();
+    if (poleCalibrator().isActive()) {
+        poleCalibrator().stop();
+    }
+    if (encoderOffsetCalibrator().isActive()) {
+        encoderOffsetCalibrator().stop();
+    }
+    if (resistanceCalibrator().isActive()) {
+        resistanceCalibrator().stop();
+    }
+
+    Telemetry::printf("[CAL] AUTO: stopped by user");
+    enterState(State::IDLE);
+}
+
+bool AutoCalibrationCoordinator::start() {
+    if (isActive()) {
+        Telemetry::printf("[CAL] AUTO: already running");
+        return false;
+    }
+
+    if (openLoopController().isRunning()) {
+        Telemetry::printf("[CAL] AUTO: stop the motor before starting");
+        return false;
+    }
+
+    if (poleCalibrator().isActive() ||
+        encoderOffsetCalibrator().isActive() ||
+        resistanceCalibrator().isActive()) {
+        Telemetry::printf("[CAL] AUTO: another calibration is active");
+        return false;
+    }
+
+    m_poles = 0.0f;
+    m_encoder_cycles_per_rev = 0.0f;
+    m_breakaway_mod = 0.0f;
+    m_encoder_offset = 0.0f;
+    m_r_uv = 0.0f;
+    m_r_uw = 0.0f;
+    m_r_vw = 0.0f;
+    m_r_avg = 0.0f;
+
+    /* The pole-cal rotation will also be used to count encoder electrical
+     * cycles, eliminating the manual encodercal step. */
+    EncoderCycleCalibrator::instance().start();
+
+    Telemetry::printf("[CAL] AUTO: starting motor profile (max_mod=%.2f res_I=%.1f A)",
+                      static_cast<double>(MAX_MODULATION),
+                      static_cast<double>(RES_MAX_CURRENT_A));
+
+    if (!poleCalibrator().start(MAX_MODULATION, POLE_TORQUE_MARGIN)) {
+        EncoderCycleCalibrator::instance().stop();
+        Telemetry::printf("[CAL] AUTO: failed to start pole calibration");
+        return false;
+    }
+
+    enterState(State::POLE);
+    return true;
+}
+
+void AutoCalibrationCoordinator::update() {
+    if (m_state == State::IDLE || m_state == State::DONE || m_state == State::FAIL) {
+        return;
+    }
+
+    switch (m_state) {
+        case State::POLE: {
+            PoleCalibrator& pc = poleCalibrator();
+            if (pc.isActive()) {
+                return; /* still running */
+            }
+
+            EncoderCycleCalibrator::instance().stop();
+
+            if (pc.lastPoles() <= 0.0f) {
+                fail("[CAL] AUTO: FAIL: pole calibration did not produce a valid pole count");
+                return;
+            }
+
+            m_poles = pc.lastPoles();
+            m_breakaway_mod = pc.lastBreakawayMod();
+
+            const float mech_cycles = PoleEstimator::instance().mechanicalCycles();
+            const float enc_cycles = EncoderCycleCalibrator::instance().cycles();
+            if (mech_cycles > 0.25f && enc_cycles > 0.0f) {
+                m_encoder_cycles_per_rev = enc_cycles / mech_cycles;
+            } else {
+                fail("[CAL] AUTO: FAIL: insufficient rotation for encoder cycle count (mech=%.2f enc=%.2f)",
+                     static_cast<double>(mech_cycles),
+                     static_cast<double>(enc_cycles));
+                return;
+            }
+
+            Telemetry::printf("[CAL] AUTO: poles=%.2f enc_cycles/rev=%.2f breakaway_mod=%.3f",
+                              static_cast<double>(m_poles),
+                              static_cast<double>(m_encoder_cycles_per_rev),
+                              static_cast<double>(m_breakaway_mod));
+
+            if (!encoderOffsetCalibrator().start(m_poles, m_encoder_cycles_per_rev,
+                                                 m_breakaway_mod, MAX_MODULATION,
+                                                 OFFSET_TORQUE_MARGIN)) {
+                fail("[CAL] AUTO: FAIL: encoder offset calibration failed to start");
+                return;
+            }
+
+            enterState(State::OFFSET);
+            break;
+        }
+
+        case State::OFFSET: {
+            EncoderOffsetCalibrator& ec = encoderOffsetCalibrator();
+            if (ec.isActive()) {
+                return; /* still running */
+            }
+
+            if (!ec.isDone()) {
+                fail("[CAL] AUTO: FAIL: encoder offset calibration failed");
+                return;
+            }
+
+            m_encoder_offset = ec.averageOffset();
+            Telemetry::printf("[CAL] AUTO: encoder offset=%.3f deg samples=%d",
+                              static_cast<double>(m_encoder_offset),
+                              ec.sampleCount());
+            Telemetry::printf("[CAL] AUTO: settling %.3f s before resistance cal",
+                              static_cast<double>(SETTLE_BEFORE_RES_MS) * 0.001);
+
+            enterState(State::SETTLE);
+            break;
+        }
+
+        case State::SETTLE: {
+            if ((HAL_GetTick() - m_state_enter_ms) < SETTLE_BEFORE_RES_MS) {
+                return; /* still settling */
+            }
+
+            if (!resistanceCalibrator().startCurrentCtrl(RES_MAX_CURRENT_A,
+                                                         ResistanceCalibrator::Pair::UV,
+                                                         true, RES_TIMEOUT_MS,
+                                                         RES_OC_LIMIT_A)) {
+                fail("[CAL] AUTO: FAIL: resistance calibration failed to start");
+                return;
+            }
+
+            enterState(State::RESISTANCE);
+            break;
+        }
+
+        case State::RESISTANCE: {
+            ResistanceCalibrator& rc = resistanceCalibrator();
+            if (rc.isActive()) {
+                return; /* still running */
+            }
+
+            if (!rc.isDone()) {
+                fail("[CAL] AUTO: FAIL: resistance calibration failed");
+                return;
+            }
+
+            m_r_uv = rc.lastResult(ResistanceCalibrator::Pair::UV);
+            m_r_uw = rc.lastResult(ResistanceCalibrator::Pair::UW);
+            m_r_vw = rc.lastResult(ResistanceCalibrator::Pair::VW);
+            m_r_avg = rc.lastAverage();
+
+            Telemetry::printf("[CAL] AUTO: DONE R_uv=%.4f R_uw=%.4f R_vw=%.4f R_avg=%.4f ohm",
+                              static_cast<double>(m_r_uv),
+                              static_cast<double>(m_r_uw),
+                              static_cast<double>(m_r_vw),
+                              static_cast<double>(m_r_avg));
+            Telemetry::printf("[CAL] AUTO: profile complete | poles=%.2f enc_cycles=%.2f offset=%.3f deg",
+                              static_cast<double>(m_poles),
+                              static_cast<double>(m_encoder_cycles_per_rev),
+                              static_cast<double>(m_encoder_offset));
+
+            enterState(State::DONE);
+            break;
+        }
+
+        case State::IDLE:
+        case State::DONE:
+        case State::FAIL:
+        default:
+            break;
+    }
+}
+
+AutoCalibrationCoordinator& autoCalibrationCoordinator() {
+    return AutoCalibrationCoordinator::instance();
+}
+
+} // namespace Inverter

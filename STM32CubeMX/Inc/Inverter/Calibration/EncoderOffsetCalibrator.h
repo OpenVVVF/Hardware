@@ -35,15 +35,24 @@ public:
      * @param breakaway_mod         Optional pre-determined breakaway modulation.
      *                              If 0, the calibrator will auto-ramp to find a
      *                              safe voltage.
+     * @param max_mod               Hard cap on modulation index during warmup/rotation.
+     * @param torque_margin         Multiplier applied to breakaway_mod to choose
+     *                              the rotation modulation.
      * @return true if the gate driver could be enabled and PWM is ready.
      */
-    bool start(float pole_count, float encoder_cycles_per_rev, float breakaway_mod = 0.0f);
+    bool start(float pole_count, float encoder_cycles_per_rev, float breakaway_mod = 0.0f,
+               float max_mod = 0.50f, float torque_margin = 2.50f);
 
     /**
      * @brief Non-blocking state-machine update.  Call at ~100 Hz from the main
      * loop.
      */
     void update();
+
+    /**
+     * @brief Abort a running calibration and turn off all switching.
+     */
+    void stop();
 
     /**
      * @brief True while a calibration is in progress.
@@ -107,6 +116,8 @@ private:
     float    m_mech_deg_per_motor_elec_cycle = 0.0f;
     float    m_mod = 0.0f;
     float    m_breakaway_mod = 0.0f;
+    float    m_max_mod = 0.50f;
+    float    m_torque_margin = 2.50f;
 
     CalibrationHardware m_hw;
     EncoderTracker      m_tracker;

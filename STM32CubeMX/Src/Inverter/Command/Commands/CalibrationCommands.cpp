@@ -6,6 +6,7 @@
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
+#include "Inverter/Calibration/AutoCalibrationCoordinator.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Telemetry.h"
 
@@ -18,10 +19,12 @@ using Inverter::PoleCalibrator;
 using Inverter::EncoderOffsetCalibrator;
 using Inverter::ResistanceCalibrator;
 using Inverter::EncoderCycleCalibrator;
+using Inverter::AutoCalibrationCoordinator;
 using Inverter::openLoopController;
 using Inverter::poleCalibrator;
 using Inverter::encoderOffsetCalibrator;
 using Inverter::resistanceCalibrator;
+using Inverter::autoCalibrationCoordinator;
 
 static bool stringsEqual(const char* a, const char* b) {
     if (a == nullptr || b == nullptr) return false;
@@ -205,11 +208,45 @@ public:
     }
 };
 
-static PolesCommand     sPolesCmd;
+class MotorCalCommand : public CommandInterface {
+public:
+    MotorCalCommand()
+      : CommandInterface("motorcal", "Automatic motor profiling (poles, encoder cycles, offset, resistance)",
+            ArgSpec{"subcmd", "", 0.0f, 0.0f, 0.0f, true, ArgSpec::STRING}) {}
+
+    void execute(const ArgValue* args, CommandContext&) override {
+        AutoCalibrationCoordinator& coord = autoCalibrationCoordinator();
+        const char* sub = args[0].s_val;
+
+        if (stringsEqual(sub, "start")) {
+            if (openLoopController().isRunning()) {
+                Telemetry::printf("[CAL] stop the motor before starting motorcal");
+                return;
+            }
+            if (!coord.start()) {
+                Telemetry::printf("[CAL] motorcal start failed");
+            }
+        } else if (stringsEqual(sub, "stop")) {
+            coord.stop();
+        } else if (stringsEqual(sub, "status")) {
+            Telemetry::printf("[CAL] motorcal: state=%s poles=%.2f enc_cycles=%.2f offset=%.3f R_avg=%.4f",
+                              coord.stateName(),
+                              static_cast<double>(coord.lastPoles()),
+                              static_cast<double>(coord.lastEncoderCyclesPerRev()),
+                              static_cast<double>(coord.lastEncoderOffset()),
+                              static_cast<double>(coord.lastResistanceAverage()));
+        } else {
+            Telemetry::printf("[CAL] motorcal: unknown subcommand '%s' (start/status)", sub);
+        }
+    }
+};
+
+static PolesCommand      sPolesCmd;
 static EncoderCalCommand sEncoderCalCmd;
-static CalPolesCommand  sCalPolesCmd;
-static EncOffsetCommand sEncOffsetCmd;
-static ResCalCommand    sResCalCmd;
+static CalPolesCommand   sCalPolesCmd;
+static EncOffsetCommand  sEncOffsetCmd;
+static ResCalCommand     sResCalCmd;
+static MotorCalCommand   sMotorCalCmd;
 
 void registerCalibrationCommands(CommandManager& mgr) {
     mgr.registerCommand(&sPolesCmd);
@@ -217,4 +254,5 @@ void registerCalibrationCommands(CommandManager& mgr) {
     mgr.registerCommand(&sCalPolesCmd);
     mgr.registerCommand(&sEncOffsetCmd);
     mgr.registerCommand(&sResCalCmd);
+    mgr.registerCommand(&sMotorCalCmd);
 }

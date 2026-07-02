@@ -21,11 +21,15 @@ PoleCalibrator& poleCalibrator() {
     return s_instance;
 }
 
-bool PoleCalibrator::start() {
+bool PoleCalibrator::start(float max_mod, float torque_margin) {
     if (openLoopController().isRunning()) {
         Telemetry::printf("[CAL] POLES: stop the motor before starting calibration");
         return false;
     }
+
+    if (max_mod <= 0.0f) max_mod = 0.50f;
+    if (torque_margin <= 1.0f) torque_margin = 1.30f;
+    m_max_mod = max_mod;
 
     /* Start open-loop at 2 Hz, zero modulation. */
     if (!openLoopController().start(2.0f, 0.0f)) {
@@ -42,12 +46,22 @@ bool PoleCalibrator::start() {
     m_last_poles = 0.0f;
 
     m_tracker.reset();
-    m_breakaway.start(0.01f, 50U, 0.50f, 0.15f, 1.30f, 3000U);
+    m_breakaway.start(0.01f, 50U, max_mod, 0.15f, torque_margin, 3000U);
 
     m_state = State::RAMP;
 
-    Telemetry::printf("[CAL] POLES: started at 2 Hz, fast ramp to breakaway");
+    Telemetry::printf("[CAL] POLES: started at 2 Hz, max_mod=%.3f margin=%.3f",
+                      static_cast<double>(max_mod),
+                      static_cast<double>(torque_margin));
     return true;
+}
+
+void PoleCalibrator::stop() {
+    if (m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL) {
+        openLoopController().stop();
+        m_state = State::IDLE;
+        Telemetry::printf("[CAL] POLES: stopped by user");
+    }
 }
 
 void PoleCalibrator::reportPoles(const char* label) {
@@ -95,7 +109,7 @@ void PoleCalibrator::update() {
                 m_mod = mod;
                 openLoopController().setModulationIndexDirect(m_mod);
 
-                if (m_tracker.stalled(now_ms, STALL_TIMEOUT_MS) && m_mod >= 0.50f) {
+                if (m_tracker.stalled(now_ms, STALL_TIMEOUT_MS) && m_mod >= m_max_mod) {
                     m_state = State::FAIL;
                     Telemetry::printf("[CAL] POLES: FAIL: encoder did not move");
                     openLoopController().stop();

@@ -200,9 +200,11 @@ bool ResistanceCalibrator::startCurrentCtrl(float max_current_a, Pair pair,
         m_targets[i] = CURRENT_CTRL_MIN_A * std::pow(ratio, static_cast<float>(i + 1U));
     }
     m_max_current_a = oc_limit_a;
-    if (oc_limit_a > 0.0f) {
-        phaseCurrentADC().setOvercurrentThreshold(oc_limit_a);
-    }
+    /* Do NOT change the global PhaseCurrentADC overcurrent threshold here.
+     * The resistance calibrator has its own per-sample abort check.  Raising
+     * a system-wide PhaseOvercurrent fault would turn off the gate-driver
+     * power rail and can leave the current-sense telemetry path in a bad
+     * state after the cal finishes or aborts. */
     m_timeout_ms = timeout_ms;
     m_pair_index = 0;
     m_point_index = 0;
@@ -411,6 +413,10 @@ void ResistanceCalibrator::restoreHardware() {
     /* 5. Restore GPIO to original alternate-function modes. */
     GPIOE->MODER = m_saved_gpioe_moder;
 
+    /* 6. Restore the software overcurrent threshold so the post-calibration
+     * idle state is not left with a sensitive trip point. */
+    phaseCurrentADC().setOvercurrentThreshold(m_saved_oc_threshold_a);
+
     /* 6. Leave the SPWM update interrupt disabled until open-loop starts again. */
     TIM1->DIER &= ~TIM_DIER_UIE;
     HAL_NVIC_DisableIRQ(TIM1_UP_IRQn);
@@ -580,7 +586,7 @@ void ResistanceCalibrator::update() {
     }
 
     if (m_state == State::ENABLE) {
-        /* Save current timer and GPIO state. */
+        /* Save current timer, GPIO, and overcurrent-threshold state. */
         m_saved_arr = TIM1->ARR;
         m_saved_psc = TIM1->PSC;
         m_saved_ccer = TIM1->CCER;
@@ -589,6 +595,7 @@ void ResistanceCalibrator::update() {
         m_saved_ccr3 = TIM1->CCR3;
         m_saved_bdtr = TIM1->BDTR;
         m_saved_gpioe_moder = GPIOE->MODER;
+        m_saved_oc_threshold_a = phaseCurrentADC().overcurrentThreshold();
 
         /* Disable the SPWM update interrupt; we will drive the timer directly. */
         TIM1->DIER &= ~TIM_DIER_UIE;

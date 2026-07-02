@@ -55,7 +55,9 @@ static const char* stateName(EncoderOffsetCalibrator::State state) {
     return "?";
 }
 
-bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_rev, float breakaway_mod) {
+bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_rev,
+                                     float breakaway_mod, float max_mod,
+                                     float torque_margin) {
     if (isActive()) {
         Telemetry::printf("[CAL] ENC: already active");
         return false;
@@ -71,6 +73,8 @@ bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_r
     m_encoder_cycles_per_rev = encoder_cycles_per_rev;
     m_mech_deg_per_motor_elec_cycle = 360.0f / m_pole_pairs;
     m_breakaway_mod = breakaway_mod;
+    m_max_mod = (max_mod > 0.0f) ? max_mod : 0.50f;
+    m_torque_margin = (torque_margin > 1.0f) ? torque_margin : 2.50f;
 
     if (m_pole_pairs <= 0.0f) {
         Telemetry::printf("[CAL] ENC: ERROR: pole_pairs must be > 0");
@@ -103,8 +107,8 @@ void EncoderOffsetCalibrator::enterState(State state) {
 
         case State::FIND_VOLTAGE:
             PWM_ResetSPWMElectricalCycles();
-            m_breakaway.start(RAMP_STEP, RAMP_PERIOD_MS, CAL_MAX_MOD,
-                              BREAKAWAY_DETECT_CYCLES, TORQUE_MARGIN, MOVE_TIMEOUT_MS);
+            m_breakaway.start(RAMP_STEP, RAMP_PERIOD_MS, m_max_mod,
+                              BREAKAWAY_DETECT_CYCLES, m_torque_margin, MOVE_TIMEOUT_MS);
             PWM_StartSPWM(OFFSET_ROTATION_FREQUENCY_HZ, 0.0f);
             break;
 
@@ -153,6 +157,15 @@ void EncoderOffsetCalibrator::enterState(State state) {
 
 void EncoderOffsetCalibrator::restoreHardware() {
     CalibrationHardware::shutdown();
+}
+
+void EncoderOffsetCalibrator::stop() {
+    if (m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL) {
+        PWM_StopSPWM();
+        restoreHardware();
+        m_state = State::IDLE;
+        Telemetry::printf("[CAL] ENC: stopped by user");
+    }
 }
 
 void EncoderOffsetCalibrator::fail(const char* reason_fmt, ...) {
@@ -267,9 +280,9 @@ void EncoderOffsetCalibrator::update() {
                                   static_cast<double>(m_encoder_cycles_per_rev));
 
                 if (m_breakaway_mod > 0.0f) {
-                    m_mod = m_breakaway_mod * TORQUE_MARGIN;
-                    if (m_mod > CAL_MAX_MOD) {
-                        m_mod = CAL_MAX_MOD;
+                    m_mod = m_breakaway_mod * m_torque_margin;
+                    if (m_mod > m_max_mod) {
+                        m_mod = m_max_mod;
                     }
                     Telemetry::printf("[CAL] ENC: using provided breakaway mod %.3f -> rotate mod %.3f",
                                       static_cast<double>(m_breakaway_mod),
