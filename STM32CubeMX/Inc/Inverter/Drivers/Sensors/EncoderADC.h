@@ -97,9 +97,23 @@ public:
      * @brief Reset dynamic bounds and fault counters.
      *
      * Call before a calibration so the encoder re-learns its amplitude envelope
-     * from the current hardware state.
+     * from the current hardware state.  Also restores the hard caps to the
+     * factory-calibrated defaults and disables bound learning.
      */
     void resetBounds();
+
+    /**
+     * @brief Enable/disable automatic sin/cos min/max learning.
+     *
+     * When enabled, the fixed hard caps are opened to the full ADC range and the
+     * dynamic bounds learn directly from raw samples.  When disabled, the hard
+     * caps are set to the learned envelope plus a small margin and normal spike
+     * rejection is restored.
+     *
+     * Call learnBounds(true) at the start of any encoder-recalibration routine
+     * and learnBounds(false) when it finishes or fails.
+     */
+    void learnBounds(bool enable);
 
 private:
     bool configureAdcChannels();
@@ -107,18 +121,34 @@ private:
     bool initDma();
     float computeAngle(uint16_t raw_sin, uint16_t raw_cos);
 
-    /* Hard limits measured/calibrated in commit 0eb9f53. */
-    static constexpr uint16_t SIN_MIN_CAP = 427U;
-    static constexpr uint16_t SIN_MAX_CAP = 65388U;
-    static constexpr uint16_t COS_MIN_CAP = 608U;
-    static constexpr uint16_t COS_MAX_CAP = 64743U;
+    /* Factory-calibrated hard limits measured in commit 0eb9f53.  These are
+     * used as the safe defaults when bound learning is not active. */
+    static constexpr uint16_t SIN_MIN_DEFAULT = 427U;
+    static constexpr uint16_t SIN_MAX_DEFAULT = 65388U;
+    static constexpr uint16_t COS_MIN_DEFAULT = 608U;
+    static constexpr uint16_t COS_MAX_DEFAULT = 64743U;
+
+    /* Margin applied around learned bounds when rebuilding the hard caps. */
+    static constexpr float    LEARN_MARGIN_FRACTION = 0.05f;
+    static constexpr uint16_t LEARN_MARGIN_MIN_COUNTS = 200U;
+
+    /* Active hard caps.  These are opened to full ADC range during learning and
+     * tightened back to learned bounds + margin when learning finishes. */
+    uint16_t m_sin_min_cap = SIN_MIN_DEFAULT;
+    uint16_t m_sin_max_cap = SIN_MAX_DEFAULT;
+    uint16_t m_cos_min_cap = COS_MIN_DEFAULT;
+    uint16_t m_cos_max_cap = COS_MAX_DEFAULT;
 
     /* Dynamic bounds start at the opposite hard limits so the first samples
      * tighten them inward to the true signal range. */
-    uint16_t m_sin_min = SIN_MAX_CAP;
-    uint16_t m_sin_max = SIN_MIN_CAP;
-    uint16_t m_cos_min = COS_MAX_CAP;
-    uint16_t m_cos_max = COS_MIN_CAP;
+    uint16_t m_sin_min = SIN_MAX_DEFAULT;
+    uint16_t m_sin_max = SIN_MIN_DEFAULT;
+    uint16_t m_cos_min = COS_MAX_DEFAULT;
+    uint16_t m_cos_max = COS_MIN_DEFAULT;
+
+    /* True while the hard caps are open and the dynamic bounds learn directly
+     * from raw samples. */
+    bool m_learning_bounds = false;
 
     /**
      * @brief Atomic snapshot of one encoder sample.

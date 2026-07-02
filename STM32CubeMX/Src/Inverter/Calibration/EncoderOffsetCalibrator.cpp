@@ -86,6 +86,7 @@ bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_r
     }
 
     encoderADC().resetBounds();
+    encoderADC().learnBounds(true);
     m_tracker.reset();
     m_hw.begin();
 
@@ -163,6 +164,7 @@ void EncoderOffsetCalibrator::stop() {
     if (m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL) {
         PWM_StopSPWM();
         restoreHardware();
+        encoderADC().learnBounds(false);
         m_state = State::IDLE;
         Telemetry::printf("[CAL] ENC: stopped by user");
     }
@@ -175,6 +177,7 @@ void EncoderOffsetCalibrator::fail(const char* reason_fmt, ...) {
     va_end(args);
 
     restoreHardware();
+    encoderADC().learnBounds(false);
     m_state = State::FAIL;
 }
 
@@ -459,6 +462,7 @@ void EncoderOffsetCalibrator::update() {
                                m_mech_deg_per_motor_elec_cycle);
                 m_average_offset = avg_offset;
                 restoreHardware();
+                encoderADC().learnBounds(false);
                 Telemetry::printf("[CAL] ENC: DONE: avg=%.3f deg samples=%d revs=%.1f",
                                   static_cast<double>(m_average_offset),
                                   m_sample_count,

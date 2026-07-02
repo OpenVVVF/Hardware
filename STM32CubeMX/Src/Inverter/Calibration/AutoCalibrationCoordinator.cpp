@@ -5,6 +5,7 @@
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
 #include "Inverter/Telemetry.h"
 
@@ -71,6 +72,7 @@ void AutoCalibrationCoordinator::fail(const char* reason_fmt, ...) {
         resistanceCalibrator().stop();
     }
 
+    encoderADC().learnBounds(false);
     enterState(State::FAIL);
 }
 
@@ -90,6 +92,7 @@ void AutoCalibrationCoordinator::stop() {
         resistanceCalibrator().stop();
     }
 
+    encoderADC().learnBounds(false);
     Telemetry::printf("[CAL] AUTO: stopped by user");
     enterState(State::IDLE);
 }
@@ -120,6 +123,11 @@ bool AutoCalibrationCoordinator::start() {
     m_r_uw = 0.0f;
     m_r_vw = 0.0f;
     m_r_avg = 0.0f;
+
+    /* Open the encoder hard caps so the sin/cos envelope for this motor is
+     * learned during the pole/rotation phase. */
+    encoderADC().resetBounds();
+    encoderADC().learnBounds(true);
 
     /* The pole-cal rotation will also be used to count encoder electrical
      * cycles, eliminating the manual encodercal step. */
@@ -253,6 +261,7 @@ void AutoCalibrationCoordinator::update() {
                               static_cast<double>(m_encoder_cycles_per_rev),
                               static_cast<double>(m_encoder_offset));
 
+            encoderADC().learnBounds(false);
             enterState(State::DONE);
             break;
         }

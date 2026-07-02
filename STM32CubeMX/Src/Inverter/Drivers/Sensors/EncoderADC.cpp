@@ -151,15 +151,20 @@ bool EncoderADC::start() {
 }
 
 float EncoderADC::computeAngle(uint16_t raw_sin, uint16_t raw_cos) {
-    /* Clamp to hard limits to reject outliers. */
+    /* During bound learning the hard caps are opened to the full ADC range so
+     * the dynamic bounds can capture the true envelope.  Otherwise clamp to the
+     * active hard limits to reject noise spikes. */
     uint16_t csin = raw_sin;
     uint16_t ccos = raw_cos;
-    if (csin < SIN_MIN_CAP) csin = SIN_MIN_CAP;
-    if (csin > SIN_MAX_CAP) csin = SIN_MAX_CAP;
-    if (ccos < COS_MIN_CAP) ccos = COS_MIN_CAP;
-    if (ccos > COS_MAX_CAP) ccos = COS_MAX_CAP;
+    if (!m_learning_bounds) {
+        if (csin < m_sin_min_cap) csin = m_sin_min_cap;
+        if (csin > m_sin_max_cap) csin = m_sin_max_cap;
+        if (ccos < m_cos_min_cap) ccos = m_cos_min_cap;
+        if (ccos > m_cos_max_cap) ccos = m_cos_max_cap;
+    }
 
-    /* Tighten dynamic bounds inside the hard limits. */
+    /* Tighten dynamic bounds.  When learning this happens on raw samples;
+     * otherwise it happens on the clamped values. */
     if (csin < m_sin_min) m_sin_min = csin;
     if (csin > m_sin_max) m_sin_max = csin;
     if (ccos < m_cos_min) m_cos_min = ccos;
@@ -223,10 +228,10 @@ void EncoderADC::onDmaComplete() {
         }
 
         const bool at_rail =
-            (raw_sin < SIN_MIN_CAP + RAIL_MARGIN) ||
-            (raw_sin > SIN_MAX_CAP - RAIL_MARGIN) ||
-            (raw_cos < COS_MIN_CAP + RAIL_MARGIN) ||
-            (raw_cos > COS_MAX_CAP - RAIL_MARGIN);
+            (raw_sin < m_sin_min_cap + RAIL_MARGIN) ||
+            (raw_sin > m_sin_max_cap - RAIL_MARGIN) ||
+            (raw_cos < m_cos_min_cap + RAIL_MARGIN) ||
+            (raw_cos > m_cos_max_cap - RAIL_MARGIN);
         if (at_rail) {
             if (++m_rail_count >= RAIL_COUNT) {
                 FaultManager::instance().raise(
@@ -269,14 +274,70 @@ bool EncoderADC::sample(float& angle_deg, uint16_t& raw_sin, uint16_t& raw_cos) 
 
 void EncoderADC::resetBounds() {
     __disable_irq();
-    m_sin_min = SIN_MAX_CAP;
-    m_sin_max = SIN_MIN_CAP;
-    m_cos_min = COS_MAX_CAP;
-    m_cos_max = COS_MIN_CAP;
+    m_sin_min_cap = SIN_MIN_DEFAULT;
+    m_sin_max_cap = SIN_MAX_DEFAULT;
+    m_cos_min_cap = COS_MIN_DEFAULT;
+    m_cos_max_cap = COS_MAX_DEFAULT;
+    m_sin_min = SIN_MAX_DEFAULT;
+    m_sin_max = SIN_MIN_DEFAULT;
+    m_cos_min = COS_MAX_DEFAULT;
+    m_cos_max = COS_MIN_DEFAULT;
+    m_learning_bounds = false;
     m_mag_ema = 0.0f;
     m_mag_ema_init = false;
     m_amp_low_count = 0;
     m_rail_count = 0;
+    __enable_irq();
+}
+
+void EncoderADC::learnBounds(bool enable) {
+    __disable_irq();
+    if (enable) {
+        /* Open the hard caps to the full ADC range and reset the dynamic
+         * bounds so the next rotation learns the true envelope from scratch. */
+        m_sin_min_cap = 0U;
+        m_sin_max_cap = 65535U;
+        m_cos_min_cap = 0U;
+        m_cos_max_cap = 65535U;
+        m_sin_min = 65535U;
+        m_sin_max = 0U;
+        m_cos_min = 65535U;
+        m_cos_max = 0U;
+        m_learning_bounds = true;
+        m_mag_ema = 0.0f;
+        m_mag_ema_init = false;
+        m_amp_low_count = 0;
+        m_rail_count = 0;
+    } else {
+        /* Rebuild the hard caps around the learned envelope with a small margin
+         * to keep normal operation tolerant of noise/spread. */
+        if (boundsValid()) {
+            auto applyMargin = [](uint16_t min_val, uint16_t max_val,
+                                  uint16_t& cap_min, uint16_t& cap_max) {
+                const uint16_t span = max_val - min_val;
+                uint16_t margin = static_cast<uint16_t>(
+                    static_cast<float>(span) * LEARN_MARGIN_FRACTION);
+                if (margin < LEARN_MARGIN_MIN_COUNTS) {
+                    margin = LEARN_MARGIN_MIN_COUNTS;
+                }
+                cap_min = (min_val > margin) ? (min_val - margin) : 0U;
+                cap_max = (max_val < (65535U - margin)) ? (max_val + margin) : 65535U;
+            };
+            applyMargin(m_sin_min, m_sin_max, m_sin_min_cap, m_sin_max_cap);
+            applyMargin(m_cos_min, m_cos_max, m_cos_min_cap, m_cos_max_cap);
+        } else {
+            /* No useful envelope was learned; fall back to safe defaults. */
+            m_sin_min_cap = SIN_MIN_DEFAULT;
+            m_sin_max_cap = SIN_MAX_DEFAULT;
+            m_cos_min_cap = COS_MIN_DEFAULT;
+            m_cos_max_cap = COS_MAX_DEFAULT;
+        }
+        m_learning_bounds = false;
+        m_mag_ema = 0.0f;
+        m_mag_ema_init = false;
+        m_amp_low_count = 0;
+        m_rail_count = 0;
+    }
     __enable_irq();
 }
 
