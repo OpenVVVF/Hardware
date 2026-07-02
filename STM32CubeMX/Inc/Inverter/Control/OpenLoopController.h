@@ -22,6 +22,16 @@ public:
     bool init();
 
     /**
+     * @brief Re-run the current-sensor zero-offset calibration safely.
+     *
+     * Asserts the gate-driver reset, parks PWM at 50 %, and lets the
+     * isolated sensor supplies settle before capturing offsets.  Safe to call
+     * before each calibration run; returns false if the motor is running or not
+     * initialized.
+     */
+    bool recalibrateOffsets();
+
+    /**
      * @brief Start the SVPWM ramp.
      *
      * @param freq_hz          Electrical fundamental frequency in Hz.

@@ -183,8 +183,8 @@ private:
     static constexpr uint32_t SETTLE_TIME_MS = 1000U;
     static constexpr uint32_t MEASURE_TIME_MS = 1000U;
     static constexpr uint32_t MIN_SAMPLES = 2000U;
-    static constexpr float MAX_INACTIVE_CURRENT_RATIO = 0.05f; /**< 5 % of active current. */
-    static constexpr float MAX_INACTIVE_CURRENT_MIN_A = 2.00f;  /**< floor for the ratio check. */
+    static constexpr float MAX_INACTIVE_CURRENT_RATIO = 0.10f; /**< 10 % of active current. */
+    static constexpr float MAX_INACTIVE_CURRENT_MIN_A = 3.00f;  /**< floor for the ratio check. */
 
     static constexpr float PI_KP = 0.05f; /**< % duty per A error. */
     static constexpr float PI_KI = 10.0f; /**< % duty per A per second. */

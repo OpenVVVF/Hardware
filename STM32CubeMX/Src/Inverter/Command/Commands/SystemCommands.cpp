@@ -76,7 +76,20 @@ public:
     void execute(const ArgValue*, CommandContext&) override {
         if (openLoopController().isRunning()) {
             Telemetry::printf("[SHELL] stop motor before calibrating");
-        } else if (phaseCurrentADC().recalibrateOffsets()) {
+            return;
+        }
+
+        /* Use the same safe offset path as auto-cal: gate driver in reset,
+         * PWM parked at 50 %, then capture. */
+        if (!openLoopController().isInitialized()) {
+            Telemetry::printf("[SHELL] running init first");
+            if (!openLoopController().init()) {
+                Telemetry::printf("[SHELL] init failed");
+                return;
+            }
+        }
+
+        if (openLoopController().recalibrateOffsets()) {
             PhaseCurrentADC& adc = phaseCurrentADC();
             Telemetry::printf("[SHELL] calibrated offsets U=%.3f V=%.3f",
                               static_cast<double>(adc.lastOffsetU()),

@@ -31,7 +31,7 @@ static constexpr float OFFSET_TORQUE_MARGIN = 1.30f;
 static constexpr float RES_MAX_CURRENT_A = 30.0f;
 static constexpr float RES_OC_LIMIT_A = 100.0f;
 static constexpr uint32_t RES_TIMEOUT_MS = 30000U;
-static constexpr uint32_t SETTLE_BEFORE_RES_MS = 500U;
+static constexpr uint32_t SETTLE_BEFORE_RES_MS = 2000U;
 
 } // namespace
 
@@ -129,6 +129,20 @@ bool AutoCalibrationCoordinator::start() {
      * learned during the pole/rotation phase. */
     encoderADC().resetBounds();
     encoderADC().learnBounds(true);
+
+    /* Re-capture current-sensor offsets with the gate driver held in reset and
+     * PWM running.  This must happen before every run because a manual `cal`
+     * (or a previous failed calibration) can leave bad offsets in place. */
+    if (!openLoopController().isInitialized()) {
+        if (!openLoopController().init()) {
+            Telemetry::printf("[CAL] AUTO: failed to initialize open-loop controller");
+            return false;
+        }
+    }
+    if (!openLoopController().recalibrateOffsets()) {
+        Telemetry::printf("[CAL] AUTO: current-sensor offset recalibration failed");
+        return false;
+    }
 
     /* The pole-cal rotation will also be used to count encoder electrical
      * cycles, eliminating the manual encodercal step. */

@@ -188,7 +188,10 @@ bool OpenLoopController::init() {
     PWM_ClearFault();
     PWM_Start();
     HAL_Delay(100);
-    (void)phaseCurrentADC().recalibrateOffsets();
+    if (!phaseCurrentADC().recalibrateOffsets()) {
+        Telemetry::printf("[OL] ERROR: init offset calibration failed");
+        return false;
+    }
 
     m_initialized = true;
     m_running = false;
@@ -199,6 +202,35 @@ bool OpenLoopController::init() {
     cancelRamp();
 
     Telemetry::printf("[OL] Init done. Outputs disabled until start.");
+    return true;
+}
+
+bool OpenLoopController::recalibrateOffsets() {
+    if (!m_initialized) {
+        Telemetry::printf("[OL] ERROR: not initialized");
+        return false;
+    }
+
+    if (m_running || m_starting) {
+        Telemetry::printf("[OL] ERROR: stop motor before recalibrating offsets");
+        return false;
+    }
+
+    /* Park at zero vector and keep the gate driver in reset so no current can
+     * flow.  The PWM timer keeps running so the current-sensor ADCs sample in
+     * their normal operating state. */
+    GateDriver_DisableOutputs();
+    PWM_SetThreePhaseDuty(50.0f, 50.0f, 50.0f);
+    PWM_ClearFault();
+    PWM_Start();
+    HAL_Delay(100);
+
+    if (!phaseCurrentADC().recalibrateOffsets()) {
+        Telemetry::printf("[OL] ERROR: offset recalibration failed");
+        return false;
+    }
+
+    Telemetry::printf("[OL] offset recalibrated");
     return true;
 }
 
