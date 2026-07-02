@@ -36,7 +36,7 @@ bool CommandShell::init() {
                                   UART_CLEAR_IDLEF);
     HAL_NVIC_ClearPendingIRQ(USART3_IRQn);
 
-    HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
+    HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart3, &m_hal_rx_byte, 1U);
     if (status != HAL_OK) {
         Telemetry::printf("[SHELL] ERROR: HAL_UART_Receive_IT failed");
         return false;
@@ -51,9 +51,10 @@ bool CommandShell::init() {
 }
 
 void CommandShell::onRxComplete() {
-    /* HAL advances pRxBuffPtr after writing, so the received byte is always
-     * at the start of the buffer we passed (m_rx_buf[0]). */
-    uint8_t b = m_rx_buf[0];
+    /* Read the byte from HAL's private scratch location, not from the ring
+     * buffer, so incoming bytes cannot overwrite data the main loop has not
+     * yet consumed. */
+    uint8_t b = m_hal_rx_byte;
 
     size_t next = (m_rx_head + 1U) % RX_BUF_SIZE;
     if (next != m_rx_tail) {
@@ -62,7 +63,7 @@ void CommandShell::onRxComplete() {
     }
 
     /* Restart reception immediately. */
-    HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
+    HAL_UART_Receive_IT(&huart3, &m_hal_rx_byte, 1U);
 }
 
 void CommandShell::recover() {
@@ -73,7 +74,7 @@ void CommandShell::recover() {
                                   UART_CLEAR_NEF | UART_CLEAR_OREF |
                                   UART_CLEAR_IDLEF);
     HAL_NVIC_ClearPendingIRQ(USART3_IRQn);
-    HAL_UART_Receive_IT(&huart3, &m_rx_buf[0], 1U);
+    HAL_UART_Receive_IT(&huart3, &m_hal_rx_byte, 1U);
 }
 
 void CommandShell::poll() {

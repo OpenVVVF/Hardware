@@ -44,6 +44,8 @@ private:
     volatile size_t m_rx_head = 0;
     volatile size_t m_rx_tail = 0;
 
+    uint8_t m_hal_rx_byte = 0;      // separate byte for HAL_UART_Receive_IT
+
     char m_line[LINE_SIZE]{};
     size_t m_line_len = 0;
 
