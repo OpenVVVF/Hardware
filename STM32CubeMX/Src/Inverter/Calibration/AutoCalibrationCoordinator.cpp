@@ -4,6 +4,7 @@
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
+#include "Inverter/Calibration/MotorCalibration.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
@@ -27,8 +28,8 @@ namespace {
 static constexpr float MAX_MODULATION = 0.35f;
 static constexpr float POLE_TORQUE_MARGIN = 1.30f;
 static constexpr float OFFSET_TORQUE_MARGIN = 1.30f;
-static constexpr float RES_MAX_CURRENT_A = 10.0f;
-static constexpr float RES_OC_LIMIT_A = 30.0f;
+static constexpr float RES_MAX_CURRENT_A = 30.0f;
+static constexpr float RES_OC_LIMIT_A = 100.0f;
 static constexpr uint32_t RES_TIMEOUT_MS = 30000U;
 static constexpr uint32_t SETTLE_BEFORE_RES_MS = 500U;
 
@@ -172,7 +173,8 @@ void AutoCalibrationCoordinator::update() {
             const float mech_cycles = PoleEstimator::instance().mechanicalCycles();
             const float enc_cycles = EncoderCycleCalibrator::instance().cycles();
             if (mech_cycles > 0.25f && enc_cycles > 0.0f) {
-                m_encoder_cycles_per_rev = enc_cycles / mech_cycles;
+                m_pole_cal_encoder_cycles_per_rev = enc_cycles / mech_cycles;
+                m_encoder_cycles_per_rev = m_pole_cal_encoder_cycles_per_rev;
             } else {
                 fail("[CAL] AUTO: FAIL: insufficient rotation for encoder cycle count (mech=%.2f enc=%.2f)",
                      static_cast<double>(mech_cycles),
@@ -208,9 +210,15 @@ void AutoCalibrationCoordinator::update() {
             }
 
             m_encoder_offset = ec.averageOffset();
+            /* Override the pole-cal cycle-count estimate with the more accurate
+             * value measured during the controlled offset rotation. */
+            m_encoder_cycles_per_rev = ec.measuredEncoderCyclesPerRev();
             Telemetry::printf("[CAL] AUTO: encoder offset=%.3f deg samples=%d",
                               static_cast<double>(m_encoder_offset),
                               ec.sampleCount());
+            Telemetry::printf("[CAL] AUTO: encoder cycles/rev measured=%.3f (pole-cal estimate=%.3f)",
+                              static_cast<double>(m_encoder_cycles_per_rev),
+                              static_cast<double>(m_pole_cal_encoder_cycles_per_rev));
             Telemetry::printf("[CAL] AUTO: settling %.3f s before resistance cal",
                               static_cast<double>(SETTLE_BEFORE_RES_MS) * 0.001);
 
@@ -251,18 +259,49 @@ void AutoCalibrationCoordinator::update() {
             m_r_vw = rc.lastResult(ResistanceCalibrator::Pair::VW);
             m_r_avg = rc.lastAverage();
 
-            Telemetry::printf("[CAL] AUTO: DONE R_uv=%.4f R_uw=%.4f R_vw=%.4f R_avg=%.4f ohm",
-                              static_cast<double>(m_r_uv),
-                              static_cast<double>(m_r_uw),
-                              static_cast<double>(m_r_vw),
-                              static_cast<double>(m_r_avg));
-            Telemetry::printf("[CAL] AUTO: profile complete | poles=%.2f enc_cycles=%.2f offset=%.3f deg",
-                              static_cast<double>(m_poles),
-                              static_cast<double>(m_encoder_cycles_per_rev),
-                              static_cast<double>(m_encoder_offset));
+            /* Store the calibrated parameters where FOC and telemetry can find
+             * them easily. */
+            {
+                MotorCalibration& mc = motorCalibration();
+                mc.pole_count = m_poles;
+                mc.encoder_cycles_per_rev = m_encoder_cycles_per_rev;
+                mc.encoder_offset_deg = m_encoder_offset;
+                mc.r_phase_uv = m_r_uv;
+                mc.r_phase_uw = m_r_uw;
+                mc.r_phase_vw = m_r_vw;
+                mc.r_phase_avg = m_r_avg;
+                mc.timestamp_ms = HAL_GetTick();
+                mc.valid = true;
+
+                Telemetry::log("motor_poles", mc.pole_count);
+                Telemetry::log("motor_enc_cycles", mc.encoder_cycles_per_rev);
+                Telemetry::log("motor_enc_offset_deg", mc.encoder_offset_deg);
+                Telemetry::log("motor_r_phase_uv", mc.r_phase_uv);
+                Telemetry::log("motor_r_phase_uw", mc.r_phase_uw);
+                Telemetry::log("motor_r_phase_vw", mc.r_phase_vw);
+                Telemetry::log("motor_r_phase_avg", mc.r_phase_avg);
+            }
 
             encoderADC().learnBounds(false);
             enterState(State::DONE);
+
+            /* One clear, self-contained summary block. */
+            Telemetry::printf("[CAL] AUTO: ===========================================");
+            Telemetry::printf("[CAL] AUTO: MOTOR PROFILE COMPLETE");
+            Telemetry::printf("[CAL] AUTO:   poles                = %.2f", static_cast<double>(m_poles));
+            Telemetry::printf("[CAL] AUTO:   encoder cycles/rev   = %.2f", static_cast<double>(m_encoder_cycles_per_rev));
+            Telemetry::printf("[CAL] AUTO:   encoder offset       = %.3f deg", static_cast<double>(m_encoder_offset));
+            Telemetry::printf("[CAL] AUTO:   R_phase (UV/UW/VW)   = %.4f / %.4f / %.4f ohm",
+                              static_cast<double>(m_r_uv),
+                              static_cast<double>(m_r_uw),
+                              static_cast<double>(m_r_vw));
+            Telemetry::printf("[CAL] AUTO:   R_phase_avg          = %.4f ohm  (%.2f mohm)",
+                              static_cast<double>(m_r_avg),
+                              static_cast<double>(m_r_avg * 1000.0f));
+            Telemetry::printf("[CAL] AUTO:   R_ll_avg             = %.4f ohm  (%.2f mohm)",
+                              static_cast<double>(m_r_avg * 2.0f),
+                              static_cast<double>(m_r_avg * 2000.0f));
+            Telemetry::printf("[CAL] AUTO: ===========================================");
             break;
         }
 

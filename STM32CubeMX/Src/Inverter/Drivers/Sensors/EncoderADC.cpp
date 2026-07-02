@@ -274,14 +274,16 @@ bool EncoderADC::sample(float& angle_deg, uint16_t& raw_sin, uint16_t& raw_cos) 
 
 void EncoderADC::resetBounds() {
     __disable_irq();
-    m_sin_min_cap = SIN_MIN_DEFAULT;
-    m_sin_max_cap = SIN_MAX_DEFAULT;
-    m_cos_min_cap = COS_MIN_DEFAULT;
-    m_cos_max_cap = COS_MAX_DEFAULT;
-    m_sin_min = SIN_MAX_DEFAULT;
-    m_sin_max = SIN_MIN_DEFAULT;
-    m_cos_min = COS_MAX_DEFAULT;
-    m_cos_max = COS_MIN_DEFAULT;
+    /* Reset to the full ADC range so calibration can learn the envelope from
+     * scratch. */
+    m_sin_min_cap = 0U;
+    m_sin_max_cap = 65535U;
+    m_cos_min_cap = 0U;
+    m_cos_max_cap = 65535U;
+    m_sin_min = 65535U;
+    m_sin_max = 0U;
+    m_cos_min = 65535U;
+    m_cos_max = 0U;
     m_learning_bounds = false;
     m_mag_ema = 0.0f;
     m_mag_ema_init = false;
@@ -326,11 +328,12 @@ void EncoderADC::learnBounds(bool enable) {
             applyMargin(m_sin_min, m_sin_max, m_sin_min_cap, m_sin_max_cap);
             applyMargin(m_cos_min, m_cos_max, m_cos_min_cap, m_cos_max_cap);
         } else {
-            /* No useful envelope was learned; fall back to safe defaults. */
-            m_sin_min_cap = SIN_MIN_DEFAULT;
-            m_sin_max_cap = SIN_MAX_DEFAULT;
-            m_cos_min_cap = COS_MIN_DEFAULT;
-            m_cos_max_cap = COS_MAX_DEFAULT;
+            /* No useful envelope was learned; keep the caps at the full ADC
+             * range so the next rotation can still be captured. */
+            m_sin_min_cap = 0U;
+            m_sin_max_cap = 65535U;
+            m_cos_min_cap = 0U;
+            m_cos_max_cap = 65535U;
         }
         m_learning_bounds = false;
         m_mag_ema = 0.0f;

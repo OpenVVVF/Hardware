@@ -461,6 +461,15 @@ void EncoderOffsetCalibrator::update() {
                     wrapOffset(static_cast<float>(m_sum_offset / static_cast<double>(m_sample_count)),
                                m_mech_deg_per_motor_elec_cycle);
                 m_average_offset = avg_offset;
+
+                /* Measure the true encoder cycles per mechanical revolution from
+                 * the raw unwrapped encoder angle over the known 3-rev rotation.
+                 * This avoids the zero-crossing counting errors that can happen
+                 * during the rough pole-cal rotation. */
+                const float raw_unwrapped_deg = m_tracker.unwrappedDegrees();
+                m_measured_encoder_cycles_per_rev =
+                    std::fabs(raw_unwrapped_deg) / (360.0f * OFFSET_ROTATE_REVS);
+
                 restoreHardware();
                 encoderADC().learnBounds(false);
                 Telemetry::printf("[CAL] ENC: DONE: avg=%.3f deg samples=%d revs=%.1f",

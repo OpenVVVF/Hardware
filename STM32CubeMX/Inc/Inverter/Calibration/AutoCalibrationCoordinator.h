@@ -84,6 +84,7 @@ private:
 
     float m_poles = 0.0f;
     float m_encoder_cycles_per_rev = 0.0f;
+    float m_pole_cal_encoder_cycles_per_rev = 0.0f;
     float m_breakaway_mod = 0.0f;
     float m_encoder_offset = 0.0f;
     float m_r_uv = 0.0f;

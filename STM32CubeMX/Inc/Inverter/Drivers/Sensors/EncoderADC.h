@@ -11,9 +11,10 @@ namespace Inverter {
  * A dedicated DMA stream (DMA2_Stream0) transfers each completed pair to a
  * circular buffer, and a TIM2 TRGO at 10 kHz triggers the regular sequence.
  *
- * Hard limits from the calibrated commit 0eb9f53 are applied first; dynamic
- * min/max bounds tighten inside those caps as the encoder rotates.  The angle
- * is computed with atan2 and returned in degrees [0, 360).
+ * Hard caps start at the full ADC range.  During calibration the caps open so
+ * dynamic min/max bounds can learn the true sin/cos envelope; when learning
+ * finishes the caps are tightened to the learned envelope plus a small margin.
+ * The angle is computed with atan2 and returned in degrees [0, 360).
  */
 class EncoderADC {
 public:
@@ -121,30 +122,23 @@ private:
     bool initDma();
     float computeAngle(uint16_t raw_sin, uint16_t raw_cos);
 
-    /* Factory-calibrated hard limits measured in commit 0eb9f53.  These are
-     * used as the safe defaults when bound learning is not active. */
-    static constexpr uint16_t SIN_MIN_DEFAULT = 427U;
-    static constexpr uint16_t SIN_MAX_DEFAULT = 65388U;
-    static constexpr uint16_t COS_MIN_DEFAULT = 608U;
-    static constexpr uint16_t COS_MAX_DEFAULT = 64743U;
-
     /* Margin applied around learned bounds when rebuilding the hard caps. */
     static constexpr float    LEARN_MARGIN_FRACTION = 0.05f;
     static constexpr uint16_t LEARN_MARGIN_MIN_COUNTS = 200U;
 
-    /* Active hard caps.  These are opened to full ADC range during learning and
-     * tightened back to learned bounds + margin when learning finishes. */
-    uint16_t m_sin_min_cap = SIN_MIN_DEFAULT;
-    uint16_t m_sin_max_cap = SIN_MAX_DEFAULT;
-    uint16_t m_cos_min_cap = COS_MIN_DEFAULT;
-    uint16_t m_cos_max_cap = COS_MAX_DEFAULT;
+    /* Active hard caps.  These start at the full ADC range and are tightened to
+     * learned bounds + margin after a successful calibration. */
+    uint16_t m_sin_min_cap = 0U;
+    uint16_t m_sin_max_cap = 65535U;
+    uint16_t m_cos_min_cap = 0U;
+    uint16_t m_cos_max_cap = 65535U;
 
-    /* Dynamic bounds start at the opposite hard limits so the first samples
-     * tighten them inward to the true signal range. */
-    uint16_t m_sin_min = SIN_MAX_DEFAULT;
-    uint16_t m_sin_max = SIN_MIN_DEFAULT;
-    uint16_t m_cos_min = COS_MAX_DEFAULT;
-    uint16_t m_cos_max = COS_MIN_DEFAULT;
+    /* Dynamic bounds start at opposite extremes so the first samples tighten
+     * them inward to the true signal range. */
+    uint16_t m_sin_min = 65535U;
+    uint16_t m_sin_max = 0U;
+    uint16_t m_cos_min = 65535U;
+    uint16_t m_cos_max = 0U;
 
     /* True while the hard caps are open and the dynamic bounds learn directly
      * from raw samples. */

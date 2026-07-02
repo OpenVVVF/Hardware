@@ -691,6 +691,7 @@ void ResistanceCalibrator::update() {
             m_sample_calls = 0;
             m_last_rate_log_ms = now_ms;
             m_last_sample_ms = now_ms;
+            m_pi_last_ms = now_ms; /* avoid a large initial dt in the PI */
             enterState(State::MEASURE);
         }
         return;
@@ -793,8 +794,8 @@ void ResistanceCalibrator::update() {
                 if (m_mode == Mode::VOLTAGE_STEP) {
                     configureHardware(m_targets[m_point_index]);
                 } else {
-                    m_pi_integral = 0.0f;
-                    m_pi_duty = PI_MIN_DUTY;
+                    /* Carry PI state forward so the next setpoint starts near the
+                     * previous operating point instead of winding up from zero. */
                     m_pi_last_ms = now_ms;
                     configureHardware(m_pi_duty);
                 }

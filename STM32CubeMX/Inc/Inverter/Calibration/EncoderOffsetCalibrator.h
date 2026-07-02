@@ -86,6 +86,16 @@ public:
      */
     int sampleCount() const { return m_sample_count; }
 
+    /**
+     * @brief Encoder electrical cycles per mechanical revolution measured during
+     * the last offset rotation.
+     *
+     * This is computed from the raw unwrapped encoder angle over the known 3-rev
+     * field rotation, so it is independent of the encoder-cycle zero-crossing
+     * counter used during pole calibration.
+     */
+    float measuredEncoderCyclesPerRev() const { return m_measured_encoder_cycles_per_rev; }
+
     static EncoderOffsetCalibrator& instance();
 
     enum class State {
@@ -157,6 +167,7 @@ private:
     int      m_sample_count = 0;
     float    m_last_offset = 0.0f;
     float    m_average_offset = 0.0f;
+    float    m_measured_encoder_cycles_per_rev = 0.0f;
 };
 
 EncoderOffsetCalibrator& encoderOffsetCalibrator();
