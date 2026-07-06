@@ -2,6 +2,7 @@
 #include "Inverter/Telemetry.h"
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Control/OpenLoopController.h"
+#include "Inverter/Control/FocControlManager.h"
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
@@ -89,6 +90,9 @@ static void init()
      * the hardware state used by a manual `cal`. */
     Inverter::openLoopController().init();
 
+    /* Closed-loop FOC manager.  Does not enable outputs until `foc` command. */
+    Inverter::focControlManager().init();
+
     /* UART command shell for start/stop/freq/mod. */
     Inverter::commandShell().init();
 
@@ -136,6 +140,7 @@ static void loop()
     Inverter::commandShell().poll();
     Inverter::FaultManager::instance().executeSafetyActions();
     Inverter::openLoopController().update();
+    Inverter::focControlManager().update();
     Inverter::poleCalibrator().update();
     Inverter::encoderOffsetCalibrator().update();
     Inverter::resistanceCalibrator().update();

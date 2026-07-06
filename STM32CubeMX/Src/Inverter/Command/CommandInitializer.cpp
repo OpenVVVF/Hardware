@@ -7,6 +7,7 @@ void registerCalibrationCommands(CommandManager& mgr);
 void registerFaultCommands(CommandManager& mgr);
 void registerSensorCommands(CommandManager& mgr);
 void registerHelpCommand(CommandManager& mgr);
+void registerFocCommands(CommandManager& mgr);
 
 void initializeCommands() {
     CommandManager& mgr = CommandManager::instance();
@@ -16,5 +17,6 @@ void initializeCommands() {
     registerCalibrationCommands(mgr);
     registerFaultCommands(mgr);
     registerSensorCommands(mgr);
+    registerFocCommands(mgr);
     registerHelpCommand(mgr);
 }

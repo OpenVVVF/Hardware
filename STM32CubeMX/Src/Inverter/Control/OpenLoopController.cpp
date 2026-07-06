@@ -1,5 +1,6 @@
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
+#include "Inverter/Control/FocControlManager.h"
 
 #include "Inverter/Drivers/PWM/pwm.h"
 #include "Inverter/Drivers/GateDriver/gate_driver.h"
@@ -158,8 +159,9 @@ bool OpenLoopController::init() {
         return true;
     }
 
-    /* 10 kHz switching, 1 us dead time. */
-    PWM_SetFrequency(10000U);
+    /* 2.5 kHz PWM period (5 kHz effective transistor switching in center-aligned
+     * mode), 1 us dead time. */
+    PWM_SetFrequency(2500U);
     PWM_SetDeadTime(1000U);
 
     /* Park all phases at 50 % (zero voltage vector). */
@@ -237,6 +239,11 @@ bool OpenLoopController::recalibrateOffsets() {
 bool OpenLoopController::start(float freq_hz, float modulation_index) {
     if (!m_initialized) {
         Telemetry::printf("[OL] ERROR: not initialized");
+        return false;
+    }
+
+    if (focControlManager().isRunning()) {
+        Telemetry::printf("[OL] ERROR: FOC is running; stop it first");
         return false;
     }
 

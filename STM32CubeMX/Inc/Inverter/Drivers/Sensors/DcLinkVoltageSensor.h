@@ -42,6 +42,11 @@ public:
     float voltage() const { return m_voltage; }
 
     /**
+     * @brief True once at least one valid sample has been received.
+     */
+    bool hasSample() const { return m_has_sample; }
+
+    /**
      * @brief Capture the current raw ADC voltage as the zero offset.
      *
      * After calling this, voltage() will report 0 V for the present input.
@@ -78,7 +83,7 @@ private:
     const char* m_key;
     float       m_scale;
     float       m_zero_offset_v;
-    float       m_voltage;
+    volatile float m_voltage;
     float       m_ov_threshold_v;
     float       m_uv_threshold_v;
     bool        m_initialized;

@@ -180,8 +180,6 @@ bool PhaseCurrentADC::start() {
         return false;
     }
 
-    htim1.Instance->RCR = 1U;
-
     if (!calibrateOffsets()) {
         HAL_TIM_Base_Stop(&htim1);
         HAL_ADCEx_InjectedStop_IT(&hadc1);

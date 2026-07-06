@@ -11,10 +11,9 @@ namespace Inverter {
  * A dedicated DMA stream (DMA2_Stream0) transfers each completed pair to a
  * circular buffer, and a TIM2 TRGO at 10 kHz triggers the regular sequence.
  *
- * Hard caps start at the full ADC range.  During calibration the caps open so
- * dynamic min/max bounds can learn the true sin/cos envelope; when learning
- * finishes the caps are tightened to the learned envelope plus a small margin.
- * The angle is computed with atan2 and returned in degrees [0, 360).
+ * Hard limits from the calibrated commit 0eb9f53 are applied first; dynamic
+ * min/max bounds tighten inside those caps as the encoder rotates.  The angle
+ * is computed with atan2 and returned in degrees [0, 360).
  */
 class EncoderADC {
 public:
@@ -95,26 +94,23 @@ public:
     void diagnose();
 
     /**
-     * @brief Reset dynamic bounds and fault counters.
-     *
-     * Call before a calibration so the encoder re-learns its amplitude envelope
-     * from the current hardware state.  Also restores the hard caps to the
-     * factory-calibrated defaults and disables bound learning.
+     * @brief Set fixed sin/cos amplitude bounds.  This overrides the dynamic
+     * bounds learned from rotation.  The hard caps are not changed.
+     */
+    void setBounds(uint16_t sin_min, uint16_t sin_max,
+                   uint16_t cos_min, uint16_t cos_max);
+
+    /**
+     * @brief Reset dynamic bounds to the hard-coded caps.
      */
     void resetBounds();
 
     /**
-     * @brief Enable/disable automatic sin/cos min/max learning.
+     * @brief No-op kept for API compatibility with existing calibrators.
      *
-     * When enabled, the fixed hard caps are opened to the full ADC range and the
-     * dynamic bounds learn directly from raw samples.  When disabled, the hard
-     * caps are set to the learned envelope plus a small margin and normal spike
-     * rejection is restored.
-     *
-     * Call learnBounds(true) at the start of any encoder-recalibration routine
-     * and learnBounds(false) when it finishes or fails.
+     * Dynamic bounds are always updated inside computeAngle().
      */
-    void learnBounds(bool enable);
+    void learnBounds(bool enable) { (void)enable; }
 
 private:
     bool configureAdcChannels();
@@ -122,27 +118,17 @@ private:
     bool initDma();
     float computeAngle(uint16_t raw_sin, uint16_t raw_cos);
 
-    /* Margin applied around learned bounds when rebuilding the hard caps. */
-    static constexpr float    LEARN_MARGIN_FRACTION = 0.05f;
-    static constexpr uint16_t LEARN_MARGIN_MIN_COUNTS = 200U;
+    /* Hard limits measured/calibrated in commit 0eb9f53. */
+    static constexpr uint16_t SIN_MIN_CAP = 427U;
+    static constexpr uint16_t SIN_MAX_CAP = 65388U;
+    static constexpr uint16_t COS_MIN_CAP = 608U;
+    static constexpr uint16_t COS_MAX_CAP = 64743U;
 
-    /* Active hard caps.  These start at the full ADC range and are tightened to
-     * learned bounds + margin after a successful calibration. */
-    uint16_t m_sin_min_cap = 0U;
-    uint16_t m_sin_max_cap = 65535U;
-    uint16_t m_cos_min_cap = 0U;
-    uint16_t m_cos_max_cap = 65535U;
-
-    /* Dynamic bounds start at opposite extremes so the first samples tighten
-     * them inward to the true signal range. */
-    uint16_t m_sin_min = 65535U;
-    uint16_t m_sin_max = 0U;
-    uint16_t m_cos_min = 65535U;
-    uint16_t m_cos_max = 0U;
-
-    /* True while the hard caps are open and the dynamic bounds learn directly
-     * from raw samples. */
-    bool m_learning_bounds = false;
+    /* Dynamic bounds start at the hard limits and tighten inward. */
+    uint16_t m_sin_min = SIN_MIN_CAP;
+    uint16_t m_sin_max = SIN_MAX_CAP;
+    uint16_t m_cos_min = COS_MIN_CAP;
+    uint16_t m_cos_max = COS_MAX_CAP;
 
     /**
      * @brief Atomic snapshot of one encoder sample.

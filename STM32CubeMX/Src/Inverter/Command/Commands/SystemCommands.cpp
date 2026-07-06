@@ -3,6 +3,7 @@
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Control/FaultManager.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
+#include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
 #include "Inverter/Drivers/Logging/SupplyMonitor.h"
 #include "Inverter/Telemetry.h"
@@ -14,9 +15,11 @@
 using Inverter::OpenLoopController;
 using Inverter::FaultManager;
 using Inverter::PhaseCurrentADC;
+using Inverter::EncoderADC;
 using Inverter::DcLinkVoltageSensor;
 using Inverter::MAX22530;
 using Inverter::phaseCurrentADC;
+using Inverter::encoderADC;
 using Inverter::dcLinkVoltageSensor;
 using Inverter::openLoopController;
 using Inverter::supplyMonitorPrintStatus;
@@ -153,12 +156,64 @@ public:
     }
 };
 
+class EncStatusCommand : public CommandInterface {
+public:
+    EncStatusCommand()
+      : CommandInterface("enc_status", "Print encoder sin/cos bounds and raw values") {}
+
+    void execute(const ArgValue*, CommandContext&) override {
+        EncoderADC& enc = encoderADC();
+        Telemetry::printf("[SHELL] enc bounds sin=%u..%u cos=%u..%u valid=%s",
+                          static_cast<unsigned>(enc.sinMin()),
+                          static_cast<unsigned>(enc.sinMax()),
+                          static_cast<unsigned>(enc.cosMin()),
+                          static_cast<unsigned>(enc.cosMax()),
+                          enc.boundsValid() ? "Y" : "N");
+        Telemetry::printf("[SHELL] enc raw sin=%u cos=%u angle=%.2f",
+                          static_cast<unsigned>(enc.lastRawSin()),
+                          static_cast<unsigned>(enc.lastRawCos()),
+                          static_cast<double>(enc.lastAngle()));
+    }
+};
+
+class EncBoundsCommand : public CommandInterface {
+public:
+    EncBoundsCommand()
+      : CommandInterface("enc_bounds",
+            "Set hardcoded encoder sin/cos bounds: sin_min sin_max cos_min cos_max",
+            {ArgSpec{"sin_min", "", 0.0f, 65535.0f, 0.0f, true, ArgSpec::FLOAT},
+             ArgSpec{"sin_max", "", 0.0f, 65535.0f, 0.0f, true, ArgSpec::FLOAT},
+             ArgSpec{"cos_min", "", 0.0f, 65535.0f, 0.0f, true, ArgSpec::FLOAT},
+             ArgSpec{"cos_max", "", 0.0f, 65535.0f, 0.0f, true, ArgSpec::FLOAT}}) {}
+
+    void execute(const ArgValue* args, CommandContext&) override {
+        uint16_t smin = static_cast<uint16_t>(args[0].f_val);
+        uint16_t smax = static_cast<uint16_t>(args[1].f_val);
+        uint16_t cmin = static_cast<uint16_t>(args[2].f_val);
+        uint16_t cmax = static_cast<uint16_t>(args[3].f_val);
+
+        if (smax <= smin || cmax <= cmin) {
+            Telemetry::printf("[SHELL] ERROR: max must be greater than min");
+            return;
+        }
+
+        encoderADC().setBounds(smin, smax, cmin, cmax);
+        Telemetry::printf("[SHELL] encoder bounds set sin=%u..%u cos=%u..%u",
+                          static_cast<unsigned>(smin),
+                          static_cast<unsigned>(smax),
+                          static_cast<unsigned>(cmin),
+                          static_cast<unsigned>(cmax));
+    }
+};
+
 static ClearFaultCommand   sClearFaultCmd;
 static CalCommand          sCalCmd;
 static RawCommand          sRawCmd;
 static VZeroCommand        sVZeroCmd;
 static SupplyStatusCommand sSupplyStatusCmd;
 static RebootCommand       sRebootCmd;
+static EncStatusCommand    sEncStatusCmd;
+static EncBoundsCommand    sEncBoundsCmd;
 
 #include "Inverter/Command/CommandManager.h"
 
@@ -169,4 +224,6 @@ void registerSystemCommands(CommandManager& mgr) {
     mgr.registerCommand(&sVZeroCmd);
     mgr.registerCommand(&sSupplyStatusCmd);
     mgr.registerCommand(&sRebootCmd);
+    mgr.registerCommand(&sEncStatusCmd);
+    mgr.registerCommand(&sEncBoundsCmd);
 }
