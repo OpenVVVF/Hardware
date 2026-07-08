@@ -18,6 +18,7 @@ struct MotorParameters {
 
     float encoder_offset_rad = 0.0f;      /**< Electrical-angle offset [rad]. */
     float encoder_cycles_per_rev = 1.0f;
+    float encoder_sign = -1.0f;           /**< +1 or -1: encoder direction vs rotor field. */
 
     float max_phase_current_a = 40.0f;
     float max_modulation = 0.9f;
@@ -44,6 +45,7 @@ inline MotorParameters buildMotorParametersFromCalibration(const MotorCalibratio
         const float mech_offset_rad = cal.encoder_offset_deg *
                                       (3.14159265358979323846f / 180.0f);
         p.encoder_offset_rad = mech_offset_rad * p.pole_pairs / p.encoder_cycles_per_rev;
+        p.encoder_sign = (cal.encoder_sign >= 0.0f) ? 1.0f : -1.0f;
     }
 
     // Hardcoded values carried over from PicoFirmware until calibration exists.

@@ -350,6 +350,23 @@ void FocControlManager::adjustEncoderOffset(float delta_mech_deg) {
                       static_cast<double>(delta_mech_deg));
 }
 
+void FocControlManager::setEncoderSign(float sign) {
+    float s = (sign >= 0.0f) ? 1.0f : -1.0f;
+
+    __disable_irq();
+    MotorCalibration::instance().encoder_sign = s;
+    MotorParameters p = buildMotorParametersFromCalibration(MotorCalibration::instance(), m_motor.vdc_v);
+    const float adj_elec_rad = m_encoder_offset_adjustment_deg *
+                               (3.14159265358979323846f / 180.0f) *
+                               p.pole_pairs / p.encoder_cycles_per_rev;
+    p.encoder_offset_rad += adj_elec_rad;
+    m_motor = p;
+    m_controller.SetMotorParameters(p);
+    __enable_irq();
+
+    Telemetry::printf("[FOC] encoder sign set to %.0f", static_cast<double>(s));
+}
+
 float FocControlManager::encoderOffsetDeg() const {
     return m_encoder_offset_adjustment_deg +
            MotorCalibration::instance().encoder_offset_deg;

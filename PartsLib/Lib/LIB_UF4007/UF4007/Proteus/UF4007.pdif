@@ -1,0 +1,157 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "UF4007"
+   (description "High current capability; High reliability ; Low forward voltage drop ; High surge current capability")
+   (family "DIO")
+   (package "DIOAD1413W86L463D238")
+   (attribute "Datasheet Link" "https://www.onsemi.com/pub/Collateral/UF4007-D.pdf")
+   (attribute "Mouser Part Number" "512-UF4007")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/UF4007?qs=NwIfwa72FlplAHiXupLMBA%3D%3D")
+   (attribute "Manufacturer_Name" "onsemi")
+   (attribute "Manufacturer_Part_Number" "UF4007")
+   (gate
+    (symbol "UF4007")
+    (pin "K" 1 PS)
+    (pin "A" 2 PS)
+   )
+  )
+  (symbol "UF4007"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 200 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 100 0) (pt 200 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 400 0) (pt 500 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (closed true) (pt 200 0) (pt 400 100) (pt 400 -100) (pt 200 0))
+   )
+   (terminal
+    (body (symbol "PINSHORT") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 140 10) (rot 0) (just MIDDLE LEFT) (visible false))
+    (number (pt 60 10) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PINSHORT") (pt 600 0) (rot 0) (mir X) (visible true))
+    (name (pt 140 10) (rot 0) (just MIDDLE LEFT) (visible false))
+    (number (pt 60 10) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "DIOAD1413W86L463D238"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt -1.038 1.538)
+      (pt 15.137 1.538)
+      (pt 15.137 -1.537)
+      (pt -1.038 -1.537)
+      (pt -1.038 1.538))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 4.735 1.188)
+      (pt 9.365 1.188)
+      (pt 9.365 -1.187)
+      (pt 4.735 -1.187)
+      (pt 4.735 1.188))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt 4.735 0)
+      (pt 5.923 1.188))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt 0 0)
+      (pt 4.735 0))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt 9.365 0)
+      (pt 14.1 0))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt 4.735 1.188)
+      (pt 9.365 1.188)
+      (pt 9.365 -1.188)
+      (pt 4.735 -1.188)
+      (pt 4.735 1.188))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 4.735 0)
+      (pt 5.922 1.188))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 1.138 0)
+      (pt 4.735 0))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 9.365 0)
+      (pt 12.962 0))))
+   (leg 1 (pt 0 0) (padstack 1))
+   (leg 2 (pt 14.1 0) (padstack 0))
+   (padstack 0
+    (hole 1.05)
+    (plated true)
+    (pad (layer TCOP) (round 1.575))
+    (pad (layer INNER) (round 1.575))
+    (pad (layer BCOP) (round 1.575))
+   )
+   (padstack 1
+    (hole 1.05)
+    (plated true)
+    (pad (layer TCOP) (square 1.575))
+    (pad (layer INNER) (round 1.575))
+    (pad (layer BCOP) (square 1.575))
+   )
+   (model "UF4007.stp"
+    (euler -90 180 -90)
+    (offset 7.050000190734863 0 1.190000057220459)
+   )
+  )
+ )
+)

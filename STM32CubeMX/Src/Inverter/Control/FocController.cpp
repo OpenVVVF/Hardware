@@ -74,11 +74,12 @@ FocOutputs FocController::Update(const FocInputs& in, const FocSetpoints& set, f
                            ? (motor_.pole_pairs / motor_.encoder_cycles_per_rev)
                            : motor_.pole_pairs;
     /* The calibration stores offset as the encoder mechanical angle when the
-     * stator field points at U-high.  The encoder direction detected during
-     * calibration is reversed on this hardware, so the field angle is:
-     *   field_mech = offset_mech - encoder_mech
-     * Convert to electrical radians accordingly. */
-    ElectricalAngle_Rad = wrapAngle2Pi(motor_.encoder_offset_rad - encoder_cycle_angle * elec_scale);
+     * stator field points at U-high.  The encoder direction sign is stored in
+     * the calibration so the rotor electrical angle follows the encoder correctly:
+     *   theta_elec = offset_elec + sign * encoder_elec
+     * sign = -1 reproduces the original "reversed encoder" behaviour. */
+    ElectricalAngle_Rad = wrapAngle2Pi(motor_.encoder_offset_rad +
+                                       motor_.encoder_sign * encoder_cycle_angle * elec_scale);
     SinTheta = sinf(ElectricalAngle_Rad);
     CosTheta = cosf(ElectricalAngle_Rad);
 

@@ -3,7 +3,14 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "a5f1255f-5d74-43d5-8bee-29abeff1db0c")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "Open Inverter Platform - Control Board")
+		(date "2026-07-07")
+		(rev "G")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+	)
 	(lib_symbols
 		(symbol "Device:C"
 			(pin_numbers
@@ -720,25 +727,15 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "minimum load >1mA"
+	(text "minimum load >1mA,\nload resistor ensures minimum load requirements are met"
 		(exclude_from_sim no)
-		(at 140.208 103.378 0)
+		(at 156.718 104.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
 		(uuid "5d29e091-f2bd-449f-987c-954a14eec07a")
-	)
-	(text "SERIES INPUT RESISTOR TO REDUCE LDO HEAT"
-		(exclude_from_sim no)
-		(at 40.894 87.376 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "6cf5e4a8-319d-485a-a711-d7b8f8f84bfe")
 	)
 	(text "WE USE LDO TO POWER CURRENT SENSORS AS IT HAS ~40uV NOISE"
 		(exclude_from_sim no)
@@ -751,28 +748,22 @@
 		(uuid "b7d3da11-1767-4583-b9d7-9cb6da856802")
 	)
 	(junction
-		(at 41.91 93.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4eb207a5-91f9-49c7-8618-cf0cfa6dca27")
-	)
-	(junction
 		(at 124.46 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "526a1b13-eb5a-4acd-a0ee-6c02764d2378")
 	)
 	(junction
+		(at 58.42 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6a0514fa-d61c-4414-b562-164f56b80436")
+	)
+	(junction
 		(at 90.17 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "85dcd393-009d-4bc2-8cbc-8f9c567a408a")
-	)
-	(junction
-		(at 44.45 93.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "995e1c72-d0df-4ba3-bd9a-dca6458beaf9")
 	)
 	(junction
 		(at 109.22 93.98)
@@ -785,12 +776,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bd9a286d-bd41-418f-86b9-6c6cef48cd51")
-	)
-	(junction
-		(at 52.07 93.98)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ca29a003-3197-41c8-8b21-f7fd30f6a978")
 	)
 	(wire
 		(pts
@@ -824,16 +809,6 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 93.98) (xy 52.07 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "079f53c4-a6f7-4f3e-afff-2e5fac8edfe2")
-	)
-	(wire
-		(pts
 			(xy 25.4 93.98) (xy 31.75 93.98)
 		)
 		(stroke
@@ -854,7 +829,7 @@
 	)
 	(wire
 		(pts
-			(xy 41.91 102.87) (xy 41.91 93.98)
+			(xy 58.42 96.52) (xy 58.42 93.98)
 		)
 		(stroke
 			(width 0)
@@ -864,7 +839,17 @@
 	)
 	(wire
 		(pts
-			(xy 31.75 93.98) (xy 41.91 93.98)
+			(xy 58.42 93.98) (xy 71.12 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3105628d-7322-4a29-bba9-322904e25e1a")
+	)
+	(wire
+		(pts
+			(xy 31.75 93.98) (xy 58.42 93.98)
 		)
 		(stroke
 			(width 0)
@@ -944,16 +929,6 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 96.52) (xy 54.61 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a55895ad-c118-4e57-8493-0e9f648269ea")
-	)
-	(wire
-		(pts
 			(xy 109.22 104.14) (xy 109.22 102.87)
 		)
 		(stroke
@@ -961,26 +936,6 @@
 			(type default)
 		)
 		(uuid "aed0e82f-7e45-4ecf-a3fa-71559f9f4016")
-	)
-	(wire
-		(pts
-			(xy 44.45 93.98) (xy 44.45 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b53195cb-40cb-40bb-9dc4-6c5bc1ec958b")
-	)
-	(wire
-		(pts
-			(xy 41.91 93.98) (xy 44.45 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b924f821-35e9-49ea-9883-ea74c39d2756")
 	)
 	(wire
 		(pts
@@ -1004,7 +959,7 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 102.87) (xy 41.91 102.87)
+			(xy 71.12 96.52) (xy 58.42 96.52)
 		)
 		(stroke
 			(width 0)
@@ -1064,16 +1019,6 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 93.98) (xy 71.12 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f29ded14-d89a-4d40-8d93-c26dbcdb5e90")
-	)
-	(wire
-		(pts
 			(xy 124.46 93.98) (xy 124.46 99.06)
 		)
 		(stroke
@@ -1081,16 +1026,6 @@
 			(type default)
 		)
 		(uuid "f4788fc4-a5a6-4fe0-a510-129687c95e0e")
-	)
-	(wire
-		(pts
-			(xy 71.12 96.52) (xy 54.61 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fa019490-c6c8-43d0-ab31-106b641350d2")
 	)
 	(label "CURRENT_SENSE_+5V_A"
 		(at 35.56 60.96 180)
@@ -1573,85 +1508,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 48.26 93.98 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "1ad540ea-2c0f-4339-8125-b614499f3d7c")
-		(property "Reference" "R33"
-			(at 48.26 89.408 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "22"
-			(at 48.26 91.948 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 48.26 95.758 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 48.26 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 48.26 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0774d73d-72bc-48f1-8876-125f85f05fac")
-		)
-		(pin "2"
-			(uuid "c4467ed7-cbe4-4dbf-9be5-a9f4b00d6df6")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/aecccc3c-ad40-4948-84a1-8bab0904bc92"
-					(reference "R33")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:22-04-1041")
 		(at 35.56 53.34 0)
 		(unit 1)
@@ -1873,85 +1729,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/aecccc3c-ad40-4948-84a1-8bab0904bc92"
 					(reference "R86")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 48.26 100.33 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "5ca9b57e-9001-4712-8412-37999c684ffe")
-		(property "Reference" "R32"
-			(at 48.26 96.012 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "22"
-			(at 48.26 98.552 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 48.26 102.108 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 48.26 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 48.26 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9a56245a-bcdd-4bb9-867e-17725b574655")
-		)
-		(pin "2"
-			(uuid "eecfd682-ec06-4182-a30f-ae5f9f59a1f8")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/aecccc3c-ad40-4948-84a1-8bab0904bc92"
-					(reference "R32")
 					(unit 1)
 				)
 			)

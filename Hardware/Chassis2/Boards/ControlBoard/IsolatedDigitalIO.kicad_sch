@@ -3,7 +3,14 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "3fe58292-e52c-4075-8137-db72954fe239")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "Open Inverter Platform - Control Board")
+		(date "2026-07-07")
+		(rev "G")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+	)
 	(lib_symbols
 		(symbol "Device:R"
 			(pin_numbers
@@ -702,6 +709,16 @@
 			)
 			(embedded_fonts no)
 		)
+	)
+	(text "digital input 1-4 are mirrored to safety coprocessor\nallows for redundant monitoring of safety critical inputs\n(e-stop/kill switch, throttle/torque off limit switch, etc)"
+		(exclude_from_sim no)
+		(at 119.634 67.31 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "011e3af6-0844-4829-a9f6-d62d57b375df")
 	)
 	(junction
 		(at 38.1 40.64)

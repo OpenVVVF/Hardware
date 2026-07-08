@@ -24,6 +24,7 @@ struct MotorCalibration {
     float pole_count = 10.0f;             /**< Total rotor pole count. */
     float encoder_cycles_per_rev = 1.0f;  /**< Encoder electrical cycles per mech rev. */
     float encoder_offset_deg = 13.106f;   /**< Encoder offset, mechanical degrees. */
+    float encoder_sign = -1.0f;           /**< +1 or -1: encoder direction vs rotor field. */
     float r_phase_uv = 0.0144f;           /**< Per-phase resistance from UV pair [ohm]. */
     float r_phase_uw = 0.0150f;           /**< Per-phase resistance from UW pair [ohm]. */
     float r_phase_vw = 0.0141f;           /**< Per-phase resistance from VW pair [ohm]. */

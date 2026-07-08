@@ -52,6 +52,15 @@ public:
     void adjustEncoderOffset(float delta_mech_deg);
 
     /**
+     * @brief Set the encoder direction sign (+1 or -1).
+     *
+     * The calibrator detects whether the encoder increases or decreases as the
+     * stator field rotates.  If the rotor locks instead of spinning, try the
+     * opposite sign.
+     */
+    void setEncoderSign(float sign);
+
+    /**
      * @brief Current total encoder offset used by FOC [mech deg].
      */
     float encoderOffsetDeg() const;

@@ -3,7 +3,14 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "444cf00e-7d79-4afe-9524-643a02b1b9f0")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "Open Inverter Platform - Control Board")
+		(date "2026-07-07")
+		(rev "G")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
 			(pin_numbers
@@ -1321,7 +1328,7 @@
 		)
 		(uuid "5bfb6ce4-be11-429d-985d-b70e15fa6643")
 	)
-	(hierarchical_label "SPI_TX_A"
+	(hierarchical_label "SPI_MOSI_A"
 		(shape input)
 		(at 99.06 52.07 180)
 		(effects
@@ -1431,7 +1438,7 @@
 		)
 		(uuid "e94f095b-b50c-46a1-ab56-a7918be8c69f")
 	)
-	(hierarchical_label "SPI_RX_A"
+	(hierarchical_label "SPI_MISO_A"
 		(shape input)
 		(at 99.06 49.53 180)
 		(effects
