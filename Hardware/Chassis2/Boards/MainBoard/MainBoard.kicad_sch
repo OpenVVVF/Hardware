@@ -4,6 +4,13 @@
 	(generator_version "10.0")
 	(uuid "1bd20b11-4068-4af7-8516-b3d686707223")
 	(paper "A4")
+	(title_block
+		(title "Open Inverter Platform - IO Board")
+		(date "2026-07-07")
+		(rev "C")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+	)
 	(lib_symbols
 		(symbol "Connector_Generic:Conn_01x02"
 			(pin_names
@@ -4343,6 +4350,16 @@
 			(justify left)
 		)
 		(uuid "f35ef137-0482-420c-be57-3be3e3733d96")
+	)
+	(text "TODO: update and replace separate power conn, and swdbg conn, add usb-b top conn, swap ampseal, potentailly bigger 12v module?\nreplace relays with solid-state smaller options?\nexpose user din 4-8? \nconn HVIL to user din? (or exposed?)\n\n"
+		(exclude_from_sim no)
+		(at 268.986 168.148 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f44e969a-0bc6-44ac-8630-cceac7d0967b")
 	)
 	(text "INPUT POLARITY PROTECTION"
 		(exclude_from_sim no)
