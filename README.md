@@ -1,11 +1,10 @@
 # Open Source Traction Inverter & VCU
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
-![Size 0 Inverter CAD Rendering](Size0.png)
 
 A high-power, open-source motor inverter and vehicle control unit for 3-phase PMSM traction motors. Rated for up to 100 kW peak, 150&ndash;800 A phase current, with DC bus up to 800 V capable (tested to 200 V). The design is applicable to any traction system requiring field-oriented motor control with robust functional safety architecture.
 
-Developed at the **Corzine Lab, University of California, Santa Cruz** by Thomas Liao. The design is modular, with common firmware, control architecture, and communication interfaces shared across applications. All hardware and software are released under open-source licenses.
+The design is modular, with common firmware, control architecture, and communication interfaces shared across applications. All hardware and software are released under open-source licenses.
 
 ## Hardware Architecture
 
