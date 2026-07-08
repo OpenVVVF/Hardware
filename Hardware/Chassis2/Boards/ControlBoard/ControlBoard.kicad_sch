@@ -3085,16 +3085,6 @@
 		)
 		(uuid "2640509c-d725-4be1-a586-a6686d07fbec")
 	)
-	(label "GATE_DRIVE_PWR2_FB"
-		(at 64.77 44.45 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "2c0321d7-37fa-4949-8c18-c542fae3a3e2")
-	)
 	(label "GND_A"
 		(at 245.11 90.17 90)
 		(effects
@@ -3494,16 +3484,6 @@
 			(justify left bottom)
 		)
 		(uuid "6fca0662-04a5-4363-aeea-cafa60777031")
-	)
-	(label "GATE_DRIVE_PWR1_FB"
-		(at 52.07 44.45 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "70b23f2a-9510-473b-a1ad-f6e9f8f6c502")
 	)
 	(label "CAN1_HIGH"
 		(at 163.83 162.56 270)
@@ -4510,6 +4490,17 @@
 		)
 		(uuid "42f2a5ba-a67e-4030-bf56-3a8d73f23f55")
 	)
+	(hierarchical_label "GATE_DRIVE_PWR1_FEEDBACK"
+		(shape input)
+		(at 52.07 44.45 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "48c63c72-d559-45a0-8b48-fee8987f68fd")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 64.77 29.21 0)
@@ -4520,6 +4511,17 @@
 			(justify left)
 		)
 		(uuid "4e14bbc7-7b77-44df-bb3d-d970638fdb5d")
+	)
+	(hierarchical_label "GATE_DRIVE_PWR2_FEEDBACK"
+		(shape input)
+		(at 64.77 44.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "59541ece-a439-4381-973c-118ec062639b")
 	)
 	(hierarchical_label "PH_V_H"
 		(shape input)
