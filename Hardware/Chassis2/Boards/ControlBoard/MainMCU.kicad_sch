@@ -5469,7 +5469,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 158.75) (xy 176.53 158.75)
+			(xy 191.77 163.83) (xy 176.53 163.83)
 		)
 		(stroke
 			(width 0)
@@ -5789,7 +5789,7 @@
 	)
 	(wire
 		(pts
-			(xy 176.53 134.62) (xy 176.53 137.16)
+			(xy 176.53 134.62) (xy 176.53 148.59)
 		)
 		(stroke
 			(width 0)
@@ -6129,7 +6129,7 @@
 	)
 	(wire
 		(pts
-			(xy 176.53 144.78) (xy 176.53 158.75)
+			(xy 176.53 156.21) (xy 176.53 163.83)
 		)
 		(stroke
 			(width 0)
@@ -6634,6 +6634,17 @@
 		)
 		(uuid "106960c1-673c-4778-9cf1-954b6d7568fd")
 	)
+	(hierarchical_label "VOLTAGE_MONITOR_I2C_SDA"
+		(shape input)
+		(at 163.83 134.62 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "11e0a995-1b42-4bcf-a65f-9f8465185584")
+	)
 	(hierarchical_label "DC_LINK_CURRENT_SENSE"
 		(shape input)
 		(at 153.67 134.62 270)
@@ -6931,6 +6942,17 @@
 		)
 		(uuid "58b53cee-bdbf-4f06-9a90-90118212be93")
 	)
+	(hierarchical_label "MULTIDRIVE_FIBER_UART_TX"
+		(shape input)
+		(at 120.65 58.42 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5cf47d78-eb9e-4733-b6f9-6ea2124feaf6")
+	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 45.72 166.37 270)
@@ -7206,6 +7228,17 @@
 		)
 		(uuid "9b68a38f-247c-47b5-aae8-61f3199cd98d")
 	)
+	(hierarchical_label "MULTIDRIVE_FIBER_SYNC"
+		(shape input)
+		(at 186.69 134.62 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9e0d97eb-c16a-4873-8c80-504e5c20a29b")
+	)
 	(hierarchical_label "GATE_DRIVER_FAULT"
 		(shape input)
 		(at 207.01 134.62 270)
@@ -7404,6 +7437,17 @@
 		)
 		(uuid "cd8398a4-5949-4130-82db-f98ca51a46bd")
 	)
+	(hierarchical_label "MULTIDRIVE_FIBER_UART_RX"
+		(shape input)
+		(at 184.15 58.42 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d25dd8d3-8522-42d8-b0c9-6bbec56d0e86")
+	)
 	(hierarchical_label "USER_DOUT_3"
 		(shape input)
 		(at 113.03 134.62 270)
@@ -7527,7 +7571,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 194.31 158.75 0)
+		(at 207.01 163.83 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7546,6 +7590,17 @@
 			(justify left)
 		)
 		(uuid "e24f86d7-fd84-41cb-9ca2-3ce9e37f3ca2")
+	)
+	(hierarchical_label "VOLTAGE_MONITOR_I2C_SCL"
+		(shape input)
+		(at 214.63 58.42 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e5121095-ab95-4b9d-ba0a-1ec49660d4b9")
 	)
 	(hierarchical_label "GATE_DRIVE_PWR2_FEEDBACK"
 		(shape input)
@@ -8469,7 +8524,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 176.53 140.97 0)
+		(at 176.53 152.4 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8479,7 +8534,7 @@
 		(dnp no)
 		(uuid "35a23d21-4633-4a72-bf95-1de84654b756")
 		(property "Reference" "R31"
-			(at 176.53 145.288 0)
+			(at 176.53 156.718 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8490,7 +8545,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 176.53 147.828 0)
+			(at 176.53 159.258 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8501,7 +8556,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 174.752 140.97 90)
+			(at 174.752 152.4 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8512,7 +8567,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 176.53 140.97 0)
+			(at 176.53 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8523,7 +8578,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 176.53 140.97 0)
+			(at 176.53 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8794,7 +8849,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:LTST-C230GKT")
-		(at 194.31 158.75 180)
+		(at 207.01 163.83 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8805,7 +8860,7 @@
 		(fields_autoplaced yes)
 		(uuid "635482f0-bf06-4711-94c4-e16aacfe589f")
 		(property "Reference" "LED2"
-			(at 186.69 151.13 0)
+			(at 199.39 156.21 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8815,7 +8870,7 @@
 			)
 		)
 		(property "Value" "LTST-C230GKT"
-			(at 186.69 153.67 0)
+			(at 199.39 158.75 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8825,7 +8880,7 @@
 			)
 		)
 		(property "Footprint" "InverterCom:LEDC3216X120N"
-			(at 181.61 65.1 0)
+			(at 194.31 70.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8837,7 +8892,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 181.61 -34.9 0)
+			(at 194.31 -29.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8849,7 +8904,7 @@
 			)
 		)
 		(property "Description" "Lite-On LTST-C230GKT Green LED, 569 nm, 3016 (1206), Rectangle Lens SMD Package"
-			(at 194.31 158.75 0)
+			(at 207.01 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8860,7 +8915,7 @@
 			)
 		)
 		(property "Height" "1.2"
-			(at 181.61 -234.9 0)
+			(at 194.31 -229.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8872,7 +8927,7 @@
 			)
 		)
 		(property "Mouser Part Number" "859-LTST-C230GKT"
-			(at 181.61 -334.9 0)
+			(at 194.31 -329.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8884,7 +8939,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Lite-On/LTST-C230GKT?qs=7ZnIBiPc9DrbEstVFO1DAg%3D%3D"
-			(at 181.61 -434.9 0)
+			(at 194.31 -429.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8896,7 +8951,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Lite-On"
-			(at 181.61 -534.9 0)
+			(at 194.31 -529.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8908,7 +8963,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "LTST-C230GKT"
-			(at 181.61 -634.9 0)
+			(at 194.31 -629.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9513,10 +9568,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "a71923d6-00ae-4635-abae-7877ce208322")
 		(property "Reference" "LED1"
-			(at 175.26 161.2899 90)
+			(at 172.212 167.386 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9527,7 +9581,7 @@
 			)
 		)
 		(property "Value" "LTST-C230CKT"
-			(at 175.26 163.8299 90)
+			(at 172.212 169.926 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
