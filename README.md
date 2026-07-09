@@ -4,6 +4,8 @@
 
 A high-power, open-source motor inverter and vehicle control unit for 3-phase PMSM traction motors. Rated for up to 100 kW peak, 150&ndash;800 A phase current, with DC bus up to 800 V capable (tested to 200 V). The design is applicable to any traction system requiring field-oriented motor control with robust functional safety architecture.
 
+This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
+
 The design is modular, with common firmware, control architecture, and communication interfaces shared across applications. All hardware and software are released under open-source licenses.
 
 ## Hardware Architecture
