@@ -1,0 +1,27 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#SamacSys ECAD Model UJ2-B-HR-G-V
+#/18881065/1553794/2.50/6/2/Connector
+DEF UJ2-B-HR-G-V J 0 30 Y Y 1 F N
+F0 "J" 850 600 50 H V L CNN
+F1 "UJ2-B-HR-G-V" 850 500 50 H V L CNN
+F2 "UJ2BHRGV" 850 400 50 H I L CNN
+F3 "https://www.sameskydevices.com/product/resource/uj2-b-hr-g-v.pdf" 850 300 50 H I L CNN
+F4 "Type B, USB 2.0, 480 Mbps, 5 Vdc, 1.5 A, Vertical, Through Hole Mounting Style, Through Hole Contact Pin Type. Gold Flash, Board Lock, 4 Pin, USB Receptacle" 850 200 50 H I L CNN "Description"
+F5 "16.5" 850 100 50 H I L CNN "Height"
+F6 "179-UJ2-B-HR-G-V" 850 0 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/CUI-Devices/UJ2-B-HR-G-V?qs=HoCaDK9Nz5fUWn12FBL%2Fqw%3D%3D" 850 -100 50 H I L CNN "Mouser Price/Stock"
+F8 "Same Sky" 850 -200 50 H I L CNN "Manufacturer_Name"
+F9 "UJ2-B-HR-G-V" 850 -300 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X VBUS 1 500 600 200 D 50 50 0 0 P
+X D- 2 400 600 200 D 50 50 0 0 P
+X D+ 3 400 -600 200 U 50 50 0 0 P
+X GND 4 500 -600 200 U 50 50 0 0 P
+X MH1 MH1 0 0 200 R 50 50 0 0 P
+X MH2 MH2 1000 0 200 L 50 50 0 0 P
+P 5 0 1 6 200 400 800 400 800 -400 200 -400 200 400 N
+ENDDRAW
+ENDDEF
+#
+#End Library

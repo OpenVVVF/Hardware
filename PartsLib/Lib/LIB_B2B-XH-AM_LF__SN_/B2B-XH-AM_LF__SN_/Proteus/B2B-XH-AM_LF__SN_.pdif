@@ -1,0 +1,152 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "B2B-XH-AM_LF__SN_"
+   (description "CONN HEADER VERT 2POS 2.5MM")
+   (family "CON")
+   (package "B2BXHAMLFSN")
+   (attribute "Datasheet Link" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf")
+   (attribute "Geometry.Height" "7mm")
+   (attribute "Mouser Part Number" "306-B2B-XH-AMLFSNP")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/JST-Commercial/B2B-XH-AMLFSN?qs=cdbOS8ANM9BJgHgwB7WxQw%3D%3D")
+   (attribute "Manufacturer_Name" "JST (JAPAN SOLDERLESS TERMINALS)")
+   (attribute "Manufacturer_Part_Number" "B2B-XH-AM(LF)(SN)")
+   (gate
+    (symbol "B2B-XH-AM_LF__SN_")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+   )
+  )
+  (symbol "B2B-XH-AM_LF__SN_"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -200) (pt 200 -200) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "B2BXHAMLFSN"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt -4.95 -2.35)
+      (pt 2.45 -2.35)
+      (pt 2.45 3.4)
+      (pt -4.95 3.4)
+      (pt -4.95 -2.35))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 2.45 3.4)
+      (pt -4.95 3.4)
+      (pt -4.95 3.4)
+      (pt 2.45 3.4)
+      (pt 2.45 3.4))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -4.95 -2.35)
+      (pt 2.45 -2.35)
+      (pt 2.45 -2.35)
+      (pt -4.95 -2.35)
+      (pt -4.95 -2.35))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -5.95 4.4)
+      (pt 3.45 4.4)
+      (pt 3.45 -3.35)
+      (pt -5.95 -3.35)
+      (pt -5.95 4.4))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 2.45 3)
+      (pt 2.45 3)
+      (pt 2.45 3.4)
+      (pt 2.45 3.4)
+      (pt 2.45 3))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -4.95 3.4)
+      (pt -4.95 3.4)
+      (pt -4.95 -2.35)
+      (pt -4.95 -2.35)
+      (pt -4.95 3.4))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 2.45 -2.35)
+      (pt 2.45 -2.35)
+      (pt 2.45 1)
+      (pt 2.45 1)
+      (pt 2.45 -2.35))))
+   (leg 1 (pt 0.000 0.000) (padstack 0))
+   (leg 2 (pt -2.500 0.000) (padstack 2))
+   (leg MH1 (pt 1.600 2.000) (padstack 3))
+   (padstack 0
+    (hole 1.05)
+    (plated true)
+    (pad (layer TCOP) (square 1.575))
+    (pad (layer INNER) (round 1.575))
+    (pad (layer BCOP) (square 1.575))
+   )
+   (padstack 2
+    (hole 1.05)
+    (plated true)
+    (pad (layer TCOP) (round 1.575))
+    (pad (layer INNER) (round 1.575))
+    (pad (layer BCOP) (round 1.575))
+   )
+   (padstack 3
+    (hole 1.3)
+    (plated false)
+    (pad (layer TCOP) (round 0.650))
+    (pad (layer INNER) (round 0.650))
+    (pad (layer BCOP) (round 0.650))
+   )
+   (model "B2B-XH-AM_LF__SN_.stp"
+    (euler 90 0 0)
+    (offset -1.25 0.5199999809265137 3.5)
+   )
+  )
+ )
+)

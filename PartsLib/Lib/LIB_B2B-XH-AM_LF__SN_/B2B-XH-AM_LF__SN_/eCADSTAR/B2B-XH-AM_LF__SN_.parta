@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_554572"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2020-07-21-13:41:45)
+    (utime 2025-02-17-10:45:47)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "B2B-XH-AM_LF__SN_")
+)
+
+
+(pinAssign "ECS_554572"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2020-07-21-13:41:45)
+    (utime 2025-02-17-10:45:47)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_554572")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "B2B-XH-AM_LF__SN_")
+)
+
+
+(part "B2B-XH-AM_LF__SN_"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2020-07-21-13:41:45)
+    (utime 2025-02-17-10:45:47)
+    (packageRef "B2B-XH-AM_LF__SN_")
+    (pinAssignRef "ECS_554572")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "2") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "YES")
+    (property "refDesPrefix" "J")
+    (property "description" "CONN HEADER VERT 2POS 2.5MM")
+    (property "Mouser_Part_Number" "306-B2B-XH-AMLFSNP")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/JST-Commercial/B2B-XH-AMLFSN?qs=cdbOS8ANM9BJgHgwB7WxQw%3D%3D")
+    (property "Manufacturer_Name" "JST (JAPAN SOLDERLESS TERMINALS)")
+    (property "Manufacturer_Part_Number" "B2B-XH-AM(LF)(SN)")
+    (property "Datasheet_Link" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf")
+    (property "compAreaTopHeight" 7)
+)
+
+

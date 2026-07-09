@@ -1,0 +1,125 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "MM3Z3V0ST1G"
+   (description "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements")
+   (family "DIO")
+   (package "SOD2512X100N")
+   (attribute "Datasheet Link" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF")
+   (attribute "Geometry.Height" "1mm")
+   (attribute "Mouser Part Number" "863-MM3Z3V0ST1G")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D")
+   (attribute "Manufacturer_Name" "onsemi")
+   (attribute "Manufacturer_Part_Number" "MM3Z3V0ST1G")
+   (gate
+    (symbol "MM3Z3V0ST1G")
+    (pin "K" 1 PS)
+    (pin "A" 2 PS)
+   )
+  )
+  (symbol "MM3Z3V0ST1G"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 80) (pt 200 -80))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 200 80) (pt 240 100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 160 -100) (pt 200 -80))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 100 0) (pt 200 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 500 0) (pt 400 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (closed true) (pt 200 0) (pt 400 100) (pt 400 -100) (pt 200 0))
+   )
+   (terminal
+    (body (symbol "PINSHORT") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 140 10) (rot 0) (just MIDDLE LEFT) (visible false))
+    (number (pt 60 10) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PINSHORT") (pt 600 0) (rot 0) (mir X) (visible true))
+    (name (pt 140 10) (rot 0) (just MIDDLE LEFT) (visible false))
+    (number (pt 60 10) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "SOD2512X100N"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt -1.95 1.15)
+      (pt 1.95 1.15)
+      (pt 1.95 -1.15)
+      (pt -1.95 -1.15)
+      (pt -1.95 1.15))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -0.85 0.625)
+      (pt 0.85 0.625)
+      (pt 0.85 -0.625)
+      (pt -0.85 -0.625)
+      (pt -0.85 0.625))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt -0.85 0.125)
+      (pt -0.35 0.625))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -1.7 0.625)
+      (pt 0.85 0.625))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -0.85 -0.625)
+      (pt 0.85 -0.625))))
+   (leg 1 (pt -1.2 0) (padstack 0))
+   (leg 2 (pt 1.2 0) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 0.5 1 0 0 0))
+   )
+   (model "MM3Z3V0ST1G.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

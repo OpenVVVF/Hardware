@@ -2397,16 +2397,6 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 71.12) (xy 107.95 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7ec85d50-69c8-413f-b055-032478a0909d")
-	)
-	(wire
-		(pts
 			(xy 228.6 58.42) (xy 238.76 58.42)
 		)
 		(stroke
@@ -2537,16 +2527,6 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 69.85) (xy 90.17 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a7576a6c-15af-42e8-8ad9-268aa00b3607")
-	)
-	(wire
-		(pts
 			(xy 64.77 88.9) (xy 69.85 88.9)
 		)
 		(stroke
@@ -2584,6 +2564,16 @@
 			(type default)
 		)
 		(uuid "addee37b-8020-4394-9da7-34c405dde157")
+	)
+	(wire
+		(pts
+			(xy 90.17 69.85) (xy 107.95 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af8c238d-b5ec-43f5-b3ee-c6a968fba713")
 	)
 	(wire
 		(pts
@@ -2737,16 +2727,6 @@
 	)
 	(wire
 		(pts
-			(xy 107.95 71.12) (xy 107.95 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dc3b653e-b976-46d2-a297-39a415cb4658")
-	)
-	(wire
-		(pts
 			(xy 64.77 110.49) (xy 69.85 110.49)
 		)
 		(stroke
@@ -2787,6 +2767,16 @@
 	)
 	(wire
 		(pts
+			(xy 107.95 71.12) (xy 107.95 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3980ca3-98b7-40ac-a553-87a6ffbbfd25")
+	)
+	(wire
+		(pts
 			(xy 110.49 101.6) (xy 114.3 101.6)
 		)
 		(stroke
@@ -2824,6 +2814,16 @@
 			(type default)
 		)
 		(uuid "ebe874b2-a8f1-4c63-8828-f9f2dc9e4c3b")
+	)
+	(wire
+		(pts
+			(xy 114.3 71.12) (xy 107.95 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efe5f844-066f-4b55-9696-3d2946a01acc")
 	)
 	(wire
 		(pts
@@ -2915,6 +2915,16 @@
 		)
 		(uuid "0451cd86-16bc-4894-87ed-28c49c77f96f")
 	)
+	(label "GND_A_A"
+		(at 114.3 125.73 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "05943a1c-c8d5-4b32-a1e5-95c599a76dc2")
+	)
 	(label "+12V_IN_A"
 		(at 96.52 179.07 0)
 		(effects
@@ -2955,16 +2965,6 @@
 		)
 		(uuid "07fc19de-f89f-4b71-953e-0dd48adbe7de")
 	)
-	(label "ANALOG_GND"
-		(at 114.3 125.73 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "0d9075b9-2f7a-4b12-87e7-e9d3d6384829")
-	)
 	(label "VS_PH_V_Y"
 		(at 40.64 147.32 0)
 		(effects
@@ -2995,6 +2995,16 @@
 		)
 		(uuid "13a2f78f-aaec-46e0-bd65-9a90300558ee")
 	)
+	(label "GND_A_A"
+		(at 90.17 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "145434cb-8c9c-457e-970c-8c0460aa47fc")
+	)
 	(label "CAN2_LOW"
 		(at 116.84 146.05 0)
 		(effects
@@ -3006,7 +3016,7 @@
 		(uuid "18abd520-8860-4740-a310-9237127987c0")
 	)
 	(label "+3.3V_A"
-		(at 245.11 44.45 0)
+		(at 251.46 44.45 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3086,7 +3096,7 @@
 		(uuid "2640509c-d725-4be1-a586-a6686d07fbec")
 	)
 	(label "GND_A"
-		(at 245.11 90.17 90)
+		(at 262.89 91.44 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3126,7 +3136,7 @@
 		(uuid "30d07add-6ac0-4632-8062-e919748d3731")
 	)
 	(label "VS_GND_Y"
-		(at 265.43 96.52 0)
+		(at 262.89 96.52 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3166,7 +3176,7 @@
 		(uuid "38be8df9-0ff8-4d0e-a112-bbe0a3be0f36")
 	)
 	(label "VS_PH_V_Y"
-		(at 265.43 101.6 0)
+		(at 262.89 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3254,16 +3264,6 @@
 			(justify right bottom)
 		)
 		(uuid "4dfd2916-3dcc-4a95-8d4f-27a4ea2e57fe")
-	)
-	(label "ANALOG_GND"
-		(at 245.11 46.99 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4e4db29e-91c0-4d1d-847a-189af2128391")
 	)
 	(label "CAN2_GND"
 		(at 142.24 162.56 270)
@@ -3365,6 +3365,16 @@
 		)
 		(uuid "633fe1ec-0cd1-441a-939a-bd36a48b6031")
 	)
+	(label "MTR_TMP"
+		(at 214.63 45.72 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6798cda1-0614-4ed5-9f29-22b530058cc3")
+	)
 	(label "MP_RESET"
 		(at 160.02 34.29 180)
 		(effects
@@ -3446,7 +3456,7 @@
 		(uuid "6d09a7ab-a669-401b-8a7e-8ead7f1252d4")
 	)
 	(label "HS_TMP_2"
-		(at 219.71 40.64 180)
+		(at 214.63 40.64 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3454,6 +3464,16 @@
 			(justify right bottom)
 		)
 		(uuid "6d721753-a063-4305-bc70-2b10c77afb41")
+	)
+	(label "MOTOR_TEMP_IN"
+		(at 69.85 69.85 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6daaf642-af24-45f9-b8b3-21a059566f5a")
 	)
 	(label "+12V_CANBUS_A"
 		(at 173.99 135.89 90)
@@ -3526,7 +3546,7 @@
 		(uuid "790bbfb6-d6e2-4772-b983-a6012a6c243f")
 	)
 	(label "VS_DC_LINK_Y"
-		(at 265.43 106.68 0)
+		(at 262.89 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3635,6 +3655,16 @@
 		)
 		(uuid "869d87d4-5da9-4480-8977-4c5f2337e8d1")
 	)
+	(label "MOTOR_TEMP_IN"
+		(at 251.46 41.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "87afed51-86d7-4e4a-99a4-e27058b531bb")
+	)
 	(label "HS_TMP_3"
 		(at 114.3 121.92 180)
 		(effects
@@ -3684,16 +3714,6 @@
 			(justify right bottom)
 		)
 		(uuid "8c444fcc-e429-49a5-b991-2adcb510354c")
-	)
-	(label "ANALOG_GND"
-		(at 90.17 116.84 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "8ec40b5a-412e-42e3-bb1b-05a89febf076")
 	)
 	(label "DIN_7_W"
 		(at 254 139.7 90)
@@ -3745,16 +3765,6 @@
 		)
 		(uuid "9500a01e-15d4-4e66-b33e-5aeb3e8bfccd")
 	)
-	(label "ANALOG_GND"
-		(at 90.17 97.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "99470397-6e8f-4d84-9b58-c4d481fe12a9")
-	)
 	(label "DIN_5_W"
 		(at 264.16 139.7 90)
 		(effects
@@ -3766,7 +3776,7 @@
 		(uuid "9a9881e9-612f-4b60-b659-675f237df034")
 	)
 	(label "VS_PH_W_Y"
-		(at 265.43 99.06 0)
+		(at 262.89 99.06 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3774,16 +3784,6 @@
 			(justify left bottom)
 		)
 		(uuid "9b49f3aa-9963-4a2b-a51f-ce59afcc5ed7")
-	)
-	(label "MOTOR_TEMP_IN"
-		(at 69.85 69.85 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "9c60cbfc-d42b-47ca-88d5-327d2436971b")
 	)
 	(label "ONBOARD_12V_ENABLE_A"
 		(at 96.52 189.23 0)
@@ -3815,16 +3815,6 @@
 		)
 		(uuid "a34c8dff-c6a7-450f-b6d1-f5ab10b047f2")
 	)
-	(label "ANALOG_GND"
-		(at 90.17 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a58e0dee-26d2-48fd-a967-39f893cb514b")
-	)
 	(label "ONBOARD_12V_ENABLE_A"
 		(at 194.31 50.8 90)
 		(effects
@@ -3834,6 +3824,16 @@
 			(justify left bottom)
 		)
 		(uuid "a65a35a7-ec3b-451d-98a6-8ed39252ab49")
+	)
+	(label "GND_A_A"
+		(at 251.46 46.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a7bd2c20-46c4-46aa-8582-dee0a00b9bd3")
 	)
 	(label "CP_SWCLK"
 		(at 172.72 29.21 0)
@@ -3955,8 +3955,18 @@
 		)
 		(uuid "b44c06b4-239b-45cf-b806-03c0b1951f93")
 	)
+	(label "GND_A_A"
+		(at 90.17 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b886a9c2-a2b1-4da9-9e9e-04a8be3f66f6")
+	)
 	(label "HS_TMP_1"
-		(at 219.71 43.18 180)
+		(at 214.63 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3995,6 +4005,16 @@
 		)
 		(uuid "ba89c7d0-41b6-4ce6-99af-8f879afea456")
 	)
+	(label "GND_A_A"
+		(at 38.1 100.33 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "bb88ba56-1ca5-450e-bb9c-ca66c1e9c9f6")
+	)
 	(label "HALL_V_ENCODER_COS_IN"
 		(at 110.49 27.94 180)
 		(effects
@@ -4006,7 +4026,7 @@
 		(uuid "bbcbadef-e6f5-493b-b105-112a06528be9")
 	)
 	(label "+3.3V_A"
-		(at 247.65 90.17 90)
+		(at 262.89 88.9 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4014,6 +4034,16 @@
 			(justify left bottom)
 		)
 		(uuid "bc0e2c8c-af14-4f0b-8225-a7616369a930")
+	)
+	(label "GND_A_A"
+		(at 90.17 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bc493b87-281a-4872-832d-ac88e2b86053")
 	)
 	(label "CAN2_HIGH"
 		(at 138.43 162.56 270)
@@ -4135,26 +4165,6 @@
 		)
 		(uuid "ce8d3c99-b422-4e1c-863a-4b90f6f981b3")
 	)
-	(label "ANALOG_GND"
-		(at 90.17 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "cef545a0-88de-4b0a-a0b4-bf15a9e72041")
-	)
-	(label "ANALOG_GND"
-		(at 38.1 100.33 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "cf7e4043-33ce-4116-aa7e-9abbf745c16f")
-	)
 	(label "CAN1_JUMPER_B"
 		(at 176.53 162.56 270)
 		(effects
@@ -4246,7 +4256,7 @@
 		(uuid "e0e77fac-ccca-4700-87f6-03bb365db123")
 	)
 	(label "VS_PH_U_Y"
-		(at 265.43 104.14 0)
+		(at 262.89 104.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4376,7 +4386,7 @@
 		(uuid "f6dd62a2-728c-47bb-b04c-2f38a8fdf962")
 	)
 	(label "HS_TMP_3"
-		(at 219.71 38.1 180)
+		(at 214.63 38.1 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4404,6 +4414,16 @@
 			(justify left bottom)
 		)
 		(uuid "fcad40c9-3856-412c-9e0e-6027eb93b61c")
+	)
+	(label "GND_A_A"
+		(at 90.17 97.79 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fcda9b0f-5616-47d4-8273-340608e12506")
 	)
 	(label "GND_A"
 		(at 160.02 21.59 180)
@@ -5544,7 +5564,7 @@
 				)
 			)
 		)
-		(property "Footprint" "SHDR6W100P0X508_1X6_4064X850X1240P"
+		(property "Footprint" "InverterCom:SHDR6W100P0X508_1X6_4064X850X1240P"
 			(at 24.13 60.02 0)
 			(hide yes)
 			(show_name no)
@@ -5698,7 +5718,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x10_P2.54mm_Vertical"
 			(at 57.15 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -6214,8 +6234,8 @@
 		)
 	)
 	(sheet
-		(at 231.14 90.17)
-		(size 34.29 19.05)
+		(at 231.14 86.36)
+		(size 31.75 22.86)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -6230,7 +6250,7 @@
 		)
 		(uuid "0caf4ddd-5aa9-47fe-b3d8-386937cdff66")
 		(property "Sheetname" "ADC"
-			(at 231.14 89.4584 0)
+			(at 231.14 85.6484 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6252,7 +6272,7 @@
 			)
 		)
 		(pin "+3.3V_A" input
-			(at 247.65 90.17 90)
+			(at 262.89 88.9 0)
 			(uuid "8218d0d5-3389-4e9f-bc16-33260da2b067")
 			(effects
 				(font
@@ -6262,7 +6282,7 @@
 			)
 		)
 		(pin "GND_A" input
-			(at 245.11 90.17 90)
+			(at 262.89 91.44 0)
 			(uuid "fc6fd691-6c01-43ab-8c97-a9f60742c801")
 			(effects
 				(font
@@ -6292,7 +6312,7 @@
 			)
 		)
 		(pin "VSENSE_DC_LINK_B" input
-			(at 265.43 106.68 0)
+			(at 262.89 106.68 0)
 			(uuid "ea5a2efc-bcd3-4f2e-b653-d8705beb7669")
 			(effects
 				(font
@@ -6302,7 +6322,7 @@
 			)
 		)
 		(pin "VSENSE_GND_B" input
-			(at 265.43 96.52 0)
+			(at 262.89 96.52 0)
 			(uuid "bbdfdd6a-079d-4740-99d1-12367726110f")
 			(effects
 				(font
@@ -6312,7 +6332,7 @@
 			)
 		)
 		(pin "VSENSE_PH_U_B" input
-			(at 265.43 104.14 0)
+			(at 262.89 104.14 0)
 			(uuid "87f2be40-fce1-4871-b6ef-9c46ce13f881")
 			(effects
 				(font
@@ -6322,7 +6342,7 @@
 			)
 		)
 		(pin "VSENSE_PH_V_B" input
-			(at 265.43 101.6 0)
+			(at 262.89 101.6 0)
 			(uuid "b4dc3a2d-c66c-489b-9e31-6e0f7b6c2d22")
 			(effects
 				(font
@@ -6332,7 +6352,7 @@
 			)
 		)
 		(pin "VSENSE_PH_W_B" input
-			(at 265.43 99.06 0)
+			(at 262.89 99.06 0)
 			(uuid "6dbeb1fe-94ed-497c-860a-45f20395c06c")
 			(effects
 				(font
@@ -7155,8 +7175,8 @@
 		)
 	)
 	(sheet
-		(at 219.71 35.56)
-		(size 25.4 12.7)
+		(at 214.63 35.56)
+		(size 36.83 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -7171,7 +7191,7 @@
 		)
 		(uuid "24425313-707e-4fda-86d9-7786b794e109")
 		(property "Sheetname" "TemperatureSensors"
-			(at 219.71 34.8484 0)
+			(at 214.63 34.8484 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7182,7 +7202,7 @@
 			)
 		)
 		(property "Sheetfile" "TemperatureSensors.kicad_sch"
-			(at 219.71 48.8446 0)
+			(at 214.63 48.8446 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7193,7 +7213,7 @@
 			)
 		)
 		(pin "GND_V" input
-			(at 245.11 46.99 0)
+			(at 251.46 46.99 0)
 			(uuid "76eee62a-1f9b-4965-8d04-68bf7bbae4a7")
 			(effects
 				(font
@@ -7203,7 +7223,7 @@
 			)
 		)
 		(pin "HEATSINK_TMP2_V" input
-			(at 219.71 38.1 180)
+			(at 214.63 38.1 180)
 			(uuid "516256cf-fa50-47d1-b22c-994d6ef93770")
 			(effects
 				(font
@@ -7213,7 +7233,7 @@
 			)
 		)
 		(pin "HEATSINK_TMP3_V" input
-			(at 219.71 40.64 180)
+			(at 214.63 40.64 180)
 			(uuid "e19dfab4-45cb-4d7e-b775-66308a158e32")
 			(effects
 				(font
@@ -7223,7 +7243,7 @@
 			)
 		)
 		(pin "HEATSINK_TMP_V" input
-			(at 219.71 43.18 180)
+			(at 214.63 43.18 180)
 			(uuid "815a1814-9a54-4092-824c-ec21ba387131")
 			(effects
 				(font
@@ -7233,13 +7253,33 @@
 			)
 		)
 		(pin "+3.3V_V" input
-			(at 245.11 44.45 0)
+			(at 251.46 44.45 0)
 			(uuid "b1eaa7b0-bfd5-426c-8170-200dc2b126ee")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "MOTOR_TEMP_IN" input
+			(at 251.46 41.91 0)
+			(uuid "7743b27e-6ad8-4f19-96b3-d0ed3d938a8a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "MOTOR_TEMP_V" input
+			(at 214.63 45.72 180)
+			(uuid "c3af700c-c4d8-4362-a9b5-fe38289e6850")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
@@ -8086,7 +8126,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
 			(type solid)

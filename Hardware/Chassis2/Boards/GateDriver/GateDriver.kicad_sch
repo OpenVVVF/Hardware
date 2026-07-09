@@ -2061,216 +2061,16 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Power_Management:BTS462TATMA1"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -5.08 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Value" "BTS462TATMA1"
-				(at 2.54 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left bottom)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
-				(at 0 -20.32 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify bottom)
-				)
-			)
-			(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
-				(at 0 -22.86 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "infineon power load switch"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "TO?252*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "BTS462TATMA1_0_0"
-				(rectangle
-					(start -5.08 5.08)
-					(end 5.08 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin power_in line
-					(at 0 -7.62 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -7.62 0 0)
-					(length 2.54)
-					(name "IN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 0 7.62 270)
-					(length 2.54)
-					(name "Vbb"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(hide yes)
-					(name "NC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 7.62 0 180)
-					(length 2.54)
-					(name "OUT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(text "feedback pins are 0-3.3v binary\n(3.3v expected when +12v present)"
 		(exclude_from_sim no)
-		(at 17.272 59.182 90)
+		(at 19.05 57.404 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
 		(uuid "0835b202-7749-42e4-8fae-262810e82dcc")
-	)
-	(text "TODO: add zeners to this"
-		(exclude_from_sim no)
-		(at 74.168 129.54 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "37da23f9-a5ef-41fc-836e-1ca2a9b639c2")
 	)
 	(text "TODO: replace terminal blocks potentially? (maybe not needed, as they make connecting much easier)"
 		(exclude_from_sim no)
@@ -2282,35 +2082,15 @@
 		)
 		(uuid "4a54aa06-9565-4b04-8f0f-41be2dc109d6")
 	)
-	(text "Feedback to validate power states\nAllows Main MCU and Safety coproc\nto independently monitor and cross-check\nstates of switches"
-		(exclude_from_sim no)
-		(at 19.304 136.398 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "979820c2-e7fb-465e-8f3f-33ebff41dc9f")
-	)
 	(text "CONNECTOR FROM THIS GATE DRIVER\nTO MAIN CONTROL BOARD ABOVE"
 		(exclude_from_sim no)
-		(at 52.832 70.104 0)
+		(at 52.832 68.834 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
 		(uuid "9a610154-b620-40eb-b6e8-5616c163fb81")
-	)
-	(text "Independent gate driver power switch,\nreduncant 1oo2 SSO/STO"
-		(exclude_from_sim no)
-		(at 77.724 93.726 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "b4e9f93a-97cf-48ae-b0ac-b35225a0afc1")
 	)
 	(text "GREEN LED FOR +12V_A DC/DC INPUT"
 		(exclude_from_sim no)
@@ -2334,7 +2114,7 @@
 	)
 	(text "Connector to control board\n\nIncludes multiple redundant SSO (six-switch-off) pathways:\n - via gate drive reset\n - via gate drive power enable 1\n - via gate drive power enable 2\n\n(Gate driver power enable \nimplemnts 1oo2, with monitoring \nfeedback)."
 		(exclude_from_sim no)
-		(at 14.732 26.67 0)
+		(at 43.688 23.622 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2374,34 +2154,16 @@
 		(uuid "152b6a25-8035-4e92-9c99-ffd8e0a9ea54")
 	)
 	(junction
-		(at 67.31 113.03)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "29e7b8fe-ba91-4179-88fd-16dd8d819865")
-	)
-	(junction
 		(at 95.25 134.62)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "32df9776-b5d1-492f-bc65-2b04b88c1020")
 	)
 	(junction
-		(at 57.15 133.35)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "392e9b95-8a99-4543-ac93-0b56cf69ed7b")
-	)
-	(junction
 		(at 154.94 119.38)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3a7d8451-acf4-4a3c-abbf-3265379ba875")
-	)
-	(junction
-		(at 67.31 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4ab2112f-7298-440b-ab9a-613b18f08ef2")
 	)
 	(junction
 		(at 160.02 134.62)
@@ -2440,12 +2202,6 @@
 		(uuid "60093b8d-c719-4661-a3d9-fccadd9cbc30")
 	)
 	(junction
-		(at 41.91 113.03)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "63c26546-1cbc-407b-8087-58ac51ddb84e")
-	)
-	(junction
 		(at 102.87 134.62)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2470,12 +2226,6 @@
 		(uuid "7b0503eb-dc15-42fb-8150-3a5a74fb42ce")
 	)
 	(junction
-		(at 41.91 123.19)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "88a52a8a-5d6b-47e8-8663-27307e32599b")
-	)
-	(junction
 		(at 165.1 66.04)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2498,12 +2248,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ca635209-9ef4-40db-bcf7-af8f21d59baa")
-	)
-	(junction
-		(at 30.48 133.35)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ccbd9462-5e13-47c0-9b7e-55883413235c")
 	)
 	(junction
 		(at 160.02 114.3)
@@ -2609,16 +2353,6 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 133.35) (xy 57.15 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1032bea8-879f-47d1-96fb-cda53a4a3e39")
-	)
-	(wire
-		(pts
 			(xy 105.41 104.14) (xy 105.41 63.5)
 		)
 		(stroke
@@ -2669,16 +2403,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 121.92) (xy 67.31 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2343b098-339c-42e9-ad34-b7294e765b5b")
-	)
-	(wire
-		(pts
 			(xy 227.33 76.2) (xy 218.44 76.2)
 		)
 		(stroke
@@ -2686,16 +2410,6 @@
 			(type default)
 		)
 		(uuid "243570ab-fd7e-4ee7-8dd7-8ecb7c62980d")
-	)
-	(wire
-		(pts
-			(xy 41.91 121.92) (xy 41.91 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "249049e0-a1c3-4c53-aad9-368c9dea8807")
 	)
 	(wire
 		(pts
@@ -2809,16 +2523,6 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 125.73) (xy 71.12 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "34ecbe61-11c2-4068-8005-ea9bc694fa52")
-	)
-	(wire
-		(pts
 			(xy 97.79 139.7) (xy 97.79 143.51)
 		)
 		(stroke
@@ -2836,16 +2540,6 @@
 			(type default)
 		)
 		(uuid "3bfcc34a-5759-4bea-8ee0-f7c80793e2f9")
-	)
-	(wire
-		(pts
-			(xy 67.31 132.08) (xy 67.31 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3d014790-8d32-489a-8040-b69cb892f286")
 	)
 	(wire
 		(pts
@@ -2879,16 +2573,6 @@
 	)
 	(wire
 		(pts
-			(xy 41.91 123.19) (xy 41.91 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "41eb1151-638b-4106-a0ab-9a92eadb153b")
-	)
-	(wire
-		(pts
 			(xy 111.76 81.28) (xy 97.79 81.28)
 		)
 		(stroke
@@ -2906,16 +2590,6 @@
 			(type default)
 		)
 		(uuid "49c3edd2-ae2c-489e-a3e2-4a6820ee2b09")
-	)
-	(wire
-		(pts
-			(xy 30.48 120.65) (xy 30.48 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "49db47dc-6543-474f-a8f3-f2878b08bf3c")
 	)
 	(wire
 		(pts
@@ -3029,26 +2703,6 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 120.65) (xy 57.15 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "583a5920-438c-4d8d-902e-bf04f308a03e")
-	)
-	(wire
-		(pts
-			(xy 41.91 114.3) (xy 41.91 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "58e69693-68c4-48a1-8650-057b366f5ef6")
-	)
-	(wire
-		(pts
 			(xy 227.33 101.6) (xy 223.52 101.6)
 		)
 		(stroke
@@ -3056,16 +2710,6 @@
 			(type default)
 		)
 		(uuid "5bb012d1-79ec-4bf2-99b5-4c1f18f3c385")
-	)
-	(wire
-		(pts
-			(xy 41.91 113.03) (xy 49.53 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6087df20-4a33-4180-beab-daed3ba26452")
 	)
 	(wire
 		(pts
@@ -3339,16 +2983,6 @@
 	)
 	(wire
 		(pts
-			(xy 30.48 133.35) (xy 30.48 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9fb7f727-bc39-4b1e-8050-63c1c5c9d206")
-	)
-	(wire
-		(pts
 			(xy 137.16 121.92) (xy 139.7 121.92)
 		)
 		(stroke
@@ -3386,26 +3020,6 @@
 			(type default)
 		)
 		(uuid "a6c5c3ce-fdba-4c2b-a229-f60544d53a97")
-	)
-	(wire
-		(pts
-			(xy 67.31 123.19) (xy 67.31 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a7a1cd5d-60f0-4518-a4dc-65c9843c489b")
-	)
-	(wire
-		(pts
-			(xy 41.91 133.35) (xy 30.48 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a7d700e2-036a-4080-9d94-3f15eeec22c1")
 	)
 	(wire
 		(pts
@@ -3509,16 +3123,6 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 113.03) (xy 67.31 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b8232656-2247-43d2-962b-34491004fbb7")
-	)
-	(wire
-		(pts
 			(xy 137.16 81.28) (xy 139.7 81.28)
 		)
 		(stroke
@@ -3539,16 +3143,6 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 113.03) (xy 41.91 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bc2686dc-5ffd-4819-86a8-08876e61821a")
-	)
-	(wire
-		(pts
 			(xy 213.36 119.38) (xy 213.36 139.7)
 		)
 		(stroke
@@ -3566,16 +3160,6 @@
 			(type default)
 		)
 		(uuid "c0151787-d679-4bb9-bd55-ef99a0c5f760")
-	)
-	(wire
-		(pts
-			(xy 45.72 125.73) (xy 45.72 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c053854a-cc2b-430c-8c1e-e677926d0ca9")
 	)
 	(wire
 		(pts
@@ -3659,16 +3243,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 133.35) (xy 57.15 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d13771e5-5060-4945-a1a6-1ffdad559312")
-	)
-	(wire
-		(pts
 			(xy 35.56 162.56) (xy 35.56 166.37)
 		)
 		(stroke
@@ -3719,16 +3293,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 114.3) (xy 67.31 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e03c2ee7-61a4-4e21-9e73-f6cf32b00027")
-	)
-	(wire
-		(pts
 			(xy 154.94 119.38) (xy 154.94 139.7)
 		)
 		(stroke
@@ -3746,16 +3310,6 @@
 			(type default)
 		)
 		(uuid "e2501245-030a-4757-ae83-165cc88245ac")
-	)
-	(wire
-		(pts
-			(xy 41.91 132.08) (xy 41.91 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e3b11a2b-b275-4db0-9af3-c363a10b8303")
 	)
 	(wire
 		(pts
@@ -3786,16 +3340,6 @@
 			(type default)
 		)
 		(uuid "e86cd8c8-bf80-4469-9f5e-c2c985f3883e")
-	)
-	(wire
-		(pts
-			(xy 67.31 113.03) (xy 64.77 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e8d828f0-ecda-4309-9725-251763450c1d")
 	)
 	(wire
 		(pts
@@ -3879,16 +3423,6 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 123.19) (xy 67.31 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f933d85a-d539-423e-8198-72c86e810671")
-	)
-	(wire
-		(pts
 			(xy 97.79 139.7) (xy 154.94 139.7)
 		)
 		(stroke
@@ -3906,16 +3440,6 @@
 			(type default)
 		)
 		(uuid "fc13a012-3047-4529-93b5-36f096d2d655")
-	)
-	(wire
-		(pts
-			(xy 45.72 123.19) (xy 41.91 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ff610261-c68f-4ee9-aa81-cb0151f88390")
 	)
 	(wire
 		(pts
@@ -3948,17 +3472,6 @@
 			(justify left)
 		)
 		(uuid "06435ac2-a2b6-4569-a9e5-e279526fe5f5")
-	)
-	(hierarchical_label "GND_A"
-		(shape input)
-		(at 30.48 143.51 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "09596217-0af1-40c5-b0e2-052fda8bf648")
 	)
 	(hierarchical_label "PH_U_H_C"
 		(shape input)
@@ -3993,9 +3506,20 @@
 		)
 		(uuid "0be8e1cb-c15e-4323-84c8-02f237550b74")
 	)
+	(hierarchical_label "GATE_DRIVE_PWR1_ENABLE"
+		(shape input)
+		(at 55.88 91.44 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0fece7f0-4ac7-4eac-9612-0bcf4791fab2")
+	)
 	(hierarchical_label "FAULT"
 		(shape input)
-		(at 50.8 45.72 180)
+		(at 50.8 44.45 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4017,7 +3541,7 @@
 	)
 	(hierarchical_label "PH_V_L"
 		(shape input)
-		(at 50.8 58.42 180)
+		(at 50.8 57.15 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4094,7 +3618,7 @@
 	)
 	(hierarchical_label "GATE_DRIVE_PWR2_ENABLE"
 		(shape input)
-		(at 63.5 60.96 0)
+		(at 63.5 59.69 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4105,7 +3629,7 @@
 	)
 	(hierarchical_label "PH_W_H"
 		(shape input)
-		(at 63.5 53.34 0)
+		(at 63.5 52.07 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4147,6 +3671,17 @@
 		)
 		(uuid "24d277a2-a2a8-4d5a-92d7-de39bb9654eb")
 	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 55.88 96.52 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "265e8ea4-81a3-45c5-b207-b77bb6b5ab5e")
+	)
 	(hierarchical_label "PH_V_L_E"
 		(shape input)
 		(at 180.34 44.45 270)
@@ -4157,6 +3692,17 @@
 			(justify right)
 		)
 		(uuid "288d59ad-55ae-4c51-81f9-b78e8b18ba9d")
+	)
+	(hierarchical_label "GATE_DRIVE_PWR1_FEEDBACK"
+		(shape input)
+		(at 55.88 105.41 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2d7c30af-e183-48c3-ac01-5873387b5f24")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -4202,20 +3748,9 @@
 		)
 		(uuid "3156676b-c8df-4102-b2aa-11064c9a4d2e")
 	)
-	(hierarchical_label "+12V_A"
-		(shape input)
-		(at 69.85 113.03 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "31c86ac1-fb58-4049-9597-c1a3b17e6973")
-	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 63.5 50.8 0)
+		(at 63.5 49.53 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4257,17 +3792,6 @@
 		)
 		(uuid "36e0a528-2275-41d1-a3ae-d617206d06ff")
 	)
-	(hierarchical_label "GATE_DRIVE_PWR2_FEEDBACK"
-		(shape input)
-		(at 71.12 125.73 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "396312b3-1606-4e1e-810d-d82d425051f2")
-	)
 	(hierarchical_label "PH_U_H_C"
 		(shape input)
 		(at 139.7 78.74 0)
@@ -4303,7 +3827,7 @@
 	)
 	(hierarchical_label "+12V_IN"
 		(shape input)
-		(at 63.5 43.18 0)
+		(at 63.5 41.91 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4455,17 +3979,6 @@
 		)
 		(uuid "646d87c9-ad83-4a3a-bea3-7855c272bb3a")
 	)
-	(hierarchical_label "GATE_DRIVE_PWR1_FEEDBACK"
-		(shape input)
-		(at 45.72 125.73 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "654fe5e5-fd14-498c-8376-ffff0e77e427")
-	)
 	(hierarchical_label "PH_V_H"
 		(shape input)
 		(at 162.56 59.69 90)
@@ -4488,9 +4001,20 @@
 		)
 		(uuid "6db07a60-7a3b-4fe2-ab03-6a32320b87a3")
 	)
+	(hierarchical_label "+12V_A"
+		(shape input)
+		(at 55.88 102.87 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6f1bb21c-23df-4e86-b757-03b6fba98bc7")
+	)
 	(hierarchical_label "GATE_DRIVE_PWR2_FEEDBACK"
 		(shape input)
-		(at 63.5 66.04 0)
+		(at 63.5 64.77 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4501,7 +4025,7 @@
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
-		(at 63.5 48.26 0)
+		(at 63.5 46.99 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4556,7 +4080,7 @@
 	)
 	(hierarchical_label "GATE_DRIVE_PWR1_FEEDBACK"
 		(shape input)
-		(at 50.8 66.04 180)
+		(at 50.8 64.77 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4567,7 +4091,7 @@
 	)
 	(hierarchical_label "GATE_DRIVE_PWR1_ENABLE"
 		(shape input)
-		(at 63.5 45.72 0)
+		(at 63.5 44.45 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4611,7 +4135,7 @@
 	)
 	(hierarchical_label "PH_V_H"
 		(shape input)
-		(at 50.8 60.96 180)
+		(at 50.8 59.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4622,7 +4146,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 50.8 43.18 180)
+		(at 50.8 41.91 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4721,7 +4245,7 @@
 	)
 	(hierarchical_label "PH_U_L"
 		(shape input)
-		(at 50.8 53.34 180)
+		(at 50.8 52.07 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4765,7 +4289,7 @@
 	)
 	(hierarchical_label "PH_U_H"
 		(shape input)
-		(at 50.8 55.88 180)
+		(at 50.8 54.61 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4818,6 +4342,17 @@
 		)
 		(uuid "aef1006b-8a5e-4be8-9a26-220ec397faa9")
 	)
+	(hierarchical_label "GATE_DRIVE_PWR2_FEEDBACK"
+		(shape input)
+		(at 55.88 107.95 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "af8216dc-be9d-446d-b4fc-becc1c04f690")
+	)
 	(hierarchical_label "+12V_A"
 		(shape input)
 		(at 196.85 64.77 0)
@@ -4839,28 +4374,6 @@
 			(justify right)
 		)
 		(uuid "b43b1bc9-c773-417c-ae0f-5f716339ccd6")
-	)
-	(hierarchical_label "GATE_DRIVE_PWR1_ENABLE"
-		(shape input)
-		(at 30.48 105.41 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b46857d7-521d-49b4-a543-d744ba0ec2b3")
-	)
-	(hierarchical_label "GND_A"
-		(shape input)
-		(at 57.15 143.51 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b5d4b1b7-5586-43b8-9d63-425ceb4f11e1")
 	)
 	(hierarchical_label "PH_V_L_G"
 		(shape input)
@@ -4917,6 +4430,17 @@
 		)
 		(uuid "be37ed65-153e-4c36-b35f-5502740742b2")
 	)
+	(hierarchical_label "GATE_DRIVE_PWR2_ENABLE"
+		(shape input)
+		(at 55.88 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c04536af-f2ef-4376-810e-bf5afe275ef7")
+	)
 	(hierarchical_label "PH_V_H_E"
 		(shape input)
 		(at 196.85 83.82 0)
@@ -4941,7 +4465,7 @@
 	)
 	(hierarchical_label "READY"
 		(shape input)
-		(at 50.8 48.26 180)
+		(at 50.8 46.99 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4960,17 +4484,6 @@
 			(justify right)
 		)
 		(uuid "ce996313-1923-4045-8be4-78f4ee7cb444")
-	)
-	(hierarchical_label "+12V_IN"
-		(shape input)
-		(at 22.86 113.03 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d0780eef-6043-4506-a9c3-169c67b4ba76")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -5018,7 +4531,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 63.5 63.5 0)
+		(at 63.5 62.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5027,20 +4540,9 @@
 		)
 		(uuid "d76dbf54-ce8a-4356-84b8-74304455ad25")
 	)
-	(hierarchical_label "GATE_DRIVE_PWR2_ENABLE"
-		(shape input)
-		(at 57.15 105.41 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d7c41553-e2d9-412a-ad65-aa69d4b8d724")
-	)
 	(hierarchical_label "DRIVER_RESET"
 		(shape input)
-		(at 50.8 50.8 180)
+		(at 50.8 49.53 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5051,7 +4553,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 63.5 58.42 0)
+		(at 63.5 57.15 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5059,6 +4561,17 @@
 			(justify left)
 		)
 		(uuid "db588f31-ea15-4f29-826c-13503fe8681d")
+	)
+	(hierarchical_label "+12V_IN"
+		(shape input)
+		(at 55.88 88.9 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dde13989-f343-42e9-87bd-f6613bcfeb66")
 	)
 	(hierarchical_label "PH_W_L"
 		(shape input)
@@ -5073,7 +4586,7 @@
 	)
 	(hierarchical_label "PH_W_L"
 		(shape input)
-		(at 63.5 55.88 0)
+		(at 63.5 54.61 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5117,7 +4630,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 50.8 63.5 180)
+		(at 50.8 62.23 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5440,85 +4953,6 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "LED2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 67.31 128.27 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "28d32150-0c19-4aca-bbfb-cb69595a53e7")
-		(property "Reference" "R30"
-			(at 63.5 128.27 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 65.278 128.27 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 65.532 128.27 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 67.31 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 67.31 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "0e5076ca-a178-485f-91c7-d1842dc54277")
-		)
-		(pin "1"
-			(uuid "c45c386b-65c3-4782-a4b5-f976e4b1ad51")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "R30")
 					(unit 1)
 				)
 			)
@@ -5973,85 +5407,6 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "H2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 67.31 118.11 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "44b5c699-8a19-4266-a6f8-3d2d309de0d7")
-		(property "Reference" "R29"
-			(at 63.5 118.11 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "3k"
-			(at 65.278 118.11 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 65.532 118.11 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 67.31 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 67.31 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "2b1ecbf5-15bf-44e2-be97-4cfd7d069181")
-		)
-		(pin "1"
-			(uuid "e8243b4d-549e-43e4-bf9e-d9341bc5fd79")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "R29")
 					(unit 1)
 				)
 			)
@@ -6882,175 +6237,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Power_Management:BTS462TATMA1")
-		(at 57.15 113.03 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "67ec2077-993d-4982-9d8f-4b0dfe3b8621")
-		(property "Reference" "U6"
-			(at 71.12 106.6098 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BTS462TATMA1"
-			(at 71.12 109.1498 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
-			(at 57.15 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
-			(at 57.15 135.89 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
-			(at 57.15 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "ad0379ef-7cda-4583-9d79-b526a64a8242")
-		)
-		(pin "3"
-			(uuid "08de9219-acf4-437f-9c85-feedc3b8f512")
-		)
-		(pin "1"
-			(uuid "67f744f3-cc6a-4c84-9fd3-8e3c4c24b1e6")
-		)
-		(pin "2"
-			(uuid "829ed30c-c30c-4c03-b249-b05ee02e0355")
-		)
-		(pin "5"
-			(uuid "108d9074-dc40-42a7-b10f-98da83e3b554")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "U6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 41.91 128.27 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "68292cab-aebd-497b-ac16-a62a29eaff55")
-		(property "Reference" "R27"
-			(at 38.1 128.27 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 39.878 128.27 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 40.132 128.27 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 41.91 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 41.91 128.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "7c022115-0bba-4f30-a399-1b24b06c52fe")
-		)
-		(pin "1"
-			(uuid "b9ff8087-498a-4964-885d-f76aad586182")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "R27")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 95.25 143.51 90)
 		(unit 1)
@@ -7267,96 +6453,6 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "LED1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Power_Management:BTS462TATMA1")
-		(at 30.48 113.03 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "8d4b23e0-204b-453a-9183-b6b9ab6ad029")
-		(property "Reference" "U5"
-			(at 44.45 106.6098 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BTS462TATMA1"
-			(at 44.45 109.1498 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
-			(at 30.48 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-			)
-		)
-		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
-			(at 30.48 135.89 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
-			(at 30.48 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "486b91c9-a415-48f6-91c8-457650a08f4f")
-		)
-		(pin "3"
-			(uuid "8e8ee5ef-d630-47e0-ad59-b01f9a25cac2")
-		)
-		(pin "1"
-			(uuid "4ece7b5d-64ab-40a1-8651-2429e422ab2e")
-		)
-		(pin "2"
-			(uuid "253ba77c-6bcf-4ee2-a76e-9675cebea281")
-		)
-		(pin "5"
-			(uuid "6e605bbf-8939-4fc9-9328-bc40ac680251")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "U5")
 					(unit 1)
 				)
 			)
@@ -8400,7 +7496,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
-		(at 55.88 53.34 0)
+		(at 55.88 52.07 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8411,7 +7507,7 @@
 		(fields_autoplaced yes)
 		(uuid "cc950c10-cc78-4277-9be9-82178a7229dd")
 		(property "Reference" "J5"
-			(at 57.15 38.1 0)
+			(at 57.15 36.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8421,7 +7517,7 @@
 			)
 		)
 		(property "Value" "Conn_02x10_Counter_Clockwise"
-			(at 57.15 40.64 0)
+			(at 57.15 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8431,7 +7527,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 55.88 53.34 0)
+			(at 55.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8442,7 +7538,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 55.88 53.34 0)
+			(at 55.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8453,7 +7549,7 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x10, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 55.88 53.34 0)
+			(at 55.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8603,85 +7699,6 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(reference "H5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 41.91 118.11 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f7df88db-6155-4683-b2d2-f6aa99548bdf")
-		(property "Reference" "R28"
-			(at 38.1 118.11 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "3k"
-			(at 39.878 118.11 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 40.132 118.11 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 41.91 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 41.91 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "497dc7b2-9d5c-44ab-a17f-0462f0e5a7bf")
-		)
-		(pin "1"
-			(uuid "99a0ff11-2916-4cf2-a188-7d2d7f91782b")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "R28")
 					(unit 1)
 				)
 			)
@@ -9697,6 +8714,122 @@
 			(project "GateDriver"
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
 					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 55.88 86.36)
+		(size 33.02 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "e91e3f89-8daa-460b-9ade-2b29cc76ab48")
+		(property "Sheetname" "Redundant Monitored Power Switch"
+			(at 55.88 85.6484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "PowerSwitch.kicad_sch"
+			(at 55.88 114.8846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+12V_A" input
+			(at 55.88 102.87 180)
+			(uuid "51ce6154-db19-48f7-928e-8c7c5477a288")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "+12V_IN" input
+			(at 55.88 88.9 180)
+			(uuid "733d6336-5e11-49cb-bf07-68f35e8e9e1a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GATE_DRIVE_PWR1_ENABLE" input
+			(at 55.88 91.44 180)
+			(uuid "6accea0b-e434-43d3-840c-81be71899994")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GATE_DRIVE_PWR1_FEEDBACK" input
+			(at 55.88 105.41 180)
+			(uuid "3229771d-9957-4f82-a769-a72108c9fdb5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GATE_DRIVE_PWR2_ENABLE" input
+			(at 55.88 93.98 180)
+			(uuid "8b3aef93-a3de-4241-9fd2-9bd1434cfb73")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GATE_DRIVE_PWR2_FEEDBACK" input
+			(at 55.88 107.95 180)
+			(uuid "567dac2b-7c2a-4799-a78f-8cda114c995e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GND_A" input
+			(at 55.88 96.52 180)
+			(uuid "d346199f-297c-4e72-b523-bfbffe10008d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
+					(page "8")
 				)
 			)
 		)
