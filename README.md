@@ -2,18 +2,29 @@
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
 
-A high-power, open-source motor inverter and vehicle control unit for 3-phase PMSM traction motors. Rated for up to 100 kW peak, 150&ndash;800 A phase current, with DC bus up to 800 V capable (tested to 200 V). The design is applicable to any traction system requiring field-oriented motor control with robust functional safety architecture.
+An open-source, high-power motor inverter and vehicle control unit (VCU) for 3-phase permanent-magnet synchronous machine (PMSM) traction drives. The present hardware implementation (Chassis Size 2) supports up to 800 V DC bus operation and 600 A phase current, with the achievable voltage class determined by the DC link capacitor selection. The control board and firmware architecture are power-stage agnostic and can be adapted across a range of voltage and current classes with appropriate hardware scaling.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
 The design is modular, with common firmware, control architecture, and communication interfaces shared across applications. All hardware and software are released under open-source licenses.
 
+## Platform Scalability
+
+The control board is designed as a reusable platform that is largely independent of the power stage. With isolation and signal conditioning rated for power stages up to 2 kV working voltage, the same controller can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the controller to be integrated into custom power-converter designs. Planned chassis variants include:
+
+| Variant | Voltage Class | Phase Current | Status |
+|---|---|---|---|
+| Chassis Size 2 | Up to 800 V (capacitor-dependent) | 600 A | Implemented, under test |
+| Chassis Size 3 | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
+
+Semiconductor ratings are selected with margin for the target DC bus: the 800 V class uses 1200 V rated parts, and the 1200 V class uses 1700 V rated parts.
+
 ## Hardware Architecture
 
 ### Power Stage
 - **3-phase 2-level IGBT bridge** with six discrete IGBT modules
-- **Phase current**: 150 A &ndash; 800 A continuous (peak capability dependent on thermal management)
-- **DC bus voltage**: Up to 800 V capable; tested to 200 V (DC link capacitor limited)
+- **Phase current**: 600 A continuous (peak capability dependent on thermal management)
+- **DC bus voltage**: Up to 800 V (voltage class determined by DC link capacitor selection)
 - **Gate drivers**: Six onsemi NCV57001 isolated IGBT gate drivers
   - Reinforced isolation: >5 kV<sub>rms</sub> (UL1577), 1200 V working voltage
   - Internal DESAT short-circuit detection with <2 us shutdown
@@ -25,6 +36,7 @@ The design is modular, with common firmware, control architecture, and communica
   - Each supply fully isolated from logic and from each other
   - PMIC enable input per supply for controlled shutdown
   - Gate driver power kill: STM32 PMIC EN = low disables all six MGJ2D121509MPC-R7 supplies simultaneously, forcing all IGBT gates to 0 V via NCV57001 active pull-down
+- **Power-stage agnostic control board**: The same controller and firmware can be paired with alternative power stages up to 2 kV working voltage with only gate-driver scaling; higher voltages are achievable with straightforward gate-driver adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
 
 ### Current Sensing
 - **Four Tamura LA37S hall-effect current transducers** (3 phase + DC link)
@@ -43,6 +55,10 @@ The design is modular, with common firmware, control architecture, and communica
 - **Dual isolated CAN bus**: ISO1042 isolated CAN transceivers
   - CAN1: Battery Management System (BMS)
   - CAN2: ABS module, display/dash, charger(s), IO board (brake, kickstand, turn signals)
+- **Distributed Drive Communication (hardware-ready)**: Fiber-optic link for multi-inverter coordination, enabled via a special IO board
+  - Enables 6+ phase drives, parallel power stages with current sharing and load balancing, or tightly synchronized multi-drive systems
+  - Hardware PWM sync between drives for timing-critical applications
+  - A fiber-optic gate-drive IO board is also in development, supporting isolated PWM signaling directly to gate drivers
 - **BMS heartbeat**: 5-second timeout (BMS external to this system)
 - **IO board heartbeat**: 1-second timeout
 
@@ -52,6 +68,7 @@ The design is modular, with common firmware, control architecture, and communica
   - FDCAN1 + FDCAN2, HRTIM, 16-bit ADC
   - Runs FOC motor control, sensor acquisition, CAN communication, safe state management
   - GATE_DRIVE_PWR1_ENABLE — gate drive power kill Path 2a
+  - CY15B102Q-SXET 256 KB FRAM for fault logs, configuration, hour meter, odometer
 - **STM32G474RCTx** safety coprocessor (170 MHz Cortex-M4+FPU)
   - Independent 3.3 V supply, 8 MHz crystal
   - FDCAN2 + FDCAN3 (independent CAN bus snooping)
@@ -60,7 +77,6 @@ The design is modular, with common firmware, control architecture, and communica
   - GATE_DRIVE_PWR2_ENABLE — gate drive power kill Path 2b (1oo2 with main MCU)
   - Challenge-response watchdog with main MCU via inter-MCU UART
   - Bidirectional NRST — can reset main MCU; main MCU can reset coprocessor
-  - CY15B102Q-SXET 256 KB FRAM for fault logs, configuration, hour meter, odometer
 - **Onboard power**: Cincon EC7BW-110S12 railway-grade DC/DC
   - 40&ndash;160 V input (4:1), 12 V / 1.67 A output
   - EN 50155 qualified, 1500 V I/O isolation
@@ -72,12 +88,14 @@ The design is modular, with common firmware, control architecture, and communica
 - Both MCUs read throttle independently; discrepancy &gt;5% triggers safe state
 
 ### Safe State Entry — Six Redundant SSO Pathways
-1. **TIM1_BKIN hardware** (&lt;100 ns) — OR'd gate driver FLT &rarr; hardware clears MOE, all PWM disabled
-2. **GATE_DRIVE_PWR1_ENABLE** (~10 us, main MCU) — main deasserts &rarr; gate drive UVLO &rarr; pull-down &rarr; SSO. Feedback: GATE_DRIVE_PWR1_FB
-3. **GATE_DRIVE_PWR2_ENABLE** (~10 us, coprocessor) — coprocessor deasserts &rarr; same UVLO path. Independent of Path 2. Feedback: GATE_DRIVE_PWR2_FB. Either Path 2 or 3 alone achieves SSO (1oo2)
-4. **GATE_DRIVE_RESET** (&lt;1 us, either MCU) — either asserts RESET &rarr; all NCV57001 soft turn-off &rarr; SSO
-5. **Coprocessor watchdog &rarr; NRST** (~100 ms) — challenge/response failure &rarr; coprocessor resets main MCU &rarr; SSO during boot
+1. **TIM1_BKIN hardware break input to main MCU** (&lt;100 ns) — OR'd gate driver FLT &rarr; hardware clears MOE, all PWM disabled
+2. **Coprocessor reset to main MCU via NRST** (~100 ms) — challenge/response failure &rarr; coprocessor resets main MCU &rarr; SSO during boot
+3. **Gate driver RESET line** (&lt;1 us, either MCU) — either MCU asserts RESET &rarr; all NCV57001 soft turn-off &rarr; SSO
+4. **Main MCU gate drive power disable** (~10 us) — main MCU deasserts GATE_DRIVE_PWR1_ENABLE &rarr; gate drive UVLO &rarr; pull-down &rarr; SSO. Feedback: GATE_DRIVE_PWR1_FB
+5. **Coprocessor gate drive power disable** (~10 us) — coprocessor deasserts GATE_DRIVE_PWR2_ENABLE &rarr; same UVLO path. Independent of Path 4. Feedback: GATE_DRIVE_PWR2_FB. Either Path 4 or 5 alone achieves SSO
 6. **Coprocessor independent fault trigger** (&lt;10 us) — coprocessor detects critical fault &rarr; GATE_DRIVE_PWR2_ENABLE low + RESET &rarr; SSO without main MCU
+
+Pathways 4 and 5 together form a **redundant, triple-monitored 1oo2 power disable** of the gate drive supplies, with independent feedback from each enable path.
 
 ### Safety Protections (Hardware + Dual-MCU)
 - Hardware PWM disable via TIM1_BKIN (&lt;100 ns)
@@ -138,7 +156,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
   - Current sensor validation: VREF 2.48&ndash;2.50&ndash;2.52V; zero-point &plusmn;20%; 0-3.3V; DC-link back-calc
   - Real-time loss estimator + thermal model; die temp estimation; time-to-overtemperature prediction
   - 1oo3 temp voting (highest wins); one NTC per IGBT module; 100&deg;C hard cap
-  - CY15B102Q-SXET 256 KB FRAM on coprocessor for logs/config/hour/odo; hardware WP
+  - CY15B102Q-SXET 256 KB FRAM on main MCU for logs/config/hour/odo; hardware WP
   - 1oo2 gate drive power kill (GATE_DRIVE_PWR1_ENABLE + GATE_DRIVE_PWR2_ENABLE) with independent feedback
   - Six SSO pathways; inter-MCU challenge/response watchdog; bidirectional NRST
   - Input validation framework (3 layers); FW update via UART/USB or CAN
@@ -199,10 +217,10 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 
 ### For Users
 
-The BOM, Gerbers, and manufacturing files are in the `Size2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (up to 800 V DC capable, tested to 200 V) and currents (up to 800 A) that can be lethal. Proper safety equipment and procedures are mandatory.
+The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (up to 800 V DC, capacitor-dependent) and currents (up to 600 A) that can be lethal. Proper safety equipment and procedures are mandatory.
 
 **Prerequisites:**
-- Compatible HV battery pack (48&ndash;800 V capable; tested to 200 V)
+- Compatible HV battery pack (up to 800 V, capacitor-dependent)
 - 3-phase PMSM motor with encoder/resolver feedback
 - Compatible BMS with CAN communication
 - 12 V auxiliary supply (or self-powered via onboard DC/DC)

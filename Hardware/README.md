@@ -1,8 +1,11 @@
-# Available Hardware Sizes
+# Hardware Variants
 
-Chassis Size 0: Low power drives. 30-120V, 30-100A
-Chassis Size 1: Low-Medium power drives: 100-450V, 50-200A
-Chassis Size 2: Medium power drives: 106-800V, 150-600A
-Chassis Size 3: High power drives: 800-1200V, 600-1200A
+The platform centers on a common control board that can be paired with multiple power-stage classes. The following chassis variants define the current and planned inverter implementations:
 
-All drives are designed with isolated logic and power.
+| Variant | Application | DC Bus Voltage | Phase Current | Status |
+|---|---|---|---|---|
+| Chassis Size 1 | Low-medium power drives | 100&ndash;450 V | 50&ndash;200 A | Planned |
+| Chassis Size 2 | Medium power drives | Up to 800 V (capacitor-dependent) | 600 A | Implemented, under test |
+| Chassis Size 3 | High power drives | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
+
+Semiconductor ratings are selected with margin for the target DC bus: the 800 V class uses 1200 V rated parts, and the 1200 V class uses 1700 V rated parts. All chassis are designed with isolated logic and power.
