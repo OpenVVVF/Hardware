@@ -6810,6 +6810,17 @@
 		)
 		(uuid "2d229fe7-c404-4fc9-8c4e-df70a2146735")
 	)
+	(hierarchical_label "POWERMON_SLEEP"
+		(shape input)
+		(at 199.39 58.42 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2e504864-1b20-45cd-84b2-7e6d22fa3edc")
+	)
 	(hierarchical_label "PHASE_W_CURRENT_SENSE_REF"
 		(shape input)
 		(at 161.29 134.62 270)
@@ -6985,6 +6996,17 @@
 			(justify right)
 		)
 		(uuid "5f21881a-6179-4b25-bb59-a00873524353")
+	)
+	(hierarchical_label "POWERMON_ENABLE"
+		(shape input)
+		(at 201.93 58.42 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6014d825-9084-41ed-919d-6bacb4ae81e4")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -9317,7 +9339,8 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 114.3 20.32 180)
+		(at 114.3 20.32 0)
+		(mirror x)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9327,7 +9350,7 @@
 		(dnp no)
 		(uuid "8e1fe3e4-9250-4764-8551-96ff4719600b")
 		(property "Reference" "C186"
-			(at 110.49 21.5901 0)
+			(at 118.11 21.5901 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9338,7 +9361,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 110.49 19.05 0)
+			(at 118.11 19.05 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9349,7 +9372,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
-			(at 113.3348 16.51 0)
+			(at 115.2652 16.51 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

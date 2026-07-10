@@ -655,6 +655,16 @@
 	)
 	(wire
 		(pts
+			(xy 218.44 157.48) (xy 220.98 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "14489cab-cf4f-412e-b979-324292fecc54")
+	)
+	(wire
+		(pts
 			(xy 106.68 90.17) (xy 119.38 90.17)
 		)
 		(stroke
@@ -812,6 +822,16 @@
 			(type default)
 		)
 		(uuid "3278a1fb-d433-4efc-b34c-7c0ad046eb18")
+	)
+	(wire
+		(pts
+			(xy 218.44 163.83) (xy 218.44 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3308e0ae-1e1b-4ef5-abb4-2d4388a54d8b")
 	)
 	(wire
 		(pts
@@ -1445,6 +1465,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 152.4) (xy 220.98 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c7254421-83db-4248-bec9-3fc985250d57")
+	)
+	(wire
+		(pts
 			(xy 215.9 147.32) (xy 220.98 147.32)
 		)
 		(stroke
@@ -1685,6 +1715,16 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 154.94) (xy 220.98 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0029e30-6f43-4bb8-bc36-c680c70e5130")
+	)
+	(wire
+		(pts
 			(xy 119.38 134.62) (xy 152.4 134.62)
 		)
 		(stroke
@@ -1712,6 +1752,16 @@
 			(type default)
 		)
 		(uuid "f7347d6d-804e-4856-bc29-6a68bfa72e0b")
+	)
+	(wire
+		(pts
+			(xy 214.63 163.83) (xy 218.44 163.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f939dee5-972a-4ec6-9828-77c6fea0c8dd")
 	)
 	(wire
 		(pts
@@ -2529,6 +2579,17 @@
 			(justify left)
 		)
 		(uuid "b6c242b2-665c-4b88-8024-df54c66ec2fd")
+	)
+	(hierarchical_label "SN_GATE_DRIVE_RESET"
+		(shape input)
+		(at 214.63 163.83 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b7bb8d6b-e318-4d43-848e-5abd256e0c7d")
 	)
 	(hierarchical_label "SN_GATE_DRIVE_PWR1_FB"
 		(shape input)
@@ -4877,6 +4938,26 @@
 		(pin "MULTIDRIVE_FIBER_UART_TX" input
 			(at 215.9 127 0)
 			(uuid "0dc7a38c-7626-4e84-84e8-3883a7038375")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "POWERMON_ENABLE" input
+			(at 215.9 154.94 0)
+			(uuid "94a79dd9-f635-4df9-a63c-36e81a329050")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "POWERMON_SLEEP" input
+			(at 215.9 152.4 0)
+			(uuid "75e3fea9-23fd-4fc0-9782-ec076fa8903d")
 			(effects
 				(font
 					(size 1.27 1.27)
