@@ -55,7 +55,7 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
 - **Dual isolated CAN bus**: ISO1042 isolated CAN transceivers
   - CAN1: Battery Management System (BMS)
   - CAN2: ABS module, display/dash, charger(s), IO board (brake, kickstand, turn signals)
-- **Distributed Drive Communication (hardware-ready)**: Fiber-optic link for multi-inverter coordination, enabled via a special IO board
+- **Distributed Drive Communication (coming soon)**: Fiber-optic link for multi-inverter coordination, enabled via a special IO board
   - Enables 6+ phase drives, parallel power stages with current sharing and load balancing, or tightly synchronized multi-drive systems
   - Hardware PWM sync between drives for timing-critical applications
   - A fiber-optic gate-drive IO board is also in development, supporting isolated PWM signaling directly to gate drivers
@@ -122,6 +122,8 @@ Field-Oriented Control (FOC) running at PWM switching frequency with the followi
 - **RSVM** &mdash; Random Space Vector Modulation
 
 Modulation schemes can be switched live via CAN bus. Automatic selection based on speed/torque operating region with configurable hysteresis to prevent boundary jitter. Bumpless crossfade with di/dt gating during regen/acceleration transitions. All configurable via the Real Time Examiner (RTE) interface tool.
+
+**Model Predictive Control (MPC)** is a planned addition to the control strategy set.
 
 ## Functional Safety
 
