@@ -12,6 +12,371 @@
 		(comment 1 "Prepared by Thomas Liao")
 	)
 	(lib_symbols
+		(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:STS41A-AWLB-R3"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 21.59 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "STS41A-AWLB-R3"
+				(at 21.59 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "STS41AAWLBR3"
+				(at 21.59 -94.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Datasheet" "https://www.mouser.ee/datasheet/3/1278/1/43275AE2DF69B96E1EE51D04FE33A8965C8A26ED3D33DDCB8BA22F99BAA99334.pdf"
+				(at 21.59 -194.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "Temperature Sensor Digital, Local -40C ~ 125C 16 b"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Height" "0.65"
+				(at 21.59 -394.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Part Number" ""
+				(at 21.59 -494.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Price/Stock" ""
+				(at 21.59 -594.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Name" "Sensirion"
+				(at 21.59 -694.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Part_Number" "STS41A-AWLB-R3"
+				(at 21.59 -794.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(symbol "STS41A-AWLB-R3_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 20.32 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "SDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "SCL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 25.4 -2.54 180)
+					(length 5.08)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 25.4 0 180)
+					(length 5.08)
+					(name "VSS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "InverterCom:TS40-66-50-R-260-SMT-TR"
 			(pin_names
 				(hide yes)
@@ -318,6 +683,16 @@
 		)
 		(uuid "0f4187e9-df93-4039-accd-dd470b4becd8")
 	)
+	(text "Onboard temperature sensing\nMonitors ambient board,\ninverter housing temperature"
+		(exclude_from_sim no)
+		(at 260.096 36.576 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "13f7d74d-0221-45df-b2f3-e3df487a329d")
+	)
 	(text "Inter-mcu UART\nalso runs challenge/response watchdog"
 		(exclude_from_sim no)
 		(at 131.318 57.404 0)
@@ -330,7 +705,7 @@
 	)
 	(text "For multidrive operation, hardware supports fiber ring\nbus for Distributed Drive Communication (DDC). IO Board\nwill need to be variant that has fiber in and out\n\nEnables power stage parallel operation or 6+ phase drives."
 		(exclude_from_sim no)
-		(at 236.474 132.08 0)
+		(at 236.474 134.112 0)
 		(effects
 			(font
 				(size 0.889 0.889)
@@ -420,6 +795,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2644663a-93a0-46cc-8c45-eb8386d6db89")
+	)
+	(junction
+		(at 248.92 20.32)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3fc1e660-a688-49df-8ba8-2d009a3407b7")
 	)
 	(junction
 		(at 119.38 105.41)
@@ -583,6 +964,12 @@
 		(color 0 0 0 0)
 		(uuid "fd097d1a-e8ce-4094-be61-c3a5814af760")
 	)
+	(junction
+		(at 256.54 20.32)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fe0e705f-6f38-4081-8e97-6eac5deead78")
+	)
 	(wire
 		(pts
 			(xy 119.38 132.08) (xy 152.4 132.08)
@@ -612,6 +999,16 @@
 			(type default)
 		)
 		(uuid "0284fb51-59de-49a4-a041-a80a6d2e415e")
+	)
+	(wire
+		(pts
+			(xy 247.65 20.32) (xy 248.92 20.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "032e70ac-180e-434c-b8eb-f3000e63f123")
 	)
 	(wire
 		(pts
@@ -662,6 +1059,16 @@
 			(type default)
 		)
 		(uuid "14489cab-cf4f-412e-b979-324292fecc54")
+	)
+	(wire
+		(pts
+			(xy 248.92 20.32) (xy 248.92 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15351e68-1a20-48e4-bc5b-03d20e90f77c")
 	)
 	(wire
 		(pts
@@ -942,6 +1349,16 @@
 			(type default)
 		)
 		(uuid "44e20ae7-029f-46f6-b997-c430a53688f5")
+	)
+	(wire
+		(pts
+			(xy 256.54 22.86) (xy 254 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "492d7ec6-e527-4105-bea6-3afb5161d806")
 	)
 	(wire
 		(pts
@@ -1255,6 +1672,26 @@
 	)
 	(wire
 		(pts
+			(xy 256.54 20.32) (xy 256.54 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "977bf61e-fa1e-4eb0-9b7c-055ca30c2afc")
+	)
+	(wire
+		(pts
+			(xy 257.81 20.32) (xy 256.54 20.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "978f6db5-6b0d-4846-9cb4-5572d6c9bb35")
+	)
+	(wire
+		(pts
 			(xy 257.81 138.43) (xy 257.81 140.97)
 		)
 		(stroke
@@ -1522,6 +1959,16 @@
 			(type default)
 		)
 		(uuid "cc80cbd2-80c5-4cd4-92d8-93d7d51925ef")
+	)
+	(wire
+		(pts
+			(xy 248.92 22.86) (xy 251.46 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d20e618b-b271-4051-bce8-8447c79ad1f5")
 	)
 	(wire
 		(pts
@@ -1813,6 +2260,26 @@
 		)
 		(uuid "0a3dd696-8c5e-488c-affe-f2f1b5e0ffc6")
 	)
+	(label "OBTS_I2C_SDA"
+		(at 215.9 54.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3c0c84f5-501a-44ff-85d3-df558d2d0c72")
+	)
+	(label "OBTS_I2C_SCL"
+		(at 215.9 57.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66ce332a-4f07-4f43-9e82-ee492b7a8629")
+	)
 	(label "PHASE_CURSENSE_COMP_N"
 		(at 119.38 147.32 0)
 		(effects
@@ -1822,6 +2289,26 @@
 			(justify left bottom)
 		)
 		(uuid "6e4afade-573b-4d48-9438-e438bb2f7b67")
+	)
+	(label "OBTS_I2C_SDA"
+		(at 251.46 48.26 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7a457589-5168-40e4-bba3-dc08eb538113")
+	)
+	(label "OBTS_I2C_SCL"
+		(at 254 48.26 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "96603690-b927-4200-9c3d-c3dcff5f3a3e")
 	)
 	(label "DC_LINK_CURSENSE_COMP_N"
 		(at 119.38 144.78 0)
@@ -1878,7 +2365,7 @@
 	)
 	(hierarchical_label "MP_FDCAN2_RX"
 		(shape input)
-		(at 215.9 78.74 0)
+		(at 215.9 81.28 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1911,7 +2398,7 @@
 	)
 	(hierarchical_label "MP_SPI2_MISO"
 		(shape input)
-		(at 215.9 90.17 0)
+		(at 215.9 92.71 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1966,7 +2453,7 @@
 	)
 	(hierarchical_label "MP_USER_DOUT_3"
 		(shape input)
-		(at 215.9 104.14 0)
+		(at 215.9 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1988,7 +2475,7 @@
 	)
 	(hierarchical_label "MP_TEMP_SENSE_2"
 		(shape input)
-		(at 215.9 67.31 0)
+		(at 215.9 69.85 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2021,7 +2508,7 @@
 	)
 	(hierarchical_label "MP_FDCAN2_TX"
 		(shape input)
-		(at 215.9 81.28 0)
+		(at 215.9 83.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2109,7 +2596,7 @@
 	)
 	(hierarchical_label "MULTIDRIVE_FIBER_UART_TX"
 		(shape input)
-		(at 215.9 127 0)
+		(at 215.9 129.54 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2120,7 +2607,7 @@
 	)
 	(hierarchical_label "MP_FDCAN1_TX"
 		(shape input)
-		(at 215.9 76.2 0)
+		(at 215.9 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2208,7 +2695,7 @@
 	)
 	(hierarchical_label "MP_USER_DIN_7"
 		(shape input)
-		(at 215.9 115.57 0)
+		(at 215.9 118.11 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2219,7 +2706,7 @@
 	)
 	(hierarchical_label "MP_SPI2_CS"
 		(shape input)
-		(at 215.9 87.63 0)
+		(at 215.9 90.17 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2252,7 +2739,7 @@
 	)
 	(hierarchical_label "MP_SPI2_MOSI"
 		(shape input)
-		(at 215.9 92.71 0)
+		(at 215.9 95.25 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2329,7 +2816,7 @@
 	)
 	(hierarchical_label "MP_PERIPHERAL_POWER_ENABLE"
 		(shape input)
-		(at 215.9 58.42 0)
+		(at 215.9 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2362,7 +2849,7 @@
 	)
 	(hierarchical_label "MP_USER_DIN_5"
 		(shape input)
-		(at 215.9 110.49 0)
+		(at 215.9 113.03 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2417,7 +2904,7 @@
 	)
 	(hierarchical_label "MP_TEMP_SENSE_3"
 		(shape input)
-		(at 215.9 69.85 0)
+		(at 215.9 72.39 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2439,7 +2926,7 @@
 	)
 	(hierarchical_label "MP_VSENSE_ISO_ADC_INTERRUPT"
 		(shape input)
-		(at 215.9 85.09 0)
+		(at 215.9 87.63 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2505,7 +2992,7 @@
 	)
 	(hierarchical_label "MP_USER_DIN_6"
 		(shape input)
-		(at 215.9 113.03 0)
+		(at 215.9 115.57 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2516,7 +3003,7 @@
 	)
 	(hierarchical_label "MP_CANBUS_12V_POWER_ENABLE"
 		(shape input)
-		(at 215.9 63.5 0)
+		(at 215.9 66.04 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2527,7 +3014,7 @@
 	)
 	(hierarchical_label "MP_USER_DOUT_4"
 		(shape input)
-		(at 215.9 106.68 0)
+		(at 215.9 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2549,7 +3036,7 @@
 	)
 	(hierarchical_label "MP_USER_DOUT_2"
 		(shape input)
-		(at 215.9 101.6 0)
+		(at 215.9 104.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2590,6 +3077,17 @@
 			(justify right)
 		)
 		(uuid "b7bb8d6b-e318-4d43-848e-5abd256e0c7d")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 247.65 20.32 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bf1ea519-5785-4236-85c2-df128a575393")
 	)
 	(hierarchical_label "SN_GATE_DRIVE_PWR1_FB"
 		(shape input)
@@ -2692,7 +3190,7 @@
 	)
 	(hierarchical_label "MULTIDRIVE_FIBER_UART_RX"
 		(shape input)
-		(at 215.9 124.46 0)
+		(at 215.9 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2703,7 +3201,7 @@
 	)
 	(hierarchical_label "MULTIDRIVE_FIBER_SYNC"
 		(shape input)
-		(at 215.9 121.92 0)
+		(at 215.9 124.46 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2769,7 +3267,7 @@
 	)
 	(hierarchical_label "MP_USER_DOUT_1"
 		(shape input)
-		(at 215.9 99.06 0)
+		(at 215.9 101.6 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2800,9 +3298,20 @@
 		)
 		(uuid "e0a47614-e406-4784-ad3e-f9ffde4bfa65")
 	)
+	(hierarchical_label "+3.3V_A"
+		(shape input)
+		(at 257.81 20.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e345f454-58a7-4073-babf-2b8492f18dd3")
+	)
 	(hierarchical_label "MP_GATE_DRIVE_PWR1_ENABLE"
 		(shape input)
-		(at 215.9 60.96 0)
+		(at 215.9 63.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2824,7 +3333,7 @@
 	)
 	(hierarchical_label "MP_FDCAN1_RX"
 		(shape input)
-		(at 215.9 73.66 0)
+		(at 215.9 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2879,7 +3388,7 @@
 	)
 	(hierarchical_label "MP_SPI2_SCK"
 		(shape input)
-		(at 215.9 95.25 0)
+		(at 215.9 97.79 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2923,7 +3432,7 @@
 	)
 	(hierarchical_label "MP_USER_DIN_8"
 		(shape input)
-		(at 215.9 118.11 0)
+		(at 215.9 120.65 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3081,6 +3590,155 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:STS41A-AWLB-R3")
+		(at 251.46 48.26 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0c0ca290-0925-4475-8b55-2b064889ac06")
+		(property "Reference" "U14"
+			(at 244.856 42.672 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "STS41A-AWLB-R3"
+			(at 247.396 42.672 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "STS41AAWLBR3"
+			(at 346.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.ee/datasheet/3/1278/1/43275AE2DF69B96E1EE51D04FE33A8965C8A26ED3D33DDCB8BA22F99BAA99334.pdf"
+			(at 446.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "Temperature Sensor Digital, Local -40C ~ 125C 16 b"
+			(at 251.46 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "0.65"
+			(at 646.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 746.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 846.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Sensirion"
+			(at 946.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "STS41A-AWLB-R3"
+			(at 1046.38 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "f81ba77c-2be2-44cf-be14-933c88ff3441")
+		)
+		(pin "2"
+			(uuid "094900f4-37ec-4775-967d-fdffd5055dff")
+		)
+		(pin "3"
+			(uuid "99c0a3e1-d502-41be-93cd-5d8ff2ade186")
+		)
+		(pin "4"
+			(uuid "0c19a488-b33e-4a14-b0bd-0068d85ea3f6")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/0ea8cdf4-b6d0-41be-8e8a-b9b799ce9f5d"
+					(reference "U14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "InverterCom:TS40-66-50-R-260-SMT-TR")
 		(at 205.74 26.67 0)
 		(unit 1)
@@ -3223,6 +3881,87 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/0ea8cdf4-b6d0-41be-8e8a-b9b799ce9f5d"
 					(reference "S2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 252.73 20.32 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9de2bc20-2bda-449f-9804-c67fa762288b")
+		(property "Reference" "C195"
+			(at 255.016 17.0181 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 255.016 14.478 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 256.54 19.3548 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 252.73 20.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 252.73 20.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "21805c68-e1e9-48e6-b709-9ad013cc9763")
+		)
+		(pin "2"
+			(uuid "e7d65940-af75-4e1c-8438-5819e5fc779c")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/0ea8cdf4-b6d0-41be-8e8a-b9b799ce9f5d"
+					(reference "C195")
 					(unit 1)
 				)
 			)
@@ -4206,7 +4945,7 @@
 			)
 		)
 		(pin "CANBUS_12V_POWER_ENABLE" input
-			(at 215.9 63.5 0)
+			(at 215.9 66.04 0)
 			(uuid "9efe00fa-8e36-4751-aabb-aa3d692e8643")
 			(effects
 				(font
@@ -4286,7 +5025,7 @@
 			)
 		)
 		(pin "FDCAN1_RX" input
-			(at 215.9 73.66 0)
+			(at 215.9 76.2 0)
 			(uuid "f4c660e8-433f-4ded-8665-cdea534550bd")
 			(effects
 				(font
@@ -4296,7 +5035,7 @@
 			)
 		)
 		(pin "FDCAN1_TX" input
-			(at 215.9 76.2 0)
+			(at 215.9 78.74 0)
 			(uuid "7f6da348-3d61-4fa9-9849-8e2e93920413")
 			(effects
 				(font
@@ -4306,7 +5045,7 @@
 			)
 		)
 		(pin "FDCAN2_RX" input
-			(at 215.9 78.74 0)
+			(at 215.9 81.28 0)
 			(uuid "6e1cb777-292f-4277-a308-a7f29b3530a4")
 			(effects
 				(font
@@ -4316,7 +5055,7 @@
 			)
 		)
 		(pin "FDCAN2_TX" input
-			(at 215.9 81.28 0)
+			(at 215.9 83.82 0)
 			(uuid "d4de0279-5b3e-495b-ab63-aa861db5f118")
 			(effects
 				(font
@@ -4336,7 +5075,7 @@
 			)
 		)
 		(pin "GATE_DRIVER_POWER_ENABLE" input
-			(at 215.9 60.96 0)
+			(at 215.9 63.5 0)
 			(uuid "882f5138-f5b9-482c-afc7-e40bf87048c8")
 			(effects
 				(font
@@ -4436,7 +5175,7 @@
 			)
 		)
 		(pin "PERIPHERAL_POWER_ENABLE" input
-			(at 215.9 58.42 0)
+			(at 215.9 60.96 0)
 			(uuid "ca7e2f0e-4431-43d5-a4bc-8be97589184d")
 			(effects
 				(font
@@ -4566,7 +5305,7 @@
 			)
 		)
 		(pin "SPI2_MISO" input
-			(at 215.9 90.17 0)
+			(at 215.9 92.71 0)
 			(uuid "d823529c-17fc-4103-aa54-43b4168618b9")
 			(effects
 				(font
@@ -4576,7 +5315,7 @@
 			)
 		)
 		(pin "SPI2_MOSI" input
-			(at 215.9 92.71 0)
+			(at 215.9 95.25 0)
 			(uuid "21e63a70-e4d0-4ef4-ac3a-710c0fb5daef")
 			(effects
 				(font
@@ -4586,7 +5325,7 @@
 			)
 		)
 		(pin "SPI2_SCK" input
-			(at 215.9 95.25 0)
+			(at 215.9 97.79 0)
 			(uuid "c30b7f2e-fad2-42f2-990e-e090067a21cb")
 			(effects
 				(font
@@ -4606,7 +5345,7 @@
 			)
 		)
 		(pin "TEMP_SENSE_2" input
-			(at 215.9 67.31 0)
+			(at 215.9 69.85 0)
 			(uuid "285c5580-510a-441f-9a0f-366ced20828c")
 			(effects
 				(font
@@ -4616,7 +5355,7 @@
 			)
 		)
 		(pin "TEMP_SENSE_3" input
-			(at 215.9 69.85 0)
+			(at 215.9 72.39 0)
 			(uuid "6c8fd4b5-af95-41c2-9a20-42cb4eb97059")
 			(effects
 				(font
@@ -4706,7 +5445,7 @@
 			)
 		)
 		(pin "USER_DIN_5" input
-			(at 215.9 110.49 0)
+			(at 215.9 113.03 0)
 			(uuid "dc5dab71-79f7-4b82-b0d6-1c2800c74d66")
 			(effects
 				(font
@@ -4716,7 +5455,7 @@
 			)
 		)
 		(pin "USER_DIN_6" input
-			(at 215.9 113.03 0)
+			(at 215.9 115.57 0)
 			(uuid "00a10200-3c8b-4e60-8bab-522151278e44")
 			(effects
 				(font
@@ -4726,7 +5465,7 @@
 			)
 		)
 		(pin "USER_DIN_7" input
-			(at 215.9 115.57 0)
+			(at 215.9 118.11 0)
 			(uuid "514f0e11-2acb-4404-a395-b256faf7d660")
 			(effects
 				(font
@@ -4736,7 +5475,7 @@
 			)
 		)
 		(pin "USER_DIN_8" input
-			(at 215.9 118.11 0)
+			(at 215.9 120.65 0)
 			(uuid "571cbd33-7dd6-41d9-a10f-630489f0b1e3")
 			(effects
 				(font
@@ -4746,7 +5485,7 @@
 			)
 		)
 		(pin "USER_DOUT_1" input
-			(at 215.9 99.06 0)
+			(at 215.9 101.6 0)
 			(uuid "2ea3de57-cc25-4a5f-851e-8d4524f2a1ac")
 			(effects
 				(font
@@ -4756,7 +5495,7 @@
 			)
 		)
 		(pin "USER_DOUT_2" input
-			(at 215.9 101.6 0)
+			(at 215.9 104.14 0)
 			(uuid "fa5b05b7-4574-4ad9-9308-6a4caba9f0f8")
 			(effects
 				(font
@@ -4766,7 +5505,7 @@
 			)
 		)
 		(pin "USER_DOUT_3" input
-			(at 215.9 104.14 0)
+			(at 215.9 106.68 0)
 			(uuid "6c497df7-8fa6-4f37-b102-3d9d5988bb8f")
 			(effects
 				(font
@@ -4776,7 +5515,7 @@
 			)
 		)
 		(pin "USER_DOUT_4" input
-			(at 215.9 106.68 0)
+			(at 215.9 109.22 0)
 			(uuid "5c33458b-d004-4b2c-a42b-9a1665a4b1fd")
 			(effects
 				(font
@@ -4786,7 +5525,7 @@
 			)
 		)
 		(pin "VSENSE_ISO_ADC_INTERRUPT" input
-			(at 215.9 85.09 0)
+			(at 215.9 87.63 0)
 			(uuid "385d7a71-e1d1-4d37-a325-1f215bc06d23")
 			(effects
 				(font
@@ -4796,7 +5535,7 @@
 			)
 		)
 		(pin "SPI2_CS" input
-			(at 215.9 87.63 0)
+			(at 215.9 90.17 0)
 			(uuid "ac9242f7-3a78-4019-90e3-5b78faf7f78a")
 			(effects
 				(font
@@ -4916,7 +5655,7 @@
 			)
 		)
 		(pin "MULTIDRIVE_FIBER_SYNC" input
-			(at 215.9 121.92 0)
+			(at 215.9 124.46 0)
 			(uuid "d440df6f-090a-408e-a3ec-c26c8b553aaf")
 			(effects
 				(font
@@ -4926,7 +5665,7 @@
 			)
 		)
 		(pin "MULTIDRIVE_FIBER_UART_RX" input
-			(at 215.9 124.46 0)
+			(at 215.9 127 0)
 			(uuid "f8bc1bf1-1f72-4e13-94a9-fdeaa31b7a21")
 			(effects
 				(font
@@ -4936,7 +5675,7 @@
 			)
 		)
 		(pin "MULTIDRIVE_FIBER_UART_TX" input
-			(at 215.9 127 0)
+			(at 215.9 129.54 0)
 			(uuid "0dc7a38c-7626-4e84-84e8-3883a7038375")
 			(effects
 				(font
@@ -4958,6 +5697,26 @@
 		(pin "POWERMON_SLEEP" input
 			(at 215.9 152.4 0)
 			(uuid "75e3fea9-23fd-4fc0-9782-ec076fa8903d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ONBOARD_TEMP_SENSE_I2C_SCL" input
+			(at 215.9 57.15 0)
+			(uuid "da313de7-9f43-4da4-8687-7a1b7f1b471d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ONBOARD_TEMP_SENSE_I2C_SDA" input
+			(at 215.9 54.61 0)
+			(uuid "3cb61349-d177-4056-8e32-c19be40ec2c7")
 			(effects
 				(font
 					(size 1.27 1.27)
