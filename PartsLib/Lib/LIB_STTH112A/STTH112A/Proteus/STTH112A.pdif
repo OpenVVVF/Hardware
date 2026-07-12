@@ -1,0 +1,117 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "STTH112A"
+   (description " Low forwarded voltage drop  High reliability  High surge current capability  Soft switching for reduced EMI disturbances  Planar technology")
+   (family "DIO")
+   (package "DIOM5126X265N")
+   (attribute "Datasheet Link" "https://www.st.com/resource/en/datasheet/stth112.pdf")
+   (attribute "Geometry.Height" "2.65mm")
+   (attribute "Mouser Part Number" "511-STTH112A")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/STMicroelectronics/STTH112A?qs=1X0wRT6hCqH%2F7s%2FmzYZuyg%3D%3D")
+   (attribute "Manufacturer_Name" "STMicroelectronics")
+   (attribute "Manufacturer_Part_Number" "STTH112A")
+   (gate
+    (symbol "STTH112A")
+    (pin "K" 1 PS)
+    (pin "A" 2 PS)
+   )
+  )
+  (symbol "STTH112A"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 200 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 100 0) (pt 200 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 400 0) (pt 500 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (closed true) (pt 200 0) (pt 400 100) (pt 400 -100) (pt 200 0))
+   )
+   (terminal
+    (body (symbol "PINSHORT") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 140 10) (rot 0) (just MIDDLE LEFT) (visible false))
+    (number (pt 60 10) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PINSHORT") (pt 600 0) (rot 0) (mir X) (visible true))
+    (name (pt 140 10) (rot 0) (just MIDDLE LEFT) (visible false))
+    (number (pt 60 10) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "DIOM5126X265N"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (path
+      (closed true)
+      (pt -3.4 1.7)
+      (pt 3.4 1.7)
+      (pt 3.4 -1.7)
+      (pt -3.4 -1.7)
+      (pt -3.4 1.7))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -2.538 1.288)
+      (pt 2.538 1.288)
+      (pt 2.538 -1.288)
+      (pt -2.538 -1.288)
+      (pt -2.538 1.288))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt -2.538 0.512)
+      (pt -1.762 1.288))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 2.538 1.288)
+      (pt -2.825 1.288))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -2.538 -1.288)
+      (pt 2.538 -1.288))))
+   (leg 1 (pt -2.05 0) (padstack 0))
+   (leg 2 (pt 2.05 0) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 1.55 2.2 0 0 0))
+   )
+   (model "STTH112A.stp"
+    (euler 0 0 180)
+    (offset 0 0 1.2300000190734863)
+   )
+  )
+ )
+)

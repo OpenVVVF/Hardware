@@ -1,0 +1,181 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "524265-E"
+   (description "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000")
+   (family "CON")
+   (package "524265E")
+   (attribute "Datasheet Link" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E")
+   (attribute "Geometry.Height" "9.4mm")
+   (attribute "Mouser Part Number" "")
+   (attribute "Mouser Price/Stock" "")
+   (attribute "Manufacturer_Name" "TE Connectivity")
+   (attribute "Manufacturer_Part_Number" "524265-E")
+   (gate
+    (symbol "524265-E")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+    (pin "3" 3 PS)
+    (pin "4" 4 PS)
+    (pin "5" 5 PS)
+    (pin "6" 6 PS)
+    (pin "MP1" 7 PS)
+    (pin "MP2" 8 PS)
+    (pin "MP3" 9 PS)
+    (pin "MP4" 10 PS)
+   )
+  )
+  (symbol "524265-E"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 700 100) (pt 700 -500) (pt 200 -500) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -300) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -400) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 900 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 900 -100) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 900 -200) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 900 -300) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 900 -400) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "524265E"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -20.9 2.5)
+      (pt 20.9 2.5)
+      (pt 20.9 -2.5)
+      (pt -20.9 -2.5)
+      (pt -20.9 2.5))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -22.55 4.8)
+      (pt 22.55 4.8)
+      (pt 22.55 -4.8)
+      (pt -22.55 -4.8)
+      (pt -22.55 4.8))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -18.6 2.5)
+      (pt 18.6 2.5))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -15.5 -4.4)
+      (arc (pt -15.500 -4.400) (pt -15.550 -4.400) (pt -15.450 -4.300) (start 180.0) (sweep -90.0))
+      (pt -15.5 -4.3)
+      (arc (pt -15.500 -4.300) (pt -15.550 -4.400) (pt -15.450 -4.300) (start 180.0) (sweep 90.0))
+      (pt -15.5 -4.4))))
+   (leg 1 (pt -15.500 -1.400) (padstack 0))
+   (leg 2 (pt -9.300 -1.400) (padstack 0))
+   (leg 3 (pt -3.100 -1.400) (padstack 0))
+   (leg 4 (pt 3.100 -1.400) (padstack 0))
+   (leg 5 (pt 9.300 -1.400) (padstack 0))
+   (leg 6 (pt 15.500 -1.400) (padstack 0))
+   (leg 7 (pt -20.825 -2.300) (padstack 7))
+   (leg 8 (pt -20.825 2.300) (padstack 8))
+   (leg 9 (pt 20.825 -2.300) (padstack 9))
+   (leg 10 (pt 20.825 2.300) (padstack 10))
+   (leg 11 (pt -19.450 0.000) (padstack 11))
+   (leg 12 (pt 19.450 0.000) (padstack 12))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 1.020 4.800 0 0 90.000))
+   )
+   (padstack 7
+    (plated false)
+    (pad (layer TCOP) (rectf 1.450 3.000 0 0 90.000))
+   )
+   (padstack 8
+    (plated false)
+    (pad (layer TCOP) (rectf 1.450 3.000 0 0 90.000))
+   )
+   (padstack 9
+    (plated false)
+    (pad (layer TCOP) (rectf 1.450 3.000 0 0 90.000))
+   )
+   (padstack 10
+    (plated false)
+    (pad (layer TCOP) (rectf 1.450 3.000 0 0 90.000))
+   )
+   (padstack 11
+    (hole 1.6)
+    (plated false)
+    (pad (layer TCOP) (round 0.800))
+    (pad (layer INNER) (round 0.800))
+    (pad (layer BCOP) (round 0.800))
+   )
+   (padstack 12
+    (hole 1.6)
+    (plated false)
+    (pad (layer TCOP) (round 0.800))
+    (pad (layer INNER) (round 0.800))
+    (pad (layer BCOP) (round 0.800))
+   )
+   (model "524265-E.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

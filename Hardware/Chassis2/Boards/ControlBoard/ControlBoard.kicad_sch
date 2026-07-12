@@ -1530,14 +1530,14 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "InverterCom:TBP01R2W-508-06BE"
+		(symbol "InverterCom:524265-E"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "J"
-				(at 16.51 7.62 0)
+				(at 19.05 7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -1547,8 +1547,8 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "TBP01R2W-508-06BE"
-				(at 16.51 5.08 0)
+			(property "Value" "524265-E"
+				(at 19.05 5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -1558,20 +1558,8 @@
 					(justify left top)
 				)
 			)
-			(property "Footprint" "SHDR6W100P0X508_1X6_4064X850X1240P"
-				(at 16.51 -94.92 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r2w-508.pdf"
-				(at 16.51 -194.92 0)
+			(property "Footprint" "524265E"
+				(at 19.05 -94.92 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1582,7 +1570,19 @@
 					(justify left top)
 				)
 			)
-			(property "Description" "2~24 Poles, Pluggable, Receptacle, Vertical 5.08 Pitch, Terminal Block Connector"
+			(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+				(at 19.05 -194.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1593,8 +1593,8 @@
 					)
 				)
 			)
-			(property "Height" "12.4"
-				(at 16.51 -394.92 0)
+			(property "Height" "9.4"
+				(at 19.05 -394.92 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1605,8 +1605,8 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Part Number" "490-TBP01R2W-50806BE"
-				(at 16.51 -494.92 0)
+			(property "Mouser Part Number" ""
+				(at 19.05 -494.92 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1617,8 +1617,8 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R2W-508-06BE?qs=PzGy0jfpSMstd7VozfoB7g%3D%3D"
-				(at 16.51 -594.92 0)
+			(property "Mouser Price/Stock" ""
+				(at 19.05 -594.92 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1629,8 +1629,8 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Name" "Same Sky"
-				(at 16.51 -694.92 0)
+			(property "Manufacturer_Name" "TE Connectivity"
+				(at 19.05 -694.92 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1641,8 +1641,8 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Part_Number" "TBP01R2W-508-06BE"
-				(at 16.51 -794.92 0)
+			(property "Manufacturer_Part_Number" "524265-E"
+				(at 19.05 -794.92 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1653,10 +1653,10 @@
 					(justify left top)
 				)
 			)
-			(symbol "TBP01R2W-508-06BE_1_1"
+			(symbol "524265-E_1_1"
 				(rectangle
 					(start 5.08 2.54)
-					(end 15.24 -15.24)
+					(end 17.78 -12.7)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -1756,7 +1756,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -12.7 0)
+					(at 22.86 0 180)
 					(length 5.08)
 					(name "6"
 						(effects
@@ -1770,6 +1770,163 @@
 							(font
 								(size 1.27 1.27)
 							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -2.54 180)
+					(length 5.08)
+					(name "MP1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -5.08 180)
+					(length 5.08)
+					(name "MP2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -7.62 180)
+					(length 5.08)
+					(name "MP3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -10.16 180)
+					(length 5.08)
+					(name "MP4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:Placeholder"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#"
+				(at -0.762 0 0)
+				(show_name no)
+				(do_not_autoplace yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Placeholder_0_1"
+				(rectangle
+					(start -0.508 -1.524)
+					(end 23.622 -4.064)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Placeholder_1_1"
+				(text "PLACEHOLDER FOR BOM"
+					(at 11.176 -2.794 0)
+					(effects
+						(font
+							(size 1.27 1.27)
 						)
 					)
 				)
@@ -1928,7 +2085,7 @@
 	)
 	(text "voltage sense connector\nISOLATED, HIGH VOLTAGE!"
 		(exclude_from_sim no)
-		(at 21.844 152.146 90)
+		(at 43.18 140.208 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1945,6 +2102,16 @@
 			)
 		)
 		(uuid "9f7976d7-0ec6-4010-9285-2635b1279982")
+	)
+	(text "STANDOFF PARTS"
+		(exclude_from_sim no)
+		(at 22.606 116.332 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "af6daa1f-72f5-4986-94ac-ab4f6ac39d13")
 	)
 	(text "Control system has dual independent mcus,\ntargeting ASIL decomposition.\nIndependently monitored switching commands,\ncurrent responses, canbus commands + faults\n\nPlease see HARA under documentation for additional informaton."
 		(exclude_from_sim no)
@@ -1998,8 +2165,24 @@
 		(uuid "f22ead4c-41af-4e32-a5e0-d91966150592")
 	)
 	(no_connect
+		(at 81.28 147.32)
+		(uuid "2337bc3a-1773-4257-a009-44107098ed64")
+	)
+	(no_connect
 		(at 161.29 50.8)
 		(uuid "2b20b041-90a9-4ac3-88a2-ceef650eefc9")
+	)
+	(no_connect
+		(at 81.28 149.86)
+		(uuid "75da2f45-2f55-4fe3-af03-0e939ef4f263")
+	)
+	(no_connect
+		(at 81.28 144.78)
+		(uuid "77fa7580-18ec-4466-8f9c-7147d5ef3d9a")
+	)
+	(no_connect
+		(at 81.28 142.24)
+		(uuid "97bfbfd3-3869-4951-a99e-6e7889144886")
 	)
 	(no_connect
 		(at 156.21 50.8)
@@ -3026,12 +3209,12 @@
 		(uuid "07fc19de-f89f-4b71-953e-0dd48adbe7de")
 	)
 	(label "VS_PH_V_Y"
-		(at 40.64 147.32 0)
+		(at 58.42 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "0e5df17b-4721-4e2c-9168-c8fa1d23a44f")
 	)
@@ -3086,12 +3269,12 @@
 		(uuid "1a5c04c3-65d9-4637-9574-2e47e757b566")
 	)
 	(label "VS_GND_Y"
-		(at 40.64 154.94 0)
+		(at 58.42 149.86 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "1e03926f-65e8-4196-9a20-ab9b47bc83e8")
 	)
@@ -3186,12 +3369,12 @@
 		(uuid "2d195212-dc73-4224-bff9-9b73bed86977")
 	)
 	(label "VS_PH_U_Y"
-		(at 40.64 149.86 0)
+		(at 58.42 142.24 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "308c33a8-d267-4eaa-b327-828178e0519d")
 	)
@@ -3536,12 +3719,12 @@
 		(uuid "6b233bca-9f48-4c86-bb4e-d54b3a5cafe5")
 	)
 	(label "VS_PH_W_Y"
-		(at 40.64 144.78 0)
+		(at 58.42 147.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "6d09a7ab-a669-401b-8a7e-8ead7f1252d4")
 	)
@@ -3586,7 +3769,7 @@
 		(uuid "6e93eda4-bbe5-4cd2-a4b1-2303a14c9715")
 	)
 	(label "VS_GND_Y"
-		(at 40.64 142.24 0)
+		(at 81.28 139.7 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4136,12 +4319,12 @@
 		(uuid "b9561d27-20ec-43c9-8f69-f03c638decf4")
 	)
 	(label "VS_DC_LINK_Y"
-		(at 40.64 152.4 0)
+		(at 58.42 139.7 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ba89c7d0-41b6-4ce6-99af-8f879afea456")
 	)
@@ -5081,6 +5264,246 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 149.86 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0eb5513d-3c38-4ac8-a3b8-a66055434c9f")
+		(property "Reference" "#ST7"
+			(at 13.208 149.86 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:524265-E")
+		(at 58.42 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1dedfc6a-116f-4749-a061-25f1edd8b242")
+		(property "Reference" "J15"
+			(at 69.85 132.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "524265-E"
+			(at 69.85 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "524265E"
+			(at 77.47 234.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+			(at 77.47 334.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+			(at 58.42 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.4"
+			(at 77.47 534.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 77.47 634.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 77.47 734.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "TE Connectivity"
+			(at 77.47 834.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "524265-E"
+			(at 77.47 934.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "3"
+			(uuid "ff73edff-1c0e-4c57-a298-8f4f4c481d93")
+		)
+		(pin "10"
+			(uuid "3aa56ef3-7390-4f08-8d43-c790129fc3fb")
+		)
+		(pin "9"
+			(uuid "4523d74e-ed22-4a62-9d44-fecff4a8b4bd")
+		)
+		(pin "5"
+			(uuid "08e48f62-1ca2-4783-9a81-e8db944295d4")
+		)
+		(pin "2"
+			(uuid "03f6b3e9-4aef-4e2f-9e62-e0d3464365c6")
+		)
+		(pin "4"
+			(uuid "e4ea19e9-e4cb-48f3-a1eb-de8afad37f92")
+		)
+		(pin "8"
+			(uuid "0dbe4226-2ef4-4aea-b216-2ebdb8583c17")
+		)
+		(pin "1"
+			(uuid "886421c8-3831-445f-b76a-05eac3d81bf1")
+		)
+		(pin "7"
+			(uuid "c9194bcf-4884-43c0-b2b7-6ccead14ac6b")
+		)
+		(pin "6"
+			(uuid "1591316b-f892-43fe-b4f7-35e663540b28")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "J15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 15.24 85.09 0)
 		(unit 1)
@@ -5151,6 +5574,80 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "H7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 60.96 125.73 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "32e20720-eb5a-4f5e-8629-18ad0e9b749c")
+		(property "Reference" "#JH1"
+			(at 60.198 125.73 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "544958-E"
+			(at 71.12 125.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 60.96 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#JH1")
 					(unit 1)
 				)
 			)
@@ -5688,6 +6185,154 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "986ca4af-7156-461e-a225-25d5a34fa82c")
+		(property "Reference" "#ST5"
+			(at 13.208 139.7 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 139.7 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9a0398f4-6a36-42ab-8cdf-33b86fa84ad8")
+		(property "Reference" "#ST3"
+			(at 13.208 129.54 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 15.24 91.44 0)
 		(unit 1)
@@ -5840,160 +6485,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:TBP01R2W-508-06BE")
-		(at 40.64 154.94 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "bfff5669-2fc2-44a5-aff0-21e05af30461")
-		(property "Reference" "J11"
-			(at 30.48 134.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TBP01R2W-508-06BE"
-			(at 30.48 137.16 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "InverterCom:SHDR6W100P0X508_1X6_4064X850X1240P"
-			(at 24.13 60.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r2w-508.pdf"
-			(at 24.13 -39.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "2~24 Poles, Pluggable, Receptacle, Vertical 5.08 Pitch, Terminal Block Connector"
-			(at 40.64 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "12.4"
-			(at 24.13 -239.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "490-TBP01R2W-50806BE"
-			(at 24.13 -339.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R2W-508-06BE?qs=PzGy0jfpSMstd7VozfoB7g%3D%3D"
-			(at 24.13 -439.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "Same Sky"
-			(at 24.13 -539.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "TBP01R2W-508-06BE"
-			(at 24.13 -639.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "2"
-			(uuid "3d33f0dd-3a1b-43a4-88f4-23d22a4c10af")
-		)
-		(pin "1"
-			(uuid "3c934861-5c72-424b-a711-1c13312808c5")
-		)
-		(pin "5"
-			(uuid "55bb7563-f335-4809-8f0b-0ba3239629f7")
-		)
-		(pin "4"
-			(uuid "22b17b69-b5c4-45a0-a2a6-841f29998397")
-		)
-		(pin "6"
-			(uuid "f6e56a4e-8599-417d-b6c1-f87299ee7ea5")
-		)
-		(pin "3"
-			(uuid "47519a6a-183f-4896-812e-f4058e49600c")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "J11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_02x10_Counter_Clockwise")
 		(at 57.15 31.75 0)
 		(unit 1)
@@ -6128,6 +6619,154 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 134.62 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "cd177b6c-269b-47e7-9dc7-8ae39b1f1991")
+		(property "Reference" "#ST4"
+			(at 13.208 134.62 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 119.38 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d76d31ea-4fc5-4e49-8e88-2dfe0805c498")
+		(property "Reference" "#ST1"
+			(at 13.208 119.38 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_02x08_Counter_Clockwise")
 		(at 254 147.32 90)
 		(unit 1)
@@ -6244,6 +6883,154 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "J12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 154.94 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e29a7e85-5ecc-4520-93e5-8ca109cc31e6")
+		(property "Reference" "#ST8"
+			(at 13.208 154.94 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 154.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 144.78 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ee960f00-6764-4384-b529-a7c59ac1d053")
+		(property "Reference" "#ST6"
+			(at 13.208 144.78 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST6")
 					(unit 1)
 				)
 			)
@@ -6413,6 +7200,80 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "J10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 13.97 124.46 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ffe221f2-fd28-4c7d-98c2-6e10aeffe8cc")
+		(property "Reference" "#ST2"
+			(at 13.208 124.46 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "971350581"
+			(at 24.13 124.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 13.97 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 13.97 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 13.97 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "#ST2")
 					(unit 1)
 				)
 			)
