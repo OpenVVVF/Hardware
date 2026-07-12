@@ -159,18 +159,41 @@ float EncoderADC::computeAngle(uint16_t raw_sin, uint16_t raw_cos) {
     if (ccos < COS_MIN_CAP) ccos = COS_MIN_CAP;
     if (ccos > COS_MAX_CAP) ccos = COS_MAX_CAP;
 
-    /* Tighten dynamic bounds inside the hard limits. */
-    if (csin < m_sin_min) m_sin_min = csin;
-    if (csin > m_sin_max) m_sin_max = csin;
-    if (ccos < m_cos_min) m_cos_min = ccos;
-    if (ccos > m_cos_max) m_cos_max = ccos;
+    /* Expand the learned bounds from the observed signal.  They start empty
+     * and bracket the true signal range after roughly one revolution. */
+    if (csin < m_obs_sin_min) m_obs_sin_min = csin;
+    if (csin > m_obs_sin_max) m_obs_sin_max = csin;
+    if (ccos < m_obs_cos_min) m_obs_cos_min = ccos;
+    if (ccos > m_obs_cos_max) m_obs_cos_max = ccos;
+
+    /* Prefer the learned bounds once both channels have seen enough span;
+     * the hardcoded caps are only a fallback until then.  Normalizing with
+     * bounds that do not match the real signal (stale mids or spans)
+     * distorts the angle with a 2nd-harmonic error large enough to
+     * detent-lock the rotor under FOC. */
+    const bool learned_valid =
+        (m_obs_sin_max >= m_obs_sin_min + LEARNED_MIN_SPAN) &&
+        (m_obs_cos_max >= m_obs_cos_min + LEARNED_MIN_SPAN);
+    uint16_t sin_min, sin_max, cos_min, cos_max;
+    if (learned_valid) {
+        sin_min = m_obs_sin_min; sin_max = m_obs_sin_max;
+        cos_min = m_obs_cos_min; cos_max = m_obs_cos_max;
+    } else {
+        sin_min = m_sin_min; sin_max = m_sin_max;
+        cos_min = m_cos_min; cos_max = m_cos_max;
+    }
+    m_active_sin_min = sin_min;
+    m_active_sin_max = sin_max;
+    m_active_cos_min = cos_min;
+    m_active_cos_max = cos_max;
+    m_learned_active = learned_valid;
 
     float angle_deg = 0.0f;
-    if ((m_sin_max > m_sin_min) && (m_cos_max > m_cos_min)) {
-        float sin_norm = (static_cast<float>(csin - m_sin_min) /
-                          static_cast<float>(m_sin_max - m_sin_min)) * 2.0f - 1.0f;
-        float cos_norm = (static_cast<float>(ccos - m_cos_min) /
-                          static_cast<float>(m_cos_max - m_cos_min)) * 2.0f - 1.0f;
+    if ((sin_max > sin_min) && (cos_max > cos_min)) {
+        float sin_norm = (static_cast<float>(csin - sin_min) /
+                          static_cast<float>(sin_max - sin_min)) * 2.0f - 1.0f;
+        float cos_norm = (static_cast<float>(ccos - cos_min) /
+                          static_cast<float>(cos_max - cos_min)) * 2.0f - 1.0f;
         angle_deg = atan2f(sin_norm, cos_norm) * (180.0f / static_cast<float>(M_PI));
         if (angle_deg < 0.0f) {
             angle_deg += 360.0f;
@@ -194,12 +217,12 @@ void EncoderADC::onDmaComplete() {
     m_last_sample_ms = HAL_GetTick();
 
     /* Only evaluate signal-quality faults after the encoder has rotated enough
-     * for the dynamic bounds to be meaningful. */
-    const bool range_ok = (m_sin_max - m_sin_min > MIN_AMP_RANGE) &&
-                          (m_cos_max - m_cos_min > MIN_AMP_RANGE);
+     * for the active bounds to be meaningful. */
+    const bool range_ok = (m_active_sin_max - m_active_sin_min > MIN_AMP_RANGE) &&
+                          (m_active_cos_max - m_active_cos_min > MIN_AMP_RANGE);
     if (range_ok) {
-        const float sin_mid = 0.5f * static_cast<float>(m_sin_min + m_sin_max);
-        const float cos_mid = 0.5f * static_cast<float>(m_cos_min + m_cos_max);
+        const float sin_mid = 0.5f * static_cast<float>(m_active_sin_min + m_active_sin_max);
+        const float cos_mid = 0.5f * static_cast<float>(m_active_cos_min + m_active_cos_max);
         const float dx = static_cast<float>(raw_sin) - sin_mid;
         const float dy = static_cast<float>(raw_cos) - cos_mid;
         const float mag = std::sqrt(dx * dx + dy * dy);
@@ -274,6 +297,12 @@ void EncoderADC::setBounds(uint16_t sin_min, uint16_t sin_max,
     m_sin_max = sin_max;
     m_cos_min = cos_min;
     m_cos_max = cos_max;
+    /* Seed the learned bounds so the override takes effect immediately;
+     * they keep expanding from real samples afterwards. */
+    m_obs_sin_min = sin_min;
+    m_obs_sin_max = sin_max;
+    m_obs_cos_min = cos_min;
+    m_obs_cos_max = cos_max;
     m_mag_ema = 0.0f;
     m_mag_ema_init = false;
     m_amp_low_count = 0;
@@ -288,6 +317,15 @@ void EncoderADC::resetBounds() {
     m_sin_max = SIN_MAX_CAP;
     m_cos_min = COS_MIN_CAP;
     m_cos_max = COS_MAX_CAP;
+    m_obs_sin_min = 65535U;
+    m_obs_sin_max = 0U;
+    m_obs_cos_min = 65535U;
+    m_obs_cos_max = 0U;
+    m_learned_active = false;
+    m_active_sin_min = SIN_MIN_CAP;
+    m_active_sin_max = SIN_MAX_CAP;
+    m_active_cos_min = COS_MIN_CAP;
+    m_active_cos_max = COS_MAX_CAP;
     m_mag_ema = 0.0f;
     m_mag_ema_init = false;
     m_amp_low_count = 0;

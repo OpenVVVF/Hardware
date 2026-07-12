@@ -11,9 +11,12 @@ namespace Inverter {
  * A dedicated DMA stream (DMA2_Stream0) transfers each completed pair to a
  * circular buffer, and a TIM2 TRGO at 10 kHz triggers the regular sequence.
  *
- * Hard limits from the calibrated commit 0eb9f53 are applied first; dynamic
- * min/max bounds tighten inside those caps as the encoder rotates.  The angle
- * is computed with atan2 and returned in degrees [0, 360).
+ * Hard limits from the calibrated commit 0eb9f53 are applied first as a
+ * fallback.  Learned min/max bounds expand from the observed signal as the
+ * encoder rotates; once both channels have spanned LEARNED_MIN_SPAN counts
+ * they replace the hardcoded fallback for normalization, so the angle
+ * self-calibrates after roughly one revolution.  The angle is computed with
+ * atan2 and returned in degrees [0, 360).
  */
 class EncoderADC {
 public:
@@ -69,12 +72,21 @@ public:
     uint32_t lastSampleMs() const { return m_last_sample_ms; }
 
     /**
-     * @brief Current dynamic amplitude bounds used for normalization.
+     * @brief Current amplitude bounds used for normalization.
+     *
+     * Returns the learned bounds once they are valid, otherwise the
+     * fallback (hardcoded caps or a manual setBounds() override).
      */
-    uint16_t sinMin() const { return m_sin_min; }
-    uint16_t sinMax() const { return m_sin_max; }
-    uint16_t cosMin() const { return m_cos_min; }
-    uint16_t cosMax() const { return m_cos_max; }
+    uint16_t sinMin() const { return m_active_sin_min; }
+    uint16_t sinMax() const { return m_active_sin_max; }
+    uint16_t cosMin() const { return m_active_cos_min; }
+    uint16_t cosMax() const { return m_active_cos_max; }
+
+    /**
+     * @brief True once the learned bounds have seen enough span on both
+     * channels to be used for normalization (roughly one revolution).
+     */
+    bool learnedBoundsActive() const { return m_learned_active; }
 
     /**
      * @brief True once both sin and cos have seen enough variation to compute
@@ -103,14 +115,16 @@ public:
     void diagnose();
 
     /**
-     * @brief Set fixed sin/cos amplitude bounds.  This overrides the dynamic
-     * bounds learned from rotation.  The hard caps are not changed.
+     * @brief Set fixed sin/cos amplitude bounds.  Seeds the learned bounds so
+     * the override takes effect immediately; they keep expanding from real
+     * samples afterwards.  The hard caps are not changed.
      */
     void setBounds(uint16_t sin_min, uint16_t sin_max,
                    uint16_t cos_min, uint16_t cos_max);
 
     /**
-     * @brief Reset dynamic bounds to the hard-coded caps.
+     * @brief Reset dynamic bounds to the hard-coded caps and clear the
+     * learned bounds.
      */
     void resetBounds();
 
@@ -127,17 +141,38 @@ private:
     bool initDma();
     float computeAngle(uint16_t raw_sin, uint16_t raw_cos);
 
-    /* Hard limits measured/calibrated in commit 0eb9f53. */
+    /* Hard limits measured/calibrated in commit 0eb9f53.  Used as the
+     * fallback normalization bounds until the learned bounds become valid. */
     static constexpr uint16_t SIN_MIN_CAP = 427U;
     static constexpr uint16_t SIN_MAX_CAP = 65388U;
     static constexpr uint16_t COS_MIN_CAP = 608U;
     static constexpr uint16_t COS_MAX_CAP = 64743U;
 
-    /* Dynamic bounds start at the hard limits and tighten inward. */
+    /* Minimum span [counts] per channel before learned bounds are trusted. */
+    static constexpr uint16_t LEARNED_MIN_SPAN = 15000U;
+
+    /* Fallback bounds: the hard caps by default, or a manual override via
+     * setBounds().  Never mutated by the sampling ISR. */
     uint16_t m_sin_min = SIN_MIN_CAP;
     uint16_t m_sin_max = SIN_MAX_CAP;
     uint16_t m_cos_min = COS_MIN_CAP;
     uint16_t m_cos_max = COS_MAX_CAP;
+
+    /* Learned bounds: expand from the observed signal as the encoder rotates.
+     * Start empty so they track the true signal range of the attached
+     * hardware instead of trusting stale hardcoded values. */
+    uint16_t m_obs_sin_min = 65535U;
+    uint16_t m_obs_sin_max = 0U;
+    uint16_t m_obs_cos_min = 65535U;
+    uint16_t m_obs_cos_max = 0U;
+
+    /* Bounds actually used for normalization (learned once valid, else
+     * fallback).  Written by the ISR, read by the main-loop accessors. */
+    volatile uint16_t m_active_sin_min = SIN_MIN_CAP;
+    volatile uint16_t m_active_sin_max = SIN_MAX_CAP;
+    volatile uint16_t m_active_cos_min = COS_MIN_CAP;
+    volatile uint16_t m_active_cos_max = COS_MAX_CAP;
+    volatile bool     m_learned_active = false;
 
     /**
      * @brief Atomic snapshot of one encoder sample.
