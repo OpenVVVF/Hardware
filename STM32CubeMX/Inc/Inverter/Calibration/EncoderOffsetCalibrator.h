@@ -96,6 +96,18 @@ public:
      */
     float measuredEncoderCyclesPerRev() const { return m_measured_encoder_cycles_per_rev; }
 
+    /**
+     * @brief Detected encoder/field rotation direction after a successful run.
+     *
+     * +1: encoder angle increases in the same direction as the rotating stator
+     * field; -1: opposite; 0: not determined (calibration did not get far
+     * enough).  The full-warmup-revolution measurement takes precedence over
+     * the OFFSET_ROTATE fallback.  FOC needs this value in MotorCalibration::
+     * encoder_sign, otherwise the electrical angle runs backwards relative to
+     * the rotor and the motor locks instead of spinning.
+     */
+    int detectedSign() const { return (m_warmup_sign != 0) ? m_warmup_sign : m_sign; }
+
     static EncoderOffsetCalibrator& instance();
 
     enum class State {

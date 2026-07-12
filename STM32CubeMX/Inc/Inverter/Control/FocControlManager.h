@@ -52,6 +52,16 @@ public:
     void adjustEncoderOffset(float delta_mech_deg);
 
     /**
+     * @brief Discard the runtime offset adjustment, returning to the pure
+     * calibration-derived offset.
+     *
+     * Called automatically when a new motor calibration completes so a stale
+     * tuning delta from a previous calibration is not applied on top of the
+     * fresh offset.
+     */
+    void resetEncoderOffsetAdjustment();
+
+    /**
      * @brief Set the encoder direction sign (+1 or -1).
      *
      * The calibrator detects whether the encoder increases or decreases as the
@@ -64,6 +74,20 @@ public:
      * @brief Current total encoder offset used by FOC [mech deg].
      */
     float encoderOffsetDeg() const;
+
+    /**
+     * @brief Diagnostic: drive the Park transform angle from a software ramp
+     * instead of the encoder.
+     *
+     * The full current loop (Clarke/Park/PI/inverse Park/SVPWM) keeps running,
+     * but the electrical angle rotates at a fixed rate.  If the motor spins
+     * with the ramp but locks with the real encoder, the encoder path is at
+     * fault; if it still locks, the current loop/output path is.  Call while
+     * FOC is running; pass 0 to return to encoder feedback.
+     *
+     * @param elec_hz  Electrical rotation rate [Hz]; negative reverses, 0 disables.
+     */
+    void setForcedAngleRate(float elec_hz);
 
     bool isRunning() const { return m_running || m_starting; }
     bool isInitialized() const { return m_initialized; }
@@ -121,12 +145,19 @@ private:
     static constexpr float DEFAULT_SOFT_VOLTAGE_LIMIT_V = 0.0f;
     static constexpr float MIN_VDC_V = 5.0f;            /**< Minimum valid DC-bus voltage. */
     static constexpr uint32_t MAX_MISSED_CURRENT_SAMPLES = 5U;
+    static constexpr uint32_t ENCODER_STALE_MS = 5U;      /**< Max encoder sample age before FOC shuts down. */
 
     FocController m_controller;
     FocConfig m_config;
     FocSetpoints m_setpoints;
     MotorParameters m_motor;
     float m_encoder_offset_adjustment_deg = 0.0f;
+
+    /* Forced-angle diagnostic: replace the encoder angle with a software ramp
+     * while the current loop keeps running. */
+    bool m_forced_angle = false;
+    float m_forced_enc_angle_rad = 0.0f;
+    float m_forced_rate_rad_per_s = 0.0f;
 
     bool m_initialized = false;
     volatile bool m_running = false;

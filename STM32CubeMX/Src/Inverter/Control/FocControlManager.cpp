@@ -38,7 +38,7 @@ bool FocControlManager::init() {
     m_config.Kp_Q = DEFAULT_KP;
     m_config.Ki_Q = DEFAULT_KI;
     m_config.SoftVoltageLimit_V = DEFAULT_SOFT_VOLTAGE_LIMIT_V;
-    m_config.MaxPhaseCurrent_A = 40.0f;
+    m_config.MaxPhaseCurrent_A = 200.0f;
     m_config.MaxModulation = 0.9f;
     m_controller.ApplyConfig(m_config);
 
@@ -187,6 +187,7 @@ bool FocControlManager::start(float iq_a, float id_a) {
 
     m_setpoints.id_a = id_a;
     m_setpoints.iq_a = iq_a;
+    m_forced_angle = false;
     applySetpointLimits();
 
     // Begin gate-driver startup sequence.
@@ -350,6 +351,58 @@ void FocControlManager::adjustEncoderOffset(float delta_mech_deg) {
                       static_cast<double>(delta_mech_deg));
 }
 
+void FocControlManager::resetEncoderOffsetAdjustment() {
+    __disable_irq();
+    m_encoder_offset_adjustment_deg = 0.0f;
+    if (m_running) {
+        MotorParameters p =
+            buildMotorParametersFromCalibration(MotorCalibration::instance(), m_motor.vdc_v);
+        m_motor = p;
+        m_controller.SetMotorParameters(p);
+    }
+    __enable_irq();
+
+    Telemetry::printf("[FOC] encoder offset adjustment reset");
+}
+
+void FocControlManager::setForcedAngleRate(float elec_hz) {
+    bool active = false;
+    __disable_irq();
+    if (elec_hz != 0.0f && m_running) {
+        /* Ramp the Park-transform angle at the requested electrical rate.  The
+         * angle fed to the controller is a raw encoder angle, so the ramp runs
+         * in encoder counts: elec_hz * cycles-per-rev / pole-pairs. */
+        const float cycles = (m_motor.encoder_cycles_per_rev > 1e-6f)
+                                 ? m_motor.encoder_cycles_per_rev : 1.0f;
+        m_forced_enc_angle_rad = 0.0f;
+        m_forced_rate_rad_per_s =
+            (2.0f * 3.14159265358979323846f * elec_hz) * cycles / m_motor.pole_pairs;
+        m_motor.encoder_sign = 1.0f;
+        m_motor.encoder_offset_rad = 0.0f;
+        m_controller.SetMotorParameters(m_motor);
+        m_forced_angle = true;
+        active = true;
+    } else {
+        m_forced_angle = false;
+        if (m_running) {
+            /* Restore normal encoder feedback: rebuild parameters from
+             * calibration plus any runtime offset adjustment. */
+            MotorParameters p =
+                buildMotorParametersFromCalibration(MotorCalibration::instance(), m_motor.vdc_v);
+            const float adj_elec_rad = m_encoder_offset_adjustment_deg *
+                                       (3.14159265358979323846f / 180.0f) *
+                                       p.pole_pairs / p.encoder_cycles_per_rev;
+            p.encoder_offset_rad += adj_elec_rad;
+            m_motor = p;
+            m_controller.SetMotorParameters(p);
+        }
+    }
+    __enable_irq();
+    Telemetry::printf("[FOC] forced-angle %s (%.2f elec Hz)",
+                      active ? "ENABLED" : "disabled",
+                      static_cast<double>(elec_hz));
+}
+
 void FocControlManager::setEncoderSign(float sign) {
     float s = (sign >= 0.0f) ? 1.0f : -1.0f;
 
@@ -417,8 +470,32 @@ void FocControlManager::onPwmPeriod() {
         return;
     }
 
+    /* The encoder angle must be fresh: a stalled encoder stream freezes the
+     * Park angle, so the rotor aligns to the fixed commanded field vector and
+     * locks while id/iq keep regulating.  Sample age comes from the DMA
+     * completion tick, so a busy main loop cannot cause false trips. */
+    if ((HAL_GetTick() - encoderADC().lastSampleMs()) > ENCODER_STALE_MS) {
+        FaultManager::instance().raise(FaultSource::EncoderTimeout,
+                                       FaultReason::EncoderSampleTimeout);
+        requestSafeStopFromIsr();
+        return;
+    }
+
     float angle_deg = encoderADC().lastAngle();
     float angle_rad = angle_deg * (3.14159265358979323846f / 180.0f);
+
+    /* Forced-angle diagnostic: ignore the encoder and drive the Park angle
+     * from a software ramp (see setForcedAngleRate).  State is kept in
+     * [0, 2pi) and fed directly, matching the encoder-angle convention. */
+    if (m_forced_angle) {
+        m_forced_enc_angle_rad += m_forced_rate_rad_per_s * m_dt_s;
+        m_forced_enc_angle_rad = std::fmod(m_forced_enc_angle_rad,
+                                           2.0f * 3.14159265358979323846f);
+        if (m_forced_enc_angle_rad < 0.0f) {
+            m_forced_enc_angle_rad += 2.0f * 3.14159265358979323846f;
+        }
+        angle_rad = m_forced_enc_angle_rad;
+    }
 
     /* Copy setpoints atomically so a main-loop update cannot give us a
      * partially-written id/iq pair. */
@@ -478,6 +555,15 @@ void FocControlManager::logTelemetry() {
     Telemetry::log("foc_iv", m_last_iv_a);
     Telemetry::log("foc_iw", m_last_iw_a);
     Telemetry::log("foc_missed", static_cast<float>(m_missed_current_samples));
+
+    /* Duty-cycle readback: proves whether the SVPWM CCR writes actually reach
+     * the timer in FOC mode (vs. frozen duties driving a fixed-axis field). */
+    const uint32_t arr = TIM1->ARR;
+    if (arr > 0U) {
+        Telemetry::log("foc_du", 100.0f * static_cast<float>(TIM1->CCR1) / static_cast<float>(arr));
+        Telemetry::log("foc_dv", 100.0f * static_cast<float>(TIM1->CCR2) / static_cast<float>(arr));
+        Telemetry::log("foc_dw", 100.0f * static_cast<float>(TIM1->CCR3) / static_cast<float>(arr));
+    }
 }
 
 void FocControlManager::update() {

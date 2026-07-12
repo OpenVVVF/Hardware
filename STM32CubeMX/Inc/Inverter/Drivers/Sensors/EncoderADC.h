@@ -60,6 +60,15 @@ public:
     float    lastAngle() const { return m_snapshot.angle; }
 
     /**
+     * @brief HAL tick of the most recent DMA sample completion.
+     *
+     * Lets control loops verify the encoder stream is alive without depending
+     * on main-loop scheduling (unlike diagnose(), which can false-trip when
+     * the main loop is busy).
+     */
+    uint32_t lastSampleMs() const { return m_last_sample_ms; }
+
+    /**
      * @brief Current dynamic amplitude bounds used for normalization.
      */
     uint16_t sinMin() const { return m_sin_min; }

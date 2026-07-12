@@ -24,12 +24,13 @@ using Inverter::focControlManager;
  *   foc ki <ki>
  *   foc vlim <v_v>
  *   foc offset <delta_mech_deg>
+ *   foc forced <elec_hz>   (0 = back to encoder feedback)
  *   foc status
  */
 class FocCommand : public CommandInterface {
 public:
     FocCommand()
-      : CommandInterface("foc", "FOC control: start/stop/id/iq/kp/ki/vlim/offset/encsign/status",
+      : CommandInterface("foc", "FOC control: start/stop/id/iq/kp/ki/vlim/offset/encsign/forced/status",
             {ArgSpec{"subcommand", "", 0.0f, 0.0f, 0.0f, true, ArgSpec::STRING},
              ArgSpec{"value1", "", -1000.0f, 1000.0f, 0.0f, false, ArgSpec::FLOAT},
              ArgSpec{"value2", "", -1000.0f, 1000.0f, 0.0f, false, ArgSpec::FLOAT}}) {}
@@ -59,10 +60,12 @@ public:
             focControlManager().adjustEncoderOffset(v1);
         } else if (strcasecmp(sub, "encsign") == 0) {
             focControlManager().setEncoderSign(v1);
+        } else if (strcasecmp(sub, "forced") == 0) {
+            focControlManager().setForcedAngleRate(v1);
         } else if (strcasecmp(sub, "status") == 0) {
             printStatus();
         } else {
-            Telemetry::printf("[SHELL] Unknown FOC subcommand '%s'. Use: start/stop/id/iq/kp/ki/vlim/offset/encsign/status", sub);
+            Telemetry::printf("[SHELL] Unknown FOC subcommand '%s'. Use: start/stop/id/iq/kp/ki/vlim/offset/encsign/forced/status", sub);
         }
     }
 
