@@ -731,13 +731,13 @@
 	)
 	(text "Independent gate driver power switch,\nredundant 1oo2 SSO/STO"
 		(exclude_from_sim no)
-		(at 73.406 54.356 0)
+		(at 35.306 59.69 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "3410b002-282b-4279-b21b-da401cf11767")
+		(uuid "2f62e7af-b932-4e49-8424-badec4c9224d")
 	)
 	(text "+12v to 3v voltage divider"
 		(exclude_from_sim no)
@@ -848,6 +848,12 @@
 		(uuid "734ce12a-c4f2-41ab-ad46-0f68061a933d")
 	)
 	(junction
+		(at 67.31 68.58)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "768614b7-a06f-49b8-9289-e323dc137b62")
+	)
+	(junction
 		(at 115.57 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -872,12 +878,6 @@
 		(uuid "e3103a3c-9cec-4701-bb88-85040f29e78d")
 	)
 	(junction
-		(at 67.31 68.58)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "fca5bde8-5cf6-465c-926f-f9bd92de2d9a")
-	)
-	(junction
 		(at 157.48 88.9)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -898,16 +898,6 @@
 			(type default)
 		)
 		(uuid "062b76b4-0381-48fc-8f9c-084df4aede2d")
-	)
-	(wire
-		(pts
-			(xy 67.31 68.58) (xy 149.86 68.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0f4a7ff0-d848-4371-bc66-0590e739a910")
 	)
 	(wire
 		(pts
@@ -951,16 +941,6 @@
 	)
 	(wire
 		(pts
-			(xy 62.23 57.15) (xy 55.88 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "304814e3-15dc-46f6-9152-1d5df4786d7c")
-	)
-	(wire
-		(pts
 			(xy 157.48 59.69) (xy 157.48 60.96)
 		)
 		(stroke
@@ -968,16 +948,6 @@
 			(type default)
 		)
 		(uuid "35812605-7282-4d58-b16e-08c60106750f")
-	)
-	(wire
-		(pts
-			(xy 55.88 57.15) (xy 55.88 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3c564274-6ba7-495f-bc0f-350746137944")
 	)
 	(wire
 		(pts
@@ -1091,16 +1061,6 @@
 	)
 	(wire
 		(pts
-			(xy 160.02 59.69) (xy 157.48 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7ffffa3c-ced2-468f-b495-46c71ca9da44")
-	)
-	(wire
-		(pts
 			(xy 67.31 77.47) (xy 67.31 78.74)
 		)
 		(stroke
@@ -1111,6 +1071,16 @@
 	)
 	(wire
 		(pts
+			(xy 97.79 68.58) (xy 67.31 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8894bc03-2507-4700-8a84-f4721639c233")
+	)
+	(wire
+		(pts
 			(xy 67.31 78.74) (xy 88.9 78.74)
 		)
 		(stroke
@@ -1118,6 +1088,16 @@
 			(type default)
 		)
 		(uuid "90e1e2d5-c228-420d-8d64-55bc471cb611")
+	)
+	(wire
+		(pts
+			(xy 157.48 59.69) (xy 97.79 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94448b36-3966-42a6-9962-9d8ebebd7121")
 	)
 	(wire
 		(pts
@@ -1138,6 +1118,26 @@
 			(type default)
 		)
 		(uuid "a55c7f43-f460-4772-aa38-74cbab63d6bc")
+	)
+	(wire
+		(pts
+			(xy 45.72 68.58) (xy 48.26 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a974555a-d664-4763-b0ed-d9361a170f07")
+	)
+	(wire
+		(pts
+			(xy 146.05 68.58) (xy 149.86 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9cd957f-4ad2-4dcc-b520-b90503f27a8b")
 	)
 	(wire
 		(pts
@@ -1211,6 +1211,16 @@
 	)
 	(wire
 		(pts
+			(xy 97.79 59.69) (xy 97.79 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed26ace9-309c-4226-93d8-bad335d41526")
+	)
+	(wire
+		(pts
 			(xy 170.18 68.58) (xy 167.64 68.58)
 		)
 		(stroke
@@ -1242,25 +1252,25 @@
 	)
 	(hierarchical_label "GATE_DRIVE_PWR1_ENABLE"
 		(shape input)
-		(at 62.23 57.15 0)
+		(at 45.72 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
-		(uuid "17f20fce-4245-4cd1-825e-585b6286147e")
+		(uuid "139e9665-f6c1-4857-ba71-db303dfefeec")
 	)
-	(hierarchical_label "GATE_DRIVE_PWR2_ENABLE"
+	(hierarchical_label "+12V_IN"
 		(shape input)
-		(at 160.02 59.69 0)
+		(at 55.88 60.96 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "23c295c7-da96-4c5f-862a-1a8526a9ef38")
+		(uuid "22b7e70b-7548-4e30-bc0c-6655e1ef0643")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -1272,17 +1282,6 @@
 			(justify right)
 		)
 		(uuid "2bd8114b-6f89-4d58-8861-d2b532365f77")
-	)
-	(hierarchical_label "+12V_IN"
-		(shape input)
-		(at 48.26 68.58 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "38dc089e-04fa-4bb5-8b6a-008fab073137")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -1349,6 +1348,17 @@
 			(justify right)
 		)
 		(uuid "ca80c5b1-ab41-4526-b314-47e1212ee401")
+	)
+	(hierarchical_label "GATE_DRIVE_PWR2_ENABLE"
+		(shape input)
+		(at 146.05 68.58 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d86f2f0e-7ded-4181-ae34-52a8751c21c8")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)

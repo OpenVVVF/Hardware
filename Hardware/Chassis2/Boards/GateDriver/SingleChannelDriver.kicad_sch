@@ -1360,7 +1360,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "InverterCom:UF4007"
+		(symbol "InverterCom:STTH112A"
 			(pin_names
 				(hide yes)
 			)
@@ -1380,7 +1380,7 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "UF4007"
+			(property "Value" "STTH112A"
 				(at 11.43 2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1391,7 +1391,7 @@
 					(justify left top)
 				)
 			)
-			(property "Footprint" "DIOAD1413W86L463D238"
+			(property "Footprint" "DIOM5126X265N"
 				(at 11.43 -97.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1403,7 +1403,7 @@
 					(justify left top)
 				)
 			)
-			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/UF4007-D.pdf"
+			(property "Datasheet" "https://www.st.com/resource/en/datasheet/stth112.pdf"
 				(at 11.43 -197.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1415,7 +1415,7 @@
 					(justify left top)
 				)
 			)
-			(property "Description" "High current capability; High reliability ; Low forward voltage drop ; High surge current capability"
+			(property "Description" "Low forwarded voltage drop  High reliability  High surge current capability  Soft switching for reduced EMI disturbances  Planar technology"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1426,7 +1426,7 @@
 					)
 				)
 			)
-			(property "Height" ""
+			(property "Height" "2.65"
 				(at 11.43 -397.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1438,7 +1438,7 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Part Number" "512-UF4007"
+			(property "Mouser Part Number" "511-STTH112A"
 				(at 11.43 -497.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1450,7 +1450,7 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/UF4007?qs=NwIfwa72FlplAHiXupLMBA%3D%3D"
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/STMicroelectronics/STTH112A?qs=1X0wRT6hCqH%2F7s%2FmzYZuyg%3D%3D"
 				(at 11.43 -597.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1462,7 +1462,7 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Name" "onsemi"
+			(property "Manufacturer_Name" "STMicroelectronics"
 				(at 11.43 -697.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1474,7 +1474,7 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Part_Number" "UF4007"
+			(property "Manufacturer_Part_Number" "STTH112A"
 				(at 11.43 -797.46 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1486,7 +1486,7 @@
 					(justify left top)
 				)
 			)
-			(symbol "UF4007_1_1"
+			(symbol "STTH112A_1_1"
 				(polyline
 					(pts
 						(xy 2.54 0) (xy 5.08 0)
@@ -1616,7 +1616,7 @@
 		)
 		(uuid "661e5555-74fe-4611-8f5f-0b944766ea47")
 	)
-	(text "Good for ~2kV blocking, each is 1000v, 75nS fast recovery"
+	(text "1200v <75nS fast recovery diode"
 		(exclude_from_sim no)
 		(at 220.472 119.888 0)
 		(effects
@@ -1638,6 +1638,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "08f8d23b-a432-4518-b180-a4849835720f")
+	)
+	(junction
+		(at 73.66 55.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0e09d5de-aae2-4363-a4c2-75554121d6e9")
 	)
 	(junction
 		(at 152.4 58.42)
@@ -1668,6 +1674,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "57b14098-fbed-4cee-9623-a155277fb2ff")
+	)
+	(junction
+		(at 78.74 55.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5a59537d-4e03-419c-a160-cef62484e597")
 	)
 	(junction
 		(at 148.59 25.4)
@@ -1712,6 +1724,12 @@
 		(uuid "abc2cc8a-352b-420a-ab28-e3d90201074b")
 	)
 	(junction
+		(at 78.74 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bb3cbf05-41a7-4b59-9e83-b63351040ddc")
+	)
+	(junction
 		(at 78.74 129.54)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1734,6 +1752,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c7c7278b-c08d-4479-88f3-8dcf1a63fae9")
+	)
+	(junction
+		(at 73.66 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c8043367-c5a5-4731-b528-630538330837")
 	)
 	(junction
 		(at 157.48 58.42)
@@ -1887,6 +1911,16 @@
 	)
 	(wire
 		(pts
+			(xy 78.74 44.45) (xy 78.74 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37b44572-eb25-4f3b-a229-c10c40cdd077")
+	)
+	(wire
+		(pts
 			(xy 120.65 58.42) (xy 120.65 59.69)
 		)
 		(stroke
@@ -1937,6 +1971,16 @@
 	)
 	(wire
 		(pts
+			(xy 73.66 44.45) (xy 73.66 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4a6d8d3b-8eb9-413a-b850-a84f9d7fd31f")
+	)
+	(wire
+		(pts
 			(xy 152.4 78.74) (xy 157.48 78.74)
 		)
 		(stroke
@@ -1977,7 +2021,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 55.88) (xy 91.44 55.88)
+			(xy 68.58 55.88) (xy 73.66 55.88)
 		)
 		(stroke
 			(width 0)
@@ -2037,6 +2081,16 @@
 	)
 	(wire
 		(pts
+			(xy 73.66 55.88) (xy 78.74 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66e5a176-9ba1-4f4a-991d-fac65858c356")
+	)
+	(wire
+		(pts
 			(xy 135.89 25.4) (xy 148.59 25.4)
 		)
 		(stroke
@@ -2044,6 +2098,16 @@
 			(type default)
 		)
 		(uuid "689f1783-7844-46d6-b027-ecd0b5f207ce")
+	)
+	(wire
+		(pts
+			(xy 73.66 22.86) (xy 78.74 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "692c4860-a2d4-4cc5-9755-814f2ac2fcb3")
 	)
 	(wire
 		(pts
@@ -2137,6 +2201,16 @@
 	)
 	(wire
 		(pts
+			(xy 78.74 55.88) (xy 91.44 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "829af273-b21b-4dd0-8ffd-77474c966d6c")
+	)
+	(wire
+		(pts
 			(xy 161.29 25.4) (xy 173.99 25.4)
 		)
 		(stroke
@@ -2144,6 +2218,16 @@
 			(type default)
 		)
 		(uuid "89a87b30-f54c-4a6b-a8dd-75cf8bc3a625")
+	)
+	(wire
+		(pts
+			(xy 73.66 22.86) (xy 73.66 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8a528ae1-6b86-4e2d-8da6-68b6f839823e")
 	)
 	(wire
 		(pts
@@ -2177,7 +2261,7 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 22.86) (xy 91.44 22.86)
+			(xy 69.85 22.86) (xy 73.66 22.86)
 		)
 		(stroke
 			(width 0)
@@ -2297,6 +2381,16 @@
 	)
 	(wire
 		(pts
+			(xy 78.74 22.86) (xy 91.44 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c3bdf9dc-b045-4cbf-be28-c9e899c9ba77")
+	)
+	(wire
+		(pts
 			(xy 157.48 58.42) (xy 157.48 64.77)
 		)
 		(stroke
@@ -2394,6 +2488,16 @@
 			(type default)
 		)
 		(uuid "e4c50c12-06a0-4012-b041-6c9ba35c3984")
+	)
+	(wire
+		(pts
+			(xy 78.74 22.86) (xy 78.74 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5b5e043-11b2-4ec9-8a19-f0b8654a1ed2")
 	)
 	(wire
 		(pts
@@ -2679,7 +2783,7 @@
 	)
 	(hierarchical_label "COLLECTOR_B"
 		(shape input)
-		(at 248.92 129.54 0)
+		(at 233.68 129.54 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2734,7 +2838,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 76.2 55.88 180)
+		(at 68.58 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2745,7 +2849,7 @@
 	)
 	(hierarchical_label "+12V_A"
 		(shape input)
-		(at 76.2 22.86 180)
+		(at 69.85 22.86 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2797,168 +2901,6 @@
 			(justify right)
 		)
 		(uuid "dad3834e-7faa-44e3-860c-f550f4127125")
-	)
-	(symbol
-		(lib_id "InverterCom:UF4007")
-		(at 233.68 129.54 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "03b65225-36f1-4c5b-8d5a-aa315f1136a5")
-		(property "Reference" "D19"
-			(at 226.06 121.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "UF4007"
-			(at 226.06 124.46 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "DIOAD1413W86L463D238"
-			(at 222.25 32.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/UF4007-D.pdf"
-			(at 222.25 -67.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "High current capability; High reliability ; Low forward voltage drop ; High surge current capability"
-			(at 233.68 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" ""
-			(at 222.25 -267.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "512-UF4007"
-			(at 222.25 -367.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/UF4007?qs=NwIfwa72FlplAHiXupLMBA%3D%3D"
-			(at 222.25 -467.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "onsemi"
-			(at 222.25 -567.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "UF4007"
-			(at 222.25 -667.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "1"
-			(uuid "429457fc-cf5a-45a3-8c31-2df63eb08fc0")
-		)
-		(pin "2"
-			(uuid "3e977331-dd4d-4d67-989c-b942f1b5a57a")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/9687f118-a669-4254-9887-c421ef3337cc"
-					(reference "D24")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/a9bf3c2d-337f-4e70-8d51-1183281d0079"
-					(reference "D21")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/ade383cf-2513-479b-96a9-394ecead4dfe"
-					(reference "D20")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/be6d0f26-34a0-47d5-982b-9ce0ed32fd9b"
-					(reference "D22")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/d5cdde47-d83d-4dd5-8057-deac97f24381"
-					(reference "D23")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
-					(reference "D19")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "Device:C")
@@ -3464,6 +3406,107 @@
 	)
 	(symbol
 		(lib_id "Device:C")
+		(at 73.66 40.64 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "243bf410-285d-4cdc-bb5f-5a4d7a204132")
+		(property "Reference" "C83"
+			(at 69.85 41.9101 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 69.85 39.37 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 72.6948 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 73.66 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "050aee33-7278-4849-96dc-34fe35dab430")
+		)
+		(pin "2"
+			(uuid "c007fd39-9df4-47ab-962d-148e2bfc4287")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/9687f118-a669-4254-9887-c421ef3337cc"
+					(reference "C93")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/a9bf3c2d-337f-4e70-8d51-1183281d0079"
+					(reference "C87")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/ade383cf-2513-479b-96a9-394ecead4dfe"
+					(reference "C85")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/be6d0f26-34a0-47d5-982b-9ce0ed32fd9b"
+					(reference "C89")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/d5cdde47-d83d-4dd5-8057-deac97f24381"
+					(reference "C91")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
+					(reference "C83")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
 		(at 204.47 135.89 180)
 		(unit 1)
 		(body_style 1)
@@ -3901,7 +3944,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "InverterCom:MGJ2D121509MPCR7"
+		(property "Footprint" "MGJ2D121509MPCR7"
 			(at 186.36 26.67 0)
 			(hide yes)
 			(show_name no)
@@ -4181,7 +4224,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "InverterCom:SOD2513X120N"
+		(property "Footprint" "SOD2513X120N"
 			(at 82.88 125.73 0)
 			(hide yes)
 			(show_name no)
@@ -4345,7 +4388,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "InverterCom:SOD2513X120N"
+		(property "Footprint" "SOD2513X120N"
 			(at 82.88 140.97 0)
 			(hide yes)
 			(show_name no)
@@ -4775,6 +4818,108 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 78.74 40.64 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aa825d2a-4761-4e8e-86a3-1a7bf6113f67")
+		(property "Reference" "C84"
+			(at 82.55 39.3699 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 82.55 41.9099 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 79.7052 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 78.74 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 78.74 40.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "15c8e4af-8fed-4a2d-b453-2fb7e69198d7")
+		)
+		(pin "2"
+			(uuid "90ad2a89-b76e-41f8-821e-1d9148b235fb")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/9687f118-a669-4254-9887-c421ef3337cc"
+					(reference "C94")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/a9bf3c2d-337f-4e70-8d51-1183281d0079"
+					(reference "C88")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/ade383cf-2513-479b-96a9-394ecead4dfe"
+					(reference "C86")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/be6d0f26-34a0-47d5-982b-9ce0ed32fd9b"
+					(reference "C90")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/d5cdde47-d83d-4dd5-8057-deac97f24381"
+					(reference "C92")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
+					(reference "C84")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 158.75 106.68 270)
 		(unit 1)
@@ -5069,168 +5214,6 @@
 				)
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
 					(reference "C11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:UF4007")
-		(at 248.92 129.54 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c5c6c5b2-bdf4-417b-9bba-a77c466b031e")
-		(property "Reference" "D25"
-			(at 241.3 121.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "UF4007"
-			(at 241.3 124.46 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "DIOAD1413W86L463D238"
-			(at 237.49 32.08 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/UF4007-D.pdf"
-			(at 237.49 -67.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "High current capability; High reliability ; Low forward voltage drop ; High surge current capability"
-			(at 248.92 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" ""
-			(at 237.49 -267.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "512-UF4007"
-			(at 237.49 -367.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/UF4007?qs=NwIfwa72FlplAHiXupLMBA%3D%3D"
-			(at 237.49 -467.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "onsemi"
-			(at 237.49 -567.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "UF4007"
-			(at 237.49 -667.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "1"
-			(uuid "d699721f-2aec-43c2-886b-c5ee02e3a209")
-		)
-		(pin "2"
-			(uuid "784c8658-c226-46dd-9b27-53e97b523be5")
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/9687f118-a669-4254-9887-c421ef3337cc"
-					(reference "D30")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/a9bf3c2d-337f-4e70-8d51-1183281d0079"
-					(reference "D27")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/ade383cf-2513-479b-96a9-394ecead4dfe"
-					(reference "D26")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/be6d0f26-34a0-47d5-982b-9ce0ed32fd9b"
-					(reference "D28")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/d5cdde47-d83d-4dd5-8057-deac97f24381"
-					(reference "D29")
-					(unit 1)
-				)
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
-					(reference "D25")
 					(unit 1)
 				)
 			)
@@ -5537,6 +5520,168 @@
 				)
 				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
 					(reference "IC1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:STTH112A")
+		(at 233.68 129.54 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cfa6c78d-d2ec-443d-93e7-a802a042dd82")
+		(property "Reference" "D3"
+			(at 226.06 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "STTH112A"
+			(at 226.06 124.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "DIOM5126X265N"
+			(at 222.25 32.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.st.com/resource/en/datasheet/stth112.pdf"
+			(at 222.25 -67.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "Low forwarded voltage drop  High reliability  High surge current capability  Soft switching for reduced EMI disturbances  Planar technology"
+			(at 233.68 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "2.65"
+			(at 222.25 -267.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "511-STTH112A"
+			(at 222.25 -367.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/STMicroelectronics/STTH112A?qs=1X0wRT6hCqH%2F7s%2FmzYZuyg%3D%3D"
+			(at 222.25 -467.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "STMicroelectronics"
+			(at 222.25 -567.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "STTH112A"
+			(at 222.25 -667.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "3e0f9bfb-6819-43d9-8b3e-b6712a05aaae")
+		)
+		(pin "2"
+			(uuid "694a13ea-87a0-4541-a7d7-52c067e6aeec")
+		)
+		(instances
+			(project "GateDriver"
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/9687f118-a669-4254-9887-c421ef3337cc"
+					(reference "D18")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/a9bf3c2d-337f-4e70-8d51-1183281d0079"
+					(reference "D9")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/ade383cf-2513-479b-96a9-394ecead4dfe"
+					(reference "D6")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/be6d0f26-34a0-47d5-982b-9ce0ed32fd9b"
+					(reference "D12")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/d5cdde47-d83d-4dd5-8057-deac97f24381"
+					(reference "D15")
+					(unit 1)
+				)
+				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7/dbef6812-99e9-4f62-822d-9763d0e0e88d"
+					(reference "D3")
 					(unit 1)
 				)
 			)
