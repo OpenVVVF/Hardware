@@ -1,14 +1,14 @@
 (footprint "CAPPRD750W80D1825H3200"
-	(version 20241229)
+	(version 20260206)
 	(generator "pcbnew")
-	(generator_version "9.0")
+	(generator_version "10.0")
 	(layer "F.Cu")
 	(descr "18mm x 30.5mm")
 	(tags "Capacitor")
 	(property "Reference" "C**"
 		(at -4.5 -7 0)
 		(layer "F.SilkS")
-		(uuid "14b78976-0870-4745-96b3-96763b502414")
+		(uuid "870484b9-a321-4ef7-a3ea-6a94fa7c1f95")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -20,7 +20,7 @@
 		(at 0 0 0)
 		(layer "F.SilkS")
 		(hide yes)
-		(uuid "16116421-dd76-49ac-b7e6-155dd492811b")
+		(uuid "64bc83fb-c74d-44d0-9fa5-796bad61ca5a")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -32,7 +32,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "793fe30c-bfc4-4041-bf68-2c37f4180b21")
+		(uuid "55661cbf-481b-487d-95ad-df77d2a05d51")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -44,7 +44,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "14942420-bf70-4c84-83f1-cb8764210765")
+		(uuid "86714242-36ee-416e-bfc0-9dbf9b37f772")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -53,6 +53,7 @@
 		)
 	)
 	(attr through_hole exclude_from_pos_files)
+	(duplicate_pad_numbers_are_jumpers no)
 	(fp_circle
 		(center 3.75 0)
 		(end 12.875 0)
@@ -62,7 +63,7 @@
 		)
 		(fill no)
 		(layer "F.SilkS")
-		(uuid "c8b35508-9847-45dc-8878-7327fff21069")
+		(uuid "27c3eead-c573-4244-bc49-7264fd721765")
 	)
 	(fp_circle
 		(center 3.75 0)
@@ -73,13 +74,24 @@
 		)
 		(fill no)
 		(layer "Dwgs.User")
-		(uuid "c0ff18cf-73ce-43eb-8369-d251420bc9c6")
+		(uuid "b3deae31-48b1-462c-8523-0b9dd2100262")
 	)
-	(fp_text user "-"
-		(at 13 -4 0)
+	(fp_circle
+		(center 3.75 0)
+		(end 12.75 -1.25)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "8818fe11-f123-497b-9e08-1424560ac20d")
+	)
+	(fp_text user "+"
+		(at -5 5.5 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "39b38bb8-726f-4c7d-8a97-6d3106081fd7")
+		(uuid "9e66d432-4e61-493d-a733-cdb230633c75")
 		(effects
 			(font
 				(size 1.5 1.5)
@@ -88,11 +100,11 @@
 			)
 		)
 	)
-	(fp_text user "+"
-		(at -5 5.5 0)
+	(fp_text user "-"
+		(at 13 -4 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "7298d951-740a-4244-aa33-a2eb5a26cd92")
+		(uuid "6877b284-6d6e-4b6c-a32c-b2bb39c6a54f")
 		(effects
 			(font
 				(size 1.5 1.5)
@@ -108,7 +120,7 @@
 		(layers "*.Cu" "*.Mask" "F.SilkS")
 		(remove_unused_layers no)
 		(thermal_bridge_angle 45)
-		(uuid "79dfcb41-6992-4e4c-b881-ac95d1521300")
+		(uuid "49f3d4c8-e1b3-4eed-a22e-84ac0e36959b")
 	)
 	(pad "2" thru_hole circle
 		(at 7.5 0 90)
@@ -116,7 +128,7 @@
 		(drill 1)
 		(layers "*.Cu" "*.Mask" "F.SilkS")
 		(remove_unused_layers no)
-		(uuid "47d4cb35-40e1-43a5-906a-74c28d319025")
+		(uuid "34c53d30-161e-4565-855c-52aa736cf3c3")
 	)
 	(embedded_fonts no)
 	(model "./PartsLib/3D/UCS2C331MHD.stp"

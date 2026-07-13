@@ -1,0 +1,110 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "B58031U9254M062"
+   (description "Specialty Ceramic Capacitors 0.25uF 900volts Ceralink J-Lead")
+   (family "CAP")
+   (package "B58031U9254M062")
+   (attribute "Datasheet Link" "https://product.tdk.com/system/files/dam/doc/product/capacitor/ceramic/ceralink/data_sheet/20/10/ds/b58031_lp.pdf")
+   (attribute "Geometry.Height" "4.5mm")
+   (attribute "Mouser Part Number" "871-B58031U9254M062")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/EPCOS-TDK/B58031U9254M062?qs=Mv7BduZupUir5egwM6Ifng%3D%3D")
+   (attribute "Manufacturer_Name" "TDK")
+   (attribute "Manufacturer_Part_Number" "B58031U9254M062")
+   (gate
+    (symbol "B58031U9254M062")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+   )
+  )
+  (symbol "B58031U9254M062"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 220 100) (pt 220 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 280 100) (pt 280 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 200 0) (pt 220 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 280 0) (pt 300 0))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 500 0) (rot 0) (mir X) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "B58031U9254M062"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt -3.57 3.925)
+      (pt 3.57 3.925)
+      (pt 3.57 -3.925)
+      (pt -3.57 -3.925)
+      (pt -3.57 3.925))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -5.7 5.425)
+      (pt 5.7 5.425)
+      (pt 5.7 -5.425)
+      (pt -5.7 -5.425)
+      (pt -5.7 5.425))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt -2 3.925)
+      (pt 2 3.925))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt -2 -3.925)
+      (pt 2 -3.925))))
+   (leg 1 (pt -3.475 0.000) (padstack 0))
+   (leg 2 (pt 3.475 0.000) (padstack 0))
+   (padstack 0
+    (plated false)
+    (pad (layer TCOP) (rectf 2.450 8.850 0 0 90.000))
+   )
+   (model "B58031U9254M062.stp"
+    (euler 0 0 0)
+    (offset 0 0 -0.05000000074505806)
+   )
+  )
+ )
+)
