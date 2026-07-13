@@ -286,6 +286,338 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Connector_Generic:Conn_02x04_Counter_Clockwise"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 1.27 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_02x04_Counter_Clockwise"
+				(at 1.27 -7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_2x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_02x04_Counter_Clockwise_1_1"
+				(rectangle
+					(start -1.27 3.81)
+					(end 3.81 -6.35)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 2.667)
+					(end 2.54 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 0.127)
+					(end 2.54 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -2.413)
+					(end 2.54 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -4.953)
+					(end 2.54 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -5.08 180)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 3.81)
+					(name "Pin_8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Connector_Generic:Conn_02x08_Counter_Clockwise"
 			(pin_names
 				(offset 1.016)
@@ -4727,9 +5059,9 @@
 		)
 		(uuid "173330b6-be2a-4653-b806-e9bc8d8fb025")
 	)
-	(text "CONNECTOR TO FIBR IO MULTIDRIVE MODULE\nALLOWS MULTI-DRIVE MANY PHASE (>3) OR LOAD SHARING"
+	(text "EXPANSION MODULE CONNECTOR\n(FOR FIBER IO MULTIDRIVE MODULE, ETC)\nALLOWS MULTI-DRIVE MANY PHASE (>3) OR LOAD SHARING"
 		(exclude_from_sim no)
-		(at 88.392 142.24 0)
+		(at 103.886 134.874 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5720,7 +6052,7 @@
 		(uuid "2d2e8694-7eb8-4264-9fd4-01e7985f74e5")
 	)
 	(label "MD_FIBER_SYNC"
-		(at 93.98 151.13 0)
+		(at 109.22 144.78 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5760,7 +6092,7 @@
 		(uuid "36921e89-a0d8-4dd5-b4a1-2a1a7a95e18d")
 	)
 	(label "MD_FIBER_TX"
-		(at 81.28 151.13 180)
+		(at 96.52 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5880,6 +6212,16 @@
 		(uuid "502e269f-5f75-4a7e-a1b9-bd27631545a8")
 	)
 	(label "+12V_A"
+		(at 96.52 152.4 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5140ca8e-a6f7-40f3-93f5-127e2908b12b")
+	)
+	(label "+12V_A"
 		(at 185.42 144.78 180)
 		(effects
 			(font
@@ -5948,6 +6290,16 @@
 			(justify right bottom)
 		)
 		(uuid "589a2ea2-a601-4aa6-b990-7c4ff096197a")
+	)
+	(label "GND_A"
+		(at 109.22 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "58b90cec-5c3b-446c-8c97-2da9bc9cdaaa")
 	)
 	(label "MP_SWO"
 		(at 229.87 59.69 180)
@@ -6040,7 +6392,7 @@
 		(uuid "65b9dff2-15db-4634-9c9c-f5955409dfe0")
 	)
 	(label "GND_A"
-		(at 93.98 156.21 0)
+		(at 109.22 149.86 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6150,7 +6502,7 @@
 		(uuid "7b75082c-770e-4af8-884d-07a527093e69")
 	)
 	(label "+5V_A"
-		(at 81.28 156.21 180)
+		(at 96.52 149.86 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6750,7 +7102,7 @@
 		(uuid "eb4d7a12-8cb3-4edc-aa49-0d52c1857452")
 	)
 	(label "MD_FIBER_RX"
-		(at 81.28 153.67 180)
+		(at 96.52 147.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6854,7 +7206,7 @@
 	)
 	(hierarchical_label "FAULT"
 		(shape input)
-		(at 93.98 153.67 0)
+		(at 109.22 147.32 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7171,7 +7523,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 140.97 -3.48 0)
 			(hide yes)
 			(show_name no)
@@ -8127,7 +8479,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 114.3 14.3 0)
 			(hide yes)
 			(show_name no)
@@ -8268,7 +8620,7 @@
 				)
 			)
 		)
-		(property "Footprint" "UJ2BHRGV"
+		(property "Footprint" "InverterCom:UJ2BHRGV"
 			(at 276.53 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -8422,7 +8774,7 @@
 				)
 			)
 		)
-		(property "Footprint" "EC7BW110S12"
+		(property "Footprint" "InverterCom:EC7BW110S12"
 			(at 55.88 27 0)
 			(hide yes)
 			(show_name no)
@@ -8744,7 +9096,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "7762311"
+		(property "Footprint" "InverterCom:7762311"
 			(at 105.41 122.86 0)
 			(hide yes)
 			(show_name no)
@@ -9214,7 +9566,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 140.97 5.41 0)
 			(hide yes)
 			(show_name no)
@@ -9855,6 +10207,104 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_02x04_Counter_Clockwise")
+		(at 101.6 147.32 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bb6369d3-5cc9-4b48-a035-06ea896f03f4")
+		(property "Reference" "J2"
+			(at 102.87 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_02x04_Counter_Clockwise"
+			(at 102.87 140.97 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x04_P2.54mm_Vertical"
+			(at 101.6 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 101.6 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 101.6 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "f76b6e6a-3bf5-42de-9d2e-0198586f0304")
+		)
+		(pin "5"
+			(uuid "a0aa4ed1-c546-4655-b7f1-5b506661fa4a")
+		)
+		(pin "7"
+			(uuid "16861352-2362-4cb0-9158-54f0ba5329a4")
+		)
+		(pin "8"
+			(uuid "1507c3dc-019f-4682-8a64-773b8977c1d1")
+		)
+		(pin "4"
+			(uuid "ca4e6925-9bb3-469a-bf9e-d9ed6485e737")
+		)
+		(pin "6"
+			(uuid "9472e72d-f670-4aba-8281-e87cdf2eae45")
+		)
+		(pin "1"
+			(uuid "4e0593e1-1d16-4a39-98cd-1a5dbe592316")
+		)
+		(pin "2"
+			(uuid "e246dea4-8357-4bed-9101-cd03a4dfad0b")
+		)
+		(instances
+			(project "IOBoard"
+				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "InverterCom:Placeholder")
 		(at 48.26 161.29 90)
 		(unit 1)
@@ -10141,99 +10591,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_02x03_Counter_Clockwise")
-		(at 86.36 153.67 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "e2c24d18-22c5-44c9-b890-b2c03f4fae11")
-		(property "Reference" "J11"
-			(at 75.057 145.161 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_02x03_Counter_Clockwise"
-			(at 74.549 146.939 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
-			(at 86.36 153.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 86.36 153.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, double row, 02x03, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 86.36 153.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "3"
-			(uuid "1d25f355-ddc8-4e9f-9df5-7c3be8d35b24")
-		)
-		(pin "1"
-			(uuid "fd3b1f6f-226e-4c38-ac42-69175d177ca8")
-		)
-		(pin "4"
-			(uuid "a2fbd05f-82fd-48da-8f67-0ada90ee2e3a")
-		)
-		(pin "6"
-			(uuid "ba6c71da-9f2f-4bda-bbdd-eac0bbf399fa")
-		)
-		(pin "2"
-			(uuid "b8a3bae6-d09b-4739-831e-283e4dd651cf")
-		)
-		(pin "5"
-			(uuid "ebff7044-e550-4dac-9790-7aa74499cf95")
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "J11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:UCM1H101MCL1GS")
 		(at 123.19 92.71 180)
 		(unit 1)
@@ -10264,7 +10621,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 114.3 -3.48 0)
 			(hide yes)
 			(show_name no)
@@ -10775,7 +11132,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 114.3 5.41 0)
 			(hide yes)
 			(show_name no)
