@@ -50,10 +50,10 @@ Total system resistance is the sum of three series components:
 
 | Configuration | $k$ [W/m·K] | Area [mm²] | $R_{standoff}$ [K/W] | $\Delta T_{standoff}$ [°C] | Total $\Delta T$ (paste) [°C] |
 |-------------|-------------|------------|----------------------|---------------------------|-------------------------------|
-| 8 mm hex brass, hollow M5 | 120 | 35.8 | 2.33 | 93 | 124 |
-| 10 mm hex Al, hollow M5 | 200 | 67.0 | 0.75 | 30 | 52 |
-| 16 mm round Al, hollow M8 | 200 | 150.8 | 0.29 | 12 | 30 |
-| 16 mm round Al, solid | 200 | 201.1 | 0.22 | 9 | 25 |
+| 8 mm hex brass, hollow M5 | 120 | 35.8 | 2.13 | 85.4 | 119 |
+| 10 mm hex Al, hollow M5 | 200 | 67.0 | 0.684 | 27.4 | 50.5 |
+| 16 mm round Al, hollow M8 | 200 | 150.8 | 0.304 | 12.2 | 27.2 |
+| 16 mm round Al, solid | 200 | 201.1 | 0.228 | 9.1 | 23.0 |
 
 *All at 40 W, 6 standoffs, 55 mm long. Values rounded.*
 
@@ -119,6 +119,8 @@ $$\Delta T_{spread} = 40 \times 0.30 = \mathbf{12.0 \text{ °C}}$$
 | With thermal paste | **~77 °C** |
 | Dry metal-to-metal | **~83 °C** |
 
+**450 V capacitor-only upgrade:** The 450 V upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V capacitors (4.08 mF total). These parts are 5 mm shorter than the 200 V UCS2D331MHD, so the standoff length is reduced by 5 mm (from 55 mm to 50 mm). The same 13 mm OD aluminium standoff thermal path applies, with marginally lower conduction resistance due to the shorter length.
+
 ---
 
 ## 4. Sensitivity & Margin
@@ -135,9 +137,9 @@ $$\Delta T_{standoff} = 40 \times \frac{0.055}{16 \times 101.6 \times 10^{-6} \t
 
 | Standoff count | $R_{standoff}$ [K/W] | $\Delta T_{standoff}$ [°C] | Total $\Delta T$ (paste) [°C] |
 |----------------|----------------------|---------------------------|-------------------------------|
-| 4 | 0.677 | 27.1 | 46 |
+| 4 | 0.677 | 27.1 | 49.2 |
 | 6 (selected) | 0.451 | 18.1 | 37 |
-| 8 | 0.338 | 13.5 | 32 |
+| 8 | 0.338 | 13.5 | 30.7 |
 
 Six standoffs provides adequate margin; eight would be better but is not required at 40 W.
 

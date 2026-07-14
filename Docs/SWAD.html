@@ -127,8 +127,8 @@ li { margin: 0.2em 0; }
             <strong>Operating Temp:</strong> &minus;40&deg;C to +85&deg;C<br>
             <strong>Prepared by:</strong> Thomas Liao<br>
             <strong>Reviewed by:</strong> (not yet reviewed)<br>
-            <strong>Date:</strong> July 8, 2026<br>
-            <strong>Version:</strong> 1.4
+            <strong>Date:</strong> July 13, 2026<br>
+            <strong>Version:</strong> 1.5
         </div>
     </div>
     <div class="cover-bottom">University of California, Santa Cruz &mdash; Corzine Lab</div>
@@ -145,6 +145,8 @@ li { margin: 0.2em 0; }
         <tr><td>June 13, 2026</td><td>1.0</td><td>Project Team</td><td>Initial release.</td></tr>
         <tr><td>June 14, 2026</td><td>1.1</td><td>Project Team</td><td>TIM1 not HRTIM, multi-modulation, 50kHz oversampling, corrected ADC, 1oo3 temp, RTE interface.</td></tr>
         <tr><td>June 14, 2026</td><td>1.2</td><td>Project Team</td><td>Major fixes: default 2kHz SVPWM (was 6kHz), min 300Hz (was 1kHz), ADC 0-3.3V scaling (not 1.67V), removed all GPIO pin assignments (refer to CubeMX), added SPI FRAM storage with write protection, input validation framework, real-time loss estimator + thermal model, power rail switching (CAN/sensor/gate driver kills), firmware update via UART/USB or CAN.</td></tr>
+        <tr><td>July 8, 2026</td><td>1.4</td><td>Project Team</td><td>Cover updated for dual-MCU (STM32H723ZG + STM32G474RCTx); body update pending. (entry added retroactively)</td></tr>
+        <tr><td>July 13, 2026</td><td>1.5</td><td>Project Team</td><td>Editorial consistency pass: FRAM part corrected to CY15B102Q-SXET 256 KB; temperature voting updated to 2oo3; current-sense bandwidth figures reconciled; cross-references updated to HARA v4.1 / TARA v1.2; gate-driver part corrected to NCV57100; rail supervisor corrected to TPS389006-Q1; watchdog part corrected</td></tr>
     </tbody>
 </table>
 
@@ -163,10 +165,10 @@ li { margin: 0.2em 0; }
     <div class="toc-item toc-h2"><span>3.2 Layer Diagram</span></div>
     <div class="toc-item toc-h1"><span>4. Hardware Abstraction Layer (HAL/BSP)</span></div>
     <div class="toc-item toc-h2"><span>4.1 TIM1 PWM Driver</span></div>
-    <div class="toc-item toc-h2"><span>4.2 ADC Driver — Multi-Rate Oversampled</span></div>
+    <div class="toc-item toc-h2"><span>4.2 ADC Driver &mdash; Multi-Rate Oversampled</span></div>
     <div class="toc-item toc-h2"><span>4.3 Current Sensor Validation</span></div>
     <div class="toc-item toc-h2"><span>4.4 FDCAN Driver</span></div>
-    <div class="toc-item toc-h2"><span>4.5 SPI FRAM — Non-Volatile Parameter Storage</span></div>
+    <div class="toc-item toc-h2"><span>4.5 SPI FRAM &mdash; Non-Volatile Parameter Storage</span></div>
     <div class="toc-item toc-h2"><span>4.6 Power Rail Switching</span></div>
     <div class="toc-item toc-h1"><span>5. Safety Layer</span></div>
     <div class="toc-item toc-h2"><span>5.1 Fault Manager (FaultMgr)</span></div>
@@ -188,7 +190,7 @@ li { margin: 0.2em 0; }
     <div class="toc-item toc-h2"><span>7.1 Throttle Processing</span></div>
     <div class="toc-item toc-h2"><span>7.2 CAN Communication</span></div>
     <div class="toc-item toc-h2"><span>7.3 DC-Link Monitor</span></div>
-    <div class="toc-item toc-h2"><span>7.4 Temperature Monitor (1oo3)</span></div>
+    <div class="toc-item toc-h2"><span>7.4 Temperature Monitor (2oo3)</span></div>
     <div class="toc-item toc-h2"><span>7.5 POST (Power-On Self Test)</span></div>
     <div class="toc-item toc-h2"><span>7.6 RTE Configuration Interface</span></div>
     <div class="toc-item toc-h2"><span>7.7 Input Validation Framework</span></div>
@@ -210,9 +212,14 @@ li { margin: 0.2em 0; }
 <h1 id="sec1">1. Introduction and Scope</h1>
 
 <h2>1.1 Purpose</h2>
-<p>This Software Architecture Document (SWAD) defines the software architecture for the STM32H723ZG-based traction inverter / Vehicle Control Unit (VCU) used in open-source aftermarket electric motorcycle conversion platforms. It implements the functional safety requirements specified in the companion Hazard Analysis and Risk Assessment (HARA, Version 3.0) and the cybersecurity requirements specified in the companion Threat Analysis and Risk Assessment (TARA, Version 1.0).</p>
+<p>This Software Architecture Document (SWAD) defines the software architecture for the traction inverter / Vehicle Control Unit (VCU) &mdash; a dual-MCU design based on the STM32H723ZG main MCU and an STM32G474RCTx safety coprocessor (see the scope note below) &mdash; used in open-source aftermarket electric motorcycle conversion platforms. It implements the functional safety requirements specified in the companion Hazard Analysis and Risk Assessment (HARA, Version 4.1) and the cybersecurity requirements specified in the companion Threat Analysis and Risk Assessment (TARA, Version 1.2).</p>
 
 <p>The architecture targets ISO 26262 ASIL-C safety integrity for motor control functions while remaining fully open-source, auditable, and free of vendor lock-in or OTP security fuses. All design decisions are traceable to specific Functional Safety Requirements (FSRs) or Cybersecurity Requirements (CSRs).</p>
+
+<div class="note">
+    <div class="callout-title">Scope Note: Safety Coprocessor (STM32G474RCTx)</div>
+    The safety coprocessor (STM32G474RCTx) is present hardware on ControlBoard Rev G and is documented in HARA v4.1. This SWAD revision covers the main-MCU (STM32H723ZG) software architecture only; a full dual-MCU body update, including the coprocessor software architecture and inter-MCU interfaces, is planned for a future revision.
+</div>
 
 <h2>1.2 Scope</h2>
 <p>This document covers the complete software architecture:</p>
@@ -220,9 +227,9 @@ li { margin: 0.2em 0; }
     <li>Four-layer software architecture (HAL/BSP, Safety, Control, Application)</li>
     <li>Six-state system state machine with full transition logic</li>
     <li>Field-Oriented Control (FOC) with multiple modulation schemes (SPWM, SVPWM, SHEPWM, N-Pulse, RSVM, RCFM)</li>
-    <li>Multi-rate oversampled current sensing (50 kHz bandwidth, 16-bit primary + 12-bit redundant)</li>
+    <li>Multi-rate oversampled current sensing (~24 kHz effective bandwidth, 16-bit primary + 12-bit redundant)</li>
     <li>Real-time power loss estimator with thermal model for die temperature prediction</li>
-    <li>Power rail switching — controlled shutdown of CAN, sensor, and gate driver supplies</li>
+    <li>Power rail switching &mdash; controlled shutdown of CAN, sensor, and gate driver supplies</li>
     <li>SPI FRAM for high-endurance non-volatile parameter storage with write protection</li>
     <li>Input validation framework for all user-configurable parameters</li>
     <li>All safety-critical modules with FSR traceability</li>
@@ -240,14 +247,14 @@ li { margin: 0.2em 0; }
     <li>Detailed threat analysis (see TARA) or hazard analysis (see HARA)</li>
     <li>GPIO pin assignments (generated by STM32CubeMX, see project .ioc file)</li>
     <li>Implementation schedule (managed externally)</li>
-    <li><strong>Traction motor design or construction</strong> — the motor is an external product supplied by the vehicle manufacturer or aftermarket vendor</li>
-    <li><strong>Encoder or resolver design</strong> — the rotor position sensor is part of the external motor; this document only covers the interface to it</li>
-    <li><strong>BMS, IO board, charger, or display design</strong> — these are external CAN nodes; this document covers the CAN interface only</li>
+    <li><strong>Traction motor design or construction</strong> &mdash; the motor is an external product supplied by the vehicle manufacturer or aftermarket vendor</li>
+    <li><strong>Encoder or resolver design</strong> &mdash; the rotor position sensor is part of the external motor; this document only covers the interface to it</li>
+    <li><strong>BMS, IO board, charger, or display design</strong> &mdash; these are external CAN nodes; this document covers the CAN interface only</li>
 </ul>
 
 <div class="note">
     <div class="callout-title">Two Evaluations: With and Without Safety Coprocessor</div>
-    This document presents two safety integrity evaluations for the same hardware: (1) <strong>Current design (no coprocessor):</strong> ASIL-C achievable for most safety goals, ASIL-A for H-06/H-16/H-17. This is the hardware that exists today. (2) <strong>Future design (with coprocessor):</strong> ASIL-D achievable for SG-01 and SG-13 via ASIL decomposition. The coprocessor is a future enhancement, not current hardware. Where ASIL ratings differ between these two configurations, both are stated explicitly.
+    This document presents two safety integrity evaluations for the same hardware: (1) <strong>Main-MCU-only configuration (no coprocessor):</strong> ASIL-C achievable for most safety goals, ASIL-A for H-06/H-16/H-17. This is the configuration covered by this document revision. (2) <strong>Dual-MCU configuration (with coprocessor):</strong> ASIL-D achievable for SG-01 and SG-13 via ASIL decomposition. The coprocessor is present on ControlBoard Rev G hardware and is documented in HARA v4.1; its software architecture is not yet covered by this document (see scope note, Section 1.1). Where ASIL ratings differ between these two configurations, both are stated explicitly.
 </div>
 
 <h2>1.3 Design Philosophy: User-Configurable, Safe, Reliable</h2>
@@ -255,13 +262,13 @@ li { margin: 0.2em 0; }
 <p>This system is designed from the ground up to be <strong>user-configurable, safe, and reliable</strong>. Every aspect of the control strategy that does not compromise safety is exposed to the user through the RTE (Real Time Examiner) open-source tool:</p>
 
 <ul>
-    <li><strong>Modulation scheme:</strong> SPWM, SVPWM, SHEPWM, N-Pulse (with variants), RSVM, RCFM — selectable at runtime</li>
+    <li><strong>Modulation scheme:</strong> SPWM, SVPWM, SHEPWM, N-Pulse (with variants), RSVM, RCFM &mdash; selectable at runtime</li>
     <li><strong>Switching frequency:</strong> 300 Hz minimum, user-adjustable up to 16 kHz (default 2 kHz SVPWM)</li>
     <li><strong>FOC status:</strong> Preliminary testing completed on Zero 75-10 motor (bench, open-loop V/Hz and closed-loop current control). Full torque control and dyno validation pending.</li>
     <li><strong>Torque maps:</strong> Four user-defined 16-point curves, plus Sport and Eco presets</li>
-    <li><strong>Safety thresholds:</strong> DC-link OV/UV, temperature limits, throttle plausibility delta — all adjustable within hard bounds</li>
+    <li><strong>Safety thresholds:</strong> DC-link OV/UV, temperature limits, throttle plausibility delta &mdash; all adjustable within hard bounds</li>
     <li><strong>PI gains:</strong> Id and Iq controller gains, adjustable for different motors</li>
-    <li><strong>CAN protocol:</strong> Frame IDs, scaling factors, periods — all user-tailorable</li>
+    <li><strong>CAN protocol:</strong> Frame IDs, scaling factors, periods &mdash; all user-tailorable</li>
     <li><strong>Custom parameters:</strong> 32 float + 32 uint32_t user-defined slots for application-specific tuning</li>
 </ul>
 
@@ -280,13 +287,13 @@ li { margin: 0.2em 0; }
         <tr><td>Flash</td><td>1 MB dual-bank (2 x 512 KB)</td><td>Bootloader + application + swap for OTA</td></tr>
         <tr><td>RAM</td><td>564 KB (AXISRAM + SRAM1-4)</td><td>FOC buffers, stack, ECC on AXISRAM</td></tr>
         <tr><td>PWM + FOC</td><td>TIM1 Advanced Timer (6 comp. outputs)</td><td>PWM carrier 300Hz-16kHz; FOC loop runs at same frequency; hw dead-time, break input</td></tr>
-        <tr><td>Gate Driver</td><td>NCV57001 x 6 (AEC-Q100)</td><td>DESAT, UVLO, active Miller clamp</td></tr>
+        <tr><td>Gate Driver</td><td>NCV57100 x 6 (AEC-Q100)</td><td>DESAT, UVLO, active Miller clamp</td></tr>
         <tr><td>Current Sensors</td><td>Tamura LA37S x 4 (3-phase + DC link)</td><td>+/-1200 A, 1.042 mV/A, 0-3.3V to ADC</td></tr>
-        <tr><td>Temp Sensors</td><td>NTC thermistor x 1 per IGBT module (3 modules, 3 sensors total)</td><td>1-out-of-3 voting, highest wins</td></tr>
+        <tr><td>Temp Sensors</td><td>NTC thermistor x 1 per IGBT module (3 modules, 3 sensors total)</td><td>2-out-of-3 voting, outlier sensor excluded</td></tr>
         <tr><td>CAN</td><td>Dual FDCAN, up to 8 Mbps</td><td>BMS, IO board, charger, diagnostic</td></tr>
-        <tr><td>FRAM</td><td>SPI-connected FRAM (e.g., Cypress FM25W256)</td><td>Unlimited endurance param storage, WP pin</td></tr>
+        <tr><td>FRAM</td><td>SPI-connected FRAM (Infineon/Cypress CY15B102Q-SXET, 2-Mbit / 256 KB)</td><td>Unlimited endurance param storage, WP pin</td></tr>
         <tr><td>Encoder</td><td>Sin/Cos or resolver (configurable)</td><td>Rotor position for FOC</td></tr>
-        <tr><td>DC-Link</td><td>102 V - 350 V (nominal range)</td><td>Overvoltage/undervoltage monitoring</td></tr>
+        <tr><td>DC-Link</td><td>102 V - 180 V (nominal range, 200 V-class hardware; 450 V with capacitor swap; 900 V with PCB + capacitor change)</td><td>Overvoltage/undervoltage monitoring</td></tr>
         <tr><td>Motor Power</td><td>Up to 100 kW peak</td><td>Peak current ~280 A (at 350V)</td></tr>
     </tbody>
 </table>
@@ -305,9 +312,9 @@ li { margin: 0.2em 0; }
         <tr><td>ISO 26262-6:2018</td><td>Part 6: Product development -- software</td><td>Software architectural design</td></tr>
         <tr><td>ISO/SAE 21434:2021</td><td>Cybersecurity engineering</td><td>Cybersecurity requirements (TARA)</td></tr>
         <tr><td>STM32H723xx RM</td><td>Reference Manual (RM0468)</td><td>Register-level programming</td></tr>
-        <tr><td>NCV57001 DS</td><td>NCV57001 Datasheet</td><td>Gate driver timing and protection</td></tr>
+        <tr><td>NCV57100 DS</td><td>NCV57100 Datasheet</td><td>Gate driver timing and protection</td></tr>
         <tr><td>Tamura LA37S</td><td>LA37S Current Transducer Datasheet</td><td>Current sensing specification</td></tr>
-        <tr><td>FM25W256</td><td>Cypress 256-Kbit SPI FRAM</td><td>Non-volatile parameter storage</td></tr>
+        <tr><td>CY15B102Q-SXET</td><td>Infineon/Cypress 2-Mbit (256 KB) SPI FRAM</td><td>Non-volatile parameter storage</td></tr>
     </tbody>
 </table>
 
@@ -320,10 +327,10 @@ li { margin: 0.2em 0; }
     <li><strong>User-configurable, safety-bounded:</strong> Every non-safety-critical parameter is adjustable via RTE. Safety-critical parameters have hard-coded min/max bounds that cannot be overridden.</li>
     <li><strong>Deterministic timing:</strong> No dynamic memory allocation in safety paths. No RTOS. Superloop plus interrupts only.</li>
     <li><strong>Hardware fault containment:</strong> Gate driver faults trigger TIM1 break input for sub-microsecond hardware SSO, independent of software.</li>
-    <li><strong>Multi-path safe state:</strong> Three complementary paths to SSO: (1) TIM1 break input (hardware, &lt;100 ns, independent of MCU CPU), (2) MCU GPIO &rarr; PMIC EN gate driver supply kill (active, ~10 us, MCU-dependent, basic FLT feedback via NCV57001 VDD_UVLO), (3) loss of shared 3.3V rail &rarr; NCV57001 internal pull-down (passive, automatic, no software).</li>
+    <li><strong>Multi-path safe state:</strong> Three complementary paths to SSO: (1) TIM1 break input (hardware, &lt;100 ns, independent of MCU CPU), (2) MCU GPIO &rarr; PMIC EN gate driver supply kill (active, ~10 us, MCU-dependent, basic FLT feedback via NCV57100 VDD_UVLO), (3) loss of shared 3.3V rail &rarr; NCV57100 internal pull-down (passive, automatic, no software).</li>
     <li><strong>Fail-safe defaults:</strong> SSO is the hardware default. Any unrecognized condition results in SSO.</li>
     <li><strong>Open-source trust model:</strong> No OTP fuses, no vendor-locked keys. HMAC-SHA256 with user-managed keys. Physical access is acceptable risk.</li>
-    <li><strong>Multi-modulation:</strong> SPWM, SVPWM, SHEPWM, N-Pulse family, RSVM, RCFM — selectable at runtime via RTE.</li>
+    <li><strong>Multi-modulation:</strong> SPWM, SVPWM, SHEPWM, N-Pulse family, RSVM, RCFM &mdash; selectable at runtime via RTE.</li>
     <li><strong>Current loop at switching frequency:</strong> FOC runs at the PWM carrier frequency (300 Hz - 16 kHz), not at a fixed rate. The current loop rate IS the switching frequency. ADC oversamples at an integer multiple (n×) of the PWM frequency, phase-locked to avoid beat noise.</li>
     <li><strong>High-bandwidth sensing:</strong> ADC oversampling up to 48 kSPS provides ~24 kHz effective current sense bandwidth, sufficient for low-inductance motors at low switching frequencies.</li>
     <li><strong>Layered abstraction:</strong> Safety mechanisms isolated in a dedicated layer, independent of control algorithms.</li>
@@ -337,7 +344,7 @@ li { margin: 0.2em 0; }
         <tr><th>Layer</th><th>Modules</th><th>Safety Integrity</th><th>Timing</th></tr>
     </thead>
     <tbody>
-        <tr><td>Application</td><td>Throttle, CAN Comms, DCLink Mon, Temp Mon (1oo3), POST, RTE, Input Validator</td><td>ASIL-B</td><td>1 ms - 100 ms</td></tr>
+        <tr><td>Application</td><td>Throttle, CAN Comms, DCLink Mon, Temp Mon (2oo3), POST, RTE, Input Validator</td><td>ASIL-B</td><td>1 ms - 100 ms</td></tr>
         <tr><td>Control</td><td>FOC, Modulation Library, PI Controllers, State Machine, Torque Commander, Loss Estimator</td><td>ASIL-C</td><td>PWM period (3.3 ms @ 300 Hz - 62.5 us @ 16 kHz)</td></tr>
         <tr><td>Safety</td><td>Fault Manager, Safe State Manager, Watchdog Manager, PSU Monitor, Rail Switch</td><td>ASIL-C</td><td>1 ms - 100 ms</td></tr>
         <tr><td>HAL/BSP</td><td>TIM1, ADC, FDCAN, SPI (FRAM), GPIO, EXTI, Flash, CRC</td><td>ASIL-B</td><td>Hardware-driven</td></tr>
@@ -351,7 +358,7 @@ li { margin: 0.2em 0; }
 <p>The HAL/BSP layer provides register-level drivers for all STM32H723ZG peripherals. This is the only code that directly accesses hardware registers. All upper layers call HAL functions.</p>
 
 <div class="note">
-    <div class="callout-title">GPIO Pinout — Refer to STM32CubeMX</div>
+    <div class="callout-title">GPIO Pinout &mdash; Refer to STM32CubeMX</div>
     All GPIO pin assignments, alternate function mappings, and peripheral pinouts are generated from the STM32CubeMX project configuration file (<code>.ioc</code>). The generated source files (<code>main.c</code>, <code>gpio.c</code>, <code>tim.c</code>, <code>adc.c</code>, <code>fdcan.c</code>, <code>spi.c</code>) are checked into version control and must not be hand-edited. Re-generate via CubeMX when changes are needed. This document does not list specific GPIO pins.
 </div>
 
@@ -378,13 +385,13 @@ li { margin: 0.2em 0; }
     </tbody>
 </table>
 
-<h3>4.1.1 TIM1 Break Input — Hardware SSO</h3>
+<h3>4.1.1 TIM1 Break Input &mdash; Hardware SSO</h3>
 
-<p>When any NCV57001 gate driver detects DESAT or UVLO, its FAULT output (active low) asserts. Six FAULT outputs are OR'd together and fed to TIM1_BKIN. TIM1 hardware immediately clears MOE (main output enable), forcing all six PWM outputs to the inactive (SSO) state within &lt;100 ns. A break interrupt then fires to log the fault.</p>
+<p>When any NCV57100 gate driver detects DESAT or UVLO, its FAULT output (active low) asserts. Six FAULT outputs are OR'd together and fed to TIM1_BKIN. TIM1 hardware immediately clears MOE (main output enable), forcing all six PWM outputs to the inactive (SSO) state within &lt;100 ns. A break interrupt then fires to log the fault.</p>
 
-<h2>4.2 ADC Driver — Multi-Rate Oversampled</h2>
+<h2>4.2 ADC Driver &mdash; Multi-Rate Oversampled</h2>
 
-<p>The ADC subsystem achieves 50 kHz effective current sense bandwidth through multi-rate oversampling. Five samples are taken per PWM period, decimated via sinc3 filtering. This is essential for low-inductance motors running at low switching frequencies (300 Hz - 2 kHz) where current ripple would otherwise alias into the control loop.</p>
+<p>The ADC subsystem achieves ~24 kHz effective current sense bandwidth through multi-rate oversampling. An integer multiple (n&times;) of samples is taken per PWM period &mdash; n=24 at the 2 kHz default (see Table 12) &mdash; decimated via sinc3 filtering. This is essential for low-inductance motors running at low switching frequencies (300 Hz - 2 kHz) where current ripple would otherwise alias into the control loop.</p>
 
 <table>
     <caption data-label="Table 5">ADC Channel Assignment</caption>
@@ -392,17 +399,17 @@ li { margin: 0.2em 0; }
         <tr><th>Signal</th><th>ADC1 (16-bit)</th><th>ADC2 (12-bit)</th><th>ADC3 (12-bit)</th></tr>
     </thead>
     <tbody>
-        <tr><td>I_U (phase U current)</td><td>INx (16-bit)</td><td>—</td><td>—</td></tr>
-        <tr><td>I_V (phase V current)</td><td>INx (16-bit)</td><td>INx (12-bit)</td><td>—</td></tr>
+        <tr><td>I_U (phase U current)</td><td>INx (16-bit)</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>I_V (phase V current)</td><td>INx (16-bit)</td><td>INx (12-bit)</td><td>&mdash;</td></tr>
         <tr><td>I_W (phase W current)</td><td>INx (16-bit)</td><td>INx (12-bit)</td><td>INx (12-bit)</td></tr>
-        <tr><td>REF_U (I_U reference)</td><td>INx (16-bit)</td><td>—</td><td>—</td></tr>
-        <tr><td>REF_V (I_V reference)</td><td>INx (16-bit)</td><td>INx (12-bit)</td><td>—</td></tr>
+        <tr><td>REF_U (I_U reference)</td><td>INx (16-bit)</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>REF_V (I_V reference)</td><td>INx (16-bit)</td><td>INx (12-bit)</td><td>&mdash;</td></tr>
         <tr><td>REF_W (I_W reference)</td><td>INx (16-bit)</td><td>INx (12-bit)</td><td>INx (12-bit)</td></tr>
-        <tr><td>V_DC (DC link voltage)</td><td>INx (16-bit)</td><td>—</td><td>—</td></tr>
-        <tr><td>Throttle main</td><td>INx (16-bit)</td><td>—</td><td>—</td></tr>
-        <tr><td>Throttle check</td><td>INx (16-bit)</td><td>—</td><td>—</td></tr>
-        <tr><td>T_IGBT[0-2]</td><td>INx (12-bit)</td><td>—</td><td>—</td></tr>
-        <tr><td>VREFINT (3.3V rail)</td><td>Internal</td><td>—</td><td>—</td></tr>
+        <tr><td>V_DC (DC link voltage)</td><td>INx (16-bit)</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>Throttle main</td><td>INx (16-bit)</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>Throttle check</td><td>INx (16-bit)</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>T_IGBT[0-2]</td><td>INx (12-bit)</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>VREFINT (3.3V rail)</td><td>Internal</td><td>&mdash;</td><td>&mdash;</td></tr>
     </tbody>
 </table>
 
@@ -410,12 +417,12 @@ li { margin: 0.2em 0; }
 
 <div class="note">
     <div class="callout-title">ADC Resolution: 16-bit Primary + 12-bit Redundant</div>
-    The 12-bit redundant channels (ADC2, ADC3) have approximately 5.3x coarser resolution than the 16-bit primary (ADC1). For the purpose of fault <em>detection</em> — the safety-relevant function — this difference is not operationally significant. A 12-bit channel can reliably detect catastrophic sensor faults: broken wire (reading at rail), stuck output (constant value regardless of current), and large gain errors (&gt;20% deviation). These are the failure modes that matter for safety. Subtle gain errors or small calibration drift are not safety-critical because the 16-bit primary channel remains the control input. The 12-bit channels serve as a "sanity check" on the primary, not as a precision backup. A second 16-bit ADC would provide higher-fidelity redundancy but is not required for ASIL-C fault detection.
+    The 12-bit redundant channels (ADC2, ADC3) have approximately 5.3x coarser resolution than the 16-bit primary (ADC1). For the purpose of fault <em>detection</em> &mdash; the safety-relevant function &mdash; this difference is not operationally significant. A 12-bit channel can reliably detect catastrophic sensor faults: broken wire (reading at rail), stuck output (constant value regardless of current), and large gain errors (&gt;20% deviation). These are the failure modes that matter for safety. Subtle gain errors or small calibration drift are not safety-critical because the 16-bit primary channel remains the control input. The 12-bit channels serve as a "sanity check" on the primary, not as a precision backup. A second 16-bit ADC would provide higher-fidelity redundancy but is not required for ASIL-C fault detection.
 </div>
 
 <h3>4.2.1 Oversampling Configuration</h3>
 
-<p>At 2 kHz PWM (default), 5 ADC samples per period = 10 kSPS per channel. The sinc3 decimator produces one filtered output every 5 raw samples, giving an effective 2 kHz control update rate with 25x noise reduction. The raw 10 kSPS stream is also analyzed for peak-to-peak ripple amplitude — excessive ripple flags a sensor or connection fault.</p>
+<p>At 2 kHz PWM (default), 24 ADC samples per period = 48 kSPS per channel. The sinc3 decimator produces one filtered output every 24 raw samples, giving an effective 2 kHz control update rate with ~24x noise reduction. The raw 48 kSPS stream is also analyzed for peak-to-peak ripple amplitude &mdash; excessive ripple flags a sensor or connection fault.</p>
 
 <h2>4.3 Current Sensor Validation</h2>
 
@@ -467,11 +474,11 @@ V<sub>dc_calc</sub> = (3 x V<sub>ph</sub> x I<sub>ph</sub> x cos(&phi;)) / (I<su
 
 <h2>4.4 FDCAN Driver</h2>
 
-<p>Dual FDCAN modules provide CAN communication. The protocol is intentionally user-tailorable — the frame definitions in Section 10 are a starting point. Users modify IDs, scaling, and layouts via RTE.</p>
+<p>Dual FDCAN modules provide CAN communication. The protocol is intentionally user-tailorable &mdash; the frame definitions in Section 10 are a starting point. Users modify IDs, scaling, and layouts via RTE.</p>
 
-<h2>4.5 SPI FRAM — Non-Volatile Parameter Storage</h2>
+<h2>4.5 SPI FRAM &mdash; Non-Volatile Parameter Storage</h2>
 
-<p>An external SPI FRAM chip (e.g., Cypress FM25W256, 256-Kbit) stores all user-configurable parameters, runtime counters, and fault logs. FRAM provides unlimited write endurance (10^14 write cycles) compared to flash (~10,000 cycles), making it suitable for frequently updated data.</p>
+<p>An external SPI FRAM chip (Infineon/Cypress CY15B102Q-SXET, 2-Mbit / 256 KB) stores all user-configurable parameters, runtime counters, and fault logs. FRAM provides unlimited write endurance (10^14 write cycles) compared to flash (~10,000 cycles), making it suitable for frequently updated data.</p>
 
 <table>
     <caption data-label="Table 8">FRAM Storage Map</caption>
@@ -490,7 +497,7 @@ V<sub>dc_calc</sub> = (3 x V<sub>ph</sub> x I<sub>ph</sub> x cos(&phi;)) / (I<su
         <tr><td>0x0B40 - 0x0B4F</td><td>Hour counter (motor run hours, 32-bit)</td><td>Every 1 hour</td></tr>
         <tr><td>0x0B50 - 0x0B53</td><td>Boot counter (total resets, 32-bit)</td><td>Every boot</td></tr>
         <tr><td>0x0B60 - 0x1F5F</td><td>Fault log ring buffer (256 entries x 20 bytes)</td><td>On every fault event</td></tr>
-        <tr><td>0x1F60 - 0x1FFF</td><td>Reserved</td><td>—</td></tr>
+        <tr><td>0x1F60 - 0x1FFF</td><td>Reserved</td><td>&mdash;</td></tr>
     </tbody>
 </table>
 
@@ -520,23 +527,23 @@ V<sub>dc_calc</sub> = (3 x V<sub>ph</sub> x I<sub>ph</sub> x cos(&phi;)) / (I<su
         <tr><th>Rail</th><th>Supply</th><th>Control</th><th>Use Case</th></tr>
     </thead>
     <tbody>
-        <tr><td>Gate driver power</td><td>Murata MGJ2D121509MPC-R7 x 6</td><td>PMIC EN (shared enable)</td><td>Primary SSO path: kills all 6 gate drive supplies simultaneously, forcing IGBT gates to 0V via NCV57001 active pull-down</td></tr>
+        <tr><td>Gate driver power</td><td>Murata MGJ2D121509MPC-R7 x 6</td><td>PMIC EN (shared enable)</td><td>Primary SSO path: kills all 6 gate drive supplies simultaneously, forcing IGBT gates to 0V via NCV57100 active pull-down</td></tr>
         <tr><td>Current sensor power</td><td>+5V sensor supply</td><td>GPIO-controlled load switch</td><td>Disables current sensors for safe state or diagnostics</td></tr>
         <tr><td>CAN transceiver power</td><td>12V to 5V DC-DC for ISO1042</td><td>GPIO-controlled load switch</td><td>Disables CAN bus for EMI reduction or fault isolation</td></tr>
     </tbody>
 </table>
 
-<h3>4.6.1 Gate Driver Supply Kill — Primary SSO Path</h3>
+<h3>4.6.1 Gate Driver Supply Kill &mdash; Primary SSO Path</h3>
 
-<p>The gate driver supply kill is the most aggressive safe-state action. When the PMIC EN line is pulled low, all six Murata isolated DC-DC converters shut down simultaneously. Within microseconds, the NCV57001 gate drivers detect the loss of their isolated supply and activate internal pull-downs, forcing all IGBT gates to 0V.</p>
+<p>The gate driver supply kill is the most aggressive safe-state action. When the PMIC EN line is pulled low, all six Murata isolated DC-DC converters shut down simultaneously. Within microseconds, the NCV57100 gate drivers detect the loss of their isolated supply and activate internal pull-downs, forcing all IGBT gates to 0V.</p>
 
-<p><strong>FLT Verification on Supply Kill:</strong> When the NCV57001 detects VDD_UVLO (loss of gate drive supply), it asserts its FLT output (active low). Since all six FLT outputs are OR'd together and fed to TIM1_BKIN, the MCU can verify that a PMIC EN kill actually worked by reading the FLT line after a short delay (~100 us). If FLT is asserted (low), the gate driver supply has been successfully shut off. If FLT remains de-asserted (high), the supply kill failed and the system must use TIM1_BKIN SSO as the fallback. This provides a basic feedback mechanism — not as robust as a dedicated voltage sense on each supply, but better than no feedback at all. Independent supply voltage monitoring (via ADC or isolated status signal) is a recommended future enhancement for higher diagnostic coverage.</p>
+<p><strong>FLT Verification on Supply Kill:</strong> When the NCV57100 detects VDD_UVLO (loss of gate drive supply), it asserts its FLT output (active low). Since all six FLT outputs are OR'd together and fed to TIM1_BKIN, the MCU can verify that a PMIC EN kill actually worked by reading the FLT line after a short delay (~100 us). If FLT is asserted (low), the gate driver supply has been successfully shut off. If FLT remains de-asserted (high), the supply kill failed and the system must use TIM1_BKIN SSO as the fallback. This provides a basic feedback mechanism &mdash; not as robust as a dedicated voltage sense on each supply, but better than no feedback at all. Independent supply voltage monitoring (via ADC or isolated status signal) is a recommended future enhancement for higher diagnostic coverage.</p>
 
-<div class="code-block">/* RailSwitch.c — software-controlled power rail management */
+<div class="code-block">/* RailSwitch.c &mdash; software-controlled power rail management */
 void RailSwitch_KillGateDrivers(void) {
     GPIO_WritePin(PMIC_EN_GPIO_Port, PMIC_EN_Pin, GPIO_PIN_RESET);
     /* All 6 Murata supplies off within ~10 us */
-    /* NCV57001 internal pull-downs force gates to 0V within ~1 us */
+    /* NCV57100 internal pull-downs force gates to 0V within ~1 us */
     rail_status.gate_driver_power = false;
     FaultMgr_SetFault(FAULT_RAIL_GATE_DRIVER_KILL, 0);
 }
@@ -561,7 +568,7 @@ void RailSwitch_KillSensorPower(void) {
 
 <h2>5.1 Fault Manager (FaultMgr)</h2>
 
-<p>Global fault registry — single source of truth for system health. The State Machine queries this on every tick.</p>
+<p>Global fault registry &mdash; single source of truth for system health. The State Machine queries this on every tick.</p>
 
 <table>
     <caption data-label="Table 10">Fault Classification</caption>
@@ -569,23 +576,23 @@ void RailSwitch_KillSensorPower(void) {
         <tr><th>Fault Name</th><th>Class</th><th>Source</th><th>FSR</th><th>Response</th></tr>
     </thead>
     <tbody>
-        <tr><td>FAULT_GATE_DRIVER</td><td>Critical</td><td>TIM1_BRK ISR</td><td>FSR-03,04</td><td>Immediate SSO + SAFE</td></tr>
-        <tr><td>FAULT_OVERCURRENT_HW</td><td>Critical</td><td>ADC comparator</td><td>FSR-05</td><td>Immediate SSO + SAFE</td></tr>
-        <tr><td>FAULT_OVERCURRENT_SW</td><td>Critical</td><td>FOC ISR</td><td>FSR-05</td><td>Immediate SSO + SAFE</td></tr>
-        <tr><td>FAULT_ADC_FAIL</td><td>Critical</td><td>ADC cross-check</td><td>FSR-06</td><td>Ramp down + SAFE</td></tr>
-        <tr><td>FAULT_SENSOR_VREF</td><td>Non-critical</td><td>Current sensor VREF</td><td>FSR-06</td><td>Log, use healthy ch</td></tr>
-        <tr><td>FAULT_SENSOR_ZERO</td><td>Non-critical</td><td>Zero-point check</td><td>FSR-06</td><td>Log, flag recal</td></tr>
-        <tr><td>FAULT_THROTTLE_PLAUS</td><td>Critical</td><td>Throttle</td><td>FSR-07</td><td>Zero torque + FAULT</td></tr>
-        <tr><td>FAULT_DC_LINK_OV</td><td>Critical</td><td>DCLink Mon</td><td>FSR-09</td><td>Immediate SSO + SAFE</td></tr>
-        <tr><td>FAULT_DC_LINK_UV</td><td>Critical</td><td>DCLink Mon</td><td>FSR-09</td><td>Zero torque + FAULT</td></tr>
-        <tr><td>FAULT_IGBT_OT</td><td>Critical</td><td>TempMonitor</td><td>FSR-11</td><td>Ramp down + FAULT</td></tr>
-        <tr><td>FAULT_IGBT_OT_WARN</td><td>Non-crit</td><td>TempMonitor</td><td>FSR-11</td><td>Log, limit 50%</td></tr>
-        <tr><td>FAULT_ENCODER</td><td>Critical</td><td>ENC_Monitor</td><td>FSR-15</td><td>Ramp down + FAULT</td></tr>
+        <tr><td>FAULT_GATE_DRIVER</td><td>Critical</td><td>TIM1_BRK ISR</td><td>FSR-12,13</td><td>Immediate SSO + SAFE</td></tr>
+        <tr><td>FAULT_OVERCURRENT_HW</td><td>Critical</td><td>ADC analog watchdog</td><td>FSR-07</td><td>Immediate SSO + SAFE</td></tr>
+        <tr><td>FAULT_OVERCURRENT_SW</td><td>Critical</td><td>FOC ISR</td><td>FSR-07</td><td>Immediate SSO + SAFE</td></tr>
+        <tr><td>FAULT_ADC_FAIL</td><td>Critical</td><td>ADC cross-check</td><td>FSR-16</td><td>Ramp down + SAFE</td></tr>
+        <tr><td>FAULT_SENSOR_VREF</td><td>Non-critical</td><td>Current sensor VREF</td><td>FSR-16</td><td>Log, use healthy ch</td></tr>
+        <tr><td>FAULT_SENSOR_ZERO</td><td>Non-critical</td><td>Zero-point check</td><td>FSR-16</td><td>Log, flag recal</td></tr>
+        <tr><td>FAULT_THROTTLE_PLAUS</td><td>Critical</td><td>Throttle</td><td>FSR-01</td><td>Zero torque + FAULT</td></tr>
+        <tr><td>FAULT_DC_LINK_OV</td><td>Critical</td><td>DCLink Mon</td><td>FSR-11</td><td>Immediate SSO + SAFE</td></tr>
+        <tr><td>FAULT_DC_LINK_UV</td><td>Critical</td><td>DCLink Mon</td><td>FSR-21</td><td>Zero torque + FAULT</td></tr>
+        <tr><td>FAULT_IGBT_OT</td><td>Critical</td><td>TempMonitor</td><td>FSR-08</td><td>Ramp down + FAULT</td></tr>
+        <tr><td>FAULT_IGBT_OT_WARN</td><td>Non-crit</td><td>TempMonitor</td><td>FSR-08</td><td>Log, limit 50%</td></tr>
+        <tr><td>FAULT_ENCODER</td><td>Critical</td><td>ENC_Monitor</td><td>FSR-09</td><td>Ramp down + FAULT</td></tr>
         <tr><td>FAULT_CAN_TIMEOUT</td><td>Critical</td><td>CAN heartbeat</td><td>FSR-17</td><td>Ramp down + FAULT</td></tr>
-        <tr><td>FAULT_WATCHDOG</td><td>Critical</td><td>IWDG/WWDG</td><td>FSR-18</td><td>Reset then POST</td></tr>
+        <tr><td>FAULT_WATCHDOG</td><td>Critical</td><td>IWDG/WWDG</td><td>FSR-15</td><td>Reset then POST</td></tr>
         <tr><td>FAULT_ECC_RAM</td><td>Critical</td><td>NMI handler</td><td>FSR-20</td><td>Log + SAFE</td></tr>
-        <tr><td>FAULT_POST_FAIL</td><td>Critical</td><td>POST</td><td>FSR-21</td><td>INIT then SAFE</td></tr>
-        <tr><td>FAULT_RAIL_GATE_DRIVER_KILL</td><td>Critical</td><td>RailSwitch</td><td>FSR-03</td><td>SSO via supply kill</td></tr>
+        <tr><td>FAULT_POST_FAIL</td><td>Critical</td><td>POST</td><td>FSR-16,19</td><td>INIT then SAFE</td></tr>
+        <tr><td>FAULT_RAIL_GATE_DRIVER_KILL</td><td>Critical</td><td>RailSwitch</td><td>FSR-14</td><td>SSO via supply kill</td></tr>
     </tbody>
 </table>
 
@@ -594,8 +601,8 @@ void RailSwitch_KillSensorPower(void) {
 <p>Three complementary paths to SSO:</p>
 <ol>
     <li><strong>TIM1 break input (hardware, active):</strong> Gate driver FAULT triggers TIM1_BKIN, MOE cleared, &lt;100 ns. Independent of MCU CPU state.</li>
-    <li><strong>Gate driver supply kill (software + hardware, active):</strong> MCU GPIO &rarr; PMIC EN low &rarr; Murata supplies off &rarr; NCV57001 UVLO pull-down, ~10 us. MCU-dependent. <strong>Basic feedback:</strong> NCV57001 asserts FLT on VDD_UVLO, which the MCU can read via TIM1_BKIN. Independent supply voltage monitoring is a recommended future enhancement.</li>
-    <li><strong>Shared 3.3V rail loss (hardware, passive):</strong> Loss of 3.3V (shared by MCU and NCV57001 logic) &rarr; NCV57001 VDD lost &rarr; internal pull-down &rarr; SSO. No software intervention. Only effective for total power collapse.</li>
+    <li><strong>Gate driver supply kill (software + hardware, active):</strong> MCU GPIO &rarr; PMIC EN low &rarr; Murata supplies off &rarr; NCV57100 UVLO pull-down, ~10 us. MCU-dependent. <strong>Basic feedback:</strong> NCV57100 asserts FLT on VDD_UVLO, which the MCU can read via TIM1_BKIN. Independent supply voltage monitoring is a recommended future enhancement.</li>
+    <li><strong>Shared 3.3V rail loss (hardware, passive):</strong> Loss of 3.3V (shared by MCU and NCV57100 logic) &rarr; NCV57100 VDD lost &rarr; internal pull-down &rarr; SSO. No software intervention. Only effective for total power collapse.</li>
 </ol>
 
 <p>Path 1 is the primary diagnosed path (TIM1_BKIN hardware). Path 2 complements it but depends on MCU GPIO functioning. Path 3 is a passive fallback for total power loss. Path 2 and Path 3 are related (both involve power) but operate under different conditions. A coprocessor with an independent switch would provide a fully independent third active path.</p>
@@ -609,9 +616,10 @@ void RailSwitch_KillSensorPower(void) {
     <tbody>
         <tr><td>IWDG</td><td>Independent (32 kHz RC)</td><td>100 ms</td><td>Every 50 ms</td><td>System reset</td></tr>
         <tr><td>WWDG</td><td>Window (sys clock)</td><td>83.3 ms</td><td>Every 50 ms</td><td>System reset</td></tr>
-        <tr><td>External</td><td>TPS3823</td><td>1.6 s</td><td>Every 100 ms</td><td>System reset</td></tr>
+        <tr><td>External</td><td>TPS389006-Q1 (6-ch window supervisor, I2C)</td><td>Per-rail window limits</td><td>Every 100 ms (I2C poll)</td><td>Gate-driver DRIVER_RESET, system reset</td></tr>
     </tbody>
 </table>
+<p>The external supervisor (TI TPS389006-Q1) monitors the 3.3 V, 5 V, and 12 V rails, the sensor 5 V rail, and both gate-drive power feedbacks. On any window violation it asserts the gate-driver DRIVER_RESET line directly, independent of MCU software.</p>
 
 <h2>5.4 Power Supply Monitor</h2>
 <p>Internal VREFINT channel monitors 3.3V regulator indirectly. Window: 3.0 V - 3.6 V. Outside this range: safe state entry.</p>
@@ -622,14 +630,14 @@ void RailSwitch_KillSensorPower(void) {
 
 <h2>6.1 Field-Oriented Control (FOC)</h2>
 
-<p>FOC runs in the <strong>TIM1 update interrupt at the PWM switching frequency</strong> (priority 0, cannot be preempted). The current loop rate IS the switching frequency: 300 Hz minimum, 16 kHz maximum, user-selectable via RTE. TIM1 generates the PWM outputs and triggers the FOC computation on every update event. Duty cycles are written to TIM1's preload (shadow) registers and applied at the next PWM period boundary — this is standard double-buffering.</p>
+<p>FOC runs in the <strong>TIM1 update interrupt at the PWM switching frequency</strong> (priority 0, cannot be preempted). The current loop rate IS the switching frequency: 300 Hz minimum, 16 kHz maximum, user-selectable via RTE. TIM1 generates the PWM outputs and triggers the FOC computation on every update event. Duty cycles are written to TIM1's preload (shadow) registers and applied at the next PWM period boundary &mdash; this is standard double-buffering.</p>
 
 <h3>6.1.1 Oversampled ADC Triggering</h3>
 
 <p>The ADC is triggered by TIM1 at an <strong>integer multiple</strong> (n×) of the PWM frequency, up to the hardware sampling rate limit. At each PWM period, n ADC samples are taken and decimated (boxcar or sinc3 filter) to produce one filtered current reading for the FOC loop:</p>
 
 <table>
-    <caption data-label="Table 12b">ADC Oversample Ratio vs. Switching Frequency</caption>
+    <caption data-label="Table 12">ADC Oversample Ratio vs. Switching Frequency</caption>
     <thead>
         <tr><th>PWM Frequency</th><th>Oversample Ratio (n)</th><th>ADC Sample Rate</th><th>Effective BW</th><th>Filter</th></tr>
     </thead>
@@ -644,11 +652,11 @@ void RailSwitch_KillSensorPower(void) {
     </tbody>
 </table>
 
-<p>The integer multiple ensures ADC sampling is phase-locked to the PWM carrier, avoiding beat-frequency noise. The ADC sample rate is capped at ~48 kSPS per channel (hardware limit of 16-bit mode with conversion time). The sinc3 decimator provides ~60 dB of alias rejection. Raw oversampled data is also analyzed for peak-to-peak ripple amplitude — excessive ripple flags a sensor or connection fault.</p>
+<p>The integer multiple ensures ADC sampling is phase-locked to the PWM carrier, avoiding beat-frequency noise. The ADC sample rate is capped at ~48 kSPS per channel (hardware limit of 16-bit mode with conversion time). The sinc3 decimator provides ~60 dB of alias rejection. Raw oversampled data is also analyzed for peak-to-peak ripple amplitude &mdash; excessive ripple flags a sensor or connection fault.</p>
 
 <h3>6.1.2 FOC ISR Implementation</h3>
 
-<div class="code-block">/* TIM1_UP_IRQHandler — FOC runs at PWM switching frequency */
+<div class="code-block">/* TIM1_UP_IRQHandler &mdash; FOC runs at PWM switching frequency */
 void TIM1_UP_IRQHandler(void) {
     TIM1-&gt;SR &amp;= ~TIM_SR_UIF;
 
@@ -698,7 +706,7 @@ void TIM1_UP_IRQHandler(void) {
 
 <h3>6.1.3 Trigonometric Functions: CORDIC vs. Software</h3>
 
-<h3>6.1.2 Trigonometric Functions: CORDIC vs. Software</h3>
+<h3>6.1.4 Trigonometric Functions: CORDIC vs. Software</h3>
 
 <p>The FOC ISR uses <code>cosf()</code>, <code>sinf()</code>, and <code>sqrtf()</code> from the CMSIS-DSP library. The STM32H723 includes a <strong>CORDIC hardware accelerator</strong> that computes sin, cos, and sqrt in ~10-20 cycles each with deterministic execution time:</p>
 <ul>
@@ -710,7 +718,7 @@ void TIM1_UP_IRQHandler(void) {
 <h2>6.2 Modulation Scheme Library</h2>
 
 <table>
-    <caption data-label="Table 12">Supported Modulation Schemes</caption>
+    <caption data-label="Table 12a">Supported Modulation Schemes</caption>
     <thead>
         <tr><th>Scheme</th><th>Type</th><th>Bus Util</th><th>Use Case</th></tr>
     </thead>
@@ -734,7 +742,7 @@ void TIM1_UP_IRQHandler(void) {
 
 <p>A modulation scheme transition is permitted only when:</p>
 <ul>
-    <li><strong>Torque reference is zero</strong> (no-load transition — safest, no current flowing), OR</li>
+    <li><strong>Torque reference is zero</strong> (no-load transition &mdash; safest, no current flowing), OR</li>
     <li><strong>Motor speed is below 10% of base speed</strong> (low voltage demand, small disturbance from transition), AND</li>
     <li><strong>No fault flags are active</strong> (healthy system state only)</li>
 </ul>
@@ -753,17 +761,17 @@ void TIM1_UP_IRQHandler(void) {
 <h4>Transition Matrix</h4>
 
 <table>
-    <caption data-label="Table 12c">Legal Modulation Scheme Transitions</caption>
+    <caption data-label="Table 12b">Legal Modulation Scheme Transitions</caption>
     <thead>
         <tr><th>From \ To</th><th>SPWM</th><th>SVPWM</th><th>SHEPWM</th><th>N-Pulse</th><th>RSVM</th><th>RCFM</th></tr>
     </thead>
     <tbody>
-        <tr><td>SPWM</td><td>—</td><td>Anytime</td><td>Zero torque only</td><td>Below 10% speed</td><td>Anytime</td><td>Anytime</td></tr>
-        <tr><td>SVPWM</td><td>Anytime</td><td>—</td><td>Zero torque only</td><td>Below 10% speed</td><td>Anytime</td><td>Anytime</td></tr>
-        <tr><td>SHEPWM</td><td>Below 10% speed</td><td>Below 10% speed</td><td>—</td><td>Not allowed</td><td>Not allowed</td><td>Not allowed</td></tr>
-        <tr><td>N-Pulse</td><td>Below 10% speed</td><td>Below 10% speed</td><td>Not allowed</td><td>—</td><td>Not allowed</td><td>Not allowed</td></tr>
-        <tr><td>RSVM</td><td>Anytime</td><td>Anytime</td><td>Zero torque only</td><td>Below 10% speed</td><td>—</td><td>Anytime</td></tr>
-        <tr><td>RCFM</td><td>Anytime</td><td>Anytime</td><td>Zero torque only</td><td>Below 10% speed</td><td>Anytime</td><td>—</td></tr>
+        <tr><td>SPWM</td><td>&mdash;</td><td>Anytime</td><td>Zero torque only</td><td>Below 10% speed</td><td>Anytime</td><td>Anytime</td></tr>
+        <tr><td>SVPWM</td><td>Anytime</td><td>&mdash;</td><td>Zero torque only</td><td>Below 10% speed</td><td>Anytime</td><td>Anytime</td></tr>
+        <tr><td>SHEPWM</td><td>Below 10% speed</td><td>Below 10% speed</td><td>&mdash;</td><td>Not allowed</td><td>Not allowed</td><td>Not allowed</td></tr>
+        <tr><td>N-Pulse</td><td>Below 10% speed</td><td>Below 10% speed</td><td>Not allowed</td><td>&mdash;</td><td>Not allowed</td><td>Not allowed</td></tr>
+        <tr><td>RSVM</td><td>Anytime</td><td>Anytime</td><td>Zero torque only</td><td>Below 10% speed</td><td>&mdash;</td><td>Anytime</td></tr>
+        <tr><td>RCFM</td><td>Anytime</td><td>Anytime</td><td>Zero torque only</td><td>Below 10% speed</td><td>Anytime</td><td>&mdash;</td></tr>
     </tbody>
 </table>
 
@@ -783,7 +791,7 @@ void TIM1_UP_IRQHandler(void) {
 <p>1-pulse to 15-pulse synchronous modulation. In synchronous mode, the PWM frequency is phase-locked to an integer multiple of the motor electrical frequency:</p>
 
 <table>
-    <caption data-label="Table 12d">N-Pulse Mode vs. Electrical Frequency (at 2 kHz PWM)</caption>
+    <caption data-label="Table 12c">N-Pulse Mode vs. Electrical Frequency (at 2 kHz PWM)</caption>
     <thead>
         <tr><th>Mode</th><th>Pulses/Half-Period</th><th>Sync Ratio</th><th>Electrical Freq Range</th><th>Use Case</th></tr>
     </thead>
@@ -823,23 +831,23 @@ void TIM1_UP_IRQHandler(void) {
 <h3>6.8.1 State Transition Table</h3>
 
 <table>
-    <caption data-label="Table 12a">State Transitions — Guards and Actions</caption>
+    <caption data-label="Table 12d">State Transitions &mdash; Guards and Actions</caption>
     <thead>
         <tr><th>From</th><th>To</th><th>Guard Condition</th><th>Entry Action</th><th>Exit Action</th></tr>
     </thead>
     <tbody>
-        <tr><td>INIT</td><td>STANDBY</td><td>POST complete AND POST passed</td><td>—</td><td>—</td></tr>
-        <tr><td>INIT</td><td>SAFE</td><td>POST complete AND POST failed</td><td>Log failure code; SSO</td><td>—</td></tr>
-        <tr><td>STANDBY</td><td>READY</td><td>Key=ON AND Brake=on AND HV present AND FaultMgr healthy</td><td>Close precharge contactor; start precharge timer</td><td>—</td></tr>
-        <tr><td>STANDBY</td><td>SAFE</td><td>Critical fault detected during STANDBY</td><td>SSO; open contactor</td><td>—</td></tr>
-        <tr><td>READY</td><td>DRIVING</td><td>Key=ON AND Brake=off AND Throttle &gt; deadband AND precharge complete</td><td>Enable torque command; start encoder validity timer</td><td>—</td></tr>
-        <tr><td>READY</td><td>STANDBY</td><td>Key=OFF</td><td>Open contactor; zero torque</td><td>—</td></tr>
+        <tr><td>INIT</td><td>STANDBY</td><td>POST complete AND POST passed</td><td>&mdash;</td><td>&mdash;</td></tr>
+        <tr><td>INIT</td><td>SAFE</td><td>POST complete AND POST failed</td><td>Log failure code; SSO</td><td>&mdash;</td></tr>
+        <tr><td>STANDBY</td><td>READY</td><td>Key=ON AND Brake=on AND HV present AND FaultMgr healthy</td><td>Close precharge contactor; start precharge timer</td><td>&mdash;</td></tr>
+        <tr><td>STANDBY</td><td>SAFE</td><td>Critical fault detected during STANDBY</td><td>SSO; open contactor</td><td>&mdash;</td></tr>
+        <tr><td>READY</td><td>DRIVING</td><td>Key=ON AND Brake=off AND Throttle &gt; deadband AND precharge complete</td><td>Enable torque command; start encoder validity timer</td><td>&mdash;</td></tr>
+        <tr><td>READY</td><td>STANDBY</td><td>Key=OFF</td><td>Open contactor; zero torque</td><td>&mdash;</td></tr>
         <tr><td>DRIVING</td><td>READY</td><td>Key=ON AND Brake=on AND Throttle &lt; deadband</td><td>Zero torque ref; idle PWM</td><td>Disable torque command</td></tr>
-        <tr><td>DRIVING</td><td>FAULT</td><td>Non-critical fault active (FAULT_MASK_NONCRITICAL)</td><td>Ramp torque to zero (500 ms)</td><td>—</td></tr>
+        <tr><td>DRIVING</td><td>FAULT</td><td>Non-critical fault active (FAULT_MASK_NONCRITICAL)</td><td>Ramp torque to zero (500 ms)</td><td>&mdash;</td></tr>
         <tr><td>DRIVING</td><td>SAFE</td><td>Critical fault active (FAULT_MASK_CRITICAL) OR Key=OFF</td><td>SSO (TIM1_BKIN or PMIC EN kill); open contactor; zero torque</td><td>Disable torque command</td></tr>
-        <tr><td>FAULT</td><td>SAFE</td><td>Ramp-down complete AND (critical fault active OR timeout 5s)</td><td>SSO; open contactor</td><td>—</td></tr>
-        <tr><td>FAULT</td><td>READY</td><td>All faults cleared AND Key cycled OFF-then-ON AND Brake=on</td><td>Run partial POST (sensors, ADC, comms only)</td><td>—</td></tr>
-        <tr><td>SAFE</td><td>INIT</td><td>Key=OFF-then-ON AND Brake=on AND FaultMgr healthy AND all faults cleared</td><td>Run full POST</td><td>—</td></tr>
+        <tr><td>FAULT</td><td>SAFE</td><td>Ramp-down complete AND (critical fault active OR timeout 5s)</td><td>SSO; open contactor</td><td>&mdash;</td></tr>
+        <tr><td>FAULT</td><td>READY</td><td>All faults cleared AND Key cycled OFF-then-ON AND Brake=on</td><td>Run partial POST (sensors, ADC, comms only)</td><td>&mdash;</td></tr>
+        <tr><td>SAFE</td><td>INIT</td><td>Key=OFF-then-ON AND Brake=on AND FaultMgr healthy AND all faults cleared</td><td>Run full POST</td><td>&mdash;</td></tr>
     </tbody>
 </table>
 
@@ -976,15 +984,15 @@ T_junction = T_sensor + P_total x (R_th_jc + R_th_cs + R_th_sb) x (1 - e^(-t/tau
 
 <p>The model computes an estimated junction temperature every 1 ms. This estimate is compared against the measured sensor temperature:</p>
 <ul>
-    <li>If T_junction_est > T_sensor_measured + 20C for > 5 seconds: flag FAULT_THERMAL_MISMATCH — the sensor may be detached or the thermal path degraded</li>
-    <li>If T_junction_est > 125C: early warning — aggressive derating before the 100C sensor hard cap is reached</li>
+    <li>If T_junction_est > T_sensor_measured + 20C for > 5 seconds: flag FAULT_THERMAL_MISMATCH &mdash; the sensor may be detached or the thermal path degraded</li>
+    <li>If T_junction_est > 125C: early warning &mdash; aggressive derating before the 100C sensor hard cap is reached</li>
 </ul>
 
 <h3>6.10.4 Time-to-Temperature Prediction</h3>
 
 <p>Using the thermal model, the system predicts how long until the sensor temperature reaches each threshold:</p>
 
-<div class="code-block">/* LossEstimator.c — 1 ms tick */
+<div class="code-block">/* LossEstimator.c &mdash; 1 ms tick */
 void LossEstimator_Update(void) {
     /* 1. Calculate instantaneous power per IGBT */
     float i_phase = fabsf(adc_filtered[phase_index]); /* RMS approx */
@@ -1037,13 +1045,13 @@ void LossEstimator_Update(void) {
 <h2>7.3 DC-Link Monitor</h2>
 <p>16-bit ADC, 10 ms IIR filter. Thresholds user-configurable via RTE within hard bounds (OV max = hardware rating, UV min = 60V). Cross-checked against back-calculation formula.</p>
 
-<h2>7.4 Temperature Monitor (1oo3)</h2>
+<h2>7.4 Temperature Monitor (2oo3)</h2>
 
-<p><strong>1-out-of-3 voting: highest reporting sensor wins.</strong> No averaging, no median. If one sensor reports 95C and the others report 70C, the system uses 95C.</p>
+<p><strong>2-out-of-3 voting: a single outlier sensor is excluded.</strong> No averaging, no median. If one sensor reports 95C and the others report 70C, the outlier is discarded and the system uses the higher of the two remaining (non-outlier) sensor readings.</p>
 
 <div class="warning">
-    <div class="warning-title">Stuck-High Sensor Vulnerability</div>
-    Because "highest wins" has no outvoting mechanism, a single noisy or stuck-high sensor can trigger progressive derating (from 80C) or fault entry (at 100C) even when the other two sensors report normal temperatures. The sensor validity check (Section 7.4.2) only catches readings outside the physical range (-40C to +175C). A sensor stuck at 95C (within range) causes unnecessary derating. There is no 2-out-of-3 consensus mechanism. This is a known limitation: the design prioritizes thermal safety (never miss a real overheat) over availability (may derate on a false positive).
+    <div class="warning-title">Two-Sensor Fault Vulnerability</div>
+    With 2-out-of-3 voting, a single noisy or stuck-high sensor is excluded as an outlier and can no longer trigger progressive derating (from 80C) or fault entry (at 100C) on its own. The sensor validity check (below) only catches readings outside the physical range (-40C to +175C). The residual risk is two sensors failing in the same direction (common-cause): two sensors stuck high within range would outvote the healthy sensor and cause unnecessary derating or fault entry. This is a known limitation (L-13): the design prioritizes thermal safety (never miss a real overheat) over availability (may derate on a false positive).
 </div>
 
 <table>
@@ -1098,9 +1106,9 @@ void LossEstimator_Update(void) {
         <tr><td>Motor Control</td><td>Modulation scheme, PWM frequency (300 Hz - 16 kHz), PI gains, current limits, field weakening</td></tr>
         <tr><td>Torque Maps</td><td>4 custom 16-point curves + Sport/Eco presets, ramp rates, deadband</td></tr>
         <tr><td>Safety Thresholds</td><td>DC-link OV/UV, IGBT temp levels, throttle plausibility delta, CAN timeouts</td></tr>
-        <tr><td>Loss Model</td><td>V_ce0, R_ce, E_on/E_off curves, R_th values, tau — all per IGBT module type</td></tr>
+        <tr><td>Loss Model</td><td>V_ce0, R_ce, E_on/E_off curves, R_th values, tau &mdash; all per IGBT module type</td></tr>
         <tr><td>Vehicle Data</td><td>Odometer (km), hour counter, boot counter, fault log (256 entries)</td></tr>
-        <tr><td>CAN Protocol</td><td>All frame IDs, scaling factors, periods — fully user-defined</td></tr>
+        <tr><td>CAN Protocol</td><td>All frame IDs, scaling factors, periods &mdash; fully user-defined</td></tr>
         <tr><td>Custom</td><td>32 float + 32 uint32_t user parameters</td></tr>
     </tbody>
 </table>
@@ -1124,12 +1132,12 @@ void LossEstimator_Update(void) {
     </thead>
     <tbody>
         <tr><td>IGBT temp fault threshold</td><td>60 C</td><td>100 C</td><td>100 C hard cap (75 C margin to Tj_max 175 C)</td></tr>
-        <tr><td>DC-link OV threshold</td><td>200 V</td><td>400 V</td><td>400 V = hardware voltage rating limit</td></tr>
+        <tr><td>DC-link OV threshold</td><td>60 V</td><td>200 V</td><td>200 V = current hardware voltage rating limit (450 V with cap swap; 900 V with PCB + cap change)</td></tr>
         <tr><td>DC-link UV threshold</td><td>60 V</td><td>150 V</td><td>Below 60 V: ADC quantization dominates</td></tr>
         <tr><td>PWM frequency</td><td>300 Hz</td><td>16 kHz</td><td>Below 300 Hz: excessive ripple/noise; above 16 kHz: thermal</td></tr>
         <tr><td>Dead time</td><td>500 ns</td><td>4 us</td><td>Below 500 ns: shoot-through risk; above 4 us: excessive loss</td></tr>
         <tr><td>Max torque (I_q_ref)</td><td>0 A</td><td>350 A</td><td>350 A = hardware current limit with margin</td></tr>
-        <tr><td>Current sensor VREF min</td><td>2.40 V</td><td>—</td><td>Below 2.40 V: sensor fault or supply collapse</td></tr>
+        <tr><td>Current sensor VREF min</td><td>2.40 V</td><td>&mdash;</td><td>Below 2.40 V: sensor fault or supply collapse</td></tr>
     </tbody>
 </table>
 
@@ -1157,7 +1165,7 @@ void LossEstimator_Update(void) {
 
 <h3>7.7.4 Validation Framework Implementation</h3>
 
-<div class="code-block">/* InputValidator.c — three-layer validation */
+<div class="code-block">/* InputValidator.c &mdash; three-layer validation */
 ValidationResult_t InputValidator_Check(const ParamDef_t* def, float value) {
     /* Layer 1: Hard bounds */
     if (value &lt; def-&gt;hard_min || value &gt; def-&gt;hard_max) {
@@ -1210,7 +1218,7 @@ bool Validator_TempFaultConsistent(float new_threshold) {
 
 <div class="warning">
     <div class="warning-title">Cache Coherency</div>
-    DMA buffers for ADC results placed in SRAM4 (non-cacheable via MPU). All DMA buffers use cache-line-aligned addresses. The FOC ISR reads ADC DMA results — cache invalidation is not required because the DMA buffer resides in non-cacheable SRAM4.
+    DMA buffers for ADC results placed in SRAM4 (non-cacheable via MPU). All DMA buffers use cache-line-aligned addresses. The FOC ISR reads ADC DMA results &mdash; cache invalidation is not required because the DMA buffer resides in non-cacheable SRAM4.
 </div>
 
 <!-- ==================== SECTION 9 ==================== -->
@@ -1258,7 +1266,7 @@ bool Validator_TempFaultConsistent(float new_threshold) {
 <div class="page-break"></div>
 <h1 id="sec10">10. CAN Protocol</h1>
 
-<p>Reference implementation — user-tailorable via RTE. All IDs, scaling factors, and periods are defaults stored in FRAM and modifiable.</p>
+<p>Reference implementation &mdash; user-tailorable via RTE. All IDs, scaling factors, and periods are defaults stored in FRAM and modifiable.</p>
 
 <table>
     <caption data-label="Table 21">VCU TX Frame Reference (Defaults)</caption>
@@ -1286,27 +1294,27 @@ bool Validator_TempFaultConsistent(float new_threshold) {
         <tr><th>FSR</th><th>Description</th><th>ASIL</th><th>Module(s)</th></tr>
     </thead>
     <tbody>
-        <tr><td>FSR-01</td><td>MCU clock/supply monitoring</td><td class="asil-c">C</td><td>PSU_Monitor, POST</td></tr>
-        <tr><td>FSR-02</td><td>Key ON before HV</td><td class="asil-c">C</td><td>State Machine</td></tr>
-        <tr><td>FSR-03</td><td>Safe state on fault</td><td class="asil-c">C</td><td>SSM, FaultMgr, TIM1_BKIN, RailSwitch</td></tr>
-        <tr><td>FSR-04</td><td>Dead time, no shoot-through</td><td class="asil-c">C</td><td>TIM1 DTG</td></tr>
-        <tr><td>FSR-05</td><td>Overcurrent shutdown</td><td class="asil-c">C</td><td>ADC comp + FOC ISR</td></tr>
-        <tr><td>FSR-06</td><td>Redundant current measurement</td><td class="asil-c">C</td><td>ADC multi-rate, CurrentSensor_Validate</td></tr>
-        <tr><td>FSR-07</td><td>Throttle plausibility</td><td class="asil-c">C</td><td>Throttle module</td></tr>
-        <tr><td>FSR-08</td><td>Torque rate limiting</td><td class="asil-b">B</td><td>TorqueCmd ramp limiter</td></tr>
-        <tr><td>FSR-09</td><td>DC-link OV/UV</td><td class="asil-c">C</td><td>DCLink_Monitor</td></tr>
-        <tr><td>FSR-10</td><td>Precharge timing</td><td class="asil-b">B</td><td>State Machine</td></tr>
-        <tr><td>FSR-11</td><td>IGBT over-temperature</td><td class="asil-c">C</td><td>TempMonitor (1oo3), LossEstimator</td></tr>
-        <tr><td>FSR-12</td><td>Contactor weld detect</td><td class="asil-b">B</td><td>Contactor driver</td></tr>
-        <tr><td>FSR-13</td><td>Key-off torque zero</td><td class="asil-c">C</td><td>State Machine</td></tr>
-        <tr><td>FSR-14</td><td>Direction interlock</td><td class="asil-b">B</td><td>State Machine</td></tr>
-        <tr><td>FSR-15</td><td>Encoder validity</td><td class="asil-c">C</td><td>Encoder, ENC_Monitor</td></tr>
-        <tr><td>FSR-16</td><td>Brake-torque interlock</td><td class="asil-b">B</td><td>State Machine</td></tr>
-        <tr><td>FSR-17</td><td>CAN heartbeat</td><td class="asil-b">B</td><td>CAN heartbeat check</td></tr>
-        <tr><td>FSR-18</td><td>Watchdog</td><td class="asil-c">C</td><td>WatchdogMgr (IWDG+WWDG+ext)</td></tr>
-        <tr><td>FSR-19</td><td>Boot CRC</td><td class="asil-c">C</td><td>Bootloader</td></tr>
-        <tr><td>FSR-20</td><td>RAM ECC</td><td class="asil-c">C</td><td>NMI handler, FaultMgr</td></tr>
-        <tr><td>FSR-21</td><td>POST before drive</td><td class="asil-c">C</td><td>POST, State Machine</td></tr>
+        <tr><td>FSR-01</td><td>Read dual redundant tractive effort control pots on both MCUs. Discrepancy &gt;5% or either OOR detected by either MCU &rarr; safe state.</td><td class="asil-d">D</td><td>Throttle module</td></tr>
+        <tr><td>FSR-02</td><td>Tractive effort command plausibility: commanded current reference vs. measured phase currents. Deviation &gt;20% for &gt;100 ms &rarr; safe state.</td><td class="asil-c">C</td><td>FOC ISR, CurrentSensor_Validate</td></tr>
+        <tr><td>FSR-03</td><td>Tractive effort control input rate-limited. Max tractive effort rate: 500 Nm/s (calibration parameter).</td><td class="asil-c">C</td><td>SSM, FaultMgr</td></tr>
+        <tr><td>FSR-04</td><td>Reject reverse tractive effort when speed &gt;0. Reverse only when stationary AND explicitly selected.</td><td class="asil-b">B</td><td>State Machine</td></tr>
+        <tr><td>FSR-05</td><td>On fault, ramp down tractive effort at &le;200 Nm/s before SSO. Abrupt removal prohibited unless &lt;50 ms safety timing requires faster response.</td><td class="asil-c">C</td><td>SSM, FaultMgr</td></tr>
+        <tr><td>FSR-06</td><td>Monitor regenerative braking tractive effort continuously. Uncommanded &gt;10 Nm for &gt;200 ms &rarr; safe state.</td><td class="asil-c">C</td><td>ADC multi-rate, CurrentSensor_Validate</td></tr>
+        <tr><td>FSR-07</td><td>Max tractive effort limit: software LUT on both MCUs with cross-check. Dual-MCU independent current monitoring detects overcurrent within 100 ms. DESAT handles hard short-circuit (&lt;2 us).</td><td class="asil-c">C</td><td>FOC ISR, CurrentSensor_Validate</td></tr>
+        <tr><td>FSR-08</td><td>One NTC temp sensor per IGBT module (3 total), 2-out-of-3 voting with 100 &deg;C hard cap. Critical threshold in ECC memory.</td><td class="asil-b">B</td><td>TempMonitor (2oo3)</td></tr>
+        <tr><td>FSR-09</td><td>Encoder loss &rarr; safe state within 100 ms. Sensorless fallback if implemented: &le;2 s, &le;30% tractive effort.</td><td class="asil-c">C</td><td>Encoder, ENC_Monitor</td></tr>
+        <tr><td>FSR-10</td><td>HVIL monitored continuously. Interruption &rarr; immediate PWM disable + BMS contactor open request within 50 ms.</td><td class="asil-b">B</td><td>Isolated DI</td></tr>
+        <tr><td>FSR-11</td><td>DC link bus voltage monitored with isolated ADC. OV threshold &rarr; immediate regen disable. Critical OV &rarr; SSO within 50 ms.</td><td class="asil-b">B</td><td>DCLink_Monitor</td></tr>
+        <tr><td>FSR-12</td><td>NCV57100 complementary inputs (IN+/IN&minus;) prevent HS+LS simultaneous conduction. Power-on self-test confirms.</td><td class="asil-a">A</td><td>TIM1 break ISR, POST</td></tr>
+        <tr><td>FSR-13</td><td>NCV57100 DESAT detection active on all six IGBTs. DESAT event &rarr; local PWM disable within &lt;2 us, independent of MCU.</td><td class="asil-a">A</td><td>TIM1 break ISR</td></tr>
+        <tr><td>FSR-14</td><td>STM32 breakpoint input &rarr; HW PWM disable within &lt;10 us on any critical fault. Independent of main CPU execution.</td><td class="asil-c">C</td><td>TIM1 break ISR</td></tr>
+        <tr><td>FSR-15</td><td>Independent windowed watchdog. Failure to service &rarr; automatic PWM disable + system reset. Timeout &le;50 ms.</td><td class="asil-c">C</td><td>Watchdog Manager</td></tr>
+        <tr><td>FSR-16</td><td>Power-on self-test (POST): ADC references, current sensor offsets, gate driver communications, encoder signal, HVIL continuity, watchdog, NCV57100 DESAT self-test. All must pass before PWM enable.</td><td class="asil-c">C</td><td>POST</td></tr>
+        <tr><td>FSR-17</td><td>IO board CAN heartbeat 1 s timeout. Loss &rarr; safe-state defaults (brake pressed, kickstand down) and tractive effort restricted to zero.</td><td class="asil-c">C</td><td>CAN RX ISR, State Machine</td></tr>
+        <tr><td>FSR-18</td><td>Tractive effort control limit switch monitored independently of analog pots. Activation overrides any analog value and commands zero tractive effort.</td><td class="asil-c">C</td><td>Isolated DI, Throttle module</td></tr>
+        <tr><td>FSR-19</td><td>Boot-time CRC-32 over safety-critical code and calibration data. Mismatch &rarr; PWM enable prevented, fault logged.</td><td class="asil-c">C</td><td>Bootloader</td></tr>
+        <tr><td>FSR-20</td><td>ECC RAM for all safety-critical variables. Single-bit errors corrected (SECDED). Double-bit errors &rarr; safe state.</td><td class="asil-c">C</td><td>NMI handler, FaultMgr</td></tr>
+        <tr><td>FSR-21</td><td>Monitor DC link bus undervoltage. UV &rarr; tractive effort derate, critical UV &rarr; safe state. Prevents overcurrent due to insufficient DC link voltage.</td><td class="asil-b">B</td><td>DCLink_Monitor</td></tr>
     </tbody>
 </table>
 
@@ -1341,7 +1349,7 @@ bool Validator_TempFaultConsistent(float new_threshold) {
 <div class="page-break"></div>
 <h1 id="sec13">13. Firmware Update Protocol</h1>
 
-<p>Firmware updates accepted over <strong>UART/USB</strong> or <strong>CAN</strong> — both use the same protocol. The update interface is selected automatically during the 500 ms bootloader window (CAN frame or USB enumeration detected).</p>
+<p>Firmware updates accepted over <strong>UART/USB</strong> or <strong>CAN</strong> &mdash; both use the same protocol. The update interface is selected automatically during the 500 ms bootloader window (CAN frame or USB enumeration detected).</p>
 
 <h2>13.1 Update Protocol</h2>
 
@@ -1412,7 +1420,7 @@ bool Validator_TempFaultConsistent(float new_threshold) {
     if ((tick_count % 50) == 0) { WWDG_Refresh(); IWDG_Refresh(); ExternalWDT_Toggle(); }
     if ((tick_count % 10) == 0) { SM_Run(); TorqueCmd_Update(); }
     if ((tick_count % 100) == 0) { CAN_TX_Heartbeat(); CAN_CheckHeartbeats(); }
-    if ((tick_count % 100) == 0) { Temp_Monitor_1oo3(); CurrentSensor_Validate(); }
+    if ((tick_count % 100) == 0) { Temp_Monitor_2oo3(); CurrentSensor_Validate(); }
     tick_count++;
 }</div>
 
@@ -1462,19 +1470,19 @@ bool Validator_TempFaultConsistent(float new_threshold) {
         <tr><th>ID</th><th>Limitation</th><th>Mitigation</th></tr>
     </thead>
     <tbody>
-        <tr><td>L-01</td><td>Single-core MCU, no lockstep</td><td>External watchdog; POST; 3-path SSO</td></tr>
+        <tr><td>L-01</td><td>Single-core main MCU, no lockstep</td><td>External watchdog; POST; 3-path SSO; safety coprocessor present on ControlBoard Rev G (see scope note, Section 1.1)</td></tr>
         <tr><td>L-02</td><td>SHEPWM: pre-computed tables only (no live calc in V1.0)</td><td>Tables cover typical range; V2.0 reserved</td></tr>
         <tr><td>L-03</td><td>Single CAN bus</td><td>Safe state on timeout</td></tr>
         <tr><td>L-04</td><td>No field weakening in V1.0</td><td>Planned V2.0</td></tr>
         <tr><td>L-05</td><td>Gate drivers AEC-Q100, not ASIL-rated</td><td>DESAT+UVLO+dead time; ASIL C max</td></tr>
         <tr><td>L-06</td><td>HMAC key in plaintext flash</td><td>Intentional; user is root</td></tr>
         <tr><td>L-07</td><td>No regen current limit in V1.0</td><td>BMS backstop; V1.1</td></tr>
-        <tr><td>L-08</td><td>STL is Class B (X-CUBE-CLASSB), not Class D</td><td>Documented in HARA LIMIT-07; 71 fault injection tests</td></tr>
+        <tr><td>L-08</td><td>STL is Class B (X-CUBE-CLASSB), not Class D</td><td>Documented in HARA LIMIT-07; 99 fault injection tests</td></tr>
         <tr><td>L-09</td><td>Loss model accuracy depends on user-entered IGBT parameters</td><td>Defaults from datasheet; user tunes via RTE; thermal model cross-checks against sensor</td></tr>
         <tr><td>L-10</td><td>No Dependent Failure Analysis (DFA) per ISO 26262-9</td><td>Acknowledged in HARA. Common-cause between SSO paths (e.g., PCB delamination affecting both TIM1_BKIN and PMIC EN routing) not formally analyzed. Required for ASIL C claim.</td></tr>
         <tr><td>L-11</td><td>No EMI/EMC pre-compliance assessment</td><td>Environmental EMI tests defined (E-08, E-09) but no pre-compliance testing or design margin analysis completed. Risk in unknown vehicle installations.</td></tr>
         <tr><td>L-12</td><td>12-bit ADC redundancy has coarser resolution than 16-bit primary</td><td>The 5.3x resolution difference is not a safety issue for fault detection (broken wire, stuck output are reliably caught). Subtle gain drift is not safety-critical. A second 16-bit ADC would provide higher-fidelity redundancy but is not required for ASIL-C.</td></tr>
-        <tr><td>L-13</td><td>1oo3 temp voting: single stuck-high sensor can cause unnecessary derating</td><td>No 2-out-of-3 consensus mechanism. A sensor stuck at 95C (within valid range) triggers derating even if the other two read 70C. Trade-off: thermal safety over availability.</td></tr>
+        <tr><td>L-13</td><td>2oo3 temp voting: common-cause failure of two sensors in the same direction can outvote the healthy sensor</td><td>A single outlier sensor is excluded; one stuck-high sensor no longer causes derating. Residual risk requires two sensors stuck high (within valid range), which triggers derating even if the third reads normal. Trade-off: thermal safety over availability.</td></tr>
     </tbody>
 </table>
 

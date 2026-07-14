@@ -63,8 +63,8 @@ caption::before { content: attr(data-label) "  "; }
             <p><strong>Operating Temp:</strong> &minus;40&deg;C to +85&deg;C</p>
             <p><strong>Prepared by:</strong> Thomas Liao</p>
             <p><strong>Reviewed by:</strong> (not yet reviewed)</p>
-            <p><strong>Date:</strong> July 8, 2026</p>
-            <p><strong>Version:</strong> 1.1</p>
+            <p><strong>Date:</strong> July 13, 2026</p>
+            <p><strong>Version:</strong> 1.2</p>
         </div>
     </div>
     <div class="cover-accent-line"></div>
@@ -113,7 +113,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="note">
     <div class="callout-title">Design Principle: User Sovereignty Over Anti-User DRM</div>
-    This project explicitly rejects all anti-user security mechanisms: OTP fuses, write-once flash regions, vendor-signed firmware with unreplaceable keys, encrypted bootloaders that prevent user modification, and any form of DRM that treats the hardware owner as an adversary. These mechanisms are incompatible with the open-source philosophy and provide no meaningful security benefit when the attacker already has physical access and the full source code. If a user wishes to add their own tamper protection (RDP Level 1/2, encrypted external flash, physical tamper switches) for their specific threat model, they are free to do so — the base design imposes no barriers and documents how. The security model is <strong>trust the user, protect the bus</strong>: the legitimate owner is never the threat; remote CAN bus attacks are.
+    This project explicitly rejects all anti-user security mechanisms: OTP fuses, write-once flash regions, vendor-signed firmware with unreplaceable keys, encrypted bootloaders that prevent user modification, and any form of DRM that treats the hardware owner as an adversary. These mechanisms are incompatible with the open-source philosophy and provide no meaningful security benefit when the attacker already has physical access and the full source code. If a user wishes to add their own tamper protection (RDP Level 1/2, encrypted external flash, physical tamper switches) for their specific threat model, they are free to do so &mdash; the base design imposes no barriers and documents how. The security model is <strong>trust the user, protect the bus</strong>: the legitimate owner is never the threat; remote CAN bus attacks are.
 </div>
 
 <h2>1.2 What We Actually Protect Against</h2>
@@ -155,7 +155,7 @@ caption::before { content: attr(data-label) "  "; }
     <tbody>
         <tr><td>A-01</td><td>Application firmware</td><td>STM32 internal flash</td><td>Contains all safety logic, FOC control, fault handling</td><td>Arbitrary tractive effort control, safety bypass</td></tr>
         <tr><td>A-02</td><td>Bootloader</td><td>STM32 internal flash (separate sector)</td><td>Verifies firmware before boot; root of trust</td><td>Bootloader bypass = any firmware runs unchecked</td></tr>
-        <tr><td>A-03</td><td>Firmware signing key</td><td>User possession (not on device)</td><td>Used to sign valid firmware updates</td><td>Key leak = anyone can sign valid firmware</td></tr>
+        <tr><td>A-03</td><td>Firmware signing key</td><td>User possession of build key; symmetric key compiled into STM32 bootloader flash (readable under RDP Level 0)</td><td>Used to sign valid firmware updates</td><td>Key leak = anyone can sign valid firmware</td></tr>
         <tr><td>A-04</td><td>Calibration data</td><td>STM32 flash (torque LUT, thresholds)</td><td>Defines safety limits and motor parameters</td><td>Altered limits = unsafe operation</td></tr>
         <tr><td>A-05</td><td>CAN bus communication</td><td>CAN1 (BMS), CAN2 (IO board, display, charger, ABS)</td><td>All external safety inputs and commands</td><td>Forged messages = false safety clearance</td></tr>
         <tr><td>A-06</td><td>Runtime state (RAM)</td><td>STM32 ECC RAM</td><td>Active safety variables, fault flags, tractive effort command</td><td>Corruption = incorrect safety decisions</td></tr>
@@ -235,10 +235,10 @@ caption::before { content: attr(data-label) "  "; }
     </thead>
     <tbody>
         <tr><td><strong>CSR-01</strong></td><td>CAN firmware update requires cryptographic signature verification. Unsigned or incorrectly signed firmware &rarr; reject update, log event, keep current firmware active.</td><td>T-01</td><td>HIGH</td><td>Algorithm: HMAC-SHA256 (recommended) or Ed25519. Key is user-generated, stored in a JSON config file during build, compiled into the bootloader. <strong>No OTP or write-once fuses.</strong> User can rotate keys by re-flashing bootloader with new key.</td></tr>
-        <tr><td><strong>CSR-02</strong></td><td>CAN firmware update protocol: each chunk carries a 32-bit CRC. Overall firmware image carries a cryptographic hash (SHA-256) verified before flash commit. Mismatch &rarr; abort update, erase partial image, log event.</td><td>T-02</td><td>HIGH</td><td>Chunk structure: [seq_number:2B][data:up to 64B][crc32:4B]. Final frame: [sha256:32B]. Abort on any CRC or hash mismatch. Partial flash is erased, not left in indeterminate state.</td></tr>
+        <tr><td><strong>CSR-02</strong></td><td>CAN firmware update protocol: each chunk carries a 32-bit CRC. Overall firmware image carries a cryptographic hash (SHA-256) verified before flash commit. Mismatch &rarr; abort update, erase partial image, log event.</td><td>T-02</td><td>HIGH</td><td>Chunk structure: [seq_number:2B][data:up to 64B][crc32:4B]. Final frame: [sha256:32B]. Abort on any CRC or hash mismatch. Partial flash is erased, not left in indeterminate state. Application-layer chunks are segmented into 0–6 byte CAN frames per Table 8; CRC in CHUNK_ACK covers each CAN segment, and the 32-byte SHA-256/HMAC digest is sent as four 8-byte frames.</td></tr>
         <tr><td><strong>CSR-03</strong></td><td>Anti-rollback counter stored in flash sector reserved for configuration data. Firmware with counter &le; current counter &rarr; reject. Counter increments on every successful update. Counter is user-resettable via JTAG/SWD (physical access required).</td><td>T-03</td><td>MEDIUM</td><td>Stored as 64-bit value in designated flash page. Not write-once: user can reset via debugger if they brick the counter. Normal updates increment automatically. Physical access = can reset = acceptable for open source.</td></tr>
         <tr><td><strong>CSR-04</strong></td><td>Firmware update preconditions: vehicle speed = 0 (encoder &lt; 10 rpm for &gt;2 s), brake applied (IO board), key-on, tractive effort = 0. Any precondition violated &rarr; abort update immediately.</td><td>T-06</td><td>LOW</td><td>All preconditions must be verified by bootloader (not application). Update aborts mid-transfer if preconditions change. This is defense-in-depth; the primary protection is the user's good judgment.</td></tr>
-        <tr><td><strong>CSR-05</strong></td><td>CAN bus heartbeat timeout (FSR-17) serves as DoS protection. IO board loss &rarr; safe state within 1 s. BMS loss &rarr; safe state within 5 s. These timeouts are independent of bus load.</td><td>T-04</td><td>MEDIUM</td><td>References FSR-17 from HARA. No additional CAN-specific DoS protection needed; safe-state timeout is the defense. Test: I-10 (CAN bus off recovery), I-09 (CAN bus load).</td></tr>
+        <tr><td><strong>CSR-05</strong></td><td>CAN bus heartbeat timeout (FSR-17) serves as DoS protection. IO board loss &rarr; safe state within 1 s. BMS loss &rarr; safe state within 5 s. These timeouts are independent of bus load.</td><td>T-04</td><td>MEDIUM</td><td>References FSR-17 from HARA. No additional CAN-specific DoS protection needed; safe-state timeout is the defense. Test: CT-09 (CAN DoS / heartbeat timeout), I-10 (CAN bus off recovery), I-09 (CAN bus load).</td></tr>
         <tr><td><strong>CSR-06</strong></td><td>CAN message freshness: safety-critical frames (BMS heartbeat, IO board inputs) include a 32-bit rolling counter. Frames with stale counter (&gt;5 s old) or unexpected counter gap (&gt;10) &rarr; treat as lost (safe defaults).</td><td>T-05</td><td>MEDIUM</td><td>Lightweight alternative to full SecOC. No MAC (would require shared key on every node). Rolling counter detects replay and sequence gaps. Shared counter seed established at system startup. Not cryptographically strong but sufficient for the threat model.</td></tr>
         <tr><td><strong>CSR-07</strong></td><td>Bootloader sector is not write-protected by hardware. This is intentional: the user must be able to update the bootloader. The bootloader's integrity is protected by CSR-01 (signed bootloader updates) and the user's physical custody of the hardware.</td><td>T-07</td><td>LOW</td><td>Explicit design decision for open source. STM32 RDP Level 0 (no read protection) by default. User can enable RDP Level 1 or 2 if they choose. Document how to do so, but do not mandate it.</td></tr>
     </tbody>
@@ -246,18 +246,18 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="note">
     <div class="callout-title">Why HMAC-SHA256 Over RSA/ECDSA</div>
-    HMAC-SHA256 is recommended over asymmetric algorithms (RSA, ECDSA, Ed25519) for three reasons: (1) <strong>Smaller code size</strong> in the bootloader — critical for size-constrained bootloaders; (2) <strong>Faster verification</strong> — SHA-256 is hardware-accelerated on STM32H7; (3) <strong>No PKI complexity</strong> — the user generates one key, stores it in their build environment, and signs their own firmware. The threat model does not require protection against key compromise (the user owns the key) so the non-repudiation benefits of asymmetric crypto are irrelevant here.
+    HMAC-SHA256 is recommended over asymmetric algorithms (RSA, ECDSA, Ed25519) for three reasons: (1) <strong>Smaller code size</strong> in the bootloader &mdash; critical for size-constrained bootloaders; (2) <strong>Faster verification</strong> &mdash; SHA-256 is hardware-accelerated on STM32H7; (3) <strong>No PKI complexity</strong> &mdash; the user generates one key, stores it in their build environment, and signs their own firmware. The threat model does not require protection against key compromise (the user owns the key) so the non-repudiation benefits of asymmetric crypto are irrelevant here.
 </div>
 
 <div class="page-break"></div>
 
 <h1 id="sec6">6. Test Plan</h1>
 
-<p>Eight test cases validate the cybersecurity requirements. All tests are component-level and require only a CAN interface and the VCU.</p>
+<p>Nine test cases validate the cybersecurity requirements. CT-01 through CT-06 and CT-09 require a CAN interface and the VCU. CT-07 and CT-08 additionally require SWD/JTAG access to the bootloader flash.</p>
 
 <div class="test-case">
     <div class="test-case-header">CT-01: Unsigned Firmware Update Rejected</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-01 — Unsigned firmware update via CAN is rejected.</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-01 &mdash; Unsigned firmware update via CAN is rejected.</div>
     <div class="test-field"><strong>Threat:</strong> T-01 (malicious firmware upload)</div>
     <div class="test-field"><strong>Setup:</strong> VCU with CAN update enabled. Bootloader built with known HMAC key.</div>
     <div class="test-field"><strong>Procedure:</strong>
@@ -273,7 +273,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="test-case">
     <div class="test-case-header">CT-02: Signed Firmware Update Accepted</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-01 positive path — Signed update accepted.</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-01 positive path &mdash; Signed update accepted.</div>
     <div class="test-field"><strong>Threat:</strong> T-01 (legitimate update)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -289,7 +289,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="test-case">
     <div class="test-case-header">CT-03: Corrupted Chunk Detected</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-02 — Bit flip in CAN chunk aborts update.</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-02 &mdash; Bit flip in CAN chunk aborts update.</div>
     <div class="test-field"><strong>Threat:</strong> T-02 (firmware corruption)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -304,7 +304,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="test-case">
     <div class="test-case-header">CT-04: Anti-Rollback Counter</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-03 — Downgrade attack rejected.</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-03 &mdash; Downgrade attack rejected.</div>
     <div class="test-field"><strong>Threat:</strong> T-03 (replay / downgrade)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -320,7 +320,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="test-case">
     <div class="test-case-header">CT-05: Update Preconditions</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-04 — Update only when stationary.</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-04 &mdash; Update only when stationary.</div>
     <div class="test-field"><strong>Threat:</strong> T-06 (update during motion)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -334,8 +334,8 @@ caption::before { content: attr(data-label) "  "; }
 </div>
 
 <div class="test-case">
-    <div class="test-case-header">CT-06: CAN Freshness Counter — Replay Detected</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-06 — Stale CAN frames treated as lost.</div>
+    <div class="test-case-header">CT-06: CAN Freshness Counter &mdash; Replay Detected</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-06 &mdash; Stale CAN frames treated as lost.</div>
     <div class="test-field"><strong>Threat:</strong> T-05 (forged safety frames)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -350,8 +350,8 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="test-case">
     <div class="test-case-header">CT-07: Bootloader Mutable (Design Verification)</div>
-    <div class="test-field"><strong>Objective:</strong> Verify CSR-07 — Bootloader can be updated by user.</div>
-    <div class="test-field"><strong>Threat:</strong> T-07 (bootloader replacement — intentional user action)</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-07 &mdash; Bootloader can be updated by user.</div>
+    <div class="test-field"><strong>Threat:</strong> T-07 (bootloader replacement &mdash; intentional user action)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Via SWD/JTAG, read current bootloader flash sector. Verify readable (RDP Level 0).</li>
@@ -365,7 +365,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <div class="test-case">
     <div class="test-case-header">CT-08: HMAC Key Rotation</div>
-    <div class="test-field"><strong>Objective:</strong> Verify the user can rotate firmware signing keys.</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-01 &mdash; user can rotate firmware signing keys.</div>
     <div class="test-field"><strong>Threat:</strong> T-01 (key compromise recovery)</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -378,6 +378,22 @@ caption::before { content: attr(data-label) "  "; }
         </ol>
     </div>
     <div class="test-field"><strong>Pass:</strong> Key rotation works. Old key rejected after rotation. Documented in user manual.</div>
+</div>
+
+<div class="test-case">
+    <div class="test-case-header">CT-09: CAN DoS / Heartbeat Timeout</div>
+    <div class="test-field"><strong>Objective:</strong> Verify CSR-05 &mdash; CAN bus flooding causes heartbeat loss and safe state entry.</div>
+    <div class="test-field"><strong>Threat:</strong> T-04 (CAN bus flooding / DoS)</div>
+    <div class="test-field"><strong>Procedure:</strong>
+        <ol>
+            <li>Establish normal operation with valid IO board and BMS heartbeat traffic.</li>
+            <li>Flood CAN1 with high-priority frames at &gt;80 % bus load.</li>
+            <li>Verify IO board heartbeat timeout triggers safe state within 1 s.</li>
+            <li>Repeat on CAN2 with BMS heartbeat and verify safe state within 5 s.</li>
+            <li>Verify normal operation resumes automatically after the bus flood stops and heartbeats return.</li>
+        </ol>
+    </div>
+    <div class="test-field"><strong>Pass:</strong> Safe state is entered within the FSR-17 timeout under bus flood, and the system recovers cleanly when flooding stops.</div>
 </div>
 
 <div class="page-break"></div>
@@ -438,7 +454,7 @@ caption::before { content: attr(data-label) "  "; }
     </thead>
     <tbody>
         <tr style="background:#f8d7da;"><td>No HMAC signature verification yet</td><td><strong>HIGH</strong></td><td>Add HMAC-SHA256 to bootloader; provide signing script</td><td>Medium</td></tr>
-        <tr style="background:#f8d7da;"><td>No CAN update integrity protocol yet</td><td><strong>HIGH</td><td>Define chunk format + CRC + SHA-256 hash</td><td>Low</td></tr>
+        <tr style="background:#f8d7da;"><td>No CAN update integrity protocol yet</td><td><strong>HIGH</strong></td><td>Define chunk format + CRC + SHA-256 hash</td><td>Low</td></tr>
         <tr><td>No anti-rollback counter yet</td><td>MEDIUM</td><td>Add 64-bit counter to config flash page</td><td>Low</td></tr>
         <tr><td>No freshness counter on CAN frames yet</td><td>MEDIUM</td><td>Add 32-bit rolling counter to BMS/IO board heartbeat frames</td><td>Low</td></tr>
     </tbody>
@@ -454,7 +470,7 @@ caption::before { content: attr(data-label) "  "; }
         <tr><th>TARA Threat</th><th>HARA Hazard</th><th>Shared Mitigation</th></tr>
     </thead>
     <tbody>
-        <tr><td>T-01 (malicious firmware upload)</td><td>H-01 (unintended tractive effort), H-15 (software error)</td><td>CSR-01 (firmware signing) supplements FSR-01 through FSR-04</td></tr>
+        <tr><td>T-01 (malicious firmware upload)</td><td>H-01 (unintended tractive effort), H-15 (software error)</td><td>CSR-01 (firmware signing) supplements FSR-19 (boot CRC) and FSR-16 (POST) for boot-time integrity; it does not supplement throttle-input FSRs.</td></tr>
         <tr><td>T-02 (firmware corruption)</td><td>H-15 (software error), H-14 (latched tractive effort)</td><td>CSR-02 (integrity) supplements FSR-19 (boot CRC)</td></tr>
         <tr><td>T-04 (CAN DoS)</td><td>H-03 (loss of tractive effort)</td><td>CSR-05 references FSR-17 (heartbeat timeout)</td></tr>
         <tr><td>T-05 (forged CAN frames)</td><td>H-01 (unintended tractive effort)</td><td>CSR-06 (freshness) supplements FSR-17 (safe defaults)</td></tr>
@@ -479,7 +495,7 @@ caption::before { content: attr(data-label) "  "; }
         <tr><td>ISO/SAE 21434:2021</td><td><em>Road vehicles &mdash; Cybersecurity engineering</em>. Defines threat analysis methodology, cybersecurity requirements, and validation for road vehicle electrical/electronic systems.</td></tr>
         <tr><td>SAE J3061</td><td><em>Cybersecurity Guidebook for Cyber-Physical Vehicle Systems</em>. Informative guidelines for automotive cybersecurity engineering.</td></tr>
         <tr><td>ISO 26262-3:2018</td><td><em>Road vehicles &mdash; Functional safety &mdash; Concept phase</em>. HARA methodology companion; safety/cybersecurity overlap addressed in both documents.</td></tr>
-        <tr><td>NIST SP 800-185</td><td><em>SHA-3 Derived Functions: cSHAKE, KMAC, TupleHash, and ParallelHash</em>. HMAC-SHA256 implementation reference.</td></tr>
+        <tr><td>FIPS 198-1 / NIST SP 800-107</td><td><em>FIPS 198-1 / NIST SP 800-107</em> &mdash; HMAC-SHA256 implementation reference.</td></tr>
         <tr><td>STM32H723 Reference Manual (RM0433)</td><td><em>STM32H723/733 &mdash; Arm Cortex-M7 MCU</em>. Flash protection (RDP, WRP), CRC peripheral, and bootloader application note (AN2606).</td></tr>
         <tr><td>HARA (this project)</td><td><em>Hazard Analysis and Risk Assessment &mdash; Traction Inverter/VCU</em>. Companion document covering functional safety. Cross-referenced for safety-relevant cybersecurity threats.</td></tr>
     </tbody>
@@ -497,7 +513,9 @@ caption::before { content: attr(data-label) "  "; }
         </tr>
     </thead>
     <tbody>
-        <tr><td>1.0</td><td>2026-06-13</td><td>Initial TARA release. 7 threat scenarios (T-01 through T-07), 7 cybersecurity requirements (CSR-01 through CSR-07), 8 test cases (CT-01 through CT-08). Open-source trust model: no OTP, no vendor lock-in, user-managed HMAC-SHA256 keys. ISO/SAE 21434 aligned. Cross-referenced to HARA companion document.</td></tr>
+        <tr><td>1.0</td><td>June 13, 2026</td><td>Initial TARA release. 7 threat scenarios (T-01 through T-07), 7 cybersecurity requirements (CSR-01 through CSR-07), 8 test cases (CT-01 through CT-08). Open-source trust model: no OTP, no vendor lock-in, user-managed HMAC-SHA256 keys. ISO/SAE 21434 aligned. Cross-referenced to HARA companion document.</td></tr>
+        <tr><td>1.1</td><td>July 8, 2026</td><td>User-sovereignty security model; 7 threat scenarios (T-01 through T-07); 7 Cybersecurity Requirements; 8 cybersecurity test cases. (entry added retroactively)</td></tr>
+        <tr><td>1.2</td><td>July 13, 2026</td><td>Editorial consistency pass: restored missing v1.1 revision-history entry; cross-reference and formatting fixes; CT-08 objective aligned to CSR-01 (HMAC key rotation); CT-09 added for CSR-05 CAN DoS / heartbeat timeout.</td></tr>
     </tbody>
 </table>
 

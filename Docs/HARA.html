@@ -91,8 +91,8 @@ a { word-break: break-all; color: #333; }
             <strong>Operating Temp:</strong> &minus;40&deg;C to +85&deg;C<br>
             <strong>Prepared by:</strong> Thomas Liao<br>
             <strong>Reviewed by:</strong> (not yet reviewed)<br>
-            <strong>Date:</strong> July 8, 2026<br>
-            <strong>Version:</strong> 4.0
+            <strong>Date:</strong> July 13, 2026<br>
+            <strong>Version:</strong> 4.1
         </div>
     </div>
     <div class="cover-accent-line"></div>
@@ -150,8 +150,8 @@ a { word-break: break-all; color: #333; }
     <ul>
         <li><strong>ASIL ratings are targets</strong> derived from the HARA process. They represent the assessed risk level of identified hazardous events, <strong>not a claim that the design has been verified or certified to meet those ASILs</strong>.</li>
         <li><strong>The system described is not ISO 26262 compliant.</strong> Full compliance would require: complete product development per Parts 4-6, hardware architectural metrics (SPFM &ge; 90% for ASIL B, &ge; 97% for ASIL D; LFM &ge; 60% for ASIL B, &ge; 80% for ASIL D), dependent failure analysis (DFA), software tool qualification, verification and validation testing (including fault injection), configuration management, change control, and independent safety assessment. <strong>None of these have been completed.</strong></li>
-        <li>The hardware implements a <strong>dual-MCU architecture</strong>: STM32H723ZG main MCU + STM32G474RCTx safety coprocessor. The coprocessor provides independent ADC monitoring of all safety-critical signals, 1oo2 gate drive power kill, challenge/response watchdog, independent CAN bus snooping, and bidirectional NRST. This enables <strong>ASIL D achievement for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition</strong>.</li>
-        <li>The gate driver ICs (onsemi NCV57001) are <strong>automotive-qualified (AEC-Q100)</strong> but are <strong>not ISO 26262 safety elements</strong>. No safety manual, FMEDA, or ASIL claim is available from the manufacturer. Internal protections (DESAT, anti-shoot-through, UVLO) provide hardware-level risk reduction but cannot be claimed as ASIL-rated safety mechanisms without additional justification.</li>
+        <li>The hardware implements a <strong>dual-MCU architecture</strong>: STM32H723ZG main MCU + STM32G474RCTx safety coprocessor. The coprocessor provides independent ADC monitoring of all safety-critical signals, 1oo2 gate drive power kill, challenge/response watchdog, independent CAN bus snooping, and bidirectional NRST. This makes <strong>ASIL D achievable for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition</strong>.</li>
+        <li>The gate driver ICs (onsemi NCV57100) are <strong>automotive-qualified (AEC-Q100)</strong> but are <strong>not ISO 26262 safety elements</strong>. No safety manual, FMEDA, or ASIL claim is available from the manufacturer. Internal protections (DESAT, anti-shoot-through, UVLO) provide hardware-level risk reduction but cannot be claimed as ASIL-rated safety mechanisms without additional justification.</li>
         <li><strong>Software Test Library (STL) limitation:</strong> This project uses ST's publicly available X-CUBE-CLASSB library (IEC 60730-1 Class B certified). The ISO 26262-certified Class D STL (X-CUBE-STL) requires an NDA and is not available for open-source use. The following ASIL process gaps result: no FMEDA/SPFM/LFM metrics derived for this hardware configuration; no ISO 26262 software tool qualification (compiler, static analysis); no fault injection testing campaign with coverage evidence; no independent safety assessment. ASIL decomposition using the Class B STL is a design and educational exercise only.</li>
         <li>The firmware is <strong>architecturally complete</strong>. Field-Oriented Control (FOC) is implemented. Safety mechanisms (tractive effort plausibility checking, fault ramp-down, boot CRC, challenge/response watchdog) are implemented per this document.</li>
         <li>This HARA and its accompanying Fault Injection Test Plan are <strong>living design-input documents</strong> intended to guide development and establish a safety engineering baseline. They do not constitute a product safety case, compliance certification, or warranty of fitness for any purpose.</li>
@@ -164,7 +164,7 @@ a { word-break: break-all; color: #333; }
 
 <p>The DC link is supplied from a traction battery pack with Battery Management System (BMS), though the traction inverter itself is agnostic to the DC source type provided the voltage remains within the specified operating window. The analysis covers the traction inverter/VCU unit and its interfaces to external systems that affect safety.</p>
 
-<p>The scope includes all hardware and software within the combined unit: the STM32H723ZG main MCU, the STM32G474RCTx safety coprocessor, six NCV57001 gate drivers, 3-phase IGBT power stage, current/voltage/temperature sensing, HVIL circuit, tractive effort control input processing, motor control algorithm, CAN communication, inter-MCU challenge/response watchdog, and fault handling. The Safety Coprocessor is <strong>part of the current design</strong> and provides independent monitoring, 1oo2 gate drive power kill, and ASIL B(D) decomposition.</p>
+<p>The scope includes all hardware and software within the combined unit: the STM32H723ZG main MCU, the STM32G474RCTx safety coprocessor, six NCV57100 gate drivers, 3-phase IGBT power stage, current/voltage/temperature sensing, HVIL circuit, tractive effort control input processing, motor control algorithm, CAN communication, inter-MCU challenge/response watchdog, and fault handling. The Safety Coprocessor is <strong>part of the current design</strong> and provides independent monitoring, 1oo2 gate drive power kill, and ASIL B(D) decomposition.</p>
 
 <p><strong>Out of scope:</strong> The traction motor itself (external product), the rotor position sensor/encoder (part of the external motor), the Battery Management System (BMS), the IO board, the charger, and the vehicle display — these are external CAN nodes interfaced by the VCU but not designed or manufactured by this project. The CAN protocol definitions in this document are the VCU-side interface only.</p>
 
@@ -199,7 +199,7 @@ a { word-break: break-all; color: #333; }
     <caption data-label="Table 1">System Boundary Inclusions and Exclusions</caption>
     <thead><tr><th>Category</th><th>Description</th></tr></thead>
     <tbody>
-        <tr><td><strong>In Scope</strong></td><td>Combined traction inverter/VCU PCB, six onsemi NCV57001 isolated gate drivers (non-ASIL), 3-phase 2-level IGBT bridge, <strong>STM32H723ZG main MCU + STM32G474RCTx safety coprocessor</strong> (dual independent core), phase current sensing (3-phase + DC link), DC link bus voltage sensing, phase voltage sensing, IGBT temperature sensing (3 modules, 1 NTC per module), traction motor temperature sensing, traction motor encoder input, HVIL circuit, dual redundant tractive effort control input + end-travel limit switch, CAN1 (BMS), CAN2 (ABS, display, charger, IO board), precharge control, fault handling logic, 1oo2 gate drive power supply kill (GATE_DRIVE_PWR1_ENABLE + GATE_DRIVE_PWR2_ENABLE), inter-MCU challenge/response watchdog, CY15B102Q-SXET 256 KB FRAM (coprocessor side)</td></tr>
+        <tr><td><strong>In Scope</strong></td><td>Combined traction inverter/VCU PCB, six onsemi NCV57100 isolated gate drivers (non-ASIL), 3-phase 2-level IGBT bridge, <strong>STM32H723ZG main MCU + STM32G474RCTx safety coprocessor</strong> (dual independent core), phase current sensing (3-phase + DC link), DC link bus voltage sensing, phase voltage sensing, IGBT temperature sensing (3 modules, 1 NTC per module), traction motor temperature sensing, traction motor encoder input, HVIL circuit, dual redundant tractive effort control input + end-travel limit switch, CAN1 (BMS), CAN2 (ABS, display, charger, IO board), precharge control, fault handling logic, 1oo2 gate drive power supply kill (GATE_DRIVE_PWR1_ENABLE + GATE_DRIVE_PWR2_ENABLE), inter-MCU challenge/response watchdog, CY15B102Q-SXET 256 KB FRAM (coprocessor side)</td></tr>
         <tr><td><strong>Interfaced (external)</strong></td><td>Traction battery pack with BMS (provides DC link, CAN1 heartbeat 5 s), ABS module (CAN2, independently powered), display/dash (CAN2), charger(s) (CAN2), IO board (CAN2, brake switch, kickstand switch, turn signal feedback, headlight feedback, 1 s heartbeat), 3-phase PMSM traction motor with encoder, 12 V onboard power (EC7BW-110S12 DC/DC from DC link)</td></tr>
         <tr><td><strong>Out of Scope</strong></td><td>BMS internal cell protection and contactor control, ABS hydraulic/mechanical system, charger AC-side circuitry, vehicle chassis, traction motor construction, DC link source beyond electrical interface</td></tr>
     </tbody>
@@ -215,20 +215,22 @@ a { word-break: break-all; color: #333; }
         <tr style="background:#f0f0f0;"><td colspan="3" style="text-align:center;font-weight:bold;">PRIMARY CONTROL PATH &mdash; STM32H723ZG MAIN MCU</td></tr>
         <tr><td style="width:35%;vertical-align:top;"><strong>Core Processing</strong><br>550 MHz Cortex-M7<br>ECC RAM<br>Brown-out detect<br>Internal WDT<br><br><strong>Software Functions:</strong><br>FOC motor control<br>Tractive effort command processing<br>Sensor acquisition &amp; plausibility<br>Fault detection &amp; handling<br>CAN communication (FDCAN1 + FDCAN2)<br>Safe state management<br>Gate drive power kill (Path 2a)<br><br><strong>Coprocessor interface:</strong><br>Inter-MCU UART<br>Timer sync line<br>Bidirectional NRST</td><td style="width:30%;"><strong>Interface</strong></td><td style="width:35%;"><strong>Connected System</strong></td></tr>
         <tr><td rowspan="9"></td><td>DC link (102&ndash;350 V)</td><td>Traction battery (or compatible DC source)</td></tr>
-        <tr><td>3-Phase AC via NCV57001 x6</td><td>PMSM traction motor</td></tr>
+        <tr><td>3-Phase AC via NCV57100 x6</td><td>PMSM traction motor</td></tr>
         <tr><td>CAN1 (heartbeat 5 s)</td><td>BMS</td></tr>
         <tr><td>CAN2 (heartbeat 1 s)</td><td>IO board (brake, kickstand, signals)</td></tr>
         <tr><td>CAN2</td><td>ABS module, display, charger</td></tr>
         <tr><td>Analog (dual pot + limit switch)</td><td>Tractive effort control input</td></tr>
         <tr><td>Sin/Cos analog / Hall effect</td><td>Traction motor encoder</td></tr>
         <tr><td>EC7BW-110S12</td><td>12 V onboard power rail</td></tr>
-        <tr><td>FLT (OR'd, active low)</td><td>Six NCV57001 fault outputs</td></tr>
-        <tr style="background:#e8f5e9;"><td colspan="3" style="text-align:center;font-weight:bold;">HARDWARE PROTECTION LAYER &mdash; NCV57001 GATE DRIVERS (NON-ASIL)</td></tr>
-        <tr><td colspan="3">Six NCV57001 devices provide <strong>local hardware protection</strong> for each IGBT: DESAT short-circuit detection (&lt;2 us), complementary anti-shoot-through inputs, UVLO, active Miller clamp, soft turn-off, gate active pull-down. These protections operate independently of the STM32 and provide the first line of defense against power stage faults. All six FLT outputs are OR'd together and fed to the STM32 fault input. <strong>Note: these protections are not ASIL-rated but provide valuable hardware-level risk reduction.</strong></td></tr>
+        <tr><td>FLT (OR'd, active low)</td><td>Six NCV57100 fault outputs</td></tr>
+        <tr style="background:#e8f5e9;"><td colspan="3" style="text-align:center;font-weight:bold;">HARDWARE PROTECTION LAYER &mdash; NCV57100 GATE DRIVERS (NON-ASIL)</td></tr>
+        <tr><td colspan="3">Six NCV57100 devices provide <strong>local hardware protection</strong> for each IGBT: DESAT short-circuit detection (&lt;2 us), complementary anti-shoot-through inputs, UVLO, active Miller clamp, soft turn-off, gate active pull-down. These protections operate independently of the STM32 and provide the first line of defense against power stage faults. All six FLT outputs are OR'd together and fed to the STM32 fault input. <strong>Note: these protections are not ASIL-rated but provide valuable hardware-level risk reduction.</strong></td></tr>
         <tr style="background:#e8f5e9;"><td colspan="3" style="text-align:center;font-weight:bold;">INDEPENDENT SAFETY MONITOR &mdash; STM32G474RCTx SAFETY COPROCESSOR</td></tr>
-        <tr><td colspan="3"><strong>Core:</strong> 170 MHz Cortex-M4+FPU, 8 MHz crystal, independent 3.3 V supply, independent oscillator.<br><strong>Independent ADC access:</strong> All 4 current sense signals (phase U/V/W + DC link) + REF, all 3 heatsink temperature sensors + motor temp, all encoder signals (Hall U/V/W, Sin/Cos).<br><strong>Independent gate drive monitoring:</strong> GATE_DRIVE_FAULT (OR'd FLT), GATE_DRIVE_READY, GATE_DRIVE_RESET, GATE_DRIVE_PWR1_FEEDBACK, GATE_DRIVE_PWR2_FEEDBACK. All 6 PWM outputs monitored (PH_U/V/W_HIGH/LOW).<br><strong>Independent CAN:</strong> FDCAN2 + FDCAN3 — can snoop both CAN buses to cross-check torque commands and node heartbeats.<br><strong>Inter-MCU communication:</strong> Dedicated UART + timer sync line + bidirectional NRST cross-reset.<br><strong>1oo2 gate drive power kill:</strong> GATE_DRIVE_PWR2_ENABLE (coprocessor) in logical-OR with GATE_DRIVE_PWR1_ENABLE (main). Either MCU deasserting its enable kills all six gate drive supplies. Each enable has independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB).<br><strong>Challenge/response watchdog:</strong> Coprocessor issues challenge; main MCU must respond within window. Failure &rarr; coprocessor asserts NRST on main MCU &rarr; SSO.<br><strong>Storage:</strong> CY15B102Q-SXET 256 KB FRAM for fault logs, configuration, hour meter, odometer. Hardware WP pin.<br><strong>Safe state authority:</strong> Coprocessor can independently trigger SSO via gate drive power kill, gate drive RESET, or main MCU NRST.</td></tr>
+        <tr><td colspan="3"><strong>Core:</strong> 170 MHz Cortex-M4+FPU, 8 MHz crystal, shared +3.3 V rail (dedicated RD7-12S033R DC/DC converter), independent oscillator.<br><strong>Independent ADC access:</strong> All 4 current sense signals (phase U/V/W + DC link) + REF, all 3 heatsink temperature sensors + motor temp, all encoder signals (Hall U/V/W, Sin/Cos).<br><strong>Independent gate drive monitoring:</strong> GATE_DRIVE_FAULT (OR'd FLT), GATE_DRIVE_READY, GATE_DRIVE_RESET, GATE_DRIVE_PWR1_FEEDBACK, GATE_DRIVE_PWR2_FEEDBACK. All 6 PWM outputs monitored (PH_U/V/W_HIGH/LOW).<br><strong>Independent CAN:</strong> FDCAN2 + FDCAN3 — can snoop both CAN buses to cross-check torque commands and node heartbeats.<br><strong>Inter-MCU communication:</strong> Dedicated UART + timer sync line + bidirectional NRST cross-reset.<br><strong>1oo2 gate drive power kill:</strong> GATE_DRIVE_PWR2_ENABLE (coprocessor) in logical-OR with GATE_DRIVE_PWR1_ENABLE (main). Either MCU deasserting its enable kills all six gate drive supplies. Each enable has independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB).<br><strong>Challenge/response watchdog:</strong> Coprocessor issues challenge; main MCU must respond within window. Failure &rarr; coprocessor asserts NRST on main MCU &rarr; SSO.<br><strong>Storage:</strong> CY15B102Q-SXET 256 KB FRAM for fault logs, configuration, hour meter, odometer. Hardware WP pin.<br><strong>Safe state authority:</strong> Coprocessor can independently trigger SSO via gate drive power kill, gate drive RESET, or main MCU NRST.</td></tr>
+        <tr style="background:#e8f5e9;"><td colspan="3" style="text-align:center;font-weight:bold;">RAIL SUPERVISOR &mdash; TPS389006-Q1 6-CHANNEL WINDOW SUPERVISOR</td></tr>
+        <tr><td colspan="3">A TPS389006-Q1 six-channel window supervisor monitors the +3.3 V, +5 V, +12 V, and sensor +5 V rails plus both gate-drive power feedbacks (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB). Window thresholds are I2C-configured by the main MCU at boot. On any out-of-window rail fault &mdash; including brownout of the +3.3 V rail shared by both MCUs &mdash; its NIRQ output asserts DRIVER_RESET directly, forcing all six NCV57100 outputs off independent of both MCUs. The device is TI Functional Safety-Compliant and supports designs up to SIL 3 / ASIL D per TI. The boot-time I2C threshold configuration is a dependency to be covered by the pending DFA (LIMIT-08).</td></tr>
         <tr style="background:#fff3cd;"><td colspan="3" style="text-align:center;font-weight:bold;">SAFE STATE ACTUATION LAYER &mdash; SIX REDUNDANT SSO PATHWAYS</td></tr>
-        <tr><td colspan="3"><strong>Path 1 (hardware, &lt;100 ns):</strong> TIM1 break input (TIM1_BKIN) &rarr; hardware clears MOE, all PWM outputs disabled. Triggered by OR'd gate driver FLT (DESAT/UVLO) or software fault. Independent of both CPU states after trigger.<br><br><strong>Path 2a (active, ~10 us):</strong> Main MCU &rarr; GATE_DRIVE_PWR1_ENABLE low &rarr; all six Murata MGJ2D121509MPC-R7 supplies shut down &rarr; NCV57001 UVLO &rarr; active pull-down &rarr; SSO. Feedback via GATE_DRIVE_PWR1_FB.<br><br><strong>Path 2b (active, ~10 us):</strong> Coprocessor &rarr; GATE_DRIVE_PWR2_ENABLE low &rarr; same supply shutdown. Independent of Path 2a. Feedback via GATE_DRIVE_PWR2_FB. Either Path 2a or 2b alone achieves SSO (1oo2).<br><br><strong>Path 3 (hardware, passive):</strong> Loss of shared 3.3V rail &rarr; NCV57001 VDD lost &rarr; internal active pull-down &rarr; SSO. Automatic, no software intervention.<br><br><strong>Path 4 (active, &lt;1 us):</strong> Either MCU &rarr; GATE_DRIVE_RESET asserted &rarr; all NCV57001 RESET &rarr; immediate soft turn-off &rarr; SSO. Both MCUs share the RESET line (either can assert).<br><br><strong>Path 5 (active, ~100 ms):</strong> Coprocessor challenge/response watchdog failure &rarr; coprocessor asserts main MCU NRST &rarr; system reset &rarr; SSO during boot. Main MCU WDT timeout as backup.<br><br><strong>Path 6 (active, &lt;10 us):</strong> Coprocessor detects critical fault independently &rarr; asserts GATE_DRIVE_PWR2_ENABLE low + GATE_DRIVE_RESET &rarr; SSO without relying on main MCU.</td></tr>
+        <tr><td colspan="3"><strong>Path 1 (hardware, &lt;100 ns):</strong> TIM1 break input (TIM1_BKIN) &rarr; hardware clears MOE, all PWM outputs disabled. Triggered by OR'd gate driver FLT (DESAT/UVLO) or software fault. Independent of both CPU states after trigger.<br><br><strong>Path 2a (active, ~10 us):</strong> Main MCU &rarr; GATE_DRIVE_PWR1_ENABLE low &rarr; all six Murata MGJ2D121509MPC-R7 supplies shut down &rarr; NCV57100 UVLO &rarr; active pull-down &rarr; SSO. Feedback via GATE_DRIVE_PWR1_FB.<br><br><strong>Path 2b (active, ~10 us):</strong> Coprocessor &rarr; GATE_DRIVE_PWR2_ENABLE low &rarr; same supply shutdown. Independent of Path 2a. Feedback via GATE_DRIVE_PWR2_FB. Either Path 2a or 2b alone achieves SSO (1oo2). The ~10 us figures are actuation-only; time-to-SSO on the power-kill paths additionally depends on gate-bias rail decay to the NCV57100 UVLO threshold and is under characterization.<br><br><strong>Path 3 (hardware, passive):</strong> Loss of shared 3.3V rail &rarr; NCV57100 VDD lost &rarr; internal active pull-down &rarr; SSO. Automatic, no software intervention.<br><br><strong>Path 4 (active, &lt;1 us):</strong> Either MCU &rarr; DRIVER_RESET asserted &rarr; all NCV57100 RESET inputs &rarr; outputs immediately disabled (hard turn-off via OUTL active pull-down; on the NCV57100, soft turn-off exists only on the DESAT path) &rarr; SSO. Both MCUs share the RESET line (either can assert). The TPS389006-Q1 rail supervisor is an additional actuator on this pathway: on any monitored-rail fault, including brownout of the +3.3 V rail shared by both MCUs, it asserts DRIVER_RESET directly and forces all NCV57100 outputs off, independent of both MCUs.<br><br><strong>Path 5 (active, ~100 ms):</strong> Coprocessor challenge/response watchdog failure &rarr; coprocessor asserts main MCU NRST &rarr; system reset &rarr; SSO during boot. Main MCU WDT timeout as backup.<br><br><strong>Path 6 (active, &lt;10 us):</strong> Coprocessor detects critical fault independently &rarr; asserts GATE_DRIVE_PWR2_ENABLE low + GATE_DRIVE_RESET &rarr; SSO without relying on main MCU.</td></tr>
     </tbody>
 </table>
 
@@ -252,13 +254,13 @@ a { word-break: break-all; color: #333; }
         <tr><td>MCU latch-up / runaway</td><td>Windowed watchdog &le;50 ms (FSR-15); breakpoint HW PWM disable (FSR-14)</td><td>WDT is on-chip; common-cause with MCU failure possible</td></tr>
         <tr><td rowspan="2"><strong>Loss of tractive effort</strong> (H-03, H-03a)</td><td>Fault-triggered safe state entry</td><td>Torque ramp-down at &le;200 Nm/s before SSO (FSR-05); gradual removal prevents destabilization</td><td>Implemented via controlled deceleration profile</td></tr>
         <tr><td>External system loss (CAN, BMS)</td><td>CAN heartbeat timeouts with safe defaults (FSR-17); graceful degradation</td><td>IO board loss &rarr; zero tractive effort (safe but abrupt if rider not expecting)</td></tr>
-        <tr><td rowspan="2"><strong>Over-torque</strong> (H-06)</td><td>Excessive tractive effort command</td><td>Software torque limit LUT (FSR-07); torque command plausibility (FSR-02); coprocessor independent current monitoring with cross-check</td><td>DESAT handles hard short-circuit (&lt;2 us). Regular overcurrent detected within 100 ms by dual-MCU integrated monitoring &mdash; sufficient for safe torque off without hardware damage. No separate HW OCP comparator required.</td></tr>
-        <tr><td>Short-circuit / shoot-through</td><td>NCV57001 DESAT (&lt;2 us) (FSR-13); complementary anti-shoot-through inputs (FSR-12); active Miller clamp</td><td>Gate drivers are non-ASIL; coprocessor independently monitors all 6 PWM output pairs for deadtime violations and stuck-on/stuck-off</td></tr>
-        <tr><td><strong>Over-temperature</strong> (H-07)</td><td>IGBT thermal runaway</td><td>3 IGBT modules, 1 NTC sensor per module, 1-out-of-3 voting highest wins (FSR-08); progressive derating; critical threshold &rarr; SSO</td><td>1oo3 voter implemented; stuck-high sensor can cause unnecessary derating (known trade-off: safety over availability)</td></tr>
+        <tr><td rowspan="2"><strong>Over-torque</strong> (H-06)</td><td>Excessive tractive effort command</td><td>Software torque limit LUT (FSR-07); torque command plausibility (FSR-02); coprocessor independent current monitoring with cross-check</td><td>DESAT handles hard short-circuit (&lt;2 us). Regular overcurrent detected within 100 ms by dual-MCU integrated monitoring &mdash; sufficient for safe state off without hardware damage. No separate HW OCP comparator required.</td></tr>
+        <tr><td>Short-circuit / shoot-through</td><td>NCV57100 DESAT (&lt;2 us) (FSR-13); complementary anti-shoot-through inputs (FSR-12); active Miller clamp</td><td>Gate drivers are non-ASIL; coprocessor independently monitors all 6 PWM output pairs for deadtime violations and stuck-on/stuck-off</td></tr>
+        <tr><td><strong>Over-temperature</strong> (H-07)</td><td>IGBT thermal runaway</td><td>3 IGBT modules, 1 NTC sensor per module, 2-out-of-3 voting with 100 &deg;C hard cap (FSR-08); progressive derating; critical threshold &rarr; SSO</td><td>2oo3 voter implemented; stuck-high sensor can cause unnecessary derating (known trade-off: safety over availability)</td></tr>
         <tr><td><strong>Encoder loss</strong> (H-08)</td><td>Loss of rotor position feedback</td><td>Encoder timeout detection &lt;100 ms (FSR-09); immediate SSO on loss</td><td>Single encoder (no redundancy); bounded sensorless fallback if implemented</td></tr>
         <tr><td><strong>DC link overvoltage</strong> (H-10)</td><td>Regen-induced bus rise</td><td>Isolated ADC monitoring (FSR-11); regen disable at warning threshold; SSO at critical threshold</td><td>None significant</td></tr>
         <tr><td><strong>HV isolation</strong> (H-09, H-11)</td><td>HV exposure / contactor weld</td><td>HVIL continuous monitoring (FSR-10); interruption &rarr; PWM disable + contactor open request</td><td>Contactor control is in BMS domain; VCU can only request</td></tr>
-        <tr><td><strong>Safe state failure</strong> (H-13, H-14)</td><td>Cannot reach SSO; latched tractive effort</td><td>Six redundant SSO pathways: TIM1_BKIN hardware (&lt;100 ns), GATE_DRIVE_PWR1_ENABLE (main, Path 2a), GATE_DRIVE_PWR2_ENABLE (coprocessor, Path 2b), shared 3.3V rail loss &rarr; NCV57001 pull-down (Path 3), GATE_DRIVE_RESET (either MCU, Path 4), coprocessor watchdog &rarr; NRST (Path 5), coprocessor independent fault trigger (Path 6). WDT reset (FSR-15); POST before PWM enable (FSR-16).</td><td>1oo2 power kill: either GATE_DRIVE_PWR1_ENABLE or GATE_DRIVE_PWR2_ENABLE going low achieves SSO. Each has independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB). Coprocessor provides fully independent safe state actuation. Six pathways provide extensive redundancy against any single-point failure.</td></tr>
+        <tr><td><strong>Safe state failure</strong> (H-13, H-14)</td><td>Cannot reach SSO; latched tractive effort</td><td>Six redundant SSO pathways (Path 2a and Path 2b are redundant channels of one 1oo2 power-kill pathway): Path 1 = TIM1_BKIN hardware (&lt;100 ns); Path 2a/2b = 1oo2 gate-drive power kill (GATE_DRIVE_PWR1_ENABLE / GATE_DRIVE_PWR2_ENABLE); Path 3 = shared 3.3 V rail loss &rarr; NCV57100 pull-down; Path 4 = GATE_DRIVE_RESET; Path 5 = coprocessor watchdog &rarr; NRST; Path 6 = coprocessor independent fault trigger. WDT reset (FSR-15); POST before PWM enable (FSR-16).</td><td>1oo2 power kill: either GATE_DRIVE_PWR1_ENABLE or GATE_DRIVE_PWR2_ENABLE going low achieves SSO. Each has independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB). Coprocessor provides fully independent safe state actuation. Six pathways provide extensive redundancy against any single-point failure.</td></tr>
         <tr><td><strong>Gate driver fault</strong> (H-16, H-17)</td><td>DESAT/UVLO not detected; PWM deadtime violation</td><td>OR'd FLT input to STM32 (FSR-13); DESAT self-test at POST (FSR-16); complementary inputs (FSR-12)</td><td>OR'd FLT monitored by both MCUs; coprocessor additionally monitors individual READY signals and all 6 PWM outputs for independent fault diagnosis</td></tr>
     </tbody>
 </table>
@@ -281,22 +283,22 @@ a { word-break: break-all; color: #333; }
         <tr><td>DC link voltage range</td><td>48 V &ndash; 350 V (nominal 102 V &ndash; 320 V)</td></tr>
         <tr><td>DC link source</td><td>Traction battery with BMS (or compatible DC source)</td></tr>
         <tr><td>Main MCU</td><td>STM32H723ZG, 550 MHz Cortex-M7, ECC RAM, FDCAN1/2, HRTIM</td></tr>
-        <tr><td>Gate driver</td><td>onsemi NCV57001 x6 (AEC-Q100, non-ASIL)</td></tr>
+        <tr><td>Gate driver</td><td>onsemi NCV57100 x6 (AEC-Q100, non-ASIL)</td></tr>
         <tr><td>Isolation</td><td>&gt;5 kV<sub>rms</sub> (reinforced) per channel</td></tr>
         <tr><td>Power stage</td><td>3-phase 2-level IGBT bridge</td></tr>
         <tr><td>Onboard DC/DC</td><td>Cincon EC7BW-110S12 (railway grade, EN 50155)</td></tr>
-        <tr><td>Fail-safe default</td><td>Six-switch-open (SSO) via NCV57001 active pull-down</td></tr>
+        <tr><td>Fail-safe default</td><td>Six-switch-open (SSO) via NCV57100 active pull-down</td></tr>
         <tr><td>Gate kill paths</td><td>STM32 breakpoint input only (single path)</td></tr>
-        <tr><td>FLT outputs</td><td>All six NCV57001 FLT OR'd to single STM32 GPIO</td></tr>
+        <tr><td>FLT outputs</td><td>All six NCV57100 FLT OR'd to single STM32 GPIO</td></tr>
         <tr><td>Regenerative braking</td><td>One-pedal (tractive effort control rollback), not wheel-lock capable</td></tr>
     </tbody>
 </table>
 
 <h2 id="sec2-5">2.5 Gate Drivers (Non-ASIL)</h2>
-<p>Six <strong>onsemi NCV57001</strong> isolated high-current IGBT gate drivers. Automotive-qualified per AEC-Q100. These devices are <strong>not ISO 26262 safety elements</strong> &mdash; no safety manual, FMEDA, or ASIL claim is available.</p>
+<p>Six <strong>onsemi NCV57100</strong> isolated high-current IGBT gate drivers. Automotive-qualified per AEC-Q100. These devices are <strong>not ISO 26262 safety elements</strong> &mdash; no safety manual, FMEDA, or ASIL claim is available.</p>
 
 <table>
-    <caption data-label="Table 5">NCV57001 Safety-Relevant Features</caption>
+    <caption data-label="Table 5">NCV57100 Safety-Relevant Features</caption>
     <thead><tr><th>Feature</th><th>Specification</th><th>Safety Role</th><th>ASIL Credit</th></tr></thead>
     <tbody>
         <tr><td>Reinforced isolation</td><td>&gt;5 kV<sub>rms</sub>, 1200 V working</td><td>HV-to-logic barrier</td><td>Hardware only</td></tr>
@@ -312,7 +314,7 @@ a { word-break: break-all; color: #333; }
 </table>
 
 <div class="note">
-    <strong>Non-ASIL Gate Driver Implications:</strong> The NCV57001 internal protections provide valuable hardware-level risk reduction but cannot be counted toward ASIL metrics. The OR'd FLT output is monitored by <strong>both</strong> the main MCU (via TIM1_BKIN) and the coprocessor (via independent GPIO). Either MCU detecting FLT can trigger SSO. The coprocessor additionally monitors each NCV57001's READY output and can detect a stuck-active FLT line through its independent PWM output monitoring (all 6 phase high/low signals). This dual monitoring closes the single-point FLT path gap.
+    <strong>Non-ASIL Gate Driver Implications:</strong> The NCV57100 internal protections provide valuable hardware-level risk reduction but cannot be counted toward ASIL metrics. The OR'd FLT output is monitored by <strong>both</strong> the main MCU (via TIM1_BKIN) and the coprocessor (via independent GPIO). Either MCU detecting FLT can trigger SSO. The coprocessor additionally monitors each NCV57100's READY output and can detect a stuck-active FLT line through its independent PWM output monitoring (all 6 phase high/low signals). This dual monitoring closes the single-point FLT path gap.
 </div>
 
 <h2 id="sec2-6">2.6 Onboard Power</h2>
@@ -343,7 +345,7 @@ a { word-break: break-all; color: #333; }
         <li><strong>Bidirectional NRST</strong> — coprocessor can reset main MCU; main MCU can reset coprocessor</li>
         <li><strong>256 KB FRAM</strong> (CY15B102Q-SXET) for fault logs, configuration, hour meter, odometer</li>
     </ul>
-    The coprocessor enables <strong>ASIL D claims for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition</strong>. Both MCUs must independently agree that operation is safe; either can trigger SSO.
+    The coprocessor enables <strong>target ASIL D claims for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition</strong>. Both MCUs must independently agree that operation is safe; either can trigger SSO.
 </div>
 
 <div class="page-break"></div>
@@ -507,8 +509,8 @@ a { word-break: break-all; color: #333; }
         <tr><td><strong>H-09</strong></td><td>OS-01 (crash/service)</td><td>S3</td><td>E1</td><td>C2</td><td class="asil-a">A</td><td class="asil-a">A</td><td>HV shock. HVIL + reinforced isolation.</td></tr>
         <tr><td><strong>H-10</strong></td><td>OS-08 (regen downhill)</td><td>S3</td><td>E2</td><td>C2</td><td class="asil-b">B</td><td class="asil-b">B</td><td>DC link overvoltage from regen.</td></tr>
         <tr><td><strong>H-11</strong></td><td>OS-01 (post-crash)</td><td>S3</td><td>E1</td><td>C3</td><td class="asil-b">B</td><td class="asil-b">B</td><td>HV present after crash endangers responders.</td></tr>
-        <tr><td><strong>H-12</strong></td><td>OS-07 (hard accel)</td><td>S3</td><td>E2</td><td>C3</td><td class="asil-c">C</td><td class="asil-c">C</td><td>Shoot-through. NCV57001 anti-shoot-through is HW non-ASIL. Coprocessor independently monitors all 6 PWM output pairs for deadtime violations and stuck-on/stuck-off.</td></tr>
-        <tr><td><strong>H-13</strong></td><td>OS-06 (fault at speed)</td><td>S3</td><td>E3</td><td>C3</td><td class="asil-d">D</td><td class="asil-d">D</td><td>Cannot reach safe state. Six redundant SSO pathways (TIM1_BKIN, GATE_DRIVE_PWR1_ENABLE, GATE_DRIVE_PWR2_ENABLE, 3.3V rail loss, GATE_DRIVE_RESET, coprocessor watchdog/NRST). 1oo2 power kill with independent feedback.</td></tr>
+        <tr><td><strong>H-12</strong></td><td>OS-07 (hard accel)</td><td>S3</td><td>E2</td><td>C3</td><td class="asil-c">C</td><td class="asil-c">C</td><td>Shoot-through. NCV57100 anti-shoot-through is HW non-ASIL. Coprocessor independently monitors all 6 PWM output pairs for deadtime violations and stuck-on/stuck-off.</td></tr>
+        <tr><td><strong>H-13</strong></td><td>OS-06 (fault at speed)</td><td>S3</td><td>E3</td><td>C3</td><td class="asil-d">D</td><td class="asil-d">D</td><td>Six redundant SSO pathways (Path 1: TIM1_BKIN; Path 2: 1oo2 power kill via GATE_DRIVE_PWR1_ENABLE / GATE_DRIVE_PWR2_ENABLE; Path 3: 3.3 V rail loss; Path 4: GATE_DRIVE_RESET; Path 5: coprocessor watchdog/NRST; Path 6: coprocessor independent fault trigger).</td></tr>
         <tr><td><strong>H-14</strong></td><td>OS-06 (highway)</td><td>S3</td><td>E3</td><td>C3</td><td class="asil-c">C</td><td class="asil-c">C</td><td>Stuck tractive effort command. WDT catches CPU halt.</td></tr>
         <tr><td><strong>H-15</strong></td><td>OS-06 (highway)</td><td>S3</td><td>E3</td><td>C3</td><td class="asil-d">D</td><td class="asil-d">D</td><td>Software error producing incorrect tractive effort. Coprocessor provides independent verification: cross-checks commanded torque vs. measured currents, monitors CAN torque commands, and can trigger independent SSO via GATE_DRIVE_PWR2_ENABLE.</td></tr>
         <tr><td><strong>H-16</strong></td><td>OS-07 (hard accel)</td><td>S3</td><td>E2</td><td>C3</td><td class="asil-c">C</td><td class="asil-c">C</td><td>Gate driver fault not acted upon. Both MCUs independently monitor the OR'd FLT line. Coprocessor additionally monitors individual READY signals and PWM outputs to detect stuck-active FLT.</td></tr>
@@ -548,7 +550,7 @@ a { word-break: break-all; color: #333; }
         <tr><td><strong>SG-11</strong></td><td>Detect HVIL interruption, request contactor open within 100 ms.</td><td class="asil-b">B</td><td class="asil-b">B</td><td>H-11</td><td>SSO, HV disconnect</td></tr>
         <tr><td><strong>SG-12</strong></td><td>Prevent IGBT shoot-through. Risk &rarr; PWM disable &lt;10 us via hardware.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>H-12</td><td>SSO, HW PWM kill</td></tr>
         <tr><td><strong>SG-13</strong></td><td>Achieve safe state (SSO) within 200 ms of any fault. Safe state entry independent of main control loop.</td><td class="asil-d">D</td><td class="asil-d">D</td><td>H-13, H-14</td><td>SSO, HW-enforced</td></tr>
-        <tr><td><strong>SG-14</strong></td><td>Detect any NCV57001 fault (DESAT, UVLO, TSD) and transition to safe state.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>H-16</td><td>SSO, FLT detect</td></tr>
+        <tr><td><strong>SG-14</strong></td><td>Detect any NCV57100 fault (DESAT, UVLO, TSD) and transition to safe state.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>H-16</td><td>SSO, FLT detect</td></tr>
         <tr><td><strong>SG-15</strong></td><td>Detect PWM deadtime violations and stuck-on faults. Deadtime collapse or stuck-high &gt;100 us &rarr; safe state.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>H-17</td><td>SSO, PWM kill</td></tr>
 
     </tbody>
@@ -578,15 +580,15 @@ a { word-break: break-all; color: #333; }
         <tr><td><strong>FSR-05</strong></td><td>On fault, ramp down tractive effort at &le;200 Nm/s before SSO. Abrupt removal prohibited unless &lt;50 ms safety timing requires faster response.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>SG-03</td></tr>
         <tr><td><strong>FSR-06</strong></td><td>Monitor regenerative braking tractive effort continuously. Uncommanded &gt;10 Nm for &gt;200 ms &rarr; safe state.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>SG-05</td></tr>
         <tr><td><strong>FSR-07</strong></td><td>Max tractive effort limit: software LUT on both MCUs with cross-check. Dual-MCU independent current monitoring detects overcurrent within 100 ms. DESAT handles hard short-circuit (&lt;2 us).</td><td class="asil-c">C</td><td class="asil-c">C</td><td>SG-06</td></tr>
-        <tr><td><strong>FSR-08</strong></td><td>One NTC temp sensor per IGBT module (3 total), 1-out-of-3 voting (highest wins). Critical threshold in ECC memory.</td><td class="asil-b">B</td><td class="asil-b">B</td><td>SG-07</td></tr>
+        <tr><td><strong>FSR-08</strong></td><td>One NTC temp sensor per IGBT module (3 total), 2-out-of-3 voting with 100 &deg;C hard cap. Critical threshold in ECC memory.</td><td class="asil-b">B</td><td class="asil-b">B</td><td>SG-07</td></tr>
         <tr><td><strong>FSR-09</strong></td><td>Encoder loss &rarr; safe state within 100 ms. Sensorless fallback if implemented: &le;2 s, &le;30% tractive effort.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>SG-08</td></tr>
         <tr><td><strong>FSR-10</strong></td><td>HVIL monitored continuously. Interruption &rarr; immediate PWM disable + BMS contactor open request within 50 ms.</td><td class="asil-b">B</td><td class="asil-b">B</td><td>SG-09, SG-11</td></tr>
         <tr><td><strong>FSR-11</strong></td><td>DC link bus voltage monitored with isolated ADC. OV threshold &rarr; immediate regen disable. Critical OV &rarr; SSO within 50 ms.</td><td class="asil-b">B</td><td class="asil-b">B</td><td>SG-10</td></tr>
-        <tr><td><strong>FSR-12</strong></td><td>NCV57001 complementary inputs (IN+/IN&minus;) prevent HS+LS simultaneous conduction. Power-on self-test confirms.</td><td class="asil-c">C</td><td class="asil-a">A</td><td>SG-12</td></tr>
-        <tr><td><strong>FSR-13</strong></td><td>NCV57001 DESAT detection active on all six IGBTs. DESAT event &rarr; local PWM disable within &lt;2 us, independent of MCU.</td><td class="asil-c">C</td><td class="asil-a">A</td><td>SG-12, SG-14</td></tr>
+        <tr><td><strong>FSR-12</strong></td><td>NCV57100 complementary inputs (IN+/IN&minus;) prevent HS+LS simultaneous conduction. Power-on self-test confirms.</td><td class="asil-c">C</td><td class="asil-a">A</td><td>SG-12</td></tr>
+        <tr><td><strong>FSR-13</strong></td><td>NCV57100 DESAT detection active on all six IGBTs. DESAT event &rarr; local PWM disable within &lt;2 us, independent of MCU.</td><td class="asil-c">C</td><td class="asil-a">A</td><td>SG-12, SG-14</td></tr>
         <tr><td><strong>FSR-14</strong></td><td>STM32 breakpoint input &rarr; HW PWM disable within &lt;10 us on any critical fault. Independent of main CPU execution.</td><td class="asil-d">D</td><td class="asil-c">C</td><td>SG-13</td></tr>
         <tr><td><strong>FSR-15</strong></td><td>Independent windowed watchdog. Failure to service &rarr; automatic PWM disable + system reset. Timeout &le;50 ms.</td><td class="asil-d">D</td><td class="asil-c">C</td><td>SG-13, SG-01</td></tr>
-        <tr><td><strong>FSR-16</strong></td><td>Power-on self-test (POST): ADC references, current sensor offsets, gate driver communications, encoder signal, HVIL continuity, watchdog, NCV57001 DESAT self-test. All must pass before PWM enable.</td><td class="asil-d">D</td><td class="asil-c">C</td><td>SG-13</td></tr>
+        <tr><td><strong>FSR-16</strong></td><td>Power-on self-test (POST): ADC references, current sensor offsets, gate driver communications, encoder signal, HVIL continuity, watchdog, NCV57100 DESAT self-test. All must pass before PWM enable.</td><td class="asil-d">D</td><td class="asil-c">C</td><td>SG-13</td></tr>
         <tr><td><strong>FSR-17</strong></td><td>IO board CAN heartbeat 1 s timeout. Loss &rarr; safe-state defaults (brake pressed, kickstand down) and tractive effort restricted to zero.</td><td class="asil-c">C</td><td class="asil-c">C</td><td>SG-01</td></tr>
         <tr><td><strong>FSR-18</strong></td><td>Tractive effort control limit switch monitored independently of analog pots. Activation overrides any analog value and commands zero tractive effort.</td><td class="asil-d">D</td><td class="asil-c">C</td><td>SG-01</td></tr>
         <tr><td><strong>FSR-19</strong></td><td>Boot-time CRC-32 over safety-critical code and calibration data. Mismatch &rarr; PWM enable prevented, fault logged.</td><td class="asil-d">D</td><td class="asil-c">C</td><td>SG-01, SG-13</td></tr>
@@ -625,11 +627,11 @@ a { word-break: break-all; color: #333; }
         <tr><td>FSR-09</td><td class="asil-c">C</td><td class="asil-c">C</td><td>Limited</td><td>Single encoder (external constraint)</td><td>Immediate SSO on loss; bounded sensorless if used</td></tr>
         <tr><td>FSR-10</td><td class="asil-b">B</td><td class="asil-b">B</td><td>Covered</td><td>HVIL circuit implemented</td><td>Verify &le;50 ms E2E</td></tr>
         <tr><td>FSR-11</td><td class="asil-b">B</td><td class="asil-b">B</td><td>Covered</td><td>DC link isolated ADC</td><td>Define OV thresholds</td></tr>
-        <tr><td>FSR-12</td><td class="asil-c">C</td><td class="asil-a">A</td><td>Covered</td><td>NCV57001 complementary inputs</td><td>Non-ASIL; no credit claimed</td></tr>
-        <tr><td>FSR-13</td><td class="asil-c">C</td><td class="asil-a">A</td><td>Covered</td><td>NCV57001 DESAT on all six</td><td>Non-ASIL; no credit claimed</td></tr>
+        <tr><td>FSR-12</td><td class="asil-c">C</td><td class="asil-a">A</td><td>Covered</td><td>NCV57100 complementary inputs</td><td>Non-ASIL; no credit claimed</td></tr>
+        <tr><td>FSR-13</td><td class="asil-c">C</td><td class="asil-a">A</td><td>Covered</td><td>NCV57100 DESAT on all six</td><td>Non-ASIL; no credit claimed</td></tr>
         <tr><td>FSR-14</td><td class="asil-d">D</td><td class="asil-d">D</td><td>Covered</td><td>Breakpoint input to HW PWM disable + 1oo2 gate drive power kill</td><td>Six redundant SSO pathways; either MCU achieves SSO independently</tr>
         <tr><td>FSR-15</td><td class="asil-d">D</td><td class="asil-c">C</td><td>Covered</td><td>Independent watchdog on STM32</td><td>On-chip WDT subject to common cause</td></tr>
-        <tr><td>FSR-16</td><td class="asil-d">D</td><td class="asil-c">C</td><td>Partial</td><td>NCV57001 DESAT self-test exists</td><td>Expand to all safety functions</td></tr>
+        <tr><td>FSR-16</td><td class="asil-d">D</td><td class="asil-c">C</td><td>Partial</td><td>NCV57100 DESAT self-test exists</td><td>Expand to all safety functions</td></tr>
         <tr><td>FSR-17</td><td class="asil-c">C</td><td class="asil-c">C</td><td>Planned</td><td>1-second heartbeat timeout confirmed</td><td>Safe defaults on CAN loss</td></tr>
         <tr><td>FSR-18</td><td class="asil-d">D</td><td class="asil-c">C</td><td>Covered</td><td>Limit switch input implemented</td><td>Verify override precedence</td></tr>
         <tr><td>FSR-19</td><td class="asil-d">D</td><td class="asil-c">C</td><td>To implement</td><td>STM32 flash CRC peripheral available</td><td>Add boot-time CRC check</td></tr>
@@ -649,20 +651,20 @@ a { word-break: break-all; color: #333; }
 <div class="gap">
     <div class="callout-title">GAP-ARCH-01: Single-Core MCU Without Independent Monitor (P0)</div>
     <strong>Issue:</strong> All safety mechanisms execute on one STM32H723. A single MCU fault (clock failure, latch-up, supply collapse) can disable all safety functions simultaneously. The independent watchdog is on-chip and subject to common-cause failure.<br><br>
-    <strong>Impact:</strong> SG-01 and SG-13 target ASIL D but are not achievable. Maximum: ASIL C.<br><br>
+    <strong>Impact:</strong> SG-01 and SG-13 target ASIL D, achievable via dual-MCU ASIL B(D) + ASIL B(D) decomposition (Table 11). The remaining gap is the formal ASIL D claim, pending the Dependent Failure Analysis (LIMIT-08).<br><br>
     <strong>Mitigation path:</strong> Dual-MCU ASIL B(D) decomposition — implemented. Main MCU + coprocessor each achieve ASIL B(D); combined via 1oo2 voter on safe state actuation.
 </div>
 
 <div class="gap">
     <div class="callout-title">GAP-ARCH-02: Power Kill Without Feedback Monitoring (P1, was P0)</div>
-    <strong>Issue:</strong> The GATE_DRIVE_PWR1_ENABLE (main MCU) and GATE_DRIVE_PWR2_ENABLE (coprocessor) paths provide a 1oo2 active SSO mechanism. <strong>Feedback:</strong> GATE_DRIVE_PWR1_FB and GATE_DRIVE_PWR2_FB provide independent per-supply status. When the NCV57001 detects VDD_UVLO (loss of gate drive supply), it asserts FLT (active low), which both MCUs can read. The 1oo2 architecture means a stuck-high GATE_DRIVE_PWR1_ENABLE is not a single-point failure — the coprocessor can still achieve SSO via GATE_DRIVE_PWR2_ENABLE (Path 2b), GATE_DRIVE_RESET (Path 4), or NRST (Path 5). The shared 3.3V rail provides a passive SSO path (NCV57001 pull-down on VDD loss, Path 3).<br><br>
-    <strong>Impact:</strong> SG-13 achieves ASIL D via ASIL B(D) decomposition. Six SSO pathways exist (see Section 2.2). The 1oo2 power kill with independent feedback provides diagnostic coverage for the supply kill path.<br><br>
-    <strong>Mitigation path:</strong> Implemented — GATE_DRIVE_PWR1_FB (main MCU) and GATE_DRIVE_PWR2_FB (coprocessor) provide independent per-supply feedback. Six SSO pathways (TIM1_BKIN, GATE_DRIVE_PWR1_ENABLE, GATE_DRIVE_PWR2_ENABLE, 3.3V rail loss, GATE_DRIVE_RESET, coprocessor watchdog/NRST) provide extensive redundancy. Verify feedback paths in S-16 through S-19.
+    <strong>Issue:</strong> The GATE_DRIVE_PWR1_ENABLE (main MCU) and GATE_DRIVE_PWR2_ENABLE (coprocessor) paths provide a 1oo2 active SSO mechanism. <strong>Feedback:</strong> GATE_DRIVE_PWR1_FB and GATE_DRIVE_PWR2_FB provide independent per-supply status. When the NCV57100 detects VDD_UVLO (loss of gate drive supply), it asserts FLT (active low), which both MCUs can read. The 1oo2 architecture means a stuck-high GATE_DRIVE_PWR1_ENABLE is not a single-point failure — the coprocessor can still achieve SSO via GATE_DRIVE_PWR2_ENABLE (Path 2b), GATE_DRIVE_RESET (Path 4), or NRST (Path 5). The shared 3.3V rail provides a passive SSO path (NCV57100 pull-down on VDD loss, Path 3).<br><br>
+    <strong>Impact:</strong> SG-13 targets ASIL D via ASIL B(D) decomposition. Six SSO pathways exist (see Section 2.2). The 1oo2 power kill with independent feedback provides diagnostic coverage for the supply kill path.<br><br>
+    <strong>Mitigation path:</strong> Implemented — GATE_DRIVE_PWR1_FB (main MCU) and GATE_DRIVE_PWR2_FB (coprocessor) provide independent per-supply feedback. Six SSO pathways (TIM1_BKIN; 1oo2 power kill via GATE_DRIVE_PWR1_ENABLE / GATE_DRIVE_PWR2_ENABLE; 3.3 V rail loss; GATE_DRIVE_RESET; coprocessor watchdog/NRST; coprocessor independent fault trigger) provide extensive redundancy. Verify feedback paths in C-17, C-26, C-27, S-10, and S-11.
 </div>
 
 <div class="gap">
     <div class="callout-title">GAP-ARCH-03: Non-ASIL Gate Driver Protections (P1)</div>
-    <strong>Issue:</strong> NCV57001 internal protections not ASIL-rated. OR'd FLT output is single wire to STM32 (single point, not diagnosed).<br><br>
+    <strong>Issue:</strong> NCV57100 internal protections not ASIL-rated. OR'd FLT output is single wire to STM32 (single point, not diagnosed).<br><br>
     <strong>Impact:</strong> SG-12, SG-14, SG-15 limited. ASIL credit requires external monitoring.<br><br>
     <strong>Mitigation path:</strong> Coprocessor with individual FLT monitoring and PWM integrity check.
 </div>
@@ -670,7 +672,7 @@ a { word-break: break-all; color: #333; }
 <h2>9.2 Component Gaps</h2>
 <div class="gap" style="background:#e8f5e9;">
     <div class="callout-title">GAP-HW-01: Hardware Overcurrent Comparator — CLOSED (Not Required)</div>
-    The schematic includes LM397 comparators for phase and DC link overcurrent detection, but these are <strong>not required for safe operation</strong>. Hard short-circuit protection is handled by NCV57001 DESAT (&lt;2 us). Regular overcurrent (non-DESAT) is detected within <strong>100 ms</strong> by the dual-MCU integrated monitoring: both the main STM32H723 and the coprocessor STM32G474 independently sample all four current sense channels at high rate. Either MCU detecting overcurrent triggers SSO via its independent gate drive power kill path. This 100 ms detection time is faster than the thermal time constant of the IGBT module and therefore cannot cause permanent damage. The LM397 comparators are retained on the PCB as a redundant monitoring layer but are not relied upon for the safety case. <strong>Closed — integrated dual-MCU monitoring is sufficient.</strong>
+    The schematic includes LM397 comparators for phase and DC link overcurrent detection, but these are <strong>not required for safe operation</strong>. Hard short-circuit protection is handled by NCV57100 DESAT (&lt;2 us). Regular overcurrent (non-DESAT) is detected within <strong>100 ms</strong> by the dual-MCU integrated monitoring: both the main STM32H723 and the coprocessor STM32G474 independently sample all four current sense channels at high rate. Either MCU detecting overcurrent triggers SSO via its independent gate drive power kill path. This 100 ms detection time is faster than the thermal time constant of the IGBT module and therefore cannot cause permanent damage. The LM397 comparators are retained on the PCB as a redundant monitoring layer but are not relied upon for the safety case. <strong>Closed — integrated dual-MCU monitoring is sufficient.</strong>
 </div>
 <div class="gap">
     <div class="callout-title">GAP-HW-02: No Tractive Effort Ramp-Down (P1)</div>
@@ -695,7 +697,7 @@ a { word-break: break-all; color: #333; }
     <thead><tr><th>Gap</th><th>Priority</th><th>Mitigation</th><th>Effort</th></tr></thead>
     <tbody>
         <tr style="background:#e8f5e9;"><td>Dual MCU with coprocessor</td><td><strong>RESOLVED</strong></td><td>STM32G474RCTx implemented — 1oo2 power kill, independent ADC, challenge/response watchdog, independent CAN snoop</td><td>Complete</td></tr>
-        <tr style="background:#e8f5e9;"><td>HW overcurrent comparator</td><td><strong>CLOSED</strong></td><td>Dual-MCU integrated monitoring detects overcurrent within 100 ms — sufficient for STO without damage. LM397 retained as non-safety redundant layer.</td><td>N/A</td></tr>
+        <tr style="background:#e8f5e9;"><td>HW overcurrent comparator</td><td><strong>CLOSED</strong></td><td>Dual-MCU integrated monitoring detects overcurrent within 100 ms — sufficient for SSO without damage. LM397 retained as non-safety redundant layer.</td><td>N/A</td></tr>
         <tr style="background:#fff3cd;"><td>Power kill feedback monitoring</td><td><strong>P1</strong></td><td>GATE_DRIVE_PWR1_FB and GATE_DRIVE_PWR2_FB provide independent per-supply feedback. Verify in S-16 through S-19.</td><td>Low</td></tr>
         <tr style="background:#fff3cd;"><td>Non-ASIL gate driver credit</td><td><strong>P1</strong></td><td>Coprocessor monitors FLT, READY, all 6 PWM outputs. Verify cross-check logic in C-14, S-16.</td><td>Medium</td></tr>
         <tr><td>Tractive effort ramp-down</td><td><strong>P1</strong></td><td>Software</td><td>Medium</td></tr>
@@ -715,7 +717,7 @@ a { word-break: break-all; color: #333; }
 <h1 id="sec10">10. Fault Injection Test Plan</h1>
 
 <h2 id="sec10-1">10.1 Test Philosophy</h2>
-<p>The purpose of this Fault Injection Test Plan is to provide a comprehensive, traceable methodology for verifying that the safety mechanisms implemented in the traction inverter/VCU detect faults and transition to the defined safe state (SSO) within the required time budgets. The test plan defines <strong>75 tests</strong> organized into four categories:</p>
+<p>The purpose of this Fault Injection Test Plan is to provide a comprehensive, traceable methodology for verifying that the safety mechanisms implemented in the traction inverter/VCU detect faults and transition to the defined safe state (SSO) within the required time budgets. The test plan defines <strong>99 tests</strong> organized into four categories:</p>
 
 <ul>
     <li><strong>Component-Level Tests (C-01 to C-50):</strong> Individual hardware component validation &mdash; inject faults into a single sensor, input, or protection circuit and verify detection and safe state entry. Includes supply faults (brownout, rail shorts), phase faults (open, short-to-short, short-to-DC), gate driver validation, clock failures, GPIO stuck-at, ADC drift, SPI, CAN bus off, watchdog starvation, thermal runaway, pre-charge, Miller clamp, propagation delay, deadtime, isolation.</li>
@@ -740,7 +742,7 @@ a { word-break: break-all; color: #333; }
     <caption data-label="Table 15">Test Equipment and Setup</caption>
     <thead><tr><th>Item</th><th>Description</th><th>Purpose</th></tr></thead>
     <tbody>
-        <tr><td><strong>Test article</strong></td><td>Traction inverter/VCU PCB with STM32H723, six NCV57001, IGBT power stage, all sensors</td><td>Device under test (DUT)</td></tr>
+        <tr><td><strong>Test article</strong></td><td>Traction inverter/VCU PCB with STM32H723, six NCV57100, IGBT power stage, all sensors</td><td>Device under test (DUT)</td></tr>
         <tr><td><strong>DC link source</strong></td><td>Programmable DC power supply 0&ndash;400 V, &ge;50 A or traction battery with contactor control</td><td>DC link for low-power testing; traction battery for high-power</td></tr>
         <tr><td><strong>Test motor</strong></td><td>Low-voltage PMSM on dyno or equivalent inertia load</td><td>Closed-loop traction motor control testing</td></tr>
         <tr><td><strong>Dyno</strong></td><td>Motor dynamometer with torque/speed measurement and programmable load</td><td>Full-load characterization and fault testing under load</td></tr>
@@ -779,7 +781,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-01: Tractive Effort Control Potentiometer 1 Open Circuit</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-01 &mdash; Dual tractive effort control plausibility detects open circuit on primary potentiometer.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-01, H-01</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-01, H-01</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Connect tractive effort control assembly with both pots functional. System at key-on, traction motor not running.</li>
@@ -797,7 +799,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-02: Tractive Effort Control Potentiometer 2 Shorted to +5 V</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-01 &mdash; Dual tractive effort control plausibility detects short-to-rail on secondary potentiometer.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-01, H-01</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-01, H-01</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Connect tractive effort control with both pots functional. System at key-on.</li>
@@ -813,7 +815,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-03: Tractive Effort Control Potentiometer 1 Shorted to Ground</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-01 &mdash; Short-to-ground detection on primary pot.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-01, H-01</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-01, H-01</div>
     <div class="test-field"><strong>Procedure:</strong> Short pot 1 signal to ground while pot 2 at 50%. Observe response. Repeat under motor load.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Discrepancy detected &lt;100 ms. Safe state. Fault logged.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Ground short is distinct from open and +5 V short (different ADC reading). Verifies the plausibility check is robust to all three common wiring fault modes.</div>
@@ -822,7 +824,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-04: Tractive Effort Control Potentiometer Drift (Gradual Divergence)</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-01 detects gradual potentiometer mismatch (simulating sensor degradation).</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-01, H-01</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-01, H-01</div>
     <div class="test-field"><strong>Procedure:</strong> Use programmable resistors to gradually increase offset between pot 1 and pot 2 from 0% to 10% over 10 seconds while traction motor running at constant speed. Observe when fault triggers.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Fault triggers when discrepancy exceeds 5% threshold. No false trips below threshold.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Gradual sensor drift (wear, temperature aging) must be distinguished from normal variation. Verifies threshold is calibrated correctly and not overly sensitive (nuisance trips) or insensitive (missed faults).</div>
@@ -831,7 +833,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-05: Tractive Effort Control Limit Switch Activation at Speed</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-18 &mdash; Limit switch independently commands zero tractive effort, overriding analog values.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-18, H-01</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-18, H-01</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Traction motor running at 50% rated speed under dyno load with 50% tractive effort request applied.</li>
@@ -846,7 +848,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-06: Phase Current Sensor Offset Drift</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-02 &mdash; Tractive effort command plausibility detects current sensor offset error.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-06 (ASIL A), FSR-02, H-01, H-06</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-06 (ASIL C), FSR-02, H-01, H-06</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Traction motor running at 50% rated tractive effort under dyno load.</li>
@@ -862,7 +864,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-07: DC Link Current Sensor Open Circuit</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-02 &mdash; Loss of DC link current sensor detection.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-02, FSR-07, H-01, H-06</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-02, FSR-07, H-01, H-06</div>
     <div class="test-field"><strong>Procedure:</strong> Open-circuit DC link current sensor signal wire while traction motor running at 25% load. Observe plausibility check and safe state entry.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Sensor out-of-range detected. If sensor has reference signal: reference mismatch detected. Safe state within &lt;200 ms.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> The DC link sensor provides the sum current check against phase currents. Its loss removes a plausibility layer. This verifies the system handles the failure gracefully.</div>
@@ -946,7 +948,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-13: Watchdog Timeout (STM32 Failure to Service)</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-15 &mdash; Independent watchdog detects MCU runaway and forces reset.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), SG-01 (ASIL C), FSR-15, H-13, H-14</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), SG-01 (ASIL D), FSR-15, H-13, H-14</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Traction motor running at 50% load. System operating normally.</li>
@@ -962,7 +964,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-14: STM32 Breakpoint Input (HW PWM Disable)</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-14 &mdash; Hardware breakpoint input disables all PWM within &lt;10 us, independent of software.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-14, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-14, H-13</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Traction motor running at 50% load with active PWM.</li>
@@ -978,8 +980,8 @@ a { word-break: break-all; color: #333; }
 
 <div class="test-case">
     <div class="test-case-header">C-15: Gate Driver DESAT (Simulated Short Circuit)</div>
-    <div class="test-field"><strong>Objective:</strong> Verify FSR-13 &mdash; NCV57001 DESAT protection detects and responds to simulated short circuit.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), SG-14 (ASIL A), FSR-13, H-12, H-16</div>
+    <div class="test-field"><strong>Objective:</strong> Verify FSR-13 &mdash; NCV57100 DESAT protection detects and responds to simulated short circuit.</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), SG-14 (ASIL C), FSR-13, H-12, H-16</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System at key-on with DC link present. Gate drivers active.</li>
@@ -990,13 +992,13 @@ a { word-break: break-all; color: #333; }
         </ol>
     </div>
     <div class="test-field"><strong>Pass Criteria:</strong> DESAT detected and PWM disabled within &lt;2 us. Soft turn-off observed. FLT asserted and latched. System enters safe state.</div>
-    <div class="test-field"><strong>Why this covers the requirement:</strong> DESAT is the primary short-circuit protection in the gate driver. While the NCV57001 is non-ASIL, verifying its response time and behavior is essential for the overall safety argument. This test also forms the basis for the DESAT self-test (C-16).</div>
+    <div class="test-field"><strong>Why this covers the requirement:</strong> DESAT is the primary short-circuit protection in the gate driver. While the NCV57100 is non-ASIL, verifying its response time and behavior is essential for the overall safety argument. This test also forms the basis for the DESAT self-test (C-16).</div>
 </div>
 
 <div class="test-case">
     <div class="test-case-header">C-16: Gate Driver DESAT Self-Test at Power-On</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-16 &mdash; DESAT self-test confirms protection circuit functional before PWM enable.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), SG-14 (ASIL A), FSR-16, H-12, H-16</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), SG-14 (ASIL C), FSR-16, H-12, H-16</div>
     <div class="test-field"><strong>Procedure:</strong> Power cycle the system. Observe the DESAT self-test sequence (brief test pulse to verify DESAT detection circuit responds). Verify PWM is not enabled until all six gate drivers pass self-test. Introduce a fault in one DESAT circuit (e.g., open DESAT diode) and verify system refuses to enable PWM.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Self-test completes on all six channels. PWM enable gated by self-test pass. With DESAT fault injected: system remains in safe state, fault logged, PWM never enabled.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> A failed DESAT circuit (open DESAT diode, broken connection) is a latent fault that would prevent short-circuit detection. The power-on self-test must catch this before the system can operate. This is essential for latent fault coverage.</div>
@@ -1005,7 +1007,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-17: Gate Driver UVLO (Simulated Low Supply)</div>
     <div class="test-field"><strong>Objective:</strong> Verify gate driver UVLO prevents operation at insufficient gate drive voltage.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-12, H-12</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-12, H-12</div>
     <div class="test-field"><strong>Procedure:</strong> Gradually reduce the +15 V gate driver supply voltage while system is operating. Observe the point at which UVLO triggers and PWM is disabled.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> UVLO triggers at V<sub>UVLO&minus;</sub> &asymp; 11.3 V. All PWM disabled. FLT asserted. Safe state entered.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Insufficient gate drive voltage causes the IGBT to operate in the linear region, leading to excessive conduction loss and thermal destruction. UVLO prevents this by forcing gate OFF when supply is inadequate.</div>
@@ -1014,7 +1016,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-18: ECC RAM Single-Bit Error Injection</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-20 &mdash; ECC RAM corrects single-bit errors and allows continued operation.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), SG-15 (ASIL C), FSR-20</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), SG-15 (ASIL C), FSR-20</div>
     <div class="test-field"><strong>Procedure:</strong> Use STM32's built-in ECC error injection capability (if available) or debug interface to flip a single bit in a safety-critical RAM location (e.g., tractive effort limit variable). Observe system behavior via RTE.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Single-bit error detected and corrected. System continues operating. Error logged. No unsafe state entered.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Cosmic radiation and EMI can corrupt RAM. SECDED ECC must handle single-bit errors transparently. This verifies the error correction path works without causing false trips.</div>
@@ -1023,7 +1025,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-19: ECC RAM Double-Bit Error Injection</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-20 &mdash; Double-bit errors trigger safe state (uncorrectable).</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-20</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-20</div>
     <div class="test-field"><strong>Procedure:</strong> Flip two bits in a safety-critical RAM location. Observe system response.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Double-bit error detected. Safe state entered immediately. Fatal error logged. System requires reset.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Double-bit errors are uncorrectable. The system must treat them as critical faults and enter safe state, because the corrupted data could be a safety-critical variable (tractive effort limit, fault threshold, etc.).</div>
@@ -1032,7 +1034,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-20: Boot CRC Mismatch</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-19 &mdash; Boot CRC prevents operation with corrupted firmware.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-13 (ASIL C), FSR-19, H-15</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-13 (ASIL D), FSR-19, H-15</div>
     <div class="test-field"><strong>Procedure:</strong> Deliberately corrupt one byte in the safety-critical code flash region (using debugger or flash programming tool). Power cycle and observe boot behavior.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> CRC-32 mismatch detected at boot. PWM enable prevented. Fault logged. System remains in safe state.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Corrupted firmware (flash wear, programming error, EMI during write) could modify the tractive effort mapping, safety thresholds, or fault handling logic. FSR-19 prevents the system from operating with untrusted code. This directly addresses H-15 (incorrect tractive effort from software error).</div>
@@ -1046,7 +1048,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-21: STM32 Supply Brownout — Gradual Vdd Drop</div>
     <div class="test-field"><strong>Objective:</strong> Verify brownout detection (BOR) triggers safe state before MCU operation becomes unreliable.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-14, FSR-15, H-13, H-14</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-14, FSR-15, H-13, H-14</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating at 50% tractive effort. STM32 Vdd = 3.3 V nominal.</li>
@@ -1064,7 +1066,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-22: Brownout Recovery — Power Dip Ride-Through</div>
     <div class="test-field"><strong>Objective:</strong> Verify system behavior during brief power dips and recovery.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-16, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-16, H-13</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating at 50% tractive effort.</li>
@@ -1074,31 +1076,31 @@ a { word-break: break-all; color: #333; }
             <li>Repeat with dip on +12 V rail (gate drive supply) while monitoring gate driver UVLO.</li>
         </ol>
     </div>
-    <div class="test-field"><strong>Pass Criteria:</strong> Dips above BOR: uninterrupted operation. Dips below BOR: clean reset, PWM disabled, POST runs on recovery. +12 V dip: NCV57001 UVLO triggers, PWM disabled. All cases: safe state maintained during anomaly.</div>
+    <div class="test-field"><strong>Pass Criteria:</strong> Dips above BOR: uninterrupted operation. Dips below BOR: clean reset, PWM disabled, POST runs on recovery. +12 V dip: NCV57100 UVLO triggers, PWM disabled. All cases: safe state maintained during anomaly.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Real-world power disturbances (load dump, starter motor engagement, loose battery connection) cause brief voltage dips. The system must either ride through cleanly or reset cleanly — never enter an undefined operational state. This validates both the brownout detector and the gate driver UVLO independence.</div>
 </div>
 
 <div class="test-case">
     <div class="test-case-header">C-23: +12 V Logic Rail Short to Ground</div>
     <div class="test-field"><strong>Objective:</strong> Verify system response when +12 V logic rail is shorted to ground.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-14, FSR-15, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-14, FSR-15, H-13</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating at 50% tractive effort. +12 V rail monitored.</li>
             <li>Apply controlled short to ground on +12 V rail via current-limited test fixture (&lt;5 A limit to protect wiring).</li>
-            <li>Observe: STM32 supply (3.3 V via LDO), gate driver supplies (via isolated DC/DC), CAN transceivers.</li>
+            <li>Observe: STM32 supply (3.3 V via RD7-12S033R DC/DC converter), gate driver supplies (via isolated DC/DC), CAN transceivers.</li>
             <li>Verify which subsystems lose power and which remain operational.</li>
             <li>Remove short. Verify recovery behavior.</li>
         </ol>
     </div>
     <div class="test-field"><strong>Pass Criteria:</strong> If +12 V collapse causes 3.3 V dropout: BOR triggers, safe state entered. Gate driver isolated supplies must remain operational (isolated from logic rail) or UVLO triggers safe state. No erratic PWM during collapse. Short removal requires key cycle to resume.</div>
-    <div class="test-field"><strong>Why this covers the requirement:</strong> A +12 V short can occur from chafed wiring, failed downstream load, or moisture ingress. The test validates that the system fails safely — either the brownout catches it, or the gate driver UVLO catches it, or both. The isolated gate drive supplies should remain up (they have their own isolated DC/DC), but if they droop, the NCV57001 UVLO provides independent protection.</div>
+    <div class="test-field"><strong>Why this covers the requirement:</strong> A +12 V short can occur from chafed wiring, failed downstream load, or moisture ingress. The test validates that the system fails safely — either the brownout catches it, or the gate driver UVLO catches it, or both. The isolated gate drive supplies should remain up (they have their own isolated DC/DC), but if they droop, the NCV57100 UVLO provides independent protection.</div>
 </div>
 
 <div class="test-case">
     <div class="test-case-header">C-24: +5 V Sensor Rail Short to Ground</div>
     <div class="test-field"><strong>Objective:</strong> Verify system response when +5 V sensor supply is shorted.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-13 (ASIL C), FSR-01, FSR-09, H-01, H-08</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-13 (ASIL D), FSR-01, FSR-09, H-01, H-08</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating. +5 V rail powers throttle pots, current sensor references, encoder.</li>
@@ -1115,7 +1117,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-25: +3.3 V MCU Supply Short to Ground</div>
     <div class="test-field"><strong>Objective:</strong> Verify safe state behavior on MCU supply collapse.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-14, FSR-15, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-14, FSR-15, H-13</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating at 50% tractive effort. 3.3 V rail monitored.</li>
@@ -1131,13 +1133,13 @@ a { word-break: break-all; color: #333; }
 
 <div class="test-case">
     <div class="test-case-header">C-26: Gate Driver +15 V Supply Short</div>
-    <div class="test-field"><strong>Objective:</strong> Verify NCV57001 UVLO response when +15 V gate drive supply is shorted.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), SG-14 (ASIL A), FSR-12, FSR-13, H-12, H-16</div>
+    <div class="test-field"><strong>Objective:</strong> Verify NCV57100 UVLO response when +15 V gate drive supply is shorted.</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), SG-14 (ASIL C), FSR-12, FSR-13, H-12, H-16</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating. Individual gate driver +15 V supplies monitored (six isolated supplies).</li>
             <li>Short +15 V supply of one gate driver (U-phase high-side) to ground via current-limited fixture.</li>
-            <li>Observe NCV57001 UVLO trigger. Measure UVLO threshold (typical V<sub>UVLO&minus;</sub> = 11.3 V).</li>
+            <li>Observe NCV57100 UVLO trigger. Measure UVLO threshold (typical V<sub>UVLO&minus;</sub> = 11.3 V).</li>
             <li>Verify FLT asserted. Verify PWM disabled for that phase.</li>
             <li>Verify system enters safe state (not just disabling one phase, which creates imbalance).</li>
             <li>Repeat for all six gate driver positions.</li>
@@ -1149,11 +1151,11 @@ a { word-break: break-all; color: #333; }
 
 <div class="test-case">
     <div class="test-case-header">C-27: Gate Driver &minus;9 V Supply Short</div>
-    <div class="test-field"><strong>Objective:</strong> Verify NCV57001 response when negative gate drive supply is shorted.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-12, H-12</div>
+    <div class="test-field"><strong>Objective:</strong> Verify NCV57100 response when negative gate drive supply is shorted.</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-12, H-12</div>
     <div class="test-field"><strong>Procedure:</strong> Same as C-26 but short &minus;9 V supply to ground for each gate driver position.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Negative supply loss detected. Gate cannot be properly turned off (Miller current has no return path). FLT asserted. Safe state entered. No shoot-through.</div>
-    <div class="test-field"><strong>Why this covers the requirement:</strong> The &minus;9 V supply ensures the IGBT stays off during dv/dt transitions (active Miller clamp). Loss of negative rail means the Miller current charges the gate capacitance through the Miller capacitor, potentially turning the IGBT on unexpectedly. The NCV57001 must detect this condition and force safe state.</div>
+    <div class="test-field"><strong>Why this covers the requirement:</strong> The &minus;9 V supply ensures the IGBT stays off during dv/dt transitions (active Miller clamp). Loss of negative rail means the Miller current charges the gate capacitance through the Miller capacitor, potentially turning the IGBT on unexpectedly. The NCV57100 must detect this condition and force safe state.</div>
 </div>
 
 <div class="test-case">
@@ -1195,7 +1197,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-31: Phase-to-Phase Short (U-V)</div>
     <div class="test-field"><strong>Objective:</strong> Verify DESAT and overcurrent protection respond to phase-to-phase short circuit.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), SG-14 (ASIL A), FSR-13, H-12, H-16</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), SG-14 (ASIL C), FSR-13, H-12, H-16</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System at key-on with DC link energized. Low-voltage test recommended (reduced DC link to 50 V) to limit fault energy.</li>
@@ -1207,13 +1209,13 @@ a { word-break: break-all; color: #333; }
         </ol>
     </div>
     <div class="test-field"><strong>Pass Criteria:</strong> DESAT triggers within &lt;2 us. Peak current limited by DC link inductance. Soft turn-off observed. No IGBT damage. FLT latched. Safe state entered. System requires reset.</div>
-    <div class="test-field"><strong>Why this covers the requirement:</strong> Phase-to-phase short is the most severe fault the inverter can experience (H-12). The NCV57001 DESAT is the primary protection. This test validates the full short-circuit protection chain: DESAT detection &rarr; soft turn-off &rarr; FLT assertion &rarr; safe state. <strong>WARNING:</strong> This test must be conducted at reduced DC link voltage (50 V or less) with appropriate safety barriers and energy-limiting precautions. Even at reduced voltage, fault energy can be destructive if protection fails.</div>
+    <div class="test-field"><strong>Why this covers the requirement:</strong> Phase-to-phase short is the most severe fault the inverter can experience (H-12). The NCV57100 DESAT is the primary protection. This test validates the full short-circuit protection chain: DESAT detection &rarr; soft turn-off &rarr; FLT assertion &rarr; safe state. <strong>WARNING:</strong> This test must be conducted at reduced DC link voltage (50 V or less) with appropriate safety barriers and energy-limiting precautions. Even at reduced voltage, fault energy can be destructive if protection fails.</div>
 </div>
 
 <div class="test-case">
     <div class="test-case-header">C-32: Phase-to-Phase Short (V-W and U-W)</div>
     <div class="test-field"><strong>Objective:</strong> Same as C-31 for V-W and U-W phase combinations.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), SG-14 (ASIL A), FSR-13, H-12</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), SG-14 (ASIL C), FSR-13, H-12</div>
     <div class="test-field"><strong>Procedure:</strong> Identical to C-31 but short V-W and U-W combinations separately. Use reduced DC link voltage.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Same as C-31 for all phase combinations.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> All three phase-pair combinations must be independently validated. The DESAT protection must work regardless of which phases are shorted.</div>
@@ -1222,7 +1224,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-33: Phase-to-DC-Positive Short</div>
     <div class="test-field"><strong>Objective:</strong> Verify protection response when a motor phase shorts to DC link positive rail.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-13, H-12</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-13, H-12</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System at key-on. DC link at reduced voltage (50 V).</li>
@@ -1239,7 +1241,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-34: Phase-to-DC-Negative Short</div>
     <div class="test-field"><strong>Objective:</strong> Same as C-33 for phase shorted to DC link negative rail.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-13, H-12</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-13, H-12</div>
     <div class="test-field"><strong>Procedure:</strong> Identical to C-33 but short Phase U to DC-. Test all three phases.</div>
     <div class="test-field"><strong>Pass Criteria:</strong> Same as C-33.</div>
     <div class="test-field"><strong>Why this covers the requirement:</strong> Motor winding ground fault to DC- is a common failure mode (winding insulation degrades, moisture ingress, mechanical damage). All three phases must be independently validated.</div>
@@ -1284,7 +1286,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-37: STM32 HSE Clock Failure</div>
     <div class="test-field"><strong>Objective:</strong> Verify system response when the external high-speed crystal (HSE) fails.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-15, H-13, H-14</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-15, H-13, H-14</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating normally with HSE as clock source.</li>
@@ -1301,7 +1303,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-38: STM32 PLL Unlock</div>
     <div class="test-field"><strong>Objective:</strong> Verify safe state when PLL loses lock (unstable system clock).</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-15, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-15, H-13</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating with PLL providing 550 MHz system clock.</li>
@@ -1318,7 +1320,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-39: Flash Bit Rot / Corruption Detection</div>
     <div class="test-field"><strong>Objective:</strong> Verify boot CRC (FSR-19) detects flash corruption from bit rot, EMI, or wear.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-13 (ASIL C), FSR-19, H-15</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-13 (ASIL D), FSR-19, H-15</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Corrupt a single bit in safety-critical flash region (using debugger).</li>
@@ -1335,7 +1337,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-40: GPIO Stuck-At Fault Simulation</div>
     <div class="test-field"><strong>Objective:</strong> Verify system responds safely when critical GPIO pins are stuck-at-1 or stuck-at-0.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-13 (ASIL C), FSR-14, H-13, H-14</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-13 (ASIL D), FSR-14, H-13, H-14</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating normally. Identify critical GPIOs: PWM enable, breakpoint, HVIL, throttle ADC inputs, FLT input.</li>
@@ -1353,7 +1355,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-41: ADC Reference Voltage Drift</div>
     <div class="test-field"><strong>Objective:</strong> Verify ADC reference stability and detect reference drift that causes sensor misreading.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-02, H-01, H-06</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-02, H-01, H-06</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating. Apply known precision voltage to one ADC channel (calibration reference).</li>
@@ -1387,7 +1389,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-43: CAN Bus Off State and Recovery</div>
     <div class="test-field"><strong>Objective:</strong> Verify system handles CAN bus-off state correctly (TEC &gt; 255).</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-17, H-03</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-17, H-03</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating with active CAN communication.</li>
@@ -1405,7 +1407,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-44: Watchdog Starvation Under CPU Load</div>
     <div class="test-field"><strong>Objective:</strong> Verify watchdog triggers when CPU is overloaded and cannot service WDT in time.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-15, H-13, H-14</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-15, H-13, H-14</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating normally with WDT timeout = 50 ms.</li>
@@ -1456,8 +1458,8 @@ a { word-break: break-all; color: #333; }
 
 <div class="test-case">
     <div class="test-case-header">C-47: Active Miller Clamp Validation</div>
-    <div class="test-field"><strong>Objective:</strong> Verify NCV57001 active Miller clamp prevents dv/dt-induced false turn-on.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-12, H-12</div>
+    <div class="test-field"><strong>Objective:</strong> Verify NCV57100 active Miller clamp prevents dv/dt-induced false turn-on.</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-12, H-12</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>System operating at rated DC link voltage. High-side IGBT of Phase U switching at maximum dv/dt.</li>
@@ -1474,7 +1476,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-48: Gate Driver Propagation Delay Matching</div>
     <div class="test-field"><strong>Objective:</strong> Verify propagation delay matching across all six gate drivers to prevent skew-induced shoot-through.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-12, H-12</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-12, H-12</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Apply identical PWM test signal to all six gate driver inputs.</li>
@@ -1491,7 +1493,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">C-49: PWM Deadtime Verification</div>
     <div class="test-field"><strong>Objective:</strong> Verify deadtime is always present between complementary switching edges.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL A), FSR-12, H-17</div>
+    <div class="test-field"><strong>Covered:</strong> SG-12 (ASIL C), FSR-12, H-17</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Generate PWM at various duty cycles (5%, 50%, 95%) and switching frequencies.</li>
@@ -1532,7 +1534,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">S-01: Unintended Tractive Effort from Throttle Fault</div>
     <div class="test-field"><strong>Objective:</strong> Verify SG-01, FSR-01, FSR-03, FSR-18 &mdash; System rejects unintended tractive effort when throttle input is implausible.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), H-01, FSR-01, FSR-03, FSR-18</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), H-01, FSR-01, FSR-03, FSR-18</div>
     <div class="test-field"><strong>Setup:</strong> Traction motor on dyno. System in normal operating mode at key-on. DC link bus supply at nominal voltage.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1684,7 +1686,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">S-09: Field Weakening Region Operation</div>
     <div class="test-field"><strong>Objective:</strong> Verify stable operation in field-weakening region (speed above base speed).</div>
-    <div class="test-field"><strong>Covered:</strong> SG-06 (ASIL A), FSR-07, H-06</div>
+    <div class="test-field"><strong>Covered:</strong> SG-06 (ASIL C), FSR-07, H-06</div>
     <div class="test-field"><strong>Setup:</strong> Traction motor on dyno capable of exceeding base speed.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1703,7 +1705,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">S-10: Startup Sequence Validation</div>
     <div class="test-field"><strong>Objective:</strong> Verify correct sequence from key-on to ready-to-drive.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-16, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-16, H-13</div>
     <div class="test-field"><strong>Setup:</strong> Complete system with DC link bus supply, BMS simulator, IO board simulator.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1721,11 +1723,11 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">S-11: Shutdown Sequence Validation</div>
     <div class="test-field"><strong>Objective:</strong> Verify safe shutdown from any operating state.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-05, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-05, H-13</div>
     <div class="test-field"><strong>Setup:</strong> System operating at various load levels on dyno.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
-            <li>Operate at 100% load. Turn key OFF. Verify: (a) tractive effort ramps to zero at &le;200 Nm/s, (b) PWM disabled, (c) contactor opens, (d) DC link discharges through bleeder, (e) gate driver supplies disabled.</li>
+            <li>Operate at 100% load. Turn key OFF. Verify: (a) tractive effort ramps to zero at &le;200 Nm/s, (b) PWM disabled, (c) contactor opens, (d) DC link discharged via the external discharge resistor per service procedure (no onboard bleeder &mdash; the bank remains at bus voltage for hours after shutdown), (e) gate driver supplies disabled.</li>
             <li>Repeat at 50% load, 25% load, regen mode.</li>
             <li>Verify abrupt key-off (emergency shutdown) still results in safe state (may bypass ramp-down for &lt;50 ms safety).</li>
             <li>Verify system cannot be restarted without full key cycle (OFF &rarr; ON).</li>
@@ -1738,7 +1740,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">S-12: Key-Cycle Stress Test</div>
     <div class="test-field"><strong>Objective:</strong> Verify reliability of startup/shutdown cycling over many repetitions.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-16, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-16, H-13</div>
     <div class="test-field"><strong>Setup:</strong> Automated key-switch cycling. System on dyno at no-load.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1792,7 +1794,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">S-15: Overspeed Protection</div>
     <div class="test-field"><strong>Objective:</strong> Verify system limits maximum motor speed to prevent mechanical overspeed damage.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-06 (ASIL A), FSR-07, H-06</div>
+    <div class="test-field"><strong>Covered:</strong> SG-06 (ASIL C), FSR-07, H-06</div>
     <div class="test-field"><strong>Setup:</strong> Traction motor on dyno capable of exceeding rated maximum speed.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1896,7 +1898,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-01: CAN1 (BMS) Heartbeat Loss</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-17 &mdash; BMS CAN loss triggers safe degradation.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), H-03, FSR-17</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), H-03, FSR-17</div>
     <div class="test-field"><strong>Setup:</strong> VCU connected to CAN bus with BMS simulator. System in normal operation producing tractive effort.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1913,7 +1915,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-02: CAN2 (IO Board) Heartbeat Loss</div>
     <div class="test-field"><strong>Objective:</strong> Verify FSR-17 &mdash; IO board CAN loss triggers safe-state defaults.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), H-03, FSR-17</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), H-03, FSR-17</div>
     <div class="test-field"><strong>Setup:</strong> VCU connected to CAN2 with IO board simulator. System in normal operation.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1930,7 +1932,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-03: Simultaneous Throttle + Brake Request</div>
     <div class="test-field"><strong>Objective:</strong> Verify SG-01, FSR-01, FSR-18 &mdash; Brake request always overrides throttle.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), H-01, FSR-01, FSR-18</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), H-01, FSR-01, FSR-18</div>
     <div class="test-field"><strong>Setup:</strong> VCU with IO board simulator. System in normal operation.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -1984,7 +1986,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-06: Kickstand Down at Speed</div>
     <div class="test-field"><strong>Objective:</strong> Verify system responds safely to kickstand-down signal while vehicle is moving.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), H-01 (indirect), FSR-17</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), H-01 (indirect), FSR-17</div>
     <div class="test-field"><strong>Setup:</strong> VCU with IO board simulator. System producing tractive effort.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2025,7 +2027,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-08: CAN Bus Fuzzing — Random Frame Injection</div>
     <div class="test-field"><strong>Objective:</strong> Verify system ignores or gracefully handles random/corrupted CAN frames.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-17, H-01, H-15</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-17, H-01, H-15</div>
     <div class="test-field"><strong>Setup:</strong> VCU on CAN bus with fuzzing tool (CANoe, PCAN, or custom tool). System in normal operation.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2043,7 +2045,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-09: CAN Bus Load Test (95% Utilization)</div>
     <div class="test-field"><strong>Objective:</strong> Verify system operates correctly under maximum CAN bus load.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-17, H-03</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-17, H-03</div>
     <div class="test-field"><strong>Setup:</strong> CAN bus loaded to 95% utilization with background traffic. VCU operating normally.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2061,7 +2063,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-10: CAN Bus Off Recovery</div>
     <div class="test-field"><strong>Objective:</strong> Verify system correctly recovers from CAN bus-off state.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-17, H-03</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-17, H-03</div>
     <div class="test-field"><strong>Setup:</strong> VCU on CAN bus with fault injection capability.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2080,7 +2082,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-11: Invalid/Corrupted CAN Frame Injection</div>
     <div class="test-field"><strong>Objective:</strong> Verify system handles frames with valid IDs but semantically invalid data.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-10 (ASIL B), FSR-17, H-15</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-10 (ASIL B), FSR-17, H-15</div>
     <div class="test-field"><strong>Setup:</strong> VCU on CAN bus with BMS and IO board simulators.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2098,7 +2100,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-12: Display Node Failure</div>
     <div class="test-field"><strong>Objective:</strong> Verify system operates safely when the display/dash node fails.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-17, H-03</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-17, H-03</div>
     <div class="test-field"><strong>Setup:</strong> VCU on CAN2 with display simulator. System operating.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2116,7 +2118,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-13: Charger Node Interaction</div>
     <div class="test-field"><strong>Objective:</strong> Verify correct interaction with charger during charging and prevent drive-away-while-charging.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-04, H-01</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-04, H-01</div>
     <div class="test-field"><strong>Setup:</strong> VCU on CAN2 with charger simulator.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2153,7 +2155,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-15: BMS Fault Propagation</div>
     <div class="test-field"><strong>Objective:</strong> Verify VCU correctly responds to BMS fault messages.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-10 (ASIL B), FSR-17, H-01, H-10</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-10 (ASIL B), FSR-17, H-01, H-10</div>
     <div class="test-field"><strong>Setup:</strong> VCU on CAN1 with BMS simulator. System operating.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2171,7 +2173,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-16: Multi-Node Simultaneous Fault</div>
     <div class="test-field"><strong>Objective:</strong> Verify system handles simultaneous faults on multiple CAN nodes.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-03 (ASIL C), SG-13 (ASIL C), FSR-17, H-01, H-03, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-03 (ASIL C), SG-13 (ASIL D), FSR-17, H-01, H-03, H-13</div>
     <div class="test-field"><strong>Setup:</strong> VCU on both CAN buses with all node simulators.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2190,7 +2192,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-17: CAN Bus Wiring Fault (Short and Open)</div>
     <div class="test-field"><strong>Objective:</strong> Verify system response to physical CAN bus wiring faults.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), FSR-17, H-03</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), FSR-17, H-03</div>
     <div class="test-field"><strong>Setup:</strong> VCU with physical access to CAN bus wiring.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2210,7 +2212,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">I-18: Wake/Sleep Cycle Test</div>
     <div class="test-field"><strong>Objective:</strong> Verify system handles wake-from-sleep and sleep-entry correctly.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-16, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-16, H-13</div>
     <div class="test-field"><strong>Setup:</strong> VCU with sleep/wake capability (if implemented).</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2232,7 +2234,7 @@ a { word-break: break-all; color: #333; }
 <p>The following matrix maps each safety goal to the test cases that provide evidence of coverage. A test may cover multiple safety goals; a safety goal may require multiple tests.</p>
 
 <table>
-    <caption data-label="Table 15">Safety Goal to Test Case Traceability</caption>
+    <caption data-label="Table 16">Safety Goal to Test Case Traceability</caption>
     <thead>
         <tr>
             <th style="width:8%">SG</th>
@@ -2269,7 +2271,7 @@ a { word-break: break-all; color: #333; }
 <h3>10.7.1 FSR Coverage Matrix</h3>
 
 <table>
-    <caption data-label="Table 16">Functional Safety Requirement Coverage by Test Cases</caption>
+    <caption data-label="Table 17">Functional Safety Requirement Coverage by Test Cases</caption>
     <thead>
         <tr>
             <th style="width:8%">FSR</th>
@@ -2285,12 +2287,12 @@ a { word-break: break-all; color: #333; }
         <tr><td>FSR-05</td><td>Fault ramp-down &le;200 Nm/s before SSO</td><td>S-03, S-04, S-11, S-13</td></tr>
         <tr><td>FSR-06</td><td>Uncommanded regen &gt;10 Nm &rarr; safe state</td><td>S-05, S-08, I-14</td></tr>
         <tr><td>FSR-07</td><td>Max tractive effort limit (SW LUT on both MCUs + dual-MCU current monitoring)</td><td>C-07, C-08, S-09, S-15</td></tr>
-        <tr><td>FSR-08</td><td>3 modules, 1 NTC per module, 1oo3 highest wins</td><td>C-09, C-10, C-35, C-45, S-06, S-07</td></tr>
+        <tr><td>FSR-08</td><td>3 modules, 1 NTC per module, 2oo3 voting with 100 &deg;C hard cap</td><td>C-09, C-10, C-35, C-45, S-06, S-07</td></tr>
         <tr><td>FSR-09</td><td>Encoder loss &rarr; safe state &lt;100 ms</td><td>C-11, C-28, C-29, C-30</td></tr>
         <tr><td>FSR-10</td><td>HVIL interruption &rarr; PWM disable + contactor request &lt;50 ms</td><td>I-04, C-50</td></tr>
         <tr><td>FSR-11</td><td>DC link OV monitor: regen disable / SSO</td><td>C-12, C-46, I-05, S-08, S-13</td></tr>
         <tr><td>FSR-12</td><td>Gate driver complementary inputs, anti-shoot-through</td><td>C-15, C-16, C-47&ndash;C-49</td></tr>
-        <tr><td>FSR-13</td><td>NCV57001 DESAT &lt;2 us PWM disable</td><td>C-15, C-16, C-31&ndash;C-34</td></tr>
+        <tr><td>FSR-13</td><td>NCV57100 DESAT &lt;2 us PWM disable</td><td>C-15, C-16, C-31&ndash;C-34</td></tr>
         <tr><td>FSR-14</td><td>Breakpoint HW PWM disable &lt;10 us</td><td>C-13, C-14, C-23&ndash;C-25</td></tr>
         <tr><td>FSR-15</td><td>Windowed watchdog &le;50 ms</td><td>C-13, C-14, C-37, C-38, C-44</td></tr>
         <tr><td>FSR-16</td><td>Power-on self-test (POST)</td><td>C-16, C-20, S-10, S-12</td></tr>
@@ -2306,7 +2308,7 @@ a { word-break: break-all; color: #333; }
 <h3>10.7.2 Hazard Coverage Matrix</h3>
 
 <table>
-    <caption data-label="Table 17">Hazard Coverage by Test Cases</caption>
+    <caption data-label="Table 18">Hazard Coverage by Test Cases</caption>
     <thead>
         <tr>
             <th style="width:8%">Hazard</th>
@@ -2345,7 +2347,7 @@ a { word-break: break-all; color: #333; }
 <p>All test cases in this plan use the following standardized pass/fail definitions. A test is <strong>PASSED</strong> only when all criteria are met. A test is <strong>FAILED</strong> if any criterion is not met.</p>
 
 <table>
-    <caption data-label="Table 18">Test Pass/Fail Criteria Definitions</caption>
+    <caption data-label="Table 19">Test Pass/Fail Criteria Definitions</caption>
     <thead>
         <tr>
             <th style="width:20%">Criterion</th>
@@ -2369,7 +2371,7 @@ a { word-break: break-all; color: #333; }
 <p>The test plan as a whole is assessed against the following criteria:</p>
 
 <table>
-    <caption data-label="Table 19">Overall Test Plan Assessment Criteria</caption>
+    <caption data-label="Table 20">Overall Test Plan Assessment Criteria</caption>
     <thead>
         <tr>
             <th style="width:25%">Assessment</th>
@@ -2377,7 +2379,7 @@ a { word-break: break-all; color: #333; }
         </tr>
     </thead>
     <tbody>
-        <tr><td><strong>ALL TESTS PASSED</strong></td><td>Every test case in Sections 10.3&ndash;10.5 achieves PASS on all criteria. All safety goals have at least one passing test. All FSRs have at least one passing test. The system is considered validated for its achievable ASIL level (ASIL C for SG-01, SG-13; ASIL B for SG-02, SG-07; ASIL A for SG-06, SG-12, SG-14, SG-15).</td></tr>
+        <tr><td><strong>ALL TESTS PASSED</strong></td><td>Every test case in Sections 10.3&ndash;10.5 achieves PASS on all criteria. All safety goals have at least one passing test. All FSRs have at least one passing test. The system is considered validated for its achievable ASIL level (ASIL D for SG-01, SG-13; ASIL B for SG-02, SG-07; ASIL C for SG-06, SG-12, SG-14, SG-15).</td></tr>
         <tr><td><strong>PASSED WITH EXCEPTIONS</strong></td><td>All critical tests (covering P0 gaps) pass. Minor tests may fail with documented workarounds. Exceptions do not affect safety of the achievable ASIL claims. Mitigation plans documented for each exception.</td></tr>
         <tr><td><strong>FAILED &mdash; NOT ROADWORTHY</strong></td><td>Any P0-gap test fails (throttle monitoring, safe state entry, watchdog response). System must not be operated on public roads until resolved. Hardware or software modifications required.</td></tr>
         <tr><td><strong>INCONCLUSIVE</strong></td><td>Tests could not be executed due to equipment limitations or test environment constraints. Results insufficient for safety validation. Additional testing required before operation.</td></tr>
@@ -2417,14 +2419,14 @@ a { word-break: break-all; color: #333; }
 
 <div class="gap">
     <div class="callout-title">LIMIT-05: Common-Cause MCU Failure (with Shared 3.3V Rail)</div>
-    <strong>Limitation:</strong> The main STM32H723 and NCV57001 gate driver logic side share the same 3.3V supply rail — there is no independent 3.3V regulator for the gate drivers. However, this shared rail provides a <em>passive</em> safe-state path: total loss of 3.3V &rarr; NCV57001 VDD lost &rarr; internal active pull-down forces all IGBT gates to 0V &rarr; SSO, with no software involvement (Path 3). The dual-MCU architecture mitigates common-cause failures: the coprocessor has its own oscillator, independent ADC channels, and independent power kill (GATE_DRIVE_PWR2_ENABLE). A common-cause affecting the main MCU (clock failure, supply collapse, latch-up) does not disable the coprocessor's independent monitoring and safe state actuation.<br><br>
-    <strong>Mitigation:</strong> (1) Six redundant SSO pathways: TIM1_BKIN hardware (Path 1, &lt;100 ns), GATE_DRIVE_PWR1_ENABLE (main, Path 2a, with GATE_DRIVE_PWR1_FB), GATE_DRIVE_PWR2_ENABLE (coprocessor, Path 2b, with GATE_DRIVE_PWR2_FB), shared 3.3V passive pull-down (Path 3), GATE_DRIVE_RESET (either MCU, Path 4, &lt;1 us), coprocessor watchdog &rarr; NRST (Path 5, ~100 ms), coprocessor independent fault trigger (Path 6). (2) 1oo2 power kill: either GATE_DRIVE_PWR1_ENABLE or GATE_DRIVE_PWR2_ENABLE low achieves SSO. (3) Dual-MCU architecture enables ASIL D via ASIL B(D) + ASIL B(D) decomposition.
+    <strong>Limitation:</strong> The main STM32H723 and NCV57100 gate driver logic side share the same 3.3V supply rail — there is no independent 3.3V regulator for the gate drivers. However, this shared rail provides a <em>passive</em> safe-state path: total loss of 3.3V &rarr; NCV57100 VDD lost &rarr; internal active pull-down forces all IGBT gates to 0V &rarr; SSO, with no software involvement (Path 3). The dual-MCU architecture mitigates common-cause failures: the coprocessor has its own oscillator, independent ADC channels, and independent power kill (GATE_DRIVE_PWR2_ENABLE). A common-cause affecting the main MCU (clock failure, supply collapse, latch-up) does not disable the coprocessor's independent monitoring and safe state actuation.<br><br>
+    <strong>Mitigation:</strong> (1) Six redundant SSO pathways (Path 2a/2b are redundant channels of one 1oo2 power-kill pathway): Path 1 = TIM1_BKIN hardware (&lt;100 ns); Path 2a/2b = GATE_DRIVE_PWR1_ENABLE (main, with GATE_DRIVE_PWR1_FB) / GATE_DRIVE_PWR2_ENABLE (coprocessor, with GATE_DRIVE_PWR2_FB); Path 3 = shared 3.3 V passive pull-down; Path 4 = GATE_DRIVE_RESET (either MCU, &lt;1 us); Path 5 = coprocessor watchdog &rarr; NRST (~100 ms); Path 6 = coprocessor independent fault trigger. (2) 1oo2 power kill: either GATE_DRIVE_PWR1_ENABLE or GATE_DRIVE_PWR2_ENABLE low achieves SSO. (3) Dual-MCU architecture enables ASIL D via ASIL B(D) + ASIL B(D) decomposition.
 </div>
 
 <div class="gap">
     <div class="callout-title">LIMIT-06: Gate Driver Non-ASIL Status</div>
-    <strong>Limitation:</strong> The NCV57001 gate drivers are qualified to AEC-Q100, not ASIL. Internal DESAT, UVLO, and anti-shoot-through protections are not independently monitored. Tests C-15 through C-17 validate these protections function but do not provide ASIL credit.<br><br>
-    <strong>Mitigation:</strong> (1) No ASIL credit claimed for gate driver internal protections (Table 13 reflects ASIL A achievable for SG-12, SG-14). (2) Coprocessor PWM monitoring (future) enables ASIL C claim. (3) OR'd FLT input provides basic monitoring with known single-point limitation.
+    <strong>Limitation:</strong> The NCV57100 gate drivers are qualified to AEC-Q100, not ASIL. Internal DESAT, UVLO, and anti-shoot-through protections are not independently monitored. Tests C-15 through C-17 validate these protections function but do not provide ASIL credit.<br><br>
+    <strong>Mitigation:</strong> (1) No ASIL credit claimed for gate driver internal protections (Table 13 reflects ASIL C achievable for SG-12, SG-14). (2) Coprocessor PWM monitoring (future) enables ASIL C claim. (3) OR'd FLT input provides basic monitoring with known single-point limitation.
 </div>
 
 <div class="gap">
@@ -2437,18 +2439,18 @@ a { word-break: break-all; color: #333; }
         <li>No independent safety assessment or third-party audit</li>
     </ul>
     This project implements ASIL decomposition as a <strong>design and educational exercise only</strong>. A production system targeting ISO 26262 compliance would require re-implementation under an ISO 26262-compliant development process, use of a certified STL (e.g., X-CUBE-STL under NDA from ST), or use of a pre-certified MCU + STL combination from an alternative supplier.<br><br>
-    <strong>Mitigation:</strong> (1) X-CUBE-CLASSB provides CPU register test, RAM March-C test, and flash CRC — adequate for POST but not ASIL-traceable. (2) All software safety mechanisms are independently tested via fault injection (75 tests). (3) Document this gap explicitly: achievable ASIL is limited by STL certification status.
+    <strong>Mitigation:</strong> (1) X-CUBE-CLASSB provides CPU register test, RAM March-C test, and flash CRC — adequate for POST but not ASIL-traceable. (2) All software safety mechanisms are independently tested via fault injection (99 tests). (3) Document this gap explicitly: achievable ASIL is limited by STL certification status.
 </div>
 
 <div class="gap">
     <div class="callout-title">LIMIT-08: No Dependent Failure Analysis (DFA)</div>
     <strong>Limitation:</strong> ISO 26262-9 requires a Dependent Failure Analysis for ASIL C and above. No DFA has been performed. This means common-cause and cascading failures between the six SSO paths (e.g., a PCB delamination affecting multiple traces; a single ground bounce affecting both break inputs) are not formally analyzed. Without DFA, the independence claim for ASIL B(D) decomposition cannot be fully substantiated.<br><br>
-    <strong>Mitigation:</strong> (1) Physical separation of TIM1_BKIN, GATE_DRIVE_PWR1_ENABLE, and GATE_DRIVE_PWR2_ENABLE routing on the PCB. (2) Independent ground references where possible. (3) The coprocessor's independent oscillator and separate 3.3V supply reduce common-cause with the main MCU. (4) DFA to be performed before any formal ASIL D audit. (5) Documented as a blocker for formal ASIL D claim.
+    <strong>Mitigation:</strong> (1) Physical separation of TIM1_BKIN, GATE_DRIVE_PWR1_ENABLE, and GATE_DRIVE_PWR2_ENABLE routing on the PCB. (2) Independent ground references where possible. (3) The coprocessor's independent oscillator reduces common-cause with the main MCU; the +3.3 V rail shared by both MCUs is supervised by the TPS389006-Q1, which detects brownout and asserts DRIVER_RESET directly, forcing all NCV57100 outputs off. (4) DFA to be performed before any formal ASIL D audit. (5) Documented as a blocker for formal ASIL D claim.
 </div>
 
 <div class="gap">
     <div class="callout-title">LIMIT-09: No EMI/EMC Pre-Compliance Assessment</div>
-    <strong>Limitation:</strong> The fault injection test plan includes environmental EMI tests (E-08 conducted immunity, E-09 ESD), but no pre-compliance EMC assessment or design margin analysis has been performed. The inverter will be installed in unknown vehicle electromagnetic environments (ignition noise, fuel pump transients, radio transmitters, cell phones). EMI-induced ADC noise, CAN errors, or false triggering of the TIM1 break input are real risks that have not been quantified.<br><br>
+    <strong>Limitation:</strong> The fault injection test plan includes environmental EMI tests (E-08 radiated immunity, E-09 conducted immunity, E-10/E-11 ESD), but no pre-compliance EMC assessment or design margin analysis has been performed. The inverter will be installed in unknown vehicle electromagnetic environments (ignition noise, fuel pump transients, radio transmitters, cell phones). EMI-induced ADC noise, CAN errors, or false triggering of the TIM1 break input are real risks that have not been quantified.<br><br>
     <strong>Mitigation:</strong> (1) Environmental tests E-08 and E-09 provide a baseline when equipment is available. (2) CISPR 25 pre-compliance testing recommended before any field deployment. (3) PCB design includes best-practice grounding, shielding, and filtering. (4) Documented as an open risk for aftermarket installation.
 </div>
 
@@ -2468,7 +2470,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-01: Random Vibration — Operating</div>
     <div class="test-field"><strong>Objective:</strong> Verify no mechanical failure or electrical intermittent under random vibration profile.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-16, H-13 (mechanical failure mode)</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-16, H-13 (mechanical failure mode)</div>
     <div class="test-field"><strong>Setup:</strong> Vibration table with random vibration capability. DUT mounted in production-intent mounting orientation. Accelerometers on DUT.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2486,7 +2488,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-02: Sinusoidal Vibration Sweep — Resonance Search</div>
     <div class="test-field"><strong>Objective:</strong> Identify mechanical resonances that could cause fatigue failure.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), H-13 (mechanical)</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), H-13 (mechanical)</div>
     <div class="test-field"><strong>Setup:</strong> Sine vibration table. DUT with accelerometers at critical locations (PCB center, large components, connector backshells).</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2504,7 +2506,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-03: Mechanical Shock</div>
     <div class="test-field"><strong>Objective:</strong> Verify survival of pothole/curb-impact shock events.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), H-13 (mechanical)</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), H-13 (mechanical)</div>
     <div class="test-field"><strong>Setup:</strong> Shock test table. DUT in production mounting.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2540,7 +2542,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-05: Low Temperature Soak</div>
     <div class="test-field"><strong>Objective:</strong> Verify correct operation at minimum expected ambient temperature.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-16, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-16, H-13</div>
     <div class="test-field"><strong>Setup:</strong> Thermal chamber at &minus;20&deg;C.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2558,7 +2560,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-06: Thermal Shock</div>
     <div class="test-field"><strong>Objective:</strong> Verify survival of rapid temperature transitions.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), H-13 (mechanical)</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), H-13 (mechanical)</div>
     <div class="test-field"><strong>Setup:</strong> Two-zone thermal shock chamber or liquid thermal shock bath.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2593,7 +2595,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-08: Radiated EMI Immunity (ALSE)</div>
     <div class="test-field"><strong>Objective:</strong> Verify system operates correctly under radiated electromagnetic interference.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-13 (ASIL C), FSR-15, H-01, H-13, H-15</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-13 (ASIL D), FSR-15, H-01, H-13, H-15</div>
     <div class="test-field"><strong>Setup:</strong> ALSE (Absorber-Lined Shielded Enclosure) or anechoic chamber. RF signal generator and amplifiers. Bicone and log-periodic antennas.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2611,7 +2613,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-09: Conducted EMI Immunity (BCI)</div>
     <div class="test-field"><strong>Objective:</strong> Verify immunity to conducted interference on harnesses.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL C), SG-13 (ASIL C), FSR-15, H-01, H-15</div>
+    <div class="test-field"><strong>Covered:</strong> SG-01 (ASIL D), SG-13 (ASIL D), FSR-15, H-01, H-15</div>
     <div class="test-field"><strong>Setup:</strong> BCI (Bulk Current Injection) probe and calibration fixture. DUT with full harness.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2627,7 +2629,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-10: ESD — Contact Discharge</div>
     <div class="test-field"><strong>Objective:</strong> Verify system survives electrostatic discharge to accessible surfaces.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-15, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-15, H-13</div>
     <div class="test-field"><strong>Setup:</strong> ESD gun per ISO 10605. DUT fully assembled in production enclosure.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2644,7 +2646,7 @@ a { word-break: break-all; color: #333; }
 <div class="test-case">
     <div class="test-case-header">E-11: ESD — Air Discharge</div>
     <div class="test-field"><strong>Objective:</strong> Verify system survives air discharge to insulated surfaces.</div>
-    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL C), FSR-15, H-13</div>
+    <div class="test-field"><strong>Covered:</strong> SG-13 (ASIL D), FSR-15, H-13</div>
     <div class="test-field"><strong>Setup:</strong> ESD gun. DUT in production enclosure.</div>
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
@@ -2680,12 +2682,12 @@ a { word-break: break-all; color: #333; }
 <!-- ==================== SECTION 10.11 ==================== -->
 <h2 id="sec10-11">10.11 Recommended Test Execution Order</h2>
 
-<p>The 75 defined tests (50 component, 14 system, 11 integration, 12 environmental) are organized into an execution sequence designed to detect simple, non-destructive faults early while deferring potentially destructive tests until basic functionality is confirmed. This approach follows the principle of <strong>progressive validation</strong>: each test group builds confidence before moving to the next, more aggressive group. A failure in an early group prevents advancing to later groups until resolved, avoiding expensive damage from compound failures.</p>
+<p>The 99 defined tests (50 component, 19 system, 18 integration, 12 environmental) are organized into an execution sequence designed to detect simple, non-destructive faults early while deferring potentially destructive tests until basic functionality is confirmed. This approach follows the principle of <strong>progressive validation</strong>: each test group builds confidence before moving to the next, more aggressive group. A failure in an early group prevents advancing to later groups until resolved, avoiding expensive damage from compound failures.</p>
 
 <h3>10.11.1 Execution Sequence</h3>
 
 <table>
-    <caption data-label="Table 26">Test Execution Order and Justification</caption>
+    <caption data-label="Table 21">Test Execution Order and Justification</caption>
     <thead>
         <tr>
             <th style="width:5%">Order</th>
@@ -2715,7 +2717,7 @@ a { word-break: break-all; color: #333; }
 <p>Advancement from one test group to the next requires <strong>all</strong> tests in the current group to pass. The following stopping criteria apply:</p>
 
 <table>
-    <caption data-label="Table 27">Inter-Group Stopping Criteria</caption>
+    <caption data-label="Table 22">Inter-Group Stopping Criteria</caption>
     <thead>
         <tr>
             <th style="width:20%">Scenario</th>
@@ -2736,7 +2738,7 @@ a { word-break: break-all; color: #333; }
 <h3>10.11.3 Hardware Damage Risk Classification</h3>
 
 <table>
-    <caption data-label="Table 28">Per-Test Hardware Damage Risk</caption>
+    <caption data-label="Table 23">Per-Test Hardware Damage Risk</caption>
     <thead>
         <tr>
             <th style="width:10%">Risk</th>
@@ -2769,7 +2771,7 @@ a { word-break: break-all; color: #333; }
 <h2>11.1 Phase 1: Safety-Critical Foundation (Immediate)</h2>
 
 <table>
-    <caption data-label="Table 20">Phase 1 &mdash; Safety-Critical Foundation</caption>
+    <caption data-label="Table 24">Phase 1 &mdash; Safety-Critical Foundation</caption>
     <thead>
         <tr>
             <th style="width:8%">Gap</th>
@@ -2779,7 +2781,7 @@ a { word-break: break-all; color: #333; }
         </tr>
     </thead>
     <tbody>
-        <tr style="background:#e8f5e9;"><td>GAP-HW-01</td><td><strong>CLOSED</strong> — Dual-MCU integrated monitoring detects overcurrent within 100 ms. LM397 comparators retained as non-safety redundant layer. No separate HW OCP required for safety case.</td><td>N/A</td><td>S-16, S-17: verify overcurrent detection and SSO response under dual-MCU monitoring</td></tr>
+        <tr style="background:#e8f5e9;"><td>GAP-HW-01</td><td><strong>CLOSED</strong> — Dual-MCU integrated monitoring detects overcurrent within 100 ms. LM397 comparators retained as non-safety redundant layer. No separate HW OCP required for safety case.</td><td>N/A</td><td>C-07, C-08, S-09, S-15: verify overcurrent detection and SSO response under dual-MCU monitoring</td></tr>
         <tr><td>GAP-SW-01</td><td>Implement boot CRC-32 using STM32 CRC peripheral. Check safety-critical code + calibration data before PWM enable.</td><td>Low</td><td>C-20: verify corrupted flash prevents boot</td></tr>
         <tr><td>GAP-SW-02</td><td>Implement reverse interlock: speed &gt;100 rpm forward &rarr; negative tractive effort clamped to zero. Reverse only when stationary AND selected.</td><td>Low</td><td>S-02: verify reverse rejected at speed</td></tr>
         <tr><td>GAP-SW-03</td><td>Define sensorless fallback policy: immediate SSO on encoder loss. Document decision. If sensorless implemented: bound to &le;2 s, &le;30% tractive effort.</td><td>Low</td><td>C-11: verify encoder loss &rarr; SSO &lt;100 ms</td></tr>
@@ -2789,7 +2791,7 @@ a { word-break: break-all; color: #333; }
 <h2>11.2 Phase 2: Graceful Degradation (Short Term)</h2>
 
 <table>
-    <caption data-label="Table 21">Phase 2 &mdash; Graceful Degradation</caption>
+    <caption data-label="Table 25">Phase 2 &mdash; Graceful Degradation</caption>
     <thead>
         <tr>
             <th style="width:8%">Gap</th>
@@ -2803,14 +2805,14 @@ a { word-break: break-all; color: #333; }
         <tr><td>FSR-06</td><td>Implement uncommanded regenerative braking monitor. Compare commanded vs. actual regen. &gt;10 Nm for &gt;200 ms &rarr; safe state.</td><td>Medium</td><td>S-05: verify detection and response</td></tr>
         <tr><td>FSR-02</td><td>Implement tractive effort command plausibility: commanded current reference vs. measured phase currents. &gt;20% for &gt;100 ms &rarr; safe state.</td><td>Medium</td><td>C-07, C-08: verify plausibility catches sensor faults</td></tr>
         <tr><td>FSR-17</td><td>Implement CAN heartbeat timeout handling with safe-state defaults. IO board loss &rarr; brake=pressed, kickstand=down. BMS loss &rarr; tractive effort zero.</td><td>Medium</td><td>I-01, I-02: verify timeout and defaults</td></tr>
-        <tr><td>FSR-05</td><td>Implement 2-out-of-3 IGBT temperature voter. Progressive derate at warning. SSO at critical. Thresholds in ECC memory.</td><td>Medium</td><td>C-09, C-10: verify voter behavior</td></tr>
+        <tr><td>FSR-08</td><td>Implement 2-out-of-3 IGBT temperature voter. Progressive derate at warning. SSO at critical. Thresholds in ECC memory.</td><td>Medium</td><td>C-09, C-10: verify voter behavior</td></tr>
     </tbody>
 </table>
 
 <h2>11.3 Phase 3: Test Execution and Validation</h2>
 
 <table>
-    <caption data-label="Table 22">Phase 3 &mdash; Test Execution and Validation</caption>
+    <caption data-label="Table 26">Phase 3 &mdash; Test Execution and Validation</caption>
     <thead>
         <tr>
             <th style="width:30%">Activity</th>
@@ -2832,7 +2834,7 @@ a { word-break: break-all; color: #333; }
 <p>The STM32G474RCTx safety coprocessor is <strong>part of the current hardware design</strong> (ControlBoard.kicad_sch, Rev G). The following table maps coprocessor capabilities to safety goals:</p>
 
 <table>
-    <caption data-label="Table 23">Coprocessor Capability to Safety Goal Mapping</caption>
+    <caption data-label="Table 27">Coprocessor Capability to Safety Goal Mapping</caption>
     <thead>
         <tr>
             <th style="width:30%">Feature</th>
@@ -2842,17 +2844,17 @@ a { word-break: break-all; color: #333; }
     </thead>
     <tbody>
         <tr><td>Independent throttle monitoring</td><td>Coprocessor reads throttle pots (THROTTLE_A, THROTTLE_B) via independent ADC channels. Discrepancy &gt;5% &rarr; GATE_DRIVE_PWR2_ENABLE low + GATE_DRIVE_RESET &rarr; SSO. Eliminates common-cause with main MCU.</td><td>SG-01 &rarr; ASIL D</td></tr>
-        <tr><td>Independent current monitoring</td><td>Coprocessor samples all 4 current sense signals (PH_U/V/W + DC link) + REF via independent ADC. Cross-checks against main MCU torque command. Overcurrent &rarr; SSO within 100 ms.</td><td>SG-06, SG-07 &rarr; ASIL D</td></tr>
+        <tr><td>Independent current monitoring</td><td>Coprocessor samples all 4 current sense signals (PH_U/V/W + DC link) + REF via independent ADC. Cross-checks against main MCU torque command. Overcurrent &rarr; SSO within 100 ms.</td><td>SG-06, SG-07 &rarr; ASIL target</td></tr>
         <tr><td>Challenge-response watchdog</td><td>Coprocessor issues challenges via inter-MCU UART; main STM32 must respond within window. Failure &rarr; coprocessor asserts NRST &rarr; system reset &rarr; SSO. Not subject to on-chip common-cause.</td><td>SG-13 &rarr; ASIL D</td></tr>
         <tr><td>PWM integrity monitoring</td><td>Coprocessor monitors all 6 PWM output pairs (PH_U/V/W_HIGH/LOW) for deadtime violations, stuck-on, stuck-off, and frequency anomalies. Independent of main STM32.</td><td>SG-12, SG-14, SG-15 &rarr; ASIL C</td></tr>
         <tr><td>1oo2 gate drive power kill</td><td>GATE_DRIVE_PWR2_ENABLE (coprocessor) in logical-OR with GATE_DRIVE_PWR1_ENABLE (main). Either MCU deasserting its enable kills all six gate drive supplies. Independent feedback: GATE_DRIVE_PWR1_FB + GATE_DRIVE_PWR2_FB.</td><td>SG-13 &rarr; ASIL D</td></tr>
-        <tr><td>Independent CAN snooping</td><td>FDCAN2 + FDCAN3 monitor both CAN buses. Coprocessor cross-checks torque commands, heartbeats, and fault flags against main MCU actions. CAN anomaly &rarr; SSO.</td><td>SG-01, SG-04, SG-05 &rarr; ASIL D</td></tr>
-        <tr><td>Independent temperature monitoring</td><td>All 3 heatsink temps + motor temp monitored via independent ADC. 1oo3 voting cross-check. Thermal runaway &rarr; SSO.</td><td>SG-07 &rarr; ASIL D</td></tr>
+        <tr><td>Independent CAN snooping</td><td>FDCAN2 + FDCAN3 monitor both CAN buses. Coprocessor cross-checks torque commands, heartbeats, and fault flags against main MCU actions. CAN anomaly &rarr; SSO.</td><td>SG-01, SG-04, SG-05 &rarr; ASIL target</td></tr>
+        <tr><td>Independent temperature monitoring</td><td>All 3 heatsink temps + motor temp monitored via independent ADC. 2oo3 voting cross-check with 100 &deg;C hard cap. Thermal runaway &rarr; SSO.</td><td>SG-07 &rarr; ASIL target</td></tr>
         <tr><td>FRAM logging</td><td>CY15B102Q-SXET 256 KB FRAM stores fault logs, configuration, hour meter, odometer. Hardware WP pin protects critical data.</td><td>SG-03 &rarr; ASIL C</td></tr>
     </tbody>
 </table>
 
-<p>The dual-MCU architecture achieves <strong>ASIL D for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition</strong>. All other safety goals achieve their target ASIL. No hazards remain below target. The coprocessor firmware must be validated alongside the main MCU firmware — see test cases C-14 (coprocessor SSO), S-16 through S-19 (modulation transitions), and I-16 (multi-node fault with coprocessor participation).</p>
+<p>The dual-MCU architecture makes <strong>ASIL D achievable for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition</strong>. All other safety goals achieve their target ASIL. No hazards remain below target. The coprocessor firmware must be validated alongside the main MCU firmware — see test cases C-14 (coprocessor SSO), S-16 through S-19 (modulation transitions), and I-16 (multi-node fault with coprocessor participation).</p>
 
 <div class="page-break"></div>
 
@@ -2860,7 +2862,7 @@ a { word-break: break-all; color: #333; }
 <h1 id="ref">References</h1>
 
 <table>
-    <caption data-label="Table 24">Referenced Standards and Documents</caption>
+    <caption data-label="Table 28">Referenced Standards and Documents</caption>
     <thead>
         <tr>
             <th style="width:18%">Reference</th>
@@ -2874,11 +2876,11 @@ a { word-break: break-all; color: #333; }
         <tr><td>ISO 26262-9:2018</td><td><em>Road vehicles &mdash; Functional safety &mdash; Part 9: Automotive Safety Integrity Level (ASIL)-oriented and safety-oriented analyses</em>. ASIL decomposition and dependent failure analysis.</td></tr>
         <tr><td>EN 50155:2021</td><td><em>Railway applications &mdash; Electronic equipment used on rolling stock</em>. Qualification standard for onboard power supplies and electronic equipment in railway applications.</td></tr>
         <tr><td>IEC 61508</td><td><em>Functional safety of electrical/electronic/programmable electronic safety-related systems</em>. General functional safety standard; SIL terminology reference.</td></tr>
-        <tr><td>AEC-Q100</td><td><em>Failure Mechanism Based Stress Test Qualification for Integrated Circuits</em>. Automotive Electronics Council. Qualification standard for the NCV57001 gate driver.</td></tr>
+        <tr><td>AEC-Q100</td><td><em>Failure Mechanism Based Stress Test Qualification for Integrated Circuits</em>. Automotive Electronics Council. Qualification standard for the NCV57100 gate driver.</td></tr>
         <tr><td>STM32H723ZG</td><td><em>STM32H723/733 &mdash; Arm Cortex-M7 MCU Reference Manual (RM0433)</em>. STMicroelectronics. Main processor: 550 MHz, ECC RAM, dual FDCAN, HRTIM.</td></tr>
         <tr><td>STM32G474RCTx</td><td><em>STM32G474/484 &mdash; Arm Cortex-M4 MCU Reference Manual (RM0440)</em>. STMicroelectronics. Safety coprocessor: 170 MHz, FPU, 3x FDCAN, advanced motor-control timers, CORDIC.</td></tr>
         <tr><td>CY15B102Q-SXET</td><td><em>256-Kbit (32K x 8) Serial (SPI) F-RAM</em>. Infineon/Cypress. Non-volatile storage with unlimited write endurance, hardware WP pin.</td></tr>
-        <tr><td>NCV57001</td><td><em>Isolated IGBT Gate Driver with Desaturation Protection</em> &mdash; ON Semiconductor / onsemi Datasheet. DESAT, UVLO, complementary inputs, active Miller clamp, soft turn-off specifications.</td></tr>
+        <tr><td>NCV57100</td><td><em>Isolated IGBT Gate Driver with Desaturation Protection</em> &mdash; ON Semiconductor / onsemi Datasheet. DESAT, UVLO, complementary inputs, active Miller clamp, soft turn-off specifications.</td></tr>
         <tr><td>EC7BW-110S12</td><td><em>EC7BW-110 Series &mdash; 110W Isolated DC-DC Converter</em>. Cincon / Railway Grade. EN 50155 qualified onboard power supply.</td></tr>
         <tr><td>Cossalter</td><td><em>Motorcycle Dynamics (2nd ed.)</em>, Vittore Cossalter. Lulu Press, 2006. Motorcycle handling dynamics, tire friction envelopes, and lean angle mechanics reference.</td></tr>
         <tr><td>NHTSA</td><td><em>National Highway Traffic Safety Administration &mdash; Motorcycle Safety</em>. https://www.nhtsa.gov/motorcycles. Statistics and research on motorcycle accident causation.</td></tr>
@@ -2889,7 +2891,7 @@ a { word-break: break-all; color: #333; }
 <h2>Document History</h2>
 
 <table>
-    <caption data-label="Table 25">Revision History</caption>
+    <caption data-label="Table 29">Revision History</caption>
     <thead>
         <tr>
             <th style="width:12%">Version</th>
@@ -2903,3 +2905,4 @@ a { word-break: break-all; color: #333; }
         <tr><td>3.0</td><td>2026-06-14</td><td>Added LIMIT-07 (STL Class B only), LIMIT-08 (no DFA), LIMIT-09 (no EMI/EMC pre-compliance). Added CORDIC subsection. Added two ASIL evaluations (with/without coprocessor). Clarified encoder and CAN nodes out of scope. Added gate driver FLT verification on PMIC EN power cut. Added complete state machine transition table. Added FOC tested on bench note. Added 17% statistic note.</td></tr>
         <tr><td>3.1</td><td>2026-06-14</td><td>Added 4 system-level tests (S-16 to S-19) for multi-modulation scheme transitions. Total: 75 tests.</td></tr>
         <tr><td>4.0</td><td>2026-07-08</td><td>Major architecture update: Dual-MCU is now the primary architecture. STM32G474RCTx coprocessor implemented. Six SSO pathways. GAP-HW-01 closed — dual-MCU integrated monitoring sufficient, HW OCP not required. 1oo2 gate drive power kill with independent feedback. ASIL D via ASIL B(D) decomposition.</td></tr>
+        <tr><td>4.1</td><td>2026-07-13</td><td>Editorial consistency pass: fault-injection test counts corrected to 99 (50 component / 19 system / 18 integration / 12 environmental); NCV57100 gate-driver part update; DRIVER_RESET turn-off mechanism corrected; bleeder assumption removed; TPS389006-Q1 rail supervisor integrated; stale ASIL and test-reference errors fixed; shared 3.3 V rail and gap-analysis staleness corrected; temperature voting updated from 1oo3 to 2oo3.</td></tr>

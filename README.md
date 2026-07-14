@@ -2,7 +2,7 @@
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
 
-An open-source, high-power motor inverter and vehicle control unit (VCU) for 3-phase permanent-magnet synchronous machine (PMSM) traction drives. The present hardware implementation (Chassis Size 2) is built as a 140 V nominal / 600 A variant. The platform is designed to scale up to the 800 V class — up to 450 V with a capacitor-only swap, and 800 V with a DC link PCB and capacitor change (see DC Link). The control board and firmware architecture are power-stage agnostic and can be adapted across a range of voltage and current classes with appropriate hardware scaling.
+An open-source, high-power motor inverter and vehicle control unit (VCU) for 3-phase permanent-magnet synchronous machine (PMSM) traction drives. The present hardware implementation (Chassis Size 2) is built as a 140 V nominal / 600 A variant. The platform is designed to scale up to the 800 V class — up to 450 V with a capacitor-only swap, and 900 V with a DC link PCB and capacitor change (covers the 800 V target). The control board and firmware architecture are power-stage agnostic and can be adapted across a range of voltage and current classes with appropriate hardware scaling.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
@@ -14,7 +14,7 @@ The control board is designed as a reusable platform that is largely independent
 
 | Variant | Voltage Class | Phase Current | Status |
 |---|---|---|---|
-| Chassis Size 2 | 140 V nominal (current build); 450 V capacitor-only; 800 V with PCB + capacitor change | 600 A | Implemented, under test |
+| Chassis Size 2 | 140 V nominal (current build); 450 V capacitor-only; 900 V PCB + capacitor change (covers 800 V target) | 600 A | Implemented, under test |
 | Chassis Size 3 | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
 
 Semiconductor ratings are selected with margin for the target DC bus: the 800 V class uses 1200 V rated parts, and the 1200 V class uses 1700 V rated parts.
@@ -38,7 +38,7 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
 - **Power-stage agnostic control board**: The same controller and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
 
 ### DC Link
-- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. A capacitor-only swap on the existing PCB takes the bank to 450 V; a PCB and capacitor change takes it to 900 V, covering the 800 V target.
+- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. A PCB and capacitor change takes it to 900 V, covering the 800 V target.
 - **Filter board**: 6&times; 10 &micro;F / 1000 V metallized polypropylene film capacitors (absorb high-frequency ripple and clamp switching voltage spikes, reducing RMS ripple current in the electrolytics) + 12&times; 0.25 &micro;F / 900 V TDK CeraLink low-inductance ceramics at the module terminals + 18&times; 2.2 nF class-Y safety capacitors to chassis for common-mode / bearing-current (EDM) suppression
 - **Busbar-style construction**: all power connections are M6 bolted mounting holes; the mounting hardware sits at bus potential — observe high-voltage precautions during assembly
 - **No onboard bleeder**: the bank has no discharge resistor and remains at bus voltage for hours after power-down (discharge only via M&Omega;-scale parasitic paths). Verify bus voltage with a meter and discharge through a power resistor before any service.
@@ -65,10 +65,11 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
   - Per-bus isolated 5 V supply with firmware-switchable power; jumper-selectable 120 &Omega; termination
   - CAN1: Battery Management System (BMS) and IO board harness
   - CAN2: display/dash, charger(s), diagnostic tools
-- **Distributed Drive Communication (coming soon)**: Fiber-optic link for multi-inverter coordination, enabled via a special IO board
-  - Enables 6+ phase drives, parallel power stages with current sharing and load balancing, or tightly synchronized multi-drive systems
-  - Hardware PWM sync between drives for timing-critical applications
-  - A fiber-optic gate-drive IO board is also in development, supporting isolated PWM signaling directly to gate drivers
+- **Expansion module connector (J2, IO board)**: plug-in expansion header carrying MD_FIBER_TX/RX/SYNC, +5 V, +12 V, and GND for future add-on modules. Planned modules include:
+  - **Fiber IO multidrive module** — distributed-drive coordination for 5+ phase motors, parallel power stages with current sharing and load balancing, or tightly synchronized multi-drive systems with hardware PWM sync between drives
+  - **Fiber-optic gate-drive module** — isolated PWM signaling directly to gate drivers
+  - **WiFi/Bluetooth module** — wireless telemetry and configuration
+  - **Resolver interface module** — resolver position feedback (native inputs support sin/cos encoder or Hall effect only)
 - **BMS heartbeat**: 5-second timeout (HARA FSR-17; BMS external to this system; firmware implementation in progress)
 
 ### Control Electronics — Dual-MCU Architecture
@@ -102,16 +103,15 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
 - Both MCUs read throttle independently; discrepancy &gt;5% triggers safe state
 
 ### Safe State Entry — Six Redundant SSO Pathways
-1. **TIM1_BKIN hardware break input to main MCU** (&lt;100 ns) — OR'd gate driver FLT &rarr; hardware clears MOE, all PWM disabled
-2. **Coprocessor reset to main MCU via NRST** (~100 ms) — challenge/response failure &rarr; coprocessor resets main MCU &rarr; SSO during boot
-3. **Gate driver RESET line** (&lt;1 us actuation once asserted, either MCU or the TPS389006-Q1 rail supervisor) — asserts DRIVER_RESET &rarr; all NCV57100 outputs off &rarr; SSO
-4. **Main MCU gate drive power disable** (~10 us switch actuation) — main MCU deasserts GATE_DRIVE_PWR1_ENABLE &rarr; gate drive UVLO &rarr; gates off &rarr; SSO. Feedback: GATE_DRIVE_PWR1_FB
-5. **Coprocessor gate drive power disable** (~10 us switch actuation) — coprocessor deasserts GATE_DRIVE_PWR2_ENABLE &rarr; same UVLO path. Independent of Path 4. Feedback: GATE_DRIVE_PWR2_FB. Either Path 4 or 5 alone achieves SSO
-6. **Coprocessor independent fault trigger** (&lt;10 us) — coprocessor detects critical fault &rarr; GATE_DRIVE_PWR2_ENABLE low + RESET &rarr; SSO without main MCU
 
-Pathways 4 and 5 together form a **redundant 1oo2 power disable** of the gate drive supplies; each path's feedback is observed by three independent monitors (main MCU, coprocessor, and TPS389006 supervisor). Timing figures are actuation latencies once triggered; the power-kill paths additionally depend on gate-bias rail decay to UVLO (under characterization).
+1. **TIM1_BKIN hardware break input to main MCU** (<100 ns) — OR'd gate driver FLT → hardware clears MOE, all PWM disabled
+2. **Coprocessor reset to main MCU via NRST** (~100 ms) — challenge/response failure → coprocessor resets main MCU → SSO during boot
+3. **Loss of shared 3.3 V rail (passive)** — NCV57100 VDD lost → internal active pull-down → SSO; no software intervention
+4. **Gate driver RESET line** (<1 us actuation once asserted, either MCU or the TPS389006-Q1 rail supervisor) — asserts DRIVER_RESET → all NCV57100 outputs off → SSO
+5. **1oo2 gate-drive power disable** — main MCU (`GATE_DRIVE_PWR1_ENABLE`) or coprocessor (`GATE_DRIVE_PWR2_ENABLE`) opens its BTS462T; either alone removes 12 V → gate-drive UVLO → SSO. Feedbacks: `GATE_DRIVE_PWR1_FB`, `GATE_DRIVE_PWR2_FB`
+6. **Coprocessor independent fault trigger** (<10 us) — coprocessor detects critical fault → `GATE_DRIVE_PWR2_ENABLE` low + RESET → SSO without main MCU
 
-> **Note:** HARA v4.0 enumerates the SSO pathways slightly differently — counting the 1oo2 power kill as one pathway and passive 3.3 V rail loss (gate-driver UVLO pull-down) as a separate passive pathway. TPS389006 supervisor integration is pending the next HARA update.
+> **Note:** HARA v4.1 numbers these as Path 1, Path 5, Path 3, Path 4, Paths 2a/2b, and Path 6, respectively. The TPS389006-Q1 rail supervisor is an additional actuator on the RESET pathway (Path 4), not a separate SSO path.
 
 ### Safety Protections (Hardware + Dual-MCU)
 
@@ -149,41 +149,42 @@ SPWM and SVPWM are implemented in the current firmware; the remaining schemes ar
 
 A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection Test Plan has been conducted in accordance with ISO 26262 methodology. The analysis identifies hazardous events, assigns ASIL ratings, derives Safety Goals and Functional Safety Requirements, and defines 99 fault injection tests across four categories. A separate Threat Analysis and Risk Assessment (TARA) covers cybersecurity with an open-source trust model.
 
-- **`Docs/HARA.pdf`** (108 pages, v4.0) &mdash; Unified HARA and Fault Injection Test Plan covering:
+- **`Docs/HARA.pdf`** (111 pages, v4.1) &mdash; Unified HARA and Fault Injection Test Plan covering:
   - 18 identified hazards including loss of tractive effort mid-corner (H-03a)
   - 15 Safety Goals (ASIL A through D) — ASIL D achievable via dual-MCU ASIL B(D) decomposition
   - 21 Functional Safety Requirements
   - Gap analysis with priority-ranked mitigations — GAP-HW-01 (HW OCP) closed, dual-MCU monitoring sufficient
   - 99 fault injection tests across component (50), system (19), integration (18), and environmental (12) levels
   - Six redundant SSO pathways with 1oo2 gate drive power kill
+  - TPS389006-Q1 rail supervisor integrated — hardware-only gate-driver reset on rail brownout, independent of both MCUs
   - Complete traceability and coverage justification
   - Test execution order with progressive validation and hardware damage risk classification
   - STM32G474RCTx coprocessor fully integrated — not a future enhancement
 
-- **`Docs/TARA.pdf`** (19 pages, v1.1) &mdash; Threat Analysis and Risk Assessment per ISO/SAE 21434:
+- **`Docs/TARA.pdf`** (20 pages, v1.2) &mdash; Threat Analysis and Risk Assessment per ISO/SAE 21434:
   - 7 threat scenarios covering CAN bus attack surface
   - 7 Cybersecurity Requirements (CSRs) with HMAC-SHA256 firmware signing
-  - 8 cybersecurity test cases
+  - 9 cybersecurity test cases (CT-01 through CT-09)
   - <strong>User sovereignty model:</strong> explicit rejection of anti-user OTP/DRM; no vendor lock-in; user-managed keys
   - Security model: <strong>trust the user, protect the bus</strong> — legitimate owner is never the threat
   - User can add their own tamper protection (RDP, encrypted flash) if desired
   - Cross-referenced to HARA for safety-relevant threats
 
-- **`Docs/SWAD.pdf`** (45 pages, v1.4) &mdash; Software Architecture Document:
+- **`Docs/SWAD.pdf`** (47 pages, v1.5) &mdash; Software Architecture Document:
   - 4-layer architecture (HAL/BSP, Safety, Control, Application) under a "user-configurable, safe, reliable" design philosophy
   - FOC + multi-modulation (SPWM, SVPWM, SHEPWM, N-Pulse/Wide/Custom, RSVM, RCFM)
   - <strong>FOC runs at PWM switching frequency</strong> (TIM1_UP, 300 Hz&ndash;16 kHz); ADC oversampled at n&times; PWM freq up to 48 kSPS with sinc3 decimation; 16-bit ADC1/ADC2 + 12-bit ADC3
   - Bumpless modulation scheme transitions with crossfade; async/sync boundary auto-handled
   - Current sensor validation: VREF 2.48&ndash;2.50&ndash;2.52V; zero-point within &plusmn;20% of full scale (&plusmn;240 A); 0&ndash;3.3V; DC-link back-calc
   - Real-time loss estimator + thermal model; die temp estimation; time-to-overtemperature prediction
-  - One NTC per IGBT module (3 modules); 100&deg;C hard cap; temperature voting per current hardware design note is 2oo3 (SWAD text still describes 1oo3 — update pending)
+  - One NTC per IGBT module (3 modules); 100&deg;C hard cap; 2oo3 temperature voting
   - Input validation framework (3 layers); FW update via UART/USB or CAN
   - 6-state SM with full transition table; RTE config tool
   - Motor, encoder, BMS, IO board, charger, display are <strong>out of scope</strong> (external products)
   - All 21 FSRs traced
-  - <strong>Note:</strong> v1.4 covers the single-MCU architecture. The dual-MCU content (STM32G474 coprocessor, 1oo2 gate drive power kill with feedback, six SSO pathways, inter-MCU challenge/response watchdog, bidirectional NRST) is documented in HARA v4.0; the SWAD dual-MCU update is pending.
+  - <strong>Note:</strong> v1.5 covers the single-MCU architecture. The dual-MCU content (STM32G474 coprocessor, 1oo2 gate drive power kill with feedback, six SSO pathways, inter-MCU challenge/response watchdog, bidirectional NRST) is documented in HARA v4.1; the SWAD dual-MCU update is pending.
 
-- **`Docs/Traction_Inverter_User_Manual.pdf`** (29 pages, v2.3) &mdash; User Manual:
+- **`Docs/Traction_Inverter_User_Manual.pdf`** (33 pages, v2.4) &mdash; User Manual:
   - Complete electrical interface and integration guide for the 140 V nominal / 600 A variant (43&ndash;160 V DC input range)
   - Ampseal 35-pin connector (TE 776231-1) with 9 functional groups; pin numbering is placeholder pending harness finalization
   - HVIL: inverter signals presence, <strong>BMS/external system controls main contactor</strong>
@@ -192,11 +193,12 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
   - Gate drive: +15V/-9V, DESAT, Miller clamp, FLT feedback, 1oo2 supply kill
   - Position sensor: <strong>sin/cos encoder or Hall effect only</strong> (quadrature/resolver not supported)
   - Sensing: 16-bit ADC current (Tamura LA37S), MAX22530 voltage, NTC temperature (one per IGBT module)
-  - IGBT: Mitsubishi 1200V modules standard, 600V optional on request
+  - IGBT: Mitsubishi CM600DY-24T 1200 V / 600 A half-bridge modules (six-switch bridge)
   - Dual isolated CAN bus assignment; CAN protocol reference (user-configurable)
   - USB-B debug port (not bus-powered; inverter requires external power), firmware update
   - No warranty; use at own risk; parasitic drain note (no hardware sleep pin)
   - Safety callouts: HV warnings, one clean Sevcon incompatibility warning, RDP warning, debug cautions
+  - Expansion module connector (J2, IO board) — planned fiber IO multidrive (5+ phase motors, load sharing, PWM sync), fiber-optic gate drive, WiFi/Bluetooth, and resolver interface modules
 
 **Important:** ASIL ratings are targets derived from the HARA process, not compliance claims. The dual-MCU architecture (STM32H723 + STM32G474 coprocessor) enables ASIL D for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition. No formal ISO 26262 compliance audit has been performed. A Dependent Failure Analysis (DFA) per ISO 26262-9 is required before formal ASIL D claims can be substantiated — this is documented as the remaining P0 gap (LIMIT-08). This is a design-for-safety effort. Security follows a <strong>user sovereignty</strong> model: the project explicitly rejects anti-user OTP/DRM measures (no vendor lock-in, no encrypted bootloaders with unreplaceable keys). Protections target remote CAN bus attacks, not the legitimate hardware owner. Physical access = user is root.
 
@@ -225,9 +227,9 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 ### Safety Analysis
 | Deliverable | Status |
 |---|---|
-| HARA &mdash; Unified (Rev. 4.0, dual-MCU) | Complete |
-| TARA &mdash; Threat Analysis (Rev. 1.1, anti-OTP/user-sovereignty) | Complete |
-| SWAD &mdash; Software Architecture (Rev. 1.4, dual-MCU update pending) | Complete |
+| HARA &mdash; Unified (Rev. 4.1, dual-MCU) | Complete |
+| TARA &mdash; Threat Analysis (Rev. 1.2, anti-OTP/user-sovereignty) | Complete |
+| SWAD &mdash; Software Architecture (Rev. 1.5, dual-MCU body update planned) | Complete |
 | Technical Safety Concept | Not started |
 | Component-level FMEA | Not started |
 | Fault injection test plan | Complete (99 tests defined) |

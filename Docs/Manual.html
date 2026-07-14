@@ -142,8 +142,8 @@ li { margin: 0.15em 0; }
             <strong>Operating Temp:</strong> &minus;40&deg;C to +85&deg;C<br>
             <strong>Prepared by:</strong> Thomas Liao<br>
             <strong>Reviewed by:</strong> (not yet reviewed)<br>
-            <strong>Date:</strong> July 8, 2026<br>
-            <strong>Version:</strong> 2.3
+            <strong>Date:</strong> July 13, 2026<br>
+            <strong>Version:</strong> 2.4
         </div>
     </div>
     <div class="cover-bottom">
@@ -161,6 +161,8 @@ li { margin: 0.15em 0; }
         <tr><th>Date</th><th>Version</th><th>Author</th><th>Description</th></tr>
     </thead>
     <tbody>
+        <tr><td>July 13, 2026</td><td>2.4</td><td>Project Team</td><td>Editorial consistency pass: NCV57100 part update; USB debug description corrected; cross-references updated; precharge current limit corrected to 2 A; placeholder pinout made consistent; DC link cooling and expansion module sections added; hardware overview figures added; voting, companion-doc versions, and isolation ratings corrected.</td></tr>
+        <tr><td>July 8, 2026</td><td>2.3</td><td>Project Team</td><td>Dual-MCU architecture and CAN assignment updates. (entry added retroactively)</td></tr>
         <tr><td>June 14, 2026</td><td>2.2</td><td>Project Team</td><td>Tone pass: removed defensive marketing language, blanked pinout (placeholder until harness finalized), reduced Sevcon warnings to one clean callout, removed all "Zero" brand references, toned down formal "KNOWN LIMITATION" language, renamed document to User Manual. Added Section 17: modulation strategies (planned feature, 10 schemes, live switching, automatic selection, hysteresis, transition torque blip mitigation, dyno validation plan).</td></tr>
         <tr><td>June 14, 2026</td><td>2.1</td><td>Project Team</td><td>Removed "Sevcon replacement" marketing. Fixed encoder types (sin/cos or Hall only, not quadrature/resolver). Fixed IGBT spec (1200V standard, 600V optional). Clarified main contactor is driven by BMS/external system, not inverter. Fixed precharge description (high-side, isolated +12V through relay). Fixed switched +12V outputs. Removed all warranty language. Added parasitic drain note. Added no-guarantee disclaimers.</td></tr>
         <tr><td>June 14, 2026</td><td>2.0</td><td>Project Team</td><td>Complete rewrite. Professional format, two-variant clarification, corrected HVIL description, expanded pinout tables, added safety callouts, troubleshooting and maintenance sections.</td></tr>
@@ -171,9 +173,9 @@ li { margin: 0.15em 0; }
 <div class="note">
     <div class="note-title">Companion Documents</div>
     This manual covers the electrical interface, integration, and operation of the traction inverter hardware. The following companion documents provide additional detail:<br><br>
-    &bull; <strong>HARA (v4.0):</strong> Hazard Analysis and Risk Assessment per ISO 26262. 75 fault injection tests, 18 hazards, 15 safety goals, 21 FSRs. Dual-MCU architecture with STM32G474RCTx coprocessor. Six SSO pathways. ASIL D via ASIL B(D) decomposition.<br>
-    &bull; <strong>TARA (v1.1):</strong> Threat Analysis and Risk Assessment per ISO/SAE 21434. 8 cybersecurity tests, 7 CSRs, open-source trust model.<br>
-    &bull; <strong>SWAD (v1.3):</strong> Software Architecture Document. 4-layer architecture, FOC + multi-modulation, 6-state state machine, CAN protocol reference.<br><br>
+    &bull; <strong>HARA (v4.1):</strong> Hazard Analysis and Risk Assessment per ISO 26262. 99 fault injection tests, 18 hazards, 15 safety goals, 21 FSRs. Dual-MCU architecture with STM32G474RCTx coprocessor. Six SSO pathways. ASIL D via ASIL B(D) decomposition.<br>
+    &bull; <strong>TARA (v1.2):</strong> Threat Analysis and Risk Assessment per ISO/SAE 21434. 8 cybersecurity tests, 7 CSRs, open-source trust model.<br>
+    &bull; <strong>SWAD (v1.5):</strong> Software Architecture Document. 4-layer architecture, FOC + multi-modulation, 6-state state machine, CAN protocol reference.<br><br>
     The <strong>RTE (Real Time Examiner)</strong> open-source tool connects via CAN bus for live monitoring, parameter configuration, and firmware updates.
 </div>
 
@@ -186,6 +188,7 @@ li { margin: 0.15em 0; }
     <div class="toc-item toc-h2"><span>1.2 System Architecture</span></div>
     <div class="toc-item toc-h2"><span>1.3 External Connections</span></div>
     <div class="toc-item toc-h2"><span>1.4 Internal Debug Interfaces</span></div>
+    <div class="toc-item toc-h2"><span>1.5 Hardware Overview</span></div>
     <div class="toc-item toc-h1"><span>2. Safety Information</span></div>
     <div class="toc-item toc-h2"><span>2.1 High Voltage Warnings</span></div>
     <div class="toc-item toc-h2"><span>2.2 General Safety</span></div>
@@ -203,7 +206,7 @@ li { margin: 0.15em 0; }
     <div class="toc-item toc-h2"><span>7.6 HVIL</span></div>
     <div class="toc-item toc-h2"><span>7.7 Precharge / HV Control</span></div>
     <div class="toc-item toc-h2"><span>7.8 CAN Termination</span></div>
-    <div class="toc-item toc-h2"><span>7.9 Unused Pins</span></div>
+    <div class="toc-item toc-h2"><span>7.9 Reserved Pins</span></div>
     <div class="toc-item toc-h1"><span>8. Power Supply Architecture</span></div>
     <div class="toc-item toc-h2"><span>8.1 Logic Power (VIN_Z)</span></div>
     <div class="toc-item toc-h2"><span>8.2 Switched +12V Output</span></div>
@@ -222,6 +225,7 @@ li { margin: 0.15em 0; }
     <div class="toc-item toc-h2"><span>17.1 Available Modulation Schemes</span></div>
     <div class="toc-item toc-h2"><span>17.2 Live Switching and Automatic Selection</span></div>
     <div class="toc-item toc-h2"><span>17.3 Configuration via CAN Bus</span></div>
+    <div class="toc-item toc-h1"><span>18. Expansion Module</span></div>
 </div>
 
 
@@ -234,7 +238,7 @@ li { margin: 0.15em 0; }
 <p>This manual covers the 140V / 600A variant with the Ampseal 35-pin vehicle connector. This variant includes an onboard railway-grade isolated DC-DC converter that generates +12V logic power from the traction battery. A higher-voltage variant (up to 800V / 800A) is available; see Section 1.1 for details.</p>
 
 <div class="danger">
-    <div class="danger-title">DANGER — High Voltage</div>
+    <div class="danger-title">DANGER &mdash; High Voltage</div>
     This device contains lethal voltages up to 160 VDC (43-160 V range). All high-voltage connections are exposed on busbars. Only qualified personnel should install, service, or operate this equipment. Always verify zero energy state with a calibrated voltmeter before touching any terminal.
 </div>
 
@@ -248,14 +252,14 @@ li { margin: 0.15em 0; }
         <tr><th>Parameter</th><th>This Manual: 140V / 600A</th><th>Higher-Voltage Variant</th></tr>
     </thead>
     <tbody>
-        <tr><td>DC Input Voltage</td><td>43 - 160 VDC</td><td>Up to 800 VDC</td></tr>
+        <tr><td>DC Input Voltage</td><td>43 - 160 VDC</td><td>Capacitor-only swap to 450 V; PCB + capacitor change to 900 V (covers 800 V target)</td></tr>
         <tr><td>Continuous Current</td><td>600 A RMS</td><td>Up to 800 A RMS</td></tr>
         <tr><td>Peak Current</td><td>1200 A (time-limited)</td><td>Configurable</td></tr>
         <tr><td>Vehicle Connector</td><td>Ampseal 35-pin (TE 776231-1)</td><td>User-provided</td></tr>
         <tr><td>Logic Power</td><td>Onboard DC-DC from VIN_Z (included)</td><td>External +12V supply required</td></tr>
-        <tr><td>Gate Drive</td><td>+15V / -9V, 5.75 kV isolation</td><td>Same</td></tr>
+        <tr><td>Gate Drive</td><td>+15 V / &minus;9 V; &gt;5 kV<sub>rms</sub> (UL1577), 1424 V<sub>PK</sub> / 1000 V<sub>rms</sub> working (VDE 0884-11)</td><td>Same</td></tr>
         <tr><td>Control Processor</td><td>STM32H723ZG</td><td>Same</td></tr>
-        <tr><td>IGBT Module</td><td>1200V (standard); 600V available on request</td><td>Same 1200V module; 600V optional if desired</td></tr>
+        <tr><td>IGBT Module</td><td>1200 V (standard)</td><td>Same 1200 V module</td></tr>
     </tbody>
 </table>
 
@@ -266,12 +270,14 @@ li { margin: 0.15em 0; }
 
 <h2>1.2 System Architecture</h2>
 
-<p>The traction converter consists of three PCB assemblies:</p>
+<p>The traction converter consists of five PCB assemblies:</p>
 
 <ul>
     <li><strong>Main Board:</strong> Interface components that repin the board-to-board connectors to the waterproof Ampseal 35 vehicle connector. Contains the 12V logic power module (railway-grade DC-DC), precharge and contactor relays, and signal conditioning for the external vehicle harness.</li>
     <li><strong>Control Board:</strong> Dual-MCU control architecture. Main processor (STM32H723ZG, 550 MHz Cortex-M7) runs FOC motor control, sensor acquisition, CAN communication, and safe state management. Safety coprocessor (STM32G474RCTx, 170 MHz Cortex-M4+FPU) provides independent monitoring of all safety-critical signals, 1oo2 gate drive power kill, challenge/response watchdog, independent CAN bus snooping, and CY15B102Q-SXET 256 KB FRAM for fault logs and configuration.</li>
     <li><strong>Gate Driver Board:</strong> Isolated gate drive power supplies, six-channel PWM gate drive with desaturation protection, active Miller clamp, and hardware PWM disable. Interfaces directly to the IGBT power module.</li>
+    <li><strong>DC Bus Capacitor Board:</strong> DC link capacitor bank (60&times; 330 &micro;F / 200 V aluminium electrolytic capacitors, 19.8 mF total) on an aluminium heat-spreader plate for thermal coupling to the heatsink (Section 5). The 450 V capacitor-only upgrade swaps to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total) and reduces the standoff length by 5 mm (e.g., 55 mm &rarr; 50 mm).</li>
+    <li><strong>DC Bus Filter Board:</strong> Snubber capacitor board mounted at the IGBT module phase terminals (U/V/W) to filter switching transients.</li>
 </ul>
 
 <p>The Main Board aggregates all external vehicle connections through the Ampseal 35 connector and routes signals to the Control Board and Gate Driver Board via internal board-to-board cabling. All high-voltage circuitry is galvanically isolated from the low-voltage control domain.</p>
@@ -297,18 +303,47 @@ li { margin: 0.15em 0; }
 <p>Several internal connectors are available for debugging and firmware flashing. Using these requires partial disassembly of the inverter. When reassembling, ensure all waterproofing seals are correctly seated.</p>
 
 <ul>
-    <li><strong>USB-B Internal:</strong> MCP2221A USB-to-UART bridge for debug logs and firmware updates. GPIO pins on the MCP can reset the MCU and trigger bootloader mode. Do not set the write-protect bit on the MCP2221A — this will disable the USB interface.</li>
-    <li><strong>J-Link Connector:</strong> Standard ARM debug connector for firmware flashing, debugging, and reading memory. RDP (Readout Protection) is never set on the STM32H723ZG — debugging is always possible.</li>
+    <li><strong>USB-B Internal:</strong> Raw USB D+/D&minus; routed directly to the coprocessor's (STM32G474RCTx) native USB 2.0 full-speed (12 Mbit/s) interface for debug logs and firmware updates (Section 15). The port is not bus-powered &mdash; the inverter must be externally powered for the USB interface to operate.</li>
+    <li><strong>J-Link Connector:</strong> Standard ARM debug connector for firmware flashing, debugging, and reading memory. RDP (Readout Protection) is never set on the STM32H723ZG &mdash; debugging is always possible.</li>
 </ul>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Do Not Set RDP</div>
+    <div class="warning-title">WARNING &mdash; Do Not Set RDP</div>
     Setting RDP Level 1 or 2 on the STM32H723ZG will prevent firmware updates and debugging. The factory default is RDP Level 0 (no protection). If you use custom firmware, ensure your flashing tool does not set RDP. A bricked MCU can be recovered via the J-Link connector with RDP Level 0. With RDP Level 2, recovery is impossible.
 </div>
 
 <div class="caution">
-    <div class="caution-title">CAUTION — Reassembly</div>
-    Damage caused by improper disassembly, connection, or reassembly is the user's responsibility. No warranty is provided — this is an open-source hardware project. Always verify waterproofing seals are intact after servicing. Modified firmware may compromise safety-critical functions; the user assumes all risk.
+    <div class="caution-title">CAUTION &mdash; Reassembly</div>
+    Damage caused by improper disassembly, connection, or reassembly is the user's responsibility. No warranty is provided &mdash; this is an open-source hardware project. Always verify waterproofing seals are intact after servicing. Modified firmware may compromise safety-critical functions; the user assumes all risk.
+</div>
+
+<h2>1.5 Hardware Overview</h2>
+
+<p>The renders below show the major PCB assemblies of the inverter.</p>
+
+<div style="text-align: center; margin: 1em 0; page-break-inside: avoid;">
+    <img src="../Hardware/Chassis2/Boards/ControlBoard.png" alt="Control Board render" style="max-width: 480px; width: 100%;">
+    <p class="small" style="text-align: center;"><strong>Control Board</strong> &mdash; Dual-MCU control: STM32H723ZG main processor (FOC, sensor acquisition, CAN) and STM32G474RCTx safety coprocessor (independent monitoring, 1oo2 gate drive power kill).</p>
+</div>
+
+<div style="text-align: center; margin: 1em 0; page-break-inside: avoid;">
+    <img src="../Hardware/Chassis2/Boards/IOBoard.png" alt="IO Board render" style="max-width: 480px; width: 100%;">
+    <p class="small" style="text-align: center;"><strong>IO Board</strong> (the &ldquo;Main Board&rdquo; of Section 1.2) &mdash; Vehicle interface: Ampseal 35-pin connector, railway-grade 43-160 V to +12 V DC-DC converter, precharge and auxiliary relay drives, J2 expansion connector (Section 18).</p>
+</div>
+
+<div style="text-align: center; margin: 1em 0; page-break-inside: avoid;">
+    <img src="../Hardware/Chassis2/Boards/GateDriver.png" alt="Gate Driver Board render" style="max-width: 480px; width: 100%;">
+    <p class="small" style="text-align: center;"><strong>Gate Driver Board</strong> &mdash; Six isolated NCV57100 gate drive channels with +15 V / &minus;9 V Murata supplies, DESAT protection, and active Miller clamp.</p>
+</div>
+
+<div style="text-align: center; margin: 1em 0; page-break-inside: avoid;">
+    <img src="../Hardware/Chassis2/Boards/DCBusCapacitorBoard.png" alt="DC Bus Capacitor Board render" style="max-width: 480px; width: 100%;">
+    <p class="small" style="text-align: center;"><strong>DC Bus Capacitor Board</strong> &mdash; DC link capacitor bank: 60&times; 330 &micro;F / 200 V aluminium electrolytic capacitors (19.8 mF total). 450 V upgrade: 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V (4.08 mF total) with 5 mm shorter standoffs. No onboard bleeder &mdash; see Section 2.1.</p>
+</div>
+
+<div style="text-align: center; margin: 1em 0; page-break-inside: avoid;">
+    <img src="../Hardware/Chassis2/Boards/DCBusFilter.png" alt="DC Bus Filter Board render" style="max-width: 480px; width: 100%;">
+    <p class="small" style="text-align: center;"><strong>DC Bus Filter Board</strong> &mdash; Snubber capacitor board mounted at the IGBT module phase terminals (U/V/W).</p>
 </div>
 
 <!-- ==================== SECTION 2 ==================== -->
@@ -318,13 +353,13 @@ li { margin: 0.15em 0; }
 <h2>2.1 High Voltage Warnings</h2>
 
 <div class="danger">
-    <div class="danger-title">DANGER — Lethal Voltage Present</div>
+    <div class="danger-title">DANGER &mdash; Lethal Voltage Present</div>
     The DC link busbars carry the full traction battery voltage (43-160 VDC). This voltage is lethal. Always treat the DC link as energized until verified otherwise with a calibrated voltmeter. Never work on the inverter with the battery connected. Remove the B+ fuse or open the main line contactor before servicing.
 </div>
 
 <div class="danger">
-    <div class="danger-title">DANGER — Capacitor Stored Energy</div>
-    The DC link capacitor bank stores significant energy even after the battery is disconnected. Wait at least 5 minutes after disconnecting power before touching any HV terminal. Verify zero voltage with a voltmeter across DC Link Positive and Negative before proceeding.
+    <div class="danger-title">DANGER &mdash; Capacitor Stored Energy</div>
+    The DC link capacitor bank (19.8 mF) has <strong>no onboard bleeder</strong> and remains charged at full bus voltage for hours after the battery is disconnected. Do not rely on any fixed wait time. Before touching any HV terminal, verify zero voltage with a calibrated voltmeter across DC Link Positive and Negative, and discharge the bank through a power resistor if any voltage remains.
 </div>
 
 <h2>2.2 General Safety</h2>
@@ -335,13 +370,13 @@ li { margin: 0.15em 0; }
     <li>Ensure the installation location provides adequate cooling. The inverter requires a user-provided heatsink (Section 5).</li>
     <li>The inverter draws quiescent power from the battery even when not actively inverting. For long-term storage, disconnect VIN_Z (Section 3).</li>
     <li>Do not connect or disconnect the Ampseal 35-pin connector while the system is powered.</li>
-    <li>Do not operate the inverter without the enclosure lid properly sealed — the HVIL will detect this, but the interlock is a signal, not a physical barrier.</li>
+    <li>Do not operate the inverter without the enclosure lid properly sealed &mdash; the HVIL will detect this, but the interlock is a signal, not a physical barrier.</li>
 </ul>
 
 <h2>2.3 This Connector is NOT Sevcon-Compatible</h2>
 
 <div class="danger">
-    <div class="danger-title">DANGER — Pinout Incompatibility</div>
+    <div class="danger-title">DANGER &mdash; Pinout Incompatibility</div>
     The Ampseal 35-pin connector on this inverter is <strong>NOT</strong> pin-compatible with Sevcon Gen4 harnesses. Connecting a Sevcon harness to this inverter will cause immediate equipment damage, fire, and potential personal injury. Always verify pin-to-pin compatibility with the pinout tables in Section 7 before making any connection.
 </div>
 
@@ -352,7 +387,7 @@ li { margin: 0.15em 0; }
 <h1>3. Idle Power Draw and Storage</h1>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Standby Power Consumption</div>
+    <div class="warning-title">WARNING &mdash; Standby Power Consumption</div>
     The traction inverter draws quiescent power from the battery via VIN_Z even when not actively inverting. If left unattended, this standby consumption will discharge the battery pack and may cause permanent cell damage.
 </div>
 
@@ -364,7 +399,7 @@ li { margin: 0.15em 0; }
 </ul>
 
 <div class="note">
-    <div class="note-title">Note — No Hardware Sleep Pin</div>
+    <div class="note-title">Note &mdash; No Hardware Sleep Pin</div>
     The inverter does not include a dedicated hardware sleep-enable pin or an ultra-low quiescent mode. The only way to eliminate standby power draw is to physically disconnect VIN_Z. A future hardware revision may add a low-power sleep state or a sleep-control input. For long-term storage, a battery disconnect switch or timer-controlled relay on the VIN_Z line is recommended.
 </div>
 
@@ -374,7 +409,7 @@ li { margin: 0.15em 0; }
 <div class="page-break"></div>
 <h1>4. High Voltage Interlock (HVIL)</h1>
 
-<p>The High Voltage Interlock Loop (HVIL) is a safety-critical signal path between the inverter and the Battery Management System (BMS). It is important to understand that <strong>the inverter does not directly open the contactor</strong> — the HVIL is a presence signal, and the BMS is responsible for contactor control.</p>
+<p>The High Voltage Interlock Loop (HVIL) is a safety-critical signal path between the inverter and the Battery Management System (BMS). It is important to understand that <strong>the inverter does not directly open the contactor</strong> &mdash; the HVIL is a presence signal, and the BMS is responsible for contactor control.</p>
 
 <h3>How HVIL Works</h3>
 
@@ -393,7 +428,7 @@ li { margin: 0.15em 0; }
 </div>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Isolated Grounds</div>
+    <div class="warning-title">WARNING &mdash; Isolated Grounds</div>
     The BMS signal ground (CAN1_GND) is isolated from traction negative. Do not tie CAN1_GND or signal ground (GND_A) to the HV negative bus. Doing so compromises the safety isolation and may cause equipment damage or personal injury.
 </div>
 
@@ -430,25 +465,31 @@ li { margin: 0.15em 0; }
     The 100&deg;C hard cap provides a 75&deg;C safety margin to the IGBT rated maximum junction temperature of 175&deg;C. The real-time loss estimator predicts junction temperature from a thermal model and can warn the operator of impending thermal limits before the hard cap is reached. All thermal parameters are configurable via the RTE tool.
 </div>
 
+<h3>DC Link Capacitor Cooling</h3>
+
+<p>The DC link capacitor bank is thermally coupled to a 4 mm aluminium heat-spreader plate, which mounts to the heatsink via six 55 mm aluminium standoffs (13 mm OD). The thermal path is sized for a 40 W ripple-current heat load at rated operation.</p>
+
+<p>With thermal paste at the interfaces, the plate temperature rise is approximately 37&deg;C above the heatsink base &mdash; about 77&deg;C plate temperature at a 40&deg;C heatsink base. Use <strong>aluminium standoffs only</strong> &mdash; steel standoffs are thermally unacceptable. The full analysis is documented in Docs/DC_LINK_THERMAL_ANALYSIS.md.</p>
+
 <!-- ==================== SECTION 6 ==================== -->
 <div class="page-break"></div>
 <h1>6. Specifications</h1>
 
 <table>
-    <caption>Electrical Specifications — 140V / 600A Variant</caption>
+    <caption>Electrical Specifications &mdash; 140V / 600A Variant</caption>
     <thead>
         <tr><th>Parameter</th><th>Value</th><th>Notes</th></tr>
     </thead>
     <tbody>
-        <tr><td>DC Input Voltage (max)</td><td>140 VDC (nominal)</td><td>43-160 VDC configurable range</td></tr>
+        <tr><td>DC Input Voltage</td><td>140 VDC nominal (43-160 VDC range)</td><td>43-160 VDC configurable range</td></tr>
         <tr><td>Continuous Output Current</td><td>600 A RMS</td><td>Thermal limit depends on user cooling</td></tr>
         <tr><td>Peak Output Current</td><td>1200 A</td><td>Configurable, time-limited</td></tr>
         <tr><td>Output Type</td><td>3-phase AC, IGBT-based</td><td>VVVF drive for PMSM motors</td></tr>
         <tr><td>Switching Frequency</td><td>300 Hz - 16 kHz</td><td>User-configurable via RTE; default 2 kHz SVPWM</td></tr>
-        <tr><td>Modulation Schemes</td><td>SPWM, SVPWM, SHEPWM, N-Pulse, RSVM, RCFM</td><td>User-selectable at runtime via RTE</td></tr>
+        <tr><td>Modulation Schemes</td><td>SPWM, SVPWM, ARSVPWM, SHEPWM, RCFM, RSPWM, N-Pulse / N-Pulse Wide / N-Pulse Custom, RSVM</td><td>SPWM and SVPWM implemented; remainder architected / in development &mdash; see Section 17</td></tr>
         <tr><td>Power Device</td><td>Mitsubishi 1200V IGBT module</td><td>6-switch full bridge</td></tr>
         <tr><td>Gate Drive Voltage</td><td>+15V / -9V</td><td>Positive turn-on, negative turn-off</td></tr>
-        <tr><td>Gate Drive Isolation</td><td>5.75 kVrms</td><td>Galvanic, reinforced</td></tr>
+        <tr><td>Gate Drive Isolation</td><td>&gt;5 kVrms (UL1577)</td><td>Galvanic, reinforced</td></tr>
         <tr><td>Current Sensing</td><td>STM32H723 16-bit ADC</td><td>4 channels (I_U, I_V, I_W, I_DC)</td></tr>
         <tr><td>Voltage Sensing</td><td>MAX22530 isolated ADC</td><td>4 channels (V_DC, V_U, V_V, V_W)</td></tr>
         <tr><td>Control Interface</td><td>Dual isolated CAN 2.0B</td><td>Up to 1 Mbps each</td></tr>
@@ -460,7 +501,7 @@ li { margin: 0.15em 0; }
         <tr><td>Isolation (Logic to Traction)</td><td>Reinforced, railway grade</td><td>Full galvanic isolation</td></tr>
         <tr><td>Control Processor</td><td>STM32H723ZG</td><td>Cortex-M7, 550 MHz, 1 MB flash</td></tr>
         <tr><td>Non-Volatile Storage</td><td>SPI FRAM</td><td>Unlimited write endurance, WP pin</td></tr>
-        <tr><td>Debug Interface</td><td>USB-B (MCP2221A UART)</td><td>External port, isolated</td></tr>
+        <tr><td>Debug Interface</td><td>USB-B (native USB 2.0 FS)</td><td>External port, isolated</td></tr>
         <tr><td>Firmware Update</td><td>USB-B or CAN bus</td><td>Both use same protocol</td></tr>
     </tbody>
 </table>
@@ -471,11 +512,11 @@ li { margin: 0.15em 0; }
 <div class="page-break"></div>
 <h1>7. Ampseal 35-Pin Connector</h1>
 
-<p>All vehicle-facing signals route through the Ampseal 35-pin sealed connector (TE 776231-1). The connector is keyed and cannot be rotated 180 degrees — the key prevents incorrect mating. Always verify the key orientation before mating.</p>
+<p>All vehicle-facing signals route through the Ampseal 35-pin sealed connector (TE 776231-1). The connector is keyed and cannot be rotated 180 degrees &mdash; the key prevents incorrect mating. Always verify the key orientation before mating.</p>
 
 <div class="danger">
-    <div class="danger-title">DANGER — Pinout Not Yet Finalized</div>
-    The pin assignments below are <strong>placeholder only</strong>. Pin numbers are shown as "—" until the harness design is finalized. Do not wire your vehicle harness based on this manual. A finalized pinout will be released in a future revision. Contact the project for the current draft pinout if you are building a test harness.
+    <div class="danger-title">DANGER &mdash; Pinout Not Yet Finalized</div>
+    The pin assignments below are <strong>placeholder only</strong>. Pin numbers are shown as "&mdash;" until the harness design is finalized. Do not wire your vehicle harness based on this manual. A finalized pinout will be released in a future revision. Contact the project for the current draft pinout if you are building a test harness.
 </div>
 
 <table>
@@ -499,36 +540,36 @@ li { margin: 0.15em 0; }
 <h2>7.1 CAN Bus 1 (BMS)</h2>
 
 <table class="pin-table">
-    <caption>CAN Bus 1 — BMS and Peripheral Interface</caption>
+    <caption>CAN Bus 1 &mdash; BMS and Peripheral Interface</caption>
     <thead>
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>CAN1_L</td><td>CAN Bus 1 Low</td></tr>
-        <tr><td>—</td><td>CAN1_H</td><td>CAN Bus 1 High</td></tr>
-        <tr><td>—</td><td>CAN1_GND</td><td>CAN Bus 1 ground (isolated from traction negative)</td></tr>
-        <tr><td>—</td><td>GND_A</td><td>Signal ground (isolated from traction negative)</td></tr>
+        <tr><td>&mdash;</td><td>CAN1_L</td><td>CAN Bus 1 Low</td></tr>
+        <tr><td>&mdash;</td><td>CAN1_H</td><td>CAN Bus 1 High</td></tr>
+        <tr><td>&mdash;</td><td>CAN1_GND</td><td>CAN Bus 1 ground (isolated from traction negative)</td></tr>
+        <tr><td>&mdash;</td><td>GND_A</td><td>Signal ground (isolated from traction negative)</td></tr>
     </tbody>
 </table>
 
 <h2>7.2 CAN Bus 2 (Dash / Charger)</h2>
 
 <table class="pin-table">
-    <caption>CAN Bus 2 — Dashboard, Charger, and Diagnostic Interface</caption>
+    <caption>CAN Bus 2 &mdash; Dashboard, Charger, and Diagnostic Interface</caption>
     <thead>
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>CAN2_L</td><td>CAN Bus 2 Low</td></tr>
-        <tr><td>—</td><td>CAN2_H</td><td>CAN Bus 2 High</td></tr>
-        <tr><td>—</td><td>CAN2_GND</td><td>CAN Bus 2 ground (isolated from traction negative)</td></tr>
-        <tr><td>—</td><td>GND_A</td><td>Signal ground (shared with CAN1)</td></tr>
+        <tr><td>&mdash;</td><td>CAN2_L</td><td>CAN Bus 2 Low</td></tr>
+        <tr><td>&mdash;</td><td>CAN2_H</td><td>CAN Bus 2 High</td></tr>
+        <tr><td>&mdash;</td><td>CAN2_GND</td><td>CAN Bus 2 ground (isolated from traction negative)</td></tr>
+        <tr><td>&mdash;</td><td>GND_A</td><td>Signal ground (shared with CAN1)</td></tr>
     </tbody>
 </table>
 
 <div class="note">
     <div class="note-title">Dual Isolated CAN Buses</div>
-    CAN Bus 1 is designated for BMS and powertrain-critical nodes. CAN Bus 2 is for dashboard, charger, and diagnostic tools. Both buses are galvanically isolated from traction negative and from each other. The CAN protocol is user-configurable via the RTE tool — frame IDs, scaling factors, and periods can be modified for vehicle-specific integration.
+    CAN Bus 1 is designated for BMS and powertrain-critical nodes. CAN Bus 2 is for dashboard, charger, and diagnostic tools. Both buses are galvanically isolated from traction negative and from each other. The CAN protocol is user-configurable via the RTE tool &mdash; frame IDs, scaling factors, and periods can be modified for vehicle-specific integration.
 </div>
 
 <h2>7.3 Throttle Inputs</h2>
@@ -539,13 +580,13 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>THROTTLE</td><td>Analog throttle / torque demand signal (0-3.3V to ADC1)</td></tr>
-        <tr><td>—</td><td>THROTTLE_GND</td><td>Throttle signal return (differential input)</td></tr>
+        <tr><td>&mdash;</td><td>THROTTLE</td><td>Analog throttle / torque demand signal (0-3.3V to ADC1)</td></tr>
+        <tr><td>&mdash;</td><td>THROTTLE_GND</td><td>Throttle signal return (differential input)</td></tr>
     </tbody>
 </table>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Throttle Wiring</div>
+    <div class="warning-title">WARNING &mdash; Throttle Wiring</div>
     The throttle signal is referenced to AGND, not to the traction battery negative. Do not connect throttle ground to HV negative. Use a 3-wire shielded cable for the throttle connection. The shield should be grounded at the inverter end only to avoid ground loops.
 </div>
 
@@ -557,16 +598,16 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>MOT_T1+</td><td>Motor temperature sensor 1 (+), 0.01" wire</td></tr>
-        <tr><td>—</td><td>MOT_T1-</td><td>Motor temperature sensor 1 (-), 0.01" wire</td></tr>
-        <tr><td>—</td><td>MOT_T2+</td><td>Motor temperature sensor 2 (+)</td></tr>
-        <tr><td>—</td><td>MOT_T2-</td><td>Motor temperature sensor 2 (-)</td></tr>
-        <tr><td>—</td><td>SIN+</td><td>Sin/Cos encoder sine channel (+) / Hall U</td></tr>
-        <tr><td>—</td><td>SIN-</td><td>Sin/Cos encoder sine channel (-) / Hall V</td></tr>
-        <tr><td>—</td><td>COS+</td><td>Sin/Cos encoder cosine channel (+) / Hall W</td></tr>
-        <tr><td>—</td><td>COS-</td><td>Sin/Cos encoder cosine channel (-) / Hall common</td></tr>
-        <tr><td>—</td><td>REF+</td><td>Sin/Cos reference mark (+) / Hall VCC (+5V)</td></tr>
-        <tr><td>—</td><td>REF-</td><td>Sin/Cos reference mark (-) / Hall GND</td></tr>
+        <tr><td>&mdash;</td><td>MOT_T1+</td><td>Motor temperature sensor 1 (+), 0.01" wire</td></tr>
+        <tr><td>&mdash;</td><td>MOT_T1-</td><td>Motor temperature sensor 1 (-), 0.01" wire</td></tr>
+        <tr><td>&mdash;</td><td>MOT_T2+</td><td>Motor temperature sensor 2 (+)</td></tr>
+        <tr><td>&mdash;</td><td>MOT_T2-</td><td>Motor temperature sensor 2 (-)</td></tr>
+        <tr><td>&mdash;</td><td>SIN+</td><td>Sin/Cos encoder sine channel (+) / Hall U</td></tr>
+        <tr><td>&mdash;</td><td>SIN-</td><td>Sin/Cos encoder sine channel (-) / Hall V</td></tr>
+        <tr><td>&mdash;</td><td>COS+</td><td>Sin/Cos encoder cosine channel (+) / Hall W</td></tr>
+        <tr><td>&mdash;</td><td>COS-</td><td>Sin/Cos encoder cosine channel (-) / Hall common</td></tr>
+        <tr><td>&mdash;</td><td>REF+</td><td>Sin/Cos reference mark (+) / Hall VCC (+5V)</td></tr>
+        <tr><td>&mdash;</td><td>REF-</td><td>Sin/Cos reference mark (-) / Hall GND</td></tr>
     </tbody>
 </table>
 
@@ -583,14 +624,14 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>VIN_Z</td><td>+43-160VDC logic supply input (via onboard DC-DC). This input powers all internal logic, gate drive, and auxiliary circuits.</td></tr>
-        <tr><td>—</td><td>KEYSWITCH</td><td>Keyswitch input (connect to battery positive via keyswitch)</td></tr>
-        <tr><td>—</td><td>KEYSWITCH_RET</td><td>Keyswitch return</td></tr>
+        <tr><td>&mdash;</td><td>VIN_Z</td><td>+43-160VDC logic supply input (via onboard DC-DC). This input powers all internal logic, gate drive, and auxiliary circuits.</td></tr>
+        <tr><td>&mdash;</td><td>KEYSWITCH</td><td>Keyswitch input (connect to battery positive via keyswitch)</td></tr>
+        <tr><td>&mdash;</td><td>KEYSWITCH_RET</td><td>Keyswitch return</td></tr>
     </tbody>
 </table>
 
 <div class="warning">
-    <div class="warning-title">WARNING — VIN_Z is Not Optional</div>
+    <div class="warning-title">WARNING &mdash; VIN_Z is Not Optional</div>
     VIN_Z must be connected for the inverter to operate. This input powers the onboard DC-DC converter that generates +12V for all internal logic and gate drive circuits. Without VIN_Z, the inverter is completely non-functional. For storage, VIN_Z can be disconnected to prevent battery drain (Section 3).
 </div>
 
@@ -602,8 +643,8 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>O_+5V_HVIL_SOURCE_A</td><td>HVIL +5V source output (referenced to CAN1_GND)</td></tr>
-        <tr><td>—</td><td>I_+5V_HVIL_RETURN_A</td><td>HVIL +5V return input (from interlock loop)</td></tr>
+        <tr><td>&mdash;</td><td>O_+5V_HVIL_SOURCE_A</td><td>HVIL +5V source output (referenced to CAN1_GND)</td></tr>
+        <tr><td>&mdash;</td><td>I_+5V_HVIL_RETURN_A</td><td>HVIL +5V return input (from interlock loop)</td></tr>
     </tbody>
 </table>
 
@@ -617,10 +658,10 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>O_12V_PRECHARGE_ENABLE</td><td>Precharge relay drive output (+12V, high-side isolated)</td></tr>
-        <tr><td>—</td><td>O_12V_RELAY_AUX</td><td>Auxiliary relay drive output (+12V) — NOT the main HV contactor</td></tr>
-        <tr><td>—</td><td>I_VIN_HIGH_A</td><td>High-side HV tap for precharge voltage monitoring</td></tr>
-        <tr><td>—</td><td>I_VIN_LOW_A</td><td>Low-side HV tap for precharge voltage monitoring</td></tr>
+        <tr><td>&mdash;</td><td>O_12V_PRECHARGE_ENABLE</td><td>Precharge relay drive output (+12V, high-side isolated)</td></tr>
+        <tr><td>&mdash;</td><td>O_12V_RELAY_AUX</td><td>Auxiliary relay drive output (+12V) &mdash; NOT the main HV contactor</td></tr>
+        <tr><td>&mdash;</td><td>I_VIN_HIGH_A</td><td>High-side HV tap for precharge voltage monitoring</td></tr>
+        <tr><td>&mdash;</td><td>I_VIN_LOW_A</td><td>Low-side HV tap for precharge voltage monitoring</td></tr>
     </tbody>
 </table>
 
@@ -632,8 +673,8 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>CAN1_TERM</td><td>CAN Bus 1 120-ohm termination (switched via internal relay)</td></tr>
-        <tr><td>—</td><td>CAN2_TERM</td><td>CAN Bus 2 120-ohm termination (switched via internal relay)</td></tr>
+        <tr><td>&mdash;</td><td>CAN1_TERM</td><td>CAN Bus 1 120-ohm termination (switched via internal relay)</td></tr>
+        <tr><td>&mdash;</td><td>CAN2_TERM</td><td>CAN Bus 2 120-ohm termination (switched via internal relay)</td></tr>
     </tbody>
 </table>
 
@@ -650,10 +691,10 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>—</td><td>NC</td><td>Reserved for future use</td></tr>
-        <tr><td>—</td><td>NC</td><td>Reserved for future use</td></tr>
-        <tr><td>—</td><td>NC</td><td>Reserved for future use</td></tr>
-        <tr><td>—</td><td>NC</td><td>Reserved for future use</td></tr>
+        <tr><td>&mdash;</td><td>NC</td><td>Reserved for future use</td></tr>
+        <tr><td>&mdash;</td><td>NC</td><td>Reserved for future use</td></tr>
+        <tr><td>&mdash;</td><td>NC</td><td>Reserved for future use</td></tr>
+        <tr><td>&mdash;</td><td>NC</td><td>Reserved for future use</td></tr>
     </tbody>
 </table>
 
@@ -665,7 +706,7 @@ li { margin: 0.15em 0; }
 
 <h2>8.1 Logic Power (VIN_Z)</h2>
 
-<p>VIN_Z is the primary input for all internal power. An onboard railway-grade isolated DC-DC converter (5.75 kVrms isolation) converts the 43-160 VDC traction battery voltage to regulated +12V logic power. This converter provides up to 20W, which is sufficient for the MCU, gate drive, CAN transceivers, sensors, and all auxiliary circuits.</p>
+<p>VIN_Z is the primary input for all internal power. An onboard railway-grade isolated DC-DC converter (1500 Vdc I/O isolation) converts the 43-160 VDC traction battery voltage to regulated +12V logic power. This converter provides up to 20W, which is sufficient for the MCU, gate drive, CAN transceivers, sensors, and all auxiliary circuits.</p>
 
 <p>The DC-DC converter is enabled by the keyswitch input. When the keyswitch is off, the converter is disabled and the inverter draws no power (except for microamp leakage current through the keyswitch detection circuit).</p>
 
@@ -691,7 +732,7 @@ li { margin: 0.15em 0; }
 
 <div class="note">
     <div class="note-title">Gate Drive Isolation</div>
-    Each of the six gate drive channels has its own isolated DC-DC converter. This provides per-channel isolation — a fault on one channel cannot propagate to others through the gate drive power supply. The total isolation from logic to traction is 5.75 kVrms, rated for reinforced insulation.
+    Each of the six gate drive channels has its own isolated DC-DC converter. This provides per-channel isolation &mdash; a fault on one channel cannot propagate to others through the gate drive power supply. Each Murata MGJ2D121509MPC-R7 gate-drive DC/DC provides 5.2 kVDC input-to-output isolation. The gate-driver isolation barrier (NCV57100) is rated &gt;5 kV<sub>rms</sub> per UL1577 and 1424 V<sub>PK</sub> / 1000 V<sub>rms</sub> working voltage per VDE 0884-11.
 </div>
 
 <!-- ==================== SECTION 9 ==================== -->
@@ -709,8 +750,8 @@ li { margin: 0.15em 0; }
 </ul>
 
 <div class="note">
-    <div class="note-title">Gate Drive Supply Kill — 1oo2 Architecture</div>
-    Two independent MCUs can each disable all six gate drive power supplies: GATE_DRIVE_PWR1_ENABLE (main STM32H723) and GATE_DRIVE_PWR2_ENABLE (coprocessor STM32G474). Either enable going low shuts down the Murata supplies, the NCV57001 drivers detect UVLO, and force all IGBT gates to 0V via internal active pull-downs. This is a 1oo2 architecture — either MCU can achieve SSO independently. Independent feedback is provided: GATE_DRIVE_PWR1_FB (main MCU) and GATE_DRIVE_PWR2_FB (coprocessor). The FLT signal additionally confirms UVLO detection. Six total SSO pathways exist; see the HARA (v4.0) Section 2.2 for full details.
+    <div class="note-title">Gate Drive Supply Kill &mdash; 1oo2 Architecture</div>
+    Two independent MCUs can each disable all six gate drive power supplies: GATE_DRIVE_PWR1_ENABLE (main STM32H723) and GATE_DRIVE_PWR2_ENABLE (coprocessor STM32G474). Either enable going low shuts down the Murata supplies, the NCV57100 drivers detect UVLO, and force all IGBT gates to 0V via internal active pull-downs. This is a 1oo2 architecture &mdash; either MCU can achieve SSO independently. Independent feedback is provided: GATE_DRIVE_PWR1_FB (main MCU) and GATE_DRIVE_PWR2_FB (coprocessor). The FLT signal additionally confirms UVLO detection. Six total SSO pathways exist; see the HARA (v4.1) Section 2.2 for full details.
 </div>
 
 <!-- ==================== SECTION 10 ==================== -->
@@ -721,26 +762,33 @@ li { margin: 0.15em 0; }
 
 <p>Phase currents (I_U, I_V, I_W) and DC link current (I_DC) are measured using Tamura LA37S Hall-effect current transducers with 1.042 mV/A sensitivity and +/-1200 A range. The outputs are conditioned to 0-3.3V for the STM32H723's 16-bit ADC.</p>
 
-<p>Each phase current is sampled on the primary ADC at 16-bit resolution, with redundant 12-bit channels on secondary ADCs for fault detection. The ADC oversamples at an integer multiple (n x) of the PWM switching frequency, up to 48 kSPS, with sinc3 decimation for noise reduction. See SWAD (v1.3) Section 4.2 for full ADC architecture details.</p>
+<p>Each phase current is sampled on the primary ADC at 16-bit resolution, with redundant 12-bit channels on secondary ADCs for fault detection. The ADC oversamples at an integer multiple (n x) of the PWM switching frequency, up to 48 kSPS, with sinc3 decimation for noise reduction. See SWAD (v1.5) Section 4.2 for full ADC architecture details.</p>
 
 <h3>Voltage Sensing</h3>
 
-<p>DC link voltage (V_DC) and all three phase voltages (V_U, V_V, V_W) are measured using the MAX22530 4-channel isolated 12-bit ADC. The MAX22530 provides galvanic isolation between the high-voltage measurement domain and the low-voltage logic domain, with SPI interface to the STM32H723.</p>
+<p>DC link voltage (V_DC) and all three phase voltages (V_U, V_V, V_W) are measured using the MAX22530 4-channel isolated 12-bit ADC. The MAX22530 provides reinforced isolation between the high-voltage measurement domain and the low-voltage logic domain via its internal reinforced barrier, with SPI interface to the STM32H723.</p>
+
+<p>Each channel uses a 1001:1 high-voltage divider (4&times; 250 k&Omega; + 1 k&Omega;), giving a measurable range to ~1.8 kV full-scale.</p>
 
 <h3>Temperature Sensing</h3>
 
-<p>Three NTC thermistors are mounted to the IGBT module baseplate — one per module — for junction temperature estimation. The firmware uses 1-out-of-3 voting (highest reading wins) with progressive derating starting at 80&deg;C and a hard cap at 100&deg;C. Motor temperature sensors (if fitted) are connected via pins C1-C4.</p>
+<p>Three NTC thermistors are mounted to the IGBT module baseplate &mdash; one per module &mdash; for junction temperature estimation. The firmware uses 2-out-of-3 (2oo3) voting: the outlier sensor is excluded and the higher of the two agreeing readings is used, with progressive derating starting at 80&deg;C and a hard cap at 100&deg;C. Motor temperature sensors (if fitted) are connected via the MOT_T1/MOT_T2 pins on the Ampseal connector (Section 7.4; pin numbers are placeholder pending harness finalization).</p>
 
 <!-- ==================== SECTION 11 ==================== -->
 <div class="page-break"></div>
 <h1>11. External Precharge</h1>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Main HV Contactor is NOT Driven by This Inverter</div>
-    The main high-voltage contactor that connects the battery to the inverter DC link is <strong>controlled by the BMS or other external safety system</strong>, not by this inverter. The inverter only drives the <strong>precharge relay</strong> (a smaller relay that limits inrush current through a resistor). Do not connect the main contactor coil to any inverter output — this is a safety-critical function that must be managed by the BMS.
+    <div class="warning-title">WARNING &mdash; Main HV Contactor is NOT Driven by This Inverter</div>
+    The main high-voltage contactor that connects the battery to the inverter DC link is <strong>controlled by the BMS or other external safety system</strong>, not by this inverter. The inverter only drives the <strong>precharge relay</strong> (a smaller relay that limits inrush current through a resistor). Do not connect the main contactor coil to any inverter output &mdash; this is a safety-critical function that must be managed by the BMS.
 </div>
 
 <p>The precharge function uses a <strong>high-side relay</strong> in the battery positive path. A precharge resistor limits the current that charges the DC link capacitor when the system is first powered. The +12V relay drive is isolated from the traction high voltage. The relay closes the precharge path; once the DC link voltage reaches ~95% of battery voltage, the BMS closes the main contactor and the precharge relay opens.</p>
+
+<div class="caution">
+    <div class="caution-title">CAUTION &mdash; Precharge Current Limit</div>
+    The precharge resistor is external and user-supplied. Size it so that the peak precharge current stays below 2 A &mdash; the input fuse limit on the precharge path. Exceeding this limit will blow the fuse.
+</div>
 
 <p>The inverter provides four signals to support the precharge function:</p>
 
@@ -750,10 +798,10 @@ li { margin: 0.15em 0; }
         <tr><th>Signal</th><th>Pin</th><th>Type</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>O_12V_PRECHARGE_ENABLE</td><td>26</td><td>Output, +12V isolated</td><td>Drives the precharge relay (high-side, resistor-limited path)</td></tr>
-        <tr><td>O_12V_RELAY_AUX</td><td>27</td><td>Output, +12V</td><td>Auxiliary relay drive (NOT main contactor)</td></tr>
-        <tr><td>I_VIN_HIGH_A</td><td>28</td><td>Input, HV</td><td>High-side tap for precharge voltage monitoring</td></tr>
-        <tr><td>I_VIN_LOW_A</td><td>29</td><td>Input, HV</td><td>Low-side tap for precharge voltage monitoring</td></tr>
+        <tr><td>O_12V_PRECHARGE_ENABLE</td><td>&mdash;</td><td>Output, +12V isolated</td><td>Drives the precharge relay (high-side, resistor-limited path)</td></tr>
+        <tr><td>O_12V_RELAY_AUX</td><td>&mdash;</td><td>Output, +12V</td><td>Auxiliary relay drive (NOT main contactor)</td></tr>
+        <tr><td>I_VIN_HIGH_A</td><td>&mdash;</td><td>Input, HV</td><td>High-side tap for precharge voltage monitoring</td></tr>
+        <tr><td>I_VIN_LOW_A</td><td>&mdash;</td><td>Input, HV</td><td>Low-side tap for precharge voltage monitoring</td></tr>
     </tbody>
 </table>
 
@@ -763,7 +811,7 @@ li { margin: 0.15em 0; }
 <div class="page-break"></div>
 <h1>12. Dual Isolated CAN Bus</h1>
 
-<p>The inverter includes two independent CAN 2.0B buses, each with full galvanic isolation from traction negative and from each other.</p>
+<p>The inverter includes two independent CAN 2.0B buses, each with full galvanic isolation from traction negative and from each other. Each ISO1042BDWVR transceiver pair is rated for VIORM 2121 V<sub>PK</sub>.</p>
 
 <table>
     <caption>CAN Bus Assignment</caption>
@@ -771,7 +819,7 @@ li { margin: 0.15em 0; }
         <tr><th>Parameter</th><th>CAN Bus 1</th><th>CAN Bus 2</th></tr>
     </thead>
     <tbody>
-        <tr><td>Pins</td><td>1, 2, 3, 4</td><td>5, 6, 7, 8</td></tr>
+        <tr><td>Pins</td><td>&mdash;</td><td>&mdash;</td></tr>
         <tr><td>Nodes</td><td>BMS, IO board</td><td>Dashboard, charger, diagnostic tools</td></tr>
         <tr><td>Bitrate</td><td>500 kbps (default)</td><td>500 kbps (default)</td></tr>
         <tr><td>Termination</td><td>Relay-switched</td><td>Relay-switched</td></tr>
@@ -781,11 +829,11 @@ li { margin: 0.15em 0; }
 
 <div class="note">
     <div class="note-title">CAN Protocol is User-Configurable</div>
-    The CAN frame definitions in this manual are a reference implementation only. All CAN IDs, scaling factors, periods, and frame layouts are stored in FRAM and can be modified via the RTE (Real Time Examiner) configuration tool. The VCU does not enforce a rigid protocol — the user defines their own communication scheme for vehicle-specific integration. See the SWAD (v1.3) Section 10 for the reference frame definitions.
+    The CAN frame definitions in this manual are a reference implementation only. All CAN IDs, scaling factors, periods, and frame layouts are stored in FRAM and can be modified via the RTE (Real Time Examiner) configuration tool. The VCU does not enforce a rigid protocol &mdash; the user defines their own communication scheme for vehicle-specific integration. See the SWAD (v1.5) Section 10 for the reference frame definitions.
 </div>
 
 <div class="caution">
-    <div class="caution-title">CAUTION — Encoder and BMS are Out of Scope</div>
+    <div class="caution-title">CAUTION &mdash; Encoder and BMS are Out of Scope</div>
     This inverter does not include or supply the traction motor, rotor position sensor (sin/cos encoder or hall sensor), battery management system, IO board, charger, or vehicle display. These are external products that interface with the inverter via the CAN bus and analog/digital I/O. This manual documents the inverter-side interface only. Refer to the motor manufacturer, BMS manufacturer, and vehicle OEM for their respective documentation.
 </div>
 
@@ -867,7 +915,7 @@ li { margin: 0.15em 0; }
 <div class="page-break"></div>
 <h1>15. USB-B Debug Port</h1>
 
-<p>An external USB-B connector provides access to the debug UART and firmware update interface. The USB-B port contains an MCP2221A USB-to-UART bridge that connects to the STM32H723's USART peripheral.</p>
+<p>An external USB-B connector provides access to the debug and firmware update interface. The USB-B port routes raw USB D+/D&minus; directly to the coprocessor's (STM32G474RCTx) native USB 2.0 full-speed (12 Mbit/s) interface. The port is <strong>not bus-powered</strong> &mdash; the inverter must be powered from its external supply for the USB interface to operate; plugging in a laptop alone will not power the board.</p>
 
 <h3>Functions</h3>
 
@@ -882,13 +930,8 @@ li { margin: 0.15em 0; }
 <p>The USB-B port is galvanically isolated from the traction high-voltage domain. It is safe to connect a laptop to the USB-B port while the inverter is powered from the traction battery. However, for maximum safety, use an additional USB isolator between the laptop and the inverter when working on a live system.</p>
 
 <div class="warning">
-    <div class="warning-title">WARNING — USB Isolator Recommended</div>
+    <div class="warning-title">WARNING &mdash; USB Isolator Recommended</div>
     While the USB-B port is internally isolated, an additional external USB isolator (e.g., Adafruit USB Isolator, 1 kV isolation) is strongly recommended when connecting a laptop to a live traction system. This provides defense in depth against ground fault paths through the laptop chassis.
-</div>
-
-<div class="warning">
-    <div class="warning-title">WARNING — Do Not Set MCP Write-Protect</div>
-    Setting the write-protect bit on the MCP2221A will disable the USB interface and prevent firmware updates via USB. There is no recovery method short of desoldering the MCP2221A. The factory default has write-protect disabled. If using custom firmware, verify the MCP2221A configuration before flashing.
 </div>
 
 <!-- ==================== SECTION 16 ==================== -->
@@ -917,18 +960,18 @@ li { margin: 0.15em 0; }
 <h2>16.2 Debug Interface Warning</h2>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Authorized Use Only</div>
+    <div class="warning-title">WARNING &mdash; Authorized Use Only</div>
     The debug interface and firmware update capability are provided for development, diagnostic, and authorized repair purposes only. Access to these interfaces allows modification of safety-critical parameters including current limits, thermal thresholds, and fault response behavior. Modification of these parameters without proper understanding of the system can result in equipment damage, fire, or personal injury. Always maintain a known-good firmware image and parameter set before making changes.
 </div>
 
 <div class="note">
     <div class="note-title">Open Source</div>
-    This project is open source. Firmware source code, schematics, and all documentation are available on the project GitHub repository. The STM32H723ZG is shipped with RDP Level 0 (no readout protection) — debugging and firmware modification are always possible. The user is the root of trust. The project explicitly rejects anti-user security mechanisms (OTP fuses, vendor-locked keys, encrypted bootloaders with unreplaceable keys). Physical tampering is an acceptable risk per the open-source trust model documented in the TARA (v1.1).
+    This project is open source. Firmware source code, schematics, and all documentation are available on the project GitHub repository. The STM32H723ZG is shipped with RDP Level 0 (no readout protection) &mdash; debugging and firmware modification are always possible. The user is the root of trust. The project explicitly rejects anti-user security mechanisms (OTP fuses, vendor-locked keys, encrypted bootloaders with unreplaceable keys). Physical tampering is an acceptable risk per the open-source trust model documented in the TARA (v1.2).
 </div>
 
 <div class="caution">
-    <div class="caution-title">CAUTION — Third-Party Firmware</div>
-    Only firmware obtained from the official project repository or built from audited source code is supported. Third-party firmware may disable safety features, override thermal limits, or introduce software faults. Use of unverified firmware is at the user's own risk. The HARA (v3.0) fault injection test results apply only to the official firmware. No fitness for purpose is guaranteed for any firmware configuration.
+    <div class="caution-title">CAUTION &mdash; Third-Party Firmware</div>
+    Only firmware obtained from the official project repository or built from audited source code is supported. Third-party firmware may disable safety features, override thermal limits, or introduce software faults. Use of unverified firmware is at the user's own risk. The HARA (v4.1) fault injection test results apply only to the official firmware. No fitness for purpose is guaranteed for any firmware configuration.
 </div>
 
 <!-- ==================== SECTION 17 ==================== -->
@@ -936,7 +979,7 @@ li { margin: 0.15em 0; }
 <h1>17. Motor Control and Modulation Strategies</h1>
 
 <div class="note">
-    <div class="note-title">Note — Planned Feature</div>
+    <div class="note-title">Note &mdash; Planned Feature</div>
     The multi-modulation architecture described in this section is planned for a future firmware release. The current firmware implements SPWM and SVPWM. Expanded modulation support, live switching, and automatic selection are under development. Planned validation on a dynamometer at a university lab.
 </div>
 
@@ -989,7 +1032,7 @@ li { margin: 0.15em 0; }
 </table>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Transition Torque Blips</div>
+    <div class="warning-title">WARNING &mdash; Transition Torque Blips</div>
     Switching modulation schemes during active torque production can cause brief torque disturbances. The bumpless transfer logic crossfades the voltage reference over several PWM periods, but a small transient is unavoidable when the harmonic structure changes abruptly. The firmware gates scheme transitions during critical moments (high di/dt, regen/acceleration crossover) to prevent perceptible torque blips. Do not request a scheme switch during hard acceleration or braking unless you have validated the transition behavior on your specific motor.
 </div>
 
@@ -1012,9 +1055,27 @@ li { margin: 0.15em 0; }
 </ul>
 
 <div class="warning">
-    <div class="warning-title">WARNING — Validate on Your Hardware</div>
+    <div class="warning-title">WARNING &mdash; Validate on Your Hardware</div>
     Modulation scheme behavior varies with motor inductance, winding configuration, and mechanical resonance. Always validate modulation selection and transition behavior on your specific hardware before deploying in a vehicle. Torque ripple, acoustic noise, and EMI characteristics are motor-dependent. The automatic selection map should be tuned for your application.
 </div>
+
+<!-- ==================== SECTION 18 ==================== -->
+<div class="page-break"></div>
+<h1>18. Expansion Module</h1>
+
+<div class="note">
+    <div class="note-title">Note &mdash; Planned Feature</div>
+    All expansion modules described in this section are planned. The J2 expansion connector exists on the IO board, but no plug-in modules are available yet.
+</div>
+
+<p>The IO board provides a J2 expansion connector carrying MD_FIBER_TX, MD_FIBER_RX, MD_FIBER_SYNC, +5 V, +12 V, and GND. This connector supports the following planned plug-in modules:</p>
+
+<ul>
+    <li><strong>Fiber IO multidrive module (planned):</strong> Distributed drive configurations &mdash; motors with five or more phases, and parallel power stages with current sharing and load balancing, with hardware PWM synchronization between stages over fiber.</li>
+    <li><strong>Fiber-optic gate-drive module (planned):</strong> Isolated PWM delivered directly to the gate drivers over fiber optics.</li>
+    <li><strong>WiFi/Bluetooth telemetry module (planned):</strong> Wireless telemetry for monitoring and diagnostics.</li>
+    <li><strong>Resolver interface module (planned):</strong> Adds resolver position feedback. Without this module, native position inputs remain sin/cos encoder or Hall effect only (Section 7.4).</li>
+</ul>
 
 </body>
 </html>
