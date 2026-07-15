@@ -210,9 +210,11 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 | Main inverter schematic and PCB design | Complete |
 | STM32 prototype assembly | Complete, under active test |
 | FOC current-loop bench validation (±50 A Iq on Zero 75-10, 50 V bus, no heatsink/airflow, baseplate barely warm) | Complete |
-| Voltage/current bring-up and longer-load bench testing | In progress |
+| Voltage/current bring-up and longer-load bench testing | In progress — 100 V / 60 A continuous for 10 min and ±200 A Iq reversal for ~1 min survived on Zero 75-10; heatsink estimated ~70–85 °C with no airflow or heatsink; 400 A trial paused for phase-lead management |
 | Full-load dyno testing (motor coupled) | Planned |
 | Environmental and thermal validation | Planned |
+
+> **Note:** All high-current runs so far have been without a proper heatsink, forced airflow, or temp probes; temperatures are estimates. Proper thermal validation with temp sensors is planned in the next few days.
 
 ### Software/Firmware
 | Milestone | Status |
