@@ -242,7 +242,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 
 ### For Users
 
-The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (140 V nominal in the current build; up to 800 V class with DC link modifications) and currents (up to 600 A) that can be lethal. The DC link bank has no onboard bleeder and stays at bus voltage for hours after power-down — verify with a meter and discharge before service. Proper safety equipment and procedures are mandatory.
+The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (140 V nominal in the current build; up to 800 V class with DC link modifications) and currents (up to 600 A) that can be lethal. The DC link bank has no onboard bleeder and stays at bus voltage for hours after power-down, unless the active discharge command is run, which uses the motor as a bleeder resistor to discharge the capacitors within 2 seconds. Always verify with a meter and discharge before service. Proper safety equipment and procedures are mandatory.
 
 **Prerequisites:**
 - Compatible battery pack (43&ndash;160 V for the current build's onboard supply; higher bus voltages require appropriate DC link capacitors and supply adaptation)
