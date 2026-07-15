@@ -209,6 +209,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 |---|---|
 | Main inverter schematic and PCB design | Complete |
 | STM32 prototype assembly | Complete, under active test |
+| FOC current-loop bench validation (±50 A Iq on Zero 75-10, 50 V bus, no heatsink/airflow, baseplate barely warm) | Complete |
 | Full-load dyno testing | Planned |
 | Environmental and thermal validation | Planned |
 
@@ -219,7 +220,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 | STM32 low-level drivers (ADC, PWM, CAN, GPIO) | Implemented and tested |
 | Communication protocol | Implemented |
 | Sensor acquisition and filtering | Implemented |
-| Field-Oriented Control (FOC) | In development |
+| Field-Oriented Control (FOC) | Current loop implemented and validated at ±50 A Iq on Zero 75-10 (50 V bus, no heatsink/airflow); speed/torque loop in development |
 | Torque command processing and safety limits | Architecture defined, implementation in progress |
 | Fault handling and safe state management | Architecture defined, implementation in progress |
 | Power-on self-test (POST) | Architecture defined |
