@@ -124,7 +124,7 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
 - Dual independent watchdog timers (main MCU windowed WDT + coprocessor challenge/response)
 - HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (TODO on IO board schematic; the User Manual describes the intended HVIL interface)
 - All six NCV57100 FLT outputs OR'd — monitored by **both** MCUs
-- Overcurrent detection: ADC analog watchdogs in both MCUs (hardware threshold monitoring, no external comparators) + dual-MCU integrated monitoring, 100 ms response — sufficient for safe torque off without hardware damage (DESAT handles hard shorts &lt;2 us)
+- Overcurrent detection: ADC analog watchdogs in both MCUs (hardware threshold monitoring, no external comparators) + dual-MCU integrated monitoring, 100 us response — sufficient for safe torque off without hardware damage (DESAT handles hard shorts &lt;2 us) + Analog watchdog on main processor and coprocessor for overcurrent.
 - **Target: ASIL D** via ASIL B(D) + ASIL B(D) decomposition (DFA per ISO 26262-9 pending — LIMIT-08)
 
 > **Note on Overcurrent Protection:** Hardware overcurrent detection uses the ADC analog watchdogs built into both STM32s — comparator-equivalent threshold monitoring on each current channel with no external components. The control board also includes schematic provision for LM397 comparators for phase and DC link overcurrent detection, but these are not populated in the current build and are not required for the safety case. Hard short-circuits are handled by NCV57100 DESAT (&lt;2 us). Regular overcurrent (non-DESAT) is detected within **100 ms** by dual-MCU integrated monitoring — both the STM32H723 and STM32G474 independently sample all current channels at high rate. Either MCU detecting overcurrent triggers SSO via its independent gate drive power kill. This 100 ms detection is faster than the IGBT thermal time constant; junction temperature remains within module ratings for overloads sustained up to the 100 ms detection bound. The LM397 provision is retained as an optional non-safety redundant monitoring layer.
@@ -210,7 +210,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 | Main inverter schematic and PCB design | Complete |
 | STM32 prototype assembly | Complete, under active test |
 | FOC current-loop bench validation (±50 A Iq on Zero 75-10, 50 V bus, no heatsink/airflow, baseplate barely warm) | Complete |
-| Voltage/current bring-up and longer-load bench testing | In progress — 100 V / 60 A continuous for 10 min and ±200 A Iq reversal for ~1 min survived on Zero 75-10; heatsink estimated ~70–85 °C with no airflow or heatsink; 400 A trial paused for phase-lead management |
+| Voltage/current bring-up and longer-load bench testing | In progress — 100 V / 60 A continuous for 10 min and ±200 A Iq reversal for ~1 min survived on Zero 75-10; heatsink estimated ~70–85 °C with no airflow or heatsink; 400 A trial paused due to on-site power supply limitations |
 | Full-load dyno testing (motor coupled) | Planned |
 | Environmental and thermal validation | Planned |
 
