@@ -507,6 +507,16 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "for base plate to board compression, allows assembly to be one module"
+		(exclude_from_sim no)
+		(at 56.134 133.096 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "048893a0-f80c-4118-b0f7-a1509b2738ed")
+	)
 	(text "for top cover mounting"
 		(exclude_from_sim no)
 		(at 28.702 166.37 0)
@@ -532,6 +542,10 @@
 		(uuid "06c20ecd-3d59-4014-b8ae-56274f6d33f9")
 	)
 	(no_connect
+		(at 53.34 133.35)
+		(uuid "0d7befaf-bcf8-42cc-9eb7-39efbe61ac3e")
+	)
+	(no_connect
 		(at 26.67 120.65)
 		(uuid "2148a59c-b9d8-4a3c-aa26-0efd999bd73b")
 	)
@@ -552,12 +566,24 @@
 		(uuid "65cdc6db-0fb3-4b83-b536-0bbe4d152419")
 	)
 	(no_connect
+		(at 53.34 120.65)
+		(uuid "7ba92dc6-a064-473c-930c-e07c313b4b50")
+	)
+	(no_connect
+		(at 53.34 156.21)
+		(uuid "89ba7d4c-3b25-45ad-842e-4ee2edb0b325")
+	)
+	(no_connect
 		(at 26.67 152.4)
 		(uuid "9aa362a2-7e65-4985-ac26-5d5553f078bf")
 	)
 	(no_connect
 		(at 26.67 100.33)
 		(uuid "bad7645d-531e-4618-95c6-c8e0984bca89")
+	)
+	(no_connect
+		(at 53.34 144.78)
+		(uuid "cb87aa95-d68a-4dd1-9ed2-4c3f4e21d297")
 	)
 	(no_connect
 		(at 49.53 176.53)
@@ -1826,6 +1852,145 @@
 			(justify left bottom)
 		)
 		(uuid "fea9cd5e-ad0f-400a-9437-67d354441145")
+	)
+	(symbol
+		(lib_id "InverterCom:9774030592R")
+		(at 53.34 133.35 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0001e408-c850-410b-998b-b39a70e30c44")
+		(property "Reference" "H19"
+			(at 43.18 125.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "9774030592R"
+			(at 43.18 128.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "9774030592R"
+			(at 36.83 38.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
+			(at 36.83 -61.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
+			(at 53.34 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "3"
+			(at 36.83 -261.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "710-9774030592R"
+			(at 36.83 -361.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
+			(at 36.83 -461.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Wurth Elektronik"
+			(at 36.83 -561.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "9774030592R"
+			(at 36.83 -661.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "b8d10314-c92e-4ce3-99b3-088ed186f92e")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H19")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
@@ -3278,6 +3443,145 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:9774030592R")
+		(at 53.34 120.65 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1ab607ee-28e5-4667-83e8-d72960a5020f")
+		(property "Reference" "H20"
+			(at 43.18 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "9774030592R"
+			(at 43.18 115.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "9774030592R"
+			(at 36.83 25.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
+			(at 36.83 -74.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
+			(at 53.34 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "3"
+			(at 36.83 -274.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "710-9774030592R"
+			(at 36.83 -374.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
+			(at 36.83 -474.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Wurth Elektronik"
+			(at 36.83 -574.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "9774030592R"
+			(at 36.83 -674.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "682559ef-d85c-4766-9a04-6833072258a9")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
 		(at 71.12 142.24 270)
 		(unit 1)
@@ -4722,6 +5026,145 @@
 			(project "DCBusCapacitorBoard"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "C34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:9774030592R")
+		(at 53.34 156.21 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3a5e0ccb-3f16-4dda-8dcd-b03c451af19e")
+		(property "Reference" "H17"
+			(at 43.18 148.59 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "9774030592R"
+			(at 43.18 151.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "9774030592R"
+			(at 36.83 61.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
+			(at 36.83 -38.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
+			(at 53.34 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "3"
+			(at 36.83 -238.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "710-9774030592R"
+			(at 36.83 -338.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
+			(at 36.83 -438.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Wurth Elektronik"
+			(at 36.83 -538.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "9774030592R"
+			(at 36.83 -638.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "a50fd33d-19b8-49c3-955a-e82551d02c0f")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H17")
 					(unit 1)
 				)
 			)
@@ -8240,6 +8683,145 @@
 			(project "DCBusCapacitorBoard"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "C47")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:9774030592R")
+		(at 53.34 144.78 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9b796dd2-b8af-4d55-93ab-cb4f415fdb74")
+		(property "Reference" "H18"
+			(at 43.18 137.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "9774030592R"
+			(at 43.18 139.7 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "9774030592R"
+			(at 36.83 49.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
+			(at 36.83 -50.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
+			(at 53.34 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "3"
+			(at 36.83 -250.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "710-9774030592R"
+			(at 36.83 -350.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
+			(at 36.83 -450.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Wurth Elektronik"
+			(at 36.83 -550.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "9774030592R"
+			(at 36.83 -650.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "5d34dff5-519f-483e-9f1f-9989c3d15c25")
+		)
+		(instances
+			(project "DCBusCapacitorBoard"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "H18")
 					(unit 1)
 				)
 			)
