@@ -3,7 +3,15 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "2365f093-f079-4cf2-9926-0ba7dd4b2726")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "Open Inverter Platform - DC Bus Capacitor Board")
+		(date "2026-07-16")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-DCBUSCAP")
+	)
 	(lib_symbols
 		(symbol "InverterCom:9774030592R"
 			(exclude_from_sim no)
@@ -509,7 +517,7 @@
 	)
 	(text "for base plate to board compression, allows assembly to be one module"
 		(exclude_from_sim no)
-		(at 56.134 133.096 90)
+		(at 52.324 97.536 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -519,7 +527,7 @@
 	)
 	(text "for top cover mounting"
 		(exclude_from_sim no)
-		(at 28.702 166.37 0)
+		(at 27.432 140.97 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -527,74 +535,64 @@
 		)
 		(uuid "d619366e-70df-4d76-8dd5-7c9040f868a5")
 	)
-	(text "todo: tidy schematic, put in calcs for capacitor heating, etc\nupdate document information (title, etc)"
-		(exclude_from_sim no)
-		(at 122.936 189.23 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "e35577d3-c56b-4b6a-bebb-58939c41469a")
-	)
 	(no_connect
-		(at 33.02 187.96)
+		(at 31.75 162.56)
 		(uuid "06c20ecd-3d59-4014-b8ae-56274f6d33f9")
 	)
 	(no_connect
-		(at 53.34 133.35)
+		(at 49.53 97.79)
 		(uuid "0d7befaf-bcf8-42cc-9eb7-39efbe61ac3e")
 	)
 	(no_connect
-		(at 26.67 120.65)
+		(at 26.67 104.14)
 		(uuid "2148a59c-b9d8-4a3c-aa26-0efd999bd73b")
 	)
 	(no_connect
-		(at 49.53 187.96)
+		(at 31.75 185.42)
 		(uuid "2bc59baa-f550-451a-a894-15cbd7ef57ca")
 	)
 	(no_connect
-		(at 33.02 176.53)
+		(at 31.75 151.13)
 		(uuid "39abdff3-46df-4f9c-b2b7-f970c7257f25")
 	)
 	(no_connect
-		(at 26.67 110.49)
+		(at 26.67 93.98)
 		(uuid "3d0f5c40-b984-4b70-8192-76c08c43244f")
 	)
 	(no_connect
-		(at 26.67 132.08)
+		(at 26.67 115.57)
 		(uuid "65cdc6db-0fb3-4b83-b536-0bbe4d152419")
 	)
 	(no_connect
-		(at 53.34 120.65)
+		(at 49.53 85.09)
 		(uuid "7ba92dc6-a064-473c-930c-e07c313b4b50")
 	)
 	(no_connect
-		(at 53.34 156.21)
+		(at 49.53 120.65)
 		(uuid "89ba7d4c-3b25-45ad-842e-4ee2edb0b325")
 	)
 	(no_connect
-		(at 26.67 152.4)
+		(at 26.67 135.89)
 		(uuid "9aa362a2-7e65-4985-ac26-5d5553f078bf")
 	)
 	(no_connect
-		(at 26.67 100.33)
+		(at 26.67 83.82)
 		(uuid "bad7645d-531e-4618-95c6-c8e0984bca89")
 	)
 	(no_connect
-		(at 53.34 144.78)
+		(at 49.53 109.22)
 		(uuid "cb87aa95-d68a-4dd1-9ed2-4c3f4e21d297")
 	)
 	(no_connect
-		(at 49.53 176.53)
+		(at 31.75 173.99)
 		(uuid "de9c5811-0fcd-4233-91d7-96e5ad1fc5ed")
 	)
 	(no_connect
-		(at 26.67 142.24)
+		(at 26.67 125.73)
 		(uuid "f9ef9afc-414d-4f3b-b562-10fd0a503413")
 	)
 	(label "DC_LINK_+"
-		(at 127 38.1 180)
+		(at 100.33 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -604,7 +602,7 @@
 		(uuid "02272b3f-b2b3-4663-8f6e-e4384789ac61")
 	)
 	(label "DC_LINK_+"
-		(at 147.32 116.84 180)
+		(at 119.38 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -614,7 +612,7 @@
 		(uuid "079bcda7-112a-4605-8f49-33aedcdbf9d0")
 	)
 	(label "DC_LINK_-"
-		(at 245.11 154.94 180)
+		(at 170.18 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -624,7 +622,7 @@
 		(uuid "0865848d-e27a-4784-9c78-f7518346f780")
 	)
 	(label "DC_LINK_-"
-		(at 101.6 50.8 180)
+		(at 83.82 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -634,7 +632,7 @@
 		(uuid "08a6c9f0-2ed3-4466-9c5d-e165bbffb31b")
 	)
 	(label "DC_LINK_+"
-		(at 317.5 57.15 180)
+		(at 219.71 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -644,7 +642,7 @@
 		(uuid "090558e9-f4d0-4359-bc82-3b75fbfcc667")
 	)
 	(label "DC_LINK_-"
-		(at 317.5 69.85 180)
+		(at 219.71 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -654,7 +652,7 @@
 		(uuid "0a041f22-8716-4f31-98ed-03aea9d08b1a")
 	)
 	(label "DC_LINK_+"
-		(at 147.32 142.24 180)
+		(at 119.38 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -664,7 +662,7 @@
 		(uuid "0b47ee67-2426-4b47-b19d-e46f79c332c7")
 	)
 	(label "DC_LINK_-"
-		(at 292.1 69.85 180)
+		(at 201.93 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -674,7 +672,7 @@
 		(uuid "0bda523d-6979-4bac-80c1-5ce5111a6a19")
 	)
 	(label "DC_LINK_+"
-		(at 172.72 142.24 180)
+		(at 137.16 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -684,7 +682,7 @@
 		(uuid "1027d68d-788a-4029-a0ae-7d5fa168e184")
 	)
 	(label "DC_LINK_-"
-		(at 127 50.8 180)
+		(at 100.33 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -694,7 +692,7 @@
 		(uuid "125ea560-6561-4f4e-8fd3-9d0eefabdae0")
 	)
 	(label "DC_LINK_-"
-		(at 168.91 246.38 180)
+		(at 182.88 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -704,7 +702,7 @@
 		(uuid "136dd3be-a651-435e-858d-251ed61af04e")
 	)
 	(label "DC_LINK_-"
-		(at 172.72 154.94 180)
+		(at 137.16 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -714,7 +712,7 @@
 		(uuid "14f19dfd-98a2-42a5-9674-7e1235ebb77c")
 	)
 	(label "DC_LINK_+"
-		(at 101.6 63.5 180)
+		(at 83.82 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -724,7 +722,7 @@
 		(uuid "176ec5fe-650b-461f-8dac-d15800f3e271")
 	)
 	(label "DC_LINK_+"
-		(at 96.52 116.84 180)
+		(at 83.82 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -734,7 +732,7 @@
 		(uuid "1ab7b04d-b233-41e7-ab48-6901ea838e5f")
 	)
 	(label "DC_LINK_-"
-		(at 67.31 271.78 180)
+		(at 199.39 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -744,7 +742,7 @@
 		(uuid "1f24396c-d1b8-43ee-ad14-5ba32aefe61e")
 	)
 	(label "DC_LINK_+"
-		(at 76.2 63.5 180)
+		(at 67.31 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -754,7 +752,7 @@
 		(uuid "25bc9837-6b6d-41c8-9f04-020e52a9329e")
 	)
 	(label "DC_LINK_-"
-		(at 241.3 95.25 180)
+		(at 116.84 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -764,7 +762,7 @@
 		(uuid "26d2cd8c-01b0-4cd1-bde0-bf311ca2c766")
 	)
 	(label "DC_LINK_-"
-		(at 270.51 154.94 180)
+		(at 186.69 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -774,7 +772,7 @@
 		(uuid "2702b42c-a427-403e-b5b2-ca644082a76d")
 	)
 	(label "DC_LINK_-"
-		(at 245.11 129.54 180)
+		(at 170.18 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -784,7 +782,7 @@
 		(uuid "2780d679-096c-4c0f-9734-2d35c45a1795")
 	)
 	(label "DC_LINK_-"
-		(at 92.71 220.98 180)
+		(at 116.84 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -794,7 +792,7 @@
 		(uuid "27932959-0264-404a-b7a8-674eeda76701")
 	)
 	(label "DC_LINK_+"
-		(at 241.3 57.15 180)
+		(at 166.37 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -804,7 +802,7 @@
 		(uuid "284a1953-0382-4695-98d7-1c68a44efed0")
 	)
 	(label "DC_LINK_-"
-		(at 101.6 76.2 180)
+		(at 83.82 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -814,7 +812,7 @@
 		(uuid "2a76c6ba-20b1-4dc9-b5f8-5c89833e8693")
 	)
 	(label "DC_LINK_+"
-		(at 121.92 142.24 180)
+		(at 101.6 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -824,7 +822,7 @@
 		(uuid "2c37c836-8681-4d8a-902c-ab38ed058045")
 	)
 	(label "DC_LINK_-"
-		(at 152.4 76.2 180)
+		(at 116.84 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -834,7 +832,7 @@
 		(uuid "2f3d91cc-fec2-40c0-84d1-89ba9590cacd")
 	)
 	(label "DC_LINK_-"
-		(at 118.11 246.38 180)
+		(at 133.35 182.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -844,7 +842,7 @@
 		(uuid "30261d3a-cce7-4e26-b980-24eae2ea56d2")
 	)
 	(label "DC_LINK_+"
-		(at 215.9 31.75 180)
+		(at 149.86 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -854,7 +852,7 @@
 		(uuid "3075acec-ad12-4ecd-815a-f8e0106b6cdd")
 	)
 	(label "DC_LINK_+"
-		(at 127 63.5 180)
+		(at 100.33 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -864,7 +862,7 @@
 		(uuid "30ebf2e1-36bc-48de-8446-afd886194cab")
 	)
 	(label "DC_LINK_+"
-		(at 168.91 233.68 180)
+		(at 182.88 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -874,7 +872,7 @@
 		(uuid "30f10a2d-4c17-4a92-aded-a7e7676e50df")
 	)
 	(label "DC_LINK_+"
-		(at 143.51 208.28 180)
+		(at 149.86 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -884,7 +882,7 @@
 		(uuid "3856e87a-0263-4902-9376-969f0a774aa6")
 	)
 	(label "DC_LINK_-"
-		(at 143.51 220.98 180)
+		(at 149.86 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -894,7 +892,7 @@
 		(uuid "3bd7198e-d243-4ba2-94dd-a780ee12c1ed")
 	)
 	(label "DC_LINK_-"
-		(at 317.5 44.45 180)
+		(at 219.71 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -904,7 +902,7 @@
 		(uuid "3d59ccc9-54ee-4fd2-818a-a9e017160de2")
 	)
 	(label "DC_LINK_+"
-		(at 71.12 167.64 180)
+		(at 66.04 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -914,7 +912,7 @@
 		(uuid "3da39760-3887-423b-ad86-e45c4f517cc2")
 	)
 	(label "DC_LINK_+"
-		(at 92.71 259.08 180)
+		(at 215.9 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -924,7 +922,7 @@
 		(uuid "3e27c630-b51f-4785-a485-d3a200987ef9")
 	)
 	(label "DC_LINK_-"
-		(at 245.11 180.34 180)
+		(at 170.18 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -934,7 +932,7 @@
 		(uuid "3f44705d-0d2e-4a03-bbab-b6b18d851f74")
 	)
 	(label "DC_LINK_+"
-		(at 172.72 116.84 180)
+		(at 137.16 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -944,7 +942,7 @@
 		(uuid "3ff56ae0-fd87-406e-a34f-ae9528435e4d")
 	)
 	(label "DC_LINK_-"
-		(at 76.2 50.8 180)
+		(at 67.31 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -954,7 +952,7 @@
 		(uuid "41e4052d-9c45-4e7a-b210-99e492891958")
 	)
 	(label "DC_LINK_+"
-		(at 67.31 208.28 180)
+		(at 100.33 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -964,7 +962,7 @@
 		(uuid "42fe35fe-5138-465a-9842-d5a4d284611b")
 	)
 	(label "DC_LINK_-"
-		(at 71.12 180.34 180)
+		(at 66.04 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -974,7 +972,7 @@
 		(uuid "465aa297-5983-4ec5-8dfc-ea732f47e5a2")
 	)
 	(label "DC_LINK_+"
-		(at 292.1 57.15 180)
+		(at 201.93 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -984,7 +982,7 @@
 		(uuid "467178be-797f-4bc1-9fa7-179f7af3ef85")
 	)
 	(label "DC_LINK_-"
-		(at 219.71 154.94 180)
+		(at 153.67 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -994,7 +992,7 @@
 		(uuid "47a6be3c-b040-47dd-aeb8-c6088ac9222f")
 	)
 	(label "DC_LINK_+"
-		(at 270.51 142.24 180)
+		(at 186.69 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1004,7 +1002,7 @@
 		(uuid "508307f0-b193-4358-b85e-f01d2e87c530")
 	)
 	(label "DC_LINK_-"
-		(at 67.31 246.38 180)
+		(at 100.33 182.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1014,7 +1012,7 @@
 		(uuid "5308c87a-7fa4-40fa-9dae-5c4e5331b440")
 	)
 	(label "DC_LINK_+"
-		(at 101.6 88.9 180)
+		(at 83.82 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1024,7 +1022,7 @@
 		(uuid "56dffcb3-839c-496b-abe3-2ff45f6bfe8d")
 	)
 	(label "DC_LINK_-"
-		(at 38.1 68.58 0)
+		(at 26.67 50.8 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1034,7 +1032,7 @@
 		(uuid "5afbcd91-8cc8-46ba-a57a-636ad88de6b5")
 	)
 	(label "DC_LINK_-"
-		(at 177.8 50.8 180)
+		(at 133.35 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1044,7 +1042,7 @@
 		(uuid "5ba1486e-6951-478d-a092-79dbf70d05ca")
 	)
 	(label "DC_LINK_-"
-		(at 76.2 76.2 180)
+		(at 67.31 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1054,7 +1052,7 @@
 		(uuid "62eb1ceb-8936-4bec-bf95-a0923166f03a")
 	)
 	(label "DC_LINK_+"
-		(at 219.71 142.24 180)
+		(at 153.67 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1064,7 +1062,7 @@
 		(uuid "66e35ed3-c330-4b5a-8798-0a64b4ae1bdd")
 	)
 	(label "DC_LINK_+"
-		(at 143.51 233.68 180)
+		(at 149.86 170.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1074,7 +1072,7 @@
 		(uuid "6b11a496-659d-45bd-80ab-6939810d180c")
 	)
 	(label "DC_LINK_-"
-		(at 71.12 129.54 180)
+		(at 66.04 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1084,7 +1082,7 @@
 		(uuid "6bbf80e8-2365-4524-806c-6ff927794e11")
 	)
 	(label "DC_LINK_+"
-		(at 295.91 116.84 180)
+		(at 203.2 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1094,7 +1092,7 @@
 		(uuid "6d4878a0-eb56-4ade-a514-a8694d4a7e76")
 	)
 	(label "DC_LINK_+"
-		(at 38.1 78.74 0)
+		(at 26.67 60.96 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1104,7 +1102,7 @@
 		(uuid "6ef967d5-f9b3-4445-b932-f5d40becdfa4")
 	)
 	(label "DC_LINK_-"
-		(at 121.92 129.54 180)
+		(at 101.6 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1114,7 +1112,7 @@
 		(uuid "6fde43f5-bc96-4324-b350-5fc316f154f3")
 	)
 	(label "DC_LINK_+"
-		(at 168.91 208.28 180)
+		(at 166.37 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1124,7 +1122,7 @@
 		(uuid "796db3f7-0ed2-4d0c-9e08-7568e4e04dd0")
 	)
 	(label "DC_LINK_-"
-		(at 118.11 220.98 180)
+		(at 133.35 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1134,7 +1132,7 @@
 		(uuid "7aa183c7-6c74-4973-9a9a-7a49cfdf4c73")
 	)
 	(label "DC_LINK_+"
-		(at 295.91 142.24 180)
+		(at 203.2 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1144,7 +1142,7 @@
 		(uuid "7d3648fd-adb5-4dd5-a8a5-b82f407bbc68")
 	)
 	(label "DC_LINK_+"
-		(at 71.12 142.24 180)
+		(at 66.04 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1154,7 +1152,7 @@
 		(uuid "81174fda-38d6-4e10-892e-a853ead80c25")
 	)
 	(label "DC_LINK_-"
-		(at 172.72 129.54 180)
+		(at 137.16 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1164,7 +1162,7 @@
 		(uuid "8511de31-2cf3-4f5d-9e82-db514a6f2841")
 	)
 	(label "DC_LINK_+"
-		(at 118.11 208.28 180)
+		(at 133.35 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1174,7 +1172,7 @@
 		(uuid "86f86e55-3ba7-40f4-b7e9-f6d8bbef8e53")
 	)
 	(label "DC_LINK_+"
-		(at 219.71 167.64 180)
+		(at 153.67 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1184,7 +1182,7 @@
 		(uuid "8adf79d1-677f-461e-a774-e54171ac2a21")
 	)
 	(label "DC_LINK_-"
-		(at 71.12 154.94 180)
+		(at 66.04 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1194,7 +1192,7 @@
 		(uuid "8b7972b3-6d1e-441f-a0be-6b101558a70a")
 	)
 	(label "DC_LINK_-"
-		(at 295.91 129.54 180)
+		(at 203.2 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1204,7 +1202,7 @@
 		(uuid "8d010266-0764-418c-aa6f-d5c2b9cd8b60")
 	)
 	(label "DC_LINK_-"
-		(at 241.3 44.45 180)
+		(at 166.37 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1214,7 +1212,7 @@
 		(uuid "8dd26cbb-02f7-40aa-be33-a2cdaf00f2b7")
 	)
 	(label "DC_LINK_-"
-		(at 38.1 48.26 0)
+		(at 26.67 30.48 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1224,7 +1222,7 @@
 		(uuid "8e54ab3b-bf75-4bea-9563-556607bc47e1")
 	)
 	(label "DC_LINK_+"
-		(at 92.71 208.28 180)
+		(at 116.84 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1234,7 +1232,7 @@
 		(uuid "93db5c93-5083-4a85-95b5-ceb1e5b5c477")
 	)
 	(label "DC_LINK_-"
-		(at 266.7 69.85 180)
+		(at 184.15 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1244,7 +1242,7 @@
 		(uuid "99982f95-3f0f-4526-a3b9-1d3d852eea5f")
 	)
 	(label "DC_LINK_+"
-		(at 241.3 82.55 180)
+		(at 116.84 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1254,7 +1252,7 @@
 		(uuid "9bb77c4a-7fc0-40e9-8ce4-0f9e2039d181")
 	)
 	(label "DC_LINK_+"
-		(at 292.1 31.75 180)
+		(at 201.93 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1264,7 +1262,7 @@
 		(uuid "9bf98bec-aa7f-497e-af42-a4fb466fdebd")
 	)
 	(label "DC_LINK_+"
-		(at 245.11 142.24 180)
+		(at 170.18 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1274,7 +1272,7 @@
 		(uuid "9c076dd9-9ace-4f40-8e18-597f218d72cf")
 	)
 	(label "DC_LINK_-"
-		(at 168.91 220.98 180)
+		(at 166.37 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1284,7 +1282,7 @@
 		(uuid "9c543541-87ed-4198-bcf5-86802909e8b4")
 	)
 	(label "DC_LINK_-"
-		(at 147.32 154.94 180)
+		(at 119.38 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1294,7 +1292,7 @@
 		(uuid "9ee36b45-afc8-4147-8dfe-41b1cc441cb8")
 	)
 	(label "DC_LINK_+"
-		(at 38.1 38.1 0)
+		(at 26.67 20.32 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1304,7 +1302,7 @@
 		(uuid "9fd1d66b-d943-48b3-b570-239bdce9aebf")
 	)
 	(label "DC_LINK_+"
-		(at 177.8 63.5 180)
+		(at 133.35 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1314,7 +1312,7 @@
 		(uuid "a15e9612-92c6-4562-aab1-035aa97e05b0")
 	)
 	(label "DC_LINK_-"
-		(at 321.31 154.94 180)
+		(at 219.71 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1324,7 +1322,7 @@
 		(uuid "a23e5418-4bda-48af-8c81-5d2a08bb6aa1")
 	)
 	(label "DC_LINK_+"
-		(at 76.2 88.9 180)
+		(at 67.31 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1334,7 +1332,7 @@
 		(uuid "a4e53a13-0e0f-4d56-a1f7-a347adc246ce")
 	)
 	(label "DC_LINK_+"
-		(at 270.51 116.84 180)
+		(at 186.69 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1344,7 +1342,7 @@
 		(uuid "ac5f62b1-b157-410f-9f36-8896c29f2dac")
 	)
 	(label "DC_LINK_+"
-		(at 245.11 167.64 180)
+		(at 170.18 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1354,7 +1352,7 @@
 		(uuid "af377962-d2d1-445d-a507-33c4a6d5edcf")
 	)
 	(label "DC_LINK_-"
-		(at 147.32 129.54 180)
+		(at 119.38 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1364,7 +1362,7 @@
 		(uuid "b16fb7b9-bd7f-4294-82ed-8756d8b028d0")
 	)
 	(label "DC_LINK_+"
-		(at 321.31 116.84 180)
+		(at 219.71 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1374,7 +1372,7 @@
 		(uuid "b1d35159-d703-4688-9d5f-1e4f4b208825")
 	)
 	(label "DC_LINK_+"
-		(at 215.9 57.15 180)
+		(at 149.86 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1384,7 +1382,7 @@
 		(uuid "b31ce20a-4b1f-4248-b5d4-0d8ff0dde7eb")
 	)
 	(label "DC_LINK_+"
-		(at 152.4 38.1 180)
+		(at 116.84 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1394,7 +1392,7 @@
 		(uuid "b36decba-4814-4b47-87d8-b8ceca616eee")
 	)
 	(label "DC_LINK_-"
-		(at 270.51 129.54 180)
+		(at 186.69 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1404,7 +1402,7 @@
 		(uuid "b36e1592-8f9e-4a17-bd0e-7fa0c4e47cc9")
 	)
 	(label "DC_LINK_+"
-		(at 76.2 38.1 180)
+		(at 67.31 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1414,7 +1412,7 @@
 		(uuid "b4ee0c32-a6b0-4660-9647-1fa9235ab3f0")
 	)
 	(label "DC_LINK_-"
-		(at 67.31 220.98 180)
+		(at 100.33 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1424,7 +1422,7 @@
 		(uuid "b6f52003-2e33-4446-98de-896da4c36b7c")
 	)
 	(label "DC_LINK_-"
-		(at 266.7 44.45 180)
+		(at 184.15 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1434,7 +1432,7 @@
 		(uuid "ba2607b4-8008-43b5-a2e9-38985e1025b1")
 	)
 	(label "DC_LINK_-"
-		(at 143.51 246.38 180)
+		(at 149.86 182.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1444,7 +1442,7 @@
 		(uuid "ba6fd43e-4210-41dc-a8ee-3fad0d930198")
 	)
 	(label "DC_LINK_+"
-		(at 92.71 233.68 180)
+		(at 116.84 170.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1454,7 +1452,7 @@
 		(uuid "bc197add-6609-466a-8449-77590351f575")
 	)
 	(label "DC_LINK_-"
-		(at 96.52 154.94 180)
+		(at 83.82 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1464,7 +1462,7 @@
 		(uuid "bc9e85bf-620e-4094-aed0-9a28acc4dc4b")
 	)
 	(label "DC_LINK_+"
-		(at 67.31 259.08 180)
+		(at 199.39 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1474,7 +1472,7 @@
 		(uuid "bdf789ac-f5d7-4900-9dc6-790788a54008")
 	)
 	(label "DC_LINK_-"
-		(at 219.71 129.54 180)
+		(at 153.67 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1484,7 +1482,7 @@
 		(uuid "be41b846-7d72-4dd6-9e1c-53f505c7a670")
 	)
 	(label "DC_LINK_-"
-		(at 92.71 246.38 180)
+		(at 116.84 182.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1494,7 +1492,7 @@
 		(uuid "be5b79db-80fd-471c-91dc-dc28275c922e")
 	)
 	(label "DC_LINK_+"
-		(at 245.11 116.84 180)
+		(at 170.18 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1504,7 +1502,7 @@
 		(uuid "c0c20983-7a63-4c95-ab36-223a2d0403ad")
 	)
 	(label "DC_LINK_+"
-		(at 317.5 31.75 180)
+		(at 219.71 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1514,7 +1512,7 @@
 		(uuid "c37f224d-e446-4207-8574-689aab3ac0f9")
 	)
 	(label "DC_LINK_+"
-		(at 96.52 142.24 180)
+		(at 83.82 119.38 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1524,7 +1522,7 @@
 		(uuid "c5e0b80b-0f2f-4d20-9768-9e5760dde342")
 	)
 	(label "DC_LINK_-"
-		(at 295.91 154.94 180)
+		(at 203.2 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1534,7 +1532,7 @@
 		(uuid "cb6e5099-1d8e-4b04-aaa6-35c6c0ba9800")
 	)
 	(label "DC_LINK_-"
-		(at 127 76.2 180)
+		(at 100.33 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1544,7 +1542,7 @@
 		(uuid "cb9e0f0e-5cff-46b6-998a-341552c244f1")
 	)
 	(label "DC_LINK_-"
-		(at 215.9 95.25 180)
+		(at 100.33 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1554,7 +1552,7 @@
 		(uuid "cc243398-7884-4577-9d2d-6954910bdeaf")
 	)
 	(label "DC_LINK_-"
-		(at 92.71 271.78 180)
+		(at 215.9 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1564,7 +1562,7 @@
 		(uuid "ce92cb00-c250-4de8-b87a-1d10fafc80eb")
 	)
 	(label "DC_LINK_-"
-		(at 96.52 129.54 180)
+		(at 83.82 106.68 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1574,7 +1572,7 @@
 		(uuid "cf15d518-6fd9-4496-a07c-978d8bd84e85")
 	)
 	(label "DC_LINK_+"
-		(at 241.3 31.75 180)
+		(at 166.37 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1584,7 +1582,7 @@
 		(uuid "d2adf1ac-e043-43cb-aae7-38d715df5f79")
 	)
 	(label "DC_LINK_+"
-		(at 321.31 142.24 180)
+		(at 219.71 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1594,7 +1592,7 @@
 		(uuid "d6bd1a86-d42e-44e9-b941-04e923219b4f")
 	)
 	(label "DC_LINK_-"
-		(at 321.31 129.54 180)
+		(at 219.71 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1604,7 +1602,7 @@
 		(uuid "d7eca94a-3c8a-44dc-a825-a880829d5980")
 	)
 	(label "DC_LINK_+"
-		(at 219.71 116.84 180)
+		(at 153.67 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1614,7 +1612,7 @@
 		(uuid "dc0b43df-24c5-4e12-af2d-f8135a87abfd")
 	)
 	(label "DC_LINK_-"
-		(at 76.2 101.6 180)
+		(at 67.31 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1624,7 +1622,7 @@
 		(uuid "dfd6a427-aa3c-4d7b-be57-939f23e77eb5")
 	)
 	(label "DC_LINK_-"
-		(at 292.1 44.45 180)
+		(at 201.93 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1634,7 +1632,7 @@
 		(uuid "e04cd697-8077-47ec-8e26-1a5a62c5f7a5")
 	)
 	(label "DC_LINK_+"
-		(at 266.7 31.75 180)
+		(at 184.15 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1644,7 +1642,7 @@
 		(uuid "e10335ee-1bf4-4263-b807-71aa9da6fb98")
 	)
 	(label "DC_LINK_+"
-		(at 101.6 38.1 180)
+		(at 83.82 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1654,7 +1652,7 @@
 		(uuid "e15236dd-abad-4c83-a909-8acaf0ec0e54")
 	)
 	(label "DC_LINK_+"
-		(at 96.52 167.64 180)
+		(at 83.82 144.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1664,7 +1662,7 @@
 		(uuid "e2208ae1-00cb-4212-8320-072901940110")
 	)
 	(label "DC_LINK_-"
-		(at 152.4 50.8 180)
+		(at 116.84 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1674,7 +1672,7 @@
 		(uuid "e3afb22b-fe46-4a3d-9810-3f427674db89")
 	)
 	(label "DC_LINK_-"
-		(at 121.92 154.94 180)
+		(at 101.6 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1684,7 +1682,7 @@
 		(uuid "e44ecc49-0646-4c75-a8e4-78ba5f222685")
 	)
 	(label "DC_LINK_-"
-		(at 241.3 69.85 180)
+		(at 166.37 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1694,7 +1692,7 @@
 		(uuid "e4d3a9fe-b666-450f-8d0b-9a8b309e4cb0")
 	)
 	(label "DC_LINK_-"
-		(at 215.9 69.85 180)
+		(at 149.86 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1704,7 +1702,7 @@
 		(uuid "e51c613e-564a-4511-856e-8af29643d101")
 	)
 	(label "DC_LINK_-"
-		(at 177.8 76.2 180)
+		(at 133.35 55.88 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1714,7 +1712,7 @@
 		(uuid "e6fdfe1a-8228-4a6f-8b47-9d69a758c793")
 	)
 	(label "DC_LINK_-"
-		(at 101.6 101.6 180)
+		(at 83.82 81.28 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1724,7 +1722,7 @@
 		(uuid "e87e0a95-ac87-4158-974b-a3a10a095eb8")
 	)
 	(label "DC_LINK_+"
-		(at 152.4 63.5 180)
+		(at 116.84 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1734,7 +1732,7 @@
 		(uuid "e938af9e-a729-41fe-abf4-cc3940859338")
 	)
 	(label "DC_LINK_-"
-		(at 96.52 180.34 180)
+		(at 83.82 157.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1744,7 +1742,7 @@
 		(uuid "e99df0b4-e8ed-4825-9261-02397ad22bb7")
 	)
 	(label "DC_LINK_-"
-		(at 38.1 88.9 0)
+		(at 26.67 71.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1754,7 +1752,7 @@
 		(uuid "eb705824-1c13-4570-9ebf-664b531d12b2")
 	)
 	(label "DC_LINK_+"
-		(at 71.12 116.84 180)
+		(at 66.04 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1764,7 +1762,7 @@
 		(uuid "ebdc4aba-9aa7-4c12-ad71-5e38e3efb654")
 	)
 	(label "DC_LINK_+"
-		(at 121.92 116.84 180)
+		(at 101.6 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1774,7 +1772,7 @@
 		(uuid "edb52bcd-0bd8-4fcd-9036-9b7bbbeb174c")
 	)
 	(label "DC_LINK_+"
-		(at 118.11 233.68 180)
+		(at 133.35 170.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1784,7 +1782,7 @@
 		(uuid "f024080c-5480-467c-960d-564f14e0404d")
 	)
 	(label "DC_LINK_+"
-		(at 67.31 233.68 180)
+		(at 100.33 170.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1794,7 +1792,7 @@
 		(uuid "f35f1ad9-1dbe-4d02-bec1-ddeef9d5a9b8")
 	)
 	(label "DC_LINK_+"
-		(at 215.9 82.55 180)
+		(at 100.33 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1804,7 +1802,7 @@
 		(uuid "f543a95f-e6a0-4ab0-910f-9a2865330888")
 	)
 	(label "DC_LINK_+"
-		(at 266.7 57.15 180)
+		(at 184.15 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1814,7 +1812,7 @@
 		(uuid "f56c8abf-a501-46c4-9a62-27cbd901dc26")
 	)
 	(label "DC_LINK_-"
-		(at 215.9 44.45 180)
+		(at 149.86 30.48 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1824,7 +1822,7 @@
 		(uuid "fb0544a7-70d7-4d0c-a9de-9d6ba4e41472")
 	)
 	(label "DC_LINK_-"
-		(at 219.71 180.34 180)
+		(at 153.67 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1834,7 +1832,7 @@
 		(uuid "fcf50cbf-3eff-4ecd-8875-953b62c3bc8b")
 	)
 	(label "DC_LINK_+"
-		(at 177.8 38.1 180)
+		(at 133.35 17.78 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1844,7 +1842,7 @@
 		(uuid "fe12bef9-8a06-4824-bd91-21dafa025f55")
 	)
 	(label "DC_LINK_+"
-		(at 38.1 58.42 0)
+		(at 26.67 40.64 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1855,7 +1853,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 53.34 133.35 180)
+		(at 49.53 97.79 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1866,7 +1864,7 @@
 		(fields_autoplaced yes)
 		(uuid "0001e408-c850-410b-998b-b39a70e30c44")
 		(property "Reference" "H19"
-			(at 43.18 125.73 0)
+			(at 39.37 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1876,7 +1874,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 43.18 128.27 0)
+			(at 39.37 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1886,7 +1884,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 36.83 38.43 0)
+			(at 33.02 2.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1898,7 +1896,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 36.83 -61.57 0)
+			(at 33.02 -97.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1910,7 +1908,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 53.34 133.35 0)
+			(at 49.53 97.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1921,7 +1919,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 36.83 -261.57 0)
+			(at 33.02 -297.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1933,7 +1931,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 36.83 -361.57 0)
+			(at 33.02 -397.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1945,7 +1943,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 36.83 -461.57 0)
+			(at 33.02 -497.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1957,7 +1955,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 36.83 -561.57 0)
+			(at 33.02 -597.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1969,7 +1967,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 36.83 -661.57 0)
+			(at 33.02 -697.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1994,7 +1992,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 35.56 38.1 90)
+		(at 24.13 20.32 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2005,7 +2003,7 @@
 		(fields_autoplaced yes)
 		(uuid "013fb0a9-e96b-4961-b973-1462dc941710")
 		(property "Reference" "H1"
-			(at 34.29 31.75 90)
+			(at 22.86 13.97 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2015,7 +2013,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 34.29 34.29 90)
+			(at 22.86 16.51 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2025,7 +2023,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 35.56 38.1 0)
+			(at 24.13 20.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2036,7 +2034,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 38.1 0)
+			(at 24.13 20.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2047,7 +2045,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 35.56 38.1 0)
+			(at 24.13 20.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2071,7 +2069,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 292.1 31.75 270)
+		(at 201.93 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2079,10 +2077,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "04ef01dd-8e55-4757-888f-e7203446cb01")
 		(property "Reference" "C33"
-			(at 295.91 35.9367 90)
+			(at 205.74 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2093,7 +2090,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 295.91 38.4767 90)
+			(at 205.74 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2104,7 +2101,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 195.91 40.64 0)
+			(at 105.74 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2116,7 +2113,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 95.91 40.64 0)
+			(at 5.74 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2128,7 +2125,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 292.1 31.75 0)
+			(at 201.93 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2139,7 +2136,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -104.09 40.64 0)
+			(at -194.26 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2151,7 +2148,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -204.09 40.64 0)
+			(at -294.26 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2163,7 +2160,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -304.09 40.64 0)
+			(at -394.26 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2175,7 +2172,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -404.09 40.64 0)
+			(at -494.26 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2187,7 +2184,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -504.09 40.64 0)
+			(at -594.26 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2215,7 +2212,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 245.11 116.84 270)
+		(at 170.18 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2223,10 +2220,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0b428d62-39db-4c3e-bf95-70968a910622")
 		(property "Reference" "C40"
-			(at 248.92 121.0267 90)
+			(at 173.99 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2237,7 +2233,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 248.92 123.5667 90)
+			(at 173.99 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2248,7 +2244,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 148.92 125.73 0)
+			(at 73.99 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2260,7 +2256,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 48.92 125.73 0)
+			(at -26.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2272,7 +2268,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 245.11 116.84 0)
+			(at 170.18 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2283,7 +2279,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -151.08 125.73 0)
+			(at -226.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2295,7 +2291,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -251.08 125.73 0)
+			(at -326.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2307,7 +2303,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -351.08 125.73 0)
+			(at -426.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2319,7 +2315,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -451.08 125.73 0)
+			(at -526.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2331,7 +2327,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -551.08 125.73 0)
+			(at -626.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2359,7 +2355,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 295.91 142.24 270)
+		(at 203.2 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2367,10 +2363,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0cdef1a2-256f-4c5c-89ff-772a48265fa6")
 		(property "Reference" "C46"
-			(at 299.72 146.4267 90)
+			(at 207.01 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2381,7 +2376,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 299.72 148.9667 90)
+			(at 207.01 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2392,7 +2387,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 199.72 151.13 0)
+			(at 107.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2404,7 +2399,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 99.72 151.13 0)
+			(at 7.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2416,7 +2411,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 295.91 142.24 0)
+			(at 203.2 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2427,7 +2422,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -100.28 151.13 0)
+			(at -192.99 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2439,7 +2434,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -200.28 151.13 0)
+			(at -292.99 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2451,7 +2446,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -300.28 151.13 0)
+			(at -392.99 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2463,7 +2458,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -400.28 151.13 0)
+			(at -492.99 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2475,7 +2470,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -500.28 151.13 0)
+			(at -592.99 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2503,7 +2498,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 152.4 38.1 270)
+		(at 116.84 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2511,10 +2506,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0d59514a-09c8-4020-8c6a-6b26660b1637")
 		(property "Reference" "C4"
-			(at 156.21 42.2867 90)
+			(at 120.65 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2525,7 +2519,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 156.21 44.8267 90)
+			(at 120.65 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2536,7 +2530,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 56.21 46.99 0)
+			(at 20.65 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2548,7 +2542,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -43.79 46.99 0)
+			(at -79.35 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2560,7 +2554,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 152.4 38.1 0)
+			(at 116.84 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2571,7 +2565,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -243.79 46.99 0)
+			(at -279.35 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2583,7 +2577,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -343.79 46.99 0)
+			(at -379.35 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2595,7 +2589,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -443.79 46.99 0)
+			(at -479.35 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2607,7 +2601,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -543.79 46.99 0)
+			(at -579.35 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2619,7 +2613,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -643.79 46.99 0)
+			(at -679.35 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2647,7 +2641,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 177.8 38.1 270)
+		(at 133.35 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2655,10 +2649,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0da83bcb-e500-474b-810d-865f1992a443")
 		(property "Reference" "C5"
-			(at 181.61 42.2867 90)
+			(at 137.16 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2669,7 +2662,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 181.61 44.8267 90)
+			(at 137.16 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2680,7 +2673,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 81.61 46.99 0)
+			(at 37.16 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2692,7 +2685,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -18.39 46.99 0)
+			(at -62.84 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2704,7 +2697,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 177.8 38.1 0)
+			(at 133.35 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2715,7 +2708,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -218.39 46.99 0)
+			(at -262.84 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2727,7 +2720,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -318.39 46.99 0)
+			(at -362.84 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2739,7 +2732,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -418.39 46.99 0)
+			(at -462.84 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2751,7 +2744,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -518.39 46.99 0)
+			(at -562.84 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2763,7 +2756,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -618.39 46.99 0)
+			(at -662.84 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2791,7 +2784,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 270.51 116.84 270)
+		(at 186.69 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2799,10 +2792,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0e1ba499-382d-4773-b43d-17ea717f1650")
 		(property "Reference" "C43"
-			(at 274.32 121.0267 90)
+			(at 190.5 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2813,7 +2805,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 274.32 123.5667 90)
+			(at 190.5 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2824,7 +2816,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 174.32 125.73 0)
+			(at 90.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2836,7 +2828,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 74.32 125.73 0)
+			(at -9.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2848,7 +2840,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 270.51 116.84 0)
+			(at 186.69 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2859,7 +2851,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -125.68 125.73 0)
+			(at -209.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2871,7 +2863,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -225.68 125.73 0)
+			(at -309.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2883,7 +2875,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -325.68 125.73 0)
+			(at -409.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2895,7 +2887,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -425.68 125.73 0)
+			(at -509.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2907,7 +2899,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -525.68 125.73 0)
+			(at -609.5 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2935,7 +2927,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 177.8 63.5 270)
+		(at 133.35 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2943,10 +2935,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "136eb0ea-6f94-4d61-b88a-8052f05882a9")
 		(property "Reference" "C10"
-			(at 181.61 67.6867 90)
+			(at 137.16 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2957,7 +2948,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 181.61 70.2267 90)
+			(at 137.16 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2968,7 +2959,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 81.61 72.39 0)
+			(at 37.16 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2980,7 +2971,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -18.39 72.39 0)
+			(at -62.84 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2992,7 +2983,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 177.8 63.5 0)
+			(at 133.35 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3003,7 +2994,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -218.39 72.39 0)
+			(at -262.84 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3015,7 +3006,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -318.39 72.39 0)
+			(at -362.84 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3027,7 +3018,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -418.39 72.39 0)
+			(at -462.84 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3039,7 +3030,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -518.39 72.39 0)
+			(at -562.84 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3051,7 +3042,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -618.39 72.39 0)
+			(at -662.84 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3079,7 +3070,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 245.11 167.64 270)
+		(at 170.18 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3087,10 +3078,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "1639223c-12d5-48bc-bc6e-3c8ae392d702")
 		(property "Reference" "C42"
-			(at 248.92 171.8267 90)
+			(at 173.99 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3101,7 +3091,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 248.92 174.3667 90)
+			(at 173.99 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3112,7 +3102,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 148.92 176.53 0)
+			(at 73.99 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3124,7 +3114,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 48.92 176.53 0)
+			(at -26.01 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3136,7 +3126,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 245.11 167.64 0)
+			(at 170.18 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3147,7 +3137,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -151.08 176.53 0)
+			(at -226.01 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3159,7 +3149,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -251.08 176.53 0)
+			(at -326.01 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3171,7 +3161,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -351.08 176.53 0)
+			(at -426.01 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3183,7 +3173,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -451.08 176.53 0)
+			(at -526.01 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3195,7 +3185,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -551.08 176.53 0)
+			(at -626.01 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3223,7 +3213,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 270.51 142.24 270)
+		(at 186.69 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3231,10 +3221,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "170bef1f-6186-4559-be3a-08af9a665db2")
 		(property "Reference" "C44"
-			(at 274.32 146.4267 90)
+			(at 190.5 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3245,7 +3234,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 274.32 148.9667 90)
+			(at 190.5 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3256,7 +3245,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 174.32 151.13 0)
+			(at 90.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3268,7 +3257,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 74.32 151.13 0)
+			(at -9.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3280,7 +3269,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 270.51 142.24 0)
+			(at 186.69 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3291,7 +3280,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -125.68 151.13 0)
+			(at -209.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3303,7 +3292,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -225.68 151.13 0)
+			(at -309.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3315,7 +3304,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -325.68 151.13 0)
+			(at -409.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3327,7 +3316,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -425.68 151.13 0)
+			(at -509.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3339,7 +3328,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -525.68 151.13 0)
+			(at -609.5 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3367,7 +3356,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 24.13 142.24 90)
+		(at 24.13 125.73 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3378,7 +3367,7 @@
 		(fields_autoplaced yes)
 		(uuid "1aa6b1b3-3042-4204-a3a0-ae0e39442eec")
 		(property "Reference" "H11"
-			(at 22.86 135.89 90)
+			(at 22.86 119.38 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3388,7 +3377,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 22.86 138.43 90)
+			(at 22.86 121.92 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3398,7 +3387,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 24.13 142.24 0)
+			(at 24.13 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3409,7 +3398,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 142.24 0)
+			(at 24.13 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3420,7 +3409,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 24.13 142.24 0)
+			(at 24.13 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3444,7 +3433,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 53.34 120.65 180)
+		(at 49.53 85.09 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3455,7 +3444,7 @@
 		(fields_autoplaced yes)
 		(uuid "1ab607ee-28e5-4667-83e8-d72960a5020f")
 		(property "Reference" "H20"
-			(at 43.18 113.03 0)
+			(at 39.37 77.47 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3465,7 +3454,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 43.18 115.57 0)
+			(at 39.37 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3475,7 +3464,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 36.83 25.73 0)
+			(at 33.02 -9.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3487,7 +3476,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 36.83 -74.27 0)
+			(at 33.02 -109.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3499,7 +3488,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 53.34 120.65 0)
+			(at 49.53 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3510,7 +3499,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 36.83 -274.27 0)
+			(at 33.02 -309.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3522,7 +3511,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 36.83 -374.27 0)
+			(at 33.02 -409.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3534,7 +3523,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 36.83 -474.27 0)
+			(at 33.02 -509.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3546,7 +3535,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 36.83 -574.27 0)
+			(at 33.02 -609.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3558,7 +3547,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 36.83 -674.27 0)
+			(at 33.02 -709.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3583,7 +3572,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 71.12 142.24 270)
+		(at 66.04 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3591,10 +3580,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "1ae87793-9190-4efb-a82f-0204ec71cbd6")
 		(property "Reference" "C14"
-			(at 74.93 146.4267 90)
+			(at 69.85 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3605,7 +3593,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 74.93 148.9667 90)
+			(at 69.85 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3616,7 +3604,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -25.07 151.13 0)
+			(at -30.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3628,7 +3616,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -125.07 151.13 0)
+			(at -130.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3640,7 +3628,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 71.12 142.24 0)
+			(at 66.04 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3651,7 +3639,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -325.07 151.13 0)
+			(at -330.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3663,7 +3651,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -425.07 151.13 0)
+			(at -430.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3675,7 +3663,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -525.07 151.13 0)
+			(at -530.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3687,7 +3675,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -625.07 151.13 0)
+			(at -630.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3699,7 +3687,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -725.07 151.13 0)
+			(at -730.15 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3727,7 +3715,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 172.72 142.24 270)
+		(at 137.16 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3735,10 +3723,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "20324492-9a97-44ba-bc92-8414249d5fa3")
 		(property "Reference" "C24"
-			(at 176.53 146.4267 90)
+			(at 140.97 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3749,7 +3736,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 176.53 148.9667 90)
+			(at 140.97 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3760,7 +3747,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 76.53 151.13 0)
+			(at 40.97 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3772,7 +3759,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -23.47 151.13 0)
+			(at -59.03 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3784,7 +3771,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 172.72 142.24 0)
+			(at 137.16 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3795,7 +3782,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -223.47 151.13 0)
+			(at -259.03 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3807,7 +3794,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -323.47 151.13 0)
+			(at -359.03 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3819,7 +3806,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -423.47 151.13 0)
+			(at -459.03 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3831,7 +3818,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -523.47 151.13 0)
+			(at -559.03 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3843,7 +3830,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -623.47 151.13 0)
+			(at -659.03 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3871,7 +3858,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 241.3 57.15 270)
+		(at 166.37 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3879,10 +3866,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "214718f0-bfb7-4d0a-bba8-d52e3af64dbc")
 		(property "Reference" "C29"
-			(at 245.11 61.3367 90)
+			(at 170.18 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3893,7 +3879,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 245.11 63.8767 90)
+			(at 170.18 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3904,7 +3890,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 145.11 66.04 0)
+			(at 70.18 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3916,7 +3902,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 45.11 66.04 0)
+			(at -29.82 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3928,7 +3914,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 241.3 57.15 0)
+			(at 166.37 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3939,7 +3925,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -154.89 66.04 0)
+			(at -229.82 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3951,7 +3937,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -254.89 66.04 0)
+			(at -329.82 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3963,7 +3949,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -354.89 66.04 0)
+			(at -429.82 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3975,7 +3961,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -454.89 66.04 0)
+			(at -529.82 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3987,7 +3973,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -554.89 66.04 0)
+			(at -629.82 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4015,7 +4001,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 143.51 233.68 270)
+		(at 149.86 170.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4023,10 +4009,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "234e77ab-8d1a-4cf1-b892-bdb623be007d")
 		(property "Reference" "C58"
-			(at 147.32 237.8667 90)
+			(at 153.67 174.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4037,7 +4022,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 147.32 240.4067 90)
+			(at 153.67 176.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4048,7 +4033,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 47.32 242.57 0)
+			(at 53.67 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4060,7 +4045,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -52.68 242.57 0)
+			(at -46.33 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4072,7 +4057,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 143.51 233.68 0)
+			(at 149.86 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4083,7 +4068,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -252.68 242.57 0)
+			(at -246.33 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4095,7 +4080,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -352.68 242.57 0)
+			(at -346.33 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4107,7 +4092,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -452.68 242.57 0)
+			(at -446.33 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4119,7 +4104,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -552.68 242.57 0)
+			(at -546.33 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4131,7 +4116,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -652.68 242.57 0)
+			(at -646.33 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4159,7 +4144,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 147.32 116.84 270)
+		(at 119.38 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4167,10 +4152,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "28bd3489-fcaa-4303-abbf-73ac985934dd")
 		(property "Reference" "C21"
-			(at 151.13 121.0267 90)
+			(at 123.19 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4181,7 +4165,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 151.13 123.5667 90)
+			(at 123.19 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4192,7 +4176,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 51.13 125.73 0)
+			(at 23.19 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4204,7 +4188,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -48.87 125.73 0)
+			(at -76.81 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4216,7 +4200,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 147.32 116.84 0)
+			(at 119.38 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4227,7 +4211,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -248.87 125.73 0)
+			(at -276.81 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4239,7 +4223,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -348.87 125.73 0)
+			(at -376.81 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4251,7 +4235,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -448.87 125.73 0)
+			(at -476.81 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4263,7 +4247,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -548.87 125.73 0)
+			(at -576.81 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4275,7 +4259,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -648.87 125.73 0)
+			(at -676.81 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4303,7 +4287,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 24.13 100.33 90)
+		(at 24.13 83.82 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4314,7 +4298,7 @@
 		(fields_autoplaced yes)
 		(uuid "2a6cda72-4573-4bd9-9c76-4b9087af784f")
 		(property "Reference" "H7"
-			(at 22.86 93.98 90)
+			(at 22.86 77.47 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4324,7 +4308,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 22.86 96.52 90)
+			(at 22.86 80.01 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4334,7 +4318,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 24.13 100.33 0)
+			(at 24.13 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4345,7 +4329,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 100.33 0)
+			(at 24.13 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4356,7 +4340,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 24.13 100.33 0)
+			(at 24.13 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4380,7 +4364,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 143.51 208.28 270)
+		(at 149.86 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4388,10 +4372,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "2babcc1b-8082-42e0-99c3-dad89f3d173b")
 		(property "Reference" "C57"
-			(at 147.32 212.4667 90)
+			(at 153.67 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4402,7 +4385,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 147.32 215.0067 90)
+			(at 153.67 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4413,7 +4396,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 47.32 217.17 0)
+			(at 53.67 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4425,7 +4408,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -52.68 217.17 0)
+			(at -46.33 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4437,7 +4420,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 143.51 208.28 0)
+			(at 149.86 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4448,7 +4431,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -252.68 217.17 0)
+			(at -246.33 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4460,7 +4443,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -352.68 217.17 0)
+			(at -346.33 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4472,7 +4455,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -452.68 217.17 0)
+			(at -446.33 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4484,7 +4467,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -552.68 217.17 0)
+			(at -546.33 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4496,7 +4479,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -652.68 217.17 0)
+			(at -646.33 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4524,7 +4507,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 96.52 142.24 270)
+		(at 83.82 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4532,10 +4515,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "2ed7bf75-4693-4843-9f41-1b22646668ef")
 		(property "Reference" "C17"
-			(at 100.33 146.4267 90)
+			(at 87.63 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4546,7 +4528,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 100.33 148.9667 90)
+			(at 87.63 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4557,7 +4539,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 0.33 151.13 0)
+			(at -12.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4569,7 +4551,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -99.67 151.13 0)
+			(at -112.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4581,7 +4563,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 96.52 142.24 0)
+			(at 83.82 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4592,7 +4574,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -299.67 151.13 0)
+			(at -312.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4604,7 +4586,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -399.67 151.13 0)
+			(at -412.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4616,7 +4598,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -499.67 151.13 0)
+			(at -512.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4628,7 +4610,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -599.67 151.13 0)
+			(at -612.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4640,7 +4622,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -699.67 151.13 0)
+			(at -712.37 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4668,7 +4650,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 35.56 68.58 90)
+		(at 24.13 50.8 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4679,7 +4661,7 @@
 		(fields_autoplaced yes)
 		(uuid "2f547c56-30d8-48dc-baca-63a0f6724418")
 		(property "Reference" "H4"
-			(at 34.29 62.23 90)
+			(at 22.86 44.45 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4689,7 +4671,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 34.29 64.77 90)
+			(at 22.86 46.99 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4699,7 +4681,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 35.56 68.58 0)
+			(at 24.13 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4710,7 +4692,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 68.58 0)
+			(at 24.13 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4721,7 +4703,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 35.56 68.58 0)
+			(at 24.13 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4745,7 +4727,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 92.71 208.28 270)
+		(at 116.84 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4753,10 +4735,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "31adca27-eccc-49cd-8c44-e4ffa352d258")
 		(property "Reference" "C52"
-			(at 96.52 212.4667 90)
+			(at 120.65 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4767,7 +4748,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 96.52 215.0067 90)
+			(at 120.65 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4778,7 +4759,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -3.48 217.17 0)
+			(at 20.65 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4790,7 +4771,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -103.48 217.17 0)
+			(at -79.35 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4802,7 +4783,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 92.71 208.28 0)
+			(at 116.84 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4813,7 +4794,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -303.48 217.17 0)
+			(at -279.35 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4825,7 +4806,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -403.48 217.17 0)
+			(at -379.35 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4837,7 +4818,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -503.48 217.17 0)
+			(at -479.35 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4849,7 +4830,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -603.48 217.17 0)
+			(at -579.35 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4861,7 +4842,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -703.48 217.17 0)
+			(at -679.35 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4889,7 +4870,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 292.1 57.15 270)
+		(at 201.93 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4897,10 +4878,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "3409e6b0-f6e9-41d3-a3cc-e298db76441f")
 		(property "Reference" "C34"
-			(at 295.91 61.3367 90)
+			(at 205.74 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4911,7 +4891,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 295.91 63.8767 90)
+			(at 205.74 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4922,7 +4902,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 195.91 66.04 0)
+			(at 105.74 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4934,7 +4914,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 95.91 66.04 0)
+			(at 5.74 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4946,7 +4926,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 292.1 57.15 0)
+			(at 201.93 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4957,7 +4937,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -104.09 66.04 0)
+			(at -194.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4969,7 +4949,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -204.09 66.04 0)
+			(at -294.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4981,7 +4961,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -304.09 66.04 0)
+			(at -394.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4993,7 +4973,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -404.09 66.04 0)
+			(at -494.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5005,7 +4985,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -504.09 66.04 0)
+			(at -594.26 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5033,7 +5013,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 53.34 156.21 180)
+		(at 49.53 120.65 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5044,7 +5024,7 @@
 		(fields_autoplaced yes)
 		(uuid "3a5e0ccb-3f16-4dda-8dcd-b03c451af19e")
 		(property "Reference" "H17"
-			(at 43.18 148.59 0)
+			(at 39.37 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5054,7 +5034,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 43.18 151.13 0)
+			(at 39.37 115.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5064,7 +5044,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 36.83 61.29 0)
+			(at 33.02 25.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5076,7 +5056,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 36.83 -38.71 0)
+			(at 33.02 -74.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5088,7 +5068,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 53.34 156.21 0)
+			(at 49.53 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5099,7 +5079,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 36.83 -238.71 0)
+			(at 33.02 -274.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5111,7 +5091,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 36.83 -338.71 0)
+			(at 33.02 -374.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5123,7 +5103,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 36.83 -438.71 0)
+			(at 33.02 -474.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5135,7 +5115,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 36.83 -538.71 0)
+			(at 33.02 -574.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5147,7 +5127,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 36.83 -638.71 0)
+			(at 33.02 -674.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5172,7 +5152,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 33.02 176.53 180)
+		(at 31.75 151.13 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5183,7 +5163,7 @@
 		(fields_autoplaced yes)
 		(uuid "3bacba7d-610a-4d73-951e-d76d664e143e")
 		(property "Reference" "H13"
-			(at 22.86 168.91 0)
+			(at 21.59 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5193,7 +5173,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 22.86 171.45 0)
+			(at 21.59 146.05 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5203,7 +5183,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 16.51 81.61 0)
+			(at 15.24 56.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5215,7 +5195,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 16.51 -18.39 0)
+			(at 15.24 -43.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5227,7 +5207,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 33.02 176.53 0)
+			(at 31.75 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5238,7 +5218,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 16.51 -218.39 0)
+			(at 15.24 -243.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5250,7 +5230,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 16.51 -318.39 0)
+			(at 15.24 -343.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5262,7 +5242,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 16.51 -418.39 0)
+			(at 15.24 -443.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5274,7 +5254,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 16.51 -518.39 0)
+			(at 15.24 -543.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5286,7 +5266,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 16.51 -618.39 0)
+			(at 15.24 -643.79 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5311,7 +5291,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 168.91 208.28 270)
+		(at 166.37 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5319,10 +5299,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "3c9385c7-65d6-41a5-8ff9-802431ecc473")
 		(property "Reference" "C59"
-			(at 172.72 212.4667 90)
+			(at 170.18 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5333,7 +5312,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 172.72 215.0067 90)
+			(at 170.18 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5344,7 +5323,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 72.72 217.17 0)
+			(at 70.18 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5356,7 +5335,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -27.28 217.17 0)
+			(at -29.82 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5368,7 +5347,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 168.91 208.28 0)
+			(at 166.37 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5379,7 +5358,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -227.28 217.17 0)
+			(at -229.82 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5391,7 +5370,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -327.28 217.17 0)
+			(at -329.82 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5403,7 +5382,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -427.28 217.17 0)
+			(at -429.82 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5415,7 +5394,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -527.28 217.17 0)
+			(at -529.82 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5427,7 +5406,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -627.28 217.17 0)
+			(at -629.82 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5455,7 +5434,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 172.72 116.84 270)
+		(at 137.16 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5463,10 +5442,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "3dc9cc7e-5f67-4f1e-a849-f97a0ff3f4a5")
 		(property "Reference" "C23"
-			(at 176.53 121.0267 90)
+			(at 140.97 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5477,7 +5455,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 176.53 123.5667 90)
+			(at 140.97 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5488,7 +5466,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 76.53 125.73 0)
+			(at 40.97 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5500,7 +5478,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -23.47 125.73 0)
+			(at -59.03 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5512,7 +5490,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 172.72 116.84 0)
+			(at 137.16 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5523,7 +5501,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -223.47 125.73 0)
+			(at -259.03 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5535,7 +5513,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -323.47 125.73 0)
+			(at -359.03 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5547,7 +5525,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -423.47 125.73 0)
+			(at -459.03 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5559,7 +5537,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -523.47 125.73 0)
+			(at -559.03 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5571,7 +5549,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -623.47 125.73 0)
+			(at -659.03 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5599,7 +5577,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 67.31 259.08 270)
+		(at 199.39 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5607,10 +5585,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "3e7ac22f-37c5-4dc5-a8b5-f237c97e1e1e")
 		(property "Reference" "C51"
-			(at 71.12 263.2667 90)
+			(at 203.2 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5621,7 +5598,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 71.12 265.8067 90)
+			(at 203.2 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5632,7 +5609,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -28.88 267.97 0)
+			(at 103.2 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5644,7 +5621,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -128.88 267.97 0)
+			(at 3.2 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5656,7 +5633,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 67.31 259.08 0)
+			(at 199.39 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5667,7 +5644,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -328.88 267.97 0)
+			(at -196.8 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5679,7 +5656,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -428.88 267.97 0)
+			(at -296.8 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5691,7 +5668,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -528.88 267.97 0)
+			(at -396.8 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5703,7 +5680,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -628.88 267.97 0)
+			(at -496.8 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5715,7 +5692,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -728.88 267.97 0)
+			(at -596.8 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5743,7 +5720,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 121.92 116.84 270)
+		(at 101.6 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5751,10 +5728,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "3f80c110-5d73-4817-ba9a-44b9f51be963")
 		(property "Reference" "C19"
-			(at 125.73 121.0267 90)
+			(at 105.41 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5765,7 +5741,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 125.73 123.5667 90)
+			(at 105.41 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5776,7 +5752,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 25.73 125.73 0)
+			(at 5.41 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5788,7 +5764,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -74.27 125.73 0)
+			(at -94.59 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5800,7 +5776,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 121.92 116.84 0)
+			(at 101.6 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5811,7 +5787,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -274.27 125.73 0)
+			(at -294.59 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5823,7 +5799,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -374.27 125.73 0)
+			(at -394.59 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5835,7 +5811,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -474.27 125.73 0)
+			(at -494.59 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5847,7 +5823,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -574.27 125.73 0)
+			(at -594.59 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5859,7 +5835,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -674.27 125.73 0)
+			(at -694.59 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5887,7 +5863,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 219.71 142.24 270)
+		(at 153.67 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5895,10 +5871,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "427dd83e-88a4-40a0-ab63-993551288522")
 		(property "Reference" "C38"
-			(at 223.52 146.4267 90)
+			(at 157.48 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5909,7 +5884,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 223.52 148.9667 90)
+			(at 157.48 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5920,7 +5895,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 123.52 151.13 0)
+			(at 57.48 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5932,7 +5907,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 23.52 151.13 0)
+			(at -42.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5944,7 +5919,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 219.71 142.24 0)
+			(at 153.67 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5955,7 +5930,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -176.48 151.13 0)
+			(at -242.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5967,7 +5942,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -276.48 151.13 0)
+			(at -342.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5979,7 +5954,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -376.48 151.13 0)
+			(at -442.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5991,7 +5966,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -476.48 151.13 0)
+			(at -542.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6003,7 +5978,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -576.48 151.13 0)
+			(at -642.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6031,7 +6006,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 168.91 233.68 270)
+		(at 182.88 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6039,10 +6014,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "43693e29-aee0-43bc-8b0d-5bab438bcfaa")
 		(property "Reference" "C60"
-			(at 172.72 237.8667 90)
+			(at 186.69 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6053,7 +6027,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 172.72 240.4067 90)
+			(at 186.69 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6064,7 +6038,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 72.72 242.57 0)
+			(at 86.69 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6076,7 +6050,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -27.28 242.57 0)
+			(at -13.31 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6088,7 +6062,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 168.91 233.68 0)
+			(at 182.88 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6099,7 +6073,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -227.28 242.57 0)
+			(at -213.31 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6111,7 +6085,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -327.28 242.57 0)
+			(at -313.31 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6123,7 +6097,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -427.28 242.57 0)
+			(at -413.31 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6135,7 +6109,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -527.28 242.57 0)
+			(at -513.31 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6147,7 +6121,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -627.28 242.57 0)
+			(at -613.31 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6175,7 +6149,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 49.53 187.96 180)
+		(at 31.75 185.42 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6186,7 +6160,7 @@
 		(fields_autoplaced yes)
 		(uuid "47b032c3-96f6-4b92-9a31-70a7fdb9d644")
 		(property "Reference" "H16"
-			(at 39.37 180.34 0)
+			(at 21.59 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6196,7 +6170,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 39.37 182.88 0)
+			(at 21.59 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6206,7 +6180,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 33.02 93.04 0)
+			(at 15.24 90.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6218,7 +6192,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 33.02 -6.96 0)
+			(at 15.24 -9.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6230,7 +6204,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 49.53 187.96 0)
+			(at 31.75 185.42 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6241,7 +6215,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 33.02 -206.96 0)
+			(at 15.24 -209.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6253,7 +6227,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 33.02 -306.96 0)
+			(at 15.24 -309.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6265,7 +6239,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 33.02 -406.96 0)
+			(at 15.24 -409.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6277,7 +6251,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 33.02 -506.96 0)
+			(at 15.24 -509.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6289,7 +6263,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 33.02 -606.96 0)
+			(at 15.24 -609.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6314,7 +6288,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 96.52 116.84 270)
+		(at 83.82 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6322,10 +6296,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "4c236c24-eac5-4bca-92ac-b81038672463")
 		(property "Reference" "C16"
-			(at 100.33 121.0267 90)
+			(at 87.63 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6336,7 +6309,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 100.33 123.5667 90)
+			(at 87.63 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6347,7 +6320,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 0.33 125.73 0)
+			(at -12.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6359,7 +6332,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -99.67 125.73 0)
+			(at -112.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6371,7 +6344,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 96.52 116.84 0)
+			(at 83.82 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6382,7 +6355,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -299.67 125.73 0)
+			(at -312.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6394,7 +6367,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -399.67 125.73 0)
+			(at -412.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6406,7 +6379,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -499.67 125.73 0)
+			(at -512.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6418,7 +6391,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -599.67 125.73 0)
+			(at -612.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6430,7 +6403,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -699.67 125.73 0)
+			(at -712.37 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6458,7 +6431,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 127 63.5 270)
+		(at 100.33 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6466,10 +6439,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "4c51f96e-ea5f-48a7-8a7b-8bf7081e387f")
 		(property "Reference" "C8"
-			(at 130.81 67.6867 90)
+			(at 104.14 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6480,7 +6452,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 130.81 70.2267 90)
+			(at 104.14 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6491,7 +6463,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 30.81 72.39 0)
+			(at 4.14 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6503,7 +6475,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -69.19 72.39 0)
+			(at -95.86 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6515,7 +6487,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 127 63.5 0)
+			(at 100.33 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6526,7 +6498,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -269.19 72.39 0)
+			(at -295.86 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6538,7 +6510,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -369.19 72.39 0)
+			(at -395.86 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6550,7 +6522,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -469.19 72.39 0)
+			(at -495.86 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6562,7 +6534,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -569.19 72.39 0)
+			(at -595.86 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6574,7 +6546,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -669.19 72.39 0)
+			(at -695.86 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6602,7 +6574,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 295.91 116.84 270)
+		(at 203.2 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6610,10 +6582,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "4f6aa1f4-e824-4193-98b2-3a01d5386f91")
 		(property "Reference" "C45"
-			(at 299.72 121.0267 90)
+			(at 207.01 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6624,7 +6595,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 299.72 123.5667 90)
+			(at 207.01 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6635,7 +6606,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 199.72 125.73 0)
+			(at 107.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6647,7 +6618,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 99.72 125.73 0)
+			(at 7.01 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6659,7 +6630,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 295.91 116.84 0)
+			(at 203.2 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6670,7 +6641,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -100.28 125.73 0)
+			(at -192.99 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6682,7 +6653,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -200.28 125.73 0)
+			(at -292.99 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6694,7 +6665,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -300.28 125.73 0)
+			(at -392.99 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6706,7 +6677,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -400.28 125.73 0)
+			(at -492.99 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6718,7 +6689,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -500.28 125.73 0)
+			(at -592.99 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6746,7 +6717,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 152.4 63.5 270)
+		(at 116.84 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6754,10 +6725,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "505fbf80-69a2-48d7-8dc5-32ad9b7e80c1")
 		(property "Reference" "C9"
-			(at 156.21 67.6867 90)
+			(at 120.65 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6768,7 +6738,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 156.21 70.2267 90)
+			(at 120.65 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6779,7 +6749,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 56.21 72.39 0)
+			(at 20.65 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6791,7 +6761,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -43.79 72.39 0)
+			(at -79.35 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6803,7 +6773,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 152.4 63.5 0)
+			(at 116.84 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6814,7 +6784,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -243.79 72.39 0)
+			(at -279.35 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6826,7 +6796,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -343.79 72.39 0)
+			(at -379.35 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6838,7 +6808,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -443.79 72.39 0)
+			(at -479.35 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6850,7 +6820,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -543.79 72.39 0)
+			(at -579.35 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6862,7 +6832,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -643.79 72.39 0)
+			(at -679.35 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6890,7 +6860,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 219.71 116.84 270)
+		(at 153.67 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6898,10 +6868,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "52c6ce7f-409b-424b-afcc-3d6eb00933d0")
 		(property "Reference" "C37"
-			(at 223.52 121.0267 90)
+			(at 157.48 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6912,7 +6881,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 223.52 123.5667 90)
+			(at 157.48 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6923,7 +6892,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 123.52 125.73 0)
+			(at 57.48 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6935,7 +6904,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 23.52 125.73 0)
+			(at -42.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6947,7 +6916,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 219.71 116.84 0)
+			(at 153.67 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6958,7 +6927,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -176.48 125.73 0)
+			(at -242.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6970,7 +6939,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -276.48 125.73 0)
+			(at -342.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6982,7 +6951,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -376.48 125.73 0)
+			(at -442.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6994,7 +6963,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -476.48 125.73 0)
+			(at -542.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7006,7 +6975,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -576.48 125.73 0)
+			(at -642.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7034,7 +7003,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 219.71 167.64 270)
+		(at 153.67 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7042,10 +7011,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "5930529f-dac6-4b1c-81e1-64cbc611c418")
 		(property "Reference" "C39"
-			(at 223.52 171.8267 90)
+			(at 157.48 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7056,7 +7024,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 223.52 174.3667 90)
+			(at 157.48 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7067,7 +7035,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 123.52 176.53 0)
+			(at 57.48 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7079,7 +7047,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 23.52 176.53 0)
+			(at -42.52 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7091,7 +7059,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 219.71 167.64 0)
+			(at 153.67 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7102,7 +7070,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -176.48 176.53 0)
+			(at -242.52 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7114,7 +7082,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -276.48 176.53 0)
+			(at -342.52 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7126,7 +7094,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -376.48 176.53 0)
+			(at -442.52 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7138,7 +7106,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -476.48 176.53 0)
+			(at -542.52 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7150,7 +7118,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -576.48 176.53 0)
+			(at -642.52 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7178,7 +7146,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 92.71 259.08 270)
+		(at 215.9 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7186,10 +7154,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "596bcfe1-ee7d-4fc8-bfe6-857aed4493e0")
 		(property "Reference" "C54"
-			(at 96.52 263.2667 90)
+			(at 219.71 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7200,7 +7167,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 96.52 265.8067 90)
+			(at 219.71 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7211,7 +7178,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -3.48 267.97 0)
+			(at 119.71 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7223,7 +7190,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -103.48 267.97 0)
+			(at 19.71 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7235,7 +7202,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 92.71 259.08 0)
+			(at 215.9 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7246,7 +7213,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -303.48 267.97 0)
+			(at -180.29 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7258,7 +7225,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -403.48 267.97 0)
+			(at -280.29 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7270,7 +7237,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -503.48 267.97 0)
+			(at -380.29 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7282,7 +7249,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -603.48 267.97 0)
+			(at -480.29 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7294,7 +7261,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -703.48 267.97 0)
+			(at -580.29 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7322,7 +7289,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 76.2 88.9 270)
+		(at 67.31 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7330,10 +7297,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "5f7cc1fd-dc6d-41f0-acd5-b570e586031e")
 		(property "Reference" "C11"
-			(at 80.01 93.0867 90)
+			(at 71.12 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7344,7 +7310,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 80.01 95.6267 90)
+			(at 71.12 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7355,7 +7321,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -19.99 97.79 0)
+			(at -28.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7367,7 +7333,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -119.99 97.79 0)
+			(at -128.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7379,7 +7345,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 76.2 88.9 0)
+			(at 67.31 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7390,7 +7356,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -319.99 97.79 0)
+			(at -328.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7402,7 +7368,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -419.99 97.79 0)
+			(at -428.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7414,7 +7380,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -519.99 97.79 0)
+			(at -528.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7426,7 +7392,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -619.99 97.79 0)
+			(at -628.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7438,7 +7404,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -719.99 97.79 0)
+			(at -728.88 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7466,7 +7432,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 321.31 142.24 270)
+		(at 219.71 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7474,10 +7440,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "686b9461-410d-4d57-bbe0-35d01c31f004")
 		(property "Reference" "C48"
-			(at 325.12 146.4267 90)
+			(at 223.52 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7488,7 +7453,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 325.12 148.9667 90)
+			(at 223.52 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7499,7 +7464,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 225.12 151.13 0)
+			(at 123.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7511,7 +7476,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 125.12 151.13 0)
+			(at 23.52 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7523,7 +7488,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 321.31 142.24 0)
+			(at 219.71 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7534,7 +7499,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -74.88 151.13 0)
+			(at -176.48 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7546,7 +7511,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -174.88 151.13 0)
+			(at -276.48 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7558,7 +7523,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -274.88 151.13 0)
+			(at -376.48 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7570,7 +7535,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -374.88 151.13 0)
+			(at -476.48 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7582,7 +7547,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -474.88 151.13 0)
+			(at -576.48 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7610,7 +7575,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 24.13 120.65 90)
+		(at 24.13 104.14 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7621,7 +7586,7 @@
 		(fields_autoplaced yes)
 		(uuid "6ab458a9-2451-4736-9c0d-4a5f86b86af5")
 		(property "Reference" "H9"
-			(at 22.86 114.3 90)
+			(at 22.86 97.79 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7631,7 +7596,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 22.86 116.84 90)
+			(at 22.86 100.33 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7641,7 +7606,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 24.13 120.65 0)
+			(at 24.13 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7652,7 +7617,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 120.65 0)
+			(at 24.13 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7663,7 +7628,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 24.13 120.65 0)
+			(at 24.13 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7687,7 +7652,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 215.9 82.55 270)
+		(at 100.33 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7695,10 +7660,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "6c4d355a-9266-4656-bb8e-5ac3c5ddf9af")
 		(property "Reference" "C27"
-			(at 219.71 86.7367 90)
+			(at 104.14 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7709,7 +7673,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 219.71 89.2767 90)
+			(at 104.14 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7720,7 +7684,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 119.71 91.44 0)
+			(at 4.14 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7732,7 +7696,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 19.71 91.44 0)
+			(at -95.86 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7744,7 +7708,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 215.9 82.55 0)
+			(at 100.33 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7755,7 +7719,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -180.29 91.44 0)
+			(at -295.86 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7767,7 +7731,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -280.29 91.44 0)
+			(at -395.86 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7779,7 +7743,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -380.29 91.44 0)
+			(at -495.86 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7791,7 +7755,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -480.29 91.44 0)
+			(at -595.86 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7803,7 +7767,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -580.29 91.44 0)
+			(at -695.86 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7831,7 +7795,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 33.02 187.96 180)
+		(at 31.75 162.56 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7842,7 +7806,7 @@
 		(fields_autoplaced yes)
 		(uuid "6d1cf19e-1c11-48e1-9854-78bd40b4001f")
 		(property "Reference" "H14"
-			(at 22.86 180.34 0)
+			(at 21.59 154.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7852,7 +7816,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 22.86 182.88 0)
+			(at 21.59 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7862,7 +7826,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 16.51 93.04 0)
+			(at 15.24 67.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7874,7 +7838,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 16.51 -6.96 0)
+			(at 15.24 -32.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7886,7 +7850,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 33.02 187.96 0)
+			(at 31.75 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7897,7 +7861,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 16.51 -206.96 0)
+			(at 15.24 -232.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7909,7 +7873,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 16.51 -306.96 0)
+			(at 15.24 -332.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7921,7 +7885,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 16.51 -406.96 0)
+			(at 15.24 -432.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7933,7 +7897,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 16.51 -506.96 0)
+			(at 15.24 -532.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7945,7 +7909,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 16.51 -606.96 0)
+			(at 15.24 -632.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7970,7 +7934,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 96.52 167.64 270)
+		(at 83.82 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7978,10 +7942,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "759361c3-86f0-4bac-a543-7acde7fc9e3c")
 		(property "Reference" "C18"
-			(at 100.33 171.8267 90)
+			(at 87.63 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7992,7 +7955,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 100.33 174.3667 90)
+			(at 87.63 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8003,7 +7966,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 0.33 176.53 0)
+			(at -12.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8015,7 +7978,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -99.67 176.53 0)
+			(at -112.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8027,7 +7990,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 96.52 167.64 0)
+			(at 83.82 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8038,7 +8001,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -299.67 176.53 0)
+			(at -312.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8050,7 +8013,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -399.67 176.53 0)
+			(at -412.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8062,7 +8025,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -499.67 176.53 0)
+			(at -512.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8074,7 +8037,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -599.67 176.53 0)
+			(at -612.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8086,7 +8049,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -699.67 176.53 0)
+			(at -712.37 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8114,7 +8077,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 101.6 88.9 270)
+		(at 83.82 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8122,10 +8085,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "77c55f96-0fa7-41ee-a008-c9be55932b66")
 		(property "Reference" "C12"
-			(at 105.41 93.0867 90)
+			(at 87.63 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8136,7 +8098,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 105.41 95.6267 90)
+			(at 87.63 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8147,7 +8109,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 5.41 97.79 0)
+			(at -12.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8159,7 +8121,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -94.59 97.79 0)
+			(at -112.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8171,7 +8133,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 101.6 88.9 0)
+			(at 83.82 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8182,7 +8144,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -294.59 97.79 0)
+			(at -312.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8194,7 +8156,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -394.59 97.79 0)
+			(at -412.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8206,7 +8168,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -494.59 97.79 0)
+			(at -512.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8218,7 +8180,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -594.59 97.79 0)
+			(at -612.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8230,7 +8192,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -694.59 97.79 0)
+			(at -712.37 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8258,7 +8220,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 215.9 57.15 270)
+		(at 149.86 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8266,10 +8228,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "7ef07ca9-5be6-49f8-a79c-80e6ef704700")
 		(property "Reference" "C26"
-			(at 219.71 61.3367 90)
+			(at 153.67 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8280,7 +8241,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 219.71 63.8767 90)
+			(at 153.67 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8291,7 +8252,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 119.71 66.04 0)
+			(at 53.67 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8303,7 +8264,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 19.71 66.04 0)
+			(at -46.33 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8315,7 +8276,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 215.9 57.15 0)
+			(at 149.86 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8326,7 +8287,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -180.29 66.04 0)
+			(at -246.33 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8338,7 +8299,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -280.29 66.04 0)
+			(at -346.33 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8350,7 +8311,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -380.29 66.04 0)
+			(at -446.33 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8362,7 +8323,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -480.29 66.04 0)
+			(at -546.33 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8374,7 +8335,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -580.29 66.04 0)
+			(at -646.33 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8402,7 +8363,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 241.3 31.75 270)
+		(at 166.37 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8410,10 +8371,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "8252365e-8b90-4bf0-b4b2-ad99f8c509e3")
 		(property "Reference" "C28"
-			(at 245.11 35.9367 90)
+			(at 170.18 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8424,7 +8384,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 245.11 38.4767 90)
+			(at 170.18 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8435,7 +8395,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 145.11 40.64 0)
+			(at 70.18 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8447,7 +8407,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 45.11 40.64 0)
+			(at -29.82 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8459,7 +8419,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 241.3 31.75 0)
+			(at 166.37 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8470,7 +8430,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -154.89 40.64 0)
+			(at -229.82 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8482,7 +8442,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -254.89 40.64 0)
+			(at -329.82 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8494,7 +8454,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -354.89 40.64 0)
+			(at -429.82 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8506,7 +8466,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -454.89 40.64 0)
+			(at -529.82 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8518,7 +8478,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -554.89 40.64 0)
+			(at -629.82 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8546,7 +8506,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 321.31 116.84 270)
+		(at 219.71 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8554,10 +8514,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "8d3dbae6-a986-4f2f-bad0-4415631f6882")
 		(property "Reference" "C47"
-			(at 325.12 121.0267 90)
+			(at 223.52 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8568,7 +8527,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 325.12 123.5667 90)
+			(at 223.52 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8579,7 +8538,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 225.12 125.73 0)
+			(at 123.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8591,7 +8550,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 125.12 125.73 0)
+			(at 23.52 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8603,7 +8562,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 321.31 116.84 0)
+			(at 219.71 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8614,7 +8573,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -74.88 125.73 0)
+			(at -176.48 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8626,7 +8585,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -174.88 125.73 0)
+			(at -276.48 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8638,7 +8597,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -274.88 125.73 0)
+			(at -376.48 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8650,7 +8609,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -374.88 125.73 0)
+			(at -476.48 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8662,7 +8621,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -474.88 125.73 0)
+			(at -576.48 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8690,7 +8649,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 53.34 144.78 180)
+		(at 49.53 109.22 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8701,7 +8660,7 @@
 		(fields_autoplaced yes)
 		(uuid "9b796dd2-b8af-4d55-93ab-cb4f415fdb74")
 		(property "Reference" "H18"
-			(at 43.18 137.16 0)
+			(at 39.37 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8711,7 +8670,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 43.18 139.7 0)
+			(at 39.37 104.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8721,7 +8680,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 36.83 49.86 0)
+			(at 33.02 14.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8733,7 +8692,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 36.83 -50.14 0)
+			(at 33.02 -85.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8745,7 +8704,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 53.34 144.78 0)
+			(at 49.53 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8756,7 +8715,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 36.83 -250.14 0)
+			(at 33.02 -285.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8768,7 +8727,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 36.83 -350.14 0)
+			(at 33.02 -385.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8780,7 +8739,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 36.83 -450.14 0)
+			(at 33.02 -485.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8792,7 +8751,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 36.83 -550.14 0)
+			(at 33.02 -585.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8804,7 +8763,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 36.83 -650.14 0)
+			(at 33.02 -685.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8829,7 +8788,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 24.13 132.08 90)
+		(at 24.13 115.57 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8840,7 +8799,7 @@
 		(fields_autoplaced yes)
 		(uuid "9e11a122-4739-4cff-941e-39dfeaa8f7a9")
 		(property "Reference" "H10"
-			(at 22.86 125.73 90)
+			(at 22.86 109.22 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8850,7 +8809,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 22.86 128.27 90)
+			(at 22.86 111.76 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8860,7 +8819,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 24.13 132.08 0)
+			(at 24.13 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8871,7 +8830,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 132.08 0)
+			(at 24.13 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8882,7 +8841,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 24.13 132.08 0)
+			(at 24.13 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8906,7 +8865,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 35.56 58.42 90)
+		(at 24.13 40.64 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8917,7 +8876,7 @@
 		(fields_autoplaced yes)
 		(uuid "a3d689e2-062b-4b62-8a56-50f4b2df142d")
 		(property "Reference" "H3"
-			(at 34.29 52.07 90)
+			(at 22.86 34.29 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8927,7 +8886,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 34.29 54.61 90)
+			(at 22.86 36.83 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8937,7 +8896,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 35.56 58.42 0)
+			(at 24.13 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8948,7 +8907,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 58.42 0)
+			(at 24.13 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8959,7 +8918,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 35.56 58.42 0)
+			(at 24.13 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8983,7 +8942,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 76.2 38.1 270)
+		(at 67.31 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8991,10 +8950,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "a4b371a2-31b1-4cba-94a8-1b9f63b3ab52")
 		(property "Reference" "C1"
-			(at 80.01 42.2867 90)
+			(at 71.12 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9005,7 +8963,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 80.01 44.8267 90)
+			(at 71.12 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9016,7 +8974,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -19.99 46.99 0)
+			(at -28.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9028,7 +8986,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -119.99 46.99 0)
+			(at -128.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9040,7 +8998,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 76.2 38.1 0)
+			(at 67.31 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9051,7 +9009,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -319.99 46.99 0)
+			(at -328.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9063,7 +9021,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -419.99 46.99 0)
+			(at -428.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9075,7 +9033,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -519.99 46.99 0)
+			(at -528.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9087,7 +9045,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -619.99 46.99 0)
+			(at -628.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9099,7 +9057,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -719.99 46.99 0)
+			(at -728.88 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9127,7 +9085,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 317.5 57.15 270)
+		(at 219.71 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9135,10 +9093,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ab20207e-624e-4dc7-8328-9401d8aacedf")
 		(property "Reference" "C36"
-			(at 321.31 61.3367 90)
+			(at 223.52 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9149,7 +9106,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 321.31 63.8767 90)
+			(at 223.52 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9160,7 +9117,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 221.31 66.04 0)
+			(at 123.52 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9172,7 +9129,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 121.31 66.04 0)
+			(at 23.52 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9184,7 +9141,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 317.5 57.15 0)
+			(at 219.71 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9195,7 +9152,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -78.69 66.04 0)
+			(at -176.48 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9207,7 +9164,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -178.69 66.04 0)
+			(at -276.48 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9219,7 +9176,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -278.69 66.04 0)
+			(at -376.48 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9231,7 +9188,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -378.69 66.04 0)
+			(at -476.48 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9243,7 +9200,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -478.69 66.04 0)
+			(at -576.48 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9271,7 +9228,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 266.7 57.15 270)
+		(at 184.15 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9279,10 +9236,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ad47a8f3-1b45-47d8-87d9-399c890d07c0")
 		(property "Reference" "C32"
-			(at 270.51 61.3367 90)
+			(at 187.96 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9293,7 +9249,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 270.51 63.8767 90)
+			(at 187.96 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9304,7 +9260,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 170.51 66.04 0)
+			(at 87.96 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9316,7 +9272,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 70.51 66.04 0)
+			(at -12.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9328,7 +9284,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 266.7 57.15 0)
+			(at 184.15 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9339,7 +9295,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -129.49 66.04 0)
+			(at -212.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9351,7 +9307,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -229.49 66.04 0)
+			(at -312.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9363,7 +9319,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -329.49 66.04 0)
+			(at -412.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9375,7 +9331,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -429.49 66.04 0)
+			(at -512.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9387,7 +9343,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -529.49 66.04 0)
+			(at -612.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9415,7 +9371,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 35.56 88.9 90)
+		(at 24.13 71.12 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9426,7 +9382,7 @@
 		(fields_autoplaced yes)
 		(uuid "afc90e9e-ffbb-40ff-88cb-7aa3732610a3")
 		(property "Reference" "H6"
-			(at 34.29 82.55 90)
+			(at 22.86 64.77 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9436,7 +9392,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 34.29 85.09 90)
+			(at 22.86 67.31 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9446,7 +9402,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 35.56 88.9 0)
+			(at 24.13 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9457,7 +9413,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 88.9 0)
+			(at 24.13 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9468,7 +9424,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 35.56 88.9 0)
+			(at 24.13 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9492,7 +9448,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 24.13 110.49 90)
+		(at 24.13 93.98 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9503,7 +9459,7 @@
 		(fields_autoplaced yes)
 		(uuid "bb04a47d-5f67-4b18-91f1-383a580ceb7c")
 		(property "Reference" "H8"
-			(at 22.86 104.14 90)
+			(at 22.86 87.63 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9513,7 +9469,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 22.86 106.68 90)
+			(at 22.86 90.17 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9523,7 +9479,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 24.13 110.49 0)
+			(at 24.13 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9534,7 +9490,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 110.49 0)
+			(at 24.13 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9545,7 +9501,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 24.13 110.49 0)
+			(at 24.13 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9569,7 +9525,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 317.5 31.75 270)
+		(at 219.71 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9577,10 +9533,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "bb4345f0-ac4c-4e0f-9d09-64a7f92b54f6")
 		(property "Reference" "C35"
-			(at 321.31 35.9367 90)
+			(at 223.52 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9591,7 +9546,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 321.31 38.4767 90)
+			(at 223.52 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9602,7 +9557,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 221.31 40.64 0)
+			(at 123.52 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9614,7 +9569,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 121.31 40.64 0)
+			(at 23.52 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9626,7 +9581,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 317.5 31.75 0)
+			(at 219.71 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9637,7 +9592,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -78.69 40.64 0)
+			(at -176.48 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9649,7 +9604,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -178.69 40.64 0)
+			(at -276.48 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9661,7 +9616,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -278.69 40.64 0)
+			(at -376.48 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9673,7 +9628,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -378.69 40.64 0)
+			(at -476.48 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9685,7 +9640,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -478.69 40.64 0)
+			(at -576.48 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9713,7 +9668,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 245.11 142.24 270)
+		(at 170.18 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9721,10 +9676,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "c60474f8-4aac-4eab-9a6e-47243f2542f6")
 		(property "Reference" "C41"
-			(at 248.92 146.4267 90)
+			(at 173.99 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9735,7 +9689,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 248.92 148.9667 90)
+			(at 173.99 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9746,7 +9700,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 148.92 151.13 0)
+			(at 73.99 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9758,7 +9712,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 48.92 151.13 0)
+			(at -26.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9770,7 +9724,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 245.11 142.24 0)
+			(at 170.18 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9781,7 +9735,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -151.08 151.13 0)
+			(at -226.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9793,7 +9747,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -251.08 151.13 0)
+			(at -326.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9805,7 +9759,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -351.08 151.13 0)
+			(at -426.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9817,7 +9771,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -451.08 151.13 0)
+			(at -526.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9829,7 +9783,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -551.08 151.13 0)
+			(at -626.01 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9857,7 +9811,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 266.7 31.75 270)
+		(at 184.15 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9865,10 +9819,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "c6fc0b7e-05ca-4655-a98b-b4c807cdd6d9")
 		(property "Reference" "C31"
-			(at 270.51 35.9367 90)
+			(at 187.96 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9879,7 +9832,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 270.51 38.4767 90)
+			(at 187.96 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9890,7 +9843,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 170.51 40.64 0)
+			(at 87.96 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9902,7 +9855,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 70.51 40.64 0)
+			(at -12.04 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9914,7 +9867,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 266.7 31.75 0)
+			(at 184.15 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9925,7 +9878,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -129.49 40.64 0)
+			(at -212.04 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9937,7 +9890,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -229.49 40.64 0)
+			(at -312.04 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9949,7 +9902,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -329.49 40.64 0)
+			(at -412.04 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9961,7 +9914,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -429.49 40.64 0)
+			(at -512.04 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9973,7 +9926,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -529.49 40.64 0)
+			(at -612.04 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10001,7 +9954,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 118.11 208.28 270)
+		(at 133.35 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10009,10 +9962,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "cdb5ad99-1e46-4ca6-a3ec-312c4fea2843")
 		(property "Reference" "C55"
-			(at 121.92 212.4667 90)
+			(at 137.16 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10023,7 +9975,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 121.92 215.0067 90)
+			(at 137.16 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10034,7 +9986,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 21.92 217.17 0)
+			(at 37.16 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10046,7 +9998,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -78.08 217.17 0)
+			(at -62.84 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10058,7 +10010,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 118.11 208.28 0)
+			(at 133.35 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10069,7 +10021,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -278.08 217.17 0)
+			(at -262.84 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10081,7 +10033,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -378.08 217.17 0)
+			(at -362.84 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10093,7 +10045,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -478.08 217.17 0)
+			(at -462.84 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10105,7 +10057,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -578.08 217.17 0)
+			(at -562.84 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10117,7 +10069,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -678.08 217.17 0)
+			(at -662.84 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10145,7 +10097,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 71.12 116.84 270)
+		(at 66.04 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10153,10 +10105,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "cf852897-2b83-4b65-b98f-f394c69df80e")
 		(property "Reference" "C13"
-			(at 74.93 121.0267 90)
+			(at 69.85 98.1667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10167,7 +10118,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 74.93 123.5667 90)
+			(at 69.85 100.7067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10178,7 +10129,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -25.07 125.73 0)
+			(at -30.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10190,7 +10141,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -125.07 125.73 0)
+			(at -130.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10202,7 +10153,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 71.12 116.84 0)
+			(at 66.04 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10213,7 +10164,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -325.07 125.73 0)
+			(at -330.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10225,7 +10176,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -425.07 125.73 0)
+			(at -430.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10237,7 +10188,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -525.07 125.73 0)
+			(at -530.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10249,7 +10200,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -625.07 125.73 0)
+			(at -630.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10261,7 +10212,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -725.07 125.73 0)
+			(at -730.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10289,7 +10240,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 71.12 167.64 270)
+		(at 66.04 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10297,10 +10248,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "d297cb1a-afef-4e45-9b90-73d61a989a5c")
 		(property "Reference" "C15"
-			(at 74.93 171.8267 90)
+			(at 69.85 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10311,7 +10261,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 74.93 174.3667 90)
+			(at 69.85 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10322,7 +10272,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -25.07 176.53 0)
+			(at -30.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10334,7 +10284,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -125.07 176.53 0)
+			(at -130.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10346,7 +10296,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 71.12 167.64 0)
+			(at 66.04 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10357,7 +10307,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -325.07 176.53 0)
+			(at -330.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10369,7 +10319,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -425.07 176.53 0)
+			(at -430.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10381,7 +10331,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -525.07 176.53 0)
+			(at -530.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10393,7 +10343,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -625.07 176.53 0)
+			(at -630.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10405,7 +10355,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -725.07 176.53 0)
+			(at -730.15 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10433,7 +10383,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 101.6 63.5 270)
+		(at 83.82 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10441,10 +10391,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ddcb7bf3-a308-42d9-ad0c-798452d5df79")
 		(property "Reference" "C7"
-			(at 105.41 67.6867 90)
+			(at 87.63 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10455,7 +10404,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 105.41 70.2267 90)
+			(at 87.63 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10466,7 +10415,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 5.41 72.39 0)
+			(at -12.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10478,7 +10427,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -94.59 72.39 0)
+			(at -112.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10490,7 +10439,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 101.6 63.5 0)
+			(at 83.82 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10501,7 +10450,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -294.59 72.39 0)
+			(at -312.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10513,7 +10462,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -394.59 72.39 0)
+			(at -412.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10525,7 +10474,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -494.59 72.39 0)
+			(at -512.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10537,7 +10486,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -594.59 72.39 0)
+			(at -612.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10549,7 +10498,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -694.59 72.39 0)
+			(at -712.37 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10577,7 +10526,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 35.56 48.26 90)
+		(at 24.13 30.48 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10588,7 +10537,7 @@
 		(fields_autoplaced yes)
 		(uuid "e2a9a334-d0ff-4d14-b7c3-ed82bb6fea82")
 		(property "Reference" "H2"
-			(at 34.29 41.91 90)
+			(at 22.86 24.13 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10598,7 +10547,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 34.29 44.45 90)
+			(at 22.86 26.67 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10608,7 +10557,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 35.56 48.26 0)
+			(at 24.13 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10619,7 +10568,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 48.26 0)
+			(at 24.13 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10630,7 +10579,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 35.56 48.26 0)
+			(at 24.13 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10654,7 +10603,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 241.3 82.55 270)
+		(at 116.84 68.58 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10662,10 +10611,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "e3839819-988c-4fb6-97e0-117e40b2da08")
 		(property "Reference" "C30"
-			(at 245.11 86.7367 90)
+			(at 120.65 72.7667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10676,7 +10624,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 245.11 89.2767 90)
+			(at 120.65 75.3067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10687,7 +10635,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 145.11 91.44 0)
+			(at 20.65 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10699,7 +10647,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 45.11 91.44 0)
+			(at -79.35 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10711,7 +10659,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 241.3 82.55 0)
+			(at 116.84 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10722,7 +10670,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -154.89 91.44 0)
+			(at -279.35 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10734,7 +10682,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -254.89 91.44 0)
+			(at -379.35 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10746,7 +10694,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -354.89 91.44 0)
+			(at -479.35 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10758,7 +10706,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -454.89 91.44 0)
+			(at -579.35 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10770,7 +10718,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -554.89 91.44 0)
+			(at -679.35 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10798,7 +10746,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 215.9 31.75 270)
+		(at 149.86 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10806,10 +10754,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "ed02ef20-abca-4b13-b26e-1c4d3a471cc6")
 		(property "Reference" "C25"
-			(at 219.71 35.9367 90)
+			(at 153.67 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10820,7 +10767,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 219.71 38.4767 90)
+			(at 153.67 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10831,7 +10778,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 119.71 40.64 0)
+			(at 53.67 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10843,7 +10790,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at 19.71 40.64 0)
+			(at -46.33 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10855,7 +10802,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 215.9 31.75 0)
+			(at 149.86 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10866,7 +10813,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -180.29 40.64 0)
+			(at -246.33 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10878,7 +10825,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -280.29 40.64 0)
+			(at -346.33 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10890,7 +10837,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -380.29 40.64 0)
+			(at -446.33 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10902,7 +10849,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -480.29 40.64 0)
+			(at -546.33 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10914,7 +10861,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -580.29 40.64 0)
+			(at -646.33 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10942,7 +10889,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 67.31 233.68 270)
+		(at 100.33 170.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10950,10 +10897,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f0735913-a55a-47b1-a5c6-69bf26b317fa")
 		(property "Reference" "C50"
-			(at 71.12 237.8667 90)
+			(at 104.14 174.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10964,7 +10910,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 71.12 240.4067 90)
+			(at 104.14 176.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10975,7 +10921,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -28.88 242.57 0)
+			(at 4.14 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10987,7 +10933,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -128.88 242.57 0)
+			(at -95.86 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10999,7 +10945,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 67.31 233.68 0)
+			(at 100.33 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11010,7 +10956,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -328.88 242.57 0)
+			(at -295.86 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11022,7 +10968,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -428.88 242.57 0)
+			(at -395.86 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11034,7 +10980,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -528.88 242.57 0)
+			(at -495.86 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11046,7 +10992,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -628.88 242.57 0)
+			(at -595.86 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11058,7 +11004,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -728.88 242.57 0)
+			(at -695.86 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11086,7 +11032,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 76.2 63.5 270)
+		(at 67.31 43.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11094,10 +11040,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f280bb23-00af-4658-a35f-46203fe521b8")
 		(property "Reference" "C6"
-			(at 80.01 67.6867 90)
+			(at 71.12 47.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11108,7 +11053,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 80.01 70.2267 90)
+			(at 71.12 49.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11119,7 +11064,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -19.99 72.39 0)
+			(at -28.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11131,7 +11076,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -119.99 72.39 0)
+			(at -128.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11143,7 +11088,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 76.2 63.5 0)
+			(at 67.31 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11154,7 +11099,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -319.99 72.39 0)
+			(at -328.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11166,7 +11111,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -419.99 72.39 0)
+			(at -428.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11178,7 +11123,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -519.99 72.39 0)
+			(at -528.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11190,7 +11135,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -619.99 72.39 0)
+			(at -628.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11202,7 +11147,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -719.99 72.39 0)
+			(at -728.88 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11230,7 +11175,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 67.31 208.28 270)
+		(at 100.33 144.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11238,10 +11183,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f42bb540-1de2-419f-8634-c81f9ce45ac0")
 		(property "Reference" "C49"
-			(at 71.12 212.4667 90)
+			(at 104.14 148.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11252,7 +11196,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 71.12 215.0067 90)
+			(at 104.14 151.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11263,7 +11207,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -28.88 217.17 0)
+			(at 4.14 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11275,7 +11219,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -128.88 217.17 0)
+			(at -95.86 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11287,7 +11231,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 67.31 208.28 0)
+			(at 100.33 144.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11298,7 +11242,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -328.88 217.17 0)
+			(at -295.86 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11310,7 +11254,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -428.88 217.17 0)
+			(at -395.86 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11322,7 +11266,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -528.88 217.17 0)
+			(at -495.86 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11334,7 +11278,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -628.88 217.17 0)
+			(at -595.86 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11346,7 +11290,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -728.88 217.17 0)
+			(at -695.86 153.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11374,7 +11318,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 118.11 233.68 270)
+		(at 133.35 170.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11382,10 +11326,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f7342b00-49c2-4f5d-b3d8-e6ea153b1fb3")
 		(property "Reference" "C56"
-			(at 121.92 237.8667 90)
+			(at 137.16 174.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11396,7 +11339,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 121.92 240.4067 90)
+			(at 137.16 176.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11407,7 +11350,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 21.92 242.57 0)
+			(at 37.16 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11419,7 +11362,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -78.08 242.57 0)
+			(at -62.84 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11431,7 +11374,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 118.11 233.68 0)
+			(at 133.35 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11442,7 +11385,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -278.08 242.57 0)
+			(at -262.84 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11454,7 +11397,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -378.08 242.57 0)
+			(at -362.84 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11466,7 +11409,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -478.08 242.57 0)
+			(at -462.84 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11478,7 +11421,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -578.08 242.57 0)
+			(at -562.84 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11490,7 +11433,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -678.08 242.57 0)
+			(at -662.84 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11518,7 +11461,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 121.92 142.24 270)
+		(at 101.6 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11526,10 +11469,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f8b8af3f-b329-4224-a382-13263966502e")
 		(property "Reference" "C20"
-			(at 125.73 146.4267 90)
+			(at 105.41 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11540,7 +11482,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 125.73 148.9667 90)
+			(at 105.41 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11551,7 +11493,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 25.73 151.13 0)
+			(at 5.41 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11563,7 +11505,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -74.27 151.13 0)
+			(at -94.59 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11575,7 +11517,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 121.92 142.24 0)
+			(at 101.6 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11586,7 +11528,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -274.27 151.13 0)
+			(at -294.59 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11598,7 +11540,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -374.27 151.13 0)
+			(at -394.59 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11610,7 +11552,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -474.27 151.13 0)
+			(at -494.59 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11622,7 +11564,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -574.27 151.13 0)
+			(at -594.59 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11634,7 +11576,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -674.27 151.13 0)
+			(at -694.59 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11662,7 +11604,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 24.13 152.4 90)
+		(at 24.13 135.89 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11673,7 +11615,7 @@
 		(fields_autoplaced yes)
 		(uuid "f8d5623a-f80c-4535-93fe-361810ce08fb")
 		(property "Reference" "H12"
-			(at 22.86 146.05 90)
+			(at 22.86 129.54 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11683,7 +11625,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 22.86 148.59 90)
+			(at 22.86 132.08 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11693,7 +11635,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 24.13 152.4 0)
+			(at 24.13 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11704,7 +11646,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 24.13 152.4 0)
+			(at 24.13 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11715,7 +11657,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 24.13 152.4 0)
+			(at 24.13 135.89 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11739,7 +11681,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 92.71 233.68 270)
+		(at 116.84 170.18 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11747,10 +11689,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "f9cc0dde-a392-4fb3-b6bb-c9a6b4314ed1")
 		(property "Reference" "C53"
-			(at 96.52 237.8667 90)
+			(at 120.65 174.3667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11761,7 +11702,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 96.52 240.4067 90)
+			(at 120.65 176.9067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11772,7 +11713,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at -3.48 242.57 0)
+			(at 20.65 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11784,7 +11725,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -103.48 242.57 0)
+			(at -79.35 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11796,7 +11737,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 92.71 233.68 0)
+			(at 116.84 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11807,7 +11748,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -303.48 242.57 0)
+			(at -279.35 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11819,7 +11760,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -403.48 242.57 0)
+			(at -379.35 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11831,7 +11772,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -503.48 242.57 0)
+			(at -479.35 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11843,7 +11784,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -603.48 242.57 0)
+			(at -579.35 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11855,7 +11796,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -703.48 242.57 0)
+			(at -679.35 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11883,7 +11824,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 147.32 142.24 270)
+		(at 119.38 119.38 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11891,10 +11832,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "fa040e09-63a8-410c-aacd-858c341faace")
 		(property "Reference" "C22"
-			(at 151.13 146.4267 90)
+			(at 123.19 123.5667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11905,7 +11845,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 151.13 148.9667 90)
+			(at 123.19 126.1067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11916,7 +11856,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 51.13 151.13 0)
+			(at 23.19 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11928,7 +11868,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -48.87 151.13 0)
+			(at -76.81 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11940,7 +11880,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 147.32 142.24 0)
+			(at 119.38 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11951,7 +11891,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -248.87 151.13 0)
+			(at -276.81 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11963,7 +11903,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -348.87 151.13 0)
+			(at -376.81 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11975,7 +11915,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -448.87 151.13 0)
+			(at -476.81 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11987,7 +11927,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -548.87 151.13 0)
+			(at -576.81 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11999,7 +11939,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -648.87 151.13 0)
+			(at -676.81 128.27 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12027,7 +11967,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole_Pad")
-		(at 35.56 78.74 90)
+		(at 24.13 60.96 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12038,7 +11978,7 @@
 		(fields_autoplaced yes)
 		(uuid "fc03277d-1fa7-471c-88a6-a9f712270676")
 		(property "Reference" "H5"
-			(at 34.29 72.39 90)
+			(at 22.86 54.61 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12048,7 +11988,7 @@
 			)
 		)
 		(property "Value" "MountingHole_Pad"
-			(at 34.29 74.93 90)
+			(at 22.86 57.15 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12058,7 +11998,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_6.4mm_M6_ISO14580_Pad"
-			(at 35.56 78.74 0)
+			(at 24.13 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12069,7 +12009,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 78.74 0)
+			(at 24.13 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12080,7 +12020,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
-			(at 35.56 78.74 0)
+			(at 24.13 60.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12104,7 +12044,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 127 38.1 270)
+		(at 100.33 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12112,10 +12052,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "fc0665b3-ddda-496f-8e34-ad1ffa302331")
 		(property "Reference" "C3"
-			(at 130.81 42.2867 90)
+			(at 104.14 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12126,7 +12065,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 130.81 44.8267 90)
+			(at 104.14 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12137,7 +12076,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 30.81 46.99 0)
+			(at 4.14 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12149,7 +12088,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -69.19 46.99 0)
+			(at -95.86 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12161,7 +12100,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 127 38.1 0)
+			(at 100.33 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12172,7 +12111,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -269.19 46.99 0)
+			(at -295.86 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12184,7 +12123,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -369.19 46.99 0)
+			(at -395.86 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12196,7 +12135,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -469.19 46.99 0)
+			(at -495.86 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12208,7 +12147,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -569.19 46.99 0)
+			(at -595.86 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12220,7 +12159,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -669.19 46.99 0)
+			(at -695.86 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12248,7 +12187,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:9774030592R")
-		(at 49.53 176.53 180)
+		(at 31.75 173.99 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12259,7 +12198,7 @@
 		(fields_autoplaced yes)
 		(uuid "fdf74e13-9db6-4838-84dc-1215b06a8b6a")
 		(property "Reference" "H15"
-			(at 39.37 168.91 0)
+			(at 21.59 166.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12269,7 +12208,7 @@
 			)
 		)
 		(property "Value" "9774030592R"
-			(at 39.37 171.45 0)
+			(at 21.59 168.91 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12279,7 +12218,7 @@
 			)
 		)
 		(property "Footprint" "9774030592R"
-			(at 33.02 81.61 0)
+			(at 15.24 79.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12291,7 +12230,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf"
-			(at 33.02 -18.39 0)
+			(at 15.24 -20.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12303,7 +12242,7 @@
 			)
 		)
 		(property "Description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape"
-			(at 49.53 176.53 0)
+			(at 31.75 173.99 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12314,7 +12253,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 33.02 -218.39 0)
+			(at 15.24 -220.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12326,7 +12265,7 @@
 			)
 		)
 		(property "Mouser Part Number" "710-9774030592R"
-			(at 33.02 -318.39 0)
+			(at 15.24 -320.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12338,7 +12277,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D"
-			(at 33.02 -418.39 0)
+			(at 15.24 -420.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12350,7 +12289,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Wurth Elektronik"
-			(at 33.02 -518.39 0)
+			(at 15.24 -520.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12362,7 +12301,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "9774030592R"
-			(at 33.02 -618.39 0)
+			(at 15.24 -620.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12387,7 +12326,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:UCS2D331MHD")
-		(at 101.6 38.1 270)
+		(at 83.82 17.78 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12395,10 +12334,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "fe2bfe4a-1499-4ac8-a824-82f7d076b257")
 		(property "Reference" "C2"
-			(at 105.41 42.2867 90)
+			(at 87.63 21.9667 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12409,7 +12347,7 @@
 			)
 		)
 		(property "Value" "UCS2D331MHD"
-			(at 105.41 44.8267 90)
+			(at 87.63 24.5067 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12420,7 +12358,7 @@
 			)
 		)
 		(property "Footprint" "CAPPRD750W80D1800H3700"
-			(at 5.41 46.99 0)
+			(at -12.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12432,7 +12370,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf"
-			(at -94.59 46.99 0)
+			(at -112.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12444,7 +12382,7 @@
 			)
 		)
 		(property "Description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD"
-			(at 101.6 38.1 0)
+			(at 83.82 17.78 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12455,7 +12393,7 @@
 			)
 		)
 		(property "Height" "37"
-			(at -294.59 46.99 0)
+			(at -312.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12467,7 +12405,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at -394.59 46.99 0)
+			(at -412.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12479,7 +12417,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at -494.59 46.99 0)
+			(at -512.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12491,7 +12429,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Nichicon"
-			(at -594.59 46.99 0)
+			(at -612.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12503,7 +12441,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "UCS2D331MHD"
-			(at -694.59 46.99 0)
+			(at -712.37 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
