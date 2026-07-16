@@ -59,6 +59,24 @@ def test_harness_csv_gets_harness_category(tmp_path):
     assert items[0].source == "GDHarness"
 
 
+def test_kicad10_symbol_fields_export(tmp_path):
+    """KiCad 10 schematic export (Reference,Qty,Value,DNP,Exclude from BOM,...)."""
+    csv_path = tmp_path / "TempSenseHarness.csv"
+    csv_path.write_text(
+        '"Reference","Qty","Value","DNP","Exclude from BOM","Exclude from Board","Footprint","Datasheet"\n'
+        '"J1","1","455-2266-ND","","","","",""\n'
+        '"Z1,Z2","2","SXH-001T-P0.6","","","","",""\n'
+        '"R9","1","10k","DNP","","","R_0805",""\n'
+        '"R10","1","4.7k","","yes","","R_0805",""\n',
+        encoding="utf-8",
+    )
+    src = BomSource("Chassis1", "harness", "TempSenseHarness", csv_path)
+    items = list(parse_source(src))
+    assert [i.designation for i in items] == ["455-2266-ND", "SXH-001T-P0.6"]
+    assert items[1].quantity == 2
+    assert items[1].designators == "Z1,Z2"
+
+
 def test_discover_finds_harnesses(tmp_path):
     from conftest import make_chassis
 

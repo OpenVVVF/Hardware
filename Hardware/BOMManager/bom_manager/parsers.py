@@ -39,15 +39,25 @@ def _strip_fieldnames(reader: csv.DictReader) -> csv.DictReader:
 
 
 def parse_kicad_fab_csv(path: Path, chassis: str, board: str, category: str = "board") -> Iterator[LineItem]:
-    """Parse a KiCad BOM export CSV (board Fab output or schematic-only harness export)."""
+    """Parse a KiCad BOM export CSV.
+
+    Accepts both export styles:
+    - board Fab output: Id;Designator;Footprint;Quantity;Designation;Supplier and ref
+    - schematic symbol-fields export (KiCad 10): Reference,Qty,Value,DNP,
+      Exclude from BOM,... — rows flagged DNP or excluded are skipped.
+    """
     with open(path, "r", encoding="utf-8-sig") as f:
         sample = f.read(4096)
         f.seek(0)
         dialect = csv.Sniffer().sniff(sample, delimiters=";,\t")
         reader = _strip_fieldnames(csv.DictReader(f, delimiter=dialect.delimiter))
         for row in reader:
+            excluded = row.get("Exclude from BOM", "").strip().lower()
+            dnp = row.get("DNP", "").strip().lower()
+            if excluded in ("yes", "1", "x", "true") or dnp in ("yes", "1", "x", "true", "dnp"):
+                continue
             try:
-                qty = int(row.get("Quantity", "0").strip())
+                qty = int((row.get("Quantity") or row.get("Qty") or "0").strip())
             except ValueError:
                 continue
             if qty <= 0:
@@ -57,9 +67,9 @@ def parse_kicad_fab_csv(path: Path, chassis: str, board: str, category: str = "b
                 source=board,
                 category=category,
                 footprint=row.get("Footprint", "").strip(),
-                designation=row.get("Designation", "").strip(),
+                designation=(row.get("Designation") or row.get("Value") or "").strip(),
                 quantity=qty,
-                designators=row.get("Designator", "").strip(),
+                designators=(row.get("Designator") or row.get("Reference") or "").strip(),
                 vendor_hint="mouser",
             )
 

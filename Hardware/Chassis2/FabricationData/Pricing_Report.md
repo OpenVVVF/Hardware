@@ -1,6 +1,6 @@
 # Hardware BOM Pricing Report
 
-Generated: 2026-07-16T23:23:15.396466Z
+Generated: 2026-07-16T23:52:17.260951Z
 
 Base quantity: 1 unit(s)
 
@@ -12,6 +12,7 @@ Base quantity: 1 unit(s)
 | Qty | Order | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |
 |-----|-------|--------------|-------------|-------------|------------|------------|--------|
 | 1 |  | HW-C2-WH-GDVS-A | GDVSHarness |  | N/A | N/A | manual |
+| 1 |  | HW-C2-WH-TSIGBT-A | TempSenseHarness |  | N/A | N/A | manual |
 
 **In-House Assembly subtotal:** $0.00
 
@@ -21,7 +22,7 @@ Base quantity: 1 unit(s)
 | Qty | Order | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |
 |-----|-------|--------------|-------------|-------------|------------|------------|--------|
 | 20 |  | HW-C2-HW-0008500113-A | 0008500113 | 0008500113 | N/A | N/A | unknown |
-| 1 |  | HW-C2-HW-3M156058-ND-A | 3M156058-ND | 3M156058-ND | N/A | N/A | unknown |
+| 1 |  | HW-C2-HW-3M156058-ND-A | 3M156058-ND | 3M156058-ND | $46.9800 | $46.98 | manual |
 | 10 |  | HW-C2-HW-455-1135-1-ND-A | 455-1135-1-ND | 455-1135-1-ND | N/A | N/A | unknown |
 | 3 |  | HW-C2-HW-455-2266-ND-A | 455-2266-ND | 455-2266-ND | N/A | N/A | unknown |
 | 5 |  | HW-C2-HW-BC5011CT-ND-A | BC5011CT-ND | BC5011CT-ND | N/A | N/A | unknown |
@@ -30,7 +31,7 @@ Base quantity: 1 unit(s)
 | 1 |  | HW-C2-HW-TSW-110-21-S-D-A | TSW-110-21-S-D | TSW-110-21-S-D | N/A | N/A | unknown |
 | 10 |  | HW-C2-HW-WM2022-ND-A | WM2022-ND | WM2022-ND | N/A | N/A | unknown |
 
-**Digi-Key subtotal:** $0.00
+**Digi-Key subtotal:** $46.98
 
 
 ## McMaster-Carr
@@ -56,9 +57,9 @@ Base quantity: 1 unit(s)
 
 | Qty | Order | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |
 |-----|-------|--------------|-------------|-------------|------------|------------|--------|
-| 3 |  | HW-C2-HW-CM600DY-24T-A | CM600DY-24T | CM600DY-24T | N/A | N/A | unknown |
+| 3 |  | HW-C2-HW-CM600DY-24T-A | CM600DY-24T | CM600DY-24T | $323.5000 | $970.50 | manual |
 
-**Mitsubishi subtotal:** $0.00
+**Mitsubishi subtotal:** $970.50
 
 
 ## Mouser
@@ -87,6 +88,7 @@ Base quantity: 1 unit(s)
 | 1 |  | HW-C2-CONN-SSW-110-01-F-D-A | SSW-110-01-F-D |  | N/A | N/A | manual |
 | 1 |  | HW-C2-CONN-TSW-110-21-L-D-LL-A | TSW-110-21-L-D-LL |  | N/A | N/A | manual |
 | 4 |  | HW-C2-HW-22-04-1041-A | 22-04-1041 |  | N/A | N/A | manual |
+| 1 |  | HW-C2-HW-455-2266-ND-A | 455-2266-ND |  | N/A | N/A | manual |
 | 10 |  | HW-C2-HW-524265-E-A | 524265-E |  | N/A | N/A | manual |
 | 1 |  | HW-C2-HW-776231-1-A | 776231-1 |  | N/A | N/A | manual |
 | 8 |  | HW-C2-HW-971350581-A | 971350581 |  | N/A | N/A | manual |
@@ -108,12 +110,14 @@ Base quantity: 1 unit(s)
 | 5 |  | HW-C2-HW-MM3Z3V0ST1G-A | MM3Z3V0ST1G |  | N/A | N/A | manual |
 | 1 |  | HW-C2-HW-RD7-12S033R-A | RD7-12S033R |  | N/A | N/A | manual |
 | 3 |  | HW-C2-HW-RKE-1205S_H-A | RKE-1205S_H |  | N/A | N/A | manual |
+| 1 |  | HW-C2-HW-RTS103C1R2M6L201-A | RTS103C1R2M6L201 |  | N/A | N/A | manual |
 | 2 |  | HW-C2-HW-S3N-A | S3N |  | N/A | N/A | manual |
 | 2 |  | HW-C2-HW-SSW-103-01-L-D-A | SSW-103-01-L-D |  | N/A | N/A | manual |
 | 2 |  | HW-C2-HW-SSW-108-01-L-D-A | SSW-108-01-L-D |  | N/A | N/A | manual |
 | 1 |  | HW-C2-HW-SSW-110-01-F-D-A | SSW-110-01-F-D |  | N/A | N/A | manual |
 | 1 |  | HW-C2-HW-STS41A-AWLB-R3-A | STS41A-AWLB-R3 |  | N/A | N/A | manual |
 | 6 |  | HW-C2-HW-STTH112A-A | STTH112A |  | N/A | N/A | manual |
+| 2 |  | HW-C2-HW-SXH-001T-P0-6-A | SXH-001T-P0.6 |  | N/A | N/A | manual |
 | 4 |  | HW-C2-HW-SZMMSZ4678T1G-A | SZMMSZ4678T1G |  | N/A | N/A | manual |
 | 21 |  | HW-C2-HW-TESTPOINT-TH-RED-A | Testpoint TH, RED | 534-5000 | $0.2930 | $6.15 | mouser_cart_import |
 | 1 |  | HW-C2-HW-TPS389006ADJRTER-A | TPS389006ADJRTER |  | N/A | N/A | manual |
@@ -165,24 +169,24 @@ Base quantity: 1 unit(s)
 
 ---
 
-## Grand Total (1 unit): **$695.23**
+## Grand Total (1 unit): **$1712.71**
 
 
 ## Quantity Scaling
 
 | Quantity | Estimated Total |
 |----------|----------------|
-| 3 | $2085.69 |
-| 5 | $3476.16 |
-| 10 | $6952.31 |
-| 25 | $17380.78 |
+| 3 | $5138.13 |
+| 5 | $8563.56 |
+| 10 | $17127.11 |
+| 25 | $42817.78 |
 
 
 ## Unknown / Missing Prices
 
 - GDVSHarness (assembly)
+- TempSenseHarness (assembly)
 - 0008500113 (digikey)
-- 3M156058-ND (digikey)
 - 455-1135-1-ND (digikey)
 - 455-2266-ND (digikey)
 - BC5011CT-ND (digikey)
@@ -190,7 +194,6 @@ Base quantity: 1 unit(s)
 - RTS103C1R2M6L201 (digikey)
 - TSW-110-21-S-D (digikey)
 - WM2022-ND (digikey)
-- CM600DY-24T (mitsubishi)
 - 220pF 100V C0G 1210 (mouser)
 - CY15B102Q-SXET (mouser)
 - ISO1042BDWVR (mouser)
@@ -206,6 +209,7 @@ Base quantity: 1 unit(s)
 - SSW-110-01-F-D (mouser)
 - TSW-110-21-L-D-LL (mouser)
 - 22-04-1041 (mouser)
+- 455-2266-ND (mouser)
 - 524265-E (mouser)
 - 776231-1 (mouser)
 - 971350581 (mouser)
@@ -227,12 +231,14 @@ Base quantity: 1 unit(s)
 - MM3Z3V0ST1G (mouser)
 - RD7-12S033R (mouser)
 - RKE-1205S_H (mouser)
+- RTS103C1R2M6L201 (mouser)
 - S3N (mouser)
 - SSW-103-01-L-D (mouser)
 - SSW-108-01-L-D (mouser)
 - SSW-110-01-F-D (mouser)
 - STS41A-AWLB-R3 (mouser)
 - STTH112A (mouser)
+- SXH-001T-P0.6 (mouser)
 - SZMMSZ4678T1G (mouser)
 - TPS389006ADJRTER (mouser)
 - TS40-66-50-R-260-SMT-TR (mouser)
@@ -313,4 +319,5 @@ Base quantity: 1 unit(s)
 | Harness | BOM CSV |
 |---------|---------|
 | GDVSHarness | yes |
+| TempSenseHarness | yes |
 

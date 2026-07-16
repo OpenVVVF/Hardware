@@ -449,16 +449,6 @@
     "key": "c2|other|digikey|455-1135-1-nd",
     "chassis": "C2"
   },
-  "c2|other|digikey|455-2266-nd": {
-    "part_number": "HW-C2-HW-455-2266-ND-A",
-    "category": "other",
-    "category_prefix": "HW",
-    "descriptor": "455-2266-ND",
-    "revision": "A",
-    "description": "455-2266-ND",
-    "key": "c2|other|digikey|455-2266-nd",
-    "chassis": "C2"
-  },
   "c2|other|524265e|524265-e": {
     "part_number": "HW-C2-HW-524265-E-A",
     "category": "other",
@@ -687,16 +677,6 @@
     "revision": "A",
     "description": "RKE-1205S_H",
     "key": "c2|other|rke1205sh|rke-1205s_h",
-    "chassis": "C2"
-  },
-  "c2|other|digikey|rts103c1r2m6l201": {
-    "part_number": "HW-C2-HW-RTS103C1R2M6L201-A",
-    "category": "other",
-    "category_prefix": "HW",
-    "descriptor": "RTS103C1R2M6L201",
-    "revision": "A",
-    "description": "RTS103C1R2M6L201",
-    "key": "c2|other|digikey|rts103c1r2m6l201",
     "chassis": "C2"
   },
   "c2|other|diom8059x265n|s3n": {
@@ -1153,6 +1133,60 @@
     "revision": "A",
     "description": "GDVSHarness",
     "key": "c2|wiring|wh|gdvsharness",
+    "chassis": "C2",
+    "history": [
+      {
+        "rev": "A",
+        "date": "2026-07-16",
+        "note": "created"
+      }
+    ]
+  },
+  "c2|other||455-2266-nd": {
+    "part_number": "HW-C2-HW-455-2266-ND-A",
+    "category": "other",
+    "category_prefix": "HW",
+    "descriptor": "455-2266-ND",
+    "revision": "A",
+    "description": "455-2266-ND",
+    "key": "c2|other||455-2266-nd",
+    "chassis": "C2"
+  },
+  "c2|other||rts103c1r2m6l201": {
+    "part_number": "HW-C2-HW-RTS103C1R2M6L201-A",
+    "category": "other",
+    "category_prefix": "HW",
+    "descriptor": "RTS103C1R2M6L201",
+    "revision": "A",
+    "description": "RTS103C1R2M6L201",
+    "key": "c2|other||rts103c1r2m6l201",
+    "chassis": "C2"
+  },
+  "c2|other||sxh-001t-p0.6": {
+    "part_number": "HW-C2-HW-SXH-001T-P0-6-A",
+    "category": "other",
+    "category_prefix": "HW",
+    "descriptor": "SXH-001T-P0-6",
+    "revision": "A",
+    "description": "SXH-001T-P0.6",
+    "key": "c2|other||sxh-001t-p0.6",
+    "chassis": "C2",
+    "history": [
+      {
+        "rev": "A",
+        "date": "2026-07-16",
+        "note": "created"
+      }
+    ]
+  },
+  "c2|wiring|wh|tempsenseharness": {
+    "part_number": "HW-C2-WH-TSIGBT-A",
+    "category": "wiring",
+    "category_prefix": "WH",
+    "descriptor": "TSIGBT",
+    "revision": "A",
+    "description": "TempSenseHarness",
+    "key": "c2|wiring|wh|tempsenseharness",
     "chassis": "C2",
     "history": [
       {
