@@ -4,6 +4,14 @@
 	(generator_version "10.0")
 	(uuid "f446794a-f65c-446a-b45b-4ad914caebbf")
 	(paper "USLetter")
+	(title_block
+		(title "Open Inverter Platform - Gate Driver Board")
+		(date "2026-07-07")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-GD")
+	)
 	(lib_symbols
 		(symbol "Device:C"
 			(pin_numbers
@@ -1721,7 +1729,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "SOD2512X100N"
+		(property "Footprint" "InverterCom:SOD2512X100N"
 			(at 95.58 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -2185,7 +2193,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "SOD2512X100N"
+		(property "Footprint" "InverterCom:SOD2512X100N"
 			(at -4.75 90.17 0)
 			(hide yes)
 			(show_name no)

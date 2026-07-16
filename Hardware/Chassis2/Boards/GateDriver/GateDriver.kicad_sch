@@ -7,9 +7,10 @@
 	(title_block
 		(title "Open Inverter Platform - Gate Driver Board")
 		(date "2026-07-07")
-		(rev "C")
+		(rev "A")
 		(company "Corzine Lab, University of California, Santa Cruz")
 		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-GD")
 	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
@@ -5003,7 +5004,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 144.78 254.94 0)
 			(hide yes)
 			(show_name no)
@@ -5221,7 +5222,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "LEDC3216X120N"
+		(property "Footprint" "InverterCom:LEDC3216X120N"
 			(at 167.31 175.26 0)
 			(hide yes)
 			(show_name no)
@@ -5363,7 +5364,7 @@
 				)
 			)
 		)
-		(property "Footprint" "524265E"
+		(property "Footprint" "InverterCom:524265E"
 			(at 248.92 133.02 0)
 			(hide yes)
 			(show_name no)
@@ -5598,7 +5599,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 245.1099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5609,7 +5610,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 243.84 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -5765,7 +5766,7 @@
 				)
 			)
 		)
-		(property "Footprint" "524265E"
+		(property "Footprint" "InverterCom:524265E"
 			(at 191.77 130.48 0)
 			(hide yes)
 			(show_name no)
@@ -5931,7 +5932,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 113.03 253.67 0)
 			(hide yes)
 			(show_name no)
@@ -6064,7 +6065,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 181.6099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6075,7 +6076,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 180.34 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -6140,7 +6141,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 168.9099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6151,7 +6152,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -6215,7 +6216,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x10_Counter_Clockwise"
+		(property "Value" "SSW-110-01-F-D"
 			(at 57.15 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6328,80 +6329,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 199.39 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "4f88ca31-f014-4ae9-a9c6-537a25f90ad1")
-		(property "Reference" "#ST4"
-			(at 199.39 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 199.39 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 199.39 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 199.39 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 199.39 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:UCM1H101MCL1GS")
 		(at 104.14 170.18 0)
 		(unit 1)
@@ -6433,7 +6360,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 113.03 266.37 0)
 			(hide yes)
 			(show_name no)
@@ -6640,7 +6567,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 207.0099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6651,7 +6578,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 205.74 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -6716,7 +6643,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 232.4099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6727,7 +6654,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 231.14 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -6801,7 +6728,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 113.03 294.31 0)
 			(hide yes)
 			(show_name no)
@@ -6990,302 +6917,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 212.09 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7395f0f7-711a-4b20-b3fa-355f5897df20")
-		(property "Reference" "#ST5"
-			(at 212.09 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 212.09 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 212.09 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 212.09 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 212.09 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 160.02 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "75b07858-6508-42a0-b2c8-662fa74a4116")
-		(property "Reference" "#ST1"
-			(at 160.02 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 160.02 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 160.02 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 160.02 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 160.02 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 173.99 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "78aadc53-1bc4-4ff1-9856-54a9e6641522")
-		(property "Reference" "#ST2"
-			(at 173.99 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 173.99 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 173.99 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 173.99 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 173.99 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 250.19 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7c303d72-071f-4419-b805-f577ca715d61")
-		(property "Reference" "#ST8"
-			(at 250.19 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 250.19 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 250.19 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 250.19 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 250.19 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:LTST-C230GKT")
 		(at 43.18 187.96 90)
 		(unit 1)
@@ -7319,7 +6950,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "LEDC3216X120N"
+		(property "Footprint" "InverterCom:LEDC3216X120N"
 			(at 136.83 175.26 0)
 			(hide yes)
 			(show_name no)
@@ -7461,7 +7092,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 144.78 294.31 0)
 			(hide yes)
 			(show_name no)
@@ -7650,80 +7281,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 224.79 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b24e3a96-2e40-445d-8f9a-0f267cc3fd79")
-		(property "Reference" "#ST6"
-			(at 224.79 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 224.79 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 224.79 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 224.79 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 224.79 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:524265-E")
 		(at 113.03 36.83 0)
 		(unit 1)
@@ -7755,7 +7312,7 @@
 				)
 			)
 		)
-		(property "Footprint" "524265E"
+		(property "Footprint" "InverterCom:524265E"
 			(at 132.08 131.75 0)
 			(hide yes)
 			(show_name no)
@@ -7912,7 +7469,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 257.8099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7923,7 +7480,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 256.54 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -7988,7 +7545,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 194.3099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7999,7 +7556,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 193.04 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -8155,7 +7712,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 144.78 280.34 0)
 			(hide yes)
 			(show_name no)
@@ -8297,7 +7854,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 113.03 279.07 0)
 			(hide yes)
 			(show_name no)
@@ -8439,7 +7996,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CAPAE660X800N"
+		(property "Footprint" "InverterCom:CAPAE660X800N"
 			(at 144.78 267.64 0)
 			(hide yes)
 			(show_name no)
@@ -8550,154 +8107,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 186.69 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d9676e98-5ead-46df-86bb-761103508049")
-		(property "Reference" "#ST3"
-			(at 186.69 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 186.69 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 186.69 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 186.69 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 186.69 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 237.49 168.91 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "db80c604-b954-4fbe-8bad-3fa079289824")
-		(property "Reference" "#ST7"
-			(at 237.49 169.672 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971100581"
-			(at 237.49 158.75 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 237.49 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 237.49 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 237.49 168.91 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "GateDriver"
-				(path "/d09017b7-9bb2-4a32-a451-ba266d3392f7"
-					(reference "#ST7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 218.44 167.64 90)
 		(unit 1)
@@ -8720,7 +8129,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971150581"
 			(at 219.7099 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8731,7 +8140,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971150581"
 			(at 218.44 167.64 0)
 			(hide yes)
 			(show_name no)
