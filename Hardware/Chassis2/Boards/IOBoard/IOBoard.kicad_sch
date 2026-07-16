@@ -7,9 +7,10 @@
 	(title_block
 		(title "Open Inverter Platform - IO Board")
 		(date "2026-07-07")
-		(rev "C")
+		(rev "A")
 		(company "Corzine Lab, University of California, Santa Cruz")
 		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-IO")
 	)
 	(lib_symbols
 		(symbol "Connector_Generic:Conn_02x03_Counter_Clockwise"
@@ -3890,91 +3891,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "InverterCom:Placeholder"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#"
-				(at -0.762 0 0)
-				(show_name no)
-				(do_not_autoplace yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "Placeholder_0_1"
-				(rectangle
-					(start -0.508 -1.524)
-					(end 23.622 -4.064)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Placeholder_1_1"
-				(text "PLACEHOLDER FOR BOM"
-					(at 11.176 -2.794 0)
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "InverterCom:S3N"
 			(pin_names
 				(hide yes)
@@ -5392,16 +5308,6 @@
 		)
 		(uuid "c33aa25f-cfe4-4b7e-ae41-3dc6b8773dab")
 	)
-	(text "!!!TODO!!!"
-		(exclude_from_sim no)
-		(at 158.75 211.074 0)
-		(effects
-			(font
-				(size 3.81 3.81)
-			)
-		)
-		(uuid "c355cbb8-1ef3-45f3-b610-d46bf1e46bea")
-	)
 	(text "Connector to IO board"
 		(exclude_from_sim no)
 		(at 236.982 125.476 0)
@@ -5411,16 +5317,6 @@
 			)
 		)
 		(uuid "c5f3b625-adb8-4645-8980-7e56eda20891")
-	)
-	(text "STANDOFF PARTS"
-		(exclude_from_sim no)
-		(at 14.732 152.654 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "cc1c230e-165e-4d9d-9929-7c1f1a9ae6f9")
 	)
 	(text "USB Debugging port\n12Mbit/s - not powered\ninverter must have external power"
 		(exclude_from_sim no)
@@ -5453,16 +5349,6 @@
 			(justify left)
 		)
 		(uuid "f35ef137-0482-420c-be57-3be3e3733d96")
-	)
-	(text "TODO: update and replace separate power conn, and swdbg conn, add usb-b top conn, swap ampseal, potentailly bigger 12v module?\nreplace relays with solid-state smaller options?\nexpose user din 4-8? \nconn HVIL to user din? (or exposed?)\n\n"
-		(exclude_from_sim no)
-		(at 162.306 226.568 0)
-		(effects
-			(font
-				(size 2.54 2.54)
-			)
-		)
-		(uuid "f44e969a-0bc6-44ac-8630-cceac7d0967b")
 	)
 	(text "INPUT POLARITY PROTECTION"
 		(exclude_from_sim no)
@@ -7237,7 +7123,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x08_Counter_Clockwise"
+		(property "Value" "TSW-108-18-F-D"
 			(at 237.49 21.59 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7247,7 +7133,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:TSW-108-18-F-D"
 			(at 236.22 33.02 0)
 			(hide yes)
 			(show_name no)
@@ -7419,80 +7305,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 22.86 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "1982cf5b-a9cd-4f9f-8984-f955f639355a")
-		(property "Reference" "#ST2"
-			(at 22.86 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 22.86 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 22.86 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 22.86 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 22.86 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:UCM1H101MCL1GS")
 		(at 149.86 92.71 180)
 		(unit 1)
@@ -7656,7 +7468,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 62.2299 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7667,7 +7479,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 60.96 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -7731,7 +7543,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x10_Counter_Clockwise"
+		(property "Value" "TSW-110-18-T-D"
 			(at 236.22 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7741,7 +7553,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:TSW-110-18-T-D"
 			(at 234.95 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -7998,80 +7810,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 33.02 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "34cfea06-44da-47cc-81e6-d5535b4fdcd1")
-		(property "Reference" "#ST4"
-			(at 33.02 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 33.02 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 33.02 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 33.02 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 33.02 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 41.91 96.52 90)
 		(unit 1)
@@ -8094,7 +7832,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 43.1799 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8105,7 +7843,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 41.91 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -8148,80 +7886,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 38.1 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "408c4d1f-831b-49db-a2ea-4c1bb0070d15")
-		(property "Reference" "#ST5"
-			(at 38.1 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 38.1 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 38.1 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 38.1 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 38.1 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 35.56 96.52 90)
 		(unit 1)
@@ -8244,7 +7908,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 36.8299 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8255,7 +7919,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 35.56 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -8897,80 +8561,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 43.18 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6cc597cc-2659-440f-bb01-4367d138ca58")
-		(property "Reference" "#ST6"
-			(at 43.18 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 43.18 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 43.18 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 43.18 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 43.18 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_02x03_Counter_Clockwise")
 		(at 234.95 137.16 0)
 		(unit 1)
@@ -8992,7 +8582,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_02x03_Counter_Clockwise"
+		(property "Value" "TSW-103-18-G-D"
 			(at 223.139 130.429 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9003,7 +8593,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:TSW-103-18-G-D"
 			(at 234.95 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -9482,7 +9072,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 24.1299 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9493,7 +9083,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 22.86 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -9677,228 +9267,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 17.78 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "98df97c7-7efe-46c6-982f-df2cb8c0eea8")
-		(property "Reference" "#ST1"
-			(at 17.78 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 17.78 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 17.78 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 17.78 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 17.78 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 27.94 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "995ce22e-acb5-4ba3-bff0-a8360ee39ba2")
-		(property "Reference" "#ST3"
-			(at 27.94 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 27.94 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 27.94 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 27.94 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 27.94 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 53.34 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9bddb214-a000-444d-b5af-9429ab3b7375")
-		(property "Reference" "#ST8"
-			(at 53.34 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 53.34 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 53.34 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 53.34 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 53.34 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 29.21 96.52 90)
 		(unit 1)
@@ -9921,7 +9289,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 30.4799 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9932,7 +9300,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 29.21 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -10228,7 +9596,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x04_Counter_Clockwise"
+		(property "Value" "SSW-104-01-L-D"
 			(at 102.87 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10238,7 +9606,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x04_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:SSW-104-01-L-D"
 			(at 101.6 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -10305,80 +9673,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 48.26 161.29 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "cb5f68a2-e3b1-46b1-becb-dd9b697b2031")
-		(property "Reference" "#ST7"
-			(at 48.26 162.052 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971150581"
-			(at 48.26 151.13 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 48.26 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 48.26 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 48.26 161.29 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "IOBoard"
-				(path "/1bd20b11-4068-4af7-8516-b3d686707223"
-					(reference "#ST7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_02x08_Counter_Clockwise")
 		(at 234.95 109.22 0)
 		(unit 1)
@@ -10400,7 +9694,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x08_Counter_Clockwise"
+		(property "Value" "TSW-108-18-F-D"
 			(at 236.22 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10410,7 +9704,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:TSW-108-18-F-D"
 			(at 234.95 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -10754,7 +10048,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 55.8799 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10765,7 +10059,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 54.61 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -10830,7 +10124,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 49.5299 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10841,7 +10135,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 48.26 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -10906,7 +10200,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971250581"
 			(at 17.7799 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10917,7 +10211,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971250581"
 			(at 16.51 96.52 0)
 			(hide yes)
 			(show_name no)
@@ -11406,7 +10700,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_02x03_Counter_Clockwise"
+		(property "Value" "TSW-103-18-G-D"
 			(at 223.139 143.129 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11417,7 +10711,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:TSW-103-18-G-D"
 			(at 234.95 149.86 0)
 			(hide yes)
 			(show_name no)
