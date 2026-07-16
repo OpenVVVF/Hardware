@@ -1,185 +1,111 @@
 # BOM Manager Workflow
 
-This guide walks through the entire process from exporting a KiCad BOM to generating the final price report.
-
-## 1. Export PCB BOMs from KiCad
-
-For each board, generate the Fab BOM CSV:
-
-1. Open the board in KiCad.
-2. **File → Fabrication Outputs → BOM CSV**.
-3. Save as `Hardware/Chassis2/Boards/<BoardName>/Fab/<BoardName>.csv`.
-
-The tool expects these columns: `Id;Designator;Footprint;Quantity;Designation;Supplier and ref`.
-
-The same folder will be zipped into `Hardware/Chassis2/FabricationData/PCB_Fab_Zips/<BoardName>.zip` for vendor upload.
-
-## 2. Add McMaster fasteners
-
-Create or edit:
-
-```text
-Hardware/Chassis2/Mechanical/MechanicalBOM.txt
-```
-
-Format:
-
-```csv
-Qty,Vendor,PN
-12,McMaster,94669A199
-6,McMaster,94669A190
-```
-
-Save. The tool will detect these and try to look up prices.
-
-## 3. Add custom fabricated parts (SendCutSend)
-
-For each fabricated part, create a folder:
-
-```text
-Hardware/Chassis2/Mechanical/Fab/DCPlusBusBar/
-├── DCPlusBusBar.step
-├── info.png
-└── info.txt
-```
-
-`info.txt`:
-
-```ini
-PartName=DC Link Bus Bar
-Material=Copper
-Thickness_mm=4.75
-Qty=2
-Dimensions_in=12.357x0.551 in
-Finish=Bending
-UnitPrice=50.71
-Process=Sheet Cutting
-Notes=Tin plate ends after forming
-```
-
-The `info.png` is optional but recommended — it will appear in the price report.
-
-See `CUSTOM_PARTS.md` for the full field reference and naming conventions.
-
-### Importing from a SendCutSend cart
-
-After building a cart on SendCutSend, copy the page text and run:
+The whole flow runs inside the interactive shell:
 
 ```bash
-python3 import_sendcutsend_cart.py
-# paste the cart text, then press Ctrl+D
+cd Hardware/BOMManager
+python3 bom.py
 ```
 
-This parses the quote and writes/updates the `info.txt` in the matching `Fab/<PartName>/` folder. Add `--dry-run` to preview first.
+(Everything below also works one-shot, e.g. `python3 bom.py generate --qty 5`.)
 
-## 4. Run the generator
+## 1. Feed the tool your design data
 
-```bash
-cd /home/tliao/Desktop/InverterGen5/Hardware/BOMManager
-python3 generate_bom.py
-```
+**PCB BOMs** — for each board, in KiCad: **File → Fabrication Outputs → BOM CSV**,
+saved as `Hardware/<Chassis>/Boards/<Board>/Fab/<Board>.csv`. The same folder is
+zipped for the fab house, so put gerbers/drill files there too.
 
-The first time you run the tool (or any time a new PCB or wiring harness appears), it will prompt you for short descriptors:
+**New parts** — scaffold instead of hand-creating folders:
 
 ```text
-Need a descriptor for Chassis2 pcb: ControlBoard
-  (PCB board descriptor)
-  Default: CTRL
-  Descriptor (Enter to accept default):
+bom> new fab Phase Bus Bar        # Mechanical/Fab/HW-C2-PBB-A/ + info.txt + README
+bom> new board PowerBoard         # Boards/PowerBoard/Fab/ + README, descriptor registered
+bom> new harness GateDriverHarness # Wiring/GateDriverHarness/Fab/ + README
 ```
 
-These are saved to `bom_manager/data/part_descriptors.json`, so you will not be prompted again unless you add a new board or harness.
+**Wiring harnesses** — document as a KiCad *schematic only* (no layout). Place
+symbols for connectors/crimps/wire (wire values start with `WIRE`), then export
+the BOM CSV from Eeschema (**Tools → Generate BOM**) into the harness folder.
+The scaffolded README spells out the exact export settings. Components land in
+the BOM like any other part; the harness itself appears as a `HW-C2-WH-...`
+assembly line.
 
-You will see output like:
+**Purchased hardware** — the tool owns `MechanicalBOM.txt`; do not hand-edit:
 
 ```text
-Discovered 10 BOM sources.
-
-=== Chassis2 ===
-Consolidated to 83 unique BOM lines.
-  Wrote BOMs/mcmaster_bom.csv
-  Wrote BOMs/mouser_bom.csv
-  Wrote BOMs/pcb_bom.csv
-  Wrote BOMs/sendcutsend_bom.csv
-  Wrote BOMs/unknown_bom.csv
-  Wrote McMaster_Order_Paste.txt
-  Wrote BOMs/Consolidated_BOM.csv
-  Wrote Pricing_Report.md
-  Wrote PCB_Fab_Zips/ControlBoard.zip
-  ...
+bom> mech add McMaster 94669A199 12 M3x10 socket head screw
+bom> mech set 94669A199 20
+bom> mech rm 94669A199
 ```
 
-Outputs are written per chassis:
+## 2. Price things
 
 ```text
-Hardware/Chassis2/FabricationData/
-├── BOMs/
-│   ├── Consolidated_BOM.csv
-│   ├── mcmaster_bom.csv
-│   ├── mouser_bom.csv
-│   ├── digikey_bom.csv
-│   ├── pcb_bom.csv
-│   ├── sendcutsend_bom.csv
-│   └── unknown_bom.csv
-├── McMaster_Order_Paste.txt
-├── PCB_Fab_Zips/
-│   ├── ControlBoard.zip
-│   ├── DCBusCapacitorBoard.zip
-│   ├── DCBusFilter.zip
-│   ├── GateDriver.zip
-│   └── IOBoard.zip
-└── Pricing_Report.md
+bom> status           # what still needs attention
+bom> add              # wizard: walks BOM lines missing vendor PNs/prices
+bom> price 94669A199 3.10
+bom> pack 94669A199 25 24.40     # box of 25 at $24.40/box
+bom> fab pcb-price ControlBoard 25.24
 ```
 
-If you later add Chassis3, the tool will create `Hardware/Chassis3/FabricationData/` automatically.
+Prices attach to the committed part database. `pack` means: order N packs of
+25, not N pieces.
 
-For scripted/CI runs, use `--no-prompt` so the tool errors instead of blocking for input when a descriptor is missing.
+## 3. Generate and order
 
-## 5. Handle missing parts
-
-Open `Hardware/Chassis2/FabricationData/Pricing_Report.md` and scroll to **Unknown / Missing Prices**. These are parts the tool could not price.
-
-For generic 1210 resistors and capacitors:
-
-```bash
-python3 generate_bom.py --suggest
+```text
+bom> generate
 ```
 
-This will propose in-stock, low-cost options and save your choice to the database.
+Outputs land in `Hardware/<Chassis>/FabricationData/` (see README). Ordering:
 
-For everything else, add vendor part numbers manually:
+- **Mouser / DigiKey**: upload the respective `*_bom.csv` to the vendor BOM tool.
+- **McMaster**: paste `McMaster_Order_Paste.txt` into the cart's
+  "Paste part numbers and quantities" box. Quantities are already in packs, and
+  parts covered by your shelf stock are left out.
+- **SendCutSend**: specs are in the report's fab section; upload the STEP files
+  from `Mechanical/Fab/<Part>/`.
+- **PCBs**: upload `PCB_Fab_Zips/<Board>.zip` to your fab.
 
-```bash
-python3 manage_parts.py
-# choose option 1 (Add/Edit part database entry)
+## 4. Import real prices after ordering
+
+Paste the cart/order confirmation (then Ctrl+D):
+
+```text
+bom> import mouser
+bom> import mcmaster
+bom> import sendcutsend       # fills/updates info.txt in Fab folders
+bom> import jlcpcb            # per-board PCB fab prices
 ```
 
-You can also add a manual price if you do not want to rely on API lookups.
+Imported prices go to the local cache **and** persist into the committed part
+database, so cost history survives a fresh clone.
 
-## 6. Order parts
+## 5. Receive parts, record leftovers
 
-- **Mouser**: upload `Hardware/Chassis2/FabricationData/BOMs/mouser_bom.csv` to the Mouser BOM Tool. After you get cart/order pricing, paste the order text back into:
-  ```bash
-  python3 import_mouser_cart.py
-  ```
-- **DigiKey**: upload `Hardware/Chassis2/FabricationData/BOMs/digikey_bom.csv` to the DigiKey BOM Tool.
-- **McMaster**: copy `Hardware/Chassis2/FabricationData/McMaster_Order_Paste.txt` and paste into the McMaster cart's "Paste part numbers and quantities" box. After ordering, paste the order confirmation text back into:
-  ```bash
-  python3 import_mcmaster_order.py
-  ```
-- **SendCutSend**: use the specs in the report's SendCutSend section and upload the STEP files from `Hardware/Chassis2/Mechanical/Fab/<PartName>/`.
-- **PCB fabrication**: upload the zip files in `PCB_Fab_Zips/` to your PCB vendor. Add the quoted PCB price to the part database (set a manual price on the `HW-PCB-XXXX-A` lines) so the report includes it.
+```text
+bom> stock 94669A199 19       # 19 screws left over
+```
 
-These import scripts update `bom_manager/data/price_cache.json` so the report reflects real prices instead of API guesses.
+Stock lives in `inventory.json`, which is gitignored — your shelf is not
+project data. Future `generate` runs subtract it: covered parts order 0 packs
+and show up in the report's **Pack Rounding & Stock** section.
 
-## 7. Track project cost over time
+## 6. Revisions
 
-Commit the following to git:
+```text
+bom> rev list
+bom> rev bump DCLBB --note "widen mounting holes"
+```
 
-- `Hardware/Chassis2/FabricationData/Pricing_Report.md`
-- `bom_manager/data/part_database.json`
-- `bom_manager/data/part_numbers.json`
+Bumps update the registry (with history) and write `Rev=` into a fabricated
+part's `info.txt`. Folders and STEP files are never renamed — CAD and vendor
+links keep working, and internal PNs never change when you edit descriptions.
 
-Each time you rerun `generate_bom.py`, the report updates, so you can diff cost changes as the design evolves.
+## 7. Track cost over time
 
-`config.yaml` and `bom_manager/data/price_cache.json` are gitignored and should not be committed.
+Commit `FabricationData/Pricing_Report.md`, `part_database.json`, and
+`part_numbers.json`. Rerun `generate` as the design evolves and diff the report.
+
+For scripted/CI runs use `--no-prompt` so the tool errors instead of blocking
+when something needs input.

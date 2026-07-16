@@ -26,10 +26,28 @@ class BomLine:
     sendcutsend_id: str = ""
     vendor_hint: Optional[str] = None
     manual_price: Optional[float] = None
+    pack_size: int = 1   # units per order pack; 1 = sold individually
+    on_hand: int = 0     # pieces already on your shelf (local inventory)
     image_path: Optional[Path] = None
     step_path: Optional[Path] = None
     metadata: Dict[str, str] = field(default_factory=dict)
     internal_pn: str = ""
+
+    def packs_needed(self, need: int) -> int:
+        """Order quantity (packs when pack_size > 1, else pieces) to cover `need`."""
+        remaining = max(0, need - self.on_hand)
+        if self.pack_size and self.pack_size > 1:
+            return -(-remaining // self.pack_size)  # ceil
+        return remaining
+
+    def pieces_ordered(self, need: int) -> int:
+        """How many physical pieces the order delivers for `need`."""
+        packs = self.packs_needed(need)
+        return packs * self.pack_size if self.pack_size and self.pack_size > 1 else packs
+
+    def leftover(self, need: int) -> int:
+        """Pieces left on the shelf after consuming `need`."""
+        return self.on_hand + self.pieces_ordered(need) - need
 
     def primary_vendor(self) -> Optional[str]:
         if self.mouser_part and self.mouser_part != "DNO":
@@ -46,22 +64,22 @@ class BomLine:
 
     def vendor_part_number(self, vendor: Optional[str] = None) -> str:
         vendor = vendor or self.primary_vendor()
+        # Vendor-list rows (MechanicalBOM.txt) carry the PN in the designation
+        # and the vendor name in the footprint — use it when no explicit
+        # vendor mapping exists in the part database.
+        from_vendor_list = self.footprint.strip().lower() == (vendor or "").lower()
+        fallback = self.designation if from_vendor_list else ""
         if vendor == "mouser":
-            return self.mouser_part
+            return self.mouser_part or fallback
         if vendor == "digikey":
-            return self.digikey_part
+            return self.digikey_part or fallback
         if vendor == "mcmaster":
             return self.mcmaster_part or self.designation
         if vendor == "sendcutsend":
             return self.sendcutsend_id or self.designation.split("|")[0].strip()
         if vendor == "pcb":
             return self.designation
-        return ""
-
-
-def _is_generic_passive(footprint: str, designation: str) -> bool:
-    fp = footprint.lower()
-    return (fp.startswith("r_1210") or fp.startswith("c_1210")) and bool(designation.strip())
+        return fallback
 
 
 def _component_type(footprint: str, designation: str, source: str = "", category: str = "") -> str:
@@ -73,6 +91,8 @@ def _component_type(footprint: str, designation: str, source: str = "", category
     # Explicit category hints from the parser/discoverer.
     if cat == "pcb_fab":
         return "pcb"
+    if cat == "harness_asm":
+        return "wiring"
 
     # PCB components from KiCad footprints
     if fp.startswith("r_"):
@@ -133,11 +153,20 @@ def _round_to_standard(qty: int) -> int:
     return ((qty + 499) // 500) * 500
 
 
+def _as_positive_int(value, default: int = 0) -> int:
+    try:
+        n = int(value)
+    except (TypeError, ValueError):
+        return default
+    return n if n > 0 else default
+
+
 def aggregate_bom(
     items: Iterator[LineItem],
     db: PartDatabase,
     spares: str = "none",
     extra_pct: float = 0.0,
+    inventory=None,
 ) -> List[BomLine]:
     """Aggregate line items, apply substitutions, and apply spares policy."""
     raw: Dict[str, BomLine] = {}
@@ -166,6 +195,8 @@ def aggregate_bom(
                     sendcutsend_id=entry.get("sendcutsend_id", ""),
                     vendor_hint=item.vendor_hint,
                     manual_price=entry.get("manual_price"),
+                    pack_size=_as_positive_int(entry.get("pack_size"), default=1),
+                    on_hand=inventory.get(item.footprint, item.designation) if inventory else 0,
                     image_path=item.image_path,
                     step_path=item.step_path,
                     metadata=dict(item.metadata or {}),

@@ -1,9 +1,21 @@
-"""Internal part number and revision registry."""
+"""Internal part number and revision registry.
+
+Registry keys are identity-based so that user-editable text (descriptions,
+friendly PartNames) never silently renumbers a part:
+
+- most parts:        <chassis>|<category>|<footprint>|<designation>
+- fabricated parts:  <chassis>|<category>|fab:<folder name>
+
+Older registries used <chassis>|<category>|<description>; entries are migrated
+on first contact (looked up under the legacy key, moved to the identity key,
+keeping the assigned part number, revision, and history).
+"""
 
 import json
 import re
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Tuple
 
 
 CATEGORY_PREFIXES = {
@@ -52,6 +64,21 @@ def _normalize_category(category: str) -> str:
     return synonyms.get(cat, cat)
 
 
+def line_identity(line) -> str:
+    """Stable identity string for a BOM line.
+
+    Fabricated (SendCutSend folder) parts are identified by their folder name,
+    which never changes; everything else by footprint|designation, matching
+    the part-database key.
+    """
+    if line.vendor_hint == "sendcutsend" and line.sources:
+        folder = line.sources[0].split("/")[-1]
+        return f"fab:{re.sub(r' ', '', folder.strip().lower())}"
+    fp = re.sub(r"\s+", "", line.footprint.strip().lower())
+    des = re.sub(r"\s+", "", line.designation.strip().lower())
+    return f"{fp}|{des}"
+
+
 class PartNumberRegistry:
     """Generates and stores internal part numbers with revisions.
 
@@ -97,9 +124,58 @@ class PartNumberRegistry:
 
     @staticmethod
     def _make_key(category: str, description: str, chassis: Optional[str] = None) -> str:
+        """Legacy (pre-identity) key form, kept for migration lookups."""
         desc = re.sub(r"\s+", "_", description.strip().lower())[:80]
         prefix = f"{chassis.lower()}|" if chassis else ""
         return f"{prefix}{category.lower()}|{desc}"
+
+    @staticmethod
+    def _make_identity_key(category: str, identity: str, chassis: Optional[str] = None) -> str:
+        prefix = f"{chassis.lower()}|" if chassis else ""
+        return f"{prefix}{category.lower()}|{identity}"
+
+    def _rekey(self, old_key: str, new_key: str, entry: Dict) -> None:
+        if old_key != new_key:
+            self._data.pop(old_key, None)
+            entry["key"] = new_key
+            self._data[new_key] = entry
+
+    def resolve_entry(
+        self,
+        category: str,
+        description: str,
+        descriptor: str,
+        chassis: Optional[str],
+        identity: Optional[str] = None,
+    ) -> Tuple[str, Optional[Dict]]:
+        """Find the entry for a line without creating one.
+
+        Lookup chain: identity key -> legacy description key -> chassis +
+        category + descriptor scan (covers description edits). Matches under a
+        stale key are migrated to the identity key.
+        """
+        key = self._make_identity_key(category, identity or description, chassis)
+        entry = self._data.get(key)
+        if entry:
+            return key, entry
+
+        legacy_key = self._make_key(category, description, chassis)
+        if legacy_key != key:
+            entry = self._data.get(legacy_key)
+            if entry:
+                self._rekey(legacy_key, key, entry)
+                return key, entry
+
+        cat = _normalize_category(category)
+        for k, e in list(self._data.items()):
+            if (
+                e.get("chassis") == chassis
+                and e.get("category") == cat
+                and e.get("descriptor") == descriptor
+            ):
+                self._rekey(k, key, e)
+                return key, e
+        return key, None
 
     def generate_pn(
         self,
@@ -108,10 +184,10 @@ class PartNumberRegistry:
         descriptor: str,
         rev: str = "A",
         chassis: Optional[str] = None,
+        identity: Optional[str] = None,
     ) -> str:
-        """Generate or retrieve an existing part number for a key."""
-        key = self._make_key(category, description, chassis)
-        existing = self._data.get(key)
+        """Generate or retrieve an existing part number for a line."""
+        key, existing = self.resolve_entry(category, description, descriptor, chassis, identity)
         if existing:
             return existing["part_number"]
 
@@ -138,11 +214,36 @@ class PartNumberRegistry:
             "description": description,
             "key": key,
             "chassis": chassis,
+            "history": [
+                {
+                    "rev": rev,
+                    "date": datetime.utcnow().date().isoformat(),
+                    "note": "created",
+                }
+            ],
         }
         return pn
 
-    def bump_revision(self, key: str, new_rev: Optional[str] = None) -> Optional[str]:
-        """Bump the revision of an existing part number."""
+    def find(self, query: str) -> List[Dict]:
+        """Fuzzy-find registry entries by part number, descriptor, or description."""
+        q = query.strip().lower()
+        if not q:
+            return []
+        exact = [e for e in self._data.values() if e.get("part_number", "").lower() == q]
+        if exact:
+            return exact
+        return [
+            e
+            for e in self._data.values()
+            if q in e.get("part_number", "").lower()
+            or q in e.get("descriptor", "").lower()
+            or q in e.get("description", "").lower()
+        ]
+
+    def bump_revision(
+        self, key: str, new_rev: Optional[str] = None, note: str = ""
+    ) -> Optional[str]:
+        """Bump the revision of an existing part number, recording history."""
         entry = self._data.get(key)
         if not entry:
             return None
@@ -156,6 +257,13 @@ class PartNumberRegistry:
         entry["revision"] = new_rev
         base = entry["part_number"].rsplit("-", 1)[0]
         entry["part_number"] = f"{base}-{new_rev}"
+        entry.setdefault("history", []).append(
+            {
+                "rev": new_rev,
+                "date": datetime.utcnow().date().isoformat(),
+                "note": note,
+            }
+        )
         return entry["part_number"]
 
     def list_all(self) -> Dict[str, Dict]:

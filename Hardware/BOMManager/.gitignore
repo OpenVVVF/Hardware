@@ -13,6 +13,10 @@ venv/
 # Cached prices are local and can be regenerated
 bom_manager/data/price_cache.json
 
+# On-hand stock is your shelf, not project data
+bom_manager/data/inventory.json
+
 # IDE
 .vscode/
 .idea/
+.pytest_cache/

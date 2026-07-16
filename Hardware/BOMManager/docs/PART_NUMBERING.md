@@ -16,7 +16,7 @@ Examples:
 - `HW-C2-RES-10K1210-A` — Chassis2 10k 1210 resistor
 - `HW-C2-IC-STM32H723ZGTX-A` — Chassis2 STM32 microcontroller
 
-The registry lives in `bom_manager/data/part_numbers.json` and is generated automatically. The tool also keeps a descriptor registry at `bom_manager/data/part_descriptors.json` so you only have to name a part once.
+The registry lives in `bom_manager/data/part_numbers.json` and is generated automatically. Registry keys are **identity-based** (`chassis|category|footprint|designation`, or `chassis|category|fab:<folder>` for fabricated parts), so editing a description or a friendly `PartName` never renumbers a part. (Registries written by older versions used description-based keys; entries are migrated automatically on first contact, keeping their part numbers.) The tool also keeps a descriptor registry at `bom_manager/data/part_descriptors.json` so you only have to name a part once.
 
 ## Category reference
 
@@ -47,13 +47,14 @@ The tool tries to pick a good descriptor automatically and only asks you when it
 
 | Part class | How descriptor is chosen |
 |------------|--------------------------|
-| **PCB fab** | Prompted on first run. Default is an abbreviation of the board folder name (`ControlBoard` → `CTRL`, `GateDriver` → `GD`, etc.). |
-| **Wiring harness** | Prompted on first run. Default is the harness folder/document name. |
+| **PCB fab** | Pre-registered by `new board` (or prompted on first run). Default is an abbreviation of the board folder name (`ControlBoard` → `CTRL`). |
+| **Wiring harness** | Pre-registered by `new harness`. Default is the harness folder/document name. |
+| **Wire / cable in a harness** | Auto from the value (e.g. `WIRE 10AWG RED` → `WIRE-10AWG-RED`), no prompt. |
 | **Bus bars / plates / brackets / 3D prints** | Auto from the fabricated-part folder name (`DCLBB`, `CHSP`, `BSP`). |
 | **Mechanical / fasteners** | Auto from the McMaster part number or slugified description. |
 | **Resistors / capacitors / ICs / connectors** | Auto from value, footprint, or manufacturer part number. |
 
-You can edit `bom_manager/data/part_descriptors.json` directly at any time to rename descriptors. After editing, rerun `python3 generate_bom.py`.
+You can edit `bom_manager/data/part_descriptors.json` directly at any time to rename descriptors. After editing, rerun `python3 bom.py generate`.
 
 ### Example descriptor registry
 
@@ -134,13 +135,30 @@ Bump a revision when the part changes enough that you need to distinguish old st
 
 For off-the-shelf commodity parts (resistors, capacitors, ICs), the revision letter is kept for format consistency but is usually left at `A` because you are not revising the part itself.
 
-To bump a revision later:
+To bump a revision:
 
-```bash
-python3 manage_parts.py
-# choose option 4 (Manage internal part numbers)
-# choose option 3 (Bump revision)
+```text
+bom> rev list
+bom> rev bump DCLBB --note "widen mounting holes"
 ```
+
+The query is fuzzy — a full IPN, a descriptor, or description text. The bump is
+recorded in the entry's `history` (rev, date, note) inside `part_numbers.json`.
+
+Revisions are **decoupled from file and folder names**: bumping writes `Rev=`
+into a fabricated part's `info.txt` and never renames its folder or STEP file,
+so CAD documents and vendor uploads keep pointing at the same place.
+
+## Wiring harnesses
+
+A harness documented as a KiCad schematic gets an assembly line
+like `HW-C2-WH-GD-A` once you drop the schematic's BOM CSV export into
+`Hardware/<Chassis>/Wiring/<Name>/` (or its `Fab/` subfolder, same layout as
+boards). Create the folder with `new harness` —
+it pre-registers the descriptor and its README has the exact Eeschema export
+settings. Naming the folder with the full part number (`HW-C2-WH-GD-A`) makes
+`generate` adopt that number with no prompt at all. The harness's connectors,
+crimps, and wire appear as normal BOM lines with their own IPNs.
 
 ## Auto-detection
 
@@ -155,14 +173,14 @@ The tool guesses the category from the footprint, description, and source/folder
 - KiCad board source → `pcb`
 - McMaster mechanical parts → `mechanical`
 
-If it guesses wrong, you can override the category by editing the part database in `manage_parts.py`.
+If it guesses wrong, you can override the category with `add` (the wizard's Type prompt) in the shell.
 
 ## Non-interactive / CI usage
 
 If you run the tool in a script and it encounters a part that needs a descriptor, it will prompt by default. Use `--no-prompt` to make it fail with a clear error instead:
 
 ```bash
-python3 generate_bom.py --no-prompt
+python3 bom.py generate --no-prompt
 ```
 
 Add the missing descriptors to `bom_manager/data/part_descriptors.json` and rerun.

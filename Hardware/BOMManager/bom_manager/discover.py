@@ -55,6 +55,23 @@ def discover_boms(
             for path in sorted(custom_dir.glob("*.csv")):
                 yield BomSource(chassis, "custom", path.stem, path, vendor_hint="sendcutsend")
 
+        # Wiring harnesses documented as KiCad schematics: one BOM CSV export
+        # per harness under Wiring/<Name>/ or Harnesses/<Name>/, either in the
+        # folder root or a Fab/ subfolder (same layout as boards).
+        for harness_root in ("Wiring", "Harnesses"):
+            harness_dir = chassis_dir / harness_root
+            if not harness_dir.is_dir():
+                continue
+            for part_dir in sorted(harness_dir.iterdir()):
+                if not part_dir.is_dir() or part_dir.name.startswith("."):
+                    continue
+                candidates = sorted(part_dir.glob("*.csv"))
+                fab_sub = part_dir / "Fab"
+                if fab_sub.is_dir():
+                    candidates += sorted(fab_sub.glob("*.csv"))
+                for csv_file in candidates:
+                    yield BomSource(chassis, "harness", part_dir.name, csv_file)
+
         # Discover SendCutSend/fabricated part folders under Mechanical/Fab/ or Mechanical/SendCutSendParts/
         for scs_name in ("Fab", "SendCutSendParts"):
             scs_dir = mech_dir / scs_name

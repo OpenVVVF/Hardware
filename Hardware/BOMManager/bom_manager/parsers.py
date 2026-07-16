@@ -38,8 +38,8 @@ def _strip_fieldnames(reader: csv.DictReader) -> csv.DictReader:
     return reader
 
 
-def parse_kicad_fab_csv(path: Path, chassis: str, board: str) -> Iterator[LineItem]:
-    """Parse a KiCad Fab export CSV (; delimited, quoted fields)."""
+def parse_kicad_fab_csv(path: Path, chassis: str, board: str, category: str = "board") -> Iterator[LineItem]:
+    """Parse a KiCad BOM export CSV (board Fab output or schematic-only harness export)."""
     with open(path, "r", encoding="utf-8-sig") as f:
         sample = f.read(4096)
         f.seek(0)
@@ -55,7 +55,7 @@ def parse_kicad_fab_csv(path: Path, chassis: str, board: str) -> Iterator[LineIt
             yield LineItem(
                 chassis=chassis,
                 source=board,
-                category="board",
+                category=category,
                 footprint=row.get("Footprint", "").strip(),
                 designation=row.get("Designation", "").strip(),
                 quantity=qty,
@@ -203,6 +203,8 @@ def parse_source(source) -> Iterator[LineItem]:
     """Route a discovered BomSource to the correct parser."""
     if source.category == "board":
         yield from parse_kicad_fab_csv(source.path, source.chassis, source.board)
+    elif source.category == "harness":
+        yield from parse_kicad_fab_csv(source.path, source.chassis, source.board, category="harness")
     elif source.category == "mechanical":
         yield from parse_simple_csv(source.path, source.chassis, source.category, source.board, source.vendor_hint)
     elif source.category == "custom":

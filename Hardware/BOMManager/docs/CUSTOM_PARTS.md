@@ -2,46 +2,48 @@
 
 ## McMaster-Carr Parts
 
-McMaster-Carr has an approved-customer Product Information API (see `API_KEYS.md`). If you configure the certificate-based credentials, the tool uses the official API; otherwise it falls back to scraping the public product page or using a manually maintained CSV.
+McMaster-Carr has an approved-customer Product Information API (see
+`API_KEYS.md`). If you configure the certificate-based credentials, the tool
+uses the official API; otherwise it falls back to cached or manually set
+prices.
 
-### Mechanical BOM format
+### The mechanical list
 
-Place a file at:
+`Hardware/<Chassis>/Mechanical/MechanicalBOM.txt` is owned by the tool — add
+and change rows from the shell instead of editing by hand:
 
+```text
+bom> mech                                   # list with prices
+bom> mech add McMaster 94669A199 12 M3x10 SHCS
+bom> mech set 94669A199 20
+bom> mech rm 94669A199
 ```
-Hardware/Chassis2/Mechanical/MechanicalBOM.txt
-```
 
-With contents:
-
-```csv
-Qty,Vendor,PN
-12,McMaster,94669A199
-6,McMaster,94669A190
-```
-
-You can also include a `Description` column. The tool will look up each PN in the part database; if no database entry exists it will create one with the scraped/manual price.
-
-### Adding McMaster parts manually
-
-Use `manage_parts.py` and set `McMaster P/N`. You can also add a manual price if you do not want to rely on scraping.
+The file stays a plain CSV (`Qty,Vendor,PN,Description`), sorted and
+deduplicated on every change. Any vendor string works (`McMaster`, `Digikey`,
+`Mitsubishi`, ...). Set prices with `price <pn> <usd>`, and if the part comes
+in a box, `pack <pn> 25 <box price>` — ordering then counts packs, not pieces.
 
 ## SendCutSend Fabricated Parts
 
-For bus bars, plates, brackets, and other laser/waterjet cut parts, create one folder per part under:
+Bus bars, plates, brackets, and other laser/waterjet-cut parts live one folder
+per part under `Hardware/<Chassis>/Mechanical/Fab/<PartName>/`. Scaffold a new
+one from the shell:
 
-```
-Hardware/Chassis2/Mechanical/Fab/<PartName>/
+```text
+bom> new fab DC Link Bus Bar
 ```
 
-Example:
+which creates:
 
+```text
+Hardware/<Chassis>/Mechanical/Fab/HW-C2-DCLBB-A/
+├── info.txt        # specs and price (template)
+└── README.md       # what goes here
 ```
-Hardware/Chassis2/Mechanical/Fab/HW-C2-DCLBB-A/
-├── HW-C2-DCLBB-A.step
-├── info.png
-└── info.txt
-```
+
+Drop in `<folder>.step` (required) and `info.png` (optional, embedded in the
+price report).
 
 ### `info.txt` fields
 
@@ -59,7 +61,7 @@ Notes=Tin plate ends after forming
 
 | Field | Description |
 |-------|-------------|
-| PartName | Human-readable name. Use words like "bus bar", "plate", or "bracket" so the tool picks the right category. |
+| PartName | Human-readable name. Words like "bus bar", "plate", "bracket" drive category detection. |
 | Material | e.g., `Copper`, `5052 aluminum` |
 | Thickness_mm | Sheet thickness in mm |
 | Qty | Quantity per chassis |
@@ -68,51 +70,27 @@ Notes=Tin plate ends after forming
 | UnitPrice | USD per part |
 | Process | e.g., `Sheet Cutting` |
 | Notes | Design notes, tolerances, etc. |
+| Rev | Managed by the tool (`rev bump`) — do not edit by hand. |
 
-### Attachments
+Each part gets an internal part number such as `HW-C2-BB-DCLBB-A`
+(see `PART_NUMBERING.md`).
 
-- **STEP file**: name it `<folder_name>.step` (or any `.step/.stp`). The path is listed in the report.
-- **info.png**: a render or photo of the part. If present, it is embedded in the price report's SendCutSend details section.
+### Importing from a SendCutSend cart
 
-Each folder-based part automatically gets an internal part number such as `HW-BB-0001-A`. See `PART_NUMBERING.md` for category conventions.
+After building a cart on SendCutSend, copy the page text and paste it:
 
-## Importing from a SendCutSend cart
-
-After getting a quote on SendCutSend, copy the cart text and run:
-
-```bash
-python3 import_sendcutsend_cart.py
-# paste the cart text, then press Ctrl+D
+```text
+bom> import sendcutsend            # paste, then Ctrl+D
+bom> import sendcutsend cart.txt   # or from a file
+bom> import sendcutsend cart.txt --dry-run
 ```
 
-Or save the cart text to a file:
+The importer matches cart filenames to existing folders regardless of token
+order (`C2_HW_BSP_A.step` matches `HW-C2-BSP-A`), creates missing folders, and
+writes/updates each `info.txt` — including the quoted price.
 
-```bash
-python3 import_sendcutsend_cart.py cart.txt --chassis Chassis2
-```
+### Revisions
 
-This parses the quote and writes/updates the `info.txt` in the matching folder under `Hardware/Chassis2/Mechanical/Fab/`. Run a dry-run first to preview:
-
-```bash
-python3 import_sendcutsend_cart.py cart.txt --dry-run
-```
-
-The importer extracts:
-
-- Part name from the `.step` filename
-- Material and thickness (e.g., `Copper (.187")`)
-- Dimensions (e.g., `12.357 x 0.551 in`)
-- Services such as `Bending`
-- Unit price and total price (used to compute quantity)
-
-The importer matches cart filenames to existing folders regardless of token order, so `C2_HW_BSP_A.step` will match a folder named `HW-C2-BSP-A`. If the folder does not exist yet, the importer creates it for you.
-
-### Tip: use descriptive PartName values
-
-The tool auto-detects the part category from `PartName`. For example:
-
-- `PartName=DC Link Bus Bar` → category `busbar` → `HW-BB-0001-A`
-- `PartName=Capacitor Heat Spreader Plate` → category `plate` → `HW-PLT-0001-A`
-- `PartName=Gate Driver Mounting Bracket` → category `bracket` → `HW-BRK-0001-A`
-
-If the auto-detected category is wrong, edit `info.txt` and re-run `generate_bom.py`.
+`rev bump DCLBB --note "..."` bumps the revision and writes `Rev=` into
+`info.txt`. Folders and STEP files are never renamed, so vendor re-uploads and
+CAD links keep working.

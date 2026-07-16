@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from .bom import BomLine
-from .vendors import DigiKeyClient, McMasterClient, MouserClient, OctopartClient, SendCutSendClient
+from .vendors import DigiKeyClient, McMasterClient, MouserClient, OctopartClient
 
 
 @dataclass
@@ -77,6 +77,17 @@ class PriceCache:
         }
 
 
+def line_total(line: BomLine, unit_price: Optional[float], qty: int = 1) -> float:
+    """Extended cost for `qty` builds: packs x pack price for packed parts,
+    per-piece price otherwise."""
+    if unit_price is None:
+        return 0.0
+    need = line.quantity * qty
+    if line.pack_size and line.pack_size > 1:
+        return unit_price * line.packs_needed(need)
+    return unit_price * need
+
+
 class PricingEngine:
     def __init__(
         self,
@@ -85,14 +96,12 @@ class PricingEngine:
         digikey: Optional[DigiKeyClient] = None,
         octopart: Optional[OctopartClient] = None,
         mcmaster: Optional[McMasterClient] = None,
-        sendcutsend: Optional[SendCutSendClient] = None,
     ):
         self.cache = cache
         self.mouser = mouser
         self.digikey = digikey
         self.octopart = octopart
         self.mcmaster = mcmaster
-        self.sendcutsend = sendcutsend
 
     def lookup(self, line: BomLine, refresh: bool = False) -> PriceInfo:
         vendor = line.primary_vendor()
@@ -166,33 +175,21 @@ class PricingEngine:
                 return cached
 
         price = None
-        url = ""
-        source = "sendcutsend_manifest"
+        source = "sendcutsend_folder"
 
         # Folder info.txt price
         unit_price_meta = line.metadata.get("UnitPrice", "")
         if unit_price_meta:
             try:
                 price = float(unit_price_meta) or None
-                source = "sendcutsend_folder"
             except ValueError:
                 price = None
 
-        # Manifest fallback
-        if price is None and self.sendcutsend:
-            manifest_row = self.sendcutsend.lookup(part_name)
-            if manifest_row:
-                try:
-                    price = float(manifest_row.get("UnitPrice", "") or 0) or None
-                except ValueError:
-                    price = None
-                url = manifest_row.get("URL", "")
-                if price is None and url:
-                    price = self.sendcutsend.fetch_price(url)
-
-        if price is None:
+        if price is None and line.manual_price is not None:
             price = line.manual_price
-        info = PriceInfo("sendcutsend", part_name, price, source=source, url=url)
+            source = "manual"
+
+        info = PriceInfo("sendcutsend", part_name, price, source=source)
         self.cache.set(info)
         return info
 
@@ -200,11 +197,10 @@ class PricingEngine:
         priced = []
         for line in lines:
             info = self.lookup(line, refresh=refresh)
-            total = (info.unit_price or 0) * line.quantity
             priced.append({
                 "line": line,
                 "price": info,
-                "total": total,
+                "total": line_total(line, info.unit_price),
             })
         return priced
 
@@ -214,6 +210,7 @@ def generate_markdown_report(
     output_path: Path,
     qty: int = 1,
     extra_qtys: Optional[List[int]] = None,
+    extra_sections: Optional[List[str]] = None,
 ) -> None:
     """Write a markdown price report."""
     if extra_qtys is None:
@@ -242,26 +239,39 @@ def generate_markdown_report(
         "digikey": "Digi-Key",
         "sendcutsend": "SendCutSend",
         "pcb": "PCB Fabrication",
+        "assembly": "In-House Assembly",
         "unknown": "Unknown / Missing",
     }
     for vendor, entries in sorted(vendor_groups.items()):
         display = VENDOR_DISPLAY.get(vendor, vendor.title())
         md.append(f"\n## {display}\n")
-        md.append("| Qty | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |")
-        md.append("|-----|--------------|-------------|-------------|------------|------------|--------|")
+        md.append("| Qty | Order | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |")
+        md.append("|-----|-------|--------------|-------------|-------------|------------|------------|--------|")
         vendor_total = 0.0
         for entry in entries:
             line = entry["line"]
             price = entry["price"]
             unit = price.unit_price
-            line_total = entry["total"] * qty
-            vendor_total += line_total
+            need = line.quantity * qty
+            ext = line_total(line, unit, qty)
+            vendor_total += ext
             if unit is None:
                 unknown.append(f"{line.description} ({vendor})")
+            packed = line.pack_size and line.pack_size > 1
+            if packed:
+                order_cell = f"{line.packs_needed(need)} pack x {line.pack_size} (left {line.leftover(need)})"
+            elif line.on_hand:
+                order_cell = f"{max(0, need - line.on_hand)} ({line.on_hand} from stock)"
+            else:
+                order_cell = ""
+            if unit is not None:
+                unit_cell = f"${unit:.4f}" + ("/pk" if packed else "")
+                total_cell = f"${ext:.2f}"
+            else:
+                unit_cell = total_cell = "N/A"
             md.append(
-                f"| {line.quantity * qty} | {line.internal_pn} | {line.description} | {price.part_number} | "
-                f"{'$' + f'{unit:.4f}' if unit is not None else 'N/A'} | "
-                f"{'$' + f'{line_total:.2f}' if unit is not None else 'N/A'} | {price.source} |"
+                f"| {need} | {order_cell} | {line.internal_pn} | {line.description} | {price.part_number} | "
+                f"{unit_cell} | {total_cell} | {price.source} |"
             )
         md.append(f"\n**{display} subtotal:** ${vendor_total:.2f}\n")
         grand_total += vendor_total
@@ -274,8 +284,25 @@ def generate_markdown_report(
         md.append("| Quantity | Estimated Total |")
         md.append("|----------|----------------|")
         for q in extra_qtys:
-            total = sum(e["total"] for e in lines) * q
+            total = sum(line_total(e["line"], e["price"].unit_price, q) for e in lines)
             md.append(f"| {q} | ${total:.2f} |")
+        md.append("")
+
+    packed_lines = [
+        e["line"] for e in lines
+        if (e["line"].pack_size or 1) > 1 or e["line"].on_hand
+    ]
+    if packed_lines:
+        md.append("\n## Pack Rounding & Stock\n")
+        md.append("| Part | Need | On Hand | Order | Leftover |")
+        md.append("|------|------|---------|-------|----------|")
+        for line in sorted(packed_lines, key=lambda x: x.description.lower()):
+            need = line.quantity * qty
+            if line.pack_size and line.pack_size > 1:
+                order = f"{line.packs_needed(need)} pack x {line.pack_size}"
+            else:
+                order = str(max(0, need - line.on_hand))
+            md.append(f"| {line.description} | {need} | {line.on_hand or '-'} | {order} | {line.leftover(need)} |")
         md.append("")
 
     if unknown:
@@ -304,6 +331,10 @@ def generate_markdown_report(
                 rel_img = os.path.relpath(line.image_path, output_path.parent)
                 md.append(f"\n![{line.description}]({rel_img})\n")
             md.append("")
+
+    if extra_sections:
+        md.extend(extra_sections)
+        md.append("")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
