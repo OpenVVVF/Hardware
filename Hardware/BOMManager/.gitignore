@@ -1,0 +1,18 @@
+# API keys / local config
+config.yaml
+config.yml
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Cached prices are local and can be regenerated
+bom_manager/data/price_cache.json
+
+# IDE
+.vscode/
+.idea/
