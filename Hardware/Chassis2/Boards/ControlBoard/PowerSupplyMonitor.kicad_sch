@@ -3,7 +3,15 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "8a3e5400-be0f-4836-abd2-bccf5508e21e")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "Open Inverter Platform - Control Board")
+		(date "2026-07-07")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-CTRL")
+	)
 	(lib_symbols
 		(symbol "Device:C"
 			(pin_numbers
@@ -1978,7 +1986,7 @@
 				)
 			)
 		)
-		(property "Footprint" "QFN50P300X300X80-17N-D"
+		(property "Footprint" "InverterCom:QFN50P300X300X80-17N-D"
 			(at 125.73 -13.64 0)
 			(hide yes)
 			(show_name no)

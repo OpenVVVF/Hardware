@@ -7,9 +7,10 @@
 	(title_block
 		(title "Open Inverter Platform - Control Board")
 		(date "2026-07-07")
-		(rev "G")
+		(rev "A")
 		(company "Corzine Lab, University of California, Santa Cruz")
 		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-CTRL")
 	)
 	(lib_symbols
 		(symbol "Connector_Generic:Conn_02x03_Counter_Clockwise"
@@ -2045,7 +2046,7 @@
 	)
 	(text "SINGLE WIRE DEBUG / PROGRAMMING\nUSB INTERFACE TO TOP IO BOARD\n+12V TO CTRL BOARD FROM IO BOARD"
 		(exclude_from_sim no)
-		(at 164.846 3.302 0)
+		(at 171.704 4.064 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2102,16 +2103,6 @@
 			)
 		)
 		(uuid "9f7976d7-0ec6-4010-9285-2635b1279982")
-	)
-	(text "STANDOFF PARTS"
-		(exclude_from_sim no)
-		(at 22.606 116.332 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "af6daa1f-72f5-4986-94ac-ab4f6ac39d13")
 	)
 	(text "Control system has dual independent mcus,\ntargeting ASIL decomposition.\nIndependently monitored switching commands,\ncurrent responses, canbus commands + faults\n\nPlease see HARA under documentation for additional informaton."
 		(exclude_from_sim no)
@@ -5163,7 +5154,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x08_Counter_Clockwise"
+		(property "Value" "SSW-108-01-L-D"
 			(at 116.84 19.05 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5173,7 +5164,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:SSW-108-01-L-D"
 			(at 115.57 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -5264,80 +5255,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 149.86 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0eb5513d-3c38-4ac8-a3b8-a66055434c9f")
-		(property "Reference" "#ST7"
-			(at 13.208 149.86 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 149.86 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:524265-E")
 		(at 58.42 139.7 0)
 		(unit 1)
@@ -5369,7 +5286,7 @@
 				)
 			)
 		)
-		(property "Footprint" "524265E"
+		(property "Footprint" "InverterCom:524265E"
 			(at 77.47 234.62 0)
 			(hide yes)
 			(show_name no)
@@ -5509,7 +5426,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -5526,7 +5443,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 86.3599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5537,7 +5454,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -5659,7 +5576,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -5676,7 +5593,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 54.6099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5687,7 +5604,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -5735,7 +5652,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -5752,7 +5669,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 48.2599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5763,7 +5680,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -5811,7 +5728,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -5828,7 +5745,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 67.3099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5839,7 +5756,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -5887,7 +5804,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -5904,7 +5821,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 80.0099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5915,7 +5832,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 78.74 0)
 			(hide yes)
 			(show_name no)
@@ -5967,10 +5884,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "69fcf277-1599-49ad-a61d-7e84dfd79bf4")
 		(property "Reference" "J14"
-			(at 163.83 6.35 0)
+			(at 151.384 5.334 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5979,8 +5895,8 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x10_Counter_Clockwise"
-			(at 163.83 8.89 0)
+		(property "Value" "SSW-110-01-F-D"
+			(at 159.004 7.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5989,7 +5905,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:SSW-110-01-F-D"
 			(at 162.56 21.59 0)
 			(hide yes)
 			(show_name no)
@@ -6113,7 +6029,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_02x03_Counter_Clockwise"
+		(property "Value" "SSW-103-01-L-D"
 			(at 97.409 139.319 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6124,7 +6040,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:SSW-103-01-L-D"
 			(at 109.22 146.05 0)
 			(hide yes)
 			(show_name no)
@@ -6185,160 +6101,12 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 139.7 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "986ca4af-7156-461e-a225-25d5a34fa82c")
-		(property "Reference" "#ST5"
-			(at 13.208 139.7 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 139.7 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 129.54 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9a0398f4-6a36-42ab-8cdf-33b86fa84ad8")
-		(property "Reference" "#ST3"
-			(at 13.208 129.54 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 129.54 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 15.24 91.44 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -6355,7 +6123,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 92.7099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6366,7 +6134,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -6414,7 +6182,7 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -6431,7 +6199,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 60.9599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6442,7 +6210,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 59.69 0)
 			(hide yes)
 			(show_name no)
@@ -6506,7 +6274,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_02x10_Counter_Clockwise"
+		(property "Value" "TSW-110-21-L-D-LL"
 			(at 58.42 19.05 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6516,7 +6284,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:PinHeader_2x10_P2.54mm_Vertical-31mm"
 			(at 57.15 31.75 0)
 			(hide yes)
 			(show_name no)
@@ -6619,154 +6387,6 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 134.62 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "cd177b6c-269b-47e7-9dc7-8ae39b1f1991")
-		(property "Reference" "#ST4"
-			(at 13.208 134.62 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 134.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 119.38 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d76d31ea-4fc5-4e49-8e88-2dfe0805c498")
-		(property "Reference" "#ST1"
-			(at 13.208 119.38 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 119.38 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_02x08_Counter_Clockwise")
 		(at 254 147.32 90)
 		(unit 1)
@@ -6776,29 +6396,30 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "df0ff1c1-bb19-45eb-85a2-26707ccc04eb")
 		(property "Reference" "J12"
-			(at 240.03 146.05 0)
+			(at 241.808 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "Conn_02x08_Counter_Clockwise"
-			(at 242.57 146.05 0)
+		(property "Value" "SSW-108-01-L-D"
+			(at 243.84 147.3199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:SSW-108-01-L-D"
 			(at 254 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -6889,160 +6510,12 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 154.94 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "e29a7e85-5ecc-4520-93e5-8ca109cc31e6")
-		(property "Reference" "#ST8"
-			(at 13.208 154.94 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 154.94 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 144.78 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ee960f00-6764-4384-b529-a7c59ac1d053")
-		(property "Reference" "#ST6"
-			(at 13.208 144.78 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 144.78 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 15.24 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom no)
+		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
@@ -7059,7 +6532,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MountingHole"
+		(property "Value" "971350581"
 			(at 17.78 73.6599 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7070,7 +6543,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_5.3mm_M5_ISO7380_Pad"
+		(property "Footprint" "InverterCom:971350581"
 			(at 15.24 72.39 0)
 			(hide yes)
 			(show_name no)
@@ -7134,7 +6607,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Conn_02x03_Counter_Clockwise"
+		(property "Value" "SSW-103-01-L-D"
 			(at 97.409 152.019 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7145,7 +6618,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical"
+		(property "Footprint" "InverterCom:SSW-103-01-L-D"
 			(at 109.22 158.75 0)
 			(hide yes)
 			(show_name no)
@@ -7200,80 +6673,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "J10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:Placeholder")
-		(at 13.97 124.46 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ffe221f2-fd28-4c7d-98c2-6e10aeffe8cc")
-		(property "Reference" "#ST2"
-			(at 13.208 124.46 0)
-			(show_name no)
-			(do_not_autoplace yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 24.13 124.46 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 13.97 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 13.97 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 13.97 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "#ST2")
 					(unit 1)
 				)
 			)
