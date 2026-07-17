@@ -50,6 +50,8 @@ class HarnessStatus:
     folder: Path
     name: str
     has_csv: bool
+    qty: int = 1
+    rev: str = ""
 
 
 @dataclass
@@ -178,11 +180,27 @@ def collect(ctx: Context, chassis: str, hardware_root: Optional[Path] = None) ->
             if not folder.is_dir() or folder.name.startswith("."):
                 continue
             has_csv = any(folder.glob("*.csv")) or any((folder / "Fab").glob("*.csv"))
+            qty = 1
+            csv = next(iter(sorted(folder.glob("*.csv")) or sorted((folder / "Fab").glob("*.csv"))), None)
+            if csv is not None:
+                from .parsers import harness_qty
+                qty = harness_qty(csv)
+            rev = ""
+            from .descriptor_registry import DescriptorRegistry
+            from .part_numbers import PartNumberRegistry
+            abbr = DescriptorRegistry.abbreviate_chassis(chassis)
+            entry = ctx.pn_registry.lookup(
+                PartNumberRegistry._make_identity_key("wiring", f"wh|{folder.name.lower()}", abbr)
+            )
+            if entry:
+                rev = entry.get("revision", "")
             status.harnesses.append(
                 HarnessStatus(
                     folder=folder,
                     name=folder.name,
                     has_csv=has_csv,
+                    qty=qty,
+                    rev=rev,
                 )
             )
 
@@ -258,7 +276,8 @@ def render(status: FabStatus) -> str:
     if status.harnesses:
         out.append(f"\nWiring harnesses ({len(status.harnesses)}):")
         for h in status.harnesses:
-            out.append(f"  [{_check(h.has_csv)}] {h.name:<22} {'BOM CSV present' if h.has_csv else 'no BOM CSV export'}")
+            rev_txt = f" rev {h.rev}" if h.rev else ""
+            out.append(f"  [{_check(h.has_csv)}] {h.name:<22} qty {h.qty}{rev_txt}  {'BOM CSV present' if h.has_csv else 'no BOM CSV export'}")
 
     problems = status.problems
     out.append("")
@@ -291,10 +310,10 @@ def render_markdown(status: FabStatus) -> List[str]:
             md.append(f"| {p.name} | {p.rev or 'A'} | {p.qty} | {step} | {info} | {price} | {p.spec} |")
         md.append("")
     if status.harnesses:
-        md.append("| Harness | BOM CSV |")
-        md.append("|---------|---------|")
+        md.append("| Harness | Qty/Chassis | Rev | BOM CSV |")
+        md.append("|---------|-------------|-----|---------|")
         for h in status.harnesses:
-            md.append(f"| {h.name} | {'yes' if h.has_csv else '**no**'} |")
+            md.append(f"| {h.name} | {h.qty} | {h.rev or 'A'} | {'yes' if h.has_csv else '**no**'} |")
         md.append("")
     problems = status.problems
     if problems:

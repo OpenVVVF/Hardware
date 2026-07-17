@@ -170,7 +170,7 @@ re-exports everything from KiCad and rebuilds the BOM:
 
 - each board: BOM CSV (`sch export bom`), gerbers + drill into `Fab/`,
   board STEP model, and a DRC report at `FabricationData/DRC/<Board>.txt`
-  (violation counts printed per board)
+  (**errors only** — warnings are suppressed for now; counts printed per board)
 - each harness: BOM CSV from its schematic
 - then a normal `generate` runs
 
@@ -184,17 +184,21 @@ project docs, same format as `Docs/HARA.pdf`):
 
 - Cover with totals and the 1/2/3/5/10-unit scaling table
 - Contents page, order summary (per-vendor tables, pack-aware)
-- Fabrication package (readiness + a page per fab part with a **fresh 3D
-  preview rendered from its STEP file**, colored by material)
+- Fabrication package (readiness incl. harness qty/rev + a page per fab part
+  with a **fresh 3D preview rendered from its STEP file**, colored by material)
 - Per board: divider (name, IPN, **3D board renders** top + bottom) → full
-  schematic → PCB layer plots (all copper + silkscreen)
+  schematic → PCB layer plots (all copper + silkscreen) → **DRC summary page**
+  (errors only, from the regen reports)
 - Per harness: divider → schematic
+- **Design documents**: every document in `Docs/` (HARA, TARA, SWAD, Manual,
+  analyses) is a part with its own IPN (`HW-C2-DOC-...`), compiled from its
+  HTML/Markdown source into the package — the PDF you ship with the device.
 
 Rendering: board 3D renders and layer plots come from KiCad CLI (flatpak via
 `flatpak run --command=kicad-cli org.kicad.KiCad`); fab-part previews are
-rendered from STEP with cadquery + matplotlib (no GL needed). `bom.py`
-automatically re-executes itself with the bundled `.venv` python when one
-exists, so dependencies always resolve.
+rendered from STEP with cadquery + matplotlib (no GL needed); documents are
+compiled with weasyprint. `bom.py` automatically re-executes itself with the
+bundled `.venv` python when one exists, so dependencies always resolve.
 
 ## Assembly HTML (iBOM)
 

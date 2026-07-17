@@ -387,9 +387,9 @@ caption::before { content: attr(data-label) "  "; }
     <div class="test-field"><strong>Procedure:</strong>
         <ol>
             <li>Establish normal operation with valid IO board and BMS heartbeat traffic.</li>
-            <li>Flood CAN1 with high-priority frames at &gt;80 % bus load.</li>
+            <li>Flood CAN2 with high-priority frames at &gt;80 % bus load.</li>
             <li>Verify IO board heartbeat timeout triggers safe state within 1 s.</li>
-            <li>Repeat on CAN2 with BMS heartbeat and verify safe state within 5 s.</li>
+            <li>Repeat on CAN1 with BMS heartbeat and verify safe state within 5 s.</li>
             <li>Verify normal operation resumes automatically after the bus flood stops and heartbeats return.</li>
         </ol>
     </div>
@@ -402,7 +402,7 @@ caption::before { content: attr(data-label) "  "; }
 
 <h2>7.1 HMAC Key Management</h2>
 
-<p>The user manages their own signing key. The project provides a build script that:</p>
+<p>The user manages their own signing key. The project will provide a build script that:</p>
 <ol>
     <li>Generates a random 256-bit key if none exists (stored in <code>keys/fw_signing_key.bin</code>).</li>
     <li>Embeds the key into the bootloader binary at build time.</li>

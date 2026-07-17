@@ -174,7 +174,7 @@ li { margin: 0.15em 0; }
     <div class="note-title">Companion Documents</div>
     This manual covers the electrical interface, integration, and operation of the traction inverter hardware. The following companion documents provide additional detail:<br><br>
     &bull; <strong>HARA (v4.1):</strong> Hazard Analysis and Risk Assessment per ISO 26262. 99 fault injection tests, 18 hazards, 15 safety goals, 21 FSRs. Dual-MCU architecture with STM32G474RCTx coprocessor. Six SSO pathways. ASIL D via ASIL B(D) decomposition.<br>
-    &bull; <strong>TARA (v1.2):</strong> Threat Analysis and Risk Assessment per ISO/SAE 21434. 8 cybersecurity tests, 7 CSRs, open-source trust model.<br>
+    &bull; <strong>TARA (v1.2):</strong> Threat Analysis and Risk Assessment per ISO/SAE 21434. 9 cybersecurity tests, 7 CSRs, open-source trust model.<br>
     &bull; <strong>SWAD (v1.5):</strong> Software Architecture Document. 4-layer architecture, FOC + multi-modulation, 6-state state machine, CAN protocol reference.<br><br>
     The <strong>RTE (Real Time Examiner)</strong> open-source tool connects via CAN bus for live monitoring, parameter configuration, and firmware updates.
 </div>
@@ -493,8 +493,8 @@ li { margin: 0.15em 0; }
         <tr><td>Current Sensing</td><td>STM32H723 16-bit ADC</td><td>4 channels (I_U, I_V, I_W, I_DC)</td></tr>
         <tr><td>Voltage Sensing</td><td>MAX22530 isolated ADC</td><td>4 channels (V_DC, V_U, V_V, V_W)</td></tr>
         <tr><td>Control Interface</td><td>Dual isolated CAN 2.0B</td><td>Up to 1 Mbps each</td></tr>
-        <tr><td>Digital Inputs</td><td>8x</td><td>5-24V, active low, tied to AGND</td></tr>
-        <tr><td>Relay Outputs</td><td>4x switched +12V</td><td>Contactor/precharge drive</td></tr>
+        <tr><td>Digital Inputs</td><td>8x ISO1212 isolated (2 populated in current build)</td><td>24-60V field inputs, galvanically isolated from logic domain</td></tr>
+        <tr><td>Relay Outputs</td><td>4x switched +12V</td><td>Precharge and auxiliary relay drive (not the main HV contactor)</td></tr>
         <tr><td>Logic Power</td><td>VIN_Z via DC-DC</td><td>43-160V in, +12V out, 20W, railway grade</td></tr>
         <tr><td>HVIL</td><td>5V inline interlock loop</td><td>Signal to BMS; BMS controls contactor</td></tr>
         <tr><td>Operating Temperature</td><td>-40&deg;C to +85&deg;C</td><td>Ambient at backplate</td></tr>
@@ -580,8 +580,8 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>&mdash;</td><td>THROTTLE</td><td>Analog throttle / torque demand signal (0-3.3V to ADC1)</td></tr>
-        <tr><td>&mdash;</td><td>THROTTLE_GND</td><td>Throttle signal return (differential input)</td></tr>
+        <tr><td>&mdash;</td><td>THROTTLE</td><td>Analog throttle / torque demand input (redundant potentiometer, 0-5 V scaled to 0-3.3 V at the ADC)</td></tr>
+        <tr><td>&mdash;</td><td>THROTTLE_GND</td><td>Throttle signal return (single-ended, referenced to AGND)</td></tr>
     </tbody>
 </table>
 
@@ -673,14 +673,14 @@ li { margin: 0.15em 0; }
         <tr><th>Pin</th><th>Signal</th><th>Description</th></tr>
     </thead>
     <tbody>
-        <tr><td>&mdash;</td><td>CAN1_TERM</td><td>CAN Bus 1 120-ohm termination (switched via internal relay)</td></tr>
-        <tr><td>&mdash;</td><td>CAN2_TERM</td><td>CAN Bus 2 120-ohm termination (switched via internal relay)</td></tr>
+        <tr><td>&mdash;</td><td>CAN1_TERM</td><td>CAN Bus 1 120-ohm termination (jumper-selectable)</td></tr>
+        <tr><td>&mdash;</td><td>CAN2_TERM</td><td>CAN Bus 2 120-ohm termination (jumper-selectable)</td></tr>
     </tbody>
 </table>
 
 <div class="note">
     <div class="note-title">CAN Termination</div>
-    The termination resistors can be enabled or disabled via firmware configuration. In a typical vehicle network, the BMS or another node provides termination at the opposite end of the bus. Enable termination on the inverter only if it is at the physical end of the bus. The internal relay allows switching without external resistors. Configure via the RTE tool.
+    The termination resistors are enabled or disabled by on-board jumpers (CAN1/CAN2 termination jumpers). In a typical vehicle network, the BMS or another node provides termination at the opposite end of the bus. Enable termination on the inverter only if it is at the physical end of the bus. The jumpers allow termination to be fitted without external resistors.
 </div>
 
 <h2>7.9 Reserved Pins</h2>
@@ -822,7 +822,7 @@ li { margin: 0.15em 0; }
         <tr><td>Pins</td><td>&mdash;</td><td>&mdash;</td></tr>
         <tr><td>Nodes</td><td>BMS, IO board</td><td>Dashboard, charger, diagnostic tools</td></tr>
         <tr><td>Bitrate</td><td>500 kbps (default)</td><td>500 kbps (default)</td></tr>
-        <tr><td>Termination</td><td>Relay-switched</td><td>Relay-switched</td></tr>
+        <tr><td>Termination</td><td>Jumper-selectable</td><td>Jumper-selectable</td></tr>
         <tr><td>Isolation</td><td>2.5 kVrms</td><td>2.5 kVrms</td></tr>
     </tbody>
 </table>
@@ -950,7 +950,7 @@ li { margin: 0.15em 0; }
         <tr><td>POST fails on boot</td><td>Gate driver fault pin stuck low; FRAM WP fault</td><td>Check FLT line at TIM1_BKIN. Run POST diagnostics via USB-B.</td></tr>
         <tr><td>No torque output</td><td>Throttle plausibility fault; position sensor not detected</td><td>Check throttle wiring at the connector. Verify sin/cos or Hall signal on USB-B debug log.</td></tr>
         <tr><td>BMS contactor won't close</td><td>HVIL loop open; SYSTEM_ON not asserted; BMS not closing contactor</td><td>Check HVIL continuity at the connector. Verify 5V source is present. Check BMS is configured to close contactor on SYSTEM_ON.</td></tr>
-        <tr><td>CAN communication fault</td><td>Wrong bitrate; missing termination</td><td>Verify CAN bitrate matches BMS (default 500 kbps). Check termination relay.</td></tr>
+        <tr><td>CAN communication fault</td><td>Wrong bitrate; missing termination</td><td>Verify CAN bitrate matches BMS (default 500 kbps). Check termination jumpers.</td></tr>
         <tr><td>Thermal derating</td><td>Inadequate cooling; stuck-high temp sensor</td><td>Check heatsink mounting and TIM. Verify all three NTC readings via RTE.</td></tr>
         <tr><td>Overcurrent fault</td><td>Shorted motor phase; incorrect current sensor zero</td><td>Disconnect motor and check phase-to-phase resistance. Run zero-cal via RTE.</td></tr>
         <tr><td>PWM not outputting</td><td>Keyswitch off; brake applied; throttle deadband</td><td>Check keyswitch state, brake switch, throttle above deadband. Check state machine log.</td></tr>

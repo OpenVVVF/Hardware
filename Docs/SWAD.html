@@ -218,7 +218,7 @@ li { margin: 0.2em 0; }
 
 <div class="note">
     <div class="callout-title">Scope Note: Safety Coprocessor (STM32G474RCTx)</div>
-    The safety coprocessor (STM32G474RCTx) is present hardware on ControlBoard Rev G and is documented in HARA v4.1. This SWAD revision covers the main-MCU (STM32H723ZG) software architecture only; a full dual-MCU body update, including the coprocessor software architecture and inter-MCU interfaces, is planned for a future revision.
+    The safety coprocessor (STM32G474RCTx) is present hardware on ControlBoard Rev A and is documented in HARA v4.1. This SWAD revision covers the main-MCU (STM32H723ZG) software architecture only; a full dual-MCU body update, including the coprocessor software architecture and inter-MCU interfaces, is planned for a future revision.
 </div>
 
 <h2>1.2 Scope</h2>
@@ -254,7 +254,7 @@ li { margin: 0.2em 0; }
 
 <div class="note">
     <div class="callout-title">Two Evaluations: With and Without Safety Coprocessor</div>
-    This document presents two safety integrity evaluations for the same hardware: (1) <strong>Main-MCU-only configuration (no coprocessor):</strong> ASIL-C achievable for most safety goals, ASIL-A for H-06/H-16/H-17. This is the configuration covered by this document revision. (2) <strong>Dual-MCU configuration (with coprocessor):</strong> ASIL-D achievable for SG-01 and SG-13 via ASIL decomposition. The coprocessor is present on ControlBoard Rev G hardware and is documented in HARA v4.1; its software architecture is not yet covered by this document (see scope note, Section 1.1). Where ASIL ratings differ between these two configurations, both are stated explicitly.
+    This document presents two safety integrity evaluations for the same hardware: (1) <strong>Main-MCU-only configuration (no coprocessor):</strong> ASIL-C achievable for most safety goals, ASIL-A for H-06/H-16/H-17. This is the configuration covered by this document revision. (2) <strong>Dual-MCU configuration (with coprocessor):</strong> ASIL-D achievable for SG-01 and SG-13 via ASIL decomposition. The coprocessor is present on ControlBoard Rev A hardware and is documented in HARA v4.1; its software architecture is not yet covered by this document (see scope note, Section 1.1). Where ASIL ratings differ between these two configurations, both are stated explicitly.
 </div>
 
 <h2>1.3 Design Philosophy: User-Configurable, Safe, Reliable</h2>
@@ -285,7 +285,7 @@ li { margin: 0.2em 0; }
     <tbody>
         <tr><td>MCU</td><td>STM32H723ZG, Cortex-M7, 550 MHz</td><td>Single-core, FPU, cache, dual-bank flash</td></tr>
         <tr><td>Flash</td><td>1 MB dual-bank (2 x 512 KB)</td><td>Bootloader + application + swap for OTA</td></tr>
-        <tr><td>RAM</td><td>564 KB (AXISRAM + SRAM1-4)</td><td>FOC buffers, stack, ECC on AXISRAM</td></tr>
+        <tr><td>RAM</td><td>564 KB total (320 KB AXISRAM, DTCM/ITCM, SRAM1-4)</td><td>FOC buffers, stack, ECC on AXISRAM</td></tr>
         <tr><td>PWM + FOC</td><td>TIM1 Advanced Timer (6 comp. outputs)</td><td>PWM carrier 300Hz-16kHz; FOC loop runs at same frequency; hw dead-time, break input</td></tr>
         <tr><td>Gate Driver</td><td>NCV57100 x 6 (AEC-Q100)</td><td>DESAT, UVLO, active Miller clamp</td></tr>
         <tr><td>Current Sensors</td><td>Tamura LA37S x 4 (3-phase + DC link)</td><td>+/-1200 A, 1.042 mV/A, 0-3.3V to ADC</td></tr>
@@ -705,8 +705,6 @@ void TIM1_UP_IRQHandler(void) {
 }</div>
 
 <h3>6.1.3 Trigonometric Functions: CORDIC vs. Software</h3>
-
-<h3>6.1.4 Trigonometric Functions: CORDIC vs. Software</h3>
 
 <p>The FOC ISR uses <code>cosf()</code>, <code>sinf()</code>, and <code>sqrtf()</code> from the CMSIS-DSP library. The STM32H723 includes a <strong>CORDIC hardware accelerator</strong> that computes sin, cos, and sqrt in ~10-20 cycles each with deterministic execution time:</p>
 <ul>
@@ -1250,10 +1248,10 @@ bool Validator_TempFaultConsistent(float new_threshold) {
         <tr><th>Region</th><th>Size</th><th>Usage</th><th>ECC</th></tr>
     </thead>
     <tbody>
-        <tr><td>AXISRAM</td><td>512 KB</td><td>Stack, heap, FOC buffers, fault log runtime</td><td>Yes (SECDED)</td></tr>
-        <tr><td>SRAM1</td><td>128 KB</td><td>DMA buffers, CAN FIFOs (non-cacheable)</td><td>No</td></tr>
-        <tr><td>SRAM2</td><td>128 KB</td><td>ADC oversample buffers, DMA descriptors</td><td>No</td></tr>
-        <tr><td>SRAM4</td><td>64 KB</td><td>Warm-boot retention (fault, cycle count)</td><td>No</td></tr>
+        <tr><td>AXISRAM</td><td>320 KB</td><td>Stack, heap, FOC buffers, fault log runtime</td><td>Yes (SECDED)</td></tr>
+        <tr><td>SRAM1</td><td>16 KB</td><td>DMA buffers, CAN FIFOs (non-cacheable)</td><td>No</td></tr>
+        <tr><td>SRAM2</td><td>16 KB</td><td>ADC oversample buffers, DMA descriptors</td><td>No</td></tr>
+        <tr><td>SRAM4</td><td>16 KB</td><td>Warm-boot retention (fault, cycle count)</td><td>No</td></tr>
     </tbody>
 </table>
 
@@ -1470,7 +1468,7 @@ bool Validator_TempFaultConsistent(float new_threshold) {
         <tr><th>ID</th><th>Limitation</th><th>Mitigation</th></tr>
     </thead>
     <tbody>
-        <tr><td>L-01</td><td>Single-core main MCU, no lockstep</td><td>External watchdog; POST; 3-path SSO; safety coprocessor present on ControlBoard Rev G (see scope note, Section 1.1)</td></tr>
+        <tr><td>L-01</td><td>Single-core main MCU, no lockstep</td><td>External watchdog; POST; 3-path SSO; safety coprocessor present on ControlBoard Rev A (see scope note, Section 1.1)</td></tr>
         <tr><td>L-02</td><td>SHEPWM: pre-computed tables only (no live calc in V1.0)</td><td>Tables cover typical range; V2.0 reserved</td></tr>
         <tr><td>L-03</td><td>Single CAN bus</td><td>Safe state on timeout</td></tr>
         <tr><td>L-04</td><td>No field weakening in V1.0</td><td>Planned V2.0</td></tr>

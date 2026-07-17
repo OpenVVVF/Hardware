@@ -1,6 +1,6 @@
 # Hardware BOM Pricing Report
 
-Generated: 2026-07-17T07:03:28.649671Z
+Generated: 2026-07-17T08:33:00.781518Z
 
 Base quantity: 1 unit(s)
 
@@ -270,10 +270,10 @@ Base quantity: 1 unit(s)
 | HW-C2-DCLBB-A | A | 2 | yes | yes | $50.71 | Copper / 4.75 mm / Sheet Cutting / Bending |
 | HW-C2-PBB-A | A | 3 | yes | yes | $19.58 | Copper / 4.75 mm / Sheet Cutting / Bending |
 
-| Harness | BOM CSV |
-|---------|---------|
-| CapacitorTempSenseHarness | yes |
-| CurrentSenseHarness | yes |
-| GDVSHarness | yes |
-| TempSenseHarness | yes |
+| Harness | Qty/Chassis | Rev | BOM CSV |
+|---------|-------------|-----|---------|
+| CapacitorTempSenseHarness | 1 | A | yes |
+| CurrentSenseHarness | 4 | A | yes |
+| GDVSHarness | 1 | A | yes |
+| TempSenseHarness | 2 | A | yes |
 

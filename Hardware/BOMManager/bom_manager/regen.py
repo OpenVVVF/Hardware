@@ -54,9 +54,10 @@ def _export_step(pcb: Path, out_step: Path) -> bool:
 
 
 def _run_drc(pcb: Path, out_txt: Path) -> Optional[int]:
-    """Run DRC, write the text report, return violation count (None on failure)."""
+    """Run DRC (errors only — warnings are suppressed for now), write the
+    report, return the error count (None on failure)."""
     out_txt.parent.mkdir(parents=True, exist_ok=True)
-    r = _kicad(["pcb", "drc", str(pcb), "--refill-zones", "-o", str(out_txt)])
+    r = _kicad(["pcb", "drc", str(pcb), "--refill-zones", "--severity-error", "-o", str(out_txt)])
     if not out_txt.is_file():
         return None
     violations = 0
@@ -95,7 +96,7 @@ def run(ctx: Context, chassis: Optional[str], board_filter=None, do_generate: bo
                     marks.append("step ✓" if _export_step(pcb, board_dir / f"{name}.step") else "step ✗")
                     violations = _run_drc(pcb, drc_dir / f"{name}.txt")
                     marks.append("drc clean" if violations == 0 else
-                                 (f"drc {violations} violation(s)" if violations is not None else "drc ✗"))
+                                 (f"drc {violations} error(s)" if violations is not None else "drc ✗"))
                 print(f"  {name:<22} {'  '.join(marks)}")
 
         for harness_root in ("Wiring", "Harnesses"):

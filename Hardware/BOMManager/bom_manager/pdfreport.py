@@ -28,7 +28,7 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from . import fab, render
+from . import docgen, fab, render
 from .addpart import collect_lines, existing_ipn, known_price
 from .context import Context
 from .pricing import PricingEngine, line_total
@@ -184,11 +184,13 @@ def _cover(story, ctx, chassis, priced, grand_total, scaling):
     story.append(PageBreak())
 
 
-def _toc(story, chassis, boards, harnesses):
+def _toc(story, chassis, boards, harnesses, documents=None):
     _section_header(story, "Contents")
     entries = ["Order Summary", "Fabrication Package"]
     entries += [f"{b} — schematic & PCB layers" for b in boards]
     entries += [f"{h} — wiring harness" for h in harnesses]
+    if documents:
+        entries += [f"{t} — design document" for t in documents]
     for i, e in enumerate(entries, 1):
         story.append(Spacer(1, 3))
         story.append(_para(f"{i}.  {e}", size=10))
@@ -240,7 +242,7 @@ def _fab_section(story, ctx, chassis, render_dir=None):
                      f"${p.price:,.2f}" if p.price is not None else "MISSING",
                      "yes" if p.ready else "NO"])
     for h in status.harnesses:
-        rows.append([h.name, "harness", "-", "-", "-", "yes" if h.has_csv else "NO CSV"])
+        rows.append([h.name, "harness", str(h.qty), h.rev or "A", "-", "yes" if h.has_csv else "NO CSV"])
     story.append(_table(rows, [1.9 * inch, 0.8 * inch, 0.5 * inch, 0.5 * inch, 0.9 * inch, 0.7 * inch]))
     problems = status.problems
     if problems:
@@ -299,13 +301,13 @@ def _divider_pdf(path: Path, title: str, ipn: str, kind: str, info_rows, image_p
     doc.build(story, onFirstPage=partial(_footer, chassis=chassis))
 
 
-def _front_pdf(path: Path, ctx, chassis, priced, scaling, grand_total, boards, harnesses, render_dir=None) -> None:
+def _front_pdf(path: Path, ctx, chassis, priced, scaling, grand_total, boards, harnesses, documents=None, render_dir=None) -> None:
     doc = SimpleDocTemplate(str(path), pagesize=PAGE,
                             leftMargin=MARGIN, rightMargin=MARGIN,
                             topMargin=MARGIN, bottomMargin=MARGIN)
     story = []
     _cover(story, ctx, chassis, priced, grand_total, scaling)
-    _toc(story, chassis, boards, harnesses)
+    _toc(story, chassis, boards, harnesses, documents=documents)
     _pricing_sections(story, priced)
     _fab_section(story, ctx, chassis, render_dir=render_dir)
     doc.build(story, onFirstPage=_draw_swoosh,
@@ -344,6 +346,46 @@ def export_board_layers(pcb_path: Path, out_pdf: Path) -> bool:
     if result.returncode != 0 or not out_pdf.is_file():
         print(f"  layer plot failed for {pcb_path.name}: {result.stderr.strip()[:200]}", file=sys.stderr)
         return False
+    return True
+
+
+# -------------------------------------------------------------------- DRC
+
+def _drc_pdf(path: Path, ctx, chassis: str, board: str, max_lines: int = 14) -> bool:
+    """One DRC summary page for a board: error count + first findings.
+    Warnings are suppressed in the underlying report."""
+    report = ctx.hardware_root / chassis / "FabricationData" / "DRC" / f"{board}.txt"
+    if not report.is_file():
+        return False
+    text = report.read_text(encoding="utf-8", errors="replace")
+    m = re.search(r"Found (\d+) DRC violations", text)
+    errors = int(m.group(1)) if m else 0
+    findings = []
+    for line in text.splitlines():
+        line = line.strip()
+        if line.startswith("[") and "]" in line:
+            findings.append(re.sub(r"\s+", " ", line))
+    unconnected = re.search(r"Found (\d+) unconnected", text)
+
+    doc = SimpleDocTemplate(str(path), pagesize=PAGE, leftMargin=MARGIN, rightMargin=MARGIN)
+    story = []
+    story.append(_para(f"DRC — {board}", size=14, bold=True, style="Heading1"))
+    story.extend(_rule())
+    if errors == 0:
+        story.append(_para("No DRC errors (warnings suppressed).", size=10))
+    else:
+        story.append(_para(f"<b>{errors} error{'s' if errors != 1 else ''}</b> (warnings suppressed; full report: FabricationData/DRC/{board}.txt)", size=10, markup=True))
+        story.append(Spacer(1, 0.12 * inch))
+        for f in findings[:max_lines]:
+            story.append(Spacer(1, 2))
+            story.append(_para(f, size=8, color=GREY))
+        if len(findings) > max_lines:
+            story.append(Spacer(1, 4))
+            story.append(_para(f"… and {len(findings) - max_lines} more.", size=8, color=GREY))
+    if unconnected and int(unconnected.group(1)) > 0:
+        story.append(Spacer(1, 0.12 * inch))
+        story.append(_para(f"Unconnected items: {unconnected.group(1)}", size=9))
+    doc.build(story, onFirstPage=partial(_footer, chassis=chassis))
     return True
 
 
@@ -387,10 +429,15 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                 if d.is_dir() and not d.name.startswith(".")
             )
 
+    docs = docgen.collect_documents(ctx, chassis)
+    if docs:
+        ctx.pn_registry.save()
+
     with tempfile.TemporaryDirectory(dir=out_pdf.parent) as work:
         workdir = Path(work)
         front = workdir / "00_front.pdf"
-        _front_pdf(front, ctx, chassis, priced, scaling, grand, board_names, harness_names, render_dir=workdir)
+        _front_pdf(front, ctx, chassis, priced, scaling, grand, board_names, harness_names,
+                   documents=[d.title for d in docs], render_dir=workdir)
         parts.append(front)
 
         if boards_dir.is_dir():
@@ -418,6 +465,9 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                     layers_pdf = workdir / f"layers_{name}.pdf"
                     if export_board_layers(pcb, layers_pdf):
                         parts.append(layers_pdf)
+                drc_pdf = workdir / f"drc_{name}.pdf"
+                if _drc_pdf(drc_pdf, ctx, chassis, name):
+                    parts.append(drc_pdf)
 
         for harness_root in ("Wiring", "Harnesses"):
             harness_dir = chassis_dir / harness_root
@@ -434,6 +484,22 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                 _divider_pdf(div, part_dir.name, ipn, "wiring harness — schematic", [], [], chassis)
                 parts.append(div)
                 parts.append(sch_pdf)
+
+        # Design documents ship in the package: divider + compiled PDF each.
+        if docs:
+            sec_div = workdir / "div_documents.pdf"
+            _divider_pdf(sec_div, "Design Documents", "",
+                         "project documentation — safety, security, manual, analyses",
+                         [], [], chassis)
+            parts.append(sec_div)
+            for info in docs:
+                div = workdir / f"div_doc_{info.slug}.pdf"
+                _divider_pdf(div, info.title, info.ipn, f"design document — rev {info.rev}",
+                             [], [], chassis)
+                parts.append(div)
+                compiled = workdir / f"doc_{info.slug}.pdf"
+                if docgen.compile_document(info, compiled):
+                    parts.append(compiled)
 
         out_pdf.parent.mkdir(parents=True, exist_ok=True)
         result = subprocess.run(["pdfunite", *[str(p) for p in parts], str(out_pdf)],

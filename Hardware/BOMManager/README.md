@@ -38,7 +38,7 @@ complete usage guide.**
 The old scripts (`generate_bom.py`, `manage_parts.py`, `import_*.py`) still run
 — they are thin shims that delegate to the shell.
 
-## What `generate` produces
+## What `generate` and `release` produce
 
 Per chassis, under `Hardware/<Chassis>/FabricationData/`:
 
@@ -53,10 +53,10 @@ Per chassis, under `Hardware/<Chassis>/FabricationData/`:
 │   └── assembly_bom.csv         # in-house assemblies (wiring harnesses)
 ├── McMaster_Order_Paste.txt     # paste straight into the McMaster cart
 ├── PCB_Fab_Zips/<Board>.zip     # per-board fab bundles
-├── Assembly/<Board>.html        # interactive assembly view per board (iBOM)
+├── Assembly/<Board>.html        # interactive assembly view per board (iBOM; via release)
 ├── Pricing_Report.md            # costs, pack rounding, fabrication package checklist
-└── Release_Report.pdf           # full release doc (HARA-style): cover, pricing, STEP
-                                 # previews, per-board 3D renders + schematic + layers
+└── Release_Report.pdf           # full release doc (HARA-style; via release): cover, pricing,
+                                 # STEP previews, per-board 3D renders + schematic + layers
 ```
 
 ## How ordering math works

@@ -35,6 +35,7 @@ CATEGORY_PREFIXES = {
     "capacitor": "CAP",
     "ic": "IC",
     "assembly": "ASSY",
+    "document": "DOC",
     "other": "HW",
 }
 
