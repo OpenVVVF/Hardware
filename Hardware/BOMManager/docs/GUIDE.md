@@ -116,7 +116,16 @@ report.
 release
 ```
 
-runs the full generate and prints an upload checklist:
+runs the full generate and prints an upload checklist. It also writes
+**spares variants** under `FabricationData/Variants/`:
+
+- `standard/` — cheap parts (crimps, housings, passives) +25% (min +2)
+- `generous/` — cheap parts +50% (min +5), **and** +1 each on medium parts
+  ($1–$30: STM32s, NCV57100 gate drivers, gate-drive supplies)
+
+Very expensive parts (IGBTs) and in-house assemblies are never spared. Each
+variant directory has the full vendor CSV set + McMaster paste + a priced
+Consolidated BOM; the tier totals print for comparison.
 
 | Vendor | File | Where |
 |--------|------|-------|

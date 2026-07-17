@@ -85,3 +85,38 @@ class TestAggregate:
         line = make_line()
         assert line.primary_vendor() == "mcmaster"
         assert line.vendor_part_number("mcmaster") == "94669A199"
+
+
+class TestSpareTiers:
+    def _line(self, qty, pack=1, vendor="mouser"):
+        from bom_manager.bom import BomLine
+        return BomLine(key="k", footprint="f", designation="d", description="d",
+                       customer_part="", quantity=qty, type="resistor",
+                       pack_size=pack, vendor_hint=vendor)
+
+    def test_cheap_parts_get_pct_and_min(self):
+        from bom_manager.generate import SPARE_TIERS, spare_qty
+        line = self._line(10)
+        assert spare_qty(line, 0.10, SPARE_TIERS["standard"]) == 13   # ceil(10*1.25) vs 10+2
+        assert spare_qty(line, 0.10, SPARE_TIERS["generous"]) == 15    # ceil(10*1.5) vs 10+5
+
+    def test_medium_parts_get_plus_one_generous_only(self):
+        from bom_manager.generate import SPARE_TIERS, spare_qty
+        line = self._line(4)
+        assert spare_qty(line, 8.31, SPARE_TIERS["standard"]) == 4     # STM32: none in standard
+        assert spare_qty(line, 8.31, SPARE_TIERS["generous"]) == 5     # +1
+        assert spare_qty(line, 2.98, SPARE_TIERS["generous"]) == 5     # NCV57100 +1
+
+    def test_expensive_and_assembly_never_spared(self):
+        from bom_manager.generate import SPARE_TIERS, spare_qty
+        igbt = self._line(3)
+        assert spare_qty(igbt, 323.50, SPARE_TIERS["generous"]) == 3
+        asm = self._line(4, vendor="assembly")
+        assert spare_qty(asm, None, SPARE_TIERS["generous"]) == 4
+
+    def test_pack_price_normalized_before_class_check(self):
+        from bom_manager.generate import SPARE_TIERS, spare_qty
+        line = self._line(6, pack=25)
+        # $10.55/pack of 100 -> per piece cheap -> spare rules apply
+        line.pack_size = 100
+        assert spare_qty(line, 10.55, SPARE_TIERS["generous"]) > 6

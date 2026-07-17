@@ -9,7 +9,7 @@ RELEASE_QTYS = "1,2,3,5,10"
 
 
 def run(ctx: Context, chassis: Optional[str], extra_args=None) -> int:
-    argv = ["--extra-qtys", RELEASE_QTYS] + list(extra_args or [])
+    argv = ["--extra-qtys", RELEASE_QTYS, "--variants"] + list(extra_args or [])
     rc = generate.run(argv, ctx)
     if rc != 0:
         return rc
