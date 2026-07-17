@@ -27,11 +27,13 @@ bom> new board PowerBoard
 bom> rev bump DCLBB --note "widen holes"
 bom> fab                        # fabrication package readiness: PCBs, fab parts, harnesses
 bom> import mouser              # paste a cart/order, prices land in cache AND the committed DB
-bom> generate                   # write vendor CSVs, order paste file, price report, fab zips
+bom> import digikey ~/Downloads/digikey_bom.csv.xlsx
+bom> release                    # order files + full PDF report (schematics, layers, pricing)
 ```
 
 Every command also works one-shot for scripting: `python3 bom.py generate --qty 5`.
-Type `help` inside the shell for the full list.
+Type `help` inside the shell for the full list. **See `docs/GUIDE.md` for the
+complete usage guide.**
 
 The old scripts (`generate_bom.py`, `manage_parts.py`, `import_*.py`) still run
 — they are thin shims that delegate to the shell.
@@ -51,7 +53,9 @@ Per chassis, under `Hardware/<Chassis>/FabricationData/`:
 │   └── assembly_bom.csv         # in-house assemblies (wiring harnesses)
 ├── McMaster_Order_Paste.txt     # paste straight into the McMaster cart
 ├── PCB_Fab_Zips/<Board>.zip     # per-board fab bundles
-└── Pricing_Report.md            # costs, pack rounding, fabrication package checklist
+├── Pricing_Report.md            # costs, pack rounding, fabrication package checklist
+└── Release_Report.pdf           # full release doc: cover, pricing, fab parts,
+                                 # per-board divider + schematic + layer plots, harnesses
 ```
 
 ## How ordering math works
@@ -108,6 +112,7 @@ cart/order imports.
 
 ## Docs
 
+- `docs/GUIDE.md` — **complete usage guide (start here)**
 - `docs/WORKFLOW.md` — end-to-end fab-time walkthrough
 - `docs/CUSTOM_PARTS.md` — fabricated parts and SendCutSend
 - `docs/PART_NUMBERING.md` — internal PN conventions and revisions

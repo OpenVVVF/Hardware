@@ -1,6 +1,6 @@
 # Hardware BOM Pricing Report
 
-Generated: 2026-07-17T01:45:30.476962Z
+Generated: 2026-07-17T02:27:26.945319Z
 
 Base quantity: 1 unit(s)
 
@@ -170,10 +170,11 @@ Base quantity: 1 unit(s)
 
 | Quantity | Estimated Total |
 |----------|----------------|
+| 1 | $2403.52 |
+| 2 | $4739.58 |
 | 3 | $7070.09 |
 | 5 | $11744.59 |
 | 10 | $23433.45 |
-| 25 | $58537.18 |
 
 
 ## Pack Rounding & Stock
