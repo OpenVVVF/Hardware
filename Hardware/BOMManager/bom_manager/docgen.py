@@ -38,6 +38,8 @@ body { font-family: "Liberation Sans", sans-serif; font-size: 9.5pt; color: #212
 h1 { font-size: 16pt; border-bottom: 1.2pt solid #1E4D2B; padding-bottom: 1.6mm; margin-top: 9mm; page-break-after: avoid; }
 h2 { font-size: 12.5pt; border-bottom: 0.7pt solid #1E4D2B; padding-bottom: 1mm; margin-top: 7mm; page-break-after: avoid; }
 h3 { font-size: 10.5pt; margin-top: 5mm; page-break-after: avoid; }
+h4 { font-size: 9.5pt; margin: 4mm 0 0 0; padding: 1.8mm 2.5mm; background: #EDF3EE; border-left: 2.5pt solid #1E4D2B; page-break-after: avoid; }
+h4 + p { margin-top: 1.5mm; }
 table { border-collapse: collapse; width: 100%; margin: 3mm 0; font-size: 8.5pt; page-break-inside: auto; }
 th { background: #1E4D2B; color: white; text-align: left; padding: 1.6mm 2mm; }
 td { border: 0.4pt solid #B9C2B9; padding: 1.4mm 2mm; vertical-align: top; }

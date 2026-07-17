@@ -31,9 +31,11 @@ def _frame_aspect(verts) -> float:
     return float(np.clip(h_units / w_units, 0.3, 1.6))
 
 
-def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 900)) -> bool:
+def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 900),
+                elev: float = 18, azim: float = -55) -> bool:
     """Render a shaded 3D preview of a STEP file. Pure python (cadquery for
-    tessellation, matplotlib for shading) — no GL/display required."""
+    tessellation, matplotlib for shading) — no GL/display required.
+    elev/azim pick the view angle (default: iso-ish)."""
     if _fresh(out_png, step_path):
         return True
     try:
@@ -87,7 +89,7 @@ def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 
     span = np.maximum(maxs - mins, 1e-9)
     ax.set_box_aspect(tuple(span))
     ax.set_proj_type("ortho")
-    ax.view_init(elev=18, azim=-55)
+    ax.view_init(elev=elev, azim=azim)
     ax.set_axis_off()
     out_png.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_png, bbox_inches="tight", pad_inches=0.03, facecolor="#f5f5f5")

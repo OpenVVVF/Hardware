@@ -277,18 +277,20 @@ def _fab_section(story, ctx, chassis, render_dir=None):
         story.extend(_rule(thickness=0.8, space_after=6))
         story.append(_para(p.spec or "-", size=9, color=GREY))
         story.append(Spacer(1, 0.08 * inch))
-        # Prefer a fresh STEP render; fall back to the part's info.png.
+        # Prefer fresh STEP renders (two angles); fall back to the part's info.png.
         imgs = []
         if render_dir is not None:
             steps = sorted(p.folder.glob("*.step")) + sorted(p.folder.glob("*.stp"))
             if steps:
                 info = fab._read_info(p.folder / "info.txt")
-                preview = render_dir / f"preview_{p.name}.png"
-                if render.render_step(steps[0], preview, material=info.get("Material", "")):
-                    imgs.append(preview)
+                for tag, (elev, azim) in (("a", (18, -55)), ("b", (12, 125))):
+                    preview = render_dir / f"preview_{p.name}_{tag}.png"
+                    if render.render_step(steps[0], preview, material=info.get("Material", ""),
+                                          elev=elev, azim=azim):
+                        imgs.append(preview)
         if not imgs:
             imgs = sorted(p.folder.glob("*.png")) + sorted(p.folder.glob("*.jpg"))
-        row = _images_row(imgs[:3], max_h=4.0 * inch, max_w=CONTENT_W * 0.85)
+        row = _images_row(imgs[:2], max_h=3.6 * inch, max_w=CONTENT_W * 0.47)
         if row:
             story.append(row)
         story.append(PageBreak())
