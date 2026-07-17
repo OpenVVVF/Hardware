@@ -112,6 +112,13 @@ def friendly_name(folder: Path, kind: str = "") -> str:
     "PCB Assembly", ...) is prepended when the title doesn't already say it.
     """
     title = ""
+    # Fabricated parts carry their name in info.txt (PartName=...).
+    info = folder / "info.txt"
+    if info.is_file():
+        for line in info.read_text(encoding="utf-8", errors="replace").splitlines():
+            if line.strip().startswith("PartName="):
+                title = line.split("=", 1)[1].strip()
+                break
     sch_files = sorted(folder.glob("*.kicad_sch"))
     for sch in sch_files:
         try:
@@ -124,7 +131,7 @@ def friendly_name(folder: Path, kind: str = "") -> str:
             break
     if title:
         title = re.sub(r"^(open inverter platform|invertergen5)\s*[-–—]\s*", "", title, flags=re.IGNORECASE).strip()
-        if title.isupper():
+        if title.isupper() and " " in title:
             title = title.title()
     if not title:
         pretty = re.sub(r"([a-z])([A-Z])", r"\1 \2", folder.name)

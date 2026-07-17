@@ -135,7 +135,7 @@ def _footer(canvas, doc, chassis):
     canvas.saveState()
     canvas.setFont(BASE_FONT, 8)
     canvas.setFillColor(GREY)
-    canvas.drawString(MARGIN, 10 * mm, f"Inverter Gen5 — {chassis} Hardware Release")
+    canvas.drawString(MARGIN, 10 * mm, "InverterGen5 C2 — Hardware Release")
     canvas.drawCentredString(PAGE[0] / 2, 10 * mm, "")
     canvas.drawRightString(PAGE[0] - MARGIN, 10 * mm, f"{doc.page}")
     canvas.restoreState()
@@ -161,7 +161,7 @@ def _draw_swoosh(canvas, doc):
 def _cover(story, ctx, chassis, priced, grand_total, scaling):
     priced_count = sum(1 for e in priced if e["price"].unit_price is not None)
     story.append(Spacer(1, 1.1 * inch))
-    story.append(_para("HARDWARE RELEASE REPORT", size=10, color=ACCENT, bold=True))
+    story.append(_para("INVERTERGEN5 C2 — HARDWARE RELEASE REPORT", size=10, color=ACCENT, bold=True))
     story.append(Spacer(1, 0.16 * inch))
     story.append(_para("Traction Inverter", size=26, bold=True, style="Title"))
     story.append(Spacer(1, 0.42 * inch))
@@ -352,13 +352,14 @@ def _copper_layers(pcb_path: Path) -> List[str]:
 
 
 def export_board_layers(pcb_path: Path, out_pdf: Path) -> bool:
-    """Plot all copper + silkscreen layers to one multipage PDF via KiCad CLI."""
+    """Plot all copper + silkscreen layers to one multipage PDF via KiCad CLI,
+    with the drawing sheet (title block shows the actual plot scale)."""
     layers = ",".join(_copper_layers(pcb_path))
     out_pdf.parent.mkdir(parents=True, exist_ok=True)
     cmd = [
         "flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad",
         "pcb", "export", "pdf", str(pcb_path),
-        "--mode-multipage", "-l", layers, "-o", str(out_pdf),
+        "--mode-multipage", "-l", layers, "--ibt", "-o", str(out_pdf),
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
@@ -370,6 +371,28 @@ def export_board_layers(pcb_path: Path, out_pdf: Path) -> bool:
         print(f"  layer plot failed for {pcb_path.name}: {result.stderr.strip()[:200]}", file=sys.stderr)
         return False
     return True
+
+
+def export_board_composite(pcb_path: Path, out_pdf: Path, back: bool = False) -> bool:
+    """Single-page composite of one board side (the 'PCB viewer' look): copper,
+    silkscreen, mask, and edge cuts together. Back side is mirrored."""
+    side = "B" if back else "F"
+    layers = f"{side}.Cu,{side}.Silkscreen,{side}.Mask,Edge.Cuts"
+    out_pdf.parent.mkdir(parents=True, exist_ok=True)
+    cmd = [
+        "flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad",
+        "pcb", "export", "pdf", str(pcb_path),
+        "--mode-single", "-l", layers, "--ibt",
+    ]
+    if back:
+        cmd.append("--mirror")
+    cmd += ["-o", str(out_pdf)]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+    except FileNotFoundError:
+        cmd[0:4] = ["kicad-cli"]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+    return result.returncode == 0 and out_pdf.is_file()
 
 
 # -------------------------------------------------------------------- DRC
@@ -490,6 +513,13 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                 _divider_pdf(div, title, ipn, "printed circuit board — schematic and PCB layers",
                              [], imgs, chassis)
                 parts.append(div)
+                if kicad_layers and pcb.is_file():
+                    front = workdir / f"view_{name}_front.pdf"
+                    back = workdir / f"view_{name}_back.pdf"
+                    if export_board_composite(pcb, front, back=False):
+                        parts.append(front)
+                    if export_board_composite(pcb, back, back=True):
+                        parts.append(back)
                 if sch_pdf.is_file():
                     parts.append(sch_pdf)
                 if kicad_layers and pcb.is_file():

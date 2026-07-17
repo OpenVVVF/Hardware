@@ -195,13 +195,20 @@ project docs, same format as `Docs/HARA.pdf`):
 - Contents page, order summary (per-vendor tables, pack-aware)
 - Fabrication package (readiness incl. harness qty/rev + a page per fab part
   with a **fresh 3D preview rendered from its STEP file**, colored by material)
-- Per board: divider (name, IPN, **3D board renders** top + bottom) → full
-  schematic → PCB layer plots (all copper + silkscreen) → **DRC summary page**
-  (errors only, from the regen reports)
+- Per board: divider (name, IPN, **3D board renders** top + bottom) →
+  **composite front/back views** (the PCB-viewer look: copper + silk + mask)
+  → full schematic → PCB layer plots (all copper + silkscreen, drawing sheet
+  shows the true plot scale) → **DRC summary page** (errors only, from the
+  regen reports)
 - Per harness: divider → schematic
 - **Design documents**: every document in `Docs/` (HARA, TARA, SWAD, Manual,
   analyses) is a part with its own IPN (`HW-C2-DOC-...`), compiled into the
   package — the PDF you ship with the device.
+
+**Labels** — `FabricationData/Labels.pdf` (or `label` to regenerate alone):
+two high-voltage warning labels, a chassis ID label (serial/date/inspector),
+and a grid of per-assembly labels in the `InverterGen5 C2` convention
+(name, IPN, rev, qty).
 
 **Document standard: all project docs are Markdown** (`Docs/*.md`) compiled by
 one template (docgen: cover page, auto-TOC with page numbers, footers, green

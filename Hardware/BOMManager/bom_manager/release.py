@@ -1,8 +1,8 @@
-"""Release package: full generate + full PDF report + assembly HTML + QC forms + upload checklist."""
+"""Release package: full generate + full PDF report + assembly HTML + QC forms + labels + upload checklist."""
 
 from typing import Optional
 
-from . import assembly, generate, pdfreport, qc
+from . import assembly, generate, labels, pdfreport, qc
 from .context import Context
 
 RELEASE_QTYS = "1,2,3,5,10"
@@ -36,6 +36,10 @@ def run(ctx: Context, chassis: Optional[str], extra_args=None) -> int:
         if qc_out:
             print(f"Wrote {qc_out}")
 
+        labels_out = labels.build(ctx, ch, fab_dir / "Labels.pdf")
+        if labels_out:
+            print(f"Wrote {labels_out}")
+
         print(f"""
 === {ch} upload checklist ===
   Mouser:      {fab_dir / 'BOMs' / 'mouser_bom.csv'}  -> Mouser BOM tool
@@ -45,6 +49,7 @@ def run(ctx: Context, chassis: Optional[str], extra_args=None) -> int:
   PCB fab:     {fab_dir / 'PCB_Fab_Zips'}/*.zip -> your PCB vendor
   Assembly:    {fab_dir / 'Assembly'}/*.html -> interactive per-board assembly
   QC forms:    {fab_dir / 'QC_Forms.pdf'} -> print & sign per sub-assembly
+  Labels:      {fab_dir / 'Labels.pdf'} -> HV warnings, chassis ID, part labels
   Full report: {out}
   Prices at 1/2/3/5/10 units: Pricing_Report.md and the release PDF cover page
 """)

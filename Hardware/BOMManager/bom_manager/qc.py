@@ -70,7 +70,12 @@ def assembly_groups(ctx: Context, chassis: str) -> List[AssemblyGroup]:
         if not kind:
             continue
         if src.board not in groups:
-            folder = src.path.parent if kind != "mechanical" else src.path
+            if kind == "fab part":
+                folder = src.path
+            elif kind == "mechanical":
+                folder = src.path
+            else:
+                folder = src.path.parent
             groups[src.board] = AssemblyGroup(
                 name=src.board, kind=kind,
                 title=fab.friendly_name(folder, _KIND_LABEL[kind]) if kind != "mechanical"

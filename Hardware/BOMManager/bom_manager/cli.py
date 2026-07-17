@@ -680,6 +680,17 @@ class BomShell(cmd.Cmd):
         if release.run(self.ctx, self.chassis, shlex.split(arg)) != 0:
             self.last_error = True
 
+    def do_label(self, arg):
+        """Regenerate printable labels (FabricationData/Labels.pdf): HV warning
+        labels, chassis ID label, and per-assembly part labels."""
+        from . import labels as _labels
+        if not self._need_chassis():
+            return
+        out = _labels.build(self.ctx, self.chassis,
+                            self.ctx.hardware_root / self.chassis / "FabricationData" / "Labels.pdf")
+        if out:
+            print(f"Wrote {out}")
+
     # --- shell housekeeping -------------------------------------------------
 
     def do_quit(self, arg):

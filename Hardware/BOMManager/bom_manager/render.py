@@ -31,6 +31,19 @@ def _frame_aspect(verts) -> float:
     return float(np.clip(h_units / w_units, 0.3, 1.6))
 
 
+def _frame_geometry(verts, dpi: int = 220):
+    """Figure size so every part renders at even resolution: long image side
+    ~2200 px, short side never below ~900 px, regardless of aspect."""
+    aspect = _frame_aspect(verts)
+    long_in, short_in = 2200 / dpi, 900 / dpi
+    if aspect < 1.0:
+        w_in, h_in = long_in, max(long_in * aspect, short_in)
+    else:
+        h_in = long_in
+        w_in = max(long_in / aspect, short_in)
+    return w_in, h_in, dpi
+
+
 def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 900),
                 elev: float = 18, azim: float = -55) -> bool:
     """Render a shaded 3D preview of a STEP file. Pure python (cadquery for
@@ -63,7 +76,8 @@ def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 
         print(f"  STEP render failed for {step_path.name}: {e}", file=sys.stderr)
         return False
 
-    fig = plt.figure(figsize=(8, 8 * _frame_aspect(v)), dpi=180)
+    w_in, h_in, dpi = _frame_geometry(v)
+    fig = plt.figure(figsize=(w_in, h_in), dpi=dpi)
     ax = fig.add_subplot(111, projection="3d")
     # Solid look without mesh-seam artifacts: shade each face manually with a
     # directional light and use the same per-face color for edges, so seams
