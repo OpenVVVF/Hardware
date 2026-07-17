@@ -101,7 +101,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def write_vendor_csv(lines, vendor: str, path: Path) -> None:
+def write_vendor_csv(lines, vendor: str, path: Path, qty: int = 1) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
@@ -112,7 +112,7 @@ def write_vendor_csv(lines, vendor: str, path: Path) -> None:
             writer.writerow(["Mouser Part Number", "qty", "Manufacturer Part Number", "Customer Part Number", "Description"])
             for line in lines:
                 if line.primary_vendor() == vendor:
-                    order = line.packs_needed(line.quantity)
+                    order = line.packs_needed(line.quantity * qty)
                     if order <= 0:
                         continue  # covered by on-hand stock
                     writer.writerow([
@@ -126,7 +126,7 @@ def write_vendor_csv(lines, vendor: str, path: Path) -> None:
             writer.writerow(["Quantity", "Digi-Key Part Number", "Manufacturer Part Number", "Description", "Customer Reference"])
             for line in lines:
                 if line.primary_vendor() == vendor:
-                    order = line.packs_needed(line.quantity)
+                    order = line.packs_needed(line.quantity * qty)
                     if order <= 0:
                         continue  # covered by on-hand stock
                     writer.writerow([
@@ -140,7 +140,7 @@ def write_vendor_csv(lines, vendor: str, path: Path) -> None:
             writer.writerow(["Quantity", "Internal P/N", "Description", "Customer Part No.", "Manufacturer Part No.", "Vendor", "Vendor P/N"])
             for line in lines:
                 if line.primary_vendor() == vendor:
-                    order = line.packs_needed(line.quantity)
+                    order = line.packs_needed(line.quantity * qty)
                     if order <= 0:
                         continue  # covered by on-hand stock
                     writer.writerow([
@@ -271,7 +271,7 @@ def write_gitignore(output_dir: Path) -> None:
     gitignore.write_text(content, encoding="utf-8")
 
 
-def write_variant_outputs(chassis: str, priced, base_output: Path) -> None:
+def write_variant_outputs(chassis: str, priced, base_output: Path, qty: int = 1) -> None:
     """Write spares-variant BOMs (standard/generous tiers) under Variants/.
 
     Vendor CSVs and the McMaster paste file use spare-adjusted quantities with
@@ -282,8 +282,8 @@ def write_variant_outputs(chassis: str, priced, base_output: Path) -> None:
     def tier_total(lines_prices):
         return sum(line_total(l, p) for l, p in lines_prices)
 
-    base_total = tier_total([(e["line"], e["price"].unit_price) for e in priced])
-    print(f"\n  Spares variants (1 unit): bare minimum ${base_total:,.2f}")
+    base_total = tier_total([(e["line"], e["price"].unit_price) for e in priced]) * qty
+    print(f"\n  Spares variants ({qty} unit{'s' if qty != 1 else ''}): bare minimum ${base_total:,.2f}")
 
     for tier_name, tier in SPARE_TIERS.items():
         out_dir = base_output / "BOMs" / "Variants" / tier_name
@@ -293,15 +293,15 @@ def write_variant_outputs(chassis: str, priced, base_output: Path) -> None:
         total = 0.0
         for e in priced:
             line = e["line"]
-            qty = spare_qty(line, e["price"].unit_price, tier)
-            new_line = dataclasses.replace(line, quantity=qty)
+            spare = spare_qty(line, e["price"].unit_price, tier)
+            new_line = dataclasses.replace(line, quantity=spare * qty)
             tier_lines.append((new_line, e["price"].unit_price))
             total += line_total(new_line, e["price"].unit_price)
 
         lines = [l for l, _ in tier_lines]
         vendors_present = set(l.primary_vendor() or "unknown" for l in lines)
         for vendor in sorted(vendors_present):
-            write_vendor_csv(lines, vendor, out_dir / f"{vendor}_bom.csv")
+            write_vendor_csv(lines, vendor, out_dir / f"{vendor}_bom.csv", qty=1)
         if "mcmaster" in vendors_present:
             write_mcmaster_order_paste(lines, out_dir / "McMaster_Order_Paste.txt", qty=1)
 
@@ -356,7 +356,7 @@ def write_chassis_outputs(
     written_csvs = set()
     for vendor in sorted(vendors_present):
         fname = f"{vendor}_bom.csv"
-        write_vendor_csv(lines, vendor, boms_dir / fname)
+        write_vendor_csv(lines, vendor, boms_dir / fname, qty=args.qty)
         written_csvs.add(fname)
         print(f"  Wrote BOMs/{fname}")
 
@@ -494,7 +494,7 @@ def run(argv, ctx: Context) -> int:
         )
 
         if args.variants:
-            write_variant_outputs(chassis, priced, chassis_output)
+            write_variant_outputs(chassis, priced, chassis_output, qty=args.qty)
 
     pn_registry.save()
     cache.save()

@@ -169,27 +169,31 @@ class PricingEngine:
 
     def _lookup_sendcutsend(self, line: BomLine, refresh: bool) -> PriceInfo:
         part_name = line.sendcutsend_id or line.designation.split("|")[0].strip()
-        if not refresh:
-            cached = self.cache.get("sendcutsend", part_name)
-            if cached:
-                return cached
 
-        price = None
-        source = "sendcutsend_folder"
-
-        # Folder info.txt price
+        # info.txt is the source of truth and wins over any cached price —
+        # a fresh cart import or manual edit must never be masked by the cache.
         unit_price_meta = line.metadata.get("UnitPrice", "")
         if unit_price_meta:
             try:
                 price = float(unit_price_meta) or None
             except ValueError:
                 price = None
+            if price is not None:
+                info = PriceInfo("sendcutsend", part_name, price, source="sendcutsend_folder")
+                self.cache.set(info)
+                return info
 
-        if price is None and line.manual_price is not None:
-            price = line.manual_price
-            source = "manual"
+        if not refresh:
+            cached = self.cache.get("sendcutsend", part_name)
+            if cached:
+                return cached
 
-        info = PriceInfo("sendcutsend", part_name, price, source=source)
+        if line.manual_price is not None:
+            info = PriceInfo("sendcutsend", part_name, line.manual_price, source="manual")
+            self.cache.set(info)
+            return info
+
+        info = PriceInfo("sendcutsend", part_name, None, source="sendcutsend_folder")
         self.cache.set(info)
         return info
 
