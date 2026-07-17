@@ -1,6 +1,6 @@
 # Hardware BOM Pricing Report
 
-Generated: 2026-07-17T00:55:36.528491Z
+Generated: 2026-07-17T01:14:43.586339Z
 
 Base quantity: 1 unit(s)
 
@@ -32,19 +32,19 @@ Base quantity: 1 unit(s)
 
 | Qty | Order | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |
 |-----|-------|--------------|-------------|-------------|------------|------------|--------|
-| 1 |  | HW-C2-MECH-90128A232-A | 90128A232 | 90128A232 | $10.5500 | $10.55 | mcmaster_order_import |
-| 1 |  | HW-C2-MECH-90225A102-A | 90225A102 | 90225A102 | $12.8000 | $12.80 | mcmaster_order_import |
-| 1 |  | HW-C2-MECH-91292A134-A | 91292A134 | 91292A134 | $11.7200 | $11.72 | mcmaster_order_import |
-| 1 |  | HW-C2-MECH-91294A220-A | 91294A220 | 91294A220 | $12.7400 | $12.74 | mcmaster_order_import |
-| 1 |  | HW-C2-MECH-91502A180-A | 91502A180 | 91502A180 | $19.6500 | $19.65 | mcmaster_order_import |
-| 1 |  | HW-C2-MECH-91502A183-A | 91502A183 | 91502A183 | $17.2700 | $17.27 | mcmaster_order_import |
+| 8 | 1 pack x 100 (left 92) | HW-C2-MECH-90128A232-A | 90128A232 | 90128A232 | $10.5500/pk | $10.55 | mcmaster_order_import |
+| 5 | 1 pack x 50 (left 45) | HW-C2-MECH-90225A102-A | 90225A102 | 90225A102 | $12.8000/pk | $12.80 | mcmaster_order_import |
+| 18 | 1 pack x 50 (left 32) | HW-C2-MECH-91292A134-A | 91292A134 | 91292A134 | $11.7200/pk | $11.72 | mcmaster_order_import |
+| 4 | 1 pack x 50 (left 46) | HW-C2-MECH-91294A220-A | 91294A220 | 91294A220 | $12.7400/pk | $12.74 | mcmaster_order_import |
+| 6 | 1 pack x 25 (left 19) | HW-C2-MECH-91502A180-A | 91502A180 | 91502A180 | $19.6500/pk | $19.65 | mcmaster_order_import |
+| 6 | 1 pack x 10 (left 4) | HW-C2-MECH-91502A183-A | 91502A183 | 91502A183 | $17.2700/pk | $17.27 | mcmaster_order_import |
 | 6 |  | HW-C2-MECH-94669A190-A | 94669A190 | 94669A190 | $1.3900 | $8.34 | mcmaster_order_import |
 | 6 |  | HW-C2-MECH-94669A196-A | 94669A196 | 94669A196 | $2.9600 | $17.76 | mcmaster_order_import |
-| 12 |  | HW-C2-MECH-94669A199-A | 94669A199 | 94669A199 | $3.1000 | $37.20 | mcmaster_order_import |
+| 6 |  | HW-C2-MECH-94669A199-A | 94669A199 | 94669A199 | $3.1000 | $18.60 | mcmaster_order_import |
 | 6 |  | HW-C2-MECH-94669A202-A | 94669A202 | 94669A202 | $3.2200 | $19.32 | mcmaster_order_import |
-| 1 |  | HW-C2-MECH-98044A224-A | 98044A224 | 98044A224 | $14.8800 | $14.88 | mcmaster_order_import |
+| 25 | 1 pack x 25 (left 0) | HW-C2-MECH-98044A224-A | 98044A224 | 98044A224 | $14.8800/pk | $14.88 | mcmaster_order_import |
 
-**McMaster-Carr subtotal:** $182.23
+**McMaster-Carr subtotal:** $163.63
 
 
 ## Mouser
@@ -163,17 +163,31 @@ Base quantity: 1 unit(s)
 
 ---
 
-## Grand Total (1 unit): **$1704.01**
+## Grand Total (1 unit): **$1685.41**
 
 
 ## Quantity Scaling
 
 | Quantity | Estimated Total |
 |----------|----------------|
-| 3 | $5112.05 |
-| 5 | $8520.08 |
-| 10 | $17040.15 |
-| 25 | $42600.38 |
+| 1 | $1685.41 |
+| 2 | $3303.37 |
+| 3 | $4915.77 |
+| 5 | $8154.07 |
+| 10 | $16252.39 |
+
+
+## Pack Rounding & Stock
+
+| Part | Need | On Hand | Order | Leftover |
+|------|------|---------|-------|----------|
+| 90128A232 | 8 | - | 1 pack x 100 | 92 |
+| 90225A102 | 5 | - | 1 pack x 50 | 45 |
+| 91292A134 | 18 | - | 1 pack x 50 | 32 |
+| 91294A220 | 4 | - | 1 pack x 50 | 46 |
+| 91502A180 | 6 | - | 1 pack x 25 | 19 |
+| 91502A183 | 6 | - | 1 pack x 10 | 4 |
+| 98044A224 | 25 | - | 1 pack x 25 | 0 |
 
 
 ## Unknown / Missing Prices

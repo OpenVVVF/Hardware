@@ -657,6 +657,14 @@ class BomShell(cmd.Cmd):
             print(f"Fabrication: {len(status.boards)} board(s), {len(status.parts)} fab part(s), "
                   f"{len(status.harnesses)} harness(es) — {len(problems)} not ready (run: fab)")
 
+    def do_release(self, arg):
+        """Build the full release package: all vendor BOMs + order files, price
+        report scaled at 1/2/3/5/10 units, PCB zips, and one concatenated
+        Schematics.pdf of every board and harness."""
+        from . import release
+        if release.run(self.ctx, self.chassis, shlex.split(arg)) != 0:
+            self.last_error = True
+
     # --- shell housekeeping -------------------------------------------------
 
     def do_quit(self, arg):
