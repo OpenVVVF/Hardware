@@ -16,7 +16,7 @@ from .context import Context
 from .db import VENDOR_PN_FIELD
 from .descriptor_registry import DescriptorRegistry
 from .discover import discover_boms
-from .parsers import LineItem, parse_source
+from .parsers import LineItem, harness_qty, parse_source
 from .part_numbers import line_identity
 
 
@@ -56,6 +56,11 @@ def collect_items(ctx: Context, chassis_filter=None, board_filter=None, hardware
 
     for chassis, harnesses in harnesses_by_chassis.items():
         for harness in harnesses:
+            asm_qty = max(
+                (harness_qty(src.path) for src in sources
+                 if src.category == "harness" and src.chassis == chassis and src.board == harness),
+                default=1,
+            )
             items_by_chassis[chassis].append(
                 LineItem(
                     chassis=chassis,
@@ -63,7 +68,7 @@ def collect_items(ctx: Context, chassis_filter=None, board_filter=None, hardware
                     category="harness_asm",
                     footprint="WH",
                     designation=harness,
-                    quantity=1,
+                    quantity=asm_qty,
                     designators="",
                     vendor_hint="assembly",
                 )

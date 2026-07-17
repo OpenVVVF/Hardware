@@ -81,6 +81,17 @@ keep around, but nothing needs to be routed).
    any other part, and the harness itself appears as assembly line
    `{ipn}`.
 
+## Building more than one per chassis
+
+The schematic documents ONE harness. If you build several per chassis, add an
+`info.txt` here:
+
+```ini
+Qty=4
+```
+
+`generate` multiplies the assembly line and every component by that count.
+
 Tip: naming the folder with the full part number (e.g. `HW-C2-WH-GD-A`) makes
 `generate` adopt that number directly — no descriptor prompt, ever.
 
@@ -97,15 +108,19 @@ PCB design folder.
 ## What goes here
 
 - Your KiCad project (`{name}.kicad_pro`, schematic, layout).
-- `Fab/` — fabrication outputs:
-  - `{name}.csv` — BOM exported from KiCad
-    (**File → Fabrication Outputs → BOM CSV**; the tool expects the columns
-    `Id;Designator;Footprint;Quantity;Designation;Supplier and ref`);
-  - gerbers/drill files for the fab house.
+- `{name}.csv` — the BOM, exported from the **schematic editor**
+  (Eeschema: **Tools → Generate BOM...**, or File → Fabrication Outputs).
+  The tool reads both the classic `Id;Designator;Footprint;Quantity;
+  Designation` format and the KiCad 10 `Reference,Qty,Value,DNP,...`
+  export, and skips DNP / excluded rows.
+- `Fab/` — gerbers and drill files for the fab house. `generate` bundles
+  this folder into `FabricationData/PCB_Fab_Zips/{name}.zip` for upload.
 
-`generate` picks up `Fab/{name}.csv`, adds a `{ipn}` fabrication line, and
-bundles the whole `Fab/` folder into `FabricationData/PCB_Fab_Zips/{name}.zip`
-for upload.
+Parts that are documented elsewhere (e.g. a harness's mating connector that
+ships with the harness) should be marked **Exclude from BOM** in the
+schematic so they are not double-ordered.
+
+`generate` adds the board fabrication line `{ipn}`.
 
 Set the quoted fab price with: `fab pcb-price {name} <usd>` (or paste a JLCPCB
 cart into `import jlcpcb`).

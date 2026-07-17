@@ -38,6 +38,14 @@ def discover_boms(
                 board = board_dir.name
                 if board_filter and board not in board_filter:
                     continue
+                # Preferred: <Board>.csv beside the KiCad project (BOMs live in
+                # the project dir). The name must match the folder so stray
+                # export dirs (e.g. Boards/BOMs/) are not picked up.
+                root_csv = board_dir / f"{board}.csv"
+                if root_csv.is_file():
+                    yield BomSource(chassis, "board", board, root_csv)
+                    continue
+                # Legacy: KiCad Fab output folder.
                 fab_dir = board_dir / "Fab"
                 if fab_dir.is_dir():
                     for csv_file in sorted(fab_dir.glob("*.csv")):

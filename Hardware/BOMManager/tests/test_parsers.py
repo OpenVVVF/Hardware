@@ -99,3 +99,25 @@ def test_discover_finds_harnesses(tmp_path):
     assert "harness" in categories
     harness_sources = [s for s in sources if s.category == "harness"]
     assert {s.board for s in harness_sources} == {"GDHarness", "HW-C1-WH-X-A"}
+
+
+def test_board_root_csv_preferred_over_fab(tmp_path):
+    """Boards/<Board>/<Board>.csv (project dir) wins; Fab/*.csv is the fallback."""
+    hw = tmp_path / "Hardware"
+    board = hw / "Chassis1" / "Boards" / "PowerBoard"
+    (board / "Fab").mkdir(parents=True)
+    (board / "Fab" / "PowerBoard.csv").write_text("Id;Designator;Footprint;Quantity;Designation\n1;R1;R_1210;1;10k\n", encoding="utf-8")
+    sources = list(discover_boms(hw))
+    assert [s.path.name for s in sources if s.category == "board"] == ["PowerBoard.csv"]
+    assert sources[0].path.parent.name == "Fab"
+
+    (board / "PowerBoard.csv").write_text("Reference,Qty,Value\nR1,1,10k\n", encoding="utf-8")
+    sources = list(discover_boms(hw))
+    assert sources[0].path == board / "PowerBoard.csv"
+
+    # A stray export directory is not treated as a board.
+    stray = hw / "Chassis1" / "Boards" / "BOMs"
+    stray.mkdir()
+    (stray / "Combined.csv").write_text("Reference,Qty,Value\nR1,1,10k\n", encoding="utf-8")
+    boards = [s for s in discover_boms(hw) if s.category == "board"]
+    assert len(boards) == 1

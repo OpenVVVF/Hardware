@@ -307,7 +307,7 @@ def write_chassis_outputs(
         pcb_zip_dir.mkdir(parents=True, exist_ok=True)
         for board in sorted(boards):
             fab_dir = hardware_root / chassis / "Boards" / board / "Fab"
-            if fab_dir.is_dir():
+            if fab_dir.is_dir() and any(f.is_file() and not f.name.startswith(".") for f in fab_dir.iterdir()):
                 zip_path = pcb_zip_dir / f"{board}.zip"
                 zip_pcb_fab(fab_dir, zip_path)
                 print(f"  Wrote PCB_Fab_Zips/{board}.zip")

@@ -5,12 +5,12 @@
 	(uuid "2365f093-f079-4cf2-9926-0ba7dd4b2726")
 	(paper "USLetter")
 	(title_block
-		(title "Open Inverter Platform - IGBT Temperature Wiring Harness")
+		(title "Open Inverter Platform - Capacitor Temp Sense Wiring Harness")
 		(date "2026-07-16")
 		(rev "A")
 		(company "Corzine Lab, University of California, Santa Cruz")
 		(comment 1 "Prepared by Thomas Liao")
-		(comment 2 "HW-C2-WH-TSIGBT")
+		(comment 2 "HW-C2-WH-TSBCM")
 	)
 	(lib_symbols
 		(symbol "Connector:Conn_01x02_Socket"
@@ -556,15 +556,35 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "NTC Thermistors 10K +-2%,M6 LUG,200MM WIRELGTH "
+	(text "NOTE:\nTHERMISTOR SHOULD BE SECURELY PLACED INSIDE DC LINK CAPACITOR MODULE BETWEEN CAPACITORS\nAND ADHERED WITH THERMALLY CONDUCTIVE MATERIAL."
 		(exclude_from_sim no)
-		(at 65.532 71.628 0)
+		(at 66.294 96.266 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2307d359-b12d-4b5e-ae2b-71f41e4af57b")
+	)
+	(text "NTC Thermistors 10K OHM 1% "
+		(exclude_from_sim no)
+		(at 53.848 71.628 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
 		(uuid "4e134b47-c312-4136-a0c3-c4f4d36319ef")
+	)
+	(text "NOTE:\nWHEN ASSEMBLING, USE HEAT-SHRINK TUBING AROUND THERMISTOR LEADS,\nAND ENSURE ELECTRICAL ISOLATION IS MAINTAINED BETWEN THERMISTOR AND DC LINK"
+		(exclude_from_sim no)
+		(at 68.326 107.696 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9a636e6a-ebca-41f3-b9a9-55cff76eae1f")
 	)
 	(text "CONNECTOR HOUSING"
 		(exclude_from_sim no)
@@ -760,7 +780,7 @@
 			)
 		)
 		(instances
-			(project "TempSenseHarness"
+			(project "CapacitorTempSenseHarness"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "Z2")
 					(unit 1)
@@ -842,7 +862,7 @@
 			(uuid "4e54b358-5c96-463c-bc33-5129113d287c")
 		)
 		(instances
-			(project "TempSenseHarness"
+			(project "CapacitorTempSenseHarness"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "J1")
 					(unit 1)
@@ -873,7 +893,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "RTS103C1R2M6L201"
+		(property "Value" "NXFT15XH103FEAB021"
 			(at 34.29 73.9774 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -925,7 +945,7 @@
 			(uuid "e8796d73-56f5-4748-bc35-ad4befb1e8b7")
 		)
 		(instances
-			(project "TempSenseHarness"
+			(project "CapacitorTempSenseHarness"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "TH1")
 					(unit 1)
@@ -999,7 +1019,7 @@
 			)
 		)
 		(instances
-			(project "TempSenseHarness"
+			(project "CapacitorTempSenseHarness"
 				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
 					(reference "Z1")
 					(unit 1)

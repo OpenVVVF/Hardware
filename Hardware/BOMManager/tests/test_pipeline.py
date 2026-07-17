@@ -62,3 +62,13 @@ def test_rev_sync_writes_info_txt(ctx):
     fab.sync_info_rev(ctx, "c1|plate|fab:hw-c1-plate-a", "C")
     assert path.read_text().count("Rev=") == 1
     assert "Rev=C" in path.read_text()
+
+
+def test_harness_per_chassis_qty(ctx):
+    """info.txt Qty=N scales both the assembly line and the components."""
+    chassis = make_chassis(ctx.hardware_root)
+    (chassis / "Harnesses" / "GDHarness" / "info.txt").write_text("Qty=4\n", encoding="utf-8")
+    lines = dict(((l.designation, l) for _, l in collect_lines(ctx)))
+    assert lines["GDHarness"].quantity == 4        # assembly line
+    assert lines["WIRE 10AWG RED"].quantity == 4   # component x4
+    assert lines["0039303040"].quantity == 8       # component x4 of 2

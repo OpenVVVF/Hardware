@@ -62,11 +62,17 @@ def parse_kicad_fab_csv(path: Path, chassis: str, board: str, category: str = "b
                 continue
             if qty <= 0:
                 continue
+            footprint = row.get("Footprint", "").strip()
+            if ":" in footprint:
+                # Symbol-fields exports keep the library prefix
+                # ("InverterCom:524265E"); board Fab exports strip it. The
+                # database key must match either way.
+                footprint = footprint.split(":")[-1]
             yield LineItem(
                 chassis=chassis,
                 source=board,
                 category=category,
-                footprint=row.get("Footprint", "").strip(),
+                footprint=footprint,
                 designation=(row.get("Designation") or row.get("Value") or "").strip(),
                 quantity=qty,
                 designators=(row.get("Designator") or row.get("Reference") or "").strip(),
@@ -209,12 +215,37 @@ def parse_sendcutsend_folder(path: Path, chassis: str, part_name: str) -> Iterat
     )
 
 
+def harness_qty(csv_path: Path) -> int:
+    """Per-chassis build count for a harness, from an optional info.txt next to
+    the CSV (or one level up when the CSV sits in a Fab/ subfolder):
+
+        Qty=4
+
+    Defaults to 1. The schematic documents ONE harness; this is how many get
+    built per chassis.
+    """
+    for folder in (csv_path.parent, csv_path.parent.parent):
+        info = folder / "info.txt"
+        if info.exists():
+            with open(info, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip().startswith("Qty="):
+                        try:
+                            return max(1, int(float(line.split("=", 1)[1].strip())))
+                        except ValueError:
+                            return 1
+    return 1
+
+
 def parse_source(source) -> Iterator[LineItem]:
     """Route a discovered BomSource to the correct parser."""
     if source.category == "board":
         yield from parse_kicad_fab_csv(source.path, source.chassis, source.board)
     elif source.category == "harness":
-        yield from parse_kicad_fab_csv(source.path, source.chassis, source.board, category="harness")
+        qty = harness_qty(source.path)
+        for item in parse_kicad_fab_csv(source.path, source.chassis, source.board, category="harness"):
+            item.quantity *= qty
+            yield item
     elif source.category == "mechanical":
         yield from parse_simple_csv(source.path, source.chassis, source.category, source.board, source.vendor_hint)
     elif source.category == "custom":
