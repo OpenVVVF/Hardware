@@ -230,6 +230,24 @@ def _pricing_sections(story, priced, qty=1):
     story.append(PageBreak())
 
 
+def _assembly_cost_section(story, ctx, chassis):
+    from . import qc
+    rows_data = qc.assembly_costs(ctx, qc.assembly_groups(ctx, chassis))
+    if not rows_data:
+        return
+    _section_header(story, "Cost by Assembly")
+    rows = [["Assembly", "Kind", "Qty/chassis", "Parts", "Cost (1 unit)"]]
+    total = 0.0
+    for r in rows_data:
+        total += r["cost"]
+        rows.append([r["name"], r["kind"], str(r["qty"]), str(r["parts"]), f"${r['cost']:,.2f}"])
+    rows.append(["", "", "", "Total", f"${total:,.2f}"])
+    story.append(_table(rows, [48 * mm, 34 * mm, 22 * mm, 16 * mm, 30 * mm]))
+    story.append(Spacer(1, 0.1 * inch))
+    story.append(_para("Costs are per-piece at current prices (pack prices divided out); assembly labor and PCB fab quantities at other build counts follow the pack math in the vendor sections.", size=8, color=GREY))
+    story.append(PageBreak())
+
+
 def _fab_section(story, ctx, chassis, render_dir=None):
     status = fab.collect(ctx, chassis)
     _section_header(story, "Fabrication Package")
@@ -309,6 +327,7 @@ def _front_pdf(path: Path, ctx, chassis, priced, scaling, grand_total, boards, h
     _cover(story, ctx, chassis, priced, grand_total, scaling)
     _toc(story, chassis, boards, harnesses, documents=documents)
     _pricing_sections(story, priced)
+    _assembly_cost_section(story, ctx, chassis)
     _fab_section(story, ctx, chassis, render_dir=render_dir)
     doc.build(story, onFirstPage=_draw_swoosh,
               onLaterPages=partial(_footer, chassis=chassis))

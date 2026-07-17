@@ -211,6 +211,17 @@ bundled `.venv` python when one exists, so dependencies always resolve.
 interactive assembly view (click a BOM line to highlight its parts on the
 board, front/back views). Open in any browser; great for hand-stuffing.
 
+## Cost by assembly & QC forms
+
+The release PDF's **Cost by Assembly** section breaks the BOM down per
+sub-assembly (each board, each harness, each fab part, chassis hardware) with
+parts counts and per-assembly cost.
+
+`FabricationData/QC_Forms.pdf` — one printable page per sub-assembly: header
+(IPN, rev, qty per chassis), a checkbox parts list with per-assembly
+quantities, an inspection checklist (per assembly kind), and a
+sign-off block (assembled / inspected / signatures) for the assembler.
+
 ## Data files
 
 Committed: `part_database.json` (PNs, pack sizes, prices), `part_numbers.json`
