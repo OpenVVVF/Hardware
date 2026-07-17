@@ -285,9 +285,17 @@ def _divider_pdf(path: Path, title: str, ipn: str, kind: str, info_rows, image_p
     if info_rows:
         story.append(_table(info_rows, [40 * mm, 100 * mm], header=False, size=9))
         story.append(Spacer(1, 0.25 * inch))
-    row = _images_row(image_paths, max_h=4.2 * inch, max_w=3.3 * inch)
-    if row:
-        story.append(row)
+    if len(image_paths) > 1:
+        # Stack renders full-width so board details stay readable.
+        for p in image_paths[:2]:
+            row = _images_row([p], max_h=3.2 * inch, max_w=CONTENT_W * 0.92)
+            if row:
+                story.append(row)
+                story.append(Spacer(1, 0.15 * inch))
+    else:
+        row = _images_row(image_paths, max_h=4.2 * inch, max_w=CONTENT_W * 0.92)
+        if row:
+            story.append(row)
     doc.build(story, onFirstPage=partial(_footer, chassis=chassis))
 
 

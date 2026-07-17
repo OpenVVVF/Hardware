@@ -54,20 +54,29 @@ def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 
 
     fig = plt.figure(figsize=(size[0] / 150, size[1] / 150), dpi=150)
     ax = fig.add_subplot(111, projection="3d")
+    # Solid look without mesh-seam artifacts: shade each face manually with a
+    # directional light and use the same per-face color for edges, so seams
+    # are invisible. True aspect ratio (no thickness boost).
+    v0, v1, v2 = faces[:, 0], faces[:, 1], faces[:, 2]
+    normals = np.cross(v1 - v0, v2 - v0)
+    normals /= np.linalg.norm(normals, axis=1, keepdims=True) + 1e-12
+    light = np.array([0.35, -0.45, 0.82])
+    light /= np.linalg.norm(light)
+    intensity = 0.35 + 0.65 * np.abs(normals @ light)
     import matplotlib.colors as mcolors
-    r, g, b = mcolors.to_rgb(color)
-    edge = (r * 0.6, g * 0.6, b * 0.6)
-    pc = Poly3DCollection(faces, facecolors=color, edgecolors=[edge],
-                          linewidths=0.05, alpha=1.0, shade=True)
+    base = np.array(mcolors.to_rgb(color))
+    cols = np.clip(base * intensity[:, None], 0, 1)
+    pc = Poly3DCollection(faces, facecolors=cols, edgecolors=cols,
+                          linewidths=0.1, alpha=1.0, shade=False)
     ax.add_collection3d(pc)
     mins, maxs = v.min(axis=0), v.max(axis=0)
     extent = (maxs - mins).max()
-    m = extent * 0.08 + 1e-6
+    m = extent * 0.06 + 1e-6
     ax.set_xlim(mins[0] - m, maxs[0] + m)
     ax.set_ylim(mins[1] - m, maxs[1] + m)
     ax.set_zlim(mins[2] - m, maxs[2] + m)
-    span = maxs - mins
-    ax.set_box_aspect(tuple(np.maximum(span, extent * 0.05)))
+    span = np.maximum(maxs - mins, 1e-9)
+    ax.set_box_aspect(tuple(span))
     ax.view_init(elev=25, azim=-55)
     ax.set_axis_off()
     out_png.parent.mkdir(parents=True, exist_ok=True)

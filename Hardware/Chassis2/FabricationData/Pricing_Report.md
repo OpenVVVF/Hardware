@@ -1,6 +1,6 @@
 # Hardware BOM Pricing Report
 
-Generated: 2026-07-17T06:26:55.206225Z
+Generated: 2026-07-17T07:03:28.649671Z
 
 Base quantity: 1 unit(s)
 
@@ -257,11 +257,11 @@ Base quantity: 1 unit(s)
 
 | PCB Board | Fab Files | Zip | Fab Price |
 |-----------|-----------|-----|-----------|
-| ControlBoard | 18 | built | $25.24 |
-| DCBusCapacitorBoard | 12 | built | $7.54 |
-| DCBusFilter | 14 | built | $8.44 |
-| GateDriver | 16 | built | $11.66 |
-| IOBoard | 16 | built | $11.66 |
+| ControlBoard | 49 | built | $25.24 |
+| DCBusCapacitorBoard | 37 | built | $7.54 |
+| DCBusFilter | 41 | built | $8.44 |
+| GateDriver | 45 | built | $11.66 |
+| IOBoard | 45 | built | $11.66 |
 
 | Fab Part | Rev | Qty | STEP | info.txt | Price | Spec |
 |----------|-----|-----|------|----------|-------|------|

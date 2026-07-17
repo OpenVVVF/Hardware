@@ -658,6 +658,19 @@ class BomShell(cmd.Cmd):
             print(f"Fabrication: {len(status.boards)} board(s), {len(status.parts)} fab part(s), "
                   f"{len(status.harnesses)} harness(es) — {len(problems)} not ready (run: fab)")
 
+    def do_regen(self, arg):
+        """Re-export everything from KiCad: board BOM CSVs, gerbers + drill
+        into Fab/, DRC reports (FabricationData/DRC/), board STEP models,
+        harness BOMs — then run generate. Usage: regen [--board X,Y]
+        """
+        from . import regen
+        board_filter = None
+        args = shlex.split(arg)
+        if "--board" in args and args.index("--board") + 1 < len(args):
+            board_filter = args[args.index("--board") + 1].split(",")
+        if regen.run(self.ctx, self.chassis, board_filter=board_filter) != 0:
+            self.last_error = True
+
     def do_release(self, arg):
         """Build the full release package: all vendor BOMs + order files, price
         report scaled at 1/2/3/5/10 units, PCB zips, and Release_Report.pdf —

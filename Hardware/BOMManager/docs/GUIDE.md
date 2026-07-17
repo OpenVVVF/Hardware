@@ -160,6 +160,23 @@ rev bump DCLBB --note "widen mounting holes"
 - When you bump, re-export vendor-facing artifacts (STEP, PDFs) with the new
   rev in the filename.
 
+## Regen: change the design, run one command
+
+```text
+regen
+```
+
+re-exports everything from KiCad and rebuilds the BOM:
+
+- each board: BOM CSV (`sch export bom`), gerbers + drill into `Fab/`,
+  board STEP model, and a DRC report at `FabricationData/DRC/<Board>.txt`
+  (violation counts printed per board)
+- each harness: BOM CSV from its schematic
+- then a normal `generate` runs
+
+The loop is: edit schematics/layout in KiCad → `regen` → order/check the
+outputs. `release` afterwards for the PDF + assembly HTML.
+
 ## The release PDF
 
 `release` also builds `FabricationData/Release_Report.pdf` (styled after the
