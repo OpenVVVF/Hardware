@@ -123,7 +123,7 @@ def friendly_name(folder: Path, kind: str = "") -> str:
             title = m.group(1).strip()
             break
     if title:
-        title = re.sub(r"^open inverter platform\s*[-–—]\s*", "", title, flags=re.IGNORECASE).strip()
+        title = re.sub(r"^(open inverter platform|invertergen5)\s*[-–—]\s*", "", title, flags=re.IGNORECASE).strip()
         if title.isupper():
             title = title.title()
     if not title:

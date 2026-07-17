@@ -286,7 +286,7 @@ def write_variant_outputs(chassis: str, priced, base_output: Path) -> None:
     print(f"\n  Spares variants (1 unit): bare minimum ${base_total:,.2f}")
 
     for tier_name, tier in SPARE_TIERS.items():
-        out_dir = base_output / "Variants" / tier_name
+        out_dir = base_output / "BOMs" / "Variants" / tier_name
         out_dir.mkdir(parents=True, exist_ok=True)
 
         tier_lines = []

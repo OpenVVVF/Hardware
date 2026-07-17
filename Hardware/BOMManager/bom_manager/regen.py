@@ -35,6 +35,11 @@ def _export_bom(sch: Path, out_csv: Path) -> bool:
     return r.returncode == 0 and out_csv.is_file()
 
 
+def _export_sch_pdf(sch: Path, out_pdf: Path) -> bool:
+    r = _kicad(["sch", "export", "pdf", str(sch), "-o", str(out_pdf)])
+    return r.returncode == 0 and out_pdf.is_file()
+
+
 _FAB_EXTS = {
     ".gbr", ".gbl", ".gtl", ".gbs", ".gts", ".gbo", ".gto", ".gbp", ".gtp",
     ".gba", ".gta", ".gm1", ".gko", ".gml", ".drl",
@@ -102,6 +107,7 @@ def run(ctx: Context, chassis: Optional[str], board_filter=None, do_generate: bo
                 marks = []
                 if sch.is_file():
                     marks.append("bom ✓" if _export_bom(sch, board_dir / f"{name}.csv") else "bom ✗")
+                    marks.append("pdf ✓" if _export_sch_pdf(sch, board_dir / f"{name}.pdf") else "pdf ✗")
                 if pcb.is_file():
                     marks.append("fab ✓" if _export_fab(pcb, board_dir / "Fab") else "fab ✗")
                     marks.append("step ✓" if _export_step(pcb, board_dir / f"{name}.step") else "step ✗")
@@ -118,7 +124,8 @@ def run(ctx: Context, chassis: Optional[str], board_filter=None, do_generate: bo
                 sch = part_dir / f"{part_dir.name}.kicad_sch"
                 if part_dir.is_dir() and not part_dir.name.startswith(".") and sch.is_file():
                     ok = _export_bom(sch, part_dir / f"{part_dir.name}.csv")
-                    print(f"  {part_dir.name:<22} bom {'✓' if ok else '✗'}")
+                    ok2 = _export_sch_pdf(sch, part_dir / f"{part_dir.name}.pdf")
+                    print(f"  {part_dir.name:<22} bom {'✓' if ok else '✗'}  pdf {'✓' if ok2 else '✗'}")
 
     if do_generate:
         print()

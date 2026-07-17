@@ -117,7 +117,7 @@ release
 ```
 
 runs the full generate and prints an upload checklist. It also writes
-**spares variants** under `FabricationData/Variants/`:
+**spares variants** under `FabricationData/BOMs/Variants/`:
 
 - `standard/` — cheap parts (crimps, housings, passives) +25% (min +2)
 - `generous/` — cheap parts +50% (min +5), **and** +1 each on medium parts
