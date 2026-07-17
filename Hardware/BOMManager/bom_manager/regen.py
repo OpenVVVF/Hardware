@@ -35,8 +35,19 @@ def _export_bom(sch: Path, out_csv: Path) -> bool:
     return r.returncode == 0 and out_csv.is_file()
 
 
+_FAB_EXTS = {
+    ".gbr", ".gbl", ".gtl", ".gbs", ".gts", ".gbo", ".gto", ".gbp", ".gtp",
+    ".gba", ".gta", ".gm1", ".gko", ".gml", ".drl",
+}
+
+
 def _export_fab(pcb: Path, fab_dir: Path) -> bool:
     fab_dir.mkdir(parents=True, exist_ok=True)
+    # Clean previous fab outputs first: mixed old/new gerber naming in one zip
+    # would double-define layers at the fab house.
+    for f in fab_dir.iterdir():
+        if f.is_file() and (f.suffix.lower() in _FAB_EXTS or f.suffix.lower() in {f".g{i}" for i in range(1, 10)}):
+            f.unlink()
     ok = True
     r = _kicad(["pcb", "export", "gerbers", str(pcb), "-o", str(fab_dir)])
     if r.returncode != 0:

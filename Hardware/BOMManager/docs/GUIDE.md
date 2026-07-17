@@ -191,8 +191,13 @@ project docs, same format as `Docs/HARA.pdf`):
   (errors only, from the regen reports)
 - Per harness: divider → schematic
 - **Design documents**: every document in `Docs/` (HARA, TARA, SWAD, Manual,
-  analyses) is a part with its own IPN (`HW-C2-DOC-...`), compiled from its
-  HTML/Markdown source into the package — the PDF you ship with the device.
+  analyses) is a part with its own IPN (`HW-C2-DOC-...`), compiled into the
+  package — the PDF you ship with the device.
+
+**Document standard: all project docs are Markdown** (`Docs/*.md`) compiled by
+one template (docgen: cover page, auto-TOC with page numbers, footers, green
+HARA style). Edit the `.md`, run `release`, and both `Docs/*.pdf` and the
+package pick it up. No HTML, no LaTeX (use Unicode: ×, Δ, ρ, µ, °).
 
 Rendering: board 3D renders and layer plots come from KiCad CLI (flatpak via
 `flatpak run --command=kicad-cli org.kicad.KiCad`); fab-part previews are
