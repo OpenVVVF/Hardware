@@ -38,6 +38,7 @@ _CHECK = "[  ]"
 class AssemblyGroup:
     name: str
     kind: str
+    title: str = ""
     ipn: str = ""
     rev: str = ""
     qty_per_chassis: int = 1
@@ -69,7 +70,12 @@ def assembly_groups(ctx: Context, chassis: str) -> List[AssemblyGroup]:
         if not kind:
             continue
         if src.board not in groups:
-            groups[src.board] = AssemblyGroup(name=src.board, kind=kind)
+            folder = src.path.parent if kind != "mechanical" else src.path
+            groups[src.board] = AssemblyGroup(
+                name=src.board, kind=kind,
+                title=fab.friendly_name(folder, _KIND_LABEL[kind]) if kind != "mechanical"
+                else "Chassis Hardware",
+            )
             order.append(src.board)
         g = groups[src.board]
         for item in parse_source(src):
@@ -114,7 +120,7 @@ def assembly_cost(ctx: Context, g: AssemblyGroup) -> float:
 def assembly_costs(ctx: Context, groups: List[AssemblyGroup]) -> List[dict]:
     """Cost rows for the release report: assembly, kind, parts count, cost."""
     return [{
-        "name": g.name, "kind": g.kind_label,
+        "name": g.name, "title": g.title or g.name, "kind": g.kind_label,
         "parts": len(g.items), "qty": g.qty_per_chassis,
         "cost": assembly_cost(ctx, g),
     } for g in groups]
@@ -159,7 +165,7 @@ def build_qc_forms(ctx: Context, chassis: str, out_pdf: Path) -> Optional[Path]:
     for idx, g in enumerate(groups):
         story.append(_para("QUALITY CONTROL — ASSEMBLY SIGN-OFF", size=9, color=GREY, bold=True))
         story.append(Spacer(1, 0.12 * inch))
-        story.append(_para(g.name, size=18, bold=True))
+        story.append(_para(g.title or g.name, size=18, bold=True))
         story.extend(_rule())
         meta = [["Assembly", g.kind_label, "Qty per chassis", str(g.qty_per_chassis)],
                 ["Internal P/N", g.ipn or "—", "Revision", g.rev or "A"]]

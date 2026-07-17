@@ -22,6 +22,15 @@ def _fresh(out: Path, src: Path) -> bool:
     return out.is_file() and out.stat().st_mtime >= src.stat().st_mtime
 
 
+def _frame_aspect(verts) -> float:
+    """Figure aspect ratio (h/w) tuned to the part's projected shape."""
+    import numpy as np
+    span = np.maximum(verts.max(axis=0) - verts.min(axis=0), 1e-9)
+    w_units = span[0] + span[1] * 0.6
+    h_units = span[2] + span[1] * 0.5
+    return float(np.clip(h_units / w_units, 0.3, 1.6))
+
+
 def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 900)) -> bool:
     """Render a shaded 3D preview of a STEP file. Pure python (cadquery for
     tessellation, matplotlib for shading) — no GL/display required."""
@@ -52,11 +61,11 @@ def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 
         print(f"  STEP render failed for {step_path.name}: {e}", file=sys.stderr)
         return False
 
-    fig = plt.figure(figsize=(size[0] / 150, size[1] / 150), dpi=150)
+    fig = plt.figure(figsize=(8, 8 * _frame_aspect(v)), dpi=180)
     ax = fig.add_subplot(111, projection="3d")
     # Solid look without mesh-seam artifacts: shade each face manually with a
     # directional light and use the same per-face color for edges, so seams
-    # are invisible. True aspect ratio (no thickness boost).
+    # are invisible. Orthographic projection: no perspective distortion.
     v0, v1, v2 = faces[:, 0], faces[:, 1], faces[:, 2]
     normals = np.cross(v1 - v0, v2 - v0)
     normals /= np.linalg.norm(normals, axis=1, keepdims=True) + 1e-12
@@ -71,13 +80,14 @@ def render_step(step_path: Path, out_png: Path, material: str = "", size=(1200, 
     ax.add_collection3d(pc)
     mins, maxs = v.min(axis=0), v.max(axis=0)
     extent = (maxs - mins).max()
-    m = extent * 0.06 + 1e-6
+    m = extent * 0.04 + 1e-6
     ax.set_xlim(mins[0] - m, maxs[0] + m)
     ax.set_ylim(mins[1] - m, maxs[1] + m)
     ax.set_zlim(mins[2] - m, maxs[2] + m)
     span = np.maximum(maxs - mins, 1e-9)
     ax.set_box_aspect(tuple(span))
-    ax.view_init(elev=25, azim=-55)
+    ax.set_proj_type("ortho")
+    ax.view_init(elev=18, azim=-55)
     ax.set_axis_off()
     out_png.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_png, bbox_inches="tight", pad_inches=0.03, facecolor="#f5f5f5")

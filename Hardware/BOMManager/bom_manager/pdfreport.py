@@ -201,6 +201,8 @@ def _pricing_sections(story, priced, qty=1):
     groups: Dict[str, list] = {}
     for entry in priced:
         vendor = entry["line"].primary_vendor() or "unknown"
+        if vendor == "assembly":
+            continue  # in-house assembly lines carry no purchase price
         groups.setdefault(vendor, []).append(entry)
 
     _section_header(story, "Order Summary")
@@ -240,7 +242,7 @@ def _assembly_cost_section(story, ctx, chassis):
     total = 0.0
     for r in rows_data:
         total += r["cost"]
-        rows.append([r["name"], r["kind"], str(r["qty"]), str(r["parts"]), f"${r['cost']:,.2f}"])
+        rows.append([r.get("title", r["name"]), r["kind"], str(r["qty"]), str(r["parts"]), f"${r['cost']:,.2f}"])
     rows.append(["", "", "", "Total", f"${total:,.2f}"])
     story.append(_table(rows, [48 * mm, 34 * mm, 22 * mm, 16 * mm, 30 * mm]))
     story.append(Spacer(1, 0.1 * inch))
@@ -286,7 +288,7 @@ def _fab_section(story, ctx, chassis, render_dir=None):
                     imgs.append(preview)
         if not imgs:
             imgs = sorted(p.folder.glob("*.png")) + sorted(p.folder.glob("*.jpg"))
-        row = _images_row(imgs[:3])
+        row = _images_row(imgs[:3], max_h=4.0 * inch, max_w=CONTENT_W * 0.85)
         if row:
             story.append(row)
         story.append(PageBreak())
@@ -455,7 +457,14 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
     with tempfile.TemporaryDirectory(dir=out_pdf.parent) as work:
         workdir = Path(work)
         front = workdir / "00_front.pdf"
-        _front_pdf(front, ctx, chassis, priced, scaling, grand, board_names, harness_names,
+        toc_boards = [fab.friendly_name(boards_dir / n) for n in board_names] if boards_dir.is_dir() else []
+        toc_harnesses = []
+        for harness_root in ("Wiring", "Harnesses"):
+            hd = chassis_dir / harness_root
+            if hd.is_dir():
+                toc_harnesses += [fab.friendly_name(hd / n) for n in sorted(
+                    d.name for d in hd.iterdir() if d.is_dir() and not d.name.startswith("."))]
+        _front_pdf(front, ctx, chassis, priced, scaling, grand, toc_boards, toc_harnesses,
                    documents=[d.title for d in docs], render_dir=workdir)
         parts.append(front)
 
@@ -465,6 +474,7 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                 sch_pdf = board_dir / f"{name}.pdf"
                 pcb = board_dir / f"{name}.kicad_pcb"
                 ipn = ipn_of(lambda l: l.type == "pcb" and l.designation == name)
+                title = fab.friendly_name(board_dir, "PCB Assembly")
                 # Fresh 3D renders via KiCad CLI; static <Name>*.png as fallback/extra.
                 imgs = []
                 if pcb.is_file():
@@ -475,7 +485,7 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                 if not imgs:
                     imgs = sorted(boards_dir.glob(f"{name}*.png")) + sorted(board_dir.glob(f"{name}*.png"))
                 div = workdir / f"div_{name}.pdf"
-                _divider_pdf(div, name, ipn, "printed circuit board — schematic and PCB layers",
+                _divider_pdf(div, title, ipn, "printed circuit board — schematic and PCB layers",
                              [], imgs, chassis)
                 parts.append(div)
                 if sch_pdf.is_file():
@@ -499,8 +509,9 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
                 if not sch_pdf.is_file():
                     continue
                 ipn = ipn_of(lambda l: l.vendor_hint == "assembly" and l.designation == part_dir.name)
+                title = fab.friendly_name(part_dir, "Wiring Harness")
                 div = workdir / f"div_{part_dir.name}.pdf"
-                _divider_pdf(div, part_dir.name, ipn, "wiring harness — schematic", [], [], chassis)
+                _divider_pdf(div, title, ipn, "wiring harness — schematic", [], [], chassis)
                 parts.append(div)
                 parts.append(sch_pdf)
 

@@ -104,6 +104,37 @@ def _board_price(ctx: Context, board: str) -> Optional[float]:
     return None
 
 
+def friendly_name(folder: Path, kind: str = "") -> str:
+    """Human-readable title for a board/harness/part folder.
+
+    Prefers the schematic title-block title (the designer's own name for the
+    thing); falls back to a prettified folder name. `kind` ("Wiring Harness",
+    "PCB Assembly", ...) is prepended when the title doesn't already say it.
+    """
+    title = ""
+    sch_files = sorted(folder.glob("*.kicad_sch"))
+    for sch in sch_files:
+        try:
+            head = sch.read_text(encoding="utf-8", errors="replace")[:30000]
+        except OSError:
+            continue
+        m = re.search(r'\(title\s+"([^"]+)"\)', head)
+        if m and m.group(1).strip():
+            title = m.group(1).strip()
+            break
+    if title:
+        title = re.sub(r"^open inverter platform\s*[-–—]\s*", "", title, flags=re.IGNORECASE).strip()
+        if title.isupper():
+            title = title.title()
+    if not title:
+        pretty = re.sub(r"([a-z])([A-Z])", r"\1 \2", folder.name)
+        pretty = re.sub(r"[-_]+", " ", pretty).strip()
+        title = pretty.title() if pretty else folder.name
+    if kind and kind.lower() not in title.lower():
+        return f"{kind}: {title}"
+    return title
+
+
 def collect(ctx: Context, chassis: str, hardware_root: Optional[Path] = None) -> FabStatus:
     hw = hardware_root or ctx.hardware_root
     status = FabStatus(chassis=chassis)
