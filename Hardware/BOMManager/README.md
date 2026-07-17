@@ -53,9 +53,10 @@ Per chassis, under `Hardware/<Chassis>/FabricationData/`:
 │   └── assembly_bom.csv         # in-house assemblies (wiring harnesses)
 ├── McMaster_Order_Paste.txt     # paste straight into the McMaster cart
 ├── PCB_Fab_Zips/<Board>.zip     # per-board fab bundles
+├── Assembly/<Board>.html        # interactive assembly view per board (iBOM)
 ├── Pricing_Report.md            # costs, pack rounding, fabrication package checklist
-└── Release_Report.pdf           # full release doc: cover, pricing, fab parts,
-                                 # per-board divider + schematic + layer plots, harnesses
+└── Release_Report.pdf           # full release doc (HARA-style): cover, pricing, STEP
+                                 # previews, per-board 3D renders + schematic + layers
 ```
 
 ## How ordering math works

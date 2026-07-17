@@ -162,18 +162,28 @@ rev bump DCLBB --note "widen mounting holes"
 
 ## The release PDF
 
-`release` also builds `FabricationData/Release_Report.pdf`:
+`release` also builds `FabricationData/Release_Report.pdf` (styled after the
+project docs, same format as `Docs/HARA.pdf`):
 
 - Cover with totals and the 1/2/3/5/10-unit scaling table
-- Order summary (per-vendor tables, pack-aware)
-- Fabrication package (readiness + a page per fab part with images)
-- Per board: divider (name, IPN, renders) → full schematic → PCB layer plots
-  (all copper + silkscreen, generated via KiCad CLI — works with flatpak
-  KiCad through `flatpak run --command=kicad-cli org.kicad.KiCad`)
+- Contents page, order summary (per-vendor tables, pack-aware)
+- Fabrication package (readiness + a page per fab part with a **fresh 3D
+  preview rendered from its STEP file**, colored by material)
+- Per board: divider (name, IPN, **3D board renders** top + bottom) → full
+  schematic → PCB layer plots (all copper + silkscreen)
 - Per harness: divider → schematic
 
-Board renders are picked up from `Boards/<Board>*.png`; fab part images from
-each part's `info.png`.
+Rendering: board 3D renders and layer plots come from KiCad CLI (flatpak via
+`flatpak run --command=kicad-cli org.kicad.KiCad`); fab-part previews are
+rendered from STEP with cadquery + matplotlib (no GL needed). `bom.py`
+automatically re-executes itself with the bundled `.venv` python when one
+exists, so dependencies always resolve.
+
+## Assembly HTML (iBOM)
+
+`release` also writes `FabricationData/Assembly/<Board>.html` per board — an
+interactive assembly view (click a BOM line to highlight its parts on the
+board, front/back views). Open in any browser; great for hand-stuffing.
 
 ## Data files
 

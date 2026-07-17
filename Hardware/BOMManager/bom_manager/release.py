@@ -1,8 +1,8 @@
-"""Release package: full generate + full PDF report + upload checklist."""
+"""Release package: full generate + full PDF report + assembly HTML + upload checklist."""
 
 from typing import Optional
 
-from . import generate, pdfreport
+from . import assembly, generate, pdfreport
 from .context import Context
 
 RELEASE_QTYS = "1,2,3,5,10"
@@ -21,12 +21,16 @@ def run(ctx: Context, chassis: Optional[str], extra_args=None) -> int:
     for ch in chassis_names:
         fab_dir = ctx.hardware_root / ch / "FabricationData"
         out = fab_dir / "Release_Report.pdf"
-        print(f"\nBuilding release PDF for {ch} (front matter + schematics + PCB layers)...")
+        print(f"\nBuilding release PDF for {ch} (front matter + schematics + PCB layers + 3D renders)...")
         result = pdfreport.build(ctx, ch, out)
         if result:
             print(f"Wrote {result}")
         else:
             print(f"Release PDF build failed for {ch}.")
+
+        print(f"Building assembly HTML (iBOM)...")
+        made = assembly.build_all(ctx, ch)
+        print(f"Wrote {len(made)} assembly file(s) to {fab_dir / 'Assembly'}")
 
         print(f"""
 === {ch} upload checklist ===
@@ -35,6 +39,7 @@ def run(ctx: Context, chassis: Optional[str], extra_args=None) -> int:
   McMaster:    {fab_dir / 'McMaster_Order_Paste.txt'}  -> cart 'paste part numbers' box
   SendCutSend: STEP files in Mechanical/Fab/*/ (specs in Pricing_Report.md)
   PCB fab:     {fab_dir / 'PCB_Fab_Zips'}/*.zip -> your PCB vendor
+  Assembly:    {fab_dir / 'Assembly'}/*.html -> interactive per-board assembly
   Full report: {out}
   Prices at 1/2/3/5/10 units: Pricing_Report.md and the release PDF cover page
 """)

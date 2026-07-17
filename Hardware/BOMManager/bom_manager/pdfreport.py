@@ -2,7 +2,10 @@
 per-harness sections with divider pages, schematics, and PCB layer plots.
 
 Generated pages are built with reportlab; schematic and layer PDFs are merged
-in order with pdfunite. Board layer plots come from KiCad CLI (flatpak).
+in order with pdfunite. Board layer plots and 3D board renders come from KiCad
+CLI (flatpak); fab-part previews are rendered from STEP with cadquery +
+matplotlib. Page style follows the project docs (HARA): A4, Liberation Sans,
+green accent with ruled section headers.
 """
 
 import re
@@ -15,28 +18,42 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
+from reportlab.lib.units import inch, mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     HRFlowable, Image, PageBreak, Paragraph, SimpleDocTemplate, Spacer, Table,
     TableStyle,
 )
 
-from . import fab
+from . import fab, render
 from .addpart import collect_lines, existing_ipn, known_price
 from .context import Context
 from .pricing import PricingEngine, line_total
 
-PAGE = letter
-MARGIN = 0.75 * inch
+PAGE = A4
+MARGIN = 18 * mm
 CONTENT_W = PAGE[0] - 2 * MARGIN
 STYLES = getSampleStyleSheet()
 
-ACCENT = colors.HexColor("#16385C")
-ACCENT_LIGHT = colors.HexColor("#EAF0F6")
-GREY = colors.HexColor("#5A6570")
-GRID = colors.HexColor("#B9C2CC")
+_FONT_DIR = Path("/usr/share/fonts/truetype/liberation")
+pdfmetrics.registerFont(TTFont("LiberationSans", str(_FONT_DIR / "LiberationSans-Regular.ttf")))
+pdfmetrics.registerFont(TTFont("LiberationSans-Bold", str(_FONT_DIR / "LiberationSans-Bold.ttf")))
+pdfmetrics.registerFont(TTFont("LiberationSans-Italic", str(_FONT_DIR / "LiberationSans-Italic.ttf")))
+pdfmetrics.registerFont(TTFont("LiberationSans-BoldItalic", str(_FONT_DIR / "LiberationSans-BoldItalic.ttf")))
+pdfmetrics.registerFontFamily(
+    "LiberationSans", normal="LiberationSans", bold="LiberationSans-Bold",
+    italic="LiberationSans-Italic", boldItalic="LiberationSans-BoldItalic",
+)
+BASE_FONT = "LiberationSans"
+
+ACCENT = colors.HexColor("#1E4D2B")
+ACCENT_LIGHT = colors.HexColor("#EDF3EE")
+ACCENT_PALE = colors.HexColor("#C9DCCD")
+GREY = colors.HexColor("#4A4A4A")
+GRID = colors.HexColor("#B9C2B9")
 
 VENDOR_DISPLAY = {
     "mcmaster": "McMaster-Carr",
@@ -49,8 +66,9 @@ VENDOR_DISPLAY = {
 }
 
 
-def _para(text, style="Normal", size=9, color=None, markup=False, align=None):
-    st = STYLES[style].clone(f"p{size}{style}{color}")
+def _para(text, style="Normal", size=9, color=None, bold=False, markup=False, align=None):
+    st = STYLES[style].clone(f"p{size}{style}{color}{bold}")
+    st.fontName = "LiberationSans-Bold" if bold else BASE_FONT
     st.fontSize = size
     st.leading = size + 2.5
     if color is not None:
@@ -62,22 +80,7 @@ def _para(text, style="Normal", size=9, color=None, markup=False, align=None):
     return Paragraph(str(text), st)
 
 
-def _band(text, sub=None):
-    """Full-width accent band used on cover and section dividers."""
-    rows = [[_para(text, size=20, color=colors.white)]]
-    if sub:
-        rows.append([_para(sub, size=10, color=colors.HexColor("#C9D6E4"))])
-    t = Table(rows, colWidths=[CONTENT_W])
-    t.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), ACCENT),
-        ("LEFTPADDING", (0, 0), (-1, -1), 16),
-        ("TOPPADDING", (0, 0), (-1, 0), 14),
-        ("BOTTOMPADDING", (0, -1), (-1, -1), 14),
-    ]))
-    return t
-
-
-def _rule(space_before=4, space_after=8, thickness=1.2, color=ACCENT):
+def _rule(space_before=2, space_after=8, thickness=1.1, color=ACCENT):
     return [
         Spacer(1, space_before),
         HRFlowable(width="100%", thickness=thickness, color=color),
@@ -86,12 +89,12 @@ def _rule(space_before=4, space_after=8, thickness=1.2, color=ACCENT):
 
 
 def _section_header(story, text):
-    story.append(_para(text, size=15, color=ACCENT, style="Heading1"))
+    story.append(_para(text, size=14, bold=True, style="Heading1"))
     story.extend(_rule())
 
 
 def _table(rows, widths, header=True, size=8):
-    header_row = [[_para(c, size=size, color=colors.white) for c in rows[0]]] if header else []
+    header_row = [[_para(c, size=size, color=colors.white, bold=True) for c in rows[0]]] if header else []
     body = [[_para(c, size=size) for c in row] for row in (rows[1:] if header else rows)]
     t = Table(header_row + body, colWidths=widths, repeatRows=1 if header else 0)
     style = [
@@ -130,10 +133,26 @@ def _images_row(paths, max_h=2.6 * inch, max_w=3.3 * inch):
 
 def _footer(canvas, doc, chassis):
     canvas.saveState()
-    canvas.setFont("Helvetica", 8)
+    canvas.setFont(BASE_FONT, 8)
     canvas.setFillColor(GREY)
-    canvas.drawString(MARGIN, 0.45 * inch, f"Inverter Gen5 — {chassis} Hardware Release")
-    canvas.drawRightString(PAGE[0] - MARGIN, 0.45 * inch, f"Page {doc.page}")
+    canvas.drawString(MARGIN, 10 * mm, f"Inverter Gen5 — {chassis} Hardware Release")
+    canvas.drawCentredString(PAGE[0] / 2, 10 * mm, "")
+    canvas.drawRightString(PAGE[0] - MARGIN, 10 * mm, f"{doc.page}")
+    canvas.restoreState()
+
+
+def _draw_swoosh(canvas, doc):
+    """HARA-style green arc filling the right side of the cover."""
+    w, h = PAGE
+    canvas.saveState()
+    canvas.setFillColor(ACCENT)
+    p = canvas.beginPath()
+    p.moveTo(w, h)
+    p.lineTo(w, 0)
+    p.lineTo(w * 0.60, 0)
+    p.curveTo(w * 0.66, h * 0.30, w * 0.80, h * 0.52, w, h * 0.66)
+    p.close()
+    canvas.drawPath(p, fill=1, stroke=0)
     canvas.restoreState()
 
 
@@ -141,22 +160,38 @@ def _footer(canvas, doc, chassis):
 
 def _cover(story, ctx, chassis, priced, grand_total, scaling):
     priced_count = sum(1 for e in priced if e["price"].unit_price is not None)
-    story.append(Spacer(1, 1.2 * inch))
-    story.append(_band("INVERTER GEN5", "OPEN INVERTER PLATFORM"))
-    story.append(Spacer(1, 0.5 * inch))
-    story.append(_para("Hardware Release Report", size=24, color=ACCENT, style="Title"))
-    story.extend(_rule(space_before=6, space_after=16))
-    info = [
-        ["Chassis", chassis],
-        ["Generated", datetime.now().date().isoformat()],
-        ["BOM lines", f"{len(priced)} ({priced_count} priced)"],
+    story.append(Spacer(1, 1.1 * inch))
+    story.append(_para("HARDWARE RELEASE REPORT", size=10, color=ACCENT, bold=True))
+    story.append(Spacer(1, 0.16 * inch))
+    story.append(_para("Traction Inverter", size=26, bold=True, style="Title"))
+    story.append(Spacer(1, 0.42 * inch))
+    details = [
+        ("Chassis:", chassis),
+        ("BOM lines:", f"{len(priced)} ({priced_count} priced)"),
+        ("Generated:", datetime.now().date().isoformat()),
     ]
-    story.append(_table([["", ""]] + info, [1.4 * inch, 3.2 * inch], header=False, size=10))
-    story.append(Spacer(1, 0.45 * inch))
-    story.append(_para("Cost at quantity", size=12, color=ACCENT, style="Heading2"))
-    story.append(Spacer(1, 4))
+    for label, value in details:
+        story.append(Spacer(1, 2))
+        story.append(_para(f"<b>{label}</b>  {value}", size=10, markup=True))
+    story.append(Spacer(1, 0.5 * inch))
+    story.append(_para("Cost at quantity", size=11, bold=True))
+    story.extend(_rule(space_after=6))
     rows = [["Units", "Estimated total"]] + [[str(q), f"${t:,.2f}"] for q, t in scaling]
-    story.append(_table(rows, [1.1 * inch, 1.8 * inch], size=10))
+    story.append(_table(rows, [32 * mm, 48 * mm], size=10))
+    story.append(Spacer(1, 2.2 * inch))
+    story.extend(_rule(thickness=1.4, space_after=4))
+    story.append(_para("University of California, Santa Cruz — Corzine Lab", size=8, color=GREY))
+    story.append(PageBreak())
+
+
+def _toc(story, chassis, boards, harnesses):
+    _section_header(story, "Contents")
+    entries = ["Order Summary", "Fabrication Package"]
+    entries += [f"{b} — schematic & PCB layers" for b in boards]
+    entries += [f"{h} — wiring harness" for h in harnesses]
+    for i, e in enumerate(entries, 1):
+        story.append(Spacer(1, 3))
+        story.append(_para(f"{i}.  {e}", size=10))
     story.append(PageBreak())
 
 
@@ -193,7 +228,7 @@ def _pricing_sections(story, priced, qty=1):
     story.append(PageBreak())
 
 
-def _fab_section(story, ctx, chassis):
+def _fab_section(story, ctx, chassis, render_dir=None):
     status = fab.collect(ctx, chassis)
     _section_header(story, "Fabrication Package")
     rows = [["Item", "Kind", "Qty", "Rev", "Price", "Ready"]]
@@ -216,11 +251,21 @@ def _fab_section(story, ctx, chassis):
     for p in status.parts:
         if not p.has_info:
             continue
-        story.append(_para(p.name, size=13, color=ACCENT, style="Heading2"))
+        story.append(_para(p.name, size=13, bold=True, color=ACCENT, style="Heading2"))
         story.extend(_rule(thickness=0.8, space_after=6))
         story.append(_para(p.spec or "-", size=9, color=GREY))
         story.append(Spacer(1, 0.08 * inch))
-        imgs = sorted(p.folder.glob("*.png")) + sorted(p.folder.glob("*.jpg"))
+        # Prefer a fresh STEP render; fall back to the part's info.png.
+        imgs = []
+        if render_dir is not None:
+            steps = sorted(p.folder.glob("*.step")) + sorted(p.folder.glob("*.stp"))
+            if steps:
+                info = fab._read_info(p.folder / "info.txt")
+                preview = render_dir / f"preview_{p.name}.png"
+                if render.render_step(steps[0], preview, material=info.get("Material", "")):
+                    imgs.append(preview)
+        if not imgs:
+            imgs = sorted(p.folder.glob("*.png")) + sorted(p.folder.glob("*.jpg"))
         row = _images_row(imgs[:3])
         if row:
             story.append(row)
@@ -232,26 +277,30 @@ def _fab_section(story, ctx, chassis):
 def _divider_pdf(path: Path, title: str, ipn: str, kind: str, info_rows, image_paths: List[Path], chassis: str) -> None:
     doc = SimpleDocTemplate(str(path), pagesize=PAGE, leftMargin=MARGIN, rightMargin=MARGIN)
     story = [Spacer(1, 0.9 * inch)]
-    story.append(_band(title.upper(), f"{ipn}   ·   {kind}" if ipn else kind))
-    story.append(Spacer(1, 0.35 * inch))
+    story.append(_para(title.upper(), size=22, bold=True, color=ACCENT))
+    story.extend(_rule(thickness=1.4))
+    story.append(Spacer(1, 0.1 * inch))
+    story.append(_para(f"{ipn}   ·   {kind}" if ipn else kind, size=10, color=GREY))
+    story.append(Spacer(1, 0.3 * inch))
     if info_rows:
-        story.append(_table(info_rows, [1.4 * inch, 3.6 * inch], header=False, size=9))
-        story.append(Spacer(1, 0.3 * inch))
+        story.append(_table(info_rows, [40 * mm, 100 * mm], header=False, size=9))
+        story.append(Spacer(1, 0.25 * inch))
     row = _images_row(image_paths, max_h=4.2 * inch, max_w=3.3 * inch)
     if row:
         story.append(row)
     doc.build(story, onFirstPage=partial(_footer, chassis=chassis))
 
 
-def _front_pdf(path: Path, ctx, chassis, priced, scaling, grand_total) -> None:
+def _front_pdf(path: Path, ctx, chassis, priced, scaling, grand_total, boards, harnesses, render_dir=None) -> None:
     doc = SimpleDocTemplate(str(path), pagesize=PAGE,
                             leftMargin=MARGIN, rightMargin=MARGIN,
                             topMargin=MARGIN, bottomMargin=MARGIN)
     story = []
     _cover(story, ctx, chassis, priced, grand_total, scaling)
+    _toc(story, chassis, boards, harnesses)
     _pricing_sections(story, priced)
-    _fab_section(story, ctx, chassis)
-    doc.build(story, onFirstPage=partial(_footer, chassis=chassis),
+    _fab_section(story, ctx, chassis, render_dir=render_dir)
+    doc.build(story, onFirstPage=_draw_swoosh,
               onLaterPages=partial(_footer, chassis=chassis))
 
 
@@ -310,24 +359,47 @@ def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) 
         return next((l.internal_pn for l in lines if pred(l)), "")
 
     parts: List[Path] = []
+    chassis_dir = ctx.hardware_root / chassis
+    boards_dir = chassis_dir / "Boards"
+    board_names = []
+    if boards_dir.is_dir():
+        for d in sorted(boards_dir.iterdir()):
+            if not d.is_dir():
+                continue
+            # A real board has a KiCad project (or at least a schematic PDF);
+            # skip stray export dirs like Boards/BOMs/.
+            if (d / f"{d.name}.kicad_pcb").is_file() or (d / f"{d.name}.pdf").is_file():
+                board_names.append(d.name)
+    harness_names = []
+    for harness_root in ("Wiring", "Harnesses"):
+        harness_dir = chassis_dir / harness_root
+        if harness_dir.is_dir():
+            harness_names += sorted(
+                d.name for d in harness_dir.iterdir()
+                if d.is_dir() and not d.name.startswith(".")
+            )
+
     with tempfile.TemporaryDirectory(dir=out_pdf.parent) as work:
         workdir = Path(work)
         front = workdir / "00_front.pdf"
-        _front_pdf(front, ctx, chassis, priced, scaling, grand)
+        _front_pdf(front, ctx, chassis, priced, scaling, grand, board_names, harness_names, render_dir=workdir)
         parts.append(front)
 
-        chassis_dir = ctx.hardware_root / chassis
-        boards_dir = chassis_dir / "Boards"
         if boards_dir.is_dir():
-            for board_dir in sorted(boards_dir.iterdir()):
-                if not board_dir.is_dir():
-                    continue
-                name = board_dir.name
+            for name in board_names:
+                board_dir = boards_dir / name
                 sch_pdf = board_dir / f"{name}.pdf"
                 pcb = board_dir / f"{name}.kicad_pcb"
                 ipn = ipn_of(lambda l: l.type == "pcb" and l.designation == name)
-                # Renders live at Boards/<Name>*.png (or legacy Boards/<Name>/).
-                imgs = sorted(boards_dir.glob(f"{name}*.png")) + sorted(board_dir.glob(f"{name}*.png"))
+                # Fresh 3D renders via KiCad CLI; static <Name>*.png as fallback/extra.
+                imgs = []
+                if pcb.is_file():
+                    for side in ("top", "bottom"):
+                        shot = workdir / f"render_{name}_{side}.png"
+                        if render.render_board_3d(pcb, shot, side=side):
+                            imgs.append(shot)
+                if not imgs:
+                    imgs = sorted(boards_dir.glob(f"{name}*.png")) + sorted(board_dir.glob(f"{name}*.png"))
                 div = workdir / f"div_{name}.pdf"
                 _divider_pdf(div, name, ipn, "printed circuit board — schematic and PCB layers",
                              [], imgs, chassis)
