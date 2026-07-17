@@ -116,7 +116,9 @@ def collect(ctx: Context, chassis: str, hardware_root: Optional[Path] = None) ->
             if not fab_dir.is_dir():
                 continue
             files = [f for f in fab_dir.iterdir() if f.is_file() and not f.name.startswith(".")]
-            has_csv = any(f.suffix.lower() == ".csv" for f in files)
+            # BOM CSVs live in the project dir now; Fab/ holds gerbers.
+            root_csv = board_dir / f"{board_dir.name}.csv"
+            has_csv = root_csv.is_file() or any(f.suffix.lower() == ".csv" for f in files)
             zip_path = chassis_dir / "FabricationData" / "PCB_Fab_Zips" / f"{board_dir.name}.zip"
             status.boards.append(
                 BoardStatus(

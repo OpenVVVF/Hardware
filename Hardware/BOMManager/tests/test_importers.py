@@ -64,3 +64,55 @@ def test_persist_prices_to_db_matches_vendor_field_and_key(tmp_path):
     n = persist_prices_to_db(db, "mcmaster", {"94669a199": 3.10})
     assert n == 1
     assert db.lookup("McMaster", "94669A199")["manual_price"] == 3.10
+
+
+def test_digikey_bom_tool_export(tmp_path):
+    from bom_manager.importers.digikey import parse_digikey_file
+
+    csv_path = tmp_path / "digikey_bom.csv"
+    csv_path.write_text(
+        "Country of Origin may be different at time of shipment.,,,,\n"
+        "The HTSUS and ECCN information (if provided),,,,\n"
+        "Index,Manufacturer Part Number,Requested Quantity 1,Digi-Key Part Number 1,Unit Price 1,Requested Part Number\n"
+        "1,,,,,Digi-Key Part Number\n"
+        "2,5586 210 MM X 300 MM X 2.0 MM,1,3M156058-ND,$46.98,\n",
+        encoding="utf-8",
+    )
+    prices, unmatched = parse_digikey_file(csv_path)
+    assert prices == {"3M156058-ND": 46.98}
+    assert unmatched == ["Digi-Key Part Number"]
+
+
+def test_mouser_excel_nan_input_falls_back_and_backfills(tmp_path):
+    import pandas as pd
+    from bom_manager.importers.mouser import backfill_mouser_pns, parse_mouser_excel
+
+    xlsx = tmp_path / "mouser.xlsx"
+    pd.DataFrame([
+        {"Mouser Part Number (Input)": "80-C1210C104K1RAC", "Mfr Part Number (Input)": "100nF",
+         "Mouser Part Number": "80-C1210C104K1RAC", "Order Unit Price (USD)": "$0.16", "Quantity 1": 70},
+        {"Mouser Part Number (Input)": None, "Mfr Part Number (Input)": "STM32G474RCT3",
+         "Mouser Part Number": "511-STM32G474RCT3", "Order Unit Price (USD)": "$8.31", "Quantity 1": 2},
+    ]).to_excel(xlsx, index=False)
+
+    parts = parse_mouser_excel(xlsx)
+    assert parts["80-C1210C104K1RAC"]["unit_price"] == 0.16
+    assert parts["511-STM32G474RCT3"]["unit_price"] == 8.31
+    assert parts["511-STM32G474RCT3"]["mfr_input"] == "STM32G474RCT3"
+
+
+def test_backfill_mouser_pns(ctx):
+    from bom_manager.importers.mouser import backfill_mouser_pns
+    from conftest import make_chassis
+
+    make_chassis(ctx.hardware_root)
+    # "10k" is a live BOM line with no DB entry; "100nF 100V" gets an entry first.
+    ctx.db.add("C_1210_3225Metric", "100nF 100V", {"description": "cap", "type": "capacitor", "mouser_part": ""})
+    n = backfill_mouser_pns(ctx, {
+        "80-RES10K": {"mfr_input": "10k"},
+        "80-CAP100N": {"mfr_input": "100nF 100V"},
+        "80-GHOST": {"mfr_input": "not-a-part"},
+    })
+    assert n == 2
+    assert ctx.db.lookup("R_1210_3225Metric", "10k")["mouser_part"] == "80-RES10K"
+    assert ctx.db.lookup("C_1210_3225Metric", "100nF 100V")["mouser_part"] == "80-CAP100N"

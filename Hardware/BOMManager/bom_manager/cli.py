@@ -12,7 +12,7 @@ from datetime import datetime
 from . import addpart, fab, generate, mech, scaffold
 from .context import Context, build_context
 from .db import VENDOR_PN_FIELD
-from .importers import jlcpcb, mcmaster, mouser, sendcutsend
+from .importers import digikey, jlcpcb, mcmaster, mouser, sendcutsend
 from .pricing import PriceInfo, line_total
 
 BANNER = (
@@ -127,6 +127,7 @@ class BomShell(cmd.Cmd):
         vendor, rest = args[0].lower(), args[1:]
         runners = {
             "mouser": lambda: mouser.run(rest, self.ctx),
+            "digikey": lambda: digikey.run(rest, self.ctx),
             "mcmaster": lambda: mcmaster.run(rest, self.ctx),
             "sendcutsend": lambda: sendcutsend.run(rest, self.ctx, chassis=self.chassis),
             "jlcpcb": lambda: jlcpcb.run(rest, self.ctx),

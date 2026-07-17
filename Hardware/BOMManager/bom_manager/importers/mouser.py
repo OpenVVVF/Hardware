@@ -145,8 +145,10 @@ def parse_mouser_excel(path: Path) -> dict:
     """Extract Mouser part numbers and unit prices from a Mouser BOM Excel export.
 
     Uses the 'Mouser Part Number (Input)' and 'Order Unit Price (USD)' columns.
-    If the input PN is known to resolve incorrectly, INPUT_PN_OVERRIDES maps it
-    to the corrected cache key.
+    Rows uploaded with only a manufacturer PN (Input cell blank) fall back to
+    Mouser's resolved part number, and the manufacturer PN is kept in
+    'mfr_input' so the database can be back-filled. If the input PN is known
+    to resolve incorrectly, INPUT_PN_OVERRIDES maps it to the corrected key.
     """
     import pandas as pd
 
@@ -155,8 +157,16 @@ def parse_mouser_excel(path: Path) -> dict:
     for _, row in df.iterrows():
         input_pn = str(row.get("Mouser Part Number (Input)", "")).strip()
         matched_pn = str(row.get("Mouser Part Number", "")).strip()
+        mfr_input = str(row.get("Mfr Part Number (Input)", "")).strip()
         price_raw = row.get("Order Unit Price (USD)", "")
         qty_raw = row.get("Quantity 1", "")
+
+        if input_pn.lower() == "nan":
+            input_pn = ""
+        if matched_pn.lower() == "nan":
+            matched_pn = ""
+        if mfr_input.lower() == "nan":
+            mfr_input = ""
 
         # Decide which PN to use as the cache key.
         pn = input_pn or matched_pn
@@ -168,7 +178,7 @@ def parse_mouser_excel(path: Path) -> dict:
                 continue
             pn = corrected
 
-        if not pn or pn.lower() == "nan":
+        if not pn:
             continue
 
         unit_price = None
@@ -176,7 +186,11 @@ def parse_mouser_excel(path: Path) -> dict:
             if isinstance(price_raw, str):
                 price_raw = price_raw.replace("$", "").replace(",", "").strip()
             unit_price = float(price_raw)
+            if unit_price != unit_price or unit_price <= 0:  # NaN / blank / zero
+                unit_price = None
         except (ValueError, TypeError):
+            continue
+        if unit_price is None:
             continue
 
         qty = None
@@ -185,9 +199,45 @@ def parse_mouser_excel(path: Path) -> dict:
         except (ValueError, TypeError):
             pass
 
-        results[pn] = {"unit_price": unit_price, "qty": qty}
+        results[pn] = {"unit_price": unit_price, "qty": qty, "mfr_input": mfr_input}
 
     return results
+
+
+def backfill_mouser_pns(ctx: Context, parts: dict) -> int:
+    """Write Mouser-resolved part numbers into the part database.
+
+    Matches each resolved part against live BOM lines by its uploaded
+    manufacturer PN (designation). Creates a minimal entry for lines that
+    don't have one yet, or fills mouser_part on entries missing it.
+    Returns entries created/updated.
+    """
+    from ..addpart import PartMatch, collect_lines, ensure_entry
+
+    lines_by_des = {}
+    for ch, line in collect_lines(ctx):
+        lines_by_des.setdefault(line.designation.replace(" ", "").lower(), (ch, line))
+
+    count = 0
+    for pn, info in parts.items():
+        mfr = (info.get("mfr_input") or "").replace(" ", "").lower()
+        if not mfr or mfr not in lines_by_des:
+            continue
+        ch, line = lines_by_des[mfr]
+        entry = ctx.db.lookup(line.footprint, line.designation)
+        if entry is None:
+            match = PartMatch(
+                key=ctx.db.normalize_key(line.footprint, line.designation),
+                footprint=line.footprint, designation=line.designation,
+                entry=None, line=line, chassis=ch,
+            )
+            entry = ensure_entry(ctx, match)
+            entry["mouser_part"] = pn
+            count += 1
+        elif not entry.get("mouser_part"):
+            entry["mouser_part"] = pn
+            count += 1
+    return count
 
 
 def run(argv, ctx: Context) -> int:
@@ -254,8 +304,11 @@ def run(argv, ctx: Context) -> int:
     print(f"\nSaved {cached_count} price(s), detected {skipped_count} part number(s) without price.")
 
     if imported:
+        backfilled = backfill_mouser_pns(ctx, parts)
+        if backfilled:
+            print(f"Back-filled {backfilled} Mouser part number(s) into the part database.")
         updated = persist_prices_to_db(ctx.db, "mouser", imported)
-        if updated:
+        if updated or backfilled:
             ctx.db.save()
             print(f"Persisted {updated} price(s) into the part database.")
     return 0

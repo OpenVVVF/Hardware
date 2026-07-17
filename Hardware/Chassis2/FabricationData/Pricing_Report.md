@@ -1,6 +1,6 @@
 # Hardware BOM Pricing Report
 
-Generated: 2026-07-17T01:14:43.586339Z
+Generated: 2026-07-17T01:45:30.476962Z
 
 Base quantity: 1 unit(s)
 
@@ -23,7 +23,7 @@ Base quantity: 1 unit(s)
 
 | Qty | Order | Internal P/N | Description | Part Number | Unit Price | Line Total | Source |
 |-----|-------|--------------|-------------|-------------|------------|------------|--------|
-| 1 |  | HW-C2-HW-3M156058-ND-A | 3M156058-ND | 3M156058-ND | $46.9800 | $46.98 | manual |
+| 1 |  | HW-C2-HW-3M156058-ND-A | 3M156058-ND | 3M156058-ND | $46.9800 | $46.98 | digikey_cart_import |
 
 **Digi-Key subtotal:** $46.98
 
@@ -56,71 +56,71 @@ Base quantity: 1 unit(s)
 | 37 |  | HW-C2-CAP-10U-A | 10uF 25V | 187-CL32A106KAULNNE | $0.1340 | $4.96 | mouser_cart_import |
 | 8 |  | HW-C2-CAP-1U-A | 1uf 50V | 187-CL32B105KBHNNNE | $0.2400 | $1.92 | mouser_cart_import |
 | 2 |  | HW-C2-CAP-2U2-A | 2.2uf 1210 100v | 80-C1210C225J1RAUTO | $0.5200 | $1.04 | mouser_cart_import |
-| 6 |  | HW-C2-CAP-220P-A | 220pF 100V C0G 1210 | 80-C1210C221J2G | N/A | N/A | unknown |
-| 4 |  | HW-C2-CAP-22P-A | 22pF 50V | 80-C1210C220J5G | $0.3550 | $1.42 | mouser_cart_import |
+| 6 |  | HW-C2-CAP-220P-A | 220pF 100V C0G 1210 | 80-C1210C221J2G | $0.8800 | $5.28 | mouser_cart_import |
+| 4 |  | HW-C2-CAP-22P-A | 22pF 50V | 80-C1210C220J5G | $0.7400 | $2.96 | mouser_cart_import |
 | 2 |  | HW-C2-IC-8MHZ-A | 8mhz hc49-4h crystal | 710-830003156B | $0.5000 | $1.00 | mouser_cart_import |
-| 1 |  | HW-C2-IC-CY15B102Q-SXET-A | CY15B102Q-SXET |  | N/A | N/A | manual |
-| 4 |  | HW-C2-IC-ISO1042BDWVR-A | ISO1042BDWVR |  | N/A | N/A | manual |
-| 1 |  | HW-C2-IC-ISO1212DBQ-A | ISO1212DBQ |  | N/A | N/A | manual |
-| 1 |  | HW-C2-IC-MAX22530AWE-A | MAX22530AWE+ |  | N/A | N/A | manual |
-| 6 |  | HW-C2-IC-NCV57100DWR2G-A | NCV57100DWR2G |  | N/A | N/A | manual |
-| 1 |  | HW-C2-IC-STM32G474RCT3-A | STM32G474RCT3 |  | N/A | N/A | manual |
-| 1 |  | HW-C2-IC-STM32H723ZGT6-A | STM32H723ZGT6 |  | N/A | N/A | manual |
-| 1 |  | HW-C2-CONN-SSW-110-01-F-D-A | SSW-110-01-F-D |  | N/A | N/A | manual |
-| 1 |  | HW-C2-CONN-TSW-110-21-L-D-LL-A | TSW-110-21-L-D-LL |  | N/A | N/A | manual |
-| 32 |  | HW-C2-HW-0008500113-A | 0008500113 |  | N/A | N/A | manual |
+| 1 |  | HW-C2-IC-CY15B102Q-SXET-A | CY15B102Q-SXET | 727-CY15B102Q-SXET | $18.1400 | $18.14 | mouser_cart_import |
+| 4 |  | HW-C2-IC-ISO1042BDWVR-A | ISO1042BDWVR | 595-ISO1042BDWVR | $4.4400 | $17.76 | mouser_cart_import |
+| 1 |  | HW-C2-IC-ISO1212DBQ-A | ISO1212DBQ | 595-ISO1212DBQ | $1.7300 | $1.73 | mouser_cart_import |
+| 1 |  | HW-C2-IC-MAX22530AWE-A | MAX22530AWE+ | 700-MAX22530AWE+ | $15.6000 | $15.60 | mouser_cart_import |
+| 6 |  | HW-C2-IC-NCV57100DWR2G-A | NCV57100DWR2G | 863-NCV57100DWR2G | $2.9800 | $17.88 | mouser_cart_import |
+| 1 |  | HW-C2-IC-STM32G474RCT3-A | STM32G474RCT3 | 511-STM32G474RCT3 | $8.3100 | $8.31 | mouser_cart_import |
+| 1 |  | HW-C2-IC-STM32H723ZGT6-A | STM32H723ZGT6 | 511-STM32H723ZGT6 | $13.2500 | $13.25 | mouser_cart_import |
+| 1 |  | HW-C2-CONN-SSW-110-01-F-D-A | SSW-110-01-F-D | 200-SSW11001FD | $2.4100 | $2.41 | mouser_cart_import |
+| 1 |  | HW-C2-CONN-TSW-110-21-L-D-LL-A | TSW-110-21-L-D-LL | 200-TSW11021LDLL | $2.2700 | $2.27 | mouser_cart_import |
 | 8 |  | HW-C2-HW-0022011042-A | 0022011042 |  | N/A | N/A | manual |
-| 4 |  | HW-C2-HW-22-04-1041-A | 22-04-1041 |  | N/A | N/A | manual |
-| 3 |  | HW-C2-HW-455-2266-ND-A | 455-2266-ND |  | N/A | N/A | manual |
-| 25 |  | HW-C2-HW-464762-E-A | 464762-E |  | N/A | N/A | manual |
-| 5 |  | HW-C2-HW-524265-E-A | 524265-E |  | N/A | N/A | manual |
-| 5 |  | HW-C2-HW-544958-E-A | 544958-E |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-776231-1-A | 776231-1 |  | N/A | N/A | manual |
-| 8 |  | HW-C2-HW-971150581-A | 971150581 |  | N/A | N/A | manual |
-| 8 |  | HW-C2-HW-971250581-A | 971250581 |  | N/A | N/A | manual |
-| 8 |  | HW-C2-HW-971350581-A | 971350581 |  | N/A | N/A | manual |
-| 8 |  | HW-C2-HW-9774030592R-A | 9774030592R |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-ACT45B-101-2P-TL003-A | ACT45B-101-2P-TL003 |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-AWHSH105D00G-A | AWHSH105D00G |  | N/A | N/A | manual |
-| 3 |  | HW-C2-HW-B2B-XH-AM_LF__SN_-A | B2B-XH-AM_LF__SN_ |  | N/A | N/A | manual |
-| 12 |  | HW-C2-HW-B58031U9254M062-A | B58031U9254M062 |  | N/A | N/A | manual |
-| 12 |  | HW-C2-HW-BAT54WS-7-F-A | BAT54WS-7-F |  | N/A | N/A | manual |
-| 5 |  | HW-C2-HW-BTS462TATMA1-A | BTS462TATMA1 |  | N/A | N/A | manual |
-| 3 |  | HW-C2-HW-CM600DY-24T-A | CM600DY-24T | CM600DY-24T | $323.5000 | $970.50 | manual |
-| 1 |  | HW-C2-HW-DRDNB21D-7-A | DRDNB21D-7 |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-EC7BW-110S12-A | EC7BW-110S12 |  | N/A | N/A | manual |
-| 12 |  | HW-C2-HW-FDFNYD1-110-5-A | FDFNYD1-110(5) |  | N/A | N/A | manual |
-| 4 |  | HW-C2-HW-LA37S600S05KM-A | LA37S600S05KM |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-LT3080IQ-PBF-A | LT3080IQ#PBF |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-LTST-C230CKT-A | LTST-C230CKT |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-LTST-C230GKT-A | LTST-C230GKT |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-MF-RHT200_32-2-A | MF-RHT200_32-2 |  | N/A | N/A | manual |
-| 6 |  | HW-C2-HW-MGJ2D121509MPC-R7-A | MGJ2D121509MPC-R7 |  | N/A | N/A | manual |
-| 6 |  | HW-C2-HW-MKP1848S61010JY5B-A | MKP1848S61010JY5B |  | N/A | N/A | manual |
-| 5 |  | HW-C2-HW-MM3Z3V0ST1G-A | MM3Z3V0ST1G |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-NXFT15XH103FEAB021-A | NXFT15XH103FEAB021 |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-RD7-12S033R-A | RD7-12S033R |  | N/A | N/A | manual |
-| 3 |  | HW-C2-HW-RKE-1205S_H-A | RKE-1205S_H |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-RTS103C1R2M6L201-A | RTS103C1R2M6L201 |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-S3N-A | S3N |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-SSW-103-01-L-D-A | SSW-103-01-L-D |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-SSW-104-01-L-D-A | SSW-104-01-L-D |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-SSW-108-01-L-D-A | SSW-108-01-L-D |  | N/A | N/A | manual |
+| 32 |  | HW-C2-HW-08-50-0113-A | 08-50-0113 |  | N/A | N/A | manual |
+| 4 |  | HW-C2-HW-22-04-1041-A | 22-04-1041 | 538-22-04-1041 | $0.8900 | $3.56 | mouser_cart_import |
+| 3 |  | HW-C2-HW-455-2266-ND-A | 455-2266-ND | 306-XHP-2 | $0.1000 | $0.30 | mouser_cart_import |
+| 25 |  | HW-C2-HW-464762-E-A | 464762-E | 305-464762 | $0.3970 | $9.93 | mouser_cart_import |
+| 5 |  | HW-C2-HW-524265-E-A | 524265-E | 305-524265-E | $7.8700 | $39.35 | mouser_cart_import |
+| 5 |  | HW-C2-HW-544959-E-A | 544959-E |  | N/A | N/A | manual |
+| 1 |  | HW-C2-HW-776231-1-A | 776231-1 | 571-776231-1 | $16.6900 | $16.69 | mouser_cart_import |
+| 8 |  | HW-C2-HW-971150581-A | 971150581 | 710-971150581 | $0.6000 | $4.80 | mouser_cart_import |
+| 8 |  | HW-C2-HW-971250581-A | 971250581 | 710-971250581 | $1.1000 | $8.80 | mouser_cart_import |
+| 8 |  | HW-C2-HW-971350581-A | 971350581 | 710-971350581 | $1.4800 | $11.84 | mouser_cart_import |
+| 8 |  | HW-C2-HW-9774030592R-A | 9774030592R | 710-9774030592R | $1.5700 | $12.56 | mouser_cart_import |
+| 2 |  | HW-C2-HW-ACT45B-101-2P-TL003-A | ACT45B-101-2P-TL003 | 810-ACT45B1012PTL003 | $1.5300 | $3.06 | mouser_cart_import |
+| 2 |  | HW-C2-HW-AWHSH105D00G-A | AWHSH105D00G | 523-AWHSH105D00G | $1.1100 | $2.22 | mouser_cart_import |
+| 3 |  | HW-C2-HW-B2B-XH-AM_LF__SN_-A | B2B-XH-AM_LF__SN_ | 306-B2B-XH-AMLFSNP | $0.1000 | $0.30 | mouser_cart_import |
+| 12 |  | HW-C2-HW-B58031U9254M062-A | B58031U9254M062 | 871-B58031U9254M062 | $4.6500 | $55.80 | mouser_cart_import |
+| 12 |  | HW-C2-HW-BAT54WS-7-F-A | BAT54WS-7-F | 621-BAT54WS-F | $0.1240 | $1.49 | mouser_cart_import |
+| 5 |  | HW-C2-HW-BTS462TATMA1-A | BTS462TATMA1 | 726-BTS462TATMA1 | $2.6600 | $13.30 | mouser_cart_import |
+| 3 |  | HW-C2-HW-CM600DY-24T-A | CM600DY-24T | CM600DY-24T | $323.5000 | $970.50 | mouser_cart_import |
+| 1 |  | HW-C2-HW-DRDNB21D-7-A | DRDNB21D-7 | 621-DRDNB21D-7 | $0.5600 | $0.56 | mouser_cart_import |
+| 1 |  | HW-C2-HW-EC7BW-110S12-A | EC7BW-110S12 | 418-EC7BW-110S12 | $48.8600 | $48.86 | mouser_cart_import |
+| 12 |  | HW-C2-HW-FDFNYD1-110-5-A | FDFNYD1-110(5) | 161-FDFNYD1-1105 | $0.4800 | $5.76 | mouser_cart_import |
+| 4 |  | HW-C2-HW-LA37S600S05KM-A | LA37S600S05KM | 838-LA37S600S05KM | $19.9600 | $79.84 | mouser_cart_import |
+| 1 |  | HW-C2-HW-LT3080IQ-PBF-A | LT3080IQ#PBF | 584-LT3080IQ#PBF | $8.5400 | $8.54 | mouser_cart_import |
+| 2 |  | HW-C2-HW-LTST-C230CKT-A | LTST-C230CKT | 859-LTST-C230CKT | $0.4100 | $0.82 | mouser_cart_import |
+| 2 |  | HW-C2-HW-LTST-C230GKT-A | LTST-C230GKT | 859-LTST-C230GKT | $0.3600 | $0.72 | mouser_cart_import |
+| 1 |  | HW-C2-HW-MF-RHT200_32-2-A | MF-RHT200_32-2 | 652-MF-RHT200/32-2 | $0.6100 | $0.61 | mouser_cart_import |
+| 6 |  | HW-C2-HW-MGJ2D121509MPC-R7-A | MGJ2D121509MPC-R7 | 580-MGJ2D121509MPCR7 | $6.7700 | $40.62 | mouser_cart_import |
+| 6 |  | HW-C2-HW-MKP1848S61010JY5B-A | MKP1848S61010JY5B | 75-MKP1848S61010JY5B | $7.5400 | $45.24 | mouser_cart_import |
+| 5 |  | HW-C2-HW-MM3Z3V0ST1G-A | MM3Z3V0ST1G | 863-MM3Z3V0ST1G | $0.1700 | $0.85 | mouser_cart_import |
+| 1 |  | HW-C2-HW-NXFT15XH103FEAB021-A | NXFT15XH103FEAB021 | 81-NXFT15XH103FEAB21 | $0.3400 | $0.34 | mouser_cart_import |
+| 1 |  | HW-C2-HW-RD7-12S033R-A | RD7-12S033R | 737-RD7-12S033R | $6.7700 | $6.77 | mouser_cart_import |
+| 3 |  | HW-C2-HW-RKE-1205S_H-A | RKE-1205S_H | 919-RKE-1205S/H | $5.1700 | $15.51 | mouser_cart_import |
+| 2 |  | HW-C2-HW-RTS103C1R2M6L201-A | RTS103C1R2M6L201 | 527-RTS103C1R2M6L201 | $2.2700 | $4.54 | mouser_cart_import |
+| 2 |  | HW-C2-HW-S3N-A | S3N | 512-S3N | $0.6700 | $1.34 | mouser_cart_import |
+| 2 |  | HW-C2-HW-SSW-103-01-L-D-A | SSW-103-01-L-D | 200-SSW10301LD | $1.3400 | $2.68 | mouser_cart_import |
+| 1 |  | HW-C2-HW-SSW-104-01-L-D-A | SSW-104-01-L-D | 200-SSW10401LD | $1.6900 | $1.69 | mouser_cart_import |
+| 2 |  | HW-C2-HW-SSW-108-01-L-D-A | SSW-108-01-L-D | 200-SSW10801LD | $2.3500 | $4.70 | mouser_cart_import |
 | 1 |  | HW-C2-HW-SSW-110-01-F-D-A | SSW-110-01-F-D |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-STS41A-AWLB-R3-A | STS41A-AWLB-R3 |  | N/A | N/A | manual |
-| 6 |  | HW-C2-HW-STTH112A-A | STTH112A |  | N/A | N/A | manual |
-| 6 |  | HW-C2-HW-SXH-001T-P0-6-A | SXH-001T-P0.6 |  | N/A | N/A | manual |
-| 4 |  | HW-C2-HW-SZMMSZ4678T1G-A | SZMMSZ4678T1G |  | N/A | N/A | manual |
+| 1 |  | HW-C2-HW-STS41A-AWLB-R3-A | STS41A-AWLB-R3 | 403-STS41A-AWLB-R3 | $1.1300 | $1.13 | mouser_cart_import |
+| 6 |  | HW-C2-HW-STTH112A-A | STTH112A | 511-STTH112A | $0.5900 | $3.54 | mouser_cart_import |
+| 6 |  | HW-C2-HW-SXH-001T-P0-6-A | SXH-001T-P0.6 | 306-SXH-001T-P0.6 | $0.1000 | $0.60 | mouser_cart_import |
+| 4 |  | HW-C2-HW-SZMMSZ4678T1G-A | SZMMSZ4678T1G | 863-SZMMSZ4678T1G | $0.4300 | $1.72 | mouser_cart_import |
 | 21 |  | HW-C2-HW-TESTPOINT-TH-RED-A | Testpoint TH, RED | 534-5000 | $0.2930 | $6.15 | mouser_cart_import |
-| 1 |  | HW-C2-HW-TPS389006ADJRTER-A | TPS389006ADJRTER |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-TS40-66-50-R-260-SMT-TR-A | TS40-66-50-R-260-SMT-TR |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-TSW-103-18-G-D-A | TSW-103-18-G-D |  | N/A | N/A | manual |
-| 2 |  | HW-C2-HW-TSW-108-18-F-D-A | TSW-108-18-F-D |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-TSW-110-18-T-D-A | TSW-110-18-T-D |  | N/A | N/A | manual |
-| 13 |  | HW-C2-HW-UCM1H101MCL1GS-A | UCM1H101MCL1GS |  | N/A | N/A | manual |
-| 60 |  | HW-C2-HW-UCS2D331MHD-A | UCS2D331MHD |  | N/A | N/A | manual |
-| 1 |  | HW-C2-HW-UJ2-B-HR-G-V-A | UJ2-B-HR-G-V |  | N/A | N/A | manual |
-| 18 |  | HW-C2-HW-VY1222M47Y5UQ6TV0-A | VY1222M47Y5UQ6TV0 |  | N/A | N/A | manual |
+| 1 |  | HW-C2-HW-TPS389006ADJRTER-A | TPS389006ADJRTER | 595-TPS389006ADJRTER | $5.1000 | $5.10 | mouser_cart_import |
+| 2 |  | HW-C2-HW-TS40-66-50-R-260-SMT-TR-A | TS40-66-50-R-260-SMT-TR | 179-TS406650R260S | $0.4800 | $0.96 | mouser_cart_import |
+| 2 |  | HW-C2-HW-TSW-103-18-G-D-A | TSW-103-18-G-D | 200-TSW10318GD | $1.0100 | $2.02 | mouser_cart_import |
+| 2 |  | HW-C2-HW-TSW-108-18-F-D-A | TSW-108-18-F-D | 200-TSW10818FD | $1.4500 | $2.90 | mouser_cart_import |
+| 1 |  | HW-C2-HW-TSW-110-18-T-D-A | TSW-110-18-T-D | 200-TSW11018TD | $1.5800 | $1.58 | mouser_cart_import |
+| 13 |  | HW-C2-HW-UCM1H101MCL1GS-A | UCM1H101MCL1GS | 647-UCM1H101MCL1GS | $0.3250 | $4.23 | mouser_cart_import |
+| 60 |  | HW-C2-HW-UCS2D331MHD-A | UCS2D331MHD | 647-UCS2D331MHD | $2.1600 | $129.60 | mouser_cart_import |
+| 1 |  | HW-C2-HW-UJ2-B-HR-G-V-A | UJ2-B-HR-G-V | 179-UJ2-B-HR-G-V | $1.7000 | $1.70 | mouser_cart_import |
+| 18 |  | HW-C2-HW-VY1222M47Y5UQ6TV0-A | VY1222M47Y5UQ6TV0 | 72-VY1222M47Y5UQ6TV0 | $0.2710 | $4.88 | mouser_cart_import |
 | 27 |  | HW-C2-RES-10K-A | 10k 1210 | 603-AC1210JR-0710KL | $0.0500 | $1.35 | mouser_cart_import |
 | 4 |  | HW-C2-RES-120-A | 120 1210 | 603-AC1210FR-07120RL | $0.1000 | $0.40 | mouser_cart_import |
 | 17 |  | HW-C2-RES-1K-A | 1k 1210 | 603-RC1210FR-071KL | $0.0490 | $0.83 | mouser_cart_import |
@@ -133,7 +133,7 @@ Base quantity: 1 unit(s)
 | 2 |  | HW-C2-RES-560-A | 560ohm 1210 resistor | 667-ERJ-P14F5600U | $0.4400 | $0.88 | mouser_cart_import |
 | 16 |  | HW-C2-RES-250K-A | Thick Film Resistors - SMD 1/2watt 249Kohms 1% | 71-CRCW1210-249K-E3 | $0.0700 | $1.12 | mouser_cart_import |
 
-**Mouser subtotal:** $1015.18
+**Mouser subtotal:** $1733.29
 
 
 ## PCB Fabrication
@@ -163,18 +163,17 @@ Base quantity: 1 unit(s)
 
 ---
 
-## Grand Total (1 unit): **$1685.41**
+## Grand Total (1 unit): **$2403.52**
 
 
 ## Quantity Scaling
 
 | Quantity | Estimated Total |
 |----------|----------------|
-| 1 | $1685.41 |
-| 2 | $3303.37 |
-| 3 | $4915.77 |
-| 5 | $8154.07 |
-| 10 | $16252.39 |
+| 3 | $7070.09 |
+| 5 | $11744.59 |
+| 10 | $23433.45 |
+| 25 | $58537.18 |
 
 
 ## Pack Rounding & Stock
@@ -196,67 +195,10 @@ Base quantity: 1 unit(s)
 - CurrentSenseHarness (assembly)
 - GDVSHarness (assembly)
 - TempSenseHarness (assembly)
-- 220pF 100V C0G 1210 (mouser)
-- CY15B102Q-SXET (mouser)
-- ISO1042BDWVR (mouser)
-- ISO1212DBQ (mouser)
-- MAX22530AWE+ (mouser)
-- NCV57100DWR2G (mouser)
-- STM32G474RCT3 (mouser)
-- STM32H723ZGT6 (mouser)
-- SSW-110-01-F-D (mouser)
-- TSW-110-21-L-D-LL (mouser)
-- 0008500113 (mouser)
 - 0022011042 (mouser)
-- 22-04-1041 (mouser)
-- 455-2266-ND (mouser)
-- 464762-E (mouser)
-- 524265-E (mouser)
-- 544958-E (mouser)
-- 776231-1 (mouser)
-- 971150581 (mouser)
-- 971250581 (mouser)
-- 971350581 (mouser)
-- 9774030592R (mouser)
-- ACT45B-101-2P-TL003 (mouser)
-- AWHSH105D00G (mouser)
-- B2B-XH-AM_LF__SN_ (mouser)
-- B58031U9254M062 (mouser)
-- BAT54WS-7-F (mouser)
-- BTS462TATMA1 (mouser)
-- DRDNB21D-7 (mouser)
-- EC7BW-110S12 (mouser)
-- FDFNYD1-110(5) (mouser)
-- LA37S600S05KM (mouser)
-- LT3080IQ#PBF (mouser)
-- LTST-C230CKT (mouser)
-- LTST-C230GKT (mouser)
-- MF-RHT200_32-2 (mouser)
-- MGJ2D121509MPC-R7 (mouser)
-- MKP1848S61010JY5B (mouser)
-- MM3Z3V0ST1G (mouser)
-- NXFT15XH103FEAB021 (mouser)
-- RD7-12S033R (mouser)
-- RKE-1205S_H (mouser)
-- RTS103C1R2M6L201 (mouser)
-- S3N (mouser)
-- SSW-103-01-L-D (mouser)
-- SSW-104-01-L-D (mouser)
-- SSW-108-01-L-D (mouser)
+- 08-50-0113 (mouser)
+- 544959-E (mouser)
 - SSW-110-01-F-D (mouser)
-- STS41A-AWLB-R3 (mouser)
-- STTH112A (mouser)
-- SXH-001T-P0.6 (mouser)
-- SZMMSZ4678T1G (mouser)
-- TPS389006ADJRTER (mouser)
-- TS40-66-50-R-260-SMT-TR (mouser)
-- TSW-103-18-G-D (mouser)
-- TSW-108-18-F-D (mouser)
-- TSW-110-18-T-D (mouser)
-- UCM1H101MCL1GS (mouser)
-- UCS2D331MHD (mouser)
-- UJ2-B-HR-G-V (mouser)
-- VY1222M47Y5UQ6TV0 (mouser)
 
 
 ## SendCutSend Part Details
@@ -333,11 +275,4 @@ Base quantity: 1 unit(s)
 | CurrentSenseHarness | yes |
 | GDVSHarness | yes |
 | TempSenseHarness | yes |
-
-**Not ready:**
-- board ControlBoard: no BOM CSV in Fab/
-- board DCBusCapacitorBoard: no BOM CSV in Fab/
-- board DCBusFilter: no BOM CSV in Fab/
-- board GateDriver: no BOM CSV in Fab/
-- board IOBoard: no BOM CSV in Fab/
 
