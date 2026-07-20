@@ -33,7 +33,10 @@ void CurrentSensorTest_Init() {
 void CurrentSensorTest_RunOnce() {
     static uint32_t s_last_offset_ms = 0;
     float iu = 0.0f, iv = 0.0f, iw = 0.0f;
-    if (phaseCurrentADC().sample(iu, iv, iw)) {
+    /* Use the non-destructive accessor: FOC consumes sample() from the PWM
+     * ISR at the control rate, and racing it for the freshness flag would
+     * leave the telemetry path starved of new values. */
+    if (phaseCurrentADC().latest(iu, iv, iw)) {
         /* Do not publish current values until the zero-current offset has
          * been validated.  This prevents huge phantom startup spikes from
          * appearing in the telemetry log when the sensor is still settling. */

@@ -55,12 +55,26 @@ public:
     /**
      * @brief Convert the latest raw samples to amperes.
      *
+     * Consume-once semantics for the control loop: the freshness flag is
+     * cleared on success, so a second consumer (e.g. telemetry) racing this
+     * call will observe stale data.  Use latest() for non-destructive reads.
+     *
      * @param[out] iu  Phase U current in A.
      * @param[out] iv  Phase V current in A.
      * @param[out] iw  Phase W current in A (computed).
      * @return true if a new sample pair was available since the last call.
      */
     bool sample(float& iu, float& iv, float& iw);
+
+    /**
+     * @brief Read the most recent conversion WITHOUT consuming freshness.
+     *
+     * Intended for telemetry/logging consumers that run slower than the ADC
+     * rate and must not starve the control-loop consumer of sample().
+     *
+     * @return true if the ADC is running (values valid).
+     */
+    bool latest(float& iu, float& iv, float& iw) const;
 
     /**
      * @brief Called from the ADC ISR when an injected sequence completes.

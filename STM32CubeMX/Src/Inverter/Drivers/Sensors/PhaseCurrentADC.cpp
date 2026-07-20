@@ -359,6 +359,20 @@ bool PhaseCurrentADC::sample(float& iu, float& iv, float& iw) {
     return true;
 }
 
+bool PhaseCurrentADC::latest(float& iu, float& iv, float& iw) const {
+    if (!m_running) {
+        return false;
+    }
+
+    __disable_irq();
+    iu = m_current_u;
+    iv = m_current_v;
+    __enable_irq();
+
+    iw = -(iu + iv);
+    return true;
+}
+
 } // namespace Inverter
 
 extern "C" void ADC_IRQHandler(void) {
