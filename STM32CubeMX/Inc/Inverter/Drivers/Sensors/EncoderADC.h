@@ -213,9 +213,10 @@ private:
     float             m_mag_ema        = 0.0f;
     bool              m_mag_ema_init   = false;
 
-    /* Mechanical speed estimation (ISR context). */
-    static constexpr float SAMPLE_HZ  = 10000.0f;
+    /* Mechanical speed estimation (ISR context).  m_sample_hz is derived
+     * from the actual TIM2 trigger configuration in initTimer(). */
     static constexpr float RPM_ALPHA  = 0.01f;
+    float m_sample_hz    = 10000.0f;
     float m_rpm_prev_angle = 0.0f;
     bool  m_rpm_init       = false;
     volatile float m_rpm_ema = 0.0f;

@@ -129,6 +129,13 @@ private:
     float m_orig_ki = 0.0f;
     void restoreGains();
 
+    /* The switching frequency is a runtime variable and must not be assumed:
+     * the calibrator pins a known value for its measurement and restores the
+     * user's setting afterwards. */
+    float m_saved_switching_hz = 0.0f;
+    void restoreSwitchingFrequency();
+    static constexpr float CAL_SWITCHING_HZ = 2500.0f;
+
     /* Sequence bookkeeping. */
     int m_point_index = 0;       /* which curve point is being measured */
     bool m_lq_negative_half = false;

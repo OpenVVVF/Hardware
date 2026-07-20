@@ -83,6 +83,16 @@ bool EncoderADC::initTimer() {
         return false;
     }
 
+    /* Derive the sample rate from the actual timer configuration rather than
+     * assuming it: the RPM estimator uses this and must follow any future
+     * change to the trigger rate. */
+    {
+        /* TIM2 is on APB1 (137.5 MHz timer clock). */
+        m_sample_hz = 137500000.0f /
+            (static_cast<float>(htim2_enc.Init.Prescaler + 1U) *
+             static_cast<float>(htim2_enc.Init.Period + 1U));
+    }
+
     TIM_MasterConfigTypeDef sMasterConfig = {};
     sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
     sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
@@ -216,7 +226,7 @@ void EncoderADC::onDmaComplete() {
         float delta = angle - m_rpm_prev_angle;
         if (delta > 180.0f) delta -= 360.0f;
         else if (delta < -180.0f) delta += 360.0f;
-        const float rpm_inst = delta * (SAMPLE_HZ / 360.0f) * 60.0f;
+        const float rpm_inst = delta * (m_sample_hz / 360.0f) * 60.0f;
         m_rpm_ema += RPM_ALPHA * (rpm_inst - m_rpm_ema);
     } else {
         m_rpm_init = true;

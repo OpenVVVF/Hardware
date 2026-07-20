@@ -591,6 +591,19 @@ void FocControlManager::update() {
         return;
     }
 
+    /* The switching/update frequency is a runtime variable: if it changed
+     * since we computed the control-loop period, recompute it so the PI
+     * timing stays correct. */
+    {
+        const float f_update = PWM_GetUpdateFrequency();
+        if (f_update > 0.0f && m_dt_s > 0.0f &&
+            std::fabs(f_update - 1.0f / m_dt_s) > 0.5f) {
+            m_dt_s = 1.0f / f_update;
+            Telemetry::printf("[FOC] update rate changed; dt=%.4f ms",
+                              static_cast<double>(m_dt_s * 1000.0f));
+        }
+    }
+
     pollGateDriverStatus();
 
     if (FaultManager::instance().isSeverityActive(FaultSeverity::Critical)) {

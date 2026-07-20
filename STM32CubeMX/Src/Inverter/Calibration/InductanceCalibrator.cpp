@@ -53,6 +53,13 @@ void InductanceCalibrator::restoreGains() {
     }
 }
 
+void InductanceCalibrator::restoreSwitchingFrequency() {
+    if (m_saved_switching_hz > 0.0f) {
+        PWM_SetFrequency(static_cast<uint32_t>(m_saved_switching_hz + 0.5f));
+        m_saved_switching_hz = 0.0f;
+    }
+}
+
 bool InductanceCalibrator::isActive() const {
     return m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL;
 }
@@ -99,6 +106,7 @@ void InductanceCalibrator::fail(const char* fmt, ...) {
     focControlManager().setSampleCallback(nullptr, nullptr);
     focControlManager().stop();
     restoreGains();
+    restoreSwitchingFrequency();
     enterState(State::FAIL);
 }
 
@@ -159,6 +167,11 @@ bool InductanceCalibrator::start(float max_current_a, float ac_current_a,
     m_fail_reason[0] = '\0';
     m_retries_left = 2;
 
+    /* Pin a known switching frequency for the measurement (the runtime
+     * frequency is user-defined and may be anything); restored on exit. */
+    m_saved_switching_hz = PWM_GetFrequency();
+    PWM_SetFrequency(static_cast<uint32_t>(CAL_SWITCHING_HZ));
+
     /* Injection oscillator increment, using the real control rate. */
     float fs = PWM_GetUpdateFrequency();
     if (fs <= 0.0f) fs = 2500.0f;
@@ -205,6 +218,7 @@ void InductanceCalibrator::stop() {
     focControlManager().setSampleCallback(nullptr, nullptr);
     focControlManager().stop();
     restoreGains();
+    restoreSwitchingFrequency();
     Telemetry::printf("[CAL] IND: stopped");
     enterState(State::IDLE);
 }
@@ -525,6 +539,7 @@ void InductanceCalibrator::update() {
             focControlManager().setSampleCallback(nullptr, nullptr);
             focControlManager().stop();
             restoreGains();
+            restoreSwitchingFrequency();
 
             Telemetry::printf("[CAL] IND: ========================================");
             Telemetry::printf("[CAL] IND: INDUCTANCE COMPLETE");

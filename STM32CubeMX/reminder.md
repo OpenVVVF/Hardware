@@ -33,6 +33,13 @@ This file tracks known gaps and deferred work that should be addressed before hi
 - **Cold motorcal quirk:** if the encoder bounds have never been learned (erased/new FRAM), they become valid mid-way through the OFFSET rotation and the angle normalization switches there, which can leave the rotor unsettled for the resistance phase (seen once as a spurious 213 A overcurrent FAIL). Retry motorcal — the second attempt runs with valid bounds from the start.
 - **SPI4 runs at /32 (~4.3 MHz), not the CubeMX default /4 (34 MHz):** at 34 MHz the polling HAL receive was overrun by the 10 kHz ADC ISR, corrupting reads. `CY15B102Q_Read` now also masks interrupts for the transfer window — do not remove that, and do not raise the prescaler back without testing `motorcfg raw` (20-read hammer with error counter) under load. If CubeMX regenerates `spi.c`, re-apply the /32 prescaler (`.ioc` was updated to match).
 
+## Switching Frequency / Modulation (runtime variable)
+
+- **The switching frequency and modulation scheme are user-defined runtime settings, not constants.** Do not bake rate assumptions into control or calibration code. The current frequency is always available live via `PWM_GetFrequency()` / `PWM_GetUpdateFrequency()`.
+- `FocControlManager` recomputes the control-loop `dt` whenever the update frequency changes (checked in `update()`); keep it that way.
+- Calibration routines may pin specific values for their measurement (e.g. `InductanceCalibrator::CAL_SWITCHING_HZ`) but MUST save and restore the user's setting (see `restoreSwitchingFrequency()` and its use on every exit path).
+- The encoder/RPM path derives its sample rate from the live TIM2 configuration (`EncoderADC::m_sample_hz`), not a literal.
+
 ## Flux Linkage Calibration (back-EMF ramp)
 
 - **Method:** `FluxLinkageCalibrator` (`fluxcal start [max_iq]`, default 20 A) ramps iq 0 -> max over 12 s under FOC (id=0) and samples psi_m = (vq - R*iq)/omega_e every 50 ms, so each point of the speed sweep is a measurement. Stops at the PI voltage ceiling (near the ceiling the PI output no longer equals applied voltage and you measure the limit constant, not the motor).
