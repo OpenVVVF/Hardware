@@ -40,9 +40,13 @@ struct MotorConfigData {
     float lq_henry;               /**< Reserved (q-axis inductance), 0 for now. */
     float pi_kp;                  /**< Current-loop proportional gain. */
     float pi_ki;                  /**< Current-loop integral gain. */
+    uint16_t enc_sin_min;         /**< Learned encoder sin/cos amplitude bounds. */
+    uint16_t enc_sin_max;         /**< All-zero = not captured (e.g. v1 record). */
+    uint16_t enc_cos_min;
+    uint16_t enc_cos_max;
 };
 
-constexpr uint16_t MOTOR_CONFIG_VERSION = 1U;
+constexpr uint16_t MOTOR_CONFIG_VERSION = 2U;
 
 /**
  * @brief Motor configuration persistence: FRAM <-> runtime.

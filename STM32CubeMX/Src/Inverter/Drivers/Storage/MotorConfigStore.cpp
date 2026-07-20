@@ -2,6 +2,7 @@
 #include "Inverter/Drivers/Storage/FramStore.h"
 #include "Inverter/Calibration/MotorCalibration.h"
 #include "Inverter/Control/FocControlManager.h"
+#include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Telemetry.h"
 
 #include <cmath>
@@ -22,6 +23,7 @@ MotorConfigData s_working = {
     0.0f,               /* flux_linkage_wb (reserved) */
     0.0f, 0.0f,         /* ld/lq (reserved) */
     0.03f, 10.0f,       /* pi_kp / pi_ki (match FocControlManager defaults) */
+    0, 0, 0, 0,         /* encoder bounds: unset until learned */
 };
 bool s_stored = false;
 CY15B102Q_HandleTypeDef* s_fram_dev = nullptr;
@@ -40,6 +42,17 @@ MotorConfigData capture(const MotorConfigData& base) {
     d.r_phase_vw_ohm = mc.r_phase_vw;
     d.pi_kp = focControlManager().kp();
     d.pi_ki = focControlManager().ki();
+    /* Encoder amplitude bounds are learned dynamically as the rotor turns;
+     * persist them so FOC commutates correctly from the first electrical
+     * cycle after a reboot (the hardcoded fallback bounds distort the angle
+     * enough to detent-lock the rotor).  Keep the previously stored bounds
+     * if none have been learned yet this boot. */
+    if (encoderADC().learnedBoundsActive()) {
+        d.enc_sin_min = encoderADC().sinMin();
+        d.enc_sin_max = encoderADC().sinMax();
+        d.enc_cos_min = encoderADC().cosMin();
+        d.enc_cos_max = encoderADC().cosMax();
+    }
     return d;
 }
 
@@ -124,6 +137,17 @@ bool applyToRuntime() {
 
     if (s_working.pi_kp >= 0.0f) focControlManager().setKp(s_working.pi_kp);
     if (s_working.pi_ki >= 0.0f) focControlManager().setKi(s_working.pi_ki);
+
+    /* Seed the learned encoder bounds if a plausible set was stored.  They
+     * keep expanding from real samples afterwards, so this only ever helps
+     * the angle normalization converge before the first revolution. */
+    if (s_working.enc_sin_max > s_working.enc_sin_min &&
+        (s_working.enc_sin_max - s_working.enc_sin_min) >= 5000U &&
+        s_working.enc_cos_max > s_working.enc_cos_min &&
+        (s_working.enc_cos_max - s_working.enc_cos_min) >= 5000U) {
+        encoderADC().setBounds(s_working.enc_sin_min, s_working.enc_sin_max,
+                               s_working.enc_cos_min, s_working.enc_cos_max);
+    }
     return true;
 }
 
@@ -134,8 +158,8 @@ bool loadFromFram() {
         s_stored = false;
         return false;
     }
-    if (version != MOTOR_CONFIG_VERSION) {
-        Telemetry::printf("[CFG] motor config version %u != %u; ignoring",
+    if (version == 0U || version > MOTOR_CONFIG_VERSION) {
+        Telemetry::printf("[CFG] motor config version %u unsupported (max %u); ignoring",
                           static_cast<unsigned>(version),
                           static_cast<unsigned>(MOTOR_CONFIG_VERSION));
         s_stored = false;
@@ -184,6 +208,13 @@ void dump() {
         Telemetry::printf("[CFG]   pi kp / ki    = %.4f / %.3f",
                           static_cast<double>(stored.pi_kp),
                           static_cast<double>(stored.pi_ki));
+        if (stored.enc_sin_max > stored.enc_sin_min) {
+            Telemetry::printf("[CFG]   enc bounds    = sin [%u, %u] cos [%u, %u]",
+                              stored.enc_sin_min, stored.enc_sin_max,
+                              stored.enc_cos_min, stored.enc_cos_max);
+        } else {
+            Telemetry::printf("[CFG]   enc bounds    = (not stored)");
+        }
     }
 
     const MotorCalibration& mc = motorCalibration();

@@ -92,14 +92,20 @@ bool load(uint16_t node_id, void* payload, uint16_t length, uint16_t* version_ou
 
         if (h.magic != SLOT_MAGIC) continue;
         if (h.node_id != node_id) continue;
-        if (h.length < length || h.length > MAX_PAYLOAD) continue;
+        if (h.length > MAX_PAYLOAD) continue;
 
         uint8_t buf[MAX_PAYLOAD];
         CY15B102Q_Read(s_dev, slotAddress(node_id) + HEADER_SIZE, buf, h.length);
 
         if (recordCrc(h, buf) != h.crc32) continue;
 
-        std::memcpy(payload, buf, length);
+        /* Older schema versions may store a shorter payload: copy what is
+         * there and zero-fill the rest so new fields read as "unset". */
+        const uint16_t copy_len = (h.length < length) ? h.length : length;
+        std::memcpy(payload, buf, copy_len);
+        if (copy_len < length) {
+            std::memset(static_cast<uint8_t*>(payload) + copy_len, 0, length - copy_len);
+        }
         if (version_out != nullptr) *version_out = h.version;
         return true;
     }
