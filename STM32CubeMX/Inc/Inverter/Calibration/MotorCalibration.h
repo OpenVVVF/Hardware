@@ -31,6 +31,7 @@ struct MotorCalibration {
     float r_phase_avg = 0.0145f;          /**< Average per-phase resistance [ohm]. */
     float ld_henry = 0.0f;                /**< d-axis inductance (0 = not calibrated). */
     float lq_henry = 0.0f;                /**< q-axis inductance (0 = not calibrated). */
+    float flux_linkage_wb = 0.0f;         /**< PM flux linkage (0 = not calibrated). */
     uint32_t timestamp_ms = 0;            /**< HAL tick when the calibration finished. */
     bool valid = true;                    /**< True after a successful calibration. */
 

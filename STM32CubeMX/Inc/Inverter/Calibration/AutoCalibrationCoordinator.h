@@ -73,6 +73,7 @@ private:
         SETTLE,
         RESISTANCE,
         INDUCTANCE,
+        FLUX,
         DONE,
         FAIL
     };
@@ -94,6 +95,7 @@ private:
     float m_r_vw = 0.0f;
     float m_r_avg = 0.0f;
     bool m_inductance_ran = false;
+    bool m_flux_ran = false;
 };
 
 AutoCalibrationCoordinator& autoCalibrationCoordinator();

@@ -4,6 +4,7 @@
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/InductanceCalibrator.h"
+#include "Inverter/Calibration/FluxLinkageCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Calibration/MotorCalibration.h"
 #include "Inverter/Control/FocControlManager.h"
@@ -46,6 +47,7 @@ const char* AutoCalibrationCoordinator::stateName() const {
         case State::SETTLE:      return "SETTLE";
         case State::RESISTANCE:  return "RESISTANCE";
         case State::INDUCTANCE:  return "INDUCTANCE";
+        case State::FLUX:        return "FLUX";
         case State::DONE:        return "DONE";
         case State::FAIL:        return "FAIL";
     }
@@ -342,6 +344,32 @@ void AutoCalibrationCoordinator::update() {
                                   "incomplete; Ld/Lq left unset");
             }
 
+            /* Measure the PM flux linkage (back-EMF speed sweep).  The FRAM
+             * save happens after this stage so it includes everything. */
+            Telemetry::printf("[CAL] AUTO: enter FLUX");
+            m_flux_ran = fluxLinkageCalibrator().start(RES_MAX_CURRENT_A * 0.67f);
+            if (!m_flux_ran) {
+                Telemetry::printf("[CAL] AUTO: WARNING: flux cal failed to start; "
+                                  "continuing without it");
+            }
+            enterState(State::FLUX);
+            break;
+        }
+
+        case State::FLUX: {
+            FluxLinkageCalibrator& fc = fluxLinkageCalibrator();
+            if (fc.isActive()) {
+                return; /* still running */
+            }
+
+            if (m_flux_ran && fc.isDone() && fc.lastFlux() > 0.0f) {
+                Telemetry::printf("[CAL] AUTO: flux linkage=%.5f Wb",
+                                  static_cast<double>(fc.lastFlux()));
+            } else {
+                Telemetry::printf("[CAL] AUTO: WARNING: flux calibration "
+                                  "incomplete; psi_m left unset");
+            }
+
             /* Persist the freshly measured profile so FOC can run after a
              * reboot without re-running motorcal. */
             if (MotorConfigStore::saveFromRuntime()) {
@@ -371,6 +399,10 @@ void AutoCalibrationCoordinator::update() {
                 Telemetry::printf("[CAL] AUTO:   Ld / Lq (0 A)      = %.1f / %.1f uH",
                                   static_cast<double>(motorCalibration().ld_henry * 1.0e6),
                                   static_cast<double>(motorCalibration().lq_henry * 1.0e6));
+            }
+            if (motorCalibration().flux_linkage_wb > 0.0f) {
+                Telemetry::printf("[CAL] AUTO:   flux linkage       = %.5f Wb",
+                                  static_cast<double>(motorCalibration().flux_linkage_wb));
             }
             Telemetry::printf("[CAL] AUTO: ===========================================");
             break;

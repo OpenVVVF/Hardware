@@ -6,6 +6,7 @@
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/InductanceCalibrator.h"
+#include "Inverter/Calibration/FluxLinkageCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Calibration/AutoCalibrationCoordinator.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
@@ -20,6 +21,7 @@ using Inverter::PoleCalibrator;
 using Inverter::EncoderOffsetCalibrator;
 using Inverter::ResistanceCalibrator;
 using Inverter::InductanceCalibrator;
+using Inverter::FluxLinkageCalibrator;
 using Inverter::EncoderCycleCalibrator;
 using Inverter::AutoCalibrationCoordinator;
 using Inverter::openLoopController;
@@ -27,6 +29,7 @@ using Inverter::poleCalibrator;
 using Inverter::encoderOffsetCalibrator;
 using Inverter::resistanceCalibrator;
 using Inverter::inductanceCalibrator;
+using Inverter::fluxLinkageCalibrator;
 using Inverter::autoCalibrationCoordinator;
 
 static bool stringsEqual(const char* a, const char* b) {
@@ -297,12 +300,56 @@ public:
     }
 };
 
+class FluxCalCommand : public CommandInterface {
+public:
+    FluxCalCommand()
+      : CommandInterface("fluxcal", "PM flux linkage calibration (back-EMF speed sweep)",
+            {ArgSpec{"subcmd", "", 0.0f, 0.0f, 0.0f, true, ArgSpec::STRING},
+             ArgSpec{"max_iq", "", 0.0f, 200.0f, 0.0f, false, ArgSpec::FLOAT}}) {}
+
+    void execute(const ArgValue* args, CommandContext&) override {
+        FluxLinkageCalibrator& fc = fluxLinkageCalibrator();
+        const char* sub = args[0].s_val;
+
+        if (stringsEqual(sub, "stop")) {
+            fc.stop();
+            return;
+        }
+
+        if (stringsEqual(sub, "status")) {
+            Telemetry::printf("[CAL] fluxcal: state=%s psi_m=%.5f Wb points=%d",
+                              fc.stateName(), static_cast<double>(fc.lastFlux()),
+                              fc.pointCount());
+            for (int i = 0; i < fc.pointCount(); ++i) {
+                if (fc.fluxPoint(i) > 0.0f) {
+                    Telemetry::printf("[CAL] fluxcal:   iq=%5.1f A rpm=%6.0f psi_m=%.5f Wb",
+                                      static_cast<double>(fc.iqPoint(i)),
+                                      static_cast<double>(fc.rpmPoint(i)),
+                                      static_cast<double>(fc.fluxPoint(i)));
+                }
+            }
+            return;
+        }
+
+        if (stringsEqual(sub, "start")) {
+            const float maxIq = args[1].present ? args[1].f_val : 20.0f;
+            if (!fc.start(maxIq)) {
+                Telemetry::printf("[CAL] fluxcal start failed");
+            }
+            return;
+        }
+
+        Telemetry::printf("[CAL] fluxcal: unknown subcommand '%s' (start/stop/status)", sub);
+    }
+};
+
 static PolesCommand      sPolesCmd;
 static EncoderCalCommand sEncoderCalCmd;
 static CalPolesCommand   sCalPolesCmd;
 static EncOffsetCommand  sEncOffsetCmd;
 static ResCalCommand     sResCalCmd;
 static IndCalCommand     sIndCalCmd;
+static FluxCalCommand    sFluxCalCmd;
 static MotorCalCommand   sMotorCalCmd;
 
 void registerCalibrationCommands(CommandManager& mgr) {
@@ -312,5 +359,6 @@ void registerCalibrationCommands(CommandManager& mgr) {
     mgr.registerCommand(&sEncOffsetCmd);
     mgr.registerCommand(&sResCalCmd);
     mgr.registerCommand(&sIndCalCmd);
+    mgr.registerCommand(&sFluxCalCmd);
     mgr.registerCommand(&sMotorCalCmd);
 }

@@ -13,6 +13,7 @@
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/InductanceCalibrator.h"
+#include "Inverter/Calibration/FluxLinkageCalibrator.h"
 #include "Inverter/Calibration/AutoCalibrationCoordinator.h"
 
 #include "main.h"
@@ -150,6 +151,7 @@ static void loop()
     Inverter::encoderOffsetCalibrator().update();
     Inverter::resistanceCalibrator().update();
     Inverter::inductanceCalibrator().update();
+    Inverter::fluxLinkageCalibrator().update();
     Inverter::autoCalibrationCoordinator().update();
 
     /* Telemetry for open-loop setpoints. */

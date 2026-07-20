@@ -35,7 +35,7 @@ struct MotorConfigData {
     float r_phase_uv_ohm;         /**< Per-phase resistance, UV pair [ohm]. */
     float r_phase_uw_ohm;         /**< Per-phase resistance, UW pair [ohm]. */
     float r_phase_vw_ohm;         /**< Per-phase resistance, VW pair [ohm]. */
-    float flux_linkage_wb;        /**< Reserved (PM flux linkage), 0 for now. */
+    float flux_linkage_wb;        /**< PM flux linkage (0 = not calibrated). */
     float ld_henry;               /**< d-axis inductance at 0 A bias (0 = not calibrated). */
     float lq_henry;               /**< q-axis inductance at 0 A bias (0 = not calibrated). */
     float pi_kp;                  /**< Current-loop proportional gain. */

@@ -62,6 +62,9 @@ inline MotorParameters buildMotorParametersFromCalibration(const MotorCalibratio
     if (cal.valid && cal.lq_henry > 0.0f) {
         p.lq_henry = cal.lq_henry;
     }
+    if (cal.valid && cal.flux_linkage_wb > 0.0f) {
+        p.flux_linkage_wb = cal.flux_linkage_wb;
+    }
 
     return p;
 }

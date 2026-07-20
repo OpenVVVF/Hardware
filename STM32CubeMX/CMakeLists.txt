@@ -64,6 +64,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Calibration/EncoderCycleCalibrator.cpp
     Src/Inverter/Calibration/AutoCalibrationCoordinator.cpp
     Src/Inverter/Calibration/InductanceCalibrator.cpp
+    Src/Inverter/Calibration/FluxLinkageCalibrator.cpp
     Src/Inverter/Calibration/MotorCalibration.cpp
     Src/Inverter/Calibration/Common/CalibrationHardware.cpp
     Src/Inverter/Calibration/Common/EncoderTracker.cpp

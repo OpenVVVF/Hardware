@@ -60,6 +60,7 @@ MotorConfigData capture(const MotorConfigData& base) {
      * produced them, otherwise keep what was already stored. */
     if (mc.ld_henry > 0.0f) d.ld_henry = mc.ld_henry;
     if (mc.lq_henry > 0.0f) d.lq_henry = mc.lq_henry;
+    if (mc.flux_linkage_wb > 0.0f) d.flux_linkage_wb = mc.flux_linkage_wb;
     InductanceCalibrator& ic = inductanceCalibrator();
     if (ic.isDone() && ic.pointCount() > 0) {
         d.ind_n_points = static_cast<uint16_t>(ic.pointCount());
@@ -152,6 +153,7 @@ bool applyToRuntime() {
     mc.timestamp_ms = 0U; /* unknown for a stored config */
     if (s_working.ld_henry > 0.0f) mc.ld_henry = s_working.ld_henry;
     if (s_working.lq_henry > 0.0f) mc.lq_henry = s_working.lq_henry;
+    if (s_working.flux_linkage_wb > 0.0f) mc.flux_linkage_wb = s_working.flux_linkage_wb;
     mc.valid = true;
 
     if (s_working.pi_kp >= 0.0f) focControlManager().setKp(s_working.pi_kp);
@@ -220,7 +222,7 @@ void dump() {
                           static_cast<double>(stored.r_phase_uv_ohm),
                           static_cast<double>(stored.r_phase_uw_ohm),
                           static_cast<double>(stored.r_phase_vw_ohm));
-        Telemetry::printf("[CFG]   flux_linkage  = %.5f Wb (reserved)", static_cast<double>(stored.flux_linkage_wb));
+        Telemetry::printf("[CFG]   flux_linkage  = %.5f Wb", static_cast<double>(stored.flux_linkage_wb));
         Telemetry::printf("[CFG]   ld / lq       = %.2e / %.2e H",
                           static_cast<double>(stored.ld_henry),
                           static_cast<double>(stored.lq_henry));
