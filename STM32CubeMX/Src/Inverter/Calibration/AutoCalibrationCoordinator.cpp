@@ -5,6 +5,7 @@
 #include "Inverter/Calibration/ResistanceCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Calibration/MotorCalibration.h"
+#include "Inverter/Control/FocControlManager.h"
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
@@ -120,6 +121,7 @@ bool AutoCalibrationCoordinator::start() {
     m_encoder_cycles_per_rev = 0.0f;
     m_breakaway_mod = 0.0f;
     m_encoder_offset = 0.0f;
+    m_encoder_sign = -1.0f;
     m_r_uv = 0.0f;
     m_r_uw = 0.0f;
     m_r_vw = 0.0f;
@@ -224,12 +226,14 @@ void AutoCalibrationCoordinator::update() {
             }
 
             m_encoder_offset = ec.averageOffset();
+            m_encoder_sign = static_cast<float>(ec.detectedSign());
             /* Override the pole-cal cycle-count estimate with the more accurate
              * value measured during the controlled offset rotation. */
             m_encoder_cycles_per_rev = ec.measuredEncoderCyclesPerRev();
-            Telemetry::printf("[CAL] AUTO: encoder offset=%.3f deg samples=%d",
+            Telemetry::printf("[CAL] AUTO: encoder offset=%.3f deg samples=%d sign=%.0f",
                               static_cast<double>(m_encoder_offset),
-                              ec.sampleCount());
+                              ec.sampleCount(),
+                              static_cast<double>(m_encoder_sign));
             Telemetry::printf("[CAL] AUTO: encoder cycles/rev measured=%.3f (pole-cal estimate=%.3f)",
                               static_cast<double>(m_encoder_cycles_per_rev),
                               static_cast<double>(m_pole_cal_encoder_cycles_per_rev));
@@ -280,6 +284,7 @@ void AutoCalibrationCoordinator::update() {
                 mc.pole_count = m_poles;
                 mc.encoder_cycles_per_rev = m_encoder_cycles_per_rev;
                 mc.encoder_offset_deg = m_encoder_offset;
+                mc.encoder_sign = m_encoder_sign;
                 mc.r_phase_uv = m_r_uv;
                 mc.r_phase_uw = m_r_uw;
                 mc.r_phase_vw = m_r_vw;
@@ -290,11 +295,17 @@ void AutoCalibrationCoordinator::update() {
                 Telemetry::log("motor_poles", mc.pole_count);
                 Telemetry::log("motor_enc_cycles", mc.encoder_cycles_per_rev);
                 Telemetry::log("motor_enc_offset_deg", mc.encoder_offset_deg);
+                Telemetry::log("motor_enc_sign", mc.encoder_sign);
                 Telemetry::log("motor_r_phase_uv", mc.r_phase_uv);
                 Telemetry::log("motor_r_phase_uw", mc.r_phase_uw);
                 Telemetry::log("motor_r_phase_vw", mc.r_phase_vw);
                 Telemetry::log("motor_r_phase_avg", mc.r_phase_avg);
             }
+
+            /* The fresh calibration replaces the offset the runtime adjustment
+             * was tuned against; drop the stale delta so the next FOC start
+             * uses exactly the measured offset. */
+            focControlManager().resetEncoderOffsetAdjustment();
 
             encoderADC().learnBounds(false);
             enterState(State::DONE);
@@ -305,6 +316,7 @@ void AutoCalibrationCoordinator::update() {
             Telemetry::printf("[CAL] AUTO:   poles                = %.2f", static_cast<double>(m_poles));
             Telemetry::printf("[CAL] AUTO:   encoder cycles/rev   = %.2f", static_cast<double>(m_encoder_cycles_per_rev));
             Telemetry::printf("[CAL] AUTO:   encoder offset       = %.3f deg", static_cast<double>(m_encoder_offset));
+            Telemetry::printf("[CAL] AUTO:   encoder sign         = %.0f", static_cast<double>(m_encoder_sign));
             Telemetry::printf("[CAL] AUTO:   R_phase (UV/UW/VW)   = %.4f / %.4f / %.4f ohm",
                               static_cast<double>(m_r_uv),
                               static_cast<double>(m_r_uw),

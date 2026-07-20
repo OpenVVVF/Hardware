@@ -163,12 +163,13 @@ public:
 
     void execute(const ArgValue*, CommandContext&) override {
         EncoderADC& enc = encoderADC();
-        Telemetry::printf("[SHELL] enc bounds sin=%u..%u cos=%u..%u valid=%s",
+        Telemetry::printf("[SHELL] enc bounds sin=%u..%u cos=%u..%u valid=%s learned=%s",
                           static_cast<unsigned>(enc.sinMin()),
                           static_cast<unsigned>(enc.sinMax()),
                           static_cast<unsigned>(enc.cosMin()),
                           static_cast<unsigned>(enc.cosMax()),
-                          enc.boundsValid() ? "Y" : "N");
+                          enc.boundsValid() ? "Y" : "N",
+                          enc.learnedBoundsActive() ? "Y" : "N");
         Telemetry::printf("[SHELL] enc raw sin=%u cos=%u angle=%.2f",
                           static_cast<unsigned>(enc.lastRawSin()),
                           static_cast<unsigned>(enc.lastRawCos()),

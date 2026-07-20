@@ -235,10 +235,16 @@ void EncoderOffsetCalibrator::accumulateOffsetSample() {
     /* The physical offset is the encoder angle when the stator field points
      * at U-high.  Use the raw absolute encoder angle (0..360) and unwrap it
      * against the known continuous field angle; this avoids any drift from
-     * the movement tracker starting at an arbitrary field angle. */
+     * the movement tracker starting at an arbitrary field angle.
+     *
+     * FOC computes theta_elec = offset + sign * encoder_angle and requires
+     * theta_elec == field angle when the rotor is locked to the field, so the
+     * stored offset must be (field - sign * encoder):
+     *   sign = -1 -> encoder + field
+     *   sign = +1 -> field - encoder */
     float offset = (m_sign < 0)
                        ? (encoder_raw_deg + field_mech_deg)
-                       : (encoder_raw_deg - field_mech_deg);
+                       : (field_mech_deg - encoder_raw_deg);
 
     /* The offset is only unique modulo (360° / pole_pairs) because the
      * motor has multiple pole pairs.  Keep successive samples in the same
