@@ -40,6 +40,8 @@ public:
     void setIq(float iq_a);
     void setKp(float kp);
     void setKi(float ki);
+    float kp() const { return m_config.Kp_D; }
+    float ki() const { return m_config.Ki_D; }
     void setVoltageLimit(float v_v); ///< 0 = auto from DC bus.
 
     /**

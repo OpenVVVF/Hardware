@@ -18,6 +18,7 @@
 #include "spi.h"
 #include "cy15b102q_driver.h"
 #include "ontime_logger.h"
+#include "Inverter/Drivers/Storage/MotorConfigStore.h"
 
 namespace InverterMain {
 
@@ -57,6 +58,9 @@ static void init()
     /* Initialize F-RAM for persistent on-time logging. */
     if (CY15B102Q_Init(&g_fram) == HAL_OK) {
         OnTime_Init(&g_fram);
+        /* Restore the motor config (calibration + PI gains) if one was
+         * saved to F-RAM; otherwise the built-in defaults stay in effect. */
+        Inverter::MotorConfigStore::init(&g_fram);
     }
 
     /* Telemetry over the MCP2221A USB-UART bridge (USART3). */

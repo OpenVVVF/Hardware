@@ -48,7 +48,7 @@ public:
     /**
      * @brief True while a calibration is in progress.
      */
-    bool isActive() const { return m_state != State::IDLE && m_state != State::DONE; }
+    bool isActive() const { return m_state != State::IDLE && m_state != State::DONE && m_state != State::FAIL; }
 
     /**
      * @brief Abort a running calibration and return to idle.

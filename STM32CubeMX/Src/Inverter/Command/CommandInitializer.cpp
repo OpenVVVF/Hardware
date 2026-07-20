@@ -8,6 +8,7 @@ void registerFaultCommands(CommandManager& mgr);
 void registerSensorCommands(CommandManager& mgr);
 void registerHelpCommand(CommandManager& mgr);
 void registerFocCommands(CommandManager& mgr);
+void registerMotorConfigCommands(CommandManager& mgr);
 
 void initializeCommands() {
     CommandManager& mgr = CommandManager::instance();
@@ -18,5 +19,6 @@ void initializeCommands() {
     registerFaultCommands(mgr);
     registerSensorCommands(mgr);
     registerFocCommands(mgr);
+    registerMotorConfigCommands(mgr);
     registerHelpCommand(mgr);
 }

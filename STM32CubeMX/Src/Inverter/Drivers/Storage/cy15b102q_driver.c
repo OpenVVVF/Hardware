@@ -142,8 +142,19 @@ void CY15B102Q_Read(CY15B102Q_HandleTypeDef *dev, uint32_t addr,
     cmd[3] = (uint8_t)(addr & 0xFFU);
 
     cs_low(dev);
+
+    /* Mask interrupts for the transfer window: a preempting ISR (e.g. the
+     * 10 kHz phase-current ADC) can stretch the polling loop past the RX
+     * FIFO depth, dropping bytes and silently corrupting the read.  The
+     * window is bounded (~10 us + ~2 us/byte at the configured SCK), which
+     * the control loops tolerate; conversions complete in hardware and the
+     * ISRs run late, never lost. */
+    uint32_t primask = __get_PRIMASK();
+    __disable_irq();
     HAL_StatusTypeDef st1 = HAL_SPI_Transmit(dev->hspi, cmd, 4U, CY15B102Q_SPI_TIMEOUT);
     HAL_StatusTypeDef st2 = HAL_SPI_Receive(dev->hspi, buf, (uint16_t)len, CY15B102Q_SPI_TIMEOUT);
+    __set_PRIMASK(primask);
+
     cs_high(dev);
 
     if (st1 != HAL_OK || st2 != HAL_OK) {

@@ -77,11 +77,14 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     Src/Inverter/Command/Commands/SensorCommands.cpp
     Src/Inverter/Command/Commands/HelpCommand.cpp
     Src/Inverter/Command/Commands/FocCommands.cpp
+    Src/Inverter/Command/Commands/MotorConfigCommands.cpp
     Src/Inverter/Drivers/GateDriver/gate_driver.c
     Src/Inverter/Drivers/CAN/can_display.c
     Src/Inverter/Drivers/CAN/FdcanFault.cpp
     Src/Inverter/Drivers/UART/mcp2221a_driver.c
     Src/Inverter/Drivers/Storage/cy15b102q_driver.c
+    Src/Inverter/Drivers/Storage/FramStore.cpp
+    Src/Inverter/Drivers/Storage/MotorConfigStore.cpp
     Src/Inverter/Drivers/Logging/ontime_logger.c
     Src/Inverter/Drivers/Logging/SupplyMonitor.cpp
     Src/Inverter/Drivers/PWM/pwm.c

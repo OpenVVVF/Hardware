@@ -9,6 +9,7 @@
 #include "Inverter/Control/OpenLoopController.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
+#include "Inverter/Drivers/Storage/MotorConfigStore.h"
 #include "Inverter/Telemetry.h"
 
 #include "main.h"
@@ -306,6 +307,12 @@ void AutoCalibrationCoordinator::update() {
              * was tuned against; drop the stale delta so the next FOC start
              * uses exactly the measured offset. */
             focControlManager().resetEncoderOffsetAdjustment();
+
+            /* Persist the freshly measured profile so FOC can run after a
+             * reboot without re-running motorcal. */
+            if (MotorConfigStore::saveFromRuntime()) {
+                Telemetry::printf("[CAL] AUTO: motor config saved to FRAM");
+            }
 
             encoderADC().learnBounds(false);
             enterState(State::DONE);

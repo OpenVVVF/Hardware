@@ -26,6 +26,12 @@ This file tracks known gaps and deferred work that should be addressed before hi
 - DC-link voltage scaling (default 1516.0) has been measured and is correct.
 - TIM1 timer clock assumption (`TIM1_CLOCK_HZ = 275000000UL`) and 10 kHz switching frequency are acceptable as-is.
 
+## F-RAM Storage (FramStore)
+
+- **Generic record store:** `FramStore` (`Inc/Src Inverter/Drivers/Storage/`) keeps fixed 256-byte slots addressed by node id (`addr = node_id * 256`), each with magic/node/version/length/CRC32. Node 1 = motor config (`MotorConfigStore`); add new nodes for other persistent state. The on-time logger stays at address 0 (node ids start at 1).
+- **Motor config:** `motorcfg dump/save/load/clear/set/type`. Boot auto-loads; a successful `motorcal` auto-saves. `MotorType` enum is reserved for future machine families (only `pmsm_ipm` has control support).
+- **SPI4 runs at /32 (~4.3 MHz), not the CubeMX default /4 (34 MHz):** at 34 MHz the polling HAL receive was overrun by the 10 kHz ADC ISR, corrupting reads. `CY15B102Q_Read` now also masks interrupts for the transfer window — do not remove that, and do not raise the prescaler back without testing `motorcfg raw` (20-read hammer with error counter) under load. If CubeMX regenerates `spi.c`, re-apply the /32 prescaler (`.ioc` was updated to match).
+
 ## Current-Sensor Offset Calibration Sequence (DO NOT BREAK)
 
 The phase-current zero offset is **very sensitive to the electrical/load state** of the gate-driver / isolated-sensor rails. A manual `cal` is accurate because it runs long after the system has reached its operating state. For **startup** calibration to match it, the capture must happen:
