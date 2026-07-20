@@ -210,6 +210,20 @@ void EncoderADC::onDmaComplete() {
     /* Compute angle before touching the snapshot so the ISR writes all three
      * fields atomically relative to the main-loop readers. */
     const float angle = computeAngle(raw_sin, raw_cos);
+
+    /* Mechanical speed from unwrapped per-sample angle deltas. */
+    if (m_rpm_init) {
+        float delta = angle - m_rpm_prev_angle;
+        if (delta > 180.0f) delta -= 360.0f;
+        else if (delta < -180.0f) delta += 360.0f;
+        const float rpm_inst = delta * (SAMPLE_HZ / 360.0f) * 60.0f;
+        m_rpm_ema += RPM_ALPHA * (rpm_inst - m_rpm_ema);
+    } else {
+        m_rpm_init = true;
+        m_rpm_ema = 0.0f;
+    }
+    m_rpm_prev_angle = angle;
+
     m_snapshot.angle = angle;
     m_snapshot.raw_sin = raw_sin;
     m_snapshot.raw_cos = raw_cos;

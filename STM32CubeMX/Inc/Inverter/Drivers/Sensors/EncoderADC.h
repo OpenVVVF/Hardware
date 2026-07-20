@@ -97,6 +97,14 @@ public:
     }
 
     /**
+     * @brief Mechanical speed in RPM, signed by direction.
+     *
+     * Derived in the DMA ISR from unwrapped angle deltas at the 10 kHz
+     * sample rate, low-passed with an EMA (~100 ms settling).
+     */
+    float rpmMech() const { return m_rpm_ema; }
+
+    /**
      * @brief DMA completion callback, called from DMA2_Stream0_IRQHandler.
      */
     void onDmaComplete();
@@ -204,6 +212,13 @@ private:
     volatile uint16_t m_rail_count     = 0;
     float             m_mag_ema        = 0.0f;
     bool              m_mag_ema_init   = false;
+
+    /* Mechanical speed estimation (ISR context). */
+    static constexpr float SAMPLE_HZ  = 10000.0f;
+    static constexpr float RPM_ALPHA  = 0.01f;
+    float m_rpm_prev_angle = 0.0f;
+    bool  m_rpm_init       = false;
+    volatile float m_rpm_ema = 0.0f;
 };
 
 /**

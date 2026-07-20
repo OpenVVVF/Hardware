@@ -69,6 +69,7 @@ void CurrentSensorTest_RunOnce() {
         Telemetry::log("enc_raw_sin", static_cast<float>(encoderADC().lastRawSin()));
         Telemetry::log("enc_raw_cos", static_cast<float>(encoderADC().lastRawCos()));
     }
+    Telemetry::log("rpm_mech", encoderADC().rpmMech());
 
     /* Pole estimate: refines continuously while the motor is running. */
     PoleEstimator& poles = PoleEstimator::instance();
