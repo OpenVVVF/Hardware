@@ -17,7 +17,8 @@ This file tracks known gaps and deferred work that should be addressed before hi
   - `build_flash.sh`
   - `build_flash_uart_manual.sh`
   - `flash_uart_manual.py`
-- **Working flash path:** Use `build_flash_uart.sh` + `flash_uart.py` for MCP2221A UART bootloader flashing.
+- **Working flash path:** Use `build_flash_uart.sh` + `flash_uart.py` for MCP2221A UART bootloader flashing. If the InverterClientImGui app is running, `build_flash_uart.sh` automatically hands the binary to the client's HTTP flash API (`http://localhost:18080/flash`, override with `INVERTER_CLIENT_FLASH_URL`) so the client can stay open; otherwise it flashes directly.
+- **Post-bootloader drain is mandatory:** the app's telemetry spam leaves garbage buffered in the MCP2221A/host tty that drowns the ROM bootloader's sync ACK ("Activating device: KO"). Both `flash_uart.py` and the client's `FirmwareUpdater` drain the port once before entering the bootloader and once after, right before `STM32_Programmer_CLI` runs. Do not remove the second drain.
 - **Keep:** `setup_mcp2221a.py` is still used for one-time MCP2221A GPIO configuration.
 
 ## Verified / Accepted Items
