@@ -29,7 +29,7 @@ public:
      * @param id_a  Initial flux current [A], default 0.
      * @return true if the startup sequence began successfully.
      */
-    bool start(float iq_a, float id_a = 0.0f);
+    bool start(float iq_a, float id_a = 0.0f, bool allow_during_cal = false);
 
     /**
      * @brief Stop the FOC controller and disable the power stage.
@@ -114,6 +114,21 @@ public:
     uint32_t missedCurrentSamples() const { return m_missed_current_samples; }
 
     /**
+     * @brief Per-cycle sample hook for measurement/calibration code.
+     *
+     * Invoked from the FOC ISR (onPwmPeriod) once per control cycle with the
+     * regulated dq currents and commanded dq voltages, after the PWM update.
+     * The callback runs in ISR context: no printing, no HAL delays.  Pass
+     * nullptr to detach.
+     */
+    typedef void (*SampleCallback)(float id_a, float iq_a, float vd_v, float vq_v,
+                                   void* ctx);
+    void setSampleCallback(SampleCallback cb, void* ctx) {
+        m_sample_cb = cb;
+        m_sample_cb_ctx = ctx;
+    }
+
+    /**
      * @brief Main-loop safety poll. Call at ~100 Hz.
      */
     void update();
@@ -179,6 +194,9 @@ private:
     float m_last_iu_a = 0.0f;
     float m_last_iv_a = 0.0f;
     float m_last_iw_a = 0.0f;
+
+    SampleCallback m_sample_cb = nullptr;
+    void* m_sample_cb_ctx = nullptr;
 };
 
 /**

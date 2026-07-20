@@ -72,6 +72,7 @@ private:
         OFFSET,
         SETTLE,
         RESISTANCE,
+        INDUCTANCE,
         DONE,
         FAIL
     };
@@ -92,6 +93,7 @@ private:
     float m_r_uw = 0.0f;
     float m_r_vw = 0.0f;
     float m_r_avg = 0.0f;
+    bool m_inductance_ran = false;
 };
 
 AutoCalibrationCoordinator& autoCalibrationCoordinator();

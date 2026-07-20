@@ -126,7 +126,7 @@ void FocControlManager::applySetpointLimits() {
     }
 }
 
-bool FocControlManager::start(float iq_a, float id_a) {
+bool FocControlManager::start(float iq_a, float id_a, bool allow_during_cal) {
     if (!m_initialized) {
         Telemetry::printf("[FOC] ERROR: not initialized");
         return false;
@@ -153,7 +153,7 @@ bool FocControlManager::start(float iq_a, float id_a) {
         openLoopController().stop();
     }
 
-    if (isAnyCalibrationActive()) {
+    if (!allow_during_cal && isAnyCalibrationActive()) {
         Telemetry::printf("[FOC] ERROR: calibration is active");
         return false;
     }
@@ -527,6 +527,11 @@ void FocControlManager::onPwmPeriod() {
     }
 
     PWM_SetVoltageVector(out.valpha_v, out.vbeta_v, vdc);
+
+    if (m_sample_cb != nullptr) {
+        m_sample_cb(m_controller.Id_A, m_controller.Iq_A,
+                    m_controller.Vd_V, m_controller.Vq_V, m_sample_cb_ctx);
+    }
 }
 
 void FocControlManager::requestSafeStopFromIsr() {

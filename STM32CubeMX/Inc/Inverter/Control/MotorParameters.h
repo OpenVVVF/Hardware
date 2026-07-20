@@ -55,6 +55,14 @@ inline MotorParameters buildMotorParametersFromCalibration(const MotorCalibratio
     p.max_phase_current_a = 40.0f;
     p.max_modulation = 0.9f;
 
+    /* Prefer the measured inductances once an inductance calibration has run. */
+    if (cal.valid && cal.ld_henry > 0.0f) {
+        p.ld_henry = cal.ld_henry;
+    }
+    if (cal.valid && cal.lq_henry > 0.0f) {
+        p.lq_henry = cal.lq_henry;
+    }
+
     return p;
 }
 

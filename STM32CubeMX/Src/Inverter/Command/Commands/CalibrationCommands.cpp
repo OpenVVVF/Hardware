@@ -5,6 +5,7 @@
 #include "Inverter/Calibration/PoleCalibrator.h"
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
+#include "Inverter/Calibration/InductanceCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Calibration/AutoCalibrationCoordinator.h"
 #include "Inverter/Drivers/Sensors/PoleEstimator.h"
@@ -18,12 +19,14 @@ using Inverter::PoleEstimator;
 using Inverter::PoleCalibrator;
 using Inverter::EncoderOffsetCalibrator;
 using Inverter::ResistanceCalibrator;
+using Inverter::InductanceCalibrator;
 using Inverter::EncoderCycleCalibrator;
 using Inverter::AutoCalibrationCoordinator;
 using Inverter::openLoopController;
 using Inverter::poleCalibrator;
 using Inverter::encoderOffsetCalibrator;
 using Inverter::resistanceCalibrator;
+using Inverter::inductanceCalibrator;
 using Inverter::autoCalibrationCoordinator;
 
 static bool stringsEqual(const char* a, const char* b) {
@@ -241,11 +244,65 @@ public:
     }
 };
 
+class IndCalCommand : public CommandInterface {
+public:
+    IndCalCommand()
+      : CommandInterface("indcal", "Ld/Lq inductance calibration (biased-AC injection)",
+            {ArgSpec{"subcmd", "", 0.0f, 0.0f, 0.0f, true, ArgSpec::STRING},
+             ArgSpec{"max_a", "", 0.0f, 200.0f, 0.0f, false, ArgSpec::FLOAT},
+             ArgSpec{"ac_a", "", 0.0f, 10.0f, 0.0f, false, ArgSpec::FLOAT},
+             ArgSpec{"freq_hz", "", 0.0f, 400.0f, 0.0f, false, ArgSpec::FLOAT}}) {}
+
+    void execute(const ArgValue* args, CommandContext&) override {
+        InductanceCalibrator& ic = inductanceCalibrator();
+        const char* sub = args[0].s_val;
+
+        if (stringsEqual(sub, "stop")) {
+            ic.stop();
+            return;
+        }
+
+        if (stringsEqual(sub, "status")) {
+            Telemetry::printf("[CAL] indcal: state=%s Ld0=%.1f uH Lq0=%.1f uH points=%d",
+                              ic.stateName(),
+                              static_cast<double>(ic.lastLd() * 1.0e6),
+                              static_cast<double>(ic.lastLq() * 1.0e6),
+                              ic.pointCount());
+            for (int i = 0; i < ic.pointCount(); ++i) {
+                if (ic.ldPoint(i) > 0.0f) {
+                    Telemetry::printf("[CAL] indcal:   Ld(%5.1f A) = %7.1f uH",
+                                      static_cast<double>(ic.biasLdPoint(i)),
+                                      static_cast<double>(ic.ldPoint(i) * 1.0e6));
+                }
+                if (ic.lqPoint(i) > 0.0f) {
+                    Telemetry::printf("[CAL] indcal:   Lq(%5.1f A) = %7.1f uH",
+                                      static_cast<double>(ic.biasLqPoint(i)),
+                                      static_cast<double>(ic.lqPoint(i) * 1.0e6));
+                }
+            }
+            return;
+        }
+
+        if (stringsEqual(sub, "start")) {
+            const float maxA = args[1].present ? args[1].f_val : 30.0f;
+            const float acA = args[2].present ? args[2].f_val : 3.0f;
+            const float freq = args[3].present ? args[3].f_val : 150.0f;
+            if (!ic.start(maxA, acA, freq)) {
+                Telemetry::printf("[CAL] indcal start failed");
+            }
+            return;
+        }
+
+        Telemetry::printf("[CAL] indcal: unknown subcommand '%s' (start/stop/status)", sub);
+    }
+};
+
 static PolesCommand      sPolesCmd;
 static EncoderCalCommand sEncoderCalCmd;
 static CalPolesCommand   sCalPolesCmd;
 static EncOffsetCommand  sEncOffsetCmd;
 static ResCalCommand     sResCalCmd;
+static IndCalCommand     sIndCalCmd;
 static MotorCalCommand   sMotorCalCmd;
 
 void registerCalibrationCommands(CommandManager& mgr) {
@@ -254,5 +311,6 @@ void registerCalibrationCommands(CommandManager& mgr) {
     mgr.registerCommand(&sCalPolesCmd);
     mgr.registerCommand(&sEncOffsetCmd);
     mgr.registerCommand(&sResCalCmd);
+    mgr.registerCommand(&sIndCalCmd);
     mgr.registerCommand(&sMotorCalCmd);
 }

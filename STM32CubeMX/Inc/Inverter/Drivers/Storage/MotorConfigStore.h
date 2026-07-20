@@ -36,17 +36,23 @@ struct MotorConfigData {
     float r_phase_uw_ohm;         /**< Per-phase resistance, UW pair [ohm]. */
     float r_phase_vw_ohm;         /**< Per-phase resistance, VW pair [ohm]. */
     float flux_linkage_wb;        /**< Reserved (PM flux linkage), 0 for now. */
-    float ld_henry;               /**< Reserved (d-axis inductance), 0 for now. */
-    float lq_henry;               /**< Reserved (q-axis inductance), 0 for now. */
+    float ld_henry;               /**< d-axis inductance at 0 A bias (0 = not calibrated). */
+    float lq_henry;               /**< q-axis inductance at 0 A bias (0 = not calibrated). */
     float pi_kp;                  /**< Current-loop proportional gain. */
     float pi_ki;                  /**< Current-loop integral gain. */
     uint16_t enc_sin_min;         /**< Learned encoder sin/cos amplitude bounds. */
     uint16_t enc_sin_max;         /**< All-zero = not captured (e.g. v1 record). */
     uint16_t enc_cos_min;
     uint16_t enc_cos_max;
+    uint16_t ind_n_points;        /**< Ld/Lq curve point count (0 = none, v3+). */
+    uint16_t ind_reserved;
+    float ind_bias_ld_a[8];       /**< d bias level of each Ld point [A] (v4+). */
+    float ind_ld_h[8];            /**< Differential Ld at each bias [H]. */
+    float ind_bias_lq_a[8];       /**< q bias level of each Lq point [A] (v4+). */
+    float ind_lq_h[8];            /**< Differential Lq at each bias [H]. */
 };
 
-constexpr uint16_t MOTOR_CONFIG_VERSION = 2U;
+constexpr uint16_t MOTOR_CONFIG_VERSION = 4U;
 
 /**
  * @brief Motor configuration persistence: FRAM <-> runtime.

@@ -3,6 +3,7 @@
 #include "Inverter/Calibration/PoleCalibrator.h"
 #include "Inverter/Calibration/EncoderOffsetCalibrator.h"
 #include "Inverter/Calibration/ResistanceCalibrator.h"
+#include "Inverter/Calibration/InductanceCalibrator.h"
 #include "Inverter/Calibration/EncoderCycleCalibrator.h"
 #include "Inverter/Calibration/MotorCalibration.h"
 #include "Inverter/Control/FocControlManager.h"
@@ -44,6 +45,7 @@ const char* AutoCalibrationCoordinator::stateName() const {
         case State::OFFSET:      return "OFFSET";
         case State::SETTLE:      return "SETTLE";
         case State::RESISTANCE:  return "RESISTANCE";
+        case State::INDUCTANCE:  return "INDUCTANCE";
         case State::DONE:        return "DONE";
         case State::FAIL:        return "FAIL";
     }
@@ -308,13 +310,44 @@ void AutoCalibrationCoordinator::update() {
              * uses exactly the measured offset. */
             focControlManager().resetEncoderOffsetAdjustment();
 
+            encoderADC().learnBounds(false);
+
+            /* Measure dq inductances (biased-AC injection).  The FRAM save
+             * happens after this stage so it includes the inductances. */
+            Telemetry::printf("[CAL] AUTO: enter INDUCTANCE");
+            m_inductance_ran = inductanceCalibrator().start(RES_MAX_CURRENT_A);
+            if (!m_inductance_ran) {
+                Telemetry::printf("[CAL] AUTO: WARNING: inductance cal failed to start; "
+                                  "continuing without it");
+            }
+            enterState(State::INDUCTANCE);
+            break;
+        }
+
+        case State::INDUCTANCE: {
+            InductanceCalibrator& ic = inductanceCalibrator();
+            if (ic.isActive()) {
+                return; /* still running */
+            }
+
+            if (m_inductance_ran && ic.isDone() && ic.lastLd() > 0.0f) {
+                MotorCalibration& mc = motorCalibration();
+                mc.ld_henry = ic.lastLd();
+                mc.lq_henry = ic.lastLq();
+                Telemetry::printf("[CAL] AUTO: Ld(0)=%.1f uH Lq(0)=%.1f uH",
+                                  static_cast<double>(mc.ld_henry * 1.0e6),
+                                  static_cast<double>(mc.lq_henry * 1.0e6));
+            } else {
+                Telemetry::printf("[CAL] AUTO: WARNING: inductance calibration "
+                                  "incomplete; Ld/Lq left unset");
+            }
+
             /* Persist the freshly measured profile so FOC can run after a
              * reboot without re-running motorcal. */
             if (MotorConfigStore::saveFromRuntime()) {
                 Telemetry::printf("[CAL] AUTO: motor config saved to FRAM");
             }
 
-            encoderADC().learnBounds(false);
             enterState(State::DONE);
 
             /* One clear, self-contained summary block. */
@@ -334,6 +367,11 @@ void AutoCalibrationCoordinator::update() {
             Telemetry::printf("[CAL] AUTO:   R_ll_avg             = %.4f ohm  (%.2f mohm)",
                               static_cast<double>(m_r_avg * 2.0f),
                               static_cast<double>(m_r_avg * 2000.0f));
+            if (motorCalibration().ld_henry > 0.0f) {
+                Telemetry::printf("[CAL] AUTO:   Ld / Lq (0 A)      = %.1f / %.1f uH",
+                                  static_cast<double>(motorCalibration().ld_henry * 1.0e6),
+                                  static_cast<double>(motorCalibration().lq_henry * 1.0e6));
+            }
             Telemetry::printf("[CAL] AUTO: ===========================================");
             break;
         }

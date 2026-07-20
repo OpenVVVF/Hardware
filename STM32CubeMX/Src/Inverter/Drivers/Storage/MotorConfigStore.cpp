@@ -1,6 +1,7 @@
 #include "Inverter/Drivers/Storage/MotorConfigStore.h"
 #include "Inverter/Drivers/Storage/FramStore.h"
 #include "Inverter/Calibration/MotorCalibration.h"
+#include "Inverter/Calibration/InductanceCalibrator.h"
 #include "Inverter/Control/FocControlManager.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Telemetry.h"
@@ -24,6 +25,8 @@ MotorConfigData s_working = {
     0.0f, 0.0f,         /* ld/lq (reserved) */
     0.03f, 10.0f,       /* pi_kp / pi_ki (match FocControlManager defaults) */
     0, 0, 0, 0,         /* encoder bounds: unset until learned */
+    0, 0,               /* ind_n_points / reserved */
+    {0}, {0}, {0}, {0}, /* ind_bias_ld_a / ind_ld_h / ind_bias_lq_a / ind_lq_h */
 };
 bool s_stored = false;
 CY15B102Q_HandleTypeDef* s_fram_dev = nullptr;
@@ -52,6 +55,20 @@ MotorConfigData capture(const MotorConfigData& base) {
         d.enc_sin_max = encoderADC().sinMax();
         d.enc_cos_min = encoderADC().cosMin();
         d.enc_cos_max = encoderADC().cosMax();
+    }
+    /* Measured inductances: take the runtime values when a calibration has
+     * produced them, otherwise keep what was already stored. */
+    if (mc.ld_henry > 0.0f) d.ld_henry = mc.ld_henry;
+    if (mc.lq_henry > 0.0f) d.lq_henry = mc.lq_henry;
+    InductanceCalibrator& ic = inductanceCalibrator();
+    if (ic.isDone() && ic.pointCount() > 0) {
+        d.ind_n_points = static_cast<uint16_t>(ic.pointCount());
+        for (int i = 0; i < ic.pointCount() && i < 8; ++i) {
+            d.ind_bias_ld_a[i] = ic.biasLdPoint(i);
+            d.ind_ld_h[i] = ic.ldPoint(i);
+            d.ind_bias_lq_a[i] = ic.biasLqPoint(i);
+            d.ind_lq_h[i] = ic.lqPoint(i);
+        }
     }
     return d;
 }
@@ -133,6 +150,8 @@ bool applyToRuntime() {
     mc.r_phase_vw = s_working.r_phase_vw_ohm;
     mc.r_phase_avg = (mc.r_phase_uv + mc.r_phase_uw + mc.r_phase_vw) / 3.0f;
     mc.timestamp_ms = 0U; /* unknown for a stored config */
+    if (s_working.ld_henry > 0.0f) mc.ld_henry = s_working.ld_henry;
+    if (s_working.lq_henry > 0.0f) mc.lq_henry = s_working.lq_henry;
     mc.valid = true;
 
     if (s_working.pi_kp >= 0.0f) focControlManager().setKp(s_working.pi_kp);
@@ -142,9 +161,9 @@ bool applyToRuntime() {
      * keep expanding from real samples afterwards, so this only ever helps
      * the angle normalization converge before the first revolution. */
     if (s_working.enc_sin_max > s_working.enc_sin_min &&
-        (s_working.enc_sin_max - s_working.enc_sin_min) >= 5000U &&
+        static_cast<uint32_t>(s_working.enc_sin_max - s_working.enc_sin_min) >= 5000U &&
         s_working.enc_cos_max > s_working.enc_cos_min &&
-        (s_working.enc_cos_max - s_working.enc_cos_min) >= 5000U) {
+        static_cast<uint32_t>(s_working.enc_cos_max - s_working.enc_cos_min) >= 5000U) {
         encoderADC().setBounds(s_working.enc_sin_min, s_working.enc_sin_max,
                                s_working.enc_cos_min, s_working.enc_cos_max);
     }
@@ -202,9 +221,25 @@ void dump() {
                           static_cast<double>(stored.r_phase_uw_ohm),
                           static_cast<double>(stored.r_phase_vw_ohm));
         Telemetry::printf("[CFG]   flux_linkage  = %.5f Wb (reserved)", static_cast<double>(stored.flux_linkage_wb));
-        Telemetry::printf("[CFG]   ld / lq       = %.2e / %.2e H (reserved)",
+        Telemetry::printf("[CFG]   ld / lq       = %.2e / %.2e H",
                           static_cast<double>(stored.ld_henry),
                           static_cast<double>(stored.lq_henry));
+        if (stored.ind_n_points > 0U) {
+            for (uint16_t i = 0; i < stored.ind_n_points && i < 8U; ++i) {
+                if (stored.ind_ld_h[i] > 0.0f) {
+                    Telemetry::printf("[CFG]     Ld(%5.1f A) = %7.1f uH",
+                                      static_cast<double>(stored.ind_bias_ld_a[i]),
+                                      static_cast<double>(stored.ind_ld_h[i] * 1.0e6f));
+                }
+                if (stored.ind_lq_h[i] > 0.0f) {
+                    Telemetry::printf("[CFG]     Lq(%5.1f A) = %7.1f uH",
+                                      static_cast<double>(stored.ind_bias_lq_a[i]),
+                                      static_cast<double>(stored.ind_lq_h[i] * 1.0e6f));
+                }
+            }
+        } else {
+            Telemetry::printf("[CFG]   (no Ld/Lq curve stored)");
+        }
         Telemetry::printf("[CFG]   pi kp / ki    = %.4f / %.3f",
                           static_cast<double>(stored.pi_kp),
                           static_cast<double>(stored.pi_ki));
