@@ -21,7 +21,8 @@ PhaseCurrentADC& phaseCurrentADC() {
 }
 
 static ADC_InjectionConfTypeDef makeInjectedConfig(uint32_t channel, uint32_t rank,
-                                                    uint32_t trigger, uint32_t edge) {
+                                                    uint32_t trigger, uint32_t edge,
+                                                    uint32_t nbr_of_conv = 2U) {
     ADC_InjectionConfTypeDef cfg = {};
     cfg.InjectedChannel = channel;
     cfg.InjectedRank = rank;
@@ -30,7 +31,7 @@ static ADC_InjectionConfTypeDef makeInjectedConfig(uint32_t channel, uint32_t ra
     cfg.InjectedOffsetNumber = ADC_OFFSET_NONE;
     cfg.InjectedOffset = 0;
     cfg.InjectedOffsetSignedSaturation = DISABLE;
-    cfg.InjectedNbrOfConversion = 2;
+    cfg.InjectedNbrOfConversion = nbr_of_conv;
     cfg.InjectedDiscontinuousConvMode = DISABLE;
     cfg.AutoInjectedConv = DISABLE;
     cfg.QueueInjectedContext = DISABLE;

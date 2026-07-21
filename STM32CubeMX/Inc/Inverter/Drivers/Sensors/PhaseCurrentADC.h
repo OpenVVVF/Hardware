@@ -88,6 +88,8 @@ public:
     uint32_t lastRawVSig() const { return m_raw_v_sig; }
     uint32_t lastRawURef() const { return m_raw_u_ref; }
     uint32_t lastRawVRef() const { return m_raw_v_ref; }
+    uint32_t lastRawDclSig() const { return m_raw_dcl_sig; }
+    uint32_t lastRawDclRef() const { return m_raw_dcl_ref; }
     float    lastOffsetU() const { return m_offset_u; }
     float    lastOffsetV() const { return m_offset_v; }
     bool     offsetValid() const { return m_offset_valid; }
@@ -142,6 +144,8 @@ private:
     volatile uint32_t m_raw_v_sig = 0;
     volatile uint32_t m_raw_u_ref = 0;
     volatile uint32_t m_raw_v_ref = 0;
+    volatile uint32_t m_raw_dcl_sig = 0;
+    volatile uint32_t m_raw_dcl_ref = 0;
     volatile float    m_iu = 0.0f;
     volatile float    m_iv = 0.0f;
     float             m_offset_u = 0.0f;

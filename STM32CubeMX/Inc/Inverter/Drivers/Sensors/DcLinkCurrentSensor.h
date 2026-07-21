@@ -8,10 +8,11 @@ namespace Inverter {
  * @brief DC-link current sensor (LA37S600 on ADC1_INP2 / ADC1_INP6).
  *
  * The DC-link current uses the same differential signal + reference scheme
- * as the phase-current sensors, read on ADC1 channels 2 (signal) and 6
- * (reference) with polled regular conversions from the main loop.  Power
- * monitoring does not need PWM-synchronized sampling; ~40 Hz is plenty and
- * keeps the control-critical injected path untouched.
+ * as the phase-current sensors and is sampled in the SAME PWM-synchronized
+ * injected sequence (ADC1 injected ranks 3/4) as the phase currents.  That
+ * keeps signal and reference microseconds apart, so the sensor supply bounce
+ * is common-mode and cancels in the difference - polled regular conversions
+ * proved unusable here (kHz supply ripple aliased into the sequential reads).
  *
  * Also integrates input power into cumulative energy [Wh].
  */
@@ -19,10 +20,11 @@ class DcLinkCurrentSensor {
 public:
     bool init();
 
-    /** Main-loop poll: performs one conversion pair every POLL_MS. */
+    /** Main-loop poll: consumes the latest injected sample, finishes the
+     *  zero-offset capture window, then publishes telemetry. */
     void update();
 
-    /** Re-capture the zero-current offset and reset the energy counter.
+    /** Restart the zero-offset capture and reset the energy counter.
      *  Only meaningful with the drive idle (no switching). */
     bool zeroCalibrate();
 
@@ -38,14 +40,11 @@ public:
     static DcLinkCurrentSensor& instance();
 
 private:
-    static constexpr uint32_t POLL_MS = 25U;
-
     float countsToCurrent(uint32_t sig, uint32_t ref) const;
-    bool configChannel(uint32_t channel);
-    bool readPair();
 
-    uint32_t m_last_poll_ms = 0;
     uint32_t m_last_energy_ms = 0;
+    uint32_t m_zero_samples_left = 0;
+    double   m_zero_acc = 0.0;
 
     uint32_t m_raw_sig = 0;
     uint32_t m_raw_ref = 0;

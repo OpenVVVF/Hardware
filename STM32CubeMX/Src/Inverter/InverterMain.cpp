@@ -91,15 +91,16 @@ static void init()
     /* Phase-current sensor test harness. */
     Inverter::CurrentSensorTest_Init();
 
-    /* DC-link current sensor (zero point captured now, while the gate
-     * driver is still held in reset and the bus draw is minimal). */
-    Inverter::dcLinkCurrentSensor().init();
-
     /* Open-loop motor control (PWM + gate driver). Default off.
      * This also performs the final current-sensor offset recalibration after
      * the gate-driver power rail is up and the PWM outputs are started, matching
      * the hardware state used by a manual `cal`. */
     Inverter::openLoopController().init();
+
+    /* DC-link current sensor: start the zero-offset capture only now, after
+     * the gate-driver/isolated rails have settled with PWM running (same
+     * reasoning as the phase-offset final recalibration above). */
+    Inverter::dcLinkCurrentSensor().init();
 
     /* Closed-loop FOC manager.  Does not enable outputs until `foc` command. */
     Inverter::focControlManager().init();
