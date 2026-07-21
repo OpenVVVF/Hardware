@@ -68,6 +68,30 @@ public:
     }
 };
 
+class SwFreqCommand : public CommandInterface {
+public:
+    SwFreqCommand()
+      : CommandInterface("swfreq", "Set PWM switching frequency [Hz]",
+            ArgSpec{"freq_hz", "Hz", 1000.0f, 16000.0f, 0.0f, false, ArgSpec::FLOAT}) {}
+
+    void execute(const ArgValue* args, CommandContext&) override {
+        if (!args[0].present) {
+            Telemetry::printf("[SHELL] swfreq = %.0f Hz (update %.0f Hz)",
+                              static_cast<double>(PWM_GetFrequency()),
+                              static_cast<double>(PWM_GetUpdateFrequency()));
+            return;
+        }
+        if (openLoopController().isRunning() || focControlManager().isRunning()) {
+            Telemetry::printf("[SHELL] stop the motor before changing swfreq");
+            return;
+        }
+        PWM_SetFrequency(static_cast<uint32_t>(args[0].f_val + 0.5f));
+        Telemetry::printf("[SHELL] swfreq set to %.0f Hz (update %.0f Hz)",
+                          static_cast<double>(PWM_GetFrequency()),
+                          static_cast<double>(PWM_GetUpdateFrequency()));
+    }
+};
+
 class StatusCommand : public CommandInterface {
 public:
     StatusCommand() : CommandInterface("status", "Show OL controller and fault status") {}
@@ -208,6 +232,7 @@ static StartCommand    sStartCmd;
 static StopCommand     sStopCmd;
 static FreqCommand     sFreqCmd;
 static ModCommand      sModCmd;
+static SwFreqCommand   sSwFreqCmd;
 static StatusCommand   sStatusCmd;
 static RampCurrentLimitCommand sRampCurrentLimitCmd;
 static VectorScanCommand sVectorScanCmd;
@@ -219,6 +244,7 @@ void registerOpenLoopCommands(CommandManager& mgr) {
     mgr.registerCommand(&sStopCmd);
     mgr.registerCommand(&sFreqCmd);
     mgr.registerCommand(&sModCmd);
+    mgr.registerCommand(&sSwFreqCmd);
     mgr.registerCommand(&sStatusCmd);
     mgr.registerCommand(&sRampCurrentLimitCmd);
     mgr.registerCommand(&sVectorScanCmd);
