@@ -212,6 +212,7 @@ private:
     volatile uint16_t m_rail_count     = 0;
     float             m_mag_ema        = 0.0f;
     bool              m_mag_ema_init   = false;
+    volatile uint32_t m_isr_count      = 0;
 
     /* Mechanical speed estimation (ISR context).  m_sample_hz is derived
      * from the actual TIM2 trigger configuration in initTimer(). */

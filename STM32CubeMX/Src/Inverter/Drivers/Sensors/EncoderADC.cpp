@@ -1,4 +1,5 @@
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
+#include "Inverter/Telemetry.h"
 #include "Inverter/Control/FaultManager.h"
 
 #include "main.h"
@@ -253,6 +254,7 @@ void EncoderADC::onDmaComplete() {
     m_snapshot.raw_cos = raw_cos;
     m_new_data = true;
     m_last_sample_ms = HAL_GetTick();
+    ++m_isr_count;
 
     /* Only evaluate signal-quality faults after the encoder has rotated enough
      * for the active bounds to be meaningful. */
@@ -377,6 +379,25 @@ void EncoderADC::onDmaError() {
 }
 
 void EncoderADC::diagnose() {
+    /* Publish the measured trigger/ISR rate once a second so the assumed
+     * sample rate (m_sample_hz) can be validated against reality. */
+    static uint32_t s_last_ms = 0;
+    static uint32_t s_last_count = 0;
+    const uint32_t now_ms = HAL_GetTick();
+    if (s_last_ms != 0U && (now_ms - s_last_ms) >= 1000U) {
+        const float hz = static_cast<float>(m_isr_count - s_last_count) *
+                         (1000.0f / static_cast<float>(now_ms - s_last_ms));
+        Telemetry::log("enc_isr_hz", hz);
+        /* Self-calibrate the estimator's time base from the measured rate;
+         * the APB timer clock assumption (137.5 MHz) under-reads it badly. */
+        m_sample_hz = hz;
+        s_last_count = m_isr_count;
+        s_last_ms = now_ms;
+    } else if (s_last_ms == 0U) {
+        s_last_count = m_isr_count;
+        s_last_ms = now_ms;
+    }
+
     if (m_running && (HAL_GetTick() - m_last_sample_ms) > SAMPLE_TIMEOUT_MS) {
         /* Temporarily disabled: encoder timeout fault is firing during
          * bench testing and interfering with other calibration work. */
