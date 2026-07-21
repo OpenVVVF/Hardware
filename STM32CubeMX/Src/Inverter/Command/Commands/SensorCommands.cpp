@@ -2,14 +2,36 @@
 #include "Inverter/Command/CommandContext.h"
 #include "Inverter/Drivers/Sensors/PhaseCurrentADC.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
+#include "Inverter/Drivers/Sensors/DcLinkCurrentSensor.h"
 #include "Inverter/Drivers/Sensors/MAX22530.h"
 #include "Inverter/Telemetry.h"
 
 using Inverter::PhaseCurrentADC;
 using Inverter::DcLinkVoltageSensor;
+using Inverter::DcLinkCurrentSensor;
 using Inverter::MAX22530;
 using Inverter::phaseCurrentADC;
 using Inverter::dcLinkVoltageSensor;
+using Inverter::dcLinkCurrentSensor;
+
+class DclZeroCommand : public CommandInterface {
+public:
+    DclZeroCommand()
+      : CommandInterface("dclzero", "Zero DC-link current offset + reset energy counter (drive must be idle)",
+            ArgSpec{"dummy", "", 0.0f, 0.0f, 0.0f, false, ArgSpec::FLOAT}) {}
+
+    void execute(const ArgValue*, CommandContext&) override {
+        if (dcLinkCurrentSensor().zeroCalibrate()) {
+            Telemetry::printf("[DCL] zeroed; energy counter reset");
+        } else {
+            Telemetry::printf("[DCL] zero calibration FAILED (offset suspect)");
+        }
+        Telemetry::printf("[DCL] I=%.2f A P=%.1f W E=%.2f Wh",
+                          static_cast<double>(dcLinkCurrentSensor().current()),
+                          static_cast<double>(dcLinkCurrentSensor().power()),
+                          static_cast<double>(dcLinkCurrentSensor().energyWh()));
+    }
+};
 
 class OcSetCommand : public CommandInterface {
 public:
@@ -150,6 +172,7 @@ public:
 };
 
 static OcSetCommand             sOcSetCmd;
+static DclZeroCommand           sDclZeroCmd;
 static HwOcSetCommand           sHwOcSetCmd;
 static MaxCfgOvCommand          sMaxCfgOvCmd;
 static MaxCfgUvCommand          sMaxCfgUvCmd;
@@ -163,6 +186,7 @@ static MaxCfgFilteredCommand    sMaxCfgFilteredCmd;
 
 void registerSensorCommands(CommandManager& mgr) {
     mgr.registerCommand(&sOcSetCmd);
+    mgr.registerCommand(&sDclZeroCmd);
     mgr.registerCommand(&sHwOcSetCmd);
     mgr.registerCommand(&sMaxCfgOvCmd);
     mgr.registerCommand(&sMaxCfgUvCmd);

@@ -6,6 +6,7 @@
 #include "Inverter/Control/CommandShell.h"
 #include "Inverter/Drivers/Sensors/CurrentSensorTest.h"
 #include "Inverter/Drivers/Sensors/DcLinkVoltageSensor.h"
+#include "Inverter/Drivers/Sensors/DcLinkCurrentSensor.h"
 #include "Inverter/Drivers/Sensors/EncoderADC.h"
 #include "Inverter/Drivers/CAN/FdcanFault.h"
 #include "Inverter/Drivers/Logging/SupplyMonitor.h"
@@ -90,6 +91,10 @@ static void init()
     /* Phase-current sensor test harness. */
     Inverter::CurrentSensorTest_Init();
 
+    /* DC-link current sensor (zero point captured now, while the gate
+     * driver is still held in reset and the bus draw is minimal). */
+    Inverter::dcLinkCurrentSensor().init();
+
     /* Open-loop motor control (PWM + gate driver). Default off.
      * This also performs the final current-sensor offset recalibration after
      * the gate-driver power rail is up and the PWM outputs are started, matching
@@ -139,6 +144,7 @@ static void loop()
     /* Isolated DC-link voltage sensor: sample on every loop so the logged
      * value is always the latest conversion from the EXTI ISR. */
     Inverter::dcLinkVoltageSensor().update();
+    Inverter::dcLinkCurrentSensor().update();
     Inverter::supplyMonitorUpdate();
 
     /* Open-loop safety, calibration state machines, and command processing. */
