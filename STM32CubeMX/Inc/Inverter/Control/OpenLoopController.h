@@ -106,7 +106,14 @@ private:
     void applyModulation(float modulation_index);
     float maxPhaseCurrentMagnitude() const;
 
-    static constexpr float DEFAULT_RAMP_CURRENT_LIMIT_A = 600.0f;
+    /* Continuous current clamp: throttles the applied modulation whenever the
+     * measured phase current exceeds the limit, at ANY bus voltage.  The ramp
+     * pause only halts ramp progression; this clamp actually backs the
+     * modulation down and recovers slowly. */
+    float clampedModulation(float commanded) const;
+    void updateCurrentClamp(uint32_t now_ms);
+
+    static constexpr float DEFAULT_RAMP_CURRENT_LIMIT_A = 250.0f;
     static constexpr uint32_t RAMP_PAUSE_TIMEOUT_MS = 200U;
 
     bool m_initialized = false;
@@ -116,6 +123,9 @@ private:
     float m_mod_idx = 0.0f;        /* commanded/target modulation index */
     float m_applied_mod_idx = 0.0f; /* modulation actually applied by ramp */
     float m_ramp_current_limit_a = DEFAULT_RAMP_CURRENT_LIMIT_A;
+
+    float m_clamp_mod_ceiling = 1.2f;   /* current-clamp modulation ceiling */
+    uint32_t m_clamp_last_ms = 0;
 
     RampState m_ramp_state = RampState::IDLE;
     float m_ramp_from = 0.0f;

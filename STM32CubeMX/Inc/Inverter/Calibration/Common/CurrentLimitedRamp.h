@@ -51,6 +51,7 @@ private:
 
     bool m_paused = false;
     uint32_t m_pause_start_ms = 0;
+    uint32_t m_last_ms = 0;
 };
 
 } // namespace Inverter

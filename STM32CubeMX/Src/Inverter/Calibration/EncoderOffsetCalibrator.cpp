@@ -15,7 +15,7 @@ static constexpr float CAL_MAX_MOD = 0.50f;
 static constexpr float HOLD_MAX_MOD = 0.50f;
 static constexpr float WARMUP_MAX_MOD = 0.25f;
 static constexpr float RAMP_STEP = 0.01f;
-static constexpr float TORQUE_MARGIN = 2.50f;
+static constexpr float TORQUE_MARGIN = 0.40f;
 
 static constexpr uint32_t WARMUP_MS = 5000U;
 static constexpr float WARMUP_FREQUENCY_HZ = 1.0f;
@@ -74,7 +74,7 @@ bool EncoderOffsetCalibrator::start(float pole_count, float encoder_cycles_per_r
     m_mech_deg_per_motor_elec_cycle = 360.0f / m_pole_pairs;
     m_breakaway_mod = breakaway_mod;
     m_max_mod = (max_mod > 0.0f) ? max_mod : 0.50f;
-    m_torque_margin = (torque_margin > 1.0f) ? torque_margin : 2.50f;
+    m_torque_margin = (torque_margin > 0.0f) ? torque_margin : 0.40f;
 
     if (m_pole_pairs <= 0.0f) {
         Telemetry::printf("[CAL] ENC: ERROR: pole_pairs must be > 0");

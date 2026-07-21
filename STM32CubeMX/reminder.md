@@ -40,6 +40,13 @@ This file tracks known gaps and deferred work that should be addressed before hi
 - Calibration routines may pin specific values for their measurement (e.g. `InductanceCalibrator::CAL_SWITCHING_HZ`) but MUST save and restore the user's setting (see `restoreSwitchingFrequency()` and its use on every exit path).
 - The encoder/RPM path derives its sample rate from the live TIM2 configuration (`EncoderADC::m_sample_hz`), not a literal.
 
+## Bus-Voltage Robustness (60 V lessons)
+
+- **Open-loop phases need a continuous current clamp, not ramp pauses.** `OpenLoopController::updateCurrentClamp()` throttles the applied modulation whenever phase current exceeds `rclimit` (default 250 A, was 600 A) and recovers slowly; `CurrentLimitedRamp` throttles the same way (floored at 0.5x target so a spike cannot kill rotation). At 60 V the old pause-only logic either tripped a 1000 A single-sample OC fault or aborted the offset cal.
+- **Software overcurrent is deglitched:** 3 consecutive samples over threshold (default 500 A), because one-sample trips false-fault on 60 V switching transients.
+- **Rotation duty = breakaway duty (factor 1.0), not x1.3.** Measured at 60 V: min-follow mod ~0.05-0.065 (~40-80 A); x1.3 drew ~460 A; factor 1.0 keeps rotation current roughly voltage-independent (breakaway mod scales inversely with voltage). Pole counting tolerates weaker rotation; the offset rotation needs near-full field tracking - check enc offset matches the known-good ~68.7 deg and enc_cycles ~1.00 after any change here.
+- Flux-linkage fit is much cleaner at 60 V (bigger EMF-to-VSI-offset ratio; ceiling ~666 RPM). psi_m = 0.071 Wb at 60 V agrees with the 30 V fits (0.070-0.073), and V_off fits smaller (~1.0 V vs ~1.8 V).
+
 ## Flux Linkage Calibration (back-EMF ramp)
 
 - **Method:** `FluxLinkageCalibrator` (`fluxcal start [max_iq]`, default 20 A) ramps iq 0 -> max over 12 s under FOC (id=0) and samples psi_m = (vq - R*iq)/omega_e every 50 ms, so each point of the speed sweep is a measurement. Stops at the PI voltage ceiling (near the ceiling the PI output no longer equals applied voltage and you measure the limit constant, not the motor).

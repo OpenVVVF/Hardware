@@ -35,6 +35,7 @@ void CurrentLimitedRamp::start(float from, float to, uint32_t duration_ms, float
 CurrentLimitedRamp::Status CurrentLimitedRamp::update(uint32_t now_ms) {
     if (m_start_ms == 0U) {
         m_start_ms = now_ms;
+        m_last_ms = now_ms;
     }
 
     if (m_duration_ms == 0U || std::fabs(m_from - m_to) < 1e-4f) {
@@ -42,42 +43,46 @@ CurrentLimitedRamp::Status CurrentLimitedRamp::update(uint32_t now_ms) {
         return Status::DONE;
     }
 
+    const float dt = (now_ms - m_last_ms) * 1.0e-3f;
+    m_last_ms = now_ms;
+
     uint32_t elapsed = now_ms - m_start_ms;
     if (elapsed > m_duration_ms) {
         elapsed = m_duration_ms;
     }
 
-    float desired = m_from + (m_to - m_from) *
+    const float desired = m_from + (m_to - m_from) *
                         static_cast<float>(elapsed) / static_cast<float>(m_duration_ms);
 
-    if (m_current_limit > 0.0f) {
+    if (m_current_limit > 0.0f && dt > 0.0f && dt < 0.5f) {
         const float i_max = maxPhaseCurrentMagnitude();
-        const float resume_threshold = 0.8f * m_current_limit;
-        const bool trying_to_increase = (desired > m_applied);
 
-        if (i_max > m_current_limit && trying_to_increase) {
+        if (i_max > m_current_limit) {
+            /* Throttle down instead of pausing/aborting: at high bus voltage
+             * the demanded modulation would draw far too much current, so
+             * back the applied modulation off fast and let the rotation
+             * continue at the current limit.  Floored at half the target so
+             * a transient spike cannot kill the rotation entirely. */
             if (!m_paused) {
                 m_paused = true;
-                m_pause_start_ms = now_ms;
-                Telemetry::printf("[CAL] RAMP: paused: I=%.1f A limit=%.1f A",
+                Telemetry::printf("[CAL] RAMP: throttled: I=%.1f A limit=%.1f A",
                                   static_cast<double>(i_max),
                                   static_cast<double>(m_current_limit));
             }
-            desired = m_applied;
-        } else if (m_paused && i_max <= resume_threshold) {
-            m_start_ms += (now_ms - m_pause_start_ms);
-            m_paused = false;
-            m_applied = desired;
-            Telemetry::printf("[CAL] RAMP: resumed: I=%.1f A limit=%.1f A",
-                              static_cast<double>(i_max),
-                              static_cast<double>(m_current_limit));
-        } else if (!m_paused) {
-            m_applied = desired;
-        }
-
-        if (m_paused && (now_ms - m_pause_start_ms) > 200U) {
-            Telemetry::printf("[CAL] RAMP: ABORTED: current stayed above limit");
-            return Status::ABORTED;
+            const float floor_mod = 0.5f * m_to;
+            const float decay = 1.0f - std::exp(-dt / 0.020f);
+            m_applied -= m_applied * decay;
+            if (m_applied < floor_mod) m_applied = floor_mod;
+        } else {
+            if (m_paused && i_max <= 0.8f * m_current_limit) {
+                m_paused = false;
+                Telemetry::printf("[CAL] RAMP: released: I=%.1f A limit=%.1f A",
+                                  static_cast<double>(i_max),
+                                  static_cast<double>(m_current_limit));
+            }
+            /* Recover toward the ramp's desired value slowly (~0.5 s). */
+            const float recover = 1.0f - std::exp(-dt / 0.5f);
+            m_applied += (desired - m_applied) * recover;
         }
     } else {
         m_applied = desired;

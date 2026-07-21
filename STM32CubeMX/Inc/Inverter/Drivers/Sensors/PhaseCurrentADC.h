@@ -154,8 +154,10 @@ private:
     volatile float    m_current_u = 0.0f;
     volatile float    m_current_v = 0.0f;
 
-    float             m_oc_threshold_a = 1000.0f; /**< default: effectively disabled */
+    float             m_oc_threshold_a = 500.0f;  /**< software OC trip [A] */
     float             m_hw_oc_threshold_a = 0.0f; /**< 0 = ADC watchdog disabled */
+    uint8_t           m_oc_count = 0;
+    static constexpr uint8_t OC_CONSEC_SAMPLES = 3U;
 
     volatile bool     m_new_data = false;
     bool              m_running = false;

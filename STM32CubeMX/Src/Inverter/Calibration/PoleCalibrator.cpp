@@ -28,7 +28,7 @@ bool PoleCalibrator::start(float max_mod, float torque_margin) {
     }
 
     if (max_mod <= 0.0f) max_mod = 0.50f;
-    if (torque_margin <= 1.0f) torque_margin = 1.30f;
+    if (torque_margin <= 0.0f) torque_margin = 0.40f;
     m_max_mod = max_mod;
 
     /* Start open-loop at 2 Hz, zero modulation. */

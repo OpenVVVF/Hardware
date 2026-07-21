@@ -37,6 +37,34 @@ float OpenLoopController::maxPhaseCurrentMagnitude() const {
     return max_i;
 }
 
+float OpenLoopController::clampedModulation(float commanded) const {
+    return (commanded < m_clamp_mod_ceiling) ? commanded : m_clamp_mod_ceiling;
+}
+
+void OpenLoopController::updateCurrentClamp(uint32_t now_ms) {
+    const float dt = (m_clamp_last_ms != 0U)
+        ? (now_ms - m_clamp_last_ms) * 1.0e-3f : 0.0f;
+    m_clamp_last_ms = now_ms;
+    if (dt <= 0.0f || dt > 0.5f) {
+        return;
+    }
+
+    const float i_max = maxPhaseCurrentMagnitude();
+    const float limit = m_ramp_current_limit_a;
+
+    if (i_max > limit) {
+        /* Over limit: throttle down fast (~63 % per 20 ms). */
+        const float decay = 1.0f - std::exp(-dt / 0.020f);
+        m_clamp_mod_ceiling -= m_clamp_mod_ceiling * decay;
+        if (m_clamp_mod_ceiling < 0.0f) m_clamp_mod_ceiling = 0.0f;
+    } else if (i_max < 0.8f * limit && m_clamp_mod_ceiling < m_applied_mod_idx) {
+        /* Comfortable again: recover toward the commanded value slowly
+         * (~0.5 s time constant) so the next ramp is not starved forever. */
+        const float recover = 1.0f - std::exp(-dt / 0.5f);
+        m_clamp_mod_ceiling += (m_applied_mod_idx - m_clamp_mod_ceiling) * recover;
+    }
+}
+
 void OpenLoopController::startRamp(float from_m, float to_m, uint32_t ramp_ms,
                                    float current_limit_a,
                                    bool enable_pole_estimator_on_done) {
@@ -52,7 +80,7 @@ void OpenLoopController::startRamp(float from_m, float to_m, uint32_t ramp_ms,
 
     if (m_ramp_duration_ms == 0U || std::fabs(from_m - to_m) < 1e-4f) {
         m_applied_mod_idx = to_m;
-        PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+        PWM_SetSPWMParams(m_freq_hz, clampedModulation(m_applied_mod_idx));
         finishRamp();
     }
 }
@@ -107,7 +135,7 @@ void OpenLoopController::stepRamp(uint32_t now_ms) {
         return;
     }
 
-    PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+    PWM_SetSPWMParams(m_freq_hz, clampedModulation(m_applied_mod_idx));
 
     if (elapsed >= m_ramp_duration_ms && !m_ramp_paused) {
         finishRamp();
@@ -118,7 +146,7 @@ void OpenLoopController::finishRamp() {
     m_ramp_state = RampState::IDLE;
     m_ramp_paused = false;
     m_applied_mod_idx = m_ramp_to;
-    PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+    PWM_SetSPWMParams(m_freq_hz, clampedModulation(m_applied_mod_idx));
 
     if (m_ramp_enable_pole_estimator) {
         m_ramp_enable_pole_estimator = false;
@@ -151,7 +179,7 @@ void OpenLoopController::applyModulation(float modulation_index) {
     m_mod_idx = modulation_index;
     m_applied_mod_idx = modulation_index;
     cancelRamp();
-    PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+    PWM_SetSPWMParams(m_freq_hz, clampedModulation(m_applied_mod_idx));
 }
 
 bool OpenLoopController::init() {
@@ -367,7 +395,7 @@ void OpenLoopController::setFrequency(float freq_hz) {
     PoleEstimator::instance().setElectricalFrequency(m_freq_hz);
 
     if (m_running || m_starting) {
-        PWM_SetSPWMParams(m_freq_hz, m_applied_mod_idx);
+        PWM_SetSPWMParams(m_freq_hz, clampedModulation(m_applied_mod_idx));
     }
 }
 
@@ -407,6 +435,7 @@ void OpenLoopController::update() {
         return;
     }
 
+    updateCurrentClamp(now_ms);
     stepRamp(now_ms);
 }
 

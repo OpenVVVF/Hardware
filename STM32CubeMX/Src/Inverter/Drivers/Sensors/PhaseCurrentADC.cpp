@@ -322,13 +322,20 @@ void PhaseCurrentADC::onInjectedConversionComplete() {
     m_current_u = m_iu - m_offset_u;
     m_current_v = m_iv - m_offset_v;
 
-    /* Software overcurrent protection.  Default threshold is very high so it
-     * only trips when explicitly configured. */
+    /* Software overcurrent protection.  Requires several consecutive
+     * samples over threshold: at high bus voltage a single switching
+     * transient can glitch one sample far beyond any real current, and a
+     * one-sample trip would false-fault the whole drive. */
     if (m_oc_threshold_a > 0.0f) {
         if (std::fabs(m_current_u) > m_oc_threshold_a ||
             std::fabs(m_current_v) > m_oc_threshold_a) {
-            FaultManager::instance().raise(FaultSource::PhaseOvercurrent,
-                                           FaultReason::PhaseOvercurrentSoftware);
+            if (++m_oc_count >= OC_CONSEC_SAMPLES) {
+                m_oc_count = 0;
+                FaultManager::instance().raise(FaultSource::PhaseOvercurrent,
+                                               FaultReason::PhaseOvercurrentSoftware);
+            }
+        } else {
+            m_oc_count = 0;
         }
     }
 

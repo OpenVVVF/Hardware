@@ -30,8 +30,8 @@ namespace {
 
 /* Conservative power limits suitable for unknown motors. */
 static constexpr float MAX_MODULATION = 0.35f;
-static constexpr float POLE_TORQUE_MARGIN = 1.30f;
-static constexpr float OFFSET_TORQUE_MARGIN = 1.30f;
+static constexpr float POLE_ROTATE_MOD_FACTOR = 1.00f;
+static constexpr float OFFSET_ROTATE_MOD_FACTOR = 0.75f;
 static constexpr float RES_MAX_CURRENT_A = 30.0f;
 static constexpr float RES_OC_LIMIT_A = 100.0f;
 static constexpr uint32_t RES_TIMEOUT_MS = 30000U;
@@ -159,7 +159,7 @@ bool AutoCalibrationCoordinator::start() {
                       static_cast<double>(MAX_MODULATION),
                       static_cast<double>(RES_MAX_CURRENT_A));
 
-    if (!poleCalibrator().start(MAX_MODULATION, POLE_TORQUE_MARGIN)) {
+    if (!poleCalibrator().start(MAX_MODULATION, POLE_ROTATE_MOD_FACTOR)) {
         EncoderCycleCalibrator::instance().stop();
         Telemetry::printf("[CAL] AUTO: failed to start pole calibration");
         return false;
@@ -210,7 +210,7 @@ void AutoCalibrationCoordinator::update() {
 
             if (!encoderOffsetCalibrator().start(m_poles, m_encoder_cycles_per_rev,
                                                  m_breakaway_mod, MAX_MODULATION,
-                                                 OFFSET_TORQUE_MARGIN)) {
+                                                 OFFSET_ROTATE_MOD_FACTOR)) {
                 fail("[CAL] AUTO: FAIL: encoder offset calibration failed to start");
                 return;
             }

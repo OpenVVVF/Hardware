@@ -41,7 +41,7 @@ public:
      * @return true if the gate driver could be enabled and PWM is ready.
      */
     bool start(float pole_count, float encoder_cycles_per_rev, float breakaway_mod = 0.0f,
-               float max_mod = 0.50f, float torque_margin = 2.50f);
+               float max_mod = 0.50f, float torque_margin = 0.40f);
 
     /**
      * @brief Non-blocking state-machine update.  Call at ~100 Hz from the main
@@ -139,7 +139,7 @@ private:
     float    m_mod = 0.0f;
     float    m_breakaway_mod = 0.0f;
     float    m_max_mod = 0.50f;
-    float    m_torque_margin = 2.50f;
+    float    m_torque_margin = 0.40f;
 
     CalibrationHardware m_hw;
     EncoderTracker      m_tracker;
