@@ -215,9 +215,15 @@ private:
 
     /* Mechanical speed estimation (ISR context).  m_sample_hz is derived
      * from the actual TIM2 trigger configuration in initTimer(). */
-    static constexpr float RPM_ALPHA  = 0.01f;
+    static constexpr float    RPM_ALPHA  = 0.005f;
+    static constexpr uint32_t RPM_WINDOW = 40U;  /* ~4 ms: averages away
+        per-sample angle noise (EMI) that a 1-sample delta amplifies 1666x. */
     float m_sample_hz    = 10000.0f;
     float m_rpm_prev_angle = 0.0f;
+    float m_rpm_filt_angle = 0.0f;
+    float m_unwrapped_angle = 0.0f;
+    float m_window_ref_angle = 0.0f;
+    uint32_t m_window_n = 0;
     bool  m_rpm_init       = false;
     volatile float m_rpm_ema = 0.0f;
 };

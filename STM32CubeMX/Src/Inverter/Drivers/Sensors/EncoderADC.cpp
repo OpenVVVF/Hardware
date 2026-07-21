@@ -221,18 +221,32 @@ void EncoderADC::onDmaComplete() {
      * fields atomically relative to the main-loop readers. */
     const float angle = computeAngle(raw_sin, raw_cos);
 
-    /* Mechanical speed from unwrapped per-sample angle deltas. */
-    if (m_rpm_init) {
+    /* Mechanical speed from the angle delta over a short window: the raw
+     * per-sample delta multiplies angle noise by the full sample rate, which
+     * buries the estimate in EMI at high switching frequencies. */
+    if (!m_rpm_init) {
+        m_rpm_init = true;
+        m_unwrapped_angle = angle;
+        m_window_ref_angle = angle;
+        m_rpm_prev_angle = angle;
+        m_rpm_filt_angle = angle;
+        m_rpm_ema = 0.0f;
+    } else {
         float delta = angle - m_rpm_prev_angle;
         if (delta > 180.0f) delta -= 360.0f;
         else if (delta < -180.0f) delta += 360.0f;
-        const float rpm_inst = delta * (m_sample_hz / 360.0f) * 60.0f;
-        m_rpm_ema += RPM_ALPHA * (rpm_inst - m_rpm_ema);
-    } else {
-        m_rpm_init = true;
-        m_rpm_ema = 0.0f;
+        m_unwrapped_angle += delta;
+        m_rpm_prev_angle = angle;
+
+        if (++m_window_n >= RPM_WINDOW) {
+            const float win_deg = m_unwrapped_angle - m_window_ref_angle;
+            const float win_s = static_cast<float>(RPM_WINDOW) / m_sample_hz;
+            const float rpm_inst = (win_deg / 360.0f) * (60.0f / win_s);
+            m_rpm_ema += RPM_ALPHA * (rpm_inst - m_rpm_ema);
+            m_window_ref_angle = m_unwrapped_angle;
+            m_window_n = 0;
+        }
     }
-    m_rpm_prev_angle = angle;
 
     m_snapshot.angle = angle;
     m_snapshot.raw_sin = raw_sin;
