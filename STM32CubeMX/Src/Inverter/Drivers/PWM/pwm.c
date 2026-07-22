@@ -34,8 +34,8 @@ static const uint32_t pwm_phase_channels[3] = {
 static volatile float pwm_switching_freq_hz = (float)PWM_DEFAULT_SWITCHING_FREQ_HZ;
 
 /* Current TIM1 update frequency.  For center-aligned PWM with RCR=1 this equals
- * the switching frequency (used for both SPWM and FOC so the control loop stays
- * synchronized with the once-per-period ADC trigger). */
+ * the switching frequency; with RCR=0 it is twice the switching frequency
+ * (dual-update FOC). */
 static volatile float pwm_update_freq_hz = (float)PWM_DEFAULT_SWITCHING_FREQ_HZ;
 
 /* SPWM state, updated in the TIM1 update ISR. */
@@ -215,12 +215,11 @@ void PWM_SetVoltageVector(float valpha_v, float vbeta_v, float vdc_v)
 void PWM_EnableFocMode(void)
 {
     foc_active = 1;
-    /* Single-update FOC: run the control ISR once per PWM switching period,
-     * matching the ADC sample rate.  The phase-current ADC is triggered once
-     * per period by TIM1 CH4 / OC4REF, so the FOC loop must consume data at
-     * the same rate.  RCR=1 generates one update event per PWM period. */
-    TIM1->RCR = 1U;
-    pwm_update_freq_hz = pwm_switching_freq_hz;
+    /* Dual-update FOC: run the control ISR at twice the PWM switching frequency
+     * (both top and bottom of the center-aligned triangle).  RCR=0 generates an
+     * update event on every counter overflow/underflow. */
+    TIM1->RCR = 0U;
+    pwm_update_freq_hz = 2.0f * pwm_switching_freq_hz;
 }
 
 void PWM_DisableFocMode(void)
