@@ -38,8 +38,13 @@ static ADC_InjectionConfTypeDef makeInjectedConfig(uint32_t channel, uint32_t ra
     cfg.ExternalTrigInjecConv = trigger;
     cfg.ExternalTrigInjecConvEdge = edge;
     cfg.InjecOversamplingMode = ENABLE;
-    cfg.InjecOversampling.Ratio = 16;
-    cfg.InjecOversampling.RightBitShift = ADC_RIGHTBITSHIFT_4;
+    /* 8x oversampling gives a useful noise reduction while still fitting the
+     * injected sequence comfortably inside one PWM period at the target
+     * switching frequencies (e.g. ~33 us at 24 MHz ADC clock, vs ~65 us for
+     * 16x).  The right shift must equal log2(Ratio) to keep the full-scale
+     * output unchanged. */
+    cfg.InjecOversampling.Ratio = 8;
+    cfg.InjecOversampling.RightBitShift = ADC_RIGHTBITSHIFT_3;
     return cfg;
 }
 
