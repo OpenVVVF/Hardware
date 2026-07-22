@@ -38,8 +38,12 @@ static ADC_InjectionConfTypeDef makeInjectedConfig(uint32_t channel, uint32_t ra
     cfg.ExternalTrigInjecConv = trigger;
     cfg.ExternalTrigInjecConvEdge = edge;
     cfg.InjecOversamplingMode = ENABLE;
-    cfg.InjecOversampling.Ratio = 16;
-    cfg.InjecOversampling.RightBitShift = ADC_RIGHTBITSHIFT_4;
+    /* 8x oversampling keeps good noise rejection while letting the injected
+     * sequence finish before the next dual-update FOC cycle at higher
+     * switching frequencies (e.g. ~33 us vs ~65 us at 24 MHz ADC clock).
+     * Right shift must equal log2(Ratio) to preserve the full-scale output. */
+    cfg.InjecOversampling.Ratio = 8;
+    cfg.InjecOversampling.RightBitShift = ADC_RIGHTBITSHIFT_3;
     return cfg;
 }
 
