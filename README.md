@@ -1,12 +1,16 @@
-# Open Source Traction Inverter & VCU
+# OpenVVVF Hardware
+
+> This repository contains the **OpenVVVF Hardware** designs and documentation. The matching firmware, Real Time Examiner (RTE) host tool, and supporting configuration utilities (including node codegen and telemetry tooling) now live in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE).
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
 
-An open-source, high-power motor inverter and vehicle control unit (VCU) for 3-phase permanent-magnet synchronous machine (PMSM) traction drives. The present hardware implementation (Chassis Size 2) is built as a 140 V nominal / 600 A variant. The platform is designed to scale up to the 800 V class — up to 450 V with a capacitor-only swap, and 900 V with a DC link PCB and capacitor change (covers the 800 V target). The control board and firmware architecture are power-stage agnostic and can be adapted across a range of voltage and current classes with appropriate hardware scaling.
+An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. The design centres on a dual-MCU control board with an independent safety coprocessor, fully isolated gate drives and sensing, dual isolated CAN buses, and a control stack configurable through node-based codegen tools.
+
+The present hardware implementation (Chassis Size 2) is a 140 V nominal / 600 A build. The platform is designed to scale across a wide range of voltage and current classes — up to 450 V with a capacitor-only swap and 900 V with a DC link PCB + capacitor change — with appropriate gate-driver and sensing-divider adaptations.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
-The design is modular, with common firmware, control architecture, and communication interfaces shared across applications. All hardware and software are released under open-source licenses.
+The hardware designs are modular and share a common control architecture and communication interfaces with the firmware in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE). All hardware and software are released under open-source licenses.
 
 ## Platform Scalability
 
@@ -141,7 +145,7 @@ Field-Oriented Control (FOC) running at PWM switching frequency with the followi
 - **N-Pulse / N-Pulse Wide / N-Pulse Custom** &mdash; Low pulse-count for high-speed operation
 - **RSVM** &mdash; Random Space Vector Modulation
 
-SPWM and SVPWM are implemented in the current firmware; the remaining schemes are architected and in development (see Project Status). The modulation framework is designed for live scheme switching via CAN bus, automatic selection based on speed/torque operating region with configurable hysteresis to prevent boundary jitter, and bumpless crossfade with di/dt gating during regen/acceleration transitions (framework features in development — see Project Status). All configurable via the Real Time Examiner (RTE) interface tool.
+SPWM and SVPWM are implemented in the current firmware in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE); the remaining schemes are architected and in development (see Project Status). The modulation framework is designed for live scheme switching via CAN bus, automatic selection based on speed/torque operating region with configurable hysteresis to prevent boundary jitter, and bumpless crossfade with di/dt gating during regen/acceleration transitions (framework features in development — see Project Status). All configurable via the Real Time Examiner (RTE) interface tool in OpenVVVF/RTE, which also hosts node codegen, telemetry, and other configuration utilities.
 
 **Model Predictive Control (MPC)** is a planned addition to the control strategy set.
 
@@ -211,6 +215,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 | STM32 prototype assembly | Complete, under active test |
 | FOC current-loop bench validation (±50 A Iq on Zero 75-10, 50 V bus, no heatsink/airflow, baseplate barely warm) | Complete |
 | Voltage/current bring-up and longer-load bench testing | In progress — 100 V / 60 A continuous for 10 min and ±200 A Iq reversal for ~1 min survived on Zero 75-10; heatsink estimated ~70–85 °C with no airflow or heatsink; 400 A trial paused due to on-site power supply limitations, motor phase cables melting, and lorentz force moving phase leads > 4cm |
+| 200 V-class variant bench test (120 V, 20 min, no heatsink) | Complete — heatspreader plate reached 41.6 °C measured by thermal camera |
 | Full-load dyno testing (motor coupled) | Planned |
 | Environmental and thermal validation | Planned |
 
@@ -219,7 +224,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 ### Software/Firmware
 | Milestone | Status |
 |---|---|
-| Real Time Examiner (RTE) host tool | In development |
+| Real Time Examiner (RTE) host tool | In development in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE), which also includes node codegen and telemetry tools |
 | STM32 low-level drivers (ADC, PWM, CAN, GPIO) | Implemented and tested |
 | Communication protocol | Implemented |
 | Sensor acquisition and filtering | Implemented |
@@ -249,11 +254,11 @@ The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` direct
 - 3-phase PMSM motor with sin/cos encoder or Hall effect position feedback
 - Compatible BMS with CAN communication
 - 12 V auxiliary supply (or self-powered via onboard DC/DC)
-- Direct CAN interface for configuration (RTE host tool in development — see Project Status)
+- Direct CAN interface for configuration (RTE host tool in development in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE) — includes node codegen and telemetry tools)
 
 ### For Contributors
 
-Contributions are welcome. This project uses **KiCad** for schematic and PCB design, **FreeCAD** for mechanical design, and **STM32CubeIDE / GCC ARM** for firmware.
+Contributions are welcome. This project uses **KiCad** for schematic and PCB design, **FreeCAD** for mechanical design, and **STM32CubeIDE / GCC ARM** for firmware (now developed in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE)).
 
 When contributing:
 - Maintain consistency with existing design conventions
