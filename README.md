@@ -6,6 +6,8 @@
 
 An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. The design centres on a dual-MCU control board with an independent safety coprocessor, fully isolated gate drives and sensing, dual isolated CAN buses, and a control stack configurable through node-based codegen tools.
 
+> **A note on the name:** *VVVF* stands for Variable Voltage Variable Frequency — it describes the output, not the control strategy. This platform is **not** limited to scalar V/Hz control; it supports vector control (FOC), arbitrary modulation schemes, and any control scheme you can express through the node-based codegen tools.
+
 The present hardware implementation (Chassis Size 2) is a 140 V nominal / 600 A build. The platform is designed to scale across a wide range of voltage and current classes — up to 450 V with a capacitor-only swap and 900 V with a DC link PCB + capacitor change — with appropriate gate-driver and sensing-divider adaptations.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
