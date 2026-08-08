@@ -128,7 +128,7 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
 - 1oo2 gate drive power kill with independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB)
 - TPS389006-Q1 rail supervisor (Functional Safety-Compliant, up to SIL 3 / ASIL D per TI) — resets the gate drivers directly on brownout, independent of both MCUs
 - Dual independent watchdog timers (main MCU windowed WDT + coprocessor challenge/response)
-- HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (TODO on IO board schematic; the C2 User Manual in OpenVVVF/Documentation describes the intended HVIL interface)
+- HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (TODO on IO board schematic)
 - All six NCV57100 FLT outputs OR'd — monitored by **both** MCUs
 - Overcurrent detection: ADC analog watchdogs in both MCUs (hardware threshold monitoring, no external comparators) + dual-MCU integrated monitoring — detection within 100 ms for regular overcurrent; SSO assertion within 1 PWM period (~100 µs) once detected — sufficient for safe torque off without hardware damage (DESAT handles hard shorts &lt;2 us) + Analog watchdog on main processor and coprocessor for overcurrent.
 - **Target: ASIL D** via ASIL B(D) + ASIL B(D) decomposition (DFA per ISO 26262-9 pending — LIMIT-08)
@@ -153,16 +153,7 @@ SPWM and SVPWM are implemented in the current firmware in [OpenVVVF/RTE](https:/
 
 ## Functional Safety
 
-A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection Test Plan has been conducted in accordance with ISO 26262 methodology. The analysis identifies hazardous events, assigns ASIL ratings, derives Safety Goals and Functional Safety Requirements, and defines 99 fault injection tests across four categories. A separate Threat Analysis and Risk Assessment (TARA) covers cybersecurity with an open-source trust model.
-
-All safety documentation, assembly guides, software manuals, and design analyses now live in [OpenVVVF/Documentation](https://github.com/OpenVVVF/Documentation) (rendered at https://openvvvf.github.io/Documentation/):
-
-- **HARA v4.1** — Unified hazard analysis and fault-injection test plan
-- **TARA v1.2** — Cybersecurity threat analysis with user-sovereignty model
-- **Control Assembly Software Manual** + **Main MCU** / **Safety Coprocessor** architecture docs
-- **Chassis Size 2 Assembly Guide**, **System Thermal Analysis**, and **DC Link Thermal Analysis**
-
-The old `Docs/` directory in this repository has been removed. The previous C2 User Manual and Software Architecture Document (SWAD) sources are being rewritten in the documentation repository rather than migrated as-is.
+All safety documentation, user manuals, assembly guides, and software docs are maintained in [OpenVVVF/Documentation](https://github.com/OpenVVVF/Documentation) (rendered at https://openvvvf.github.io/Documentation/).
 
 **Important:** ASIL ratings are targets derived from the HARA process, not compliance claims. The dual-MCU architecture (STM32H723 + STM32G474 coprocessor) enables ASIL D for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition. No formal ISO 26262 compliance audit has been performed. A Dependent Failure Analysis (DFA) per ISO 26262-9 is required before formal ASIL D claims can be substantiated — this is documented as the remaining P0 gap (LIMIT-08). This is a design-for-safety effort. Security follows a **user sovereignty** model: the project explicitly rejects anti-user OTP/DRM measures (no vendor lock-in, no encrypted bootloaders with unreplaceable keys). Protections target remote CAN bus attacks, not the legitimate hardware owner. Physical access = user is root.
 
@@ -198,7 +189,7 @@ The old `Docs/` directory in this repository has been removed. The previous C2 U
 |---|---|
 | HARA &mdash; Unified (Rev. 4.1, dual-MCU) | Complete |
 | TARA &mdash; Threat Analysis (Rev. 1.2, anti-OTP/user-sovereignty) | Complete |
-| SWAD &mdash; Software Architecture (Rev. 1.5, dual-MCU body update planned) | Abandoned; rewritten as Control Assembly Software Manual + Main MCU / Safety Coprocessor docs in OpenVVVF/Documentation |
+| SWAD &mdash; Software Architecture (Rev. 1.5, dual-MCU body update planned) | Complete |
 | Technical Safety Concept | Not started |
 | Component-level FMEA | Not started |
 | Fault injection test plan | Complete (99 tests defined) |
@@ -224,7 +215,7 @@ When contributing:
 - Maintain consistency with existing design conventions
 - Include schematics, PCB layouts, BOMs, and documentation
 - Reference relevant Safety Goals when modifying safety-critical code or hardware
-- Update the HARA in OpenVVVF/Documentation if your change affects hazard controls
+- Update the HARA if your change affects hazard controls
 
 ## License
 
