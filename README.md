@@ -16,7 +16,7 @@ The hardware designs are modular and share a common control architecture and com
 
 ## Platform Scalability
 
-The control board is designed as a reusable platform that is largely independent of the power stage. With isolation barriers rated for high-voltage power stages (CAN transceiver VIORM 2121 V<sub>PK</sub>; voltage-sense range 1.8 kV full-scale), the same controller can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver and sensing-divider adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the controller to be integrated into custom power-converter designs. Planned chassis variants include:
+The control board is designed as a reusable platform that is largely independent of the power stage. With isolation barriers rated for high-voltage power stages (CAN transceiver VIORM 2121 V<sub>PK</sub>; voltage-sense range 1.8 kV full-scale), the same inverter can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver and sensing-divider adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the inverter to be integrated into custom power-converter designs. Planned chassis variants include:
 
 | Variant | Voltage Class | Phase Current | Status |
 |---|---|---|---|
@@ -41,7 +41,7 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
   - 12 V input &rarr; isolated +15 V / &minus;9 V bipolar output per gate driver
   - Each supply fully isolated from logic and from each other
   - **1oo2 power kill**: the common 12 V feed passes through two series-connected BTS462T smart high-side switches — one controlled by the main MCU (GATE_DRIVE_PWR1_ENABLE), one by the coprocessor (GATE_DRIVE_PWR2_ENABLE). Either switch opening removes power from all six supplies simultaneously, forcing all IGBT gates off as the driver rails collapse into UVLO (gates discharge via the OUTL/Miller-clamp path). Resistor-divider feedback from both switch nodes (GATE_DRIVE_PWR1_FB / GATE_DRIVE_PWR2_FB) lets each MCU verify the other's path.
-- **Power-stage agnostic control board**: The same controller and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
+- **Power-stage agnostic control board**: The same inverter and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
 
 ### DC Link
 - **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. A PCB and capacitor change takes it to 900 V, covering the 800 V target.
