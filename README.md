@@ -8,7 +8,7 @@ An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. 
 
 > **A note on the name:** *VVVF* stands for Variable Voltage Variable Frequency — it describes the output, not the control strategy. This platform is **not** limited to scalar V/Hz control; it supports vector control (FOC), arbitrary modulation schemes, and any control scheme you can express through the node-based codegen tools.
 
-The present hardware implementation (Chassis Size 2) is a 140 V nominal / 600 A build. The platform is designed to scale across a wide range of voltage and current classes — up to 450 V with a capacitor-only swap and 900 V with a DC link PCB + capacitor change — with appropriate gate-driver and sensing-divider adaptations.
+The present hardware implementation (Chassis Size 2) is a 200–450 V class / 600 A build. The usable DC bus voltage is set by the installed DC link capacitors: 200 V class with the stock 200 V aluminium-electrolytic bank, or up to 450 V class with a capacitor-only swap to 450 V parts. The platform is designed to scale to higher voltage and current classes with appropriate gate-driver, DC link, and sensing-divider adaptations.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
@@ -16,21 +16,21 @@ The hardware designs are modular and share a common control architecture and com
 
 ## Platform Scalability
 
-The control board is designed as a reusable platform that is largely independent of the power stage. With isolation barriers rated for high-voltage power stages (CAN transceiver VIORM 2121 V<sub>PK</sub>; voltage-sense range 1.8 kV full-scale), the same controller can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver and sensing-divider adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the controller to be integrated into custom power-converter designs. Planned chassis variants include:
+The control board is designed as a reusable platform that is largely independent of the power stage. With isolation barriers rated for high-voltage power stages (CAN transceiver VIORM 2121 V<sub>PK</sub>; voltage-sense range 1.8 kV full-scale), the same inverter can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver and sensing-divider adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the inverter to be integrated into custom power-converter designs. Planned chassis variants include:
 
 | Variant | Voltage Class | Phase Current | Status |
 |---|---|---|---|
-| Chassis Size 2 | 140 V nominal (current build); 450 V capacitor-only; 900 V PCB + capacitor change (covers 800 V target) | 600 A | Implemented, under test |
+| Chassis Size 2 | 200 V class (stock 200 V capacitors); 450 V class (450 V capacitor swap) | 600 A | Implemented, under test |
 | Chassis Size 3 | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
 
-Semiconductor ratings are selected with margin for the target DC bus: the 800 V class uses 1200 V rated parts, and the 1200 V class uses 1700 V rated parts.
+Semiconductor ratings are selected with margin for the target DC bus: Chassis Size 2 uses 600 V rated IGBTs for the 200–450 V range, while future higher-voltage classes use 1200 V or 1700 V rated parts as appropriate.
 
 ## Hardware Architecture
 
 ### Power Stage
-- **3-phase 2-level IGBT bridge** built from three Mitsubishi CM600DY-24T half-bridge modules (six switches, 1200 V / 600 A class, 62 mm package)
+- **3-phase 2-level IGBT bridge** built from three Mitsubishi CM600DY half-bridge modules (six switches, 600 A class, 62 mm package). The recommended device for Chassis Size 2 is the **CM600DY-13T** (600 V), which matches the 200–450 V DC bus range. The **CM600DY-24T** (1200 V) is also electrically and mechanically compatible and may be used if a higher-voltage device is preferred.
 - **Phase current**: 600 A design continuous rating (full-load dyno validation pending; peak capability dependent on thermal management)
-- **DC bus voltage**: 140 V nominal in the current build; up to 450 V with a capacitor-only swap; 800 V class with a DC link PCB and capacitor change (see DC Link below)
+- **DC bus voltage**: 200–450 V class, set by the installed DC link capacitors — 200 V class with the stock bank, up to 450 V class with a capacitor-only swap (see DC Link below)
 - **Gate drivers**: Six onsemi NCV57100 isolated IGBT gate drivers (one per switch, AEC-Q100 automotive-qualified)
   - Reinforced isolation: >5 kV<sub>rms</sub> (UL1577), 1424 V<sub>PK</sub> / 1000 V<sub>rms</sub> working voltage (VDE 0884-11)
   - DESAT short-circuit detection (1200 V fast-recovery diode + blanking) with soft turn-off
@@ -41,10 +41,10 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
   - 12 V input &rarr; isolated +15 V / &minus;9 V bipolar output per gate driver
   - Each supply fully isolated from logic and from each other
   - **1oo2 power kill**: the common 12 V feed passes through two series-connected BTS462T smart high-side switches — one controlled by the main MCU (GATE_DRIVE_PWR1_ENABLE), one by the coprocessor (GATE_DRIVE_PWR2_ENABLE). Either switch opening removes power from all six supplies simultaneously, forcing all IGBT gates off as the driver rails collapse into UVLO (gates discharge via the OUTL/Miller-clamp path). Resistor-divider feedback from both switch nodes (GATE_DRIVE_PWR1_FB / GATE_DRIVE_PWR2_FB) lets each MCU verify the other's path.
-- **Power-stage agnostic control board**: The same controller and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
+- **Power-stage agnostic control board**: The same inverter and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
 
 ### DC Link
-- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. A PCB and capacitor change takes it to 900 V, covering the 800 V target.
+- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. This is what gives Chassis Size 2 its 200–450 V class range.
 - **Filter board**: 6&times; 10 &micro;F / 1000 V metallized polypropylene film capacitors (absorb high-frequency ripple and clamp switching voltage spikes, reducing RMS ripple current in the electrolytics) + 12&times; 0.25 &micro;F / 900 V TDK CeraLink low-inductance ceramics at the module terminals + 18&times; 2.2 nF class-Y safety capacitors to chassis for common-mode / bearing-current (EDM) suppression
 - **Busbar-style construction**: all power connections are M6 bolted mounting holes; the mounting hardware sits at bus potential — observe high-voltage precautions during assembly
 - **No onboard bleeder**: the bank has no discharge resistor and remains at bus voltage for hours after power-down (discharge only via M&Omega;-scale parasitic paths). Verify bus voltage with a meter and discharge through a power resistor before any service.
@@ -198,7 +198,7 @@ All safety documentation, user manuals, assembly guides, and software docs are m
 
 ### For Users
 
-The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (140 V nominal in the current build; up to 800 V class with DC link modifications) and currents (up to 600 A) that can be lethal. The DC link bank has no onboard bleeder and stays at bus voltage for hours after power-down. An active discharge command (using the motor windings as a bleeder resistor) is planned but not yet implemented — until then, always verify with a meter and discharge through a power resistor before service. Proper safety equipment and procedures are mandatory.
+The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (200–450 V class depending on the installed DC link capacitors; higher voltage classes require a different chassis/power-stage design) and currents (up to 600 A) that can be lethal. The DC link bank has no onboard bleeder and stays at bus voltage for hours after power-down. An active discharge command (using the motor windings as a bleeder resistor) is planned but not yet implemented — until then, always verify with a meter and discharge through a power resistor before service. Proper safety equipment and procedures are mandatory.
 
 **Prerequisites:**
 - Compatible battery pack (43&ndash;160 V for the current build's onboard supply; higher bus voltages require appropriate DC link capacitors and supply adaptation)

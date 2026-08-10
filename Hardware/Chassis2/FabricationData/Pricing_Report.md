@@ -86,7 +86,7 @@ Base quantity: 1 unit(s)
 | 12 |  | HW-C2-HW-B58031U9254M062-A | B58031U9254M062 | 871-B58031U9254M062 | $4.6500 | $55.80 | mouser_cart_import |
 | 12 |  | HW-C2-HW-BAT54WS-7-F-A | BAT54WS-7-F | 621-BAT54WS-F | $0.1240 | $1.49 | mouser_cart_import |
 | 5 |  | HW-C2-HW-BTS462TATMA1-A | BTS462TATMA1 | 726-BTS462TATMA1 | $2.6600 | $13.30 | mouser_cart_import |
-| 3 |  | HW-C2-HW-CM600DY-24T-A | CM600DY-24T | CM600DY-24T | $323.5000 | $970.50 | mouser_cart_import |
+| 3 |  | HW-C2-HW-CM600DY-24T-A | CM600DY-13T recommended; CM600DY-24T also compatible | CM600DY-24T | $323.5000 | $970.50 | mouser_cart_import |
 | 1 |  | HW-C2-HW-DRDNB21D-7-A | DRDNB21D-7 | 621-DRDNB21D-7 | $0.5600 | $0.56 | mouser_cart_import |
 | 1 |  | HW-C2-HW-EC7BW-110S12-A | EC7BW-110S12 | 418-EC7BW-110S12 | $48.8600 | $48.86 | mouser_cart_import |
 | 12 |  | HW-C2-HW-FDFNYD1-110-5-A | FDFNYD1-110(5) | 161-FDFNYD1-1105 | $0.4800 | $5.76 | mouser_cart_import |
