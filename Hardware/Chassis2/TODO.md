@@ -5,9 +5,11 @@
   - Decide before releasing the mechanical BOM / assembly docs.
 
 - [ ] Fix and finalize internal part numbers for the DC link module holders.
-  - Current placeholders: `HW-C2-DCLMH-200-PRINTED-A` and `HW-C2-DCLMH-450-PRINTED-A`.
+  - Current placeholders: `HW-C2-DCLMH-200-PRINTED-A` and `HW-C2-DCLMH-250-450-PRINTED-A`.
   - Run `python3 bom.py generate` once BOMManager deps are installed to register them and confirm final IPNs.
 
-- [ ] Make DC link module variants for 250V / 350V / 400V / 450V voltage classes.
-  - Need clarification: are these separate capacitor banks / holders, or just documentation/BOM variants under the existing 250-450V class?
-  - Scaffold folders / STEP placeholders / BOM entries once the physical differences are defined.
+- [ ] Design actual DC link module holder geometry in FreeCAD.
+  - 200V variant uses 35.5 mm tall caps.
+  - 250-450V variant uses shorter caps (~5 mm shorter than 200V).
+  - Update `Thickness_mm` and STEP files when real dimensions are known.
+  - Thermal calcs will vary with aluminum heat-spreader plate thickness per voltage class.
