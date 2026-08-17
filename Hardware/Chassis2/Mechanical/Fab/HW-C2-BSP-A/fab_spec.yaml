@@ -1,11 +1,13 @@
-# Ordering spec for HW-C2-BSP-A
+# Ordering spec for HW-C2-BSP-A (base plate)
 process: laser_cut
 material: "6061 T6 Aluminum"
 thickness_mm: 9.52
 services:
   tapping:
-    - thread: "TODO (e.g. M6x1.0)"
-      holes: "TODO: which holes, e.g. all ⌀5.0 mm through-holes (4x)"
+    - thread: "M6x1.0"
+      holes: 'all 0.1968" (5.0 mm) holes'
+    - thread: "M5x0.8"
+      holes: 'all 0.1654" (4.2 mm) holes'
+    # 0.3150" holes stay untapped
 notes:
   - "Deburr all edges"
-  - ""
