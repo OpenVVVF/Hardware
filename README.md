@@ -1,30 +1,36 @@
-# Open Source Traction Inverter & VCU
+# OpenVVVF Hardware
+
+> This repository contains the **OpenVVVF Hardware** designs. User-facing documentation, safety analyses, assembly guides, and test evidence now live in [OpenVVVF/Documentation](https://github.com/OpenVVVF/Documentation) (rendered at https://openvvvf.github.io/Documentation/). The matching firmware, Real Time Examiner (RTE) host tool, and supporting configuration utilities (including node codegen and telemetry tooling) now live in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE).
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
 
-An open-source, high-power motor inverter and vehicle control unit (VCU) for 3-phase permanent-magnet synchronous machine (PMSM) traction drives. The present hardware implementation (Chassis Size 2) is built as a 140 V nominal / 600 A variant. The platform is designed to scale up to the 800 V class — up to 450 V with a capacitor-only swap, and 900 V with a DC link PCB and capacitor change (covers the 800 V target). The control board and firmware architecture are power-stage agnostic and can be adapted across a range of voltage and current classes with appropriate hardware scaling.
+An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. The design centres on a dual-MCU control board with an independent safety coprocessor, fully isolated gate drives and sensing, dual isolated CAN buses, and a control stack configurable through node-based codegen tools.
+
+> **A note on the name:** *VVVF* stands for Variable Voltage Variable Frequency — it describes the output, not the control strategy. This platform is **not** limited to scalar V/Hz control; it supports vector control (FOC), arbitrary modulation schemes, and any control scheme you can express through the node-based codegen tools.
+
+The present hardware implementation (Chassis Size 2) is a 200–450 V class / 600 A build. The usable DC bus voltage is set by the installed DC link capacitors: 200 V class with the stock 200 V aluminium-electrolytic bank, or up to 450 V class with a capacitor-only swap to 450 V parts. The platform is designed to scale to higher voltage and current classes with appropriate gate-driver, DC link, and sensing-divider adaptations.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
-The design is modular, with common firmware, control architecture, and communication interfaces shared across applications. All hardware and software are released under open-source licenses.
+The hardware designs are modular and share a common control architecture and communication interfaces with the firmware in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE). All hardware and software are released under open-source licenses.
 
 ## Platform Scalability
 
-The control board is designed as a reusable platform that is largely independent of the power stage. With isolation barriers rated for high-voltage power stages (CAN transceiver VIORM 2121 V<sub>PK</sub>; voltage-sense range 1.8 kV full-scale), the same controller can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver and sensing-divider adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the controller to be integrated into custom power-converter designs. Planned chassis variants include:
+The control board is designed as a reusable platform that is largely independent of the power stage. With isolation barriers rated for high-voltage power stages (CAN transceiver VIORM 2121 V<sub>PK</sub>; voltage-sense range 1.8 kV full-scale), the same inverter can be paired with a wide range of inverter classes; higher voltage classes are achievable with straightforward gate-driver and sensing-divider adaptations. The PWM and protection interfaces are also compatible with user-supplied gate-drive stages, allowing the inverter to be integrated into custom power-converter designs. Planned chassis variants include:
 
 | Variant | Voltage Class | Phase Current | Status |
 |---|---|---|---|
-| Chassis Size 2 | 140 V nominal (current build); 450 V capacitor-only; 900 V PCB + capacitor change (covers 800 V target) | 600 A | Implemented, under test |
+| Chassis Size 2 | 200 V class (stock 200 V capacitors); 450 V class (450 V capacitor swap) | 600 A | Implemented, under test |
 | Chassis Size 3 | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
 
-Semiconductor ratings are selected with margin for the target DC bus: the 800 V class uses 1200 V rated parts, and the 1200 V class uses 1700 V rated parts.
+Semiconductor ratings are selected with margin for the target DC bus: Chassis Size 2 uses 600 V rated IGBTs for the 200–450 V range, while future higher-voltage classes use 1200 V or 1700 V rated parts as appropriate.
 
 ## Hardware Architecture
 
 ### Power Stage
-- **3-phase 2-level IGBT bridge** built from three Mitsubishi CM600DY-24T half-bridge modules (six switches, 1200 V / 600 A class, 62 mm package)
+- **3-phase 2-level IGBT bridge** built from three Mitsubishi CM600DY half-bridge modules (six switches, 600 A class, 62 mm package). The recommended device for Chassis Size 2 is the **CM600DY-13T** (600 V), which matches the 200–450 V DC bus range. The **CM600DY-24T** (1200 V) is also electrically and mechanically compatible and may be used if a higher-voltage device is preferred.
 - **Phase current**: 600 A design continuous rating (full-load dyno validation pending; peak capability dependent on thermal management)
-- **DC bus voltage**: 140 V nominal in the current build; up to 450 V with a capacitor-only swap; 800 V class with a DC link PCB and capacitor change (see DC Link below)
+- **DC bus voltage**: 200–450 V class, set by the installed DC link capacitors — 200 V class with the stock bank, up to 450 V class with a capacitor-only swap (see DC Link below)
 - **Gate drivers**: Six onsemi NCV57100 isolated IGBT gate drivers (one per switch, AEC-Q100 automotive-qualified)
   - Reinforced isolation: >5 kV<sub>rms</sub> (UL1577), 1424 V<sub>PK</sub> / 1000 V<sub>rms</sub> working voltage (VDE 0884-11)
   - DESAT short-circuit detection (1200 V fast-recovery diode + blanking) with soft turn-off
@@ -35,14 +41,14 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
   - 12 V input &rarr; isolated +15 V / &minus;9 V bipolar output per gate driver
   - Each supply fully isolated from logic and from each other
   - **1oo2 power kill**: the common 12 V feed passes through two series-connected BTS462T smart high-side switches — one controlled by the main MCU (GATE_DRIVE_PWR1_ENABLE), one by the coprocessor (GATE_DRIVE_PWR2_ENABLE). Either switch opening removes power from all six supplies simultaneously, forcing all IGBT gates off as the driver rails collapse into UVLO (gates discharge via the OUTL/Miller-clamp path). Resistor-divider feedback from both switch nodes (GATE_DRIVE_PWR1_FB / GATE_DRIVE_PWR2_FB) lets each MCU verify the other's path.
-- **Power-stage agnostic control board**: The same controller and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
+- **Power-stage agnostic control board**: The same inverter and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
 
 ### DC Link
-- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. A PCB and capacitor change takes it to 900 V, covering the 800 V target.
+- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. This is what gives Chassis Size 2 its 200–450 V class range.
 - **Filter board**: 6&times; 10 &micro;F / 1000 V metallized polypropylene film capacitors (absorb high-frequency ripple and clamp switching voltage spikes, reducing RMS ripple current in the electrolytics) + 12&times; 0.25 &micro;F / 900 V TDK CeraLink low-inductance ceramics at the module terminals + 18&times; 2.2 nF class-Y safety capacitors to chassis for common-mode / bearing-current (EDM) suppression
 - **Busbar-style construction**: all power connections are M6 bolted mounting holes; the mounting hardware sits at bus potential — observe high-voltage precautions during assembly
 - **No onboard bleeder**: the bank has no discharge resistor and remains at bus voltage for hours after power-down (discharge only via M&Omega;-scale parasitic paths). Verify bus voltage with a meter and discharge through a power resistor before any service.
-- **Capacitor cooling**: the capacitor bank is thermally coupled to a 3.18 mm (1/8 in) aluminium heat-spreader plate, itself mounted to the heatsink via six 55 mm aluminium standoffs (13 mm OD). The thermal path is sized for a 40 W ripple-current heat load: ~40 &deg;C total temperature rise with thermal paste (&asymp;80 &deg;C plate temperature at a 40 &deg;C heatsink base). Full analysis: `Docs/DC_LINK_THERMAL_ANALYSIS.md`. Use aluminium standoffs only — steel is not acceptable in this thermal path.
+- **Capacitor cooling**: the capacitor bank is thermally coupled to a 3.18 mm (1/8 in) aluminium heat-spreader plate, itself mounted to the heatsink via six 55 mm aluminium standoffs (13 mm OD). The thermal path is sized for a 40 W ripple-current heat load: ~40 &deg;C total temperature rise with thermal paste (&asymp;80 &deg;C plate temperature at a 40 &deg;C heatsink base). Full analysis: [DC Link Thermal Analysis](https://openvvvf.github.io/Documentation/Power-Stages/C2/Design-Documents/DC-Link-Thermal/index.html) in OpenVVVF/Documentation. Use aluminium standoffs only — steel is not acceptable in this thermal path.
 - **Precharge**: onboard high-side relay on the IO board with a user-supplied external resistor — size the resistor so precharge current stays below 2 A (input fuse limit)
 
 ### Current Sensing
@@ -122,7 +128,7 @@ Semiconductor ratings are selected with margin for the target DC bus: the 800 V 
 - 1oo2 gate drive power kill with independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB)
 - TPS389006-Q1 rail supervisor (Functional Safety-Compliant, up to SIL 3 / ASIL D per TI) — resets the gate drivers directly on brownout, independent of both MCUs
 - Dual independent watchdog timers (main MCU windowed WDT + coprocessor challenge/response)
-- HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (TODO on IO board schematic; the User Manual describes the intended HVIL interface)
+- HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (TODO on IO board schematic)
 - All six NCV57100 FLT outputs OR'd — monitored by **both** MCUs
 - Overcurrent detection: ADC analog watchdogs in both MCUs (hardware threshold monitoring, no external comparators) + dual-MCU integrated monitoring — detection within 100 ms for regular overcurrent; SSO assertion within 1 PWM period (~100 µs) once detected — sufficient for safe torque off without hardware damage (DESAT handles hard shorts &lt;2 us) + Analog watchdog on main processor and coprocessor for overcurrent.
 - **Target: ASIL D** via ASIL B(D) + ASIL B(D) decomposition (DFA per ISO 26262-9 pending — LIMIT-08)
@@ -141,66 +147,15 @@ Field-Oriented Control (FOC) running at PWM switching frequency with the followi
 - **N-Pulse / N-Pulse Wide / N-Pulse Custom** &mdash; Low pulse-count for high-speed operation
 - **RSVM** &mdash; Random Space Vector Modulation
 
-SPWM and SVPWM are implemented in the current firmware; the remaining schemes are architected and in development (see Project Status). The modulation framework is designed for live scheme switching via CAN bus, automatic selection based on speed/torque operating region with configurable hysteresis to prevent boundary jitter, and bumpless crossfade with di/dt gating during regen/acceleration transitions (framework features in development — see Project Status). All configurable via the Real Time Examiner (RTE) interface tool.
+SPWM and SVPWM are implemented in the current firmware in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE); the remaining schemes are architected and in development (see Project Status). The modulation framework is designed for live scheme switching via CAN bus, automatic selection based on speed/torque operating region with configurable hysteresis to prevent boundary jitter, and bumpless crossfade with di/dt gating during regen/acceleration transitions (framework features in development — see Project Status). All configurable via the Real Time Examiner (RTE) interface tool in OpenVVVF/RTE, which also hosts node codegen, telemetry, and other configuration utilities.
 
 **Model Predictive Control (MPC)** is a planned addition to the control strategy set.
 
 ## Functional Safety
 
-A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection Test Plan has been conducted in accordance with ISO 26262 methodology. The analysis identifies hazardous events, assigns ASIL ratings, derives Safety Goals and Functional Safety Requirements, and defines 99 fault injection tests across four categories. A separate Threat Analysis and Risk Assessment (TARA) covers cybersecurity with an open-source trust model.
+All safety documentation, user manuals, assembly guides, and software docs are maintained in [OpenVVVF/Documentation](https://github.com/OpenVVVF/Documentation) (rendered at https://openvvvf.github.io/Documentation/).
 
-- **`Docs/HARA.pdf`** (79 pages, v4.1; source `Docs/HARA.md`) &mdash; Unified HARA and Fault Injection Test Plan covering:
-  - 18 identified hazards including loss of tractive effort mid-corner (H-03a)
-  - 15 Safety Goals (ASIL A through D) — ASIL D achievable via dual-MCU ASIL B(D) decomposition
-  - 21 Functional Safety Requirements
-  - Gap analysis with priority-ranked mitigations — GAP-HW-01 (HW OCP) closed, dual-MCU monitoring sufficient
-  - 99 fault injection tests across component (50), system (19), integration (18), and environmental (12) levels
-  - Six redundant SSO pathways with 1oo2 gate drive power kill
-  - TPS389006-Q1 rail supervisor integrated — hardware-only gate-driver reset on rail brownout, independent of both MCUs
-  - Complete traceability and coverage justification
-  - Test execution order with progressive validation and hardware damage risk classification
-  - STM32G474RCTx coprocessor fully integrated — not a future enhancement
-
-- **`Docs/TARA.pdf`** (13 pages, v1.2; source `Docs/TARA.md`) &mdash; Threat Analysis and Risk Assessment per ISO/SAE 21434:
-  - 7 threat scenarios covering CAN bus attack surface
-  - 7 Cybersecurity Requirements (CSRs) with HMAC-SHA256 firmware signing
-  - 9 cybersecurity test cases (CT-01 through CT-09)
-  - <strong>User sovereignty model:</strong> explicit rejection of anti-user OTP/DRM; no vendor lock-in; user-managed keys
-  - Security model: <strong>trust the user, protect the bus</strong> — legitimate owner is never the threat
-  - User can add their own tamper protection (RDP, encrypted flash) if desired
-  - Cross-referenced to HARA for safety-relevant threats
-
-- **`Docs/SWAD.pdf`** (33 pages, v1.5; source `Docs/SWAD.md`) &mdash; Software Architecture Document:
-  - 4-layer architecture (HAL/BSP, Safety, Control, Application) under a "user-configurable, safe, reliable" design philosophy
-  - FOC + multi-modulation (SPWM, SVPWM, SHEPWM, N-Pulse/Wide/Custom, RSVM, RCFM)
-  - <strong>FOC runs at PWM switching frequency</strong> (TIM1_UP, 300 Hz&ndash;16 kHz); ADC oversampled at n&times; PWM freq up to 48 kSPS with sinc3 decimation; 16-bit ADC1/ADC2 + 12-bit ADC3
-  - Bumpless modulation scheme transitions with crossfade; async/sync boundary auto-handled
-  - Current sensor validation: VREF 2.48&ndash;2.50&ndash;2.52V; zero-point within &plusmn;20% of full scale (&plusmn;240 A); 0&ndash;3.3V; DC-link back-calc
-  - Real-time loss estimator + thermal model; die temp estimation; time-to-overtemperature prediction
-  - One NTC per IGBT module (3 modules); 100&deg;C hard cap; 2oo3 temperature voting
-  - Input validation framework (3 layers); FW update via UART/USB or CAN
-  - 6-state SM with full transition table; RTE config tool
-  - Motor, encoder, BMS, IO board, charger, display are <strong>out of scope</strong> (external products)
-  - All 21 FSRs traced
-  - <strong>Note:</strong> v1.5 covers the single-MCU architecture. The dual-MCU content (STM32G474 coprocessor, 1oo2 gate drive power kill with feedback, six SSO pathways, inter-MCU challenge/response watchdog, bidirectional NRST) is documented in HARA v4.1; the SWAD dual-MCU update is pending.
-
-- **`Docs/Traction_Inverter_User_Manual.pdf`** (26 pages, v2.4; source `Docs/Manual.md`) &mdash; User Manual:
-  - Complete electrical interface and integration guide for the 140 V nominal / 600 A variant (43&ndash;160 V DC input range)
-  - Ampseal 35-pin connector (TE 776231-1) with 9 functional groups; pin numbering is placeholder pending harness finalization
-  - HVIL: inverter signals presence, <strong>BMS/external system controls main contactor</strong>
-  - Precharge: <strong>high-side relay</strong>, isolated +12V; main contactor is external (not inverter)
-  - Power supply architecture: logic power, switched +12V, isolated gate drive/sensor rails
-  - Gate drive: +15V/-9V, DESAT, Miller clamp, FLT feedback, 1oo2 supply kill
-  - Position sensor: <strong>sin/cos encoder or Hall effect only</strong> (quadrature/resolver not supported)
-  - Sensing: 16-bit ADC current (Tamura LA37S), MAX22530 voltage, NTC temperature (one per IGBT module)
-  - IGBT: Mitsubishi CM600DY-24T 1200 V / 600 A half-bridge modules (six-switch bridge)
-  - Dual isolated CAN bus assignment; CAN protocol reference (user-configurable)
-  - USB-B debug port (not bus-powered; inverter requires external power), firmware update
-  - No warranty; use at own risk; parasitic drain note (no hardware sleep pin)
-  - Safety callouts: HV warnings, one clean Sevcon incompatibility warning, RDP warning, debug cautions
-  - Expansion module connector (J2, IO board) — planned fiber IO multidrive (5+ phase motors, load sharing, PWM sync), fiber-optic gate drive, WiFi/Bluetooth, and resolver interface modules
-
-**Important:** ASIL ratings are targets derived from the HARA process, not compliance claims. The dual-MCU architecture (STM32H723 + STM32G474 coprocessor) enables ASIL D for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition. No formal ISO 26262 compliance audit has been performed. A Dependent Failure Analysis (DFA) per ISO 26262-9 is required before formal ASIL D claims can be substantiated — this is documented as the remaining P0 gap (LIMIT-08). This is a design-for-safety effort. Security follows a <strong>user sovereignty</strong> model: the project explicitly rejects anti-user OTP/DRM measures (no vendor lock-in, no encrypted bootloaders with unreplaceable keys). Protections target remote CAN bus attacks, not the legitimate hardware owner. Physical access = user is root.
+**Important:** ASIL ratings are targets derived from the HARA process, not compliance claims. The dual-MCU architecture (STM32H723 + STM32G474 coprocessor) enables ASIL D for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition. No formal ISO 26262 compliance audit has been performed. A Dependent Failure Analysis (DFA) per ISO 26262-9 is required before formal ASIL D claims can be substantiated — this is documented as the remaining P0 gap (LIMIT-08). This is a design-for-safety effort. Security follows a **user sovereignty** model: the project explicitly rejects anti-user OTP/DRM measures (no vendor lock-in, no encrypted bootloaders with unreplaceable keys). Protections target remote CAN bus attacks, not the legitimate hardware owner. Physical access = user is root.
 
 ## Project Status
 
@@ -211,6 +166,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 | STM32 prototype assembly | Complete, under active test |
 | FOC current-loop bench validation (±50 A Iq on Zero 75-10, 50 V bus, no heatsink/airflow, baseplate barely warm) | Complete |
 | Voltage/current bring-up and longer-load bench testing | In progress — 100 V / 60 A continuous for 10 min and ±200 A Iq reversal for ~1 min survived on Zero 75-10; heatsink estimated ~70–85 °C with no airflow or heatsink; 400 A trial paused due to on-site power supply limitations, motor phase cables melting, and lorentz force moving phase leads > 4cm |
+| 200 V-class variant bench test (120 V, 20 min, no heatsink) | Complete — heatspreader plate reached 41.6 °C measured by thermal camera |
 | Full-load dyno testing (motor coupled) | Planned |
 | Environmental and thermal validation | Planned |
 
@@ -219,7 +175,7 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 ### Software/Firmware
 | Milestone | Status |
 |---|---|
-| Real Time Examiner (RTE) host tool | In development |
+| Real Time Examiner (RTE) host tool | In development in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE), which also includes node codegen and telemetry tools |
 | STM32 low-level drivers (ADC, PWM, CAN, GPIO) | Implemented and tested |
 | Communication protocol | Implemented |
 | Sensor acquisition and filtering | Implemented |
@@ -242,18 +198,18 @@ A Hazard Analysis and Risk Assessment (HARA) with comprehensive Fault Injection 
 
 ### For Users
 
-The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (140 V nominal in the current build; up to 800 V class with DC link modifications) and currents (up to 600 A) that can be lethal. The DC link bank has no onboard bleeder and stays at bus voltage for hours after power-down. An active discharge command (using the motor windings as a bleeder resistor) is planned but not yet implemented — until then, always verify with a meter and discharge through a power resistor before service. Proper safety equipment and procedures are mandatory.
+The BOM, Gerbers, and manufacturing files are in the `Hardware/Chassis2/` directory. Assembly is recommended for experienced builders only. This design involves high voltages (200–450 V class depending on the installed DC link capacitors; higher voltage classes require a different chassis/power-stage design) and currents (up to 600 A) that can be lethal. The DC link bank has no onboard bleeder and stays at bus voltage for hours after power-down. An active discharge command (using the motor windings as a bleeder resistor) is planned but not yet implemented — until then, always verify with a meter and discharge through a power resistor before service. Proper safety equipment and procedures are mandatory.
 
 **Prerequisites:**
 - Compatible battery pack (43&ndash;160 V for the current build's onboard supply; higher bus voltages require appropriate DC link capacitors and supply adaptation)
 - 3-phase PMSM motor with sin/cos encoder or Hall effect position feedback
 - Compatible BMS with CAN communication
 - 12 V auxiliary supply (or self-powered via onboard DC/DC)
-- Direct CAN interface for configuration (RTE host tool in development — see Project Status)
+- Direct CAN interface for configuration (RTE host tool in development in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE) — includes node codegen and telemetry tools)
 
 ### For Contributors
 
-Contributions are welcome. This project uses **KiCad** for schematic and PCB design, **FreeCAD** for mechanical design, and **STM32CubeIDE / GCC ARM** for firmware.
+Contributions are welcome. This project uses **KiCad** for schematic and PCB design, **FreeCAD** for mechanical design, and **STM32CubeIDE / GCC ARM** for firmware (now developed in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE)).
 
 When contributing:
 - Maintain consistency with existing design conventions
