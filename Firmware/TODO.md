@@ -1,9 +1,0 @@
-- SVPWM
-- ADC
-- relays
-- canbus
-- cleanup main, finish command system
-- closed loop control
-- fault handling
-- watchdog
-- check ctx.driver before initializing commands and kill command manager if fails or gets dereferenced.

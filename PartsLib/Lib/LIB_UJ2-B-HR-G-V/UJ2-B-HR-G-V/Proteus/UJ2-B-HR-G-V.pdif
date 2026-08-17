@@ -1,0 +1,160 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "UJ2-B-HR-G-V"
+   (description "Type B, USB 2.0, 480 Mbps, 5 Vdc, 1.5 A, Vertical, Through Hole Mounting Style, Through Hole Contact Pin Type. Gold Flash, Board Lock, 4 Pin, USB Receptacle")
+   (family "CON")
+   (package "UJ2BHRGV")
+   (attribute "Datasheet Link" "https://www.sameskydevices.com/product/resource/uj2-b-hr-g-v.pdf")
+   (attribute "Geometry.Height" "16.5mm")
+   (attribute "Mouser Part Number" "179-UJ2-B-HR-G-V")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/UJ2-B-HR-G-V?qs=HoCaDK9Nz5fUWn12FBL%2Fqw%3D%3D")
+   (attribute "Manufacturer_Name" "Same Sky")
+   (attribute "Manufacturer_Part_Number" "UJ2-B-HR-G-V")
+   (gate
+    (symbol "UJ2-B-HR-G-V")
+    (pin "VBUS" 1 PS)
+    (pin "D-" 2 PS)
+    (pin "D+" 3 PS)
+    (pin "GND" 4 PS)
+    (pin "MH1" MH1 PS)
+    (pin "MH2" MH2 PS)
+   )
+  )
+  (symbol "UJ2-B-HR-G-V"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 400) (pt 800 400) (pt 800 -400) (pt 200 -400) (pt 200 400) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 500 600) (rot 90) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 400 600) (rot 90) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 400 -600) (rot 90) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 500 -600) (rot 90) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 1000 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "UJ2BHRGV"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -7.27 3.67)
+      (pt 4.77 3.67)
+      (pt 4.77 -7.33)
+      (pt -7.27 -7.33)
+      (pt -7.27 3.67))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -9.995 4.67)
+      (pt 7.495 4.67)
+      (pt 7.495 -8.33)
+      (pt -9.995 -8.33)
+      (pt -9.995 4.67))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt 4.77 -4.33)
+      (pt 4.77 -7.33)
+      (pt -7.27 -7.33)
+      (pt -7.27 -4.33))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed false)
+      (pt -7.27 0.67)
+      (pt -7.27 3.67)
+      (pt 4.77 3.67)
+      (pt 4.77 0.67))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 0 4.2)
+      (arc (pt 0.000 4.200) (pt -0.050 4.200) (pt 0.050 4.300) (start 180.0) (sweep -90.0))
+      (pt 0 4.3)
+      (arc (pt 0.000 4.300) (pt -0.050 4.200) (pt 0.050 4.300) (start 180.0) (sweep 90.0))
+      (pt 0 4.2))))
+   (leg 1 (pt 0.000 0.000) (padstack 1))
+   (leg 2 (pt -2.500 0.000) (padstack 0))
+   (leg 3 (pt -2.500 -3.200) (padstack 0))
+   (leg 4 (pt 0.000 -3.200) (padstack 0))
+   (leg MH1 (pt -7.270 -2.500) (padstack 5))
+   (leg MH2 (pt 4.770 -2.500) (padstack 6))
+   (padstack 0
+    (hole 0.95)
+    (plated true)
+    (pad (layer TCOP) (round 1.478))
+    (pad (layer INNER) (round 1.478))
+    (pad (layer BCOP) (round 1.478))
+   )
+   (padstack 1
+    (hole 0.95)
+    (plated true)
+    (pad (layer TCOP) (square 1.478))
+    (pad (layer INNER) (round 1.478))
+    (pad (layer BCOP) (square 1.478))
+   )
+   (padstack 5
+    (hole 2.3)
+    (plated true)
+    (pad (layer TCOP) (round 3.450))
+    (pad (layer INNER) (round 3.450))
+    (pad (layer BCOP) (round 3.450))
+   )
+   (padstack 6
+    (hole 2.3)
+    (plated true)
+    (pad (layer TCOP) (round 3.450))
+    (pad (layer INNER) (round 3.450))
+    (pad (layer BCOP) (round 3.450))
+   )
+   (model "UJ2-B-HR-G-V.stp"
+    (euler -90 0 0)
+    (offset -1.25 -1.8300000429153442 -0.07999999821186066)
+   )
+  )
+ )
+)

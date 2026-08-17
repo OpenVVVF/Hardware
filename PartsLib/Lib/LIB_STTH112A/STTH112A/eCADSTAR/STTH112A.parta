@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_180485"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2015-09-01-16:33:09)
+    (utime 2026-01-08-14:31:13)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "STTH112A")
+)
+
+
+(pinAssign "ECS_180485"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2015-09-01-16:33:09)
+    (utime 2026-01-08-14:31:13)
+    (interface
+        (port "1" (symbPinId 1) (portName "K") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "A") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_180485")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "STTH112A")
+)
+
+
+(part "STTH112A"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2015-09-01-16:33:09)
+    (utime 2026-01-08-14:31:13)
+    (packageRef "STTH112A")
+    (pinAssignRef "ECS_180485")
+    (interface
+        (port "1" (symbPinId 1) (portName "K") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "A") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "D")
+    (property "description" " Low forwarded voltage drop  High reliability  High surge current capability  Soft switching for reduced EMI disturbances  Planar technology")
+    (property "Mouser_Part_Number" "511-STTH112A")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/STMicroelectronics/STTH112A?qs=1X0wRT6hCqH%2F7s%2FmzYZuyg%3D%3D")
+    (property "Manufacturer_Name" "STMicroelectronics")
+    (property "Manufacturer_Part_Number" "STTH112A")
+    (property "Datasheet_Link" "https://www.st.com/resource/en/datasheet/stth112.pdf")
+    (property "compAreaTopHeight" 2.65)
+)
+
+

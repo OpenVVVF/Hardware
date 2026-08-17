@@ -1,0 +1,87 @@
+# For PCBs designed using KiCad: https://www.kicad.org/
+# Format documentation: https://kicad.org/help/file-formats/
+
+# Temporary files
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-backups
+*-cache*
+*-bak
+*-bak*
+*~
+~*
+~*.lck
+_autosave-*
+\#auto_saved_files\#
+*.tmp
+*-save.pro
+*-save.kicad_pcb
+fp-info-cache
+
+# Netlist files (exported from Eeschema)
+*.net
+
+# Autorouter files (exported from Pcbnew)
+*.dsn
+*.ses
+
+# Exported BOM files
+*.xml
+*.csv
+
+# Archived Backups (KiCad 6.0+)
+**/*-backups/
+**/*-backups/*.zip
+
+# Local git-based history (KiCad 9.0+)
+.history/
+
+# Local project settings
+*.kicad_prl
+
+# Build output (CMake, Make, IDEs)
+build/
+Build/
+Debug/
+Release/
+**/build/
+**/Build/
+**/Debug/
+**/Release/
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.su
+*.o
+*.obj
+*.d
+*.dep
+
+# STM32CubeIDE output
+**/STM32CubeIDE/Debug/
+**/STM32CubeIDE/Release/
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

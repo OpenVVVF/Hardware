@@ -1,0 +1,91 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "9774030592R"
+   (description "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape")
+   (family "ANA")
+   (package "9774030592R")
+   (attribute "Datasheet Link" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf")
+   (attribute "Geometry.Height" "3mm")
+   (attribute "Mouser Part Number" "710-9774030592R")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D")
+   (attribute "Manufacturer_Name" "Wurth Elektronik")
+   (attribute "Manufacturer_Part_Number" "9774030592R")
+   (gate
+    (symbol "9774030592R")
+    (pin "1" 1 PS)
+   )
+  )
+  (symbol "9774030592R"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -100) (pt 200 -100) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "9774030592R"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -6.6 6.6)
+      (pt 6.6 6.6)
+      (pt 6.6 -6.6)
+      (pt -6.6 -6.6)
+      (pt -6.6 6.6))))
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt 0 5.6)
+      (arc (pt 0.000 5.600) (pt -5.600 -5.600) (pt 5.600 5.600) (start 180.0) (sweep 90.0))
+      (pt 0 -5.6)
+      (arc (pt 0.000 -5.600) (pt -5.600 -5.600) (pt 5.600 5.600) (start 180.0) (sweep -90.0))
+      (pt 0 5.6))))
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt 0 5.6)
+      (arc (pt 0.000 5.600) (pt -5.600 -5.600) (pt 5.600 5.600) (start 180.0) (sweep 90.0))
+      (pt 0 -5.6)
+      (arc (pt 0.000 -5.600) (pt -5.600 -5.600) (pt 5.600 5.600) (start 180.0) (sweep -90.0))
+      (pt 0 5.6))))
+   (leg 1 (pt 0.000 0.000) (padstack 0))
+   (padstack 0
+    (hole 6)
+    (plated true)
+    (pad (layer TCOP) (round 10.400))
+    (pad (layer INNER) (round 10.400))
+    (pad (layer BCOP) (round 10.400))
+   )
+   (model "9774030592R.stp"
+    (euler 0 0 0)
+    (offset 0 0 -1.399999976158142)
+   )
+  )
+ )
+)

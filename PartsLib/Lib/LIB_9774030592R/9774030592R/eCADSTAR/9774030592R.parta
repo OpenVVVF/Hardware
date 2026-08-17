@@ -1,0 +1,62 @@
+(Japanese_coding: sjis)
+(function "ECS_14056725"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2021-05-29-04:08:00)
+    (utime 2026-03-13-11:01:24)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+    )
+    (property "symbolName" "9774030592R")
+)
+
+
+(pinAssign "ECS_14056725"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2021-05-29-04:08:00)
+    (utime 2026-03-13-11:01:24)
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_14056725")
+                (port "1" (match "1"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "9774030592R")
+)
+
+
+(part "9774030592R"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2021-05-29-04:08:00)
+    (utime 2026-03-13-11:01:24)
+    (packageRef "9774030592R")
+    (pinAssignRef "ECS_14056725")
+    (interface
+        (port "1" (symbPinId 1) (portName "1") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "YES")
+    (property "refDesPrefix" "H")
+    (property "description" "WA-SMSI SMT Steel Spacer, M5 Internal non Stop steel, tin plated with internal thread M5 non stop outer 9.2mm, reduced to 5.8mm on PCB-side for a borehole body length 3.0mm on Reel, with Polyimide Tape")
+    (property "Mouser_Part_Number" "710-9774030592R")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/9774030592R?qs=iLbezkQI%252BsiNSOBHLp2x0A%3D%3D")
+    (property "Manufacturer_Name" "Wurth Elektronik")
+    (property "Manufacturer_Part_Number" "9774030592R")
+    (property "Datasheet_Link" "https://www.we-online.com/catalog/datasheet/9774030592R.pdf")
+    (property "compAreaTopHeight" 3)
+)
+
+

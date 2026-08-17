@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_13294928"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2024-02-22-03:43:36)
+    (utime 2024-02-22-06:25:36)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "UCS2D331MHD")
+)
+
+
+(pinAssign "ECS_13294928"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2024-02-22-03:43:36)
+    (utime 2024-02-22-06:25:36)
+    (interface
+        (port "1" (symbPinId 1) (portName "+") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "-") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_13294928")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "UCS2D331MHD")
+)
+
+
+(part "UCS2D331MHD"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2024-02-22-03:43:36)
+    (utime 2024-02-22-06:25:36)
+    (packageRef "UCS2D331MHD")
+    (pinAssignRef "ECS_13294928")
+    (interface
+        (port "1" (symbPinId 1) (portName "+") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "-") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "C")
+    (property "description" "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD")
+    (property "Mouser_Part_Number" "")
+    (property "Mouser_Price/Stock" "")
+    (property "Manufacturer_Name" "Nichicon")
+    (property "Manufacturer_Part_Number" "UCS2D331MHD")
+    (property "Datasheet_Link" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf")
+    (property "compAreaTopHeight" 37)
+)
+
+

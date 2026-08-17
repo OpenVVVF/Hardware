@@ -3,7 +3,15 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "6a7b5c01-ee8c-411a-9b28-74db69cf1695")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "InverterGen5 - Control Board")
+		(date "2026-07-07")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-CTRL")
+	)
 	(lib_symbols
 		(symbol "InverterCom:RD7-12S033R"
 			(exclude_from_sim no)
@@ -654,7 +662,7 @@
 	)
 	(text "3.3V POWER, 3W MAX"
 		(exclude_from_sim no)
-		(at 116.84 20.32 0)
+		(at 81.28 119.38 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -662,13 +670,43 @@
 		)
 		(uuid "7e64ac8d-30fa-4e54-919c-cc1d7e1ecd17")
 	)
+	(text "power enable switch for external +12v aux pwr\nonly enabled when gate drive is disabled due to power constraints\ncan be used to power external aux loads while main system power is off"
+		(exclude_from_sim no)
+		(at 189.23 17.018 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "80e07953-dc85-4575-8534-8a34c0f4d279")
+	)
+	(text "onboard +5v rail"
+		(exclude_from_sim no)
+		(at 54.61 35.56 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9ffc3cfc-a72e-4a58-a6d2-e4b44cab6837")
+	)
+	(text "Canbus +12v enable\nwhen disabled, canbus transciever secondary sides are not powered\nadditionally, canbus1 and 2 +5v rails are not present"
+		(exclude_from_sim no)
+		(at 58.166 68.072 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ae2d1e09-5786-447b-9b76-fc0fef5f3651")
+	)
 	(no_connect
-		(at 81.28 35.56)
+		(at 45.72 134.62)
 		(uuid "86920442-7e6f-417e-9666-7e54e6692130")
 	)
 	(hierarchical_label "+12V_OUT_A"
 		(shape input)
-		(at 34.29 17.78 0)
+		(at 49.53 27.94 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -679,7 +717,7 @@
 	)
 	(hierarchical_label "CANBUS_12V_ENABLE_A"
 		(shape input)
-		(at 39.37 105.41 180)
+		(at 48.26 93.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -690,7 +728,7 @@
 	)
 	(hierarchical_label "+12V_SWITCHED_A"
 		(shape input)
-		(at 30.48 30.48 180)
+		(at 45.72 40.64 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -701,7 +739,7 @@
 	)
 	(hierarchical_label "+5V_A"
 		(shape input)
-		(at 30.48 38.1 180)
+		(at 45.72 48.26 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -712,7 +750,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 46.99 113.03 270)
+		(at 55.88 101.6 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -723,7 +761,7 @@
 	)
 	(hierarchical_label "+12V_OUT_A"
 		(shape input)
-		(at 46.99 59.69 90)
+		(at 185.42 35.56 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -734,7 +772,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 81.28 40.64 180)
+		(at 45.72 139.7 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -745,7 +783,7 @@
 	)
 	(hierarchical_label "+12V_CANBUS_A"
 		(shape input)
-		(at 54.61 105.41 0)
+		(at 63.5 93.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -756,7 +794,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 30.48 33.02 180)
+		(at 45.72 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -767,7 +805,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 30.48 35.56 180)
+		(at 45.72 45.72 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -778,7 +816,7 @@
 	)
 	(hierarchical_label "+12V_OUT_A"
 		(shape input)
-		(at 46.99 97.79 90)
+		(at 55.88 86.36 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -789,7 +827,7 @@
 	)
 	(hierarchical_label "+3.3V_OUT_A"
 		(shape input)
-		(at 81.28 38.1 180)
+		(at 45.72 137.16 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -800,7 +838,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 46.99 74.93 270)
+		(at 185.42 50.8 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -811,7 +849,7 @@
 	)
 	(hierarchical_label "+12V_SWITCHED_A"
 		(shape input)
-		(at 54.61 67.31 0)
+		(at 193.04 43.18 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -822,7 +860,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 81.28 30.48 180)
+		(at 45.72 129.54 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -833,7 +871,7 @@
 	)
 	(hierarchical_label "+12V_IN"
 		(shape input)
-		(at 34.29 17.78 180)
+		(at 49.53 27.94 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -844,7 +882,7 @@
 	)
 	(hierarchical_label "+12V_OUT_A"
 		(shape input)
-		(at 81.28 33.02 180)
+		(at 45.72 132.08 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -855,7 +893,7 @@
 	)
 	(hierarchical_label "SIGNAL_12V_ENABLE_A"
 		(shape input)
-		(at 39.37 67.31 180)
+		(at 177.8 43.18 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -866,7 +904,7 @@
 	)
 	(symbol
 		(lib_id "Power_Management:BTS462TATMA1")
-		(at 46.99 67.31 0)
+		(at 185.42 43.18 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -877,7 +915,7 @@
 		(fields_autoplaced yes)
 		(uuid "0ec1ad0c-3f8b-4a5f-b7a5-8fc91c12fa99")
 		(property "Reference" "U7"
-			(at 60.96 60.8898 0)
+			(at 199.39 36.7598 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -887,7 +925,7 @@
 			)
 		)
 		(property "Value" "BTS462TATMA1"
-			(at 60.96 63.4298 0)
+			(at 199.39 39.2998 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -897,7 +935,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
-			(at 46.99 87.63 0)
+			(at 185.42 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -909,7 +947,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
-			(at 46.99 90.17 0)
+			(at 185.42 66.04 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -920,7 +958,7 @@
 			)
 		)
 		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
-			(at 46.99 67.31 0)
+			(at 185.42 43.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -956,7 +994,7 @@
 	)
 	(symbol
 		(lib_id "Power_Management:BTS462TATMA1")
-		(at 46.99 105.41 0)
+		(at 55.88 93.98 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -967,7 +1005,7 @@
 		(fields_autoplaced yes)
 		(uuid "2ef9ca2d-e68f-48ac-9549-5b1b2b122aa6")
 		(property "Reference" "U8"
-			(at 60.96 98.9898 0)
+			(at 69.85 87.5598 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -977,7 +1015,7 @@
 			)
 		)
 		(property "Value" "BTS462TATMA1"
-			(at 60.96 101.5298 0)
+			(at 69.85 90.0998 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -987,7 +1025,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TO-252-4"
-			(at 46.99 125.73 0)
+			(at 55.88 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -999,7 +1037,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.infineon.com/dgdl/Infineon-BTS462T-DS-v01_01-EN.pdf?fileId=5546d4625a888733015aa9b0294035f6"
-			(at 46.99 128.27 0)
+			(at 55.88 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1010,7 +1048,7 @@
 			)
 		)
 		(property "Description" "Smart High-Side Power Switch, PROFET, Single, 100mOhm, 3.5A, 34V, TO-252-4"
-			(at 46.99 105.41 0)
+			(at 55.88 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1046,7 +1084,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:RKE-1205S_H")
-		(at 30.48 30.48 0)
+		(at 45.72 40.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1057,7 +1095,7 @@
 		(fields_autoplaced yes)
 		(uuid "82730d39-1b4c-4e87-a452-541f769b6dfe")
 		(property "Reference" "PS1"
-			(at 52.07 33.0199 0)
+			(at 67.31 43.1799 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1068,7 +1106,7 @@
 			)
 		)
 		(property "Value" "RKE-1205S_H"
-			(at 52.07 35.5599 0)
+			(at 67.31 45.7199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1079,7 +1117,7 @@
 			)
 		)
 		(property "Footprint" "InverterCom:RKE1205SH"
-			(at 52.07 125.4 0)
+			(at 67.31 135.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1091,7 +1129,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.recom-power.com/pdf/Econoline/RKE.pdf"
-			(at 52.07 225.4 0)
+			(at 67.31 235.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1103,7 +1141,7 @@
 			)
 		)
 		(property "Description" "Recom Through Hole 1W Isolated DC-DC Converter, Vin Maximum of 12 V dc, I/O isolation 4kV dc, Vout 5V dc"
-			(at 30.48 30.48 0)
+			(at 45.72 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1114,7 +1152,7 @@
 			)
 		)
 		(property "Height" "10.7"
-			(at 52.07 425.4 0)
+			(at 67.31 435.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1126,7 +1164,7 @@
 			)
 		)
 		(property "Mouser Part Number" "919-RKE-1205S/H"
-			(at 52.07 525.4 0)
+			(at 67.31 535.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1138,7 +1176,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/RECOM-Power/RKE-1205S-H?qs=IFMNCcK%2FBZwj8OgeraTUUA%3D%3D"
-			(at 52.07 625.4 0)
+			(at 67.31 635.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1150,7 +1188,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "RECOM Power"
-			(at 52.07 725.4 0)
+			(at 67.31 735.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1162,7 +1200,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "RKE-1205S/H"
-			(at 52.07 825.4 0)
+			(at 67.31 835.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1196,7 +1234,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:RD7-12S033R")
-		(at 81.28 30.48 0)
+		(at 45.72 129.54 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1207,7 +1245,7 @@
 		(fields_autoplaced yes)
 		(uuid "afbd6791-9fd0-4ac1-89f1-0182d286915c")
 		(property "Reference" "PS6"
-			(at 116.84 22.86 0)
+			(at 81.28 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1217,7 +1255,7 @@
 			)
 		)
 		(property "Value" "RD7-12S033R"
-			(at 116.84 25.4 0)
+			(at 81.28 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1227,7 +1265,7 @@
 			)
 		)
 		(property "Footprint" "InverterCom:RD712S033R"
-			(at 148.59 125.4 0)
+			(at 113.03 224.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1239,7 +1277,7 @@
 			)
 		)
 		(property "Datasheet" "https://app.adam-tech.com/products/download/data_sheet/247025/rd7-12s033r-data-sheet.pdf"
-			(at 148.59 225.4 0)
+			(at 113.03 324.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1251,7 +1289,7 @@
 			)
 		)
 		(property "Description" "Isolated DC/DC Converters - Through Hole DC-DC Converter, Isolated Module, Single Output, 9V-18VDC Input, 3.3VDC, 3W"
-			(at 81.28 30.48 0)
+			(at 45.72 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1262,7 +1300,7 @@
 			)
 		)
 		(property "Height" "11.6"
-			(at 148.59 425.4 0)
+			(at 113.03 524.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1274,7 +1312,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 148.59 525.4 0)
+			(at 113.03 624.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1286,7 +1324,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" ""
-			(at 148.59 625.4 0)
+			(at 113.03 724.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1298,7 +1336,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Adam Tech"
-			(at 148.59 725.4 0)
+			(at 113.03 824.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1310,7 +1348,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "RD7-12S033R"
-			(at 148.59 825.4 0)
+			(at 113.03 924.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

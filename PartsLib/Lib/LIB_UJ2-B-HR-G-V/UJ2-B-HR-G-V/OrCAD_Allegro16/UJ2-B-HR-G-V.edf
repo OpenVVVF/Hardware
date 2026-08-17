@@ -1,0 +1,134 @@
+
+(EDIF
+  (rename &UJ2_B_HR_G_V "UJ2_B_HR_G_V")
+  (EDIFVersion 2 0 0)
+  (EDIFLevel 0)
+  (keywordMap (keywordLevel 0))
+  (status
+    (written
+      (timestamp 2026 07 08 01 45 17)
+      (dataOrigin "18881065/1553794/2.50/6/2/Connector")
+      (program "SamacSys ECAD Model UJ2_B_HR_G_V"
+        (version "5.2"))))
+  (library
+  (rename &UJ2_B_HR_G_V "UJ2_B_HR_G_V")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition (scale 1 (e 254 -6) (unit DISTANCE)))
+      (userData GRIDRESOLUTION (integer 50 50))
+      (figureGroup DEFAULT (pathWidth 10) (textHeight 100))
+      (figureGroup PROPERTY (pathWidth 10) (textHeight 90))
+      (figureGroup PINNUMBER (pathWidth 10) (textHeight 90))
+      (figureGroup PINNAME (pathWidth 10) (textHeight 90))
+      (figureGroup COMMENT (pathWidth 10) (textHeight 90))
+      (figureGroup PIN (pathWidth 10) (textHeight 90))
+      (figureGroup GRAPHIC (pathWidth 10) (textHeight 100))
+    )
+    (cell
+      (rename &UJ2_B_HR_G_V "UJ2_B_HR_G_V")
+      (cellType GENERIC)
+      (view
+        (rename NORMAL "Normal")
+        (viewType SCHEMATIC)
+        (interface
+          (designator "J")
+          (property (rename PACKAGENAME "PackageName") (string "UJ2_B_HR_G_V"))
+          (property (rename ISHETEROGENEOUS "IsHeterogeneous") (string "False"))
+          (property (rename DEVICESINVIEW "DevicesInView") (string "1"))
+          (property (rename DEVICESINPACKAGE "DevicesInPackage") (string "1"))
+          (property (rename DEVICEDESIGNATOR "DeviceDesignator") (string "A"))
+          (property (rename DEVICENUMBERING "DeviceNumbering") (string "Alpha"))
+          (property (rename PCB_32_FOOTPRINT "PCB Footprint") (string "UJ2BHRGV"))
+          (property (rename &Mouser_Part_Number "Mouser Part Number") (string "179-UJ2-B-HR-G-V"))
+          (property (rename &Mouser_Price_Stock "Mouser Price/Stock") (string "https://www.mouser.co.uk/ProductDetail/CUI-Devices/UJ2-B-HR-G-V?qs=HoCaDK9Nz5fUWn12FBL%2Fqw%3D%3D"))
+          (property (rename &Manufacturer_Name "Manufacturer_Name") (string "Same Sky"))
+          (property (rename &Manufacturer_Part_Number "Manufacturer_Part_Number") (string "UJ2-B-HR-G-V"))
+          (property (rename &Description "Description") (string "Type B, USB 2.0, 480 Mbps, 5 Vdc, 1.5 A, Vertical, Through Hole Mounting Style, Through Hole Contact Pin Type. Gold Flash, Board Lock, 4 Pin, USB Receptacle"))
+          (property (rename &Datasheet_Link "Datasheet Link") (string "https://www.sameskydevices.com/product/resource/uj2-b-hr-g-v.pdf"))
+          (property (rename &Height "Height") (string "16.5 mm"))
+          (property (rename &_60__32_VALUE_32__62_ "Value") (string "UJ2_B_HR_G_V"))
+          (property (rename VALUE "Value") (string "Value"))
+          (port
+            (rename &VBUS "VBUS")
+            (designator "1")
+            (property (rename ORDER "Order") (string "0") (owner "OrCAD"))
+          )
+          (port
+            (rename &DM "DM")
+            (designator "2")
+            (property (rename ORDER "Order") (string "1") (owner "OrCAD"))
+          )
+          (port
+            (rename &DP "DP")
+            (designator "3")
+            (property (rename ORDER "Order") (string "2") (owner "OrCAD"))
+          )
+          (port
+            (rename &GND "GND")
+            (designator "4")
+            (property (rename ORDER "Order") (string "3") (owner "OrCAD"))
+          )
+          (port
+            (rename &MH1 "MH1")
+            (designator "MH1")
+            (property (rename ORDER "Order") (string "4") (owner "OrCAD"))
+          )
+          (port
+            (rename &MH2 "MH2")
+            (designator "MH2")
+            (property (rename ORDER "Order") (string "5") (owner "OrCAD"))
+          )
+          (symbol
+            (portImplementation
+              (name &VBUS (display PINNAME))
+              (figure PIN (path (pointList (pt 300 200) (pt 300 0))))
+              (connectLocation (figure GRAPHIC (dot (pt 300 200))))
+            )
+            (portImplementation
+              (name &DM (display PINNAME))
+              (figure PIN (path (pointList (pt 200 200) (pt 200 0))))
+              (connectLocation (figure GRAPHIC (dot (pt 200 200))))
+            )
+            (portImplementation
+              (name &DP (display PINNAME))
+              (figure PIN (path (pointList (pt 200 -1000) (pt 200 -800))))
+              (connectLocation (figure GRAPHIC (dot (pt 200 -1000))))
+            )
+            (portImplementation
+              (name &GND (display PINNAME))
+              (figure PIN (path (pointList (pt 300 -1000) (pt 300 -800))))
+              (connectLocation (figure GRAPHIC (dot (pt 300 -1000))))
+            )
+            (portImplementation
+              (name &MH1 (display PINNAME))
+              (keywordDisplay DESIGNATOR (display PINNUMBER))
+              (figure PIN (path (pointList (pt -200 -400) (pt 0 -400))))
+              (connectLocation (figure GRAPHIC (dot (pt -200 -400))))
+            )
+            (portImplementation
+              (name &MH2 (display PINNAME))
+              (keywordDisplay DESIGNATOR (display PINNUMBER))
+              (figure PIN (path (pointList (pt 600 -400) (pt 800 -400))))
+              (connectLocation (figure GRAPHIC (dot (pt 800 -400))))
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 0 0)
+                  (pt 600 0)
+                  (pt 600 -800)
+                  (pt 0 -800)
+                  (pt 0 0)
+                )
+              )
+            )
+            (keywordDisplay DESIGNATOR (display PROPERTY (justify LOWERLEFT) (orientation R0) (origin (pt 650 130))))
+            (propertyDisplay &_60__32_VALUE_32__62_ (display PROPERTY (justify LOWERLEFT) (orientation R0) (origin (pt 650 30))))
+          )
+        )
+      )
+    )
+  )
+)

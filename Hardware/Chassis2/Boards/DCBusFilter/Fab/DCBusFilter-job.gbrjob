@@ -3,9 +3,9 @@
     "GenerationSoftware": {
       "Vendor": "KiCad",
       "Application": "Pcbnew",
-      "Version": "9.0.1"
+      "Version": "10.0.3"
     },
-    "CreationDate": "2026-02-08T14:41:03-08:00"
+    "CreationDate": "2026-07-17T14:52:42-07:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -14,8 +14,8 @@
       "Revision": "rev?"
     },
     "Size": {
-      "X": 89.2,
-      "Y": 85.2
+      "X": 292.2,
+      "Y": 96.2596
     },
     "LayerNumber": 4,
     "BoardThickness": 1.6,
@@ -27,7 +27,7 @@
       "PadToPad": 0.2,
       "PadToTrack": 0.2,
       "TrackToTrack": 0.2,
-      "MinLineWidth": 2.0,
+      "MinLineWidth": 1.0,
       "TrackToRegion": 0.7,
       "RegionToRegion": 0.7
     },
@@ -36,65 +36,125 @@
       "PadToPad": 0.2,
       "PadToTrack": 0.2,
       "TrackToTrack": 0.2,
-      "MinLineWidth": 2.0,
+      "MinLineWidth": 1.0,
       "TrackToRegion": 0.7,
       "RegionToRegion": 0.7
     }
   ],
   "FilesAttributes": [
     {
-      "Path": "DCBusFilter-F_Cu.gbr",
+      "Path": "DCBusFilter-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-In1_Cu.gbr",
-      "FileFunction": "Copper,L5,Inr",
+      "Path": "DCBusFilter-In1_Cu.g1",
+      "FileFunction": "Copper,L2,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-In2_Cu.gbr",
-      "FileFunction": "Copper,L7,Inr",
+      "Path": "DCBusFilter-In2_Cu.g2",
+      "FileFunction": "Copper,L3,Inr",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-B_Cu.gbr",
+      "Path": "DCBusFilter-B_Cu.gbl",
       "FileFunction": "Copper,L4,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-F_Paste.gbr",
+      "Path": "DCBusFilter-F_Adhesive.gta",
+      "FileFunction": "Glue,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-B_Adhesive.gba",
+      "FileFunction": "Glue,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-B_Paste.gbr",
+      "Path": "DCBusFilter-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-F_Silkscreen.gbr",
+      "Path": "DCBusFilter-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-B_Silkscreen.gbr",
+      "Path": "DCBusFilter-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "DCBusFilter-F_Mask.gbr",
+      "Path": "DCBusFilter-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "DCBusFilter-B_Mask.gbr",
+      "Path": "DCBusFilter-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "DCBusFilter-Edge_Cuts.gbr",
+      "Path": "DCBusFilter-User_Drawings.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_Comments.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_Eco1.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_Eco2.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-Edge_Cuts.gm1",
       "FileFunction": "Profile",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-F_Fab.gbr",
+      "FileFunction": "AssemblyDrawing,Top",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-B_Fab.gbr",
+      "FileFunction": "AssemblyDrawing,Bot",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_1.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_2.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_3.gbr",
+      "FileFunction": "Other,User",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "DCBusFilter-User_4.gbr",
+      "FileFunction": "Other,User",
       "FilePolarity": "Positive"
     }
   ],

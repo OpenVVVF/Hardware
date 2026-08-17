@@ -3,7 +3,15 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "0d6aec75-9926-4a06-80c1-ca626649cd2c")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "InverterGen5 - Control Board")
+		(date "2026-07-07")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-CTRL")
+	)
 	(lib_symbols
 		(symbol "Device:C"
 			(pin_numbers
@@ -1005,7 +1013,7 @@
 	)
 	(rectangle
 		(start 12.7 12.7)
-		(end 149.86 60.96)
+		(end 149.86 100.33)
 		(stroke
 			(width 0)
 			(type default)
@@ -1016,8 +1024,8 @@
 		(uuid "12022271-a98e-4df0-8e33-46bd3731e9c6")
 	)
 	(rectangle
-		(start 12.7 62.23)
-		(end 149.86 88.9)
+		(start 12.7 101.6)
+		(end 149.86 128.27)
 		(stroke
 			(width 0)
 			(type default)
@@ -1026,6 +1034,16 @@
 			(type none)
 		)
 		(uuid "9009d344-1041-4a5a-9ffa-664c5e0c23ae")
+	)
+	(text "two can transcievers, allows safety coproc to snoop and interact with can traffic, if needed.\nprovides redundant path to read and cross-check motor torque commands, if using canbus for torque cmd over throttle A/B inpts"
+		(exclude_from_sim no)
+		(at 80.01 84.582 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5a428737-589f-4e67-9553-a3f2b23c039d")
 	)
 	(text "Close Jumper if terminating node\n"
 		(exclude_from_sim no)
@@ -1039,7 +1057,7 @@
 	)
 	(text "Isolated Canbus Power Supply\n"
 		(exclude_from_sim no)
-		(at 72.136 64.77 0)
+		(at 72.136 104.14 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1057,13 +1075,13 @@
 		(at 106.68 48.26)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "54d9db93-98fc-426c-bf14-7cc74fe147b5")
+		(uuid "250a800c-2fb0-43bd-8e11-78926c84c103")
 	)
 	(junction
 		(at 113.03 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "7fdaf97d-f97a-4aae-b983-84dae8b74d65")
+		(uuid "509a1c34-aa69-4aab-bfbc-d7d4e1e9a5eb")
 	)
 	(junction
 		(at 52.07 46.99)
@@ -1072,25 +1090,19 @@
 		(uuid "b9fbfe6d-7541-49b4-b742-8747c8a562d8")
 	)
 	(junction
-		(at 82.55 36.83)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bf1f5962-cda3-49a8-8035-3380c72bf437")
-	)
-	(junction
 		(at 118.11 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d49c2e7d-dd1c-46c6-8074-426ba92f4036")
 	)
 	(junction
-		(at 43.18 76.2)
+		(at 43.18 115.57)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d552e10d-e1cc-42b6-b817-4a010ab6efa5")
 	)
 	(junction
-		(at 43.18 66.04)
+		(at 43.18 105.41)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d699e2af-9136-47c7-b6d6-41c2948692cc")
@@ -1107,6 +1119,12 @@
 		(color 0 0 0 0)
 		(uuid "e08fa763-ad01-4d0c-90b5-3f0fa99572cb")
 	)
+	(junction
+		(at 82.55 36.83)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e1977c2b-fd28-4d31-840c-5eb8b8ac75e0")
+	)
 	(wire
 		(pts
 			(xy 129.54 53.34) (xy 133.35 53.34)
@@ -1119,7 +1137,7 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 50.8) (xy 113.03 50.8)
+			(xy 106.68 52.07) (xy 113.03 52.07)
 		)
 		(stroke
 			(width 0)
@@ -1169,7 +1187,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 76.2) (xy 55.88 76.2)
+			(xy 43.18 115.57) (xy 55.88 115.57)
 		)
 		(stroke
 			(width 0)
@@ -1179,7 +1197,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 66.04) (xy 43.18 66.04)
+			(xy 22.86 105.41) (xy 43.18 105.41)
 		)
 		(stroke
 			(width 0)
@@ -1189,7 +1207,7 @@
 	)
 	(wire
 		(pts
-			(xy 53.34 66.04) (xy 53.34 73.66)
+			(xy 53.34 105.41) (xy 53.34 113.03)
 		)
 		(stroke
 			(width 0)
@@ -1199,7 +1217,7 @@
 	)
 	(wire
 		(pts
-			(xy 31.75 81.28) (xy 55.88 81.28)
+			(xy 31.75 120.65) (xy 55.88 120.65)
 		)
 		(stroke
 			(width 0)
@@ -1219,7 +1237,17 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 66.04) (xy 43.18 67.31)
+			(xy 106.68 49.53) (xy 106.68 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3796c0f9-6f2d-4d59-8ad1-24b87b7d69b4")
+	)
+	(wire
+		(pts
+			(xy 43.18 105.41) (xy 43.18 106.68)
 		)
 		(stroke
 			(width 0)
@@ -1236,16 +1264,6 @@
 			(type default)
 		)
 		(uuid "3b62fc37-3708-452a-8295-7799d669e2e9")
-	)
-	(wire
-		(pts
-			(xy 83.82 48.26) (xy 83.82 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3f6557e4-458c-4d1e-928a-850b9351599a")
 	)
 	(wire
 		(pts
@@ -1266,6 +1284,16 @@
 			(type default)
 		)
 		(uuid "4be89f52-2566-4ca2-97ce-7de2c2f8518a")
+	)
+	(wire
+		(pts
+			(xy 85.09 66.04) (xy 85.09 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d8ce4f7-df73-4e83-83fb-16669018fb91")
 	)
 	(wire
 		(pts
@@ -1339,17 +1367,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 58.42) (xy 81.28 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7144cb93-6740-4f33-8886-1bcaf199757b")
-	)
-	(wire
-		(pts
-			(xy 43.18 66.04) (xy 53.34 66.04)
+			(xy 43.18 105.41) (xy 53.34 105.41)
 		)
 		(stroke
 			(width 0)
@@ -1399,17 +1417,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 50.8) (xy 86.36 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "92fd6241-9f01-40ce-b491-2baf2ac0a0db")
-	)
-	(wire
-		(pts
-			(xy 53.34 73.66) (xy 55.88 73.66)
+			(xy 53.34 113.03) (xy 55.88 113.03)
 		)
 		(stroke
 			(width 0)
@@ -1419,7 +1427,7 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 78.74) (xy 55.88 78.74)
+			(xy 45.72 118.11) (xy 55.88 118.11)
 		)
 		(stroke
 			(width 0)
@@ -1449,6 +1457,16 @@
 	)
 	(wire
 		(pts
+			(xy 113.03 52.07) (xy 113.03 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa228615-4d36-49b5-8cd9-81edb5a103da")
+	)
+	(wire
+		(pts
 			(xy 118.11 48.26) (xy 127 48.26)
 		)
 		(stroke
@@ -1459,7 +1477,17 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 76.2) (xy 43.18 76.2)
+			(xy 88.9 66.04) (xy 85.09 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcbe0f3f-b8e1-4b09-ae8e-fcb8df6ebf1b")
+	)
+	(wire
+		(pts
+			(xy 24.13 115.57) (xy 43.18 115.57)
 		)
 		(stroke
 			(width 0)
@@ -1489,27 +1517,17 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 50.8) (xy 85.09 52.07)
+			(xy 85.09 67.31) (xy 80.01 67.31)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cac858e0-cf85-4af1-8864-7884aa58ff7f")
+		(uuid "cce2e6c4-d27d-4ead-b9b7-ca9f1d6e7082")
 	)
 	(wire
 		(pts
-			(xy 83.82 48.26) (xy 86.36 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cce71fc1-8b4b-4986-ad15-4bf252b3d9ac")
-	)
-	(wire
-		(pts
-			(xy 83.82 49.53) (xy 80.01 49.53)
+			(xy 80.01 49.53) (xy 86.36 49.53)
 		)
 		(stroke
 			(width 0)
@@ -1529,7 +1547,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 74.93) (xy 43.18 76.2)
+			(xy 43.18 114.3) (xy 43.18 115.57)
 		)
 		(stroke
 			(width 0)
@@ -1569,7 +1587,7 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 58.42) (xy 81.28 54.61)
+			(xy 81.28 55.88) (xy 81.28 54.61)
 		)
 		(stroke
 			(width 0)
@@ -1579,13 +1597,64 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 52.07) (xy 80.01 52.07)
+			(xy 80.01 52.07) (xy 86.36 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "ed3c5013-553e-4092-9e83-c445c234e129")
+	)
+	(label "CAN_H"
+		(at 80.01 69.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4759de7e-749e-4aa2-9afa-cc74c601c3cd")
+	)
+	(label "CAN_L"
+		(at 85.09 52.07 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7b16cf11-7634-49dc-8839-822509267d33")
+	)
+	(label "CAN_H"
+		(at 85.09 49.53 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bb6db283-6828-485b-87d6-70146b8434b2")
+	)
+	(label "CAN_L"
+		(at 80.01 72.39 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c8b502b7-245e-45a9-9acf-4bd8032f119b")
+	)
+	(hierarchical_label "CAN_5V"
+		(shape input)
+		(at 88.9 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "12be29ba-2f19-4faf-9998-6dfe203ee1e7")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -1598,14 +1667,25 @@
 		)
 		(uuid "23791057-7703-4a5c-ab0d-d4fe32e903dd")
 	)
-	(hierarchical_label "CAN_GND"
+	(hierarchical_label "GND_A"
 		(shape input)
-		(at 85.09 58.42 0)
+		(at 52.07 74.93 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
+		)
+		(uuid "32033ba1-5236-4c66-85d6-22359b35af6c")
+	)
+	(hierarchical_label "CAN_GND"
+		(shape input)
+		(at 81.28 55.88 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
 		)
 		(uuid "3c6a3634-8392-484a-9d03-8c80eb94cf20")
 	)
@@ -1644,7 +1724,7 @@
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
-		(at 24.13 76.2 180)
+		(at 24.13 115.57 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1655,7 +1735,7 @@
 	)
 	(hierarchical_label "CAN_5V"
 		(shape input)
-		(at 31.75 81.28 180)
+		(at 31.75 120.65 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1663,6 +1743,17 @@
 			(justify right)
 		)
 		(uuid "70b0986b-f60b-42c7-8d5d-75eebbbe342e")
+	)
+	(hierarchical_label "CAN_GND"
+		(shape input)
+		(at 80.01 74.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "761d28da-2d99-484b-9f38-b6ab8ad5e415")
 	)
 	(hierarchical_label "GND_A"
 		(shape input)
@@ -1688,7 +1779,7 @@
 	)
 	(hierarchical_label "+12V_A"
 		(shape input)
-		(at 22.86 66.04 180)
+		(at 22.86 105.41 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1699,7 +1790,7 @@
 	)
 	(hierarchical_label "CAN_GND"
 		(shape input)
-		(at 45.72 78.74 180)
+		(at 45.72 118.11 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1719,7 +1810,7 @@
 		)
 		(uuid "c19dd996-2867-49b8-8fcf-e6678519aa3c")
 	)
-	(hierarchical_label "CAN_TX"
+	(hierarchical_label "A_CAN_TX"
 		(shape input)
 		(at 24.13 49.53 180)
 		(effects
@@ -1740,6 +1831,17 @@
 			(justify left)
 		)
 		(uuid "ca9cde2f-344f-4c0f-83d4-8fe041b21806")
+	)
+	(hierarchical_label "+3.3V_A"
+		(shape input)
+		(at 52.07 67.31 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cd45bef1-2ee5-4bee-9819-2b602aed710a")
 	)
 	(hierarchical_label "CAN_GND"
 		(shape input)
@@ -1763,6 +1865,17 @@
 		)
 		(uuid "f74f402a-7d38-4215-8f01-b3f3aff4702f")
 	)
+	(hierarchical_label "B_CAN_TX"
+		(shape input)
+		(at 52.07 69.85 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f786db4c-2406-487f-bc4d-31ed0e4c7a75")
+	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
 		(at 26.67 44.45 90)
@@ -1774,7 +1887,7 @@
 		)
 		(uuid "fa9bcc30-2915-40cf-8e50-28afb6ab8f7a")
 	)
-	(hierarchical_label "CAN_RX"
+	(hierarchical_label "A_CAN_RX"
 		(shape input)
 		(at 24.13 52.07 180)
 		(effects
@@ -1784,6 +1897,181 @@
 			(justify right)
 		)
 		(uuid "fbb57488-0f23-48e8-9e1e-54ade7da120b")
+	)
+	(hierarchical_label "B_CAN_RX"
+		(shape input)
+		(at 52.07 72.39 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fbd0cf49-72ee-4e96-8943-c49ef258df24")
+	)
+	(symbol
+		(lib_id "InverterCom:ISO1042BDWVR")
+		(at 52.07 67.31 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0a024a4b-0327-4826-845c-125a34e5dfb4")
+		(property "Reference" "IC5"
+			(at 66.04 59.69 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ISO1042BDWVR"
+			(at 66.04 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SOIC127P1150X280-8N"
+			(at 76.2 162.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/gpn/ISO1042"
+			(at 76.2 262.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "Isolated CAN Transceiver With 70-V Bus Fault Protection and Flexible Data Rate"
+			(at 52.07 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "2.8"
+			(at 76.2 462.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "595-ISO1042BDWVR"
+			(at 76.2 562.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/ISO1042BDWVR?qs=qSfuJ%252Bfl%2Fd68DAhWt0GTEQ%3D%3D"
+			(at 76.2 662.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Texas Instruments"
+			(at 76.2 762.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "ISO1042BDWVR"
+			(at 76.2 862.23 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "5"
+			(uuid "bcf2854c-8b60-4b03-a621-cb641c4dba29")
+		)
+		(pin "6"
+			(uuid "d8aa01da-713f-4aaa-b8ea-4f5e4800e9cb")
+		)
+		(pin "2"
+			(uuid "86e511a5-17d9-456e-9e85-3f05db1361e4")
+		)
+		(pin "1"
+			(uuid "85e99662-5ee9-472e-b2cc-06cc80c7f4ba")
+		)
+		(pin "3"
+			(uuid "c42d3a1e-deaa-429d-b974-0080d212d4a0")
+		)
+		(pin "8"
+			(uuid "b6f254b9-7c10-4e16-b733-08fc5008418d")
+		)
+		(pin "4"
+			(uuid "266d288a-88ad-49a2-86ef-436c28878565")
+		)
+		(pin "7"
+			(uuid "9b195aac-55d6-4860-9013-f2bbe7c1e675")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/409c258f-1738-47fb-977c-4d69d51768f5"
+					(reference "IC7")
+					(unit 1)
+				)
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/f9d0c726-c585-4947-bfc3-8ced57662132"
+					(reference "IC5")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:C")
@@ -2292,7 +2580,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 43.18 71.12 0)
+		(at 43.18 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2303,7 +2591,7 @@
 		(fields_autoplaced yes)
 		(uuid "a1534a5b-27eb-407c-9980-f2279b08aa0d")
 		(property "Reference" "C14"
-			(at 46.99 69.8499 0)
+			(at 46.99 109.2199 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2314,7 +2602,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 46.99 72.3899 0)
+			(at 46.99 111.7599 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2325,7 +2613,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
-			(at 44.1452 74.93 0)
+			(at 44.1452 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2336,7 +2624,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 71.12 0)
+			(at 43.18 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2347,7 +2635,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 43.18 71.12 0)
+			(at 43.18 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2378,7 +2666,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:ACT45B-101-2P-TL003")
-		(at 86.36 48.26 0)
+		(at 86.36 49.53 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2388,7 +2676,7 @@
 		(dnp no)
 		(uuid "a70fbd9d-ca85-4df2-acf5-6bfe78462d5c")
 		(property "Reference" "FL2"
-			(at 96.52 40.64 0)
+			(at 96.52 56.388 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2398,7 +2686,7 @@
 			)
 		)
 		(property "Value" "ACT45B-101-2P-TL003"
-			(at 88.646 43.688 0)
+			(at 97.028 59.182 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2408,7 +2696,7 @@
 			)
 		)
 		(property "Footprint" "InverterCom:ACT45B1012PTL003"
-			(at 102.87 143.18 0)
+			(at 102.87 144.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2420,7 +2708,7 @@
 			)
 		)
 		(property "Datasheet" "https://product.tdk.com/system/files/dam/doc/product/emc/emc/cmf_cmc/catalog/cmf_automotive_signal_act45b_en.pdf"
-			(at 102.87 243.18 0)
+			(at 102.87 244.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2432,7 +2720,7 @@
 			)
 		)
 		(property "Description" "Common Mode Filters / Chokes, |Z|=5800 at 10MHz, L x W x T :"
-			(at 86.106 40.894 0)
+			(at 86.106 42.164 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2443,7 +2731,7 @@
 			)
 		)
 		(property "Height" "3"
-			(at 102.87 443.18 0)
+			(at 102.87 444.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2455,7 +2743,7 @@
 			)
 		)
 		(property "Mouser Part Number" "810-ACT45B1012PTL003"
-			(at 102.87 543.18 0)
+			(at 102.87 544.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2467,7 +2755,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/TDK/ACT45B-101-2P-TL003?qs=SKgu1TwNDxoLFWvwfqJuJA%3D%3D"
-			(at 102.87 643.18 0)
+			(at 102.87 644.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2479,7 +2767,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "TDK"
-			(at 102.87 743.18 0)
+			(at 102.87 744.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2491,7 +2779,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "ACT45B-101-2P-TL003"
-			(at 102.87 843.18 0)
+			(at 102.87 844.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2529,7 +2817,7 @@
 	)
 	(symbol
 		(lib_id "InverterCom:RKE-1205S_H")
-		(at 55.88 73.66 0)
+		(at 55.88 113.03 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2540,7 +2828,7 @@
 		(fields_autoplaced yes)
 		(uuid "c187fdb6-fda6-4a3c-a9f2-ffd5326e00d7")
 		(property "Reference" "PS2"
-			(at 77.47 76.1999 0)
+			(at 77.47 115.5699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2551,7 +2839,7 @@
 			)
 		)
 		(property "Value" "RKE-1205S_H"
-			(at 77.47 78.7399 0)
+			(at 77.47 118.1099 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2562,7 +2850,7 @@
 			)
 		)
 		(property "Footprint" "InverterCom:RKE1205SH"
-			(at 77.47 168.58 0)
+			(at 77.47 207.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2574,7 +2862,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.recom-power.com/pdf/Econoline/RKE.pdf"
-			(at 77.47 268.58 0)
+			(at 77.47 307.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2586,7 +2874,7 @@
 			)
 		)
 		(property "Description" "Recom Through Hole 1W Isolated DC-DC Converter, Vin Maximum of 12 V dc, I/O isolation 4kV dc, Vout 5V dc"
-			(at 55.88 73.66 0)
+			(at 55.88 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2597,7 +2885,7 @@
 			)
 		)
 		(property "Height" "10.7"
-			(at 77.47 468.58 0)
+			(at 77.47 507.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2609,7 +2897,7 @@
 			)
 		)
 		(property "Mouser Part Number" "919-RKE-1205S/H"
-			(at 77.47 568.58 0)
+			(at 77.47 607.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2621,7 +2909,7 @@
 			)
 		)
 		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/RECOM-Power/RKE-1205S-H?qs=IFMNCcK%2FBZwj8OgeraTUUA%3D%3D"
-			(at 77.47 668.58 0)
+			(at 77.47 707.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2633,7 +2921,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "RECOM Power"
-			(at 77.47 768.58 0)
+			(at 77.47 807.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2645,7 +2933,7 @@
 			)
 		)
 		(property "Manufacturer_Part_Number" "RKE-1205S/H"
-			(at 77.47 868.58 0)
+			(at 77.47 907.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

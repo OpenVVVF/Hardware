@@ -38,6 +38,9 @@
         * Output
         * EVENT_OUT
         * EXTI
+     PB3(JTDO/TRACESWO)   ------> SPI1_SCK
+     PB4(NJTRST)   ------> SPI1_MISO
+     PB5   ------> SPI1_MOSI
 */
 void MX_GPIO_Init(void)
 {
@@ -70,7 +73,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, SPI1_CS_Pin|GATE_DRIVER_RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, SPI2_CS_Pin|GATE_DRIVER_RESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, USER_DOUT_4_Pin|USER_DOUT_3_Pin|USER_DOUT_2_Pin|USER_DOUT_1_Pin, GPIO_PIN_RESET);
@@ -125,8 +128,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SPI1_CS_Pin GATE_DRIVER_RESET_Pin */
-  GPIO_InitStruct.Pin = SPI1_CS_Pin|GATE_DRIVER_RESET_Pin;
+  /*Configure GPIO pins : SPI2_CS_Pin GATE_DRIVER_RESET_Pin */
+  GPIO_InitStruct.Pin = SPI2_CS_Pin|GATE_DRIVER_RESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -138,6 +141,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB3 PB4 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+  GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 

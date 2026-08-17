@@ -148,9 +148,9 @@
         "max_error": 0.005,
         "min_clearance": 0.0,
         "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.5,
+        "min_copper_edge_clearance": 0.4,
         "min_groove_width": 0.0,
-        "min_hole_clearance": 0.25,
+        "min_hole_clearance": 0.1,
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.2,
         "min_microvia_drill": 0.1,
@@ -160,8 +160,8 @@
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.3,
         "min_track_width": 0.0,
-        "min_via_annular_width": 0.1,
-        "min_via_diameter": 0.5,
+        "min_via_annular_width": 0.075,
+        "min_via_diameter": 0.45,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -211,6 +211,7 @@
       ],
       "track_widths": [
         0.0,
+        0.15,
         0.2,
         0.25,
         0.35,
@@ -250,6 +251,10 @@
           "drill": 0.0
         },
         {
+          "diameter": 0.45,
+          "drill": 0.3
+        },
+        {
           "diameter": 0.6,
           "drill": 0.3
         },
@@ -271,7 +276,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "A"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -527,7 +532,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.1,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -540,7 +545,7 @@
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.2,
         "tuning_profile": "",
-        "via_diameter": 0.6,
+        "via_diameter": 0.5,
         "via_drill": 0.3,
         "wire_width": 6
       }
@@ -676,6 +681,12 @@
           "label": "Exclude from Board",
           "name": "${EXCLUDE_FROM_BOARD}",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Description_1",
+          "name": "Description_1",
+          "show": false
         }
       ],
       "filter_string": "",
@@ -734,7 +745,7 @@
         "uuid": "66e49eb5-2741-49e2-b48a-baf482488ca8"
       }
     ],
-    "used_designators": "R32-33,R86-87,U3,U7-8,C27-28,C140-146,C194,IC4",
+    "used_designators": "",
     "variants": []
   },
   "sheets": [
@@ -779,8 +790,8 @@
       "TemperatureSensors"
     ],
     [
-      "816c3752-2c41-4921-a3c8-13bf00b36a1d",
-      "USB Interface"
+      "34a09237-f7f6-4acd-b5a9-9fc836a077d3",
+      "Hardware Overcurrent Detection"
     ],
     [
       "409c258f-1738-47fb-977c-4d69d51768f5",
@@ -803,12 +814,24 @@
       "Voltage Divider Network3"
     ],
     [
+      "d197dd88-9ac0-4328-970e-466c93cf007a",
+      "Safety Coprocessor"
+    ],
+    [
       "aecccc3c-ad40-4948-84a1-8bab0904bc92",
       "Current Sensors"
     ],
     [
       "b7ebe378-7037-498e-93ca-f7d07fb1bccb",
       "Isolated Digital IO"
+    ],
+    [
+      "d37b777c-f145-42bd-afbb-cbe5ef453b6a",
+      "Main Processor"
+    ],
+    [
+      "48854bb4-1b3f-4857-94b3-3297ca6c3cc1",
+      "Power Supply Monitor"
     ]
   ],
   "text_variables": {},

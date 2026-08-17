@@ -1,0 +1,65 @@
+(Japanese_coding: sjis)
+(function "ECS_999112"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2018-06-22-16:49:17)
+    (utime 2025-01-22-16:53:39)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "UF4007")
+)
+
+
+(pinAssign "ECS_999112"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2018-06-22-16:49:17)
+    (utime 2025-01-22-16:53:39)
+    (interface
+        (port "1" (symbPinId 1) (portName "K") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "A") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_999112")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "UF4007")
+)
+
+
+(part "UF4007"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2018-06-22-16:49:17)
+    (utime 2025-01-22-16:53:39)
+    (packageRef "UF4007")
+    (pinAssignRef "ECS_999112")
+    (interface
+        (port "1" (symbPinId 1) (portName "K") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "A") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "D")
+    (property "description" "High current capability; High reliability ; Low forward voltage drop ; High surge current capability")
+    (property "Mouser_Part_Number" "512-UF4007")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi-Fairchild/UF4007?qs=NwIfwa72FlplAHiXupLMBA%3D%3D")
+    (property "Manufacturer_Name" "onsemi")
+    (property "Manufacturer_Part_Number" "UF4007")
+    (property "Datasheet_Link" "https://www.onsemi.com/pub/Collateral/UF4007-D.pdf")
+)
+
+

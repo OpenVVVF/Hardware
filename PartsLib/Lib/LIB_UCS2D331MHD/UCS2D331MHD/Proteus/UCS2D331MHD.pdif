@@ -1,0 +1,110 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "UCS2D331MHD"
+   (description "Nichicon 330uF Electrolytic Capacitor 200V dc Through Hole - UCS2D331MHD")
+   (family "CAP")
+   (package "CAPPRD750W80D1800H3700")
+   (attribute "Datasheet Link" "https://www.nichicon.co.jp/english/series_items/catalog_pdf/e-ucs.pdf")
+   (attribute "Geometry.Height" "37mm")
+   (attribute "Mouser Part Number" "")
+   (attribute "Mouser Price/Stock" "")
+   (attribute "Manufacturer_Name" "Nichicon")
+   (attribute "Manufacturer_Part_Number" "UCS2D331MHD")
+   (gate
+    (symbol "UCS2D331MHD")
+    (pin "+" 1 PS)
+    (pin "-" 2 PS)
+   )
+  )
+  (symbol "UCS2D331MHD"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 220 100) (pt 220 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 280 100) (pt 280 -100))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 200 0) (pt 220 0))
+   )
+   (graphic
+    (stroke 10)
+    (path (pt 280 0) (pt 300 0))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 500 0) (rot 0) (mir X) (visible true))
+    (name (pt 0 -10) (rot 0) (just TOP LEFT) (visible false))
+    (number (pt 0 10) (rot 0) (just BOTTOM LEFT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "CAPPRD750W80D1800H3700"
+   (units MM)
+   (layer OCCA
+    (graphic
+     (stroke 0.05)
+     (circle
+      (pt 13.25 0) (pt -5.75 0)
+     )
+    )
+   )
+   (layer TSLK
+    (graphic
+     (stroke 0.2)
+     (circle
+      (pt 12.75 0) (pt -5.25 0)
+     )
+    )
+   )
+   (layer TASM
+    (graphic
+     (stroke 0.1)
+     (circle
+      (pt 12.75 0) (pt -5.25 0)
+     )
+    )
+   )
+   (leg 1 (pt 0 0) (padstack 1))
+   (leg 2 (pt 7.5 0) (padstack 0))
+   (padstack 0
+    (hole 1)
+    (plated true)
+    (pad (layer TCOP) (round 1.5))
+    (pad (layer INNER) (round 1.5))
+    (pad (layer BCOP) (round 1.5))
+   )
+   (padstack 1
+    (hole 1)
+    (plated true)
+    (pad (layer TCOP) (square 1.5))
+    (pad (layer INNER) (round 1.5))
+    (pad (layer BCOP) (square 1.5))
+   )
+   (model "UCS2D331MHD.stp"
+    (euler 0 0 0)
+    (offset 0 0 0)
+   )
+  )
+ )
+)

@@ -3,7 +3,15 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "444cf00e-7d79-4afe-9524-643a02b1b9f0")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "InverterGen5 - Control Board")
+		(date "2026-07-07")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-CTRL")
+	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
 			(pin_numbers
@@ -1244,17 +1252,6 @@
 		)
 		(uuid "fb186ee2-7308-4ac6-b526-735e38052e0e")
 	)
-	(hierarchical_label "VSENSE_DC_LINK_B"
-		(shape input)
-		(at 200.66 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "08f8e38d-ed66-4b9e-8d82-f339c787b9d8")
-	)
 	(hierarchical_label "ADC1_CS_A"
 		(shape input)
 		(at 99.06 57.15 180)
@@ -1288,6 +1285,17 @@
 		)
 		(uuid "2c56afd5-25b3-4073-be90-83b0be7ee031")
 	)
+	(hierarchical_label "VSENSE_PH_U_B"
+		(shape input)
+		(at 200.66 45.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2ce3f11d-3a72-407a-b024-4b591987bc7c")
+	)
 	(hierarchical_label "VSENSE_GND_B"
 		(shape input)
 		(at 129.54 57.15 0)
@@ -1298,6 +1306,17 @@
 			(justify left)
 		)
 		(uuid "38ef97ad-8567-40d7-a0f8-ed3423bcfa23")
+	)
+	(hierarchical_label "VSENSE_PH_V_B"
+		(shape input)
+		(at 200.66 58.42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "43f68766-5c38-4092-9917-f2b4cba2f52f")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -1321,7 +1340,29 @@
 		)
 		(uuid "5bfb6ce4-be11-429d-985d-b70e15fa6643")
 	)
-	(hierarchical_label "SPI_TX_A"
+	(hierarchical_label "VSENSE_PH_W_B"
+		(shape input)
+		(at 200.66 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "65bf3a6d-0cbf-43f5-8172-0d5f847f0fc7")
+	)
+	(hierarchical_label "VSENSE_DC_LINK_B"
+		(shape input)
+		(at 200.66 33.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7a5a82f2-6476-4bb5-b8a6-f476be976720")
+	)
+	(hierarchical_label "SPI_MOSI_A"
 		(shape input)
 		(at 99.06 52.07 180)
 		(effects
@@ -1331,17 +1372,6 @@
 			(justify right)
 		)
 		(uuid "8e691456-f679-4372-8b08-5b92a09d02b1")
-	)
-	(hierarchical_label "VSENSE_PH_U_B"
-		(shape input)
-		(at 200.66 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "997bc3b6-ac33-40bc-9a33-e5febb4336ea")
 	)
 	(hierarchical_label "VSENSE_GND_B"
 		(shape input)
@@ -1353,17 +1383,6 @@
 			(justify left)
 		)
 		(uuid "9ebf3042-ef16-40f4-80c1-ec3c60ac14e6")
-	)
-	(hierarchical_label "VSENSE_PH_V_B"
-		(shape input)
-		(at 200.66 45.72 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ca592426-5d1c-4656-853e-14203ebe3ea2")
 	)
 	(hierarchical_label "VSENSE_GND_B"
 		(shape input)
@@ -1420,18 +1439,7 @@
 		)
 		(uuid "e53c0d9d-eed7-445e-b119-59322b56f399")
 	)
-	(hierarchical_label "VSENSE_PH_W_B"
-		(shape input)
-		(at 200.66 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e94f095b-b50c-46a1-ab56-a7918be8c69f")
-	)
-	(hierarchical_label "SPI_RX_A"
+	(hierarchical_label "SPI_MISO_A"
 		(shape input)
 		(at 99.06 49.53 180)
 		(effects

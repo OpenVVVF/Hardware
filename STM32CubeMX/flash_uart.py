@@ -47,7 +47,7 @@ def drain_serial_port(port, baudrate, timeout_s=0.5):
         with serial.Serial(port, baudrate, timeout=timeout_s) as s:
             # Give the line a moment to settle, then suck out whatever is there.
             time.sleep(0.1)
-            stale = s.read(2048)
+            stale = s.read(65536)
             count = len(stale)
             if count:
                 # Print first few bytes as hex so we can see what was lingering.
@@ -258,6 +258,16 @@ def main():
         print(" STEP 1: Pull BOOT0 HIGH (PH3 -> 3.3V)")
         print(" STEP 2: Press RESET (or power-cycle)")
         input(" Press ENTER when done...")
+
+    # -----------------------------------------------------------------------
+    # Step 2b: Drain again now that the ROM bootloader is running.
+    # -----------------------------------------------------------------------
+    # The application may have left kilobytes of telemetry buffered in the
+    # USB-UART bridge (host tty buffers + MCP2221A FIFO). That garbage is
+    # queued ahead of the bootloader's sync ACK and makes the CLI's initial
+    # 0x7F handshake fail. Drain it just before the CLI opens the port.
+    if not args.no_drain:
+        drain_serial_port(port, BAUDRATE)
 
     # -----------------------------------------------------------------------
     # Step 3: Flash + Verify

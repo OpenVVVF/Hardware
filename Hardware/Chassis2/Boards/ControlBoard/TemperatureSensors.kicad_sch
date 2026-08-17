@@ -3,8 +3,171 @@
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "f73fbb16-5f82-470b-b06f-1a32d65c2c83")
-	(paper "A4")
+	(paper "USLetter")
+	(title_block
+		(title "InverterGen5 - Control Board")
+		(date "2026-07-07")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-PCB-CTRL")
+	)
 	(lib_symbols
+		(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:R"
 			(pin_numbers
 				(hide yes)
@@ -145,14 +308,14 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "InverterCom:TBP02R2W-381-08BE"
+		(symbol "InverterCom:B2B-XH-AM_LF__SN_"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "J"
-				(at 16.51 7.62 0)
+				(at -0.254 7.366 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -162,8 +325,8 @@
 					(justify left top)
 				)
 			)
-			(property "Value" "TBP02R2W-381-08BE"
-				(at 16.51 5.08 0)
+			(property "Value" "B2B-XH-AM_LF__SN_"
+				(at -0.254 4.826 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -173,7 +336,7 @@
 					(justify left top)
 				)
 			)
-			(property "Footprint" "TBP02R2W38108BE"
+			(property "Footprint" "B2BXHAMLFSN"
 				(at 16.51 -94.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -185,7 +348,7 @@
 					(justify left top)
 				)
 			)
-			(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp02r2w-381.pdf"
+			(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
 				(at 16.51 -194.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -197,7 +360,7 @@
 					(justify left top)
 				)
 			)
-			(property "Description" "TBP02R2W-381 Series - 2~24 Poles, Pluggable, Receptacle, Vertical, 3.81 Pitch, Terminal Block Connector"
+			(property "Description" "CONN HEADER VERT 2POS 2.5MM"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -208,7 +371,7 @@
 					)
 				)
 			)
-			(property "Height" "9.2"
+			(property "Height" "7"
 				(at 16.51 -394.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -220,7 +383,7 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Part Number" "490-TBP02R2W-38108BE"
+			(property "Mouser Part Number" "306-B2B-XH-AMLFSNP"
 				(at 16.51 -494.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -232,7 +395,7 @@
 					(justify left top)
 				)
 			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP02R2W-381-08BE?qs=PzGy0jfpSMsy8Qrmxc%252Brhg%3D%3D"
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/JST-Commercial/B2B-XH-AMLFSN?qs=cdbOS8ANM9BJgHgwB7WxQw%3D%3D"
 				(at 16.51 -594.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -244,7 +407,7 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Name" "Same Sky"
+			(property "Manufacturer_Name" "JST (JAPAN SOLDERLESS TERMINALS)"
 				(at 16.51 -694.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -256,7 +419,7 @@
 					(justify left top)
 				)
 			)
-			(property "Manufacturer_Part_Number" "TBP02R2W-381-08BE"
+			(property "Manufacturer_Part_Number" "B2B-XH-AM(LF)(SN)"
 				(at 16.51 -794.92 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -268,10 +431,10 @@
 					(justify left top)
 				)
 			)
-			(symbol "TBP02R2W-381-08BE_1_1"
+			(symbol "B2B-XH-AM_LF__SN__1_1"
 				(rectangle
 					(start 5.08 2.54)
-					(end 15.24 -20.32)
+					(end 15.24 -5.08)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -281,7 +444,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 0 0)
+					(at 0 -2.54 0)
 					(length 5.08)
 					(name "1"
 						(effects
@@ -299,7 +462,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -2.54 0)
+					(at 0 0 0)
 					(length 5.08)
 					(name "2"
 						(effects
@@ -316,17 +479,219 @@
 						)
 					)
 				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:MM3Z3V0ST1G"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "Z"
+				(at 10.16 8.89 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "MM3Z3V0ST1G"
+				(at 10.16 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "SOD2512X100N"
+				(at 10.16 -93.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF"
+				(at 10.16 -193.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Height" "1"
+				(at 10.16 -393.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Part Number" "863-MM3Z3V0ST1G"
+				(at 10.16 -493.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D"
+				(at 10.16 -593.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Name" "onsemi"
+				(at 10.16 -693.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Part_Number" "MM3Z3V0ST1G"
+				(at 10.16 -793.65 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(symbol "MM3Z3V0ST1G_1_1"
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.064 -2.54) (xy 5.08 -2.032)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.032) (xy 5.08 -2.032)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 2.032) (xy 6.096 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 0) (xy 10.16 2.54) (xy 10.16 -2.54) (xy 5.08 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 12.7 0) (xy 10.16 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(pin passive line
-					(at 0 -5.08 0)
-					(length 5.08)
-					(name "3"
+					(at 0 0 0)
+					(length 2.54)
+					(name "K"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "3"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -335,88 +700,16 @@
 					)
 				)
 				(pin passive line
-					(at 0 -7.62 0)
-					(length 5.08)
-					(name "4"
+					(at 15.24 0 180)
+					(length 2.54)
+					(name "A"
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -10.16 0)
-					(length 5.08)
-					(name "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -12.7 0)
-					(length 5.08)
-					(name "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -15.24 0)
-					(length 5.08)
-					(name "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -17.78 0)
-					(length 5.08)
-					(name "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -428,315 +721,977 @@
 			(embedded_fonts no)
 		)
 	)
-	(junction
-		(at 44.45 40.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "23e45e8d-be8b-416f-9c8b-8882d3f86790")
-	)
-	(junction
-		(at 44.45 45.72)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5b41e589-5641-49cc-a061-844f4beb8231")
-	)
-	(junction
-		(at 44.45 33.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "dd92e69a-0089-4c05-8d8d-f3318fff4048")
-	)
-	(wire
-		(pts
-			(xy 40.64 27.94) (xy 48.26 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10a34021-608d-44f2-b11b-5b59e98ce434")
-	)
-	(wire
-		(pts
-			(xy 62.23 30.48) (xy 62.23 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10f0be1c-10a9-4d69-955c-5abfa8a7e0ae")
-	)
-	(wire
-		(pts
-			(xy 40.64 40.64) (xy 44.45 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2625e45d-fea0-4ed5-aa3c-f3eb8d6f9ca9")
-	)
-	(wire
-		(pts
-			(xy 40.64 35.56) (xy 48.26 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2ede88f1-3eea-4056-8f6c-0c35a629fc64")
-	)
-	(wire
-		(pts
-			(xy 40.64 43.18) (xy 59.69 43.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "40432ce6-35e3-4c9a-8797-7de4d63f8702")
-	)
-	(wire
-		(pts
-			(xy 85.09 38.1) (xy 85.09 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a782364-998c-4282-8506-263a1b545097")
-	)
-	(wire
-		(pts
-			(xy 45.72 31.75) (xy 44.45 31.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "614346e6-77f6-47f8-abbf-66ccb23c509d")
-	)
-	(wire
-		(pts
-			(xy 40.64 45.72) (xy 44.45 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6838a744-5394-43ad-8d15-448b26f69c7e")
-	)
-	(wire
-		(pts
-			(xy 45.72 39.37) (xy 44.45 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8c25c066-546f-444a-93f1-9e6496cd4d31")
-	)
-	(wire
-		(pts
-			(xy 44.45 33.02) (xy 54.61 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "93e897b3-bfb9-4dee-a06a-0ff20b211d42")
-	)
-	(wire
-		(pts
-			(xy 40.64 33.02) (xy 44.45 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "95eb82aa-a9b6-4be0-9750-4eca016628f1")
-	)
-	(wire
-		(pts
-			(xy 44.45 44.45) (xy 44.45 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "980dd2c3-4298-4764-b28c-a29ca9091b52")
-	)
-	(wire
-		(pts
-			(xy 40.64 38.1) (xy 85.09 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a0f77306-422b-4f95-b926-5da41ebc6f38")
-	)
-	(wire
-		(pts
-			(xy 44.45 40.64) (xy 77.47 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a3b0d92f-a30f-44c7-ad31-90e2afdb03f0")
-	)
-	(wire
-		(pts
-			(xy 44.45 39.37) (xy 44.45 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b25fda03-d7af-44e7-9643-edbe7aaea740")
-	)
-	(wire
-		(pts
-			(xy 44.45 45.72) (xy 52.07 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b96152c2-4d49-4484-9f90-1620a0d1b4f9")
-	)
-	(wire
-		(pts
-			(xy 59.69 43.18) (xy 59.69 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bd10b3ed-8fb8-4820-ab83-a38598a72a42")
-	)
-	(wire
-		(pts
-			(xy 45.72 44.45) (xy 44.45 44.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c73a3b89-b1c9-404f-9f56-bd93109f7a4e")
-	)
-	(wire
-		(pts
-			(xy 44.45 31.75) (xy 44.45 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d2eab2db-e7aa-4556-8917-0568c02efc26")
-	)
-	(wire
-		(pts
-			(xy 40.64 30.48) (xy 62.23 30.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d996936b-dd9b-454f-ad3c-1b49e3a8f04a")
-	)
-	(hierarchical_label "+3.3V_V"
-		(shape input)
-		(at 45.72 31.75 0)
+	(text "RC filter gives a bandwidth of ~16Hz\nHARA determines 16hz is acceptable.\n\nfc = 1/(2π × 1,000 Ω × 10 μF)\n= 15.915 Hz "
+		(exclude_from_sim no)
+		(at 112.268 139.192 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
 		)
-		(uuid "09b5c12b-e855-4d9c-9a7c-3beac2daf52c")
+		(uuid "0570d0cb-72ef-4eb4-a2aa-1fa884540cab")
+	)
+	(text "RC filter gives a bandwidth of ~16Hz\nHARA determines 16hz is acceptable.\n\nfc = 1/(2π × 1,000 Ω × 10 μF)\n= 15.915 Hz "
+		(exclude_from_sim no)
+		(at 239.014 31.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "28c59320-66d6-4ce6-b163-cbaf04d73854")
+	)
+	(text "3v zener, clamps below 3.6v max input to STM32"
+		(exclude_from_sim no)
+		(at 59.182 131.064 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "38730477-7b0c-4b77-bc49-2d22a8b1b77b")
+	)
+	(text "For 10k NTC thermistor\n\nNOTE: Tempsense 1,2,3 are intended for monitoring IGBT module 1,2,3\nsystem uses 2oo3 voting to exclude outlier temperature as unlikely\nHARA determines SSO/STO potentially more dangerous to use 1oo3 vs 2oo3"
+		(exclude_from_sim no)
+		(at 87.884 19.05 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "41829ae1-1b92-4cbc-aa92-0f43ab6a96ba")
+	)
+	(text "3v zener, clamps below 3.6v max input to STM32"
+		(exclude_from_sim no)
+		(at 59.182 29.464 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "51ad2649-4348-46ad-8930-d1361f7cd3b3")
+	)
+	(text "RC filter gives a bandwidth of ~16Hz\nHARA determines 16hz is acceptable.\n\nfc = 1/(2π × 1,000 Ω × 10 μF)\n= 15.915 Hz "
+		(exclude_from_sim no)
+		(at 112.268 37.592 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5d98be51-abc7-41ef-b012-36386fa324ae")
+	)
+	(text "10k THERMISTOR\nCONNECTOR"
+		(exclude_from_sim no)
+		(at 18.796 93.218 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "952bcf27-0dbc-4ca2-afba-c07d90bfc6dd")
+	)
+	(text "RC filter gives a bandwidth of ~16Hz\nHARA determines 16hz is acceptable.\n\nfc = 1/(2π × 1,000 Ω × 10 μF)\n= 15.915 Hz "
+		(exclude_from_sim no)
+		(at 112.268 88.392 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ceb52aa6-0094-4bbc-8683-333ffcd2b482")
+	)
+	(text "tie other end of motor thermistor to gnd_v"
+		(exclude_from_sim no)
+		(at 163.068 41.656 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d44e8b14-bf02-4575-9d3b-cbdf02eb5db8")
+	)
+	(text "10k THERMISTOR\nCONNECTOR"
+		(exclude_from_sim no)
+		(at 18.796 144.018 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "da9affab-f1d4-439d-93b3-15d34ac5c02b")
+	)
+	(text "3v zener, clamps below 3.6v max input to STM32"
+		(exclude_from_sim no)
+		(at 59.182 80.264 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e8f1e7e3-514f-4246-be2f-c1dd6ec7cac7")
+	)
+	(text "10k THERMISTOR\nCONNECTOR"
+		(exclude_from_sim no)
+		(at 18.796 42.418 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ec94166a-2a64-4ba5-8471-b32b3681746f")
+	)
+	(text "10K thermistor from motor\nif using different value thermistor, adjust resistor accordingly"
+		(exclude_from_sim no)
+		(at 189.1563 21.4329 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "fdbd2481-61ee-4fe8-bced-3698009652a5")
+	)
+	(junction
+		(at 76.2 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "18905166-f80f-4261-bd38-08f795cf5525")
+	)
+	(junction
+		(at 190.5 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2a9ecbd5-a1d6-4632-810e-2e556c949652")
+	)
+	(junction
+		(at 53.34 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "43f794dc-3457-4f32-9516-056841d64cd2")
+	)
+	(junction
+		(at 213.36 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a668331a-9e10-4d98-956e-e788b3b2dcea")
+	)
+	(junction
+		(at 53.34 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b1f0e347-a5b5-4059-9a68-0dd6f98d96b3")
+	)
+	(junction
+		(at 76.2 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "df1fdf51-af9b-4dde-a7bb-1901b9b10f3c")
+	)
+	(junction
+		(at 76.2 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dfdc59f2-05ac-4847-a9de-1605ac518392")
+	)
+	(junction
+		(at 53.34 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ef7ee70d-c0c5-4a7c-ae19-b743d0eac19d")
+	)
+	(bus_entry
+		(at 80.01 49.53)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcb4785c-75ec-49b3-a5f2-2fb014c7f91f")
+	)
+	(wire
+		(pts
+			(xy 53.34 109.22) (xy 53.34 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0852a93f-c173-4a50-921e-5b0620e34694")
+	)
+	(wire
+		(pts
+			(xy 76.2 144.78) (xy 76.2 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09b56af8-0a9c-418e-a726-2a275ddb7d2b")
+	)
+	(wire
+		(pts
+			(xy 76.2 43.18) (xy 76.2 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "263d8265-5d59-43a5-98fd-2d538e9c4319")
+	)
+	(wire
+		(pts
+			(xy 52.07 82.55) (xy 53.34 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2914131c-2fc4-4708-94c5-041eafe0688d")
+	)
+	(wire
+		(pts
+			(xy 189.23 26.67) (xy 190.5 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2bf01709-080d-4ab6-af39-02a28063b4fe")
+	)
+	(wire
+		(pts
+			(xy 76.2 156.21) (xy 76.2 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e82994e-5788-46c2-abd6-9717edd27f7d")
+	)
+	(wire
+		(pts
+			(xy 52.07 31.75) (xy 53.34 31.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b095408-5312-41c9-b0f9-0b658a927462")
+	)
+	(wire
+		(pts
+			(xy 72.39 144.78) (xy 76.2 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "427e9761-731e-4118-abbc-e42bda6dded6")
+	)
+	(wire
+		(pts
+			(xy 177.8 38.1) (xy 190.5 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d64b59d-b5b4-405e-899e-09a4a387b7d8")
+	)
+	(wire
+		(pts
+			(xy 76.2 93.98) (xy 86.36 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fea2842-6708-49ee-a7f4-5e86bc5158af")
+	)
+	(wire
+		(pts
+			(xy 72.39 93.98) (xy 76.2 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5089bac1-0841-43e7-8d4c-1db9a5995bbd")
+	)
+	(wire
+		(pts
+			(xy 53.34 93.98) (xy 53.34 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "51435889-270c-41b1-bfd9-7e0e3521aa17")
+	)
+	(wire
+		(pts
+			(xy 190.5 38.1) (xy 201.93 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5a0ef649-d7ec-48a0-a4e9-0b553c654820")
+	)
+	(wire
+		(pts
+			(xy 53.34 144.78) (xy 64.77 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6af3826f-127a-42ae-8e82-3f4c8be60af7")
+	)
+	(wire
+		(pts
+			(xy 53.34 82.55) (xy 53.34 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e63a718-de7c-41ce-9a76-2d4c5a54e6f4")
+	)
+	(wire
+		(pts
+			(xy 72.39 43.18) (xy 76.2 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71cf64b4-ed2b-425f-96d1-61144432f01b")
+	)
+	(wire
+		(pts
+			(xy 53.34 160.02) (xy 53.34 161.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "747cccbf-880d-4635-aaa1-d2c6b03682f1")
+	)
+	(wire
+		(pts
+			(xy 53.34 58.42) (xy 53.34 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77d52b81-b03a-4c27-be8e-9dc328d53a06")
+	)
+	(wire
+		(pts
+			(xy 40.64 93.98) (xy 53.34 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b1e06e7-1a22-408c-88ae-90ca5265319b")
+	)
+	(wire
+		(pts
+			(xy 76.2 144.78) (xy 86.36 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "876d3d04-21ec-4ff5-94fb-cb271a238cd9")
+	)
+	(wire
+		(pts
+			(xy 53.34 43.18) (xy 64.77 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f51157c-6fd5-4334-8c36-030fae91f209")
+	)
+	(wire
+		(pts
+			(xy 213.36 49.53) (xy 213.36 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a1d43dd-2cfc-4f47-8c80-151921e63cf9")
+	)
+	(wire
+		(pts
+			(xy 76.2 43.18) (xy 86.36 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b2f4ab1-199d-4422-98e3-bf6c09cb55f0")
+	)
+	(wire
+		(pts
+			(xy 190.5 38.1) (xy 190.5 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b37326c-b3c5-4016-9388-37d3f25773ad")
+	)
+	(wire
+		(pts
+			(xy 209.55 38.1) (xy 213.36 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9eeb0a50-4c84-4830-9489-55efe1cbbc23")
+	)
+	(wire
+		(pts
+			(xy 213.36 38.1) (xy 223.52 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ef4fa25-5b5d-40be-a259-d014ee34c9d8")
+	)
+	(wire
+		(pts
+			(xy 53.34 144.78) (xy 53.34 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8a3f8b7-3a36-46d7-a002-02494030960d")
+	)
+	(wire
+		(pts
+			(xy 53.34 43.18) (xy 53.34 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aaaae437-7c48-4829-990c-08fed7d344ab")
+	)
+	(wire
+		(pts
+			(xy 76.2 105.41) (xy 76.2 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae1f4585-6e32-41d1-a11c-7011646c2b7f")
+	)
+	(wire
+		(pts
+			(xy 52.07 133.35) (xy 53.34 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b13e8fb9-ba3b-4278-a4fa-1bbcfd203fe9")
+	)
+	(wire
+		(pts
+			(xy 53.34 93.98) (xy 64.77 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b8386a93-5d3e-4adc-812a-494114201b51")
+	)
+	(wire
+		(pts
+			(xy 53.34 31.75) (xy 53.34 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bedb0661-9a3f-476b-af11-934173f8f05f")
+	)
+	(wire
+		(pts
+			(xy 190.5 26.67) (xy 190.5 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c2d9c7ec-0b5b-433e-8245-1eaf2e8cf9f2")
+	)
+	(wire
+		(pts
+			(xy 76.2 93.98) (xy 76.2 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c2e0f150-3a5e-4216-a56e-9c6145046068")
+	)
+	(wire
+		(pts
+			(xy 40.64 144.78) (xy 53.34 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c7c52352-432e-47cd-9b20-139ee6550de7")
+	)
+	(wire
+		(pts
+			(xy 76.2 54.61) (xy 76.2 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dae799e4-6477-46aa-9e7a-3ef0d34202e5")
+	)
+	(wire
+		(pts
+			(xy 213.36 38.1) (xy 213.36 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e15b9750-8904-4215-8d1d-3679f6b7d3ec")
+	)
+	(wire
+		(pts
+			(xy 53.34 133.35) (xy 53.34 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efbdc5c7-e6cc-4a9d-8e99-8bc19ca4afa7")
+	)
+	(wire
+		(pts
+			(xy 190.5 53.34) (xy 190.5 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f2a6d8f0-17c5-47bd-9f25-416bcb3ed623")
+	)
+	(wire
+		(pts
+			(xy 40.64 43.18) (xy 53.34 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f4fc26d3-4321-49b1-8302-d27895a57f5c")
 	)
 	(hierarchical_label "HEATSINK_TMP3_V"
 		(shape input)
-		(at 59.69 44.45 0)
+		(at 86.36 144.78 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "34a7039b-9a13-4375-9663-7a8b4fc9a6c0")
+		(uuid "01bffbce-dd2b-42ae-93a0-9e42138bfd3f")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 213.36 49.53 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0ab3824d-c9c9-467b-90f8-3062be28282e")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 76.2 105.41 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "115244d3-42b1-4d11-a691-c7e00728ebc1")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 76.2 54.61 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1960519e-2420-4704-b563-8bf8d4a0ca51")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 53.34 59.69 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2eb159da-62c0-47dc-965a-a553a2b73344")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 40.64 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "351dfae9-2da7-4275-a064-b79ec928d5ad")
+	)
+	(hierarchical_label "MOTOR_TEMP_IN"
+		(shape input)
+		(at 177.8 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "36c0c7be-d14c-474d-9f93-1d62a297ed15")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 40.64 142.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4a92759a-224f-4394-85bf-b03b803f2256")
+	)
+	(hierarchical_label "+3.3V_V"
+		(shape input)
+		(at 52.07 31.75 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4ae1fa9a-07a6-4447-a44b-564761586aa8")
+	)
+	(hierarchical_label "+3.3V_V"
+		(shape input)
+		(at 52.07 133.35 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4cc0c353-b8bb-4466-9d2f-45121aa3e036")
 	)
 	(hierarchical_label "HEATSINK_TMP2_V"
 		(shape input)
-		(at 85.09 39.37 0)
+		(at 86.36 93.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "67840ea3-81be-4390-a276-e16a4bc9d6e4")
-	)
-	(hierarchical_label "GND_V"
-		(shape input)
-		(at 48.26 27.94 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "862be331-8300-4922-b35d-818c63faa6b5")
-	)
-	(hierarchical_label "+3.3V_V"
-		(shape input)
-		(at 45.72 44.45 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "8ac134a1-4a4c-4d1d-bd05-c595aacf99b2")
-	)
-	(hierarchical_label "+3.3V_V"
-		(shape input)
-		(at 45.72 39.37 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "90af6657-48f6-413b-84a8-1141ea328299")
-	)
-	(hierarchical_label "GND_V"
-		(shape input)
-		(at 48.26 35.56 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "de2c841c-26d8-4977-b80f-55d475a0201a")
+		(uuid "5c687d99-581f-473b-a4a2-50935fca3a6b")
 	)
 	(hierarchical_label "HEATSINK_TMP_V"
 		(shape input)
-		(at 62.23 31.75 0)
+		(at 86.36 43.18 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "e73220db-f8a8-45e0-9947-e148017cec0e")
+		(uuid "62effc0b-df13-46c4-a1e4-26c33a566560")
+	)
+	(hierarchical_label "+3.3V_V"
+		(shape input)
+		(at 52.07 82.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6e9047db-b6e2-4885-b2f2-8f88c71882ea")
+	)
+	(hierarchical_label "+3.3V_V"
+		(shape input)
+		(at 189.23 26.67 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7214257e-498d-4fdd-b302-307ed1b14ee4")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 40.64 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "876ee90b-ca25-4a7b-85b6-93189c677d4b")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 76.2 156.21 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9e0f1182-70a1-4a89-8279-89f879589533")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 53.34 110.49 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d9ab8ca1-b215-4f39-87a3-9b6b51830f51")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 190.5 54.61 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dc35a622-2ee3-49b4-b16a-1e779c49149f")
+	)
+	(hierarchical_label "MOTOR_TEMP_V"
+		(shape input)
+		(at 223.52 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "eda1a095-6712-451b-838a-958e6631dbee")
+	)
+	(hierarchical_label "GND_V"
+		(shape input)
+		(at 53.34 161.29 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f596eccd-e2fc-46af-8f60-5f61364b2743")
 	)
 	(symbol
-		(lib_id "InverterCom:TBP02R2W-381-08BE")
-		(at 40.64 45.72 180)
+		(lib_id "Device:R")
+		(at 190.5 31.75 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp yes)
+		(fields_autoplaced yes)
+		(uuid "245face8-1dcb-42e9-ba3c-8f52ccaa8689")
+		(property "Reference" "R96"
+			(at 187.96 33.0201 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 187.96 30.4801 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 192.278 31.75 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 190.5 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 190.5 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "47ac91a5-d488-46ab-b7c3-fd6bd57f179c")
+		)
+		(pin "2"
+			(uuid "183b30da-cda3-46ef-9058-94e9a8180067")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R96")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 205.74 38.1 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp yes)
+		(uuid "327477f3-923b-4085-9c08-f4c8c21b0acc")
+		(property "Reference" "R97"
+			(at 205.74 32.512 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 205.74 35.052 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 205.74 36.322 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 205.74 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 205.74 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "eafbde0a-a636-447e-a7eb-ce1d3dc00e4f")
+		)
+		(pin "2"
+			(uuid "948d2fbb-80ec-4b95-8751-5d812a90459d")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R97")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:MM3Z3V0ST1G")
+		(at 53.34 93.98 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -745,9 +1700,9 @@
 		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "2f8932f8-0f86-4678-bc4d-0f8a044fa03d")
-		(property "Reference" "J5"
-			(at 30.48 20.32 0)
+		(uuid "35764a8b-db60-4880-942f-70fc8bc7d432")
+		(property "Reference" "Z6"
+			(at 60.96 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -756,8 +1711,8 @@
 				)
 			)
 		)
-		(property "Value" "TBP02R2W-381-08BE"
-			(at 30.48 22.86 0)
+		(property "Value" "MM3Z3V0ST1G"
+			(at 58.42 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -766,8 +1721,8 @@
 				)
 			)
 		)
-		(property "Footprint" "TBP02R2W38108BE"
-			(at 24.13 -49.2 0)
+		(property "Footprint" "InverterCom:SOD2512X100N"
+			(at -40.31 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -778,8 +1733,8 @@
 				(justify left top)
 			)
 		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp02r2w-381.pdf"
-			(at 24.13 -149.2 0)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF"
+			(at -140.31 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -790,8 +1745,8 @@
 				(justify left top)
 			)
 		)
-		(property "Description" "TBP02R2W-381 Series - 2~24 Poles, Pluggable, Receptacle, Vertical, 3.81 Pitch, Terminal Block Connector"
-			(at 40.64 45.72 0)
+		(property "Description" "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements"
+			(at 53.34 93.98 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -801,20 +1756,8 @@
 				)
 			)
 		)
-		(property "Height" "9.2"
-			(at 24.13 -349.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "490-TBP02R2W-38108BE"
-			(at 24.13 -449.2 0)
+		(property "Height" "1"
+			(at -340.31 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -825,8 +1768,8 @@
 				(justify left top)
 			)
 		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP02R2W-381-08BE?qs=PzGy0jfpSMsy8Qrmxc%252Brhg%3D%3D"
-			(at 24.13 -549.2 0)
+		(property "Mouser Part Number" "863-MM3Z3V0ST1G"
+			(at -440.31 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -837,8 +1780,8 @@
 				(justify left top)
 			)
 		)
-		(property "Manufacturer_Name" "Same Sky"
-			(at 24.13 -649.2 0)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D"
+			(at -540.31 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -849,8 +1792,8 @@
 				(justify left top)
 			)
 		)
-		(property "Manufacturer_Part_Number" "TBP02R2W-381-08BE"
-			(at 24.13 -749.2 0)
+		(property "Manufacturer_Name" "onsemi"
+			(at -640.31 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -861,277 +1804,1687 @@
 				(justify left top)
 			)
 		)
-		(pin "3"
-			(uuid "c8505160-9c21-44a9-a993-21e4cdc55f15")
+		(property "Manufacturer_Part_Number" "MM3Z3V0ST1G"
+			(at -740.31 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
 		)
 		(pin "2"
-			(uuid "96a141bf-bfa4-4ef4-aa21-25d8f682526b")
+			(uuid "03687244-0e1f-486c-9d24-96b82b4ea55a")
 		)
 		(pin "1"
-			(uuid "1db8ca6c-da52-430f-84f3-fcf5a38758e3")
+			(uuid "65d90063-6c28-457d-afa3-a61f28edb423")
 		)
-		(pin "8"
-			(uuid "b53f6579-c189-40f0-90f9-89cbaebbe879")
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "Z6")
+					(unit 1)
+				)
+			)
 		)
-		(pin "7"
-			(uuid "145f962d-2cb0-4a29-9cb0-d549f290c058")
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 53.34 138.43 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3935c3ef-2e9c-43bd-b0cc-12e5ea4ef28b")
+		(property "Reference" "R94"
+			(at 50.8 139.7001 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
 		)
-		(pin "6"
-			(uuid "a1561fe0-8c9c-4730-afda-5fca537999c1")
+		(property "Value" "10k"
+			(at 50.8 137.1601 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
 		)
-		(pin "5"
-			(uuid "0b883e0c-941a-4f68-93b2-299536212249")
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 55.118 138.43 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
-		(pin "4"
-			(uuid "e09ecd3d-dc44-4adc-b5a5-e8a21d734921")
+		(property "Datasheet" ""
+			(at 53.34 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 53.34 138.43 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9bd72c58-ee5e-4ce0-b4e1-964f5fe40878")
+		)
+		(pin "2"
+			(uuid "61b58f1f-5b05-4146-a362-09b1815cf8eb")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R94")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 213.36 44.45 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp yes)
+		(uuid "4596cf41-32fe-446e-9641-a5f565fef708")
+		(property "Reference" "C211"
+			(at 217.17 43.1799 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 217.17 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 214.3252 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 213.36 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 213.36 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0a14f4b9-c0f3-4a69-9591-d12c78e36661")
+		)
+		(pin "2"
+			(uuid "c8913503-8e24-4ce3-9166-02ba268c8e85")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "C211")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 76.2 100.33 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5e45d403-3f65-4112-b0ba-2e081e7b4a10")
+		(property "Reference" "C209"
+			(at 80.01 99.0599 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 80.01 101.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 77.1652 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 76.2 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "45d6286c-24c8-4678-9f7f-ae4250102149")
+		)
+		(pin "2"
+			(uuid "92030f4f-faf1-4ff8-bcff-bc28a2b165ac")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "C209")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 68.58 43.18 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6367b99b-f94c-4734-809b-2a8fb7e3a849")
+		(property "Reference" "R91"
+			(at 68.58 37.592 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 68.58 40.132 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 68.58 41.402 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 68.58 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 68.58 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "6b1ba724-2bc5-4fd9-a3b3-cc13b846e087")
+		)
+		(pin "2"
+			(uuid "2fe7ad61-a84a-4396-b895-8a431c617849")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R91")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 53.34 87.63 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7856acbf-a698-4b3d-84b9-e7ebf0fb13ea")
+		(property "Reference" "R92"
+			(at 50.8 88.9001 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 50.8 86.3601 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 55.118 87.63 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 53.34 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 53.34 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "125a4798-be80-49bf-9404-582d4df3ee16")
+		)
+		(pin "2"
+			(uuid "d967e5a4-be4a-4f54-9c58-92391ab8a0ec")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R92")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:B2B-XH-AM_LF__SN_")
+		(at 40.64 93.98 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "798c4def-e7c1-427f-bf12-def57a4b2a8f")
+		(property "Reference" "J4"
+			(at 30.48 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "B2B-XH-AM_LF__SN_"
+			(at 30.48 86.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:B2BXHAMLFSN"
+			(at 24.13 -0.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
+			(at 24.13 -100.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "CONN HEADER VERT 2POS 2.5MM"
+			(at 40.64 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "7"
+			(at 24.13 -300.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "306-B2B-XH-AMLFSNP"
+			(at 24.13 -400.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/JST-Commercial/B2B-XH-AMLFSN?qs=cdbOS8ANM9BJgHgwB7WxQw%3D%3D"
+			(at 24.13 -500.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "JST (JAPAN SOLDERLESS TERMINALS)"
+			(at 24.13 -600.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "B2B-XH-AM(LF)(SN)"
+			(at 24.13 -700.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "cfe74d9e-95e8-4ed5-b4d5-8458f89657ac")
+		)
+		(pin "2"
+			(uuid "4c952bc6-c90e-4ad1-94c0-03c23297b656")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 76.2 151.13 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8cf5afb3-b900-48a3-96e7-316388ccf44a")
+		(property "Reference" "C210"
+			(at 80.01 149.8599 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 80.01 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 77.1652 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 76.2 151.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e6df8509-e50a-4982-bb89-0f47e155ff5d")
+		)
+		(pin "2"
+			(uuid "99ac8403-53c4-4172-b938-37c3234d6455")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "C210")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:MM3Z3V0ST1G")
+		(at 190.5 38.1 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp yes)
+		(fields_autoplaced yes)
+		(uuid "a3825715-29fa-4832-9aa9-9b78044b505d")
+		(property "Reference" "Z8"
+			(at 198.12 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MM3Z3V0ST1G"
+			(at 195.58 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SOD2512X100N"
+			(at 96.85 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF"
+			(at -3.15 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements"
+			(at 190.5 38.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "1"
+			(at -203.15 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "863-MM3Z3V0ST1G"
+			(at -303.15 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D"
+			(at -403.15 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "onsemi"
+			(at -503.15 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "MM3Z3V0ST1G"
+			(at -603.15 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "cafaebf2-e76c-49b2-8a4e-973006e86b0f")
+		)
+		(pin "1"
+			(uuid "5d294e80-93d1-4f7b-a583-5e9076cad7a3")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "Z8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:MM3Z3V0ST1G")
+		(at 53.34 43.18 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a66c69fc-f63c-4f29-95b1-226f5e2f79d1")
+		(property "Reference" "Z5"
+			(at 60.96 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MM3Z3V0ST1G"
+			(at 58.42 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SOD2512X100N"
+			(at -40.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF"
+			(at -140.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements"
+			(at 53.34 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "1"
+			(at -340.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "863-MM3Z3V0ST1G"
+			(at -440.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D"
+			(at -540.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "onsemi"
+			(at -640.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "MM3Z3V0ST1G"
+			(at -740.31 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "74b46a10-fc0a-44f3-94db-3f753c782bac")
+		)
+		(pin "1"
+			(uuid "81f6bf4e-b894-4846-99fe-ffabd6db0a6f")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "Z5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:B2B-XH-AM_LF__SN_")
+		(at 40.64 43.18 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d310ac31-cba1-4e25-ad37-41be1eb3ef05")
+		(property "Reference" "J1"
+			(at 30.48 33.02 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "B2B-XH-AM_LF__SN_"
+			(at 30.48 35.56 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:B2BXHAMLFSN"
+			(at 24.13 -51.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
+			(at 24.13 -151.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "CONN HEADER VERT 2POS 2.5MM"
+			(at 40.64 43.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "7"
+			(at 24.13 -351.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "306-B2B-XH-AMLFSNP"
+			(at 24.13 -451.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/JST-Commercial/B2B-XH-AMLFSN?qs=cdbOS8ANM9BJgHgwB7WxQw%3D%3D"
+			(at 24.13 -551.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "JST (JAPAN SOLDERLESS TERMINALS)"
+			(at 24.13 -651.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "B2B-XH-AM(LF)(SN)"
+			(at 24.13 -751.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "cdb7a8a1-50e8-409d-8e67-2be9c41e839a")
+		)
+		(pin "2"
+			(uuid "2feb95c5-469d-4177-aa29-3e8244de5276")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 53.34 36.83 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ddbc79d3-fd4f-4b2e-8356-a91bc7f6982f")
+		(property "Reference" "R90"
+			(at 50.8 38.1001 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 50.8 35.5601 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 55.118 36.83 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 53.34 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 53.34 36.83 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5d4cdf69-02cb-4106-b930-66a3948d3d70")
+		)
+		(pin "2"
+			(uuid "e3641d62-a21f-42c7-86fd-31bc7205e710")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R90")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 68.58 144.78 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ddf15e16-ffd3-48f8-b359-bbe3c1c8159f")
+		(property "Reference" "R95"
+			(at 68.58 139.192 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 68.58 141.732 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 68.58 143.002 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 68.58 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 68.58 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4a576d96-a4a4-4b32-b719-0e7de40c19c8")
+		)
+		(pin "2"
+			(uuid "1091dcb0-71a8-4537-b1a2-47b2e0030e16")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R95")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 76.2 49.53 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e6ea05ab-6fa9-4d9f-b8f3-dfde8decfc7b")
+		(property "Reference" "C208"
+			(at 80.01 48.2599 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF"
+			(at 80.01 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 77.1652 53.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 76.2 49.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a4ef78db-8d5b-4986-80f8-f4d1a26353e8")
+		)
+		(pin "2"
+			(uuid "24e2b81c-cc1c-4f62-a163-266853c2c1ab")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "C208")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 68.58 93.98 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f0c9cd37-e221-4fb2-8001-edfcde7fc23b")
+		(property "Reference" "R93"
+			(at 68.58 88.392 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 68.58 90.932 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
+			(at 68.58 92.202 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 68.58 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 68.58 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4526befd-30de-47a3-b353-d627312eebaa")
+		)
+		(pin "2"
+			(uuid "2f9aa471-631c-49ef-8c07-0f7e1106ab72")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "R93")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:MM3Z3V0ST1G")
+		(at 53.34 144.78 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f49fc584-4167-4de2-b577-244aa54db6af")
+		(property "Reference" "Z7"
+			(at 60.96 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MM3Z3V0ST1G"
+			(at 58.42 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:SOD2512X100N"
+			(at -40.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF"
+			(at -140.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements"
+			(at 53.34 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "1"
+			(at -340.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "863-MM3Z3V0ST1G"
+			(at -440.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D"
+			(at -540.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "onsemi"
+			(at -640.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "MM3Z3V0ST1G"
+			(at -740.31 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "90701af2-d222-4206-a368-6698ad24ab42")
+		)
+		(pin "1"
+			(uuid "3a17e76d-2e20-41c0-a753-05b1effe60c1")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
+					(reference "Z7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:B2B-XH-AM_LF__SN_")
+		(at 40.64 144.78 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f5b3b509-29a0-4e3c-9d84-ed0c6877577f")
+		(property "Reference" "J5"
+			(at 30.48 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "B2B-XH-AM_LF__SN_"
+			(at 30.48 137.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "InverterCom:B2BXHAMLFSN"
+			(at 24.13 49.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.jst-mfg.com/product/pdf/eng/eXH.pdf"
+			(at 24.13 -50.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "CONN HEADER VERT 2POS 2.5MM"
+			(at 40.64 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "7"
+			(at 24.13 -250.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "306-B2B-XH-AMLFSNP"
+			(at 24.13 -350.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/JST-Commercial/B2B-XH-AMLFSN?qs=cdbOS8ANM9BJgHgwB7WxQw%3D%3D"
+			(at 24.13 -450.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "JST (JAPAN SOLDERLESS TERMINALS)"
+			(at 24.13 -550.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "B2B-XH-AM(LF)(SN)"
+			(at 24.13 -650.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "1"
+			(uuid "8efd69f5-88c6-4a8f-bd21-a7c4fa28661f")
+		)
+		(pin "2"
+			(uuid "223d4ddd-3706-4a12-9bfd-ba2c55b98ba9")
 		)
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
 					(reference "J5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 58.42 33.02 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "755384bb-3c23-4244-95ff-75caeb2f4c47")
-		(property "Reference" "R29"
-			(at 59.6901 35.56 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 56.134 35.56 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 58.42 31.242 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 58.42 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 58.42 33.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e2ae3abf-3fd8-4bd1-bfee-c73a87db2a51")
-		)
-		(pin "2"
-			(uuid "6991619f-8498-4209-b17f-dc13a952250d")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
-					(reference "R29")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 55.88 45.72 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "97a2aaf1-e43c-4439-9321-0a07ae6c3988")
-		(property "Reference" "R13"
-			(at 57.1501 48.26 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 53.594 48.26 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 55.88 43.942 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 55.88 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 55.88 45.72 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9dd25f14-d144-4eb3-b7f6-2350693a8995")
-		)
-		(pin "2"
-			(uuid "d312c64e-4327-4f18-8c34-0e36df096377")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
-					(reference "R13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 81.28 40.64 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b241e72b-894a-45ba-86d4-c047cbcc5c2f")
-		(property "Reference" "R30"
-			(at 82.5501 43.18 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 78.994 43.18 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1210_3225Metric_Pad1.30x2.65mm_HandSolder"
-			(at 81.28 38.862 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 81.28 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 81.28 40.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e14f4df3-867d-4f17-83a2-1424804d42e5")
-		)
-		(pin "2"
-			(uuid "347907ba-c7c9-4de7-a823-72868259b6ed")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/24425313-707e-4fda-86d9-7786b794e109"
-					(reference "R30")
 					(unit 1)
 				)
 			)

@@ -1,0 +1,5662 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "2365f093-f079-4cf2-9926-0ba7dd4b2726")
+	(paper "USLetter")
+	(title_block
+		(title "InverterGen5 - Gate Drive Wiring Harness")
+		(date "2026-07-16")
+		(rev "A")
+		(company "Corzine Lab, University of California, Santa Cruz")
+		(comment 1 "Prepared by Thomas Liao")
+		(comment 2 "HW-C2-WH-GVDS")
+	)
+	(lib_symbols
+		(symbol "Connector:Conn_01x01_Socket"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x01_Socket"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x01, script generated"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x01_Socket_1_1"
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:524265-E"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 19.05 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "524265-E"
+				(at 19.05 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "524265E"
+				(at 19.05 -94.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+				(at 19.05 -194.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Height" "9.4"
+				(at 19.05 -394.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Part Number" ""
+				(at 19.05 -494.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Price/Stock" ""
+				(at 19.05 -594.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Name" "TE Connectivity"
+				(at 19.05 -694.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Part_Number" "524265-E"
+				(at 19.05 -794.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(symbol "524265-E_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 17.78 -12.7)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 0 180)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -2.54 180)
+					(length 5.08)
+					(name "MP1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -5.08 180)
+					(length 5.08)
+					(name "MP2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -7.62 180)
+					(length 5.08)
+					(name "MP3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 22.86 -10.16 180)
+					(length 5.08)
+					(name "MP4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:Placeholder"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#"
+				(at -0.762 0 0)
+				(show_name no)
+				(do_not_autoplace yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Placeholder_0_1"
+				(rectangle
+					(start -0.508 -1.524)
+					(end 23.622 -4.064)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Placeholder_1_1"
+				(text "PLACEHOLDER FOR BOM"
+					(at 11.176 -2.794 0)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "BLK"
+		(exclude_from_sim no)
+		(at 45.72 119.126 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "02eb91ab-4ad8-4225-ba67-9c35a36fd6d2")
+	)
+	(text "CONNECT TO J1 (PHASE U)\n ON GATE DRIVER BOARD"
+		(exclude_from_sim no)
+		(at 57.15 80.264 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "06eab4af-68eb-49aa-8f07-e438808933ef")
+	)
+	(text "HIGH SIDE"
+		(exclude_from_sim no)
+		(at 29.464 163.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "087c27f9-d61e-41b0-ae99-41046092ea99")
+	)
+	(text "LOW SIDE"
+		(exclude_from_sim no)
+		(at 44.958 163.322 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "0c853043-a466-421e-b938-b1099f1bf866")
+	)
+	(text "HIGH SIDE"
+		(exclude_from_sim no)
+		(at 92.964 163.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "1258863d-07e6-4fe2-87da-b58fb27139f9")
+	)
+	(text "(E1 ON IGBT)"
+		(exclude_from_sim no)
+		(at 160.02 154.432 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "14253e27-a5ea-4af8-abcd-2c8dfb49a3e4")
+	)
+	(text "(E2 ON IGBT)"
+		(exclude_from_sim no)
+		(at 46.482 153.924 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2017837c-49f2-4901-a12a-ad043aee5481")
+	)
+	(text "SPLICE AT J1 ->"
+		(exclude_from_sim no)
+		(at 30.988 76.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "23a55203-6fb7-4beb-97f9-fd7e8e9da183")
+	)
+	(text "SPLICE AT IGBT CRIMP\n->"
+		(exclude_from_sim no)
+		(at 158.242 84.582 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "24fff631-67e4-4d19-825f-f7936d0c3595")
+	)
+	(text "TWIST PAIR"
+		(exclude_from_sim no)
+		(at 28.448 111.252 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "277020d0-0c57-4e15-bc18-80b15c7622a0")
+	)
+	(text "TWIST PAIR"
+		(exclude_from_sim no)
+		(at 169.672 110.744 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2a322b9a-1b0b-42c7-9745-7f341f7be362")
+	)
+	(text "ORN"
+		(exclude_from_sim no)
+		(at 88.9 118.11 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2c3db09f-ea56-468f-b767-a5cc73e29779")
+	)
+	(text "TWIST PAIR"
+		(exclude_from_sim no)
+		(at 106.172 110.744 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2f1f3a9b-7539-4836-a6cd-0a8b90e8edbd")
+	)
+	(text "<- SPLICE AT J2"
+		(exclude_from_sim no)
+		(at 123.952 75.946 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3ce65e35-79bb-46e2-a911-f97ca5f30569")
+	)
+	(text "PIN CRIMPS FOR CONNECTORS"
+		(exclude_from_sim no)
+		(at 28.194 175.768 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "415cce1b-7a83-4897-8a75-3e5f50aba88d")
+	)
+	(text "RED"
+		(exclude_from_sim no)
+		(at 39.37 87.122 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "428214e9-eee1-4fca-af22-de9620f5db10")
+	)
+	(text "(E2 ON IGBT)"
+		(exclude_from_sim no)
+		(at 173.482 153.924 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "44ba39b1-899f-48c3-8411-b5405e2ea47a")
+	)
+	(text "<- SPLICE AT J1"
+		(exclude_from_sim no)
+		(at 46.482 107.696 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5481d9b7-feeb-42f5-9def-12685b6e9b9d")
+	)
+	(text "(G1 ON IGBT)"
+		(exclude_from_sim no)
+		(at 89.154 154.686 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "54a41b10-9a41-4dfc-b5a8-20e4080cb1e8")
+	)
+	(text "PHASE U IGBT TERMINALS"
+		(exclude_from_sim no)
+		(at 37.084 168.656 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "56f7d2b3-38cd-4da1-bdbb-f70b088ae776")
+	)
+	(text "<- SPLICE AT J15"
+		(exclude_from_sim no)
+		(at 144.526 53.848 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "69ae7ab9-9cc8-49a8-a0a6-8db3e30ead93")
+	)
+	(text "GRN"
+		(exclude_from_sim no)
+		(at 95.25 118.0721 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6eb7a740-d927-4204-9a6d-7ec1a1a8a38d")
+	)
+	(text "BLK"
+		(exclude_from_sim no)
+		(at 172.72 118.11 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "77f82e34-995c-4f9a-aaa4-4c0f6b540f50")
+	)
+	(text "SPLICE AT J15 ->"
+		(exclude_from_sim no)
+		(at 94.488 73.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7e17368f-8fc0-4b69-ae8d-5af16807e675")
+	)
+	(text "LOW SIDE"
+		(exclude_from_sim no)
+		(at 171.958 163.322 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8092a99c-daa5-44e2-872a-6e79a575c1b5")
+	)
+	(text "BRN"
+		(exclude_from_sim no)
+		(at 102.87 118.364 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "86566e5b-b546-4456-9208-757fdae56a37")
+	)
+	(text "YEL"
+		(exclude_from_sim no)
+		(at 31.75 118.364 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "898a433f-4353-4854-8dac-12936463d5ee")
+	)
+	(text "LOW SIDE"
+		(exclude_from_sim no)
+		(at 108.458 163.322 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8e04615e-de9c-4e32-b885-f8d1c0d6eb09")
+	)
+	(text "TWIST PAIR"
+		(exclude_from_sim no)
+		(at 155.448 110.998 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8f6ae545-bb48-40d8-a654-c34088eeeab8")
+	)
+	(text "<- SPLICE AT J15 (VOLTAGE SENSE)"
+		(exclude_from_sim no)
+		(at 43.942 65.024 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9307c1a6-6212-4f37-9774-bce690fe67dc")
+	)
+	(text "SPLICE AT IGBT CRIMP\n->"
+		(exclude_from_sim no)
+		(at 94.996 86.106 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "934109cd-55d7-4bdb-861c-4da4214c2e04")
+	)
+	(text "(G2 ON IGBT)"
+		(exclude_from_sim no)
+		(at 167.64 154.178 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9391bcc5-f7ae-4c5d-b1e3-b48c2002d521")
+	)
+	(text "(E1 ON IGBT)"
+		(exclude_from_sim no)
+		(at 96.52 154.432 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9cc0cf6a-30de-4844-9b03-9c882e23a9ce")
+	)
+	(text "PHASE V IGBT TERMINALS"
+		(exclude_from_sim no)
+		(at 101.854 169.418 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a884fec7-e673-4ed0-8223-f0d1659df825")
+	)
+	(text "TWIST PAIR"
+		(exclude_from_sim no)
+		(at 91.948 110.998 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "aa03d25f-88aa-4971-8187-0ae689aa82e2")
+	)
+	(text "BRN"
+		(exclude_from_sim no)
+		(at 166.37 118.364 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "aa6d7cea-c343-427f-90d1-9d79997fce00")
+	)
+	(text "(G2 ON IGBT)"
+		(exclude_from_sim no)
+		(at 104.14 154.178 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b650290b-7500-46ca-bce9-a8d35302bf2c")
+	)
+	(text "BRN"
+		(exclude_from_sim no)
+		(at 39.37 119.126 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c4da9206-cad6-48e4-b3a0-6672aaaf4613")
+	)
+	(text "(G1 ON IGBT)"
+		(exclude_from_sim no)
+		(at 152.654 154.686 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c58c0843-1986-4219-9f36-67d5a7875a01")
+	)
+	(text "CONNECT TO J2 (PHASE V)\n ON GATE DRIVER BOARD"
+		(exclude_from_sim no)
+		(at 119.888 80.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c5c20249-74c4-41b6-8573-ee049cfd4cc1")
+	)
+	(text "SPLICE AT IGBT CRIMP\n->"
+		(exclude_from_sim no)
+		(at 34.544 85.09 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cbd8db40-105b-48d6-a16a-b49569c1b708")
+	)
+	(text "HIGH SIDE"
+		(exclude_from_sim no)
+		(at 156.464 163.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "cdb50bed-021d-4382-9b37-1d87fe0e5179")
+	)
+	(text "VOLTAGE SENSE CONNECTOR\nPLUGS INTO J15 ON CONTROL BOARD"
+		(exclude_from_sim no)
+		(at 34.925 21.209 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d37113c6-c54c-4038-b5ac-ac8f9227e27e")
+	)
+	(text "SPLICE AT J15->"
+		(exclude_from_sim no)
+		(at 34.798 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d45f52e5-4381-4e59-91a9-e6df18b66b21")
+	)
+	(text "PHASE W IGBT TERMINALS"
+		(exclude_from_sim no)
+		(at 165.354 169.418 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d59fd807-ae61-428f-a19a-ceab88d99c83")
+	)
+	(text "BLU"
+		(exclude_from_sim no)
+		(at 158.75 118.0721 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e0776335-0f32-49d2-a6ae-e91e53e9a5ea")
+	)
+	(text "ORN"
+		(exclude_from_sim no)
+		(at 152.4 118.11 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e24f25b9-27e0-4c6a-8200-aa32a4c40cb9")
+	)
+	(text "(G2 ON IGBT)"
+		(exclude_from_sim no)
+		(at 40.64 154.178 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e49dabb6-3ade-4240-be47-58d0e29772db")
+	)
+	(text "(E2 ON IGBT)"
+		(exclude_from_sim no)
+		(at 109.982 153.924 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "eaafd843-eb24-4749-9089-dedc507f14ca")
+	)
+	(text "<- SPLICE AT J15"
+		(exclude_from_sim no)
+		(at 147.32 58.166 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ed5bdb01-2e07-4bf8-9bf4-29861407e8e6")
+	)
+	(text "TWIST PAIR"
+		(exclude_from_sim no)
+		(at 42.672 111.506 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ed8748f1-4899-4696-bc31-ead1b2739e65")
+	)
+	(text "CONNECT TO J3 (PHASE W)\n ON GATE DRIVER BOARD"
+		(exclude_from_sim no)
+		(at 183.896 80.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "efaec4b6-5b78-46d6-9347-af6c9e4a5a7a")
+	)
+	(text "J15 ON FILTER BOARD\n(NAMED J15-2 HERE TO AVOID \nCONFLICT WITH J15 ON CTRL BOARD)"
+		(exclude_from_sim no)
+		(at 150.114 36.576 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f27d2ff0-faec-41e8-b711-9ca52a7bd568")
+	)
+	(text "(G1 ON IGBT)"
+		(exclude_from_sim no)
+		(at 25.654 154.686 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f46fbcd8-dd1d-49b7-a3d5-c9911bd67798")
+	)
+	(text "BLK"
+		(exclude_from_sim no)
+		(at 109.22 118.11 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f4c3539c-f470-4324-babf-f819a0156de5")
+	)
+	(text "ORN"
+		(exclude_from_sim no)
+		(at 25.4 118.11 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f5498cef-3067-4fd6-94ea-a98faee56b17")
+	)
+	(text "(E1 ON IGBT)"
+		(exclude_from_sim no)
+		(at 33.02 154.432 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f80a67d4-9259-441f-9545-d7d6ccbca7c2")
+	)
+	(text_box "Wiring Harness Note\n\nAll harnesses shall be constructed using #22 AWG stranded\nconductor, 1kV rated, PVC insulated wire (or cross-linked\npolyolefin where higher temperature rating is required).\nConductors shall be color-coded per MIL-STD-681D (see chart\nbelow). Terminations shall be crimped using approved tooling\nwith pull-test verification per IPC/WHMA-A-620, Chapter 19.\nHarnesses shall be bundled with lacing cord or expandable\nbraided sleeving; tie-wraps are acceptable only in non-vibration\nenvironments per drawing callout. All harnesses require 100%\ncontinuity and 500V DC hipot testing prior to release. RoHS\ncompliance required unless otherwise specified.\n\nCOLOR CODE CHART (MIL-STD-681D)\n\nCond#  Color      Abbr\n-----  ---------- ----\n  0    Black      BLK\n  1    Brown      BRN\n  2    Red        RED\n  3    Orange     ORG\n  4    Yellow     YEL\n  5    Green      GRN\n  6    Blue       BLU\n  7    Violet     VIO\n  8    Gray       GRY\n  9    White      WHT"
+		(exclude_from_sim no)
+		(at 203.2 15.24 0)
+		(size 60.96 126.1927)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(type none)
+		)
+		(effects
+			(font
+				(face "FreeMono")
+				(size 1.905 1.905)
+				(thickness 0.2381)
+			)
+			(justify left top)
+		)
+		(uuid "aadc6fe2-604b-4883-9b54-4e9e6923cc54")
+	)
+	(junction
+		(at 146.05 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1acff1c8-8ed5-4bc3-9950-2e133aba27fe")
+	)
+	(junction
+		(at 158.75 82.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "230b10d1-d8a7-474b-9c24-bb68571c7d82")
+	)
+	(junction
+		(at 95.25 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "361bf988-9e54-4d3b-8fa1-10854dc4c35f")
+	)
+	(junction
+		(at 39.37 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "55dd6002-9240-42b9-a7bf-fb82cc0eb6ac")
+	)
+	(junction
+		(at 95.25 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5e2d427e-6707-46fe-8f56-a29d0abffbf8")
+	)
+	(junction
+		(at 35.56 68.58)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "685e8162-efd6-43b7-b83b-fddeadf3333a")
+	)
+	(junction
+		(at 95.25 82.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6deb6ad4-e96a-4a58-b9b9-d01c9415f5ff")
+	)
+	(junction
+		(at 143.51 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "83b6c2ff-0d83-4d91-bdb0-03ee6c2d160d")
+	)
+	(junction
+		(at 43.18 66.04)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8e0f424d-e7b0-4a1b-b09a-a9274ff94125")
+	)
+	(junction
+		(at 105.41 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9f300ea2-1349-47b2-88cc-aacf69784789")
+	)
+	(junction
+		(at 35.56 82.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a0fe9463-c562-4118-85bc-46924c19137b")
+	)
+	(junction
+		(at 158.75 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bac8607c-e0ac-4a7d-a4bf-6df82d138897")
+	)
+	(junction
+		(at 35.56 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c8eca10e-a6c0-4e12-bff5-8f016fdb8452")
+	)
+	(junction
+		(at 45.72 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f994f9b6-92b6-4737-a63b-3ddd53f792a6")
+	)
+	(no_connect
+		(at 195.58 101.6)
+		(uuid "229a678a-8b07-4eb3-933a-10d66522a11a")
+	)
+	(no_connect
+		(at 135.89 19.05)
+		(uuid "2e3a1b0d-8590-4a90-8274-b28ece7dd50a")
+	)
+	(no_connect
+		(at 68.58 96.52)
+		(uuid "31743aa3-a063-4797-b3ce-b3f8836a2476")
+	)
+	(no_connect
+		(at 146.05 19.05)
+		(uuid "3eac2d44-7b60-4ce7-88e3-f5f4e43aad6f")
+	)
+	(no_connect
+		(at 143.51 19.05)
+		(uuid "41ca2151-6f80-43c0-9c3d-dbfa8a7ddff4")
+	)
+	(no_connect
+		(at 195.58 93.98)
+		(uuid "47ad5617-a02c-47a1-a81a-47393c307d3d")
+	)
+	(no_connect
+		(at 140.97 19.05)
+		(uuid "493b1902-19f5-403f-ac40-edc7e4302bf6")
+	)
+	(no_connect
+		(at 138.43 19.05)
+		(uuid "4d4ffc1a-6d96-4feb-bc12-99e7fb713c56")
+	)
+	(no_connect
+		(at 195.58 96.52)
+		(uuid "5c310273-5792-4b01-82c2-cf26e12ed98c")
+	)
+	(no_connect
+		(at 40.64 22.86)
+		(uuid "6e965dc1-f426-4c55-8d63-18e0385b4cb5")
+	)
+	(no_connect
+		(at 195.58 99.06)
+		(uuid "76a3e979-074a-4c0f-a200-5293e5c795d2")
+	)
+	(no_connect
+		(at 68.58 93.98)
+		(uuid "8c2a9750-b578-45b7-9a15-9f59daa3a538")
+	)
+	(no_connect
+		(at 43.18 22.86)
+		(uuid "9280bedb-2727-4eb4-97a9-8b3140fb3f0a")
+	)
+	(no_connect
+		(at 68.58 101.6)
+		(uuid "9e419260-7ad6-4811-b92f-271e045fbd27")
+	)
+	(no_connect
+		(at 38.1 22.86)
+		(uuid "af71e800-e3de-4b16-8d4c-a8f475cc96d1")
+	)
+	(no_connect
+		(at 68.58 99.06)
+		(uuid "b330f3be-e02f-4af4-a085-91116f6c5ca4")
+	)
+	(no_connect
+		(at 33.02 22.86)
+		(uuid "bca4fb02-b889-44e5-b134-7d88fa55f031")
+	)
+	(no_connect
+		(at 35.56 22.86)
+		(uuid "cc44e357-e839-439a-ae8a-d04112100ebe")
+	)
+	(wire
+		(pts
+			(xy 198.12 82.55) (xy 198.12 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "018ffad7-f444-441b-855c-4aea4bc70e08")
+	)
+	(wire
+		(pts
+			(xy 25.4 124.46) (xy 25.4 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 153 0 1)
+		)
+		(uuid "057446b0-aedc-4615-85fd-f7b2a313e97b")
+	)
+	(wire
+		(pts
+			(xy 143.51 71.12) (xy 158.75 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "08171124-03a8-46fb-9353-4988f0ceef9c")
+	)
+	(wire
+		(pts
+			(xy 135.89 66.04) (xy 135.89 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "089329d7-02c0-452b-aa40-b65f1a7ad760")
+	)
+	(wire
+		(pts
+			(xy 25.4 91.44) (xy 45.72 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 153 0 1)
+		)
+		(uuid "0fe93c1f-bbb4-422b-bf85-fa277d4a10fb")
+	)
+	(wire
+		(pts
+			(xy 143.51 41.91) (xy 143.51 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "15a02803-6b8b-4032-85c2-7fdecb6d87d6")
+	)
+	(wire
+		(pts
+			(xy 95.25 73.66) (xy 38.1 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "209af873-3e95-46ea-ba35-2bd691edc9d7")
+	)
+	(wire
+		(pts
+			(xy 40.64 45.72) (xy 40.64 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "2564ca81-16f1-43f7-a49d-bc53d5060371")
+	)
+	(wire
+		(pts
+			(xy 140.97 73.66) (xy 140.97 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "2836cd5b-94c5-449c-8737-41f86f370b58")
+	)
+	(wire
+		(pts
+			(xy 134.62 91.44) (xy 132.08 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "3023a27c-a3cc-4efa-a6d4-da18499d0a46")
+	)
+	(wire
+		(pts
+			(xy 102.87 99.06) (xy 102.87 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 128 77 0 1)
+		)
+		(uuid "31aa53de-3514-4952-ba56-db0375ef318a")
+	)
+	(wire
+		(pts
+			(xy 43.18 45.72) (xy 43.18 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "31cdb810-de6b-431f-9464-04bd5e9a949f")
+	)
+	(wire
+		(pts
+			(xy 35.56 82.55) (xy 71.12 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "3878d24e-5733-4d06-ab98-a46bc7e7dc34")
+	)
+	(wire
+		(pts
+			(xy 31.75 93.98) (xy 35.56 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "3b438e1c-8316-4c94-ab58-e876c8f2698d")
+	)
+	(wire
+		(pts
+			(xy 35.56 93.98) (xy 45.72 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "43b4cf77-e7f0-49ad-8721-c0d059413879")
+	)
+	(wire
+		(pts
+			(xy 105.41 96.52) (xy 109.22 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "45aefba8-9b58-4209-bf59-56983642b3ff")
+	)
+	(wire
+		(pts
+			(xy 146.05 76.2) (xy 168.91 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "480446e2-867a-4487-9cab-1e5bf48c2121")
+	)
+	(wire
+		(pts
+			(xy 71.12 82.55) (xy 71.12 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "4dec046d-789c-49e3-b6cb-ffb3493f88cb")
+	)
+	(wire
+		(pts
+			(xy 35.56 68.58) (xy 35.56 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "5448fd0c-012f-4191-94fe-8359d1313e39")
+	)
+	(wire
+		(pts
+			(xy 95.25 124.46) (xy 95.25 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "5cb95b2d-9c0b-4640-8cba-213e8f04f0c4")
+	)
+	(wire
+		(pts
+			(xy 172.72 101.6) (xy 172.72 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "606cc583-c737-4009-b897-3d6fd8dfde03")
+	)
+	(wire
+		(pts
+			(xy 39.37 76.2) (xy 105.41 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "692805f4-8c1b-41d4-ac88-4cbec0f9f54d")
+	)
+	(wire
+		(pts
+			(xy 35.56 93.98) (xy 35.56 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "6c984030-5cc1-47da-b877-024e786cb19f")
+	)
+	(wire
+		(pts
+			(xy 109.22 101.6) (xy 109.22 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "6ecde3be-aef7-4c56-bba6-7d64b445d2dc")
+	)
+	(wire
+		(pts
+			(xy 39.37 76.2) (xy 33.02 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "7519ab88-afc8-4299-88a6-276f45ab9b6e")
+	)
+	(wire
+		(pts
+			(xy 35.56 82.55) (xy 35.56 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "775f4904-16a5-4368-943c-ecd1ed716aa8")
+	)
+	(wire
+		(pts
+			(xy 35.56 68.58) (xy 138.43 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "853f402c-7a10-4c60-a471-f21114139a81")
+	)
+	(wire
+		(pts
+			(xy 158.75 82.55) (xy 198.12 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "8d6566b6-e9f3-4405-aab5-de8e89e1785c")
+	)
+	(wire
+		(pts
+			(xy 88.9 124.46) (xy 88.9 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 153 0 1)
+		)
+		(uuid "905cbfe1-f969-4588-8f5b-cd38b87a544a")
+	)
+	(wire
+		(pts
+			(xy 95.25 73.66) (xy 140.97 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "927c8668-bef7-42c1-b32c-3ab7924a10cd")
+	)
+	(wire
+		(pts
+			(xy 152.4 91.44) (xy 172.72 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 153 0 1)
+		)
+		(uuid "928ebfc1-f1c7-4905-8d63-0ec219133157")
+	)
+	(wire
+		(pts
+			(xy 168.91 76.2) (xy 168.91 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "92912509-84d7-4e17-8c6e-53a09da7066d")
+	)
+	(wire
+		(pts
+			(xy 95.25 93.98) (xy 95.25 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "9358c8b9-d2b2-4573-bffd-af7cfeee48f0")
+	)
+	(wire
+		(pts
+			(xy 39.37 99.06) (xy 39.37 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 128 77 0 1)
+		)
+		(uuid "95818325-9574-4cff-afd1-1503b2782c2b")
+	)
+	(wire
+		(pts
+			(xy 95.25 82.55) (xy 95.25 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "9762f323-19d3-48f3-ae88-7e43cabb8690")
+	)
+	(wire
+		(pts
+			(xy 166.37 99.06) (xy 166.37 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 128 77 0 1)
+		)
+		(uuid "9c1aaf88-bc2b-4fab-bded-40891690b2ed")
+	)
+	(wire
+		(pts
+			(xy 198.12 91.44) (xy 195.58 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "9f8ff15a-f5a8-4115-ac12-261c7887c1bc")
+	)
+	(wire
+		(pts
+			(xy 146.05 41.91) (xy 146.05 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "a240e68a-e1ba-4a0e-a4af-aa77d41ec718")
+	)
+	(wire
+		(pts
+			(xy 158.75 124.46) (xy 158.75 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "a56be2fd-0edb-4c40-9b95-c0e7caab8ec6")
+	)
+	(wire
+		(pts
+			(xy 43.18 66.04) (xy 43.18 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "a78b8842-3de8-4070-b403-7d0ac166b6aa")
+	)
+	(wire
+		(pts
+			(xy 95.25 82.55) (xy 134.62 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "af0a1747-6d5a-411d-a901-62d6ca2a1638")
+	)
+	(wire
+		(pts
+			(xy 71.12 91.44) (xy 68.58 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "b5844acb-ce5a-4586-8371-6a3aa266ff3d")
+	)
+	(wire
+		(pts
+			(xy 152.4 124.46) (xy 152.4 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 153 0 1)
+		)
+		(uuid "b6031741-58aa-423d-b697-500f7c82e857")
+	)
+	(wire
+		(pts
+			(xy 102.87 99.06) (xy 109.22 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 128 77 0 1)
+		)
+		(uuid "b687860b-d590-4f6d-b748-9150d5769d9a")
+	)
+	(wire
+		(pts
+			(xy 95.25 93.98) (xy 109.22 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "b6d1ee7a-2546-4052-baa9-9f82a12249d6")
+	)
+	(wire
+		(pts
+			(xy 158.75 93.98) (xy 158.75 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "bcff8a8a-9ed4-48e6-ac5e-f32e5b997591")
+	)
+	(wire
+		(pts
+			(xy 39.37 96.52) (xy 39.37 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "bd990264-e042-4513-918e-ee55c163953d")
+	)
+	(wire
+		(pts
+			(xy 138.43 68.58) (xy 138.43 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "c19b0648-0f74-4289-9835-04bb739199bf")
+	)
+	(wire
+		(pts
+			(xy 134.62 82.55) (xy 134.62 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "cbd604e6-4c0f-4584-8987-670d6403b3f1")
+	)
+	(wire
+		(pts
+			(xy 33.02 45.72) (xy 33.02 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "cc61f03c-01de-404a-8d68-f12057ae00f7")
+	)
+	(wire
+		(pts
+			(xy 39.37 99.06) (xy 45.72 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 128 77 0 1)
+		)
+		(uuid "cc9f9aab-f679-4cd6-a85f-3da3c17db974")
+	)
+	(wire
+		(pts
+			(xy 39.37 96.52) (xy 45.72 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "ccf5d9cd-cf76-4963-9ce2-441621736266")
+	)
+	(wire
+		(pts
+			(xy 105.41 76.2) (xy 105.41 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "d246b645-4d39-4b5f-8974-bd0f830683ee")
+	)
+	(wire
+		(pts
+			(xy 31.75 124.46) (xy 31.75 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 194 0 1)
+		)
+		(uuid "d6579257-9835-48fc-b961-f829d1011f99")
+	)
+	(wire
+		(pts
+			(xy 158.75 82.55) (xy 158.75 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "d8a636be-972d-47d1-8c56-cf3a40643ccb")
+	)
+	(wire
+		(pts
+			(xy 105.41 76.2) (xy 146.05 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "e55f848c-659c-46fb-8e42-511b3503a6b3")
+	)
+	(wire
+		(pts
+			(xy 166.37 99.06) (xy 172.72 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 128 77 0 1)
+		)
+		(uuid "e7fbb978-7369-4e72-9d2f-52cacd1a385c")
+	)
+	(wire
+		(pts
+			(xy 38.1 45.72) (xy 38.1 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 255 0 1)
+		)
+		(uuid "eb65b3cd-d40d-4ad5-84ad-60415802b431")
+	)
+	(wire
+		(pts
+			(xy 88.9 91.44) (xy 109.22 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 153 0 1)
+		)
+		(uuid "eb94c98f-7e23-49c8-8433-61a4cd1698b0")
+	)
+	(wire
+		(pts
+			(xy 40.64 71.12) (xy 143.51 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "f0fa51b4-fe02-42bd-92d3-cf9a4f14ae61")
+	)
+	(wire
+		(pts
+			(xy 168.91 96.52) (xy 172.72 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 0 0 1)
+		)
+		(uuid "f37bac74-0fa3-46b7-a61f-270e8447144d")
+	)
+	(wire
+		(pts
+			(xy 158.75 93.98) (xy 172.72 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 255 1)
+		)
+		(uuid "f4375b1c-03f8-4b42-a3f7-e9d8231c4110")
+	)
+	(wire
+		(pts
+			(xy 43.18 66.04) (xy 135.89 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "f9fbef57-eb91-4874-8ada-c27e3508e60d")
+	)
+	(wire
+		(pts
+			(xy 43.18 101.6) (xy 45.72 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "fc657069-38f9-4e8b-8ec6-695ade6351f1")
+	)
+	(wire
+		(pts
+			(xy 45.72 101.6) (xy 45.72 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "ffe800ad-f109-426c-9537-244c0adba7ef")
+	)
+	(symbol
+		(lib_id "InverterCom:524265-E")
+		(at 172.72 91.44 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "17930cfc-1ac6-455a-bba8-b6b94dbbf170")
+		(property "Reference" "J3"
+			(at 184.15 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "544959-E"
+			(at 184.15 86.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "524265E"
+			(at 191.77 186.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+			(at 191.77 286.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+			(at 172.72 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.4"
+			(at 191.77 486.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 191.77 586.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 191.77 686.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "TE Connectivity"
+			(at 191.77 786.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "524265-E"
+			(at 191.77 886.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "47fc1bf8-7b89-486c-812c-f30704192ada")
+		)
+		(pin "1"
+			(uuid "8d777296-7d74-4740-9ac3-15311ecfc6c5")
+		)
+		(pin "4"
+			(uuid "033312b5-89c3-4bcb-953e-b0f3b7d0f594")
+		)
+		(pin "3"
+			(uuid "7b69abc5-877f-41aa-abe8-b9e81236bb72")
+		)
+		(pin "5"
+			(uuid "893f1e98-872f-4cb3-863a-bb6512734307")
+		)
+		(pin "8"
+			(uuid "165d2294-64f7-4ff1-aac2-669af948a466")
+		)
+		(pin "10"
+			(uuid "67402ad4-5986-476a-ac81-a4e70737365a")
+		)
+		(pin "9"
+			(uuid "1f244064-8754-4c8b-9b15-176539c775b0")
+		)
+		(pin "6"
+			(uuid "e493c3d4-f10e-4bd6-9316-a0fd8481ec83")
+		)
+		(pin "7"
+			(uuid "1989592d-a920-44d7-9014-f87bae784845")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:524265-E")
+		(at 109.22 91.44 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2266a9ff-2090-410a-992b-efab8abe4e71")
+		(property "Reference" "J2"
+			(at 120.65 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "544959-E"
+			(at 120.65 86.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "524265E"
+			(at 128.27 186.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+			(at 128.27 286.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+			(at 109.22 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.4"
+			(at 128.27 486.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 128.27 586.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 128.27 686.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "TE Connectivity"
+			(at 128.27 786.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "524265-E"
+			(at 128.27 886.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "fe60907b-11a9-4a2c-a084-0260b20ad35e")
+		)
+		(pin "1"
+			(uuid "a8b5a050-c99c-4604-b968-2b6631a78139")
+		)
+		(pin "4"
+			(uuid "2e282cb6-8777-4db9-a980-e6b8d41735d9")
+		)
+		(pin "3"
+			(uuid "8c89df90-d446-483f-97fa-719626ce47c8")
+		)
+		(pin "5"
+			(uuid "51ea2fbb-124d-46a2-8fdc-882aed5a14f1")
+		)
+		(pin "8"
+			(uuid "558d2eeb-aef0-450f-b705-4c27ab52c74e")
+		)
+		(pin "10"
+			(uuid "e85bfb6c-19e7-4289-b720-e5bae823cfcd")
+		)
+		(pin "9"
+			(uuid "1811da33-de32-4e8a-a62c-f42840beea45")
+		)
+		(pin "6"
+			(uuid "73e71b52-150e-4065-b0e9-017a82bc8ee9")
+		)
+		(pin "7"
+			(uuid "ae93e7ce-3647-47d5-ba9e-8a86968a9fc0")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 172.72 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "236d9026-d930-4a68-ad50-a785c1c489db")
+		(property "Reference" "T12"
+			(at 173.99 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 173.99 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 172.72 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 172.72 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 172.72 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "553f46c6-482e-46c0-9235-09f7b3be4ef1")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 88.9 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "2b476173-c5e4-46cc-9088-10996423528f")
+		(property "Reference" "PIN14"
+			(at 88.646 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 88.646 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 88.9 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 134.62 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "31040562-e3ff-4685-8031-9d6e890a6abd")
+		(property "Reference" "PIN22"
+			(at 134.366 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 134.366 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 134.62 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 134.62 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 134.62 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 152.4 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3570047c-8518-436a-912c-c271c21ea1df")
+		(property "Reference" "T9"
+			(at 153.67 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 153.67 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 152.4 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 152.4 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 152.4 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c00156db-b48f-4edc-8ce9-9b687be24123")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 116.84 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "39382f63-c596-46a8-9f20-e7f0d4fd9bea")
+		(property "Reference" "PIN19"
+			(at 116.586 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 116.586 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 116.84 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 116.84 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 166.37 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3eaa7f2c-b8f4-4e28-a3c1-edbbae3610d7")
+		(property "Reference" "T11"
+			(at 167.64 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 167.64 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 166.37 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 166.37 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 166.37 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "73ebdefe-7a3e-4c6b-b7dd-6a304e8b363c")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 144.78 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4809edcb-9bf2-4092-990e-846c3af7e011")
+		(property "Reference" "PIN24"
+			(at 144.526 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 144.526 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 33.02 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "484b712a-b72c-4e79-a59d-bea55cc1b217")
+		(property "Reference" "PIN4"
+			(at 32.766 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 32.766 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 33.02 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 33.02 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 33.02 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 17.78 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4ea2326f-68e6-471b-9399-2994f290bd53")
+		(property "Reference" "PIN1"
+			(at 17.526 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 17.526 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 17.78 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 17.78 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 17.78 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 38.1 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4f537635-a892-4dd2-8df6-aed6f36a4e1b")
+		(property "Reference" "PIN5"
+			(at 37.846 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 37.846 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 38.1 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 55.88 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "53459316-d993-481a-badb-4cc074c3372d")
+		(property "Reference" "PIN8"
+			(at 55.626 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 55.626 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 55.88 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 55.88 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 55.88 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 102.87 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "536d8152-6b3a-4dc3-9a84-9622d42d1f97")
+		(property "Reference" "T7"
+			(at 104.14 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 104.14 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 102.87 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 102.87 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 102.87 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "1d061ab0-b648-4157-b441-c93c7203c758")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 139.7 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5d0ecd30-2012-4324-8fed-698ebf106e0c")
+		(property "Reference" "PIN23"
+			(at 139.446 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 139.446 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 139.7 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 139.7 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 139.7 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 158.75 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5f45ea24-e57f-4b17-9a22-53171e6aa5d0")
+		(property "Reference" "T10"
+			(at 160.02 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 160.02 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 158.75 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 158.75 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 158.75 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8275b761-209a-4b85-9929-6a64f32bd707")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 83.82 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6223aee4-c5a8-4e9f-b454-e44d6de70568")
+		(property "Reference" "PIN13"
+			(at 83.566 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 83.566 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 83.82 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 83.82 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 83.82 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 78.74 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "709cb5f5-501d-404d-b3da-6fe0ce29b052")
+		(property "Reference" "PIN12"
+			(at 78.486 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 78.486 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 78.74 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 78.74 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 78.74 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 50.8 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "79bfa9a1-1164-4fe9-965d-7e840ec0369b")
+		(property "Reference" "PIN7"
+			(at 50.546 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 50.546 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 50.8 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 50.8 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 50.8 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:524265-E")
+		(at 45.72 91.44 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7de6d136-ddf3-4d27-9e18-ff7d8dbdbd40")
+		(property "Reference" "J1"
+			(at 57.15 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "544959-E"
+			(at 57.15 86.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "524265E"
+			(at 64.77 186.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+			(at 64.77 286.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+			(at 45.72 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.4"
+			(at 64.77 486.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 64.77 586.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 64.77 686.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "TE Connectivity"
+			(at 64.77 786.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "524265-E"
+			(at 64.77 886.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "25786239-0757-4892-a6d8-aa2d8be8638a")
+		)
+		(pin "1"
+			(uuid "01c5e16b-c4b8-404a-93cb-970c4aff253e")
+		)
+		(pin "4"
+			(uuid "336b9672-c5fb-4b92-ab5c-31c47c3c268b")
+		)
+		(pin "3"
+			(uuid "68fedd2f-a51c-4605-aff1-dccfefdb1ed9")
+		)
+		(pin "5"
+			(uuid "caa15429-e8fb-4fa3-ac29-5f967ed1a6d9")
+		)
+		(pin "8"
+			(uuid "5e92bd91-5fe7-4465-8648-1dd05741fb9c")
+		)
+		(pin "10"
+			(uuid "a7557f30-bb53-42ff-a0be-eebc7089687b")
+		)
+		(pin "9"
+			(uuid "7696bad5-e041-4b1f-8eee-e87adc150099")
+		)
+		(pin "6"
+			(uuid "64e1949f-0902-4ce5-9e45-7da2521ed6c3")
+		)
+		(pin "7"
+			(uuid "34ddb4c9-bb75-47bc-bea9-b6b98eaba5f7")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 109.22 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "80aa948b-ba73-4a42-9b56-154db945f29e")
+		(property "Reference" "T8"
+			(at 110.49 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 110.49 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 109.22 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 109.22 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 109.22 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "08c1beca-1b0d-4263-8d1f-4a90826fc971")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 93.98 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "85b99ae2-2d22-49f1-96fe-618ffccfbf63")
+		(property "Reference" "PIN15"
+			(at 93.726 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 93.726 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 93.98 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 93.98 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 93.98 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 22.86 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "87d7f811-1c34-4670-8ae3-0e148af97b58")
+		(property "Reference" "PIN2"
+			(at 22.606 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 22.606 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 22.86 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 22.86 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 22.86 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:524265-E")
+		(at 135.89 41.91 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9f0b9f92-6c02-41dd-9f92-04589c49e471")
+		(property "Reference" "J15-2"
+			(at 149.86 29.2099 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "544959-E"
+			(at 149.86 31.7499 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "524265E"
+			(at 230.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+			(at 330.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+			(at 135.89 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.4"
+			(at 530.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 630.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 730.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "TE Connectivity"
+			(at 830.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "524265-E"
+			(at 930.81 22.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "19194ab8-e310-4057-a9c5-80672bc8bd65")
+		)
+		(pin "1"
+			(uuid "560665c4-9e32-4f65-88ed-4f64fd307cda")
+		)
+		(pin "4"
+			(uuid "f2e9dd2f-d61e-4613-94af-f30ca4a3c333")
+		)
+		(pin "3"
+			(uuid "d24612ed-e2f3-4616-b9d6-69942a3aac30")
+		)
+		(pin "5"
+			(uuid "1ac1b306-0c41-4d7e-a37c-5310cf765431")
+		)
+		(pin "8"
+			(uuid "51117f5b-0afd-4fd3-86b4-caf2ccce89dd")
+		)
+		(pin "10"
+			(uuid "eb97db97-a50d-4e02-ab96-7bfc97e3ccb5")
+		)
+		(pin "9"
+			(uuid "8632efcf-0a3b-45d1-83ab-8d2a3f4b6eb9")
+		)
+		(pin "6"
+			(uuid "675af984-4abf-4397-a4ce-e9075af93210")
+		)
+		(pin "7"
+			(uuid "7fb47eaa-98f8-43c2-9c23-56352caab0ff")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "J15-2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 73.66 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a42c677b-a6f3-49cd-87a2-7501417f5cda")
+		(property "Reference" "PIN11"
+			(at 73.406 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 73.406 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 73.66 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 73.66 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:524265-E")
+		(at 33.02 45.72 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a7fa9646-db83-4f34-964f-f794f5c9afe2")
+		(property "Reference" "J15"
+			(at 46.99 33.0199 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "544959-E"
+			(at 46.99 35.5599 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "524265E"
+			(at 127.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F524266-E%7FA1%7Fpdf%7FEnglish%7FENG_CD_524266-E_A1.pdf%7F524265-E"
+			(at 227.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "PCB Mount Header, Right Angle, Cable-to-Board, 6 Position, 6.2 mm [.244 in] Centerline, Fully Shrouded, Gold (Au), Surface Mount, ERNI VolTron 1000"
+			(at 33.02 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.4"
+			(at 427.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" ""
+			(at 527.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" ""
+			(at 627.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "TE Connectivity"
+			(at 727.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "524265-E"
+			(at 827.94 26.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "3ba28098-4acb-4ef6-8219-a5871af4829d")
+		)
+		(pin "1"
+			(uuid "96191572-a5d5-48e2-9cd5-968354542c3a")
+		)
+		(pin "4"
+			(uuid "5aea1e91-6b60-4d40-908b-9ede4521a845")
+		)
+		(pin "3"
+			(uuid "e83bff71-634e-4992-817b-e137c6801802")
+		)
+		(pin "5"
+			(uuid "b733b68b-73b9-4d70-a68b-4731460e89ad")
+		)
+		(pin "8"
+			(uuid "7604d6b5-be30-4817-a63e-4f0f51f5f2e5")
+		)
+		(pin "10"
+			(uuid "3321817c-5372-4391-abe9-67d35af1e792")
+		)
+		(pin "9"
+			(uuid "76d5eb5c-563b-445b-b0ff-b45193b5e997")
+		)
+		(pin "6"
+			(uuid "d7bdb97c-3ef5-4349-b43e-82b99c620e27")
+		)
+		(pin "7"
+			(uuid "0ff1c961-7171-41d2-8d77-2ab8a2d46117")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "J15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 121.92 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "aa8c3f53-e386-47b5-8c8b-03b80ecad45d")
+		(property "Reference" "PIN20"
+			(at 121.666 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 121.666 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 121.92 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 121.92 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 121.92 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 101.6 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b115412c-ef7d-4c0a-9f1a-dbcdcf1f8ebb")
+		(property "Reference" "PIN16"
+			(at 101.346 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 101.346 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 101.6 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 101.6 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 101.6 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 66.04 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b12193a7-97e1-4bde-bdf0-f621bc03ee0d")
+		(property "Reference" "PIN10"
+			(at 65.786 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 65.786 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 66.04 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 66.04 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 27.94 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b794b6a6-d81d-4b47-ab92-8d288752f7f5")
+		(property "Reference" "PIN3"
+			(at 27.686 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 27.686 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 27.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 27.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 27.94 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 45.72 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ce0102a2-eefd-4632-b680-5949bc5af1fb")
+		(property "Reference" "T4"
+			(at 46.99 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 46.99 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 45.72 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 45.72 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 45.72 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d9eac396-6811-4b21-9116-f21084727727")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 25.4 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d5433207-7651-46fa-bd1b-eaba21b7597c")
+		(property "Reference" "T1"
+			(at 26.67 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 26.67 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 25.4 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 25.4 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 25.4 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4b6f2bf2-15b9-4281-8ac3-541cd764cc93")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 39.37 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d914d6b2-ab7c-4675-9b81-e01953d0b4a8")
+		(property "Reference" "T3"
+			(at 40.64 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 40.64 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 39.37 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 39.37 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 39.37 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "df933d0b-536a-481d-b0d1-ebd2bf60ce48")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 31.75 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e6f35e74-2375-4d33-85fa-6829817da32f")
+		(property "Reference" "T2"
+			(at 33.02 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 33.02 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 31.75 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 31.75 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 31.75 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "96438265-b742-4fe9-903d-65147a7f152f")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 60.96 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e7acd3f7-3d46-4a1c-88d1-639f351119f2")
+		(property "Reference" "PIN9"
+			(at 60.706 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 60.706 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 60.96 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 60.96 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 60.96 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 129.54 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e89a75e7-19e1-4a26-8564-a2acdb81b1a2")
+		(property "Reference" "PIN21"
+			(at 129.286 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 129.286 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 129.54 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 129.54 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 129.54 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 106.68 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e8c439bc-a4da-4964-8a0a-667a4c8fb965")
+		(property "Reference" "PIN17"
+			(at 106.426 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 106.426 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 106.68 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 95.25 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e8cca6c4-b6ae-4713-bb2f-6deb4989303f")
+		(property "Reference" "T6"
+			(at 96.52 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 96.52 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 95.25 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 95.25 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 95.25 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3da29c6c-1d37-4494-bca9-2eb991e15023")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 45.72 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "edebaf82-57ad-4caf-837f-380417dcaecd")
+		(property "Reference" "PIN6"
+			(at 45.466 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 45.466 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 45.72 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 45.72 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 149.86 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ee358d83-0fcd-49a3-9d5a-b93ec79b8e61")
+		(property "Reference" "PIN25"
+			(at 149.606 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 149.606 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 149.86 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 149.86 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 149.86 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x01_Socket")
+		(at 88.9 129.54 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f5d67f09-e26c-4309-b43c-6caa7f62c159")
+		(property "Reference" "T5"
+			(at 90.17 127.6349 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDFNYD1-110(5)"
+			(at 90.17 130.1749 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/KS_Terminals_FDFNYD.pdf"
+			(at 88.9 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Terminals Nylon-Fully, Double Crimp Female, 22-16 AWG, .020 x .110"
+			(at 88.9 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8f83f564-8bb2-467f-9902-09e21e902a8a")
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "T5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "InverterCom:Placeholder")
+		(at 111.76 177.8 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "fabced5a-ec29-42c4-8a75-bccaa8c1fbeb")
+		(property "Reference" "PIN18"
+			(at 111.506 187.706 0)
+			(show_name no)
+			(do_not_autoplace yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "464762-E"
+			(at 111.506 182.372 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 111.76 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 111.76 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 111.76 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "GDVSHarness"
+				(path "/2365f093-f079-4cf2-9926-0ba7dd4b2726"
+					(reference "PIN18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

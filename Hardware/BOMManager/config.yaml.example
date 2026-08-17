@@ -1,0 +1,25 @@
+# Copy this file to config.yaml and fill in your API keys.
+# See docs/API_KEYS.md for instructions.
+
+mouser:
+  api_key: ""
+
+digikey:
+  client_id: ""
+  client_secret: ""
+  sandbox: false
+
+octopart:
+  api_key: ""
+
+mcmaster:
+  username: ""
+  password: ""
+  cert_path: ""      # path to .p12 or .pem client certificate from McMaster-Carr
+  cert_password: ""  # password for the certificate, if required
+
+# Optional: customize internal part number format.
+# Default: "HW-{chassis}-{category}-{descriptor}-{rev}"
+# Examples: HW-C2-PCB-CTRL-A, HW-C2-WH-GDVS-A, HW-C2-BB-DCLBB-A
+part_number:
+  format: "HW-{chassis}-{category}-{descriptor}-{rev}"

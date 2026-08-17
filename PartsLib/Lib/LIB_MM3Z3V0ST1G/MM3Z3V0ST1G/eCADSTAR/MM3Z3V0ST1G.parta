@@ -1,0 +1,66 @@
+(Japanese_coding: sjis)
+(function "ECS_717635"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2017-04-25-15:09:16)
+    (utime 2025-09-06-03:54:10)
+    (interface
+        (port "1" (symbPinId 1) (portType INOUT))
+        (port "2" (symbPinId 2) (portType INOUT))
+    )
+    (property "symbolName" "MM3Z3V0ST1G")
+)
+
+
+(pinAssign "ECS_717635"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2017-04-25-15:09:16)
+    (utime 2025-09-06-03:54:10)
+    (interface
+        (port "1" (symbPinId 1) (portName "K") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "A") (portType INOUT))
+    )
+    (internal
+        (funcInst (functionRef "ECS_717635")
+                (port "1" (match "1"))
+                (port "2" (match "2"))
+        )
+    )
+    (property "usePowerBox" "No")
+    (property "symbolName" "MM3Z3V0ST1G")
+)
+
+
+(part "MM3Z3V0ST1G"
+    (uver 1)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (ctime 2017-04-25-15:09:16)
+    (utime 2025-09-06-03:54:10)
+    (packageRef "MM3Z3V0ST1G")
+    (pinAssignRef "ECS_717635")
+    (interface
+        (port "1" (symbPinId 1) (portName "K") (portType INOUT))
+        (port "2" (symbPinId 2) (portName "A") (portType INOUT))
+    )
+    (partClass UNDEF)
+    (useInSchema Y)
+    (useInLayout Y)
+    (inPartsList Y)
+    (partType NORMAL)
+    (placeRestriction FREE)
+    (property "enetNonSeries" "NO")
+    (property "refDesPrefix" "Z")
+    (property "description" "Standard Zener Breakdown Voltage Range - 2.4 V to 75 V; Steady State Power Rating of 300 mW; ESD Rating of Class 3 (>16 KV) per Human Body Model Mechanical Characteristics:; Tight Tolerance ; MAXIMUM CASE TEMPERATURE FOR SOLDERING PURPOSES: 260?C for 10 Seconds; FLAMMABILITY RATING: UL94 V-0; These Devices are PbFree, Halogen Free/BFR Free and are RoHS Compliant; AEC-Q101 Qualified and PPAP Capable ; SZ Prefix for Automotive and Other Applications Requiring Unique Site and Control Change Requirements")
+    (property "Mouser_Part_Number" "863-MM3Z3V0ST1G")
+    (property "Mouser_Price/Stock" "https://www.mouser.co.uk/ProductDetail/onsemi/MM3Z3V0ST1G?qs=ZbcYFwcEkbcQGEmg6wDNLA%3D%3D")
+    (property "Manufacturer_Name" "onsemi")
+    (property "Manufacturer_Part_Number" "MM3Z3V0ST1G")
+    (property "Datasheet_Link" "https://www.onsemi.com/pub/Collateral/MM3Z2V4ST1-D.PDF")
+    (property "compAreaTopHeight" 1)
+)
+
+
