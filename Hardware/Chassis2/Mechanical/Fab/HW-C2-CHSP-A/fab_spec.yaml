@@ -1,0 +1,10 @@
+# Ordering spec for HW-C2-CHSP-A (capacitor heat spreader plate)
+process: laser_cut
+material: "6061 T6 Aluminum"
+thickness_mm: 3.17
+services:
+  countersinking:
+    - for: '0.411 / 0.199 / 82 deg'
+      holes: 'all 0.2166" (5.5 mm) holes'
+notes:
+  - "Deburr all edges"
