@@ -8,7 +8,7 @@ An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. 
 
 > **A note on the name:** *VVVF* stands for Variable Voltage Variable Frequency — it describes the output, not the control strategy. This platform is **not** limited to scalar V/Hz control; it supports vector control (FOC), arbitrary modulation schemes, and any control scheme you can express through the node-based codegen tools.
 
-The present hardware implementation (Chassis Size 2) is a 200–450 V class / 600 A build. The usable DC bus voltage is set by the installed DC link capacitors: 200 V class with the stock 200 V aluminium-electrolytic bank, or up to 450 V class with a capacitor-only swap to 450 V parts. The platform is designed to scale to higher voltage and current classes with appropriate gate-driver, DC link, and sensing-divider adaptations.
+The present hardware implementation (Chassis Size 2) is a 200–450 V class build rated **220 A continuous / 600 A peak (60 s, IEC 61800-2 style overload convention)**. The usable DC bus voltage is set by the installed DC link capacitors: 200 V class with the stock 200 V aluminium-electrolytic bank, or up to 450 V class with a capacitor-only swap to 450 V parts. The platform is designed to scale to higher voltage and current classes with appropriate gate-driver, DC link, and sensing-divider adaptations.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
@@ -20,7 +20,7 @@ The control board is designed as a reusable platform that is largely independent
 
 | Variant | Voltage Class | Phase Current | Status |
 |---|---|---|---|
-| Chassis Size 2 | 200 V class (stock 200 V capacitors); 450 V class (450 V capacitor swap) | 600 A | Implemented, under test |
+| Chassis Size 2 | 200 V class (stock 200 V capacitors); 450 V class (450 V capacitor swap) | 220 A continuous / 600 A peak (60 s) | Implemented, under test |
 | Chassis Size 3 | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
 
 Semiconductor ratings are selected with margin for the target DC bus: Chassis Size 2 uses 600 V rated IGBTs for the 200–450 V range, while future higher-voltage classes use 1200 V or 1700 V rated parts as appropriate.
@@ -29,7 +29,7 @@ Semiconductor ratings are selected with margin for the target DC bus: Chassis Si
 
 ### Power Stage
 - **3-phase 2-level IGBT bridge** built from three Mitsubishi CM600DY half-bridge modules (six switches, 600 A class, 62 mm package). The recommended device for Chassis Size 2 is the **CM600DY-13T** (600 V), which matches the 200–450 V DC bus range. The **CM600DY-24T** (1200 V) is also electrically and mechanically compatible and may be used if a higher-voltage device is preferred.
-- **Phase current**: 600 A design continuous rating (full-load dyno validation pending; peak capability dependent on thermal management)
+- **Phase current**: 220 A RMS continuous (conservative analytical bound set by the DC-link plate temperature at 6 kHz PWM; full-load dyno validation pending) / 600 A peak for 60 s with rolling 10-min RMS ≤ 220 A
 - **DC bus voltage**: 200–450 V class, set by the installed DC link capacitors — 200 V class with the stock bank, up to 450 V class with a capacitor-only swap (see DC Link below)
 - **Gate drivers**: Six onsemi NCV57100 isolated IGBT gate drivers (one per switch, AEC-Q100 automotive-qualified)
   - Reinforced isolation: >5 kV<sub>rms</sub> (UL1577), 1424 V<sub>PK</sub> / 1000 V<sub>rms</sub> working voltage (VDE 0884-11)
@@ -48,7 +48,7 @@ Semiconductor ratings are selected with margin for the target DC bus: Chassis Si
 - **Filter board**: 6&times; 10 &micro;F / 1000 V metallized polypropylene film capacitors (absorb high-frequency ripple and clamp switching voltage spikes, reducing RMS ripple current in the electrolytics) + 12&times; 0.25 &micro;F / 900 V TDK CeraLink low-inductance ceramics at the module terminals + 18&times; 2.2 nF class-Y safety capacitors to chassis for common-mode / bearing-current (EDM) suppression
 - **Busbar-style construction**: all power connections are M6 bolted mounting holes; the mounting hardware sits at bus potential — observe high-voltage precautions during assembly
 - **No onboard bleeder**: the bank has no discharge resistor and remains at bus voltage for hours after power-down (discharge only via M&Omega;-scale parasitic paths). Verify bus voltage with a meter and discharge through a power resistor before any service.
-- **Capacitor cooling**: the capacitor bank is thermally coupled to a 3.18 mm (1/8 in) aluminium heat-spreader plate, itself mounted to the heatsink via six 55 mm aluminium standoffs (13 mm OD). The thermal path is sized for a 40 W ripple-current heat load: ~40 &deg;C total temperature rise with thermal paste (&asymp;80 &deg;C plate temperature at a 40 &deg;C heatsink base). Full analysis: [DC Link Thermal Analysis](https://openvvvf.github.io/Documentation/Power-Stages/C2/Design-Documents/DC-Link-Thermal/index.html) in OpenVVVF/Documentation. Use aluminium standoffs only — steel is not acceptable in this thermal path.
+- **Capacitor cooling**: the capacitor bank is thermally coupled to a 6.35 mm (1/4 in) aluminium heat-spreader plate (rev B; thickened from 3.18 mm rev A), itself mounted to the heatsink via six 55 mm aluminium standoffs (13 mm OD). The thermal path is sized for a 40 W ripple-current heat load: ~32 &deg;C total temperature rise with thermal paste (&asymp;72 &deg;C plate temperature at a 40 &deg;C heatsink base). Full analysis: [DC Link Thermal Analysis](https://openvvvf.github.io/Documentation/Power-Stages/C2/Design-Documents/DC-Link-Thermal/index.html) in OpenVVVF/Documentation. Use aluminium standoffs only — steel is not acceptable in this thermal path.
 - **Precharge**: onboard high-side relay on the IO board with a user-supplied external resistor — size the resistor so precharge current stays below 2 A (input fuse limit)
 
 ### Current Sensing
