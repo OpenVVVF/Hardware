@@ -8,7 +8,7 @@ An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. 
 
 > **A note on the name:** *VVVF* stands for Variable Voltage Variable Frequency — it describes the output, not the control strategy. This platform is **not** limited to scalar V/Hz control; it supports vector control (FOC), arbitrary modulation schemes, and any control scheme you can express through the node-based codegen tools.
 
-The present hardware implementation (Chassis Size 2) is a 200–450 V class build rated **465 A peak (330 A RMS) continuous / 600 A peak (424 A RMS) for 60 s** (IEC 61800-2 style overload convention). The usable DC bus voltage is set by the installed DC link capacitors: 200 V class with the stock 200 V aluminium-electrolytic bank, or up to 450 V class with a capacitor-only swap to 450 V parts. The platform is designed to scale to higher voltage and current classes with appropriate gate-driver, DC link, and sensing-divider adaptations.
+The present hardware implementation (Chassis Size 2) is a 200–450 V class build rated **465 A continuous / 600 A peak for 60 s** (IEC 61800-2 style overload convention; peak phase current figures — 330 A / 424 A RMS). The usable DC bus voltage is set by the installed DC link capacitors: 200 V class with the stock 200 V aluminium-electrolytic bank, or up to 450 V class with a capacitor-only swap to 450 V parts. The platform is designed to scale to higher voltage and current classes with appropriate gate-driver, DC link, and sensing-divider adaptations.
 
 This project is currently being developed in Dr. Keith Corzine's Smart Power Lab at the University of California, Santa Cruz.
 
@@ -20,7 +20,7 @@ The control board is designed as a reusable platform that is largely independent
 
 | Variant | Voltage Class | Phase Current | Status |
 |---|---|---|---|
-| Chassis Size 2 | 200 V class (stock 200 V capacitors); 450 V class (450 V capacitor swap) | 465 A pk (330 A RMS) cont. / 600 A pk (424 A RMS), 60 s | Implemented, under test |
+| Chassis Size 2 | 200 V class (stock 200 V capacitors); 450 V class (450 V capacitor swap) | 465 A continuous / 600 A peak, 60 s | Implemented, under test |
 | Chassis Size 3 | Up to 1200 V (capacitor-dependent) | 1400 A | In development |
 
 Semiconductor ratings are selected with margin for the target DC bus: Chassis Size 2 uses 600 V rated IGBTs for the 200–450 V range, while future higher-voltage classes use 1200 V or 1700 V rated parts as appropriate.
@@ -29,7 +29,7 @@ Semiconductor ratings are selected with margin for the target DC bus: Chassis Si
 
 ### Power Stage
 - **3-phase 2-level IGBT bridge** built from three Mitsubishi CM600DY half-bridge modules (six switches, 600 A class, 62 mm package). The recommended device for Chassis Size 2 is the **CM600DY-13T** (600 V), which matches the 200–450 V DC bus range. The **CM600DY-24T** (1200 V) is also electrically and mechanically compatible and may be used if a higher-voltage device is preferred.
-- **Phase current**: 465 A peak (330 A RMS) continuous (conservative analytical bound set by the DC-link electrolytic ripple rating at 6 kHz PWM; full-load dyno validation pending) / 600 A peak (424 A RMS) for 60 s with rolling 10-min RMS ≤ 330 A RMS
+- **Phase current**: 465 A continuous / 600 A peak for 60 s (peak phase current; 330 A / 424 A RMS) — continuous is a conservative analytical bound set by the DC-link electrolytic ripple rating at 6 kHz PWM (full-load dyno validation pending); peak duty is windowed: rolling 10-min RMS ≤ 330 A RMS
 - **DC bus voltage**: 200–450 V class, set by the installed DC link capacitors — 200 V class with the stock bank, up to 450 V class with a capacitor-only swap (see DC Link below)
 - **Gate drivers**: Six onsemi NCV57100 isolated IGBT gate drivers (one per switch, AEC-Q100 automotive-qualified)
   - Reinforced isolation: >5 kV<sub>rms</sub> (UL1577), 1424 V<sub>PK</sub> / 1000 V<sub>rms</sub> working voltage (VDE 0884-11)
