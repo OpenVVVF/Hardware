@@ -5,7 +5,7 @@
   - Decide before releasing the mechanical BOM / assembly docs.
 
 - [ ] Fix and finalize internal part numbers for the DC link module holders.
-  - Current placeholders: `HW-C2-DCLMH-200-PRINTED-A` and `HW-C2-DCLMH-250-450-PRINTED-A`.
+  - Current placeholders: `HW-C2-DCLMH-200-PRINTED-B` and `HW-C2-DCLMH-250-450-PRINTED-A`.
   - Run `python3 bom.py generate` once BOMManager deps are installed to register them and confirm final IPNs.
 
 - [ ] Design actual DC link module holder geometry in FreeCAD.
