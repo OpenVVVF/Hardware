@@ -6,7 +6,7 @@
 
 *Our current in-progress build photos for size 2 are below, thanks again to our sponsors for helping make this possible*
 ![Size 2 Inverter Physical Assembly In-Progress](C2-Front-HW-Inprogress.jpg)
-![Size 2 Inverter Physical Assembly In-Progress](C2-S-HW-Inprogress.jpg)
+![Size 2 Inverter Physical Assembly In-Progress](C2-Side-HW-Inprogress.jpg)
 
 An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. The design centres on a dual-MCU control board with an independent safety coprocessor, fully isolated gate drives and sensing, dual isolated CAN buses, and a control stack configurable through node-based codegen tools.
 
