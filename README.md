@@ -1,6 +1,6 @@
 # OpenVVVF Hardware
 
-> This repository contains the **OpenVVVF Hardware** designs. User-facing documentation, safety analyses, assembly guides, and test evidence now live in [OpenVVVF/Documentation](https://docs.openvvvf.org/) (rendered at https://openvvvf.github.io/Documentation/). The matching firmware, Real Time Examiner (RTE) host tool, and supporting configuration utilities (including node codegen and telemetry tooling) now live in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE).
+> This repository contains the **OpenVVVF Hardware** designs. User-facing documentation, safety analyses, assembly guides, and test evidence now live in [OpenVVVF/Documentation](https://github.com/openvvvf/documentation) (rendered at https://docs.openvvvf.org/). The matching firmware, Real Time Examiner (RTE) host tool, and supporting configuration utilities (including node codegen and telemetry tooling) now live in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE).
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
 
