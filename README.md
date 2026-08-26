@@ -1,12 +1,12 @@
 # OpenVVVF Hardware
 
-> This repository contains the **OpenVVVF Hardware** designs. User-facing documentation, safety analyses, assembly guides, and test evidence now live in [OpenVVVF/Documentation](https://github.com/OpenVVVF/Documentation) (rendered at https://openvvvf.github.io/Documentation/). The matching firmware, Real Time Examiner (RTE) host tool, and supporting configuration utilities (including node codegen and telemetry tooling) now live in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE).
+> This repository contains the **OpenVVVF Hardware** designs. User-facing documentation, safety analyses, assembly guides, and test evidence now live in [OpenVVVF/Documentation](https://docs.openvvvf.org/) (rendered at https://openvvvf.github.io/Documentation/). The matching firmware, Real Time Examiner (RTE) host tool, and supporting configuration utilities (including node codegen and telemetry tooling) now live in [OpenVVVF/RTE](https://github.com/OpenVVVF/RTE).
 
 ![Size 2 Inverter CAD Rendering](Size2.png)
 
 *Our current in-progress build photos for size 2 are below, thanks again to our sponsors for helping make this possible*
 ![Size 2 Inverter Physical Assembly In-Progress](C2-Front-HW-Inprogress.jpg)
-![Size 2 Inverter Physical Assembly In-Progress](C2-Side-HW-Inprogress.jpg)
+![Size 2 Inverter Physical Assembly In-Progress](C2-S-HW-Inprogress.jpg)
 
 An open-source, high-power voltage-source inverter (VSI) for 3-phase AC drives. The design centres on a dual-MCU control board with an independent safety coprocessor, fully isolated gate drives and sensing, dual isolated CAN buses, and a control stack configurable through node-based codegen tools.
 
@@ -157,7 +157,7 @@ SPWM and SVPWM are implemented in the current firmware in [OpenVVVF/RTE](https:/
 
 ## Functional Safety
 
-All safety documentation, user manuals, assembly guides, and software docs are maintained in [OpenVVVF/Documentation](https://github.com/OpenVVVF/Documentation) (rendered at https://openvvvf.github.io/Documentation/).
+All safety documentation, user manuals, assembly guides, and software docs are maintained in [OpenVVVF/Documentation](https://docs.openvvvf.org/) (rendered at https://openvvvf.github.io/Documentation/).
 
 **Important:** ASIL ratings are targets derived from the HARA process, not compliance claims. The dual-MCU architecture (STM32H723 + STM32G474 coprocessor) enables ASIL D for SG-01 and SG-13 via ASIL B(D) + ASIL B(D) decomposition. No formal ISO 26262 compliance audit has been performed. A Dependent Failure Analysis (DFA) per ISO 26262-9 is required before formal ASIL D claims can be substantiated — this is documented as the remaining P0 gap (LIMIT-08). This is a design-for-safety effort. Security follows a **user sovereignty** model: the project explicitly rejects anti-user OTP/DRM measures (no vendor lock-in, no encrypted bootloaders with unreplaceable keys). Protections target remote CAN bus attacks, not the legitimate hardware owner. Physical access = user is root.
 
@@ -224,8 +224,6 @@ When contributing:
 ## License
 
 Hardware designs are released under the **CERN Open Hardware Licence**.
-
-Firmware and software are released under the **MIT License**.
 
 Safety documentation is provided for reference and design guidance purposes.
 
