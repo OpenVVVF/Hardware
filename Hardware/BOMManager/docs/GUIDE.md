@@ -156,7 +156,7 @@ variants:
       - add: {designation: UCS2W680MHD, footprint: CAPPRD750W80D1800H3700,
               category: board, source: DCBusCapacitorBoard, quantity: 60,
               description: "Nichicon 68uF 450V electrolytic"}
-      - add: {fab: HW-C2-DCLMH-250-450-PRINTED-A, quantity: 1}
+      - add: {fab: HW-C2-DCLMH-450-PRINTED-A, quantity: 1}
 ```
 
 - `exclude` drops items matching a designation (case-insensitive exact) or a

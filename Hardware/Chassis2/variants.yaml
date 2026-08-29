@@ -16,7 +16,7 @@ variants:
               source: DCBusCapacitorBoard, quantity: 60,
               description: "Nichicon 68uF 450V electrolytic"}
       - exclude: {source: HW-C2-DCLMH-200-PRINTED-B}
-      - add: {fab: HW-C2-DCLMH-250-450-PRINTED-A, quantity: 1}
+      - add: {fab: HW-C2-DCLMH-450-PRINTED-A, quantity: 1}
       # Standoff swap: 94669A196 (55 mm) -> 94669A193 (50 mm) for the ~5 mm
       # shorter 450V caps.
       - exclude: {designation: 94669A196}
@@ -26,7 +26,7 @@ variants:
       # Cap spacer is 200V-specific; 450V class gets its own printed spacer
       # (thickness TBD with the holder geometry).
       - exclude: {source: HW-C2-DCLMH-200-SPCR-PRINTED-A}
-      - add: {fab: HW-C2-DCLMH-250-450-SPCR-PRINTED-A, quantity: 6}
+      - add: {fab: HW-C2-DCLMH-450-SPCR-PRINTED-A, quantity: 6}
       # Extra M6 copper crush washers: shorter standoff stack means some screws
       # wind up shorter, so washers take up the length.
       - setqty: {designation: 98044A224, quantity: 50}
