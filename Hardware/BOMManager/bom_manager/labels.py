@@ -81,8 +81,8 @@ def _chassis_label(width):
     return t
 
 
-def build(ctx: Context, chassis: str, out_pdf: Path) -> Optional[Path]:
-    groups = qc.assembly_groups(ctx, chassis)
+def build(ctx: Context, chassis: str, out_pdf: Path, variant=None) -> Optional[Path]:
+    groups = qc.assembly_groups(ctx, chassis, variant=variant)
     story = []
 
     story.append(_para("Warning Labels", size=16, bold=True))

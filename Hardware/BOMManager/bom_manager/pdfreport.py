@@ -437,9 +437,9 @@ def _drc_pdf(path: Path, ctx, chassis: str, board: str, max_lines: int = 14) -> 
 
 # -------------------------------------------------------------------- build
 
-def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True) -> Optional[Path]:
+def build(ctx: Context, chassis: str, out_pdf: Path, kicad_layers: bool = True, variant=None) -> Optional[Path]:
     """Build the full release PDF for one chassis. Returns the output path."""
-    pairs = collect_lines(ctx, chassis)
+    pairs = collect_lines(ctx, chassis, variant=variant)
     for ch, line in pairs:
         if not line.internal_pn:
             line.internal_pn = existing_ipn(ctx, ch, line)

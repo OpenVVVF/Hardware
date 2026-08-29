@@ -18,11 +18,17 @@ from .descriptor_registry import DescriptorRegistry
 from .discover import discover_boms
 from .parsers import LineItem, harness_qty, parse_source
 from .part_numbers import line_identity
+from .variants import apply_variant, load_chassis_variants
 
 
-def collect_items(ctx: Context, chassis_filter=None, board_filter=None, hardware_root=None):
+def collect_items(ctx: Context, chassis_filter=None, board_filter=None, hardware_root=None,
+                  variant=None):
     """Discover and parse all BOM sources, then add one synthetic assembly line
     per board (PCB fab) and per wiring harness.
+
+    For chassis with a variants.yaml, fab folders referenced by `add: {fab: ...}`
+    rules are variant-only and left out of the base item set; `variant` selects
+    a build variant whose rules are then applied (None = base tree, unchanged).
 
     Returns (num_sources, items_by_chassis, boards_by_chassis, harnesses_by_chassis).
     """
@@ -73,13 +79,27 @@ def collect_items(ctx: Context, chassis_filter=None, board_filter=None, hardware
                     vendor_hint="assembly",
                 )
             )
+
+    for chassis in list(items_by_chassis):
+        variant_set = load_chassis_variants(hw_root / chassis)
+        if variant_set is None:
+            continue
+        fab_only = variant_set.variant_fab_sources()
+        if fab_only:
+            items_by_chassis[chassis] = [
+                i for i in items_by_chassis[chassis] if i.source.lower() not in fab_only
+            ]
+        if variant is not None:
+            items_by_chassis[chassis], _ = apply_variant(
+                items_by_chassis[chassis], variant_set.get(variant),
+                chassis_dir=hw_root / chassis)
     return len(sources), items_by_chassis, boards_by_chassis, harnesses_by_chassis
 
 
-def collect_lines(ctx: Context, chassis: Optional[str] = None) -> List[Tuple[str, BomLine]]:
+def collect_lines(ctx: Context, chassis: Optional[str] = None, variant=None) -> List[Tuple[str, BomLine]]:
     """Aggregate live BOM lines, tagged with their chassis."""
     _, items_by_chassis, _, _ = collect_items(
-        ctx, [chassis] if chassis else None, None
+        ctx, [chassis] if chassis else None, None, variant=variant
     )
     out: List[Tuple[str, BomLine]] = []
     for ch in sorted(items_by_chassis):

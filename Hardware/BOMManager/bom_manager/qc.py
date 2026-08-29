@@ -50,10 +50,10 @@ class AssemblyGroup:
         return _KIND_LABEL.get(self.kind, self.kind)
 
 
-def assembly_groups(ctx: Context, chassis: str) -> List[AssemblyGroup]:
+def assembly_groups(ctx: Context, chassis: str, variant=None) -> List[AssemblyGroup]:
     """Parts split by sub-assembly with per-assembly quantities."""
     by_key = {}
-    for ch, line in collect_lines(ctx, chassis):
+    for ch, line in collect_lines(ctx, chassis, variant=variant):
         if not line.internal_pn:
             line.internal_pn = existing_ipn(ctx, ch, line)
         by_key[ctx.db.normalize_key(line.footprint, line.designation)] = line
@@ -160,9 +160,9 @@ _INSPECTION = {
 }
 
 
-def build_qc_forms(ctx: Context, chassis: str, out_pdf: Path) -> Optional[Path]:
+def build_qc_forms(ctx: Context, chassis: str, out_pdf: Path, variant=None) -> Optional[Path]:
     """One QC sign-off page per sub-assembly."""
-    groups = assembly_groups(ctx, chassis)
+    groups = assembly_groups(ctx, chassis, variant=variant)
     if not groups:
         return None
 

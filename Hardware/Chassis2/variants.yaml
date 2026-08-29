@@ -1,0 +1,32 @@
+# Build-configuration variants for Chassis Size 2.
+# The KiCad schematics stay the 200 V design truth; a variant transforms the
+# parsed BOM items before aggregation (see Hardware/BOMManager/bom_manager/variants.py).
+# Outputs for the default variant land at FabricationData/ root (unchanged);
+# other variants write the same file set under FabricationData/Builds/<variant>/.
+default: 200v
+variants:
+  200v:
+    description: "200 V class — stock 60x UCS2D331MHD 330uF/200V DC-link bank"
+    rules: []
+  450v:
+    description: "450 V class — capacitor swap to 60x UCS2W680MHD 68uF/450V (18x31.5 mm, ~5 mm shorter)"
+    rules:
+      - exclude: {designation: UCS2D331MHD}
+      - add: {designation: UCS2W680MHD, footprint: CAPPRD750W80D1800H3700, category: board,
+              source: DCBusCapacitorBoard, quantity: 60,
+              description: "Nichicon 68uF 450V electrolytic"}
+      - exclude: {source: HW-C2-DCLMH-200-PRINTED-B}
+      - add: {fab: HW-C2-DCLMH-250-450-PRINTED-A, quantity: 1}
+      # Standoff swap: 94669A196 (55 mm) -> 94669A193 (50 mm) for the ~5 mm
+      # shorter 450V caps.
+      - exclude: {designation: 94669A196}
+      - add: {designation: 94669A193, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 6,
+              description: "Aluminum standoff, 50 mm (450V class cap-bank height)"}
+      # Cap spacer is 200V-specific; 450V class gets its own printed spacer
+      # (thickness TBD with the holder geometry).
+      - exclude: {source: HW-C2-DCLMH-200-SPCR-PRINTED-A}
+      - add: {fab: HW-C2-DCLMH-250-450-SPCR-PRINTED-A, quantity: 6}
+      # Extra M6 copper crush washers: shorter standoff stack means some screws
+      # wind up shorter, so washers take up the length.
+      - setqty: {designation: 98044A224, quantity: 50}

@@ -135,6 +135,62 @@ Consolidated BOM; the tier totals print for comparison.
 | SendCutSend | `Mechanical/Fab/*/` STEPs | specs in the report |
 | PCB | `PCB_Fab_Zips/*.zip` | your PCB vendor |
 
+## Build variants
+
+Distinct from the spares tiers above: a **build variant** is a different
+configuration of the same chassis (e.g. a 450 V build that swaps the DC-link
+capacitor bank). The schematic stays the design truth; the swap happens at BOM
+level via `Hardware/<Chassis>/variants.yaml`:
+
+```yaml
+default: 200v            # variant whose outputs land at FabricationData/ root
+variants:
+  200v:
+    description: "200 V class — stock 60x UCS2D331MHD 330uF/200V bank"
+    rules: []            # committed tree as-is
+  450v:
+    description: "450 V class — capacitor swap to 60x UCS2W680MHD 68uF/450V"
+    rules:
+      - exclude: {designation: UCS2D331MHD}           # case-insensitive exact
+      - exclude: {source: HW-C2-DCLMH-200-PRINTED-B}  # board / fab folder name
+      - add: {designation: UCS2W680MHD, footprint: CAPPRD750W80D1800H3700,
+              category: board, source: DCBusCapacitorBoard, quantity: 60,
+              description: "Nichicon 68uF 450V electrolytic"}
+      - add: {fab: HW-C2-DCLMH-250-450-PRINTED-A, quantity: 1}
+```
+
+- `exclude` drops items matching a designation (case-insensitive exact) or a
+  source (board name / `Mechanical/Fab/` folder name). A rule that matches
+  nothing is an error — typos never silently no-op.
+- `add` injects a synthetic part; the `add: {fab: FOLDER-NAME, quantity: N}`
+  form pulls a `Mechanical/Fab/` folder (specs from its `info.txt`). Such a
+  folder is **variant-only**: it stays out of the base BOM and appears only in
+  the variants that add it. Descriptions/prices for added parts come from the
+  part database like any other line.
+- `setqty: {designation: X, quantity: N}` (or `{source: FOLDER, ...}`) changes
+  only the quantity of an existing line — e.g. extra washers in one build. It
+  shows up as a quantity difference in the comparison report.
+
+`generate` with no `--variant` flag builds **all declared variants at once**.
+The `default` variant writes to the usual `FabricationData/` root (paths and
+bytes unchanged vs. a chassis with no variants.yaml); other variants write the
+same file set to `FabricationData/Builds/<variant>/` (PCB zips skipped — the
+boards are identical). Use `--variant 450v` (or a comma list) to build a
+subset. The release PDF/QC/labels are built once, for the default variant (or
+the single `--variant` if given).
+
+After a multi-variant run, the root also gets:
+
+- `Variant_Comparison.md` — per-variant totals plus "only in X" and
+  quantity-difference tables with vendor PN/price columns.
+- `variants.json` — machine-readable manifest (names, descriptions, output
+  dirs, added/removed designations, line counts, totals) for the docs website.
+
+Both stay tracked in git alongside `Pricing_Report.md`; everything else under
+`Builds/` is gitignored. Note the two "variants" concepts live in different
+places: **build variants** (parts differ) under `FabricationData/Builds/`,
+**spares tiers** (only quantities differ) under `FabricationData/BOMs/Variants/`.
+
 ## Importing real prices back
 
 After carts/orders exist, import them — prices land in the local cache **and**

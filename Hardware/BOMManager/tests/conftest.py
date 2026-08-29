@@ -76,4 +76,20 @@ def make_chassis(hw_root: Path, name: str = "Chassis1") -> Path:
         '3;"W1";Wire_10AWG;1;WIRE 10AWG RED;\n',
         encoding="utf-8",
     )
+
+    (chassis / "variants.yaml").write_text(
+        "default: base\n"
+        "variants:\n"
+        "  base:\n"
+        "    description: Base build\n"
+        "    rules: []\n"
+        "  alt:\n"
+        "    description: Alt build\n"
+        "    rules:\n"
+        "      - exclude: {designation: 100nF 100V}\n"
+        "      - add: {designation: 220nF 100V, footprint: C_1210_3225Metric, category: board,\n"
+        "              source: MainBoard, quantity: 1, description: Alt bank cap}\n"
+        "      - exclude: {source: HW-C1-PLATE-A}\n",
+        encoding="utf-8",
+    )
     return chassis

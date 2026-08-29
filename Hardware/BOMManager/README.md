@@ -55,9 +55,17 @@ Per chassis, under `Hardware/<Chassis>/FabricationData/`:
 ├── PCB_Fab_Zips/<Board>.zip     # per-board fab bundles
 ├── Assembly/<Board>.html        # interactive assembly view per board (iBOM; via release)
 ├── Pricing_Report.md            # costs, pack rounding, fabrication package checklist
-└── Release_Report.pdf           # full release doc (HARA-style; via release): cover, pricing,
-                                 # STEP previews, per-board 3D renders + schematic + layers
+├── Release_Report.pdf           # full release doc (HARA-style; via release): cover, pricing,
+│                                # STEP previews, per-board 3D renders + schematic + layers
+├── Builds/<variant>/            # build-variant outputs, when variants.yaml declares them
+│                                # (same file set as above; the default variant stays at this root)
+├── Variant_Comparison.md        # per-variant totals + part deltas (tracked)
+└── variants.json                # machine-readable variant manifest (tracked)
 ```
+
+Chassis with a `variants.yaml` (e.g. Chassis2's 200v/450v builds) generate all
+declared build variants at once; `generate --variant 450v` builds a subset. See
+[docs/GUIDE.md](docs/GUIDE.md#build-variants) for the schema.
 
 ## How ordering math works
 
