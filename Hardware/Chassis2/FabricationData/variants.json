@@ -1,0 +1,75 @@
+{
+  "chassis": "Chassis2",
+  "default": "200v",
+  "qty": 1,
+  "variants": [
+    {
+      "name": "200v",
+      "description": "200 V class \u2014 stock 60x UCS2D331MHD 330uF/200V DC-link bank",
+      "is_default": true,
+      "output_dir": "FabricationData",
+      "bom_lines": 118,
+      "total_usd": 2149.71,
+      "added_designations": [],
+      "removed_designations": []
+    },
+    {
+      "name": "450v",
+      "description": "450 V class \u2014 capacitor swap to 60x UCS2W680MHD 68uF/450V (18x31.5 mm, ~5 mm shorter)",
+      "is_default": false,
+      "output_dir": "FabricationData/Builds/450v",
+      "bom_lines": 118,
+      "total_usd": 2237.91,
+      "added_designations": [
+        "94669A193",
+        "DC LINK MODULE HOLDER - 450V CLASS",
+        "DC LINK MODULE HOLDER SPACER - PRINTED (450V CLASS)",
+        "UCS2W680MHD"
+      ],
+      "removed_designations": [
+        "94669A196",
+        "DC LINK MODULE HOLDER - 200V CLASS",
+        "DC LINK MODULE HOLDER SPACER - PRINTED",
+        "UCS2D331MHD"
+      ]
+    },
+    {
+      "name": "dcdc",
+      "description": "C2-DCDC-A \u2014 15 kW DC/DC converter build (450 V class): base C2 power stage + Hammond 195C100 choke pair, Boyd 416201U00000G coldplates, TDK MKK DC-link film cap, and frame/cabinet hardware (Mechanical/DC-DC-Module.FCStd)",
+      "is_default": false,
+      "output_dir": "FabricationData/Builds/dcdc",
+      "bom_lines": 136,
+      "total_usd": 3513.91,
+      "added_designations": [
+        "1568A52",
+        "195C100",
+        "416201U00000G",
+        "5891T56",
+        "90166A718",
+        "90720A550",
+        "91292A117",
+        "91292A137",
+        "91292A144",
+        "91477A141",
+        "91477A161",
+        "91828A251",
+        "93475A250",
+        "94669A193",
+        "B25645A1328K003",
+        "DC LINK MODULE HOLDER - 450V CLASS",
+        "DC LINK MODULE HOLDER SPACER - PRINTED (450V CLASS)",
+        "HW-C2-FR-BSP-A",
+        "HW-C2-FR-CLPHLD-A",
+        "HW-C3-FR-CSP-A",
+        "HW-C3-FR-FRNLID-A",
+        "UCS2W680MHD"
+      ],
+      "removed_designations": [
+        "94669A196",
+        "DC LINK MODULE HOLDER - 200V CLASS",
+        "DC LINK MODULE HOLDER SPACER - PRINTED",
+        "UCS2D331MHD"
+      ]
+    }
+  ]
+}

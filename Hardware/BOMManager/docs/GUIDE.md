@@ -179,6 +179,12 @@ boards are identical). Use `--variant 450v` (or a comma list) to build a
 subset. The release PDF/QC/labels are built once, for the default variant (or
 the single `--variant` if given).
 
+Chassis 2 currently declares three build variants: `200v` (default), `450v`
+(capacitor-bank swap), and `dcdc` (C2-DCDC-A — the 15 kW DC/DC converter
+build: 450 V class bank plus the choke/coldplate/frame extras from
+`Mechanical/DC-DC-Module.FCStd`; orderable outputs under
+`FabricationData/Builds/dcdc/`).
+
 After a multi-variant run, the root also gets:
 
 - `Variant_Comparison.md` — per-variant totals plus "only in X" and

@@ -30,3 +30,71 @@ variants:
       # Extra M6 copper crush washers: shorter standoff stack means some screws
       # wind up shorter, so washers take up the length.
       - setqty: {designation: 98044A224, quantity: 50}
+  dcdc:
+    description: "C2-DCDC-A — 15 kW DC/DC converter build (450 V class): base C2 power stage + Hammond 195C100 choke pair, Boyd 416201U00000G coldplates, TDK MKK DC-link film cap, and frame/cabinet hardware (Mechanical/DC-DC-Module.FCStd)"
+    rules:
+      # --- 450 V class capacitor-bank swap (same as the 450v variant) ---
+      - exclude: {designation: UCS2D331MHD}
+      - add: {designation: UCS2W680MHD, footprint: CAPPRD750W80D1800H3700, category: board,
+              source: DCBusCapacitorBoard, quantity: 60,
+              description: "Nichicon 68uF 450V electrolytic"}
+      - exclude: {source: HW-C2-DCLMH-200-PRINTED-B}
+      - add: {fab: HW-C2-DCLMH-450-PRINTED-A, quantity: 1}
+      - exclude: {designation: 94669A196}
+      - add: {designation: 94669A193, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 6,
+              description: "Aluminum standoff, 50 mm (450V class cap-bank height)"}
+      - exclude: {source: HW-C2-DCLMH-200-SPCR-PRINTED-A}
+      - add: {fab: HW-C2-DCLMH-450-SPCR-PRINTED-A, quantity: 6}
+      - setqty: {designation: 98044A224, quantity: 50}
+      # --- DC/DC module extras (quantities from DC-DC-Module.FCStd) ---
+      # Fabricated frame/bracket parts (variant-only Fab folders).
+      - add: {fab: HW-C2-FR-CLPHLD-A, quantity: 1}   # coldplate holder bracket
+      - add: {fab: HW-C2-FR-BSP-A, quantity: 2}      # frame base plates (L/R)
+      - add: {fab: HW-C3-FR-CSP-A, quantity: 4}      # cornerposts
+      - add: {fab: HW-C3-FR-FRNLID-A, quantity: 2}   # front cover lids
+      # Purchased power parts.
+      - add: {designation: 195C100, footprint: Mouser, vendor: mouser, category: mechanical,
+              source: MechanicalBOM, quantity: 2,
+              description: "Hammond 195C100 DC filter choke, 1 mH 100 A"}
+      - add: {designation: 416201U00000G, footprint: Mouser, vendor: mouser, category: mechanical,
+              source: MechanicalBOM, quantity: 2,
+              description: "Boyd/Aavid 416201U00000G 305 mm 6-pass cold plate"}
+      - add: {designation: B25645A1328K003, footprint: Mouser, vendor: mouser, category: mechanical,
+              source: MechanicalBOM, quantity: 1,
+              description: "TDK MKK DC-R film capacitor, 3210 uF 1 kV DC, chassis mount"}
+      # Coldplate mounting screws (M6-50mm assy x4).
+      - add: {designation: 91292A144, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 4,
+              description: "M6-1.0 x 50 mm 18-8 stainless SHCS"}
+      - add: {designation: 91477A161, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 8,
+              description: "M6 18-8 stainless spring lock washer"}
+      - add: {designation: 91828A251, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 8,
+              description: "M6-1.0 18-8 stainless hex nut"}
+      - add: {designation: 93475A250, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 8,
+              description: "M6 18-8 stainless general purpose washer"}
+      # Frame/lid hardware.
+      - add: {designation: 90720A550, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 20,
+              description: "Heavy duty twist-resistant hex-shaped rivet nut (12 frame + 8 cornerpost)"}
+      - add: {designation: 91292A137, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 4,
+              description: "M6-1.0 x 20 mm 18-8 stainless SHCS"}
+      - add: {designation: 90166A718, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 12,
+              description: "18-8 stainless flanged hex head screw (lid retention, 6 per lid)"}
+      - add: {designation: 91292A117, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 8,
+              description: "M4-0.7 x 12 mm 18-8 stainless SHCS (handle mounting)"}
+      - add: {designation: 91477A141, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 8,
+              description: "M4 18-8 stainless spring lock washer"}
+      - add: {designation: 1568A52, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 4,
+              description: "Threaded-hole round pull handle (2 per lid)"}
+      - add: {designation: 5891T56, footprint: McMaster, category: mechanical,
+              source: MechanicalBOM, vendor: mcmaster, quantity: 2,
+              description: "Accident prevention illustrated label (1 per lid)"}
