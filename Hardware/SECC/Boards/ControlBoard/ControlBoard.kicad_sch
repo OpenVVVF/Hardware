@@ -13,6 +13,216 @@
 		(comment 2 "HW-SECC-PCB-CTRL")
 	)
 	(lib_symbols
+		(symbol "InverterCom:TBP01R1-508-04BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP01R1-508-04BE"
+				(at 16.51 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP01R150804BE"
+				(at 16.51 -94.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+				(at 16.51 -194.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Height" "8.9"
+				(at 16.51 -394.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+				(at 16.51 -494.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+				(at 16.51 -594.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+				(at 16.51 -794.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(symbol "TBP01R1-508-04BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "InverterCom:TBP02R2W-381-06BE"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -955,6 +1165,16 @@
 		)
 		(uuid "9a7007ba-cf51-46b8-8796-c87ebe1578e0")
 	)
+	(text "Line AC Power"
+		(exclude_from_sim no)
+		(at 18.288 195.834 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a73e4486-d009-457f-a7de-4e3f46589e80")
+	)
 	(text "onboard power regulator section, for 3.3v mcu power, +5v current sense, etc"
 		(exclude_from_sim no)
 		(at 112.776 182.118 0)
@@ -975,6 +1195,20 @@
 		)
 		(uuid "e45296ca-4688-4c40-9414-9d8b31f294f5")
 	)
+	(no_connect
+		(at 40.64 198.12)
+		(uuid "acb98ec6-faec-4495-84db-11f9f151e332")
+	)
+	(wire
+		(pts
+			(xy 102.87 119.38) (xy 109.22 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "008dece1-b30c-49de-92e9-b7f696066c7e")
+	)
 	(wire
 		(pts
 			(xy 198.12 50.8) (xy 172.72 50.8)
@@ -994,6 +1228,16 @@
 			(type default)
 		)
 		(uuid "0c8ead07-dc38-4472-a457-e1b3de9ecb28")
+	)
+	(wire
+		(pts
+			(xy 102.87 124.46) (xy 109.22 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10f767c0-5d1f-46ff-9740-5f66310bb060")
 	)
 	(wire
 		(pts
@@ -1197,6 +1441,16 @@
 	)
 	(wire
 		(pts
+			(xy 86.36 191.77) (xy 90.17 191.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87a9e8f8-8470-489c-b065-5a847c8db6f0")
+	)
+	(wire
+		(pts
 			(xy 172.72 119.38) (xy 176.53 119.38)
 		)
 		(stroke
@@ -1307,6 +1561,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 110.49) (xy 109.22 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4096628-716d-455c-9ec7-555626d81171")
+	)
+	(wire
+		(pts
 			(xy 198.12 27.94) (xy 198.12 43.18)
 		)
 		(stroke
@@ -1334,6 +1598,16 @@
 			(type default)
 		)
 		(uuid "d71cb962-c501-4df6-8e70-595a364fd1a2")
+	)
+	(wire
+		(pts
+			(xy 102.87 121.92) (xy 109.22 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d878fcbc-aa68-4612-898d-a362c546fe44")
 	)
 	(wire
 		(pts
@@ -1377,6 +1651,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 127) (xy 109.22 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e4996d58-63f2-4189-873f-21358665e460")
+	)
+	(wire
+		(pts
 			(xy 172.72 72.39) (xy 214.63 72.39)
 		)
 		(stroke
@@ -1394,6 +1678,16 @@
 			(type default)
 		)
 		(uuid "f29d3dc0-1fe4-42eb-99de-eae16cf0820c")
+	)
+	(wire
+		(pts
+			(xy 102.87 115.57) (xy 109.22 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3d7edf5-9e2b-4cd1-bb36-d7c99c099f78")
 	)
 	(wire
 		(pts
@@ -1505,6 +1799,16 @@
 		)
 		(uuid "216280a9-02de-415f-8f4f-e8c1376ac095")
 	)
+	(label "AC_LINE2"
+		(at 40.64 195.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2434af20-67f1-4564-abb5-6a1e8189d91e")
+	)
 	(label "GND_A"
 		(at 36.83 142.24 0)
 		(effects
@@ -1514,16 +1818,6 @@
 			(justify left bottom)
 		)
 		(uuid "2525111e-31e0-41b1-b5ac-a9a05b68717e")
-	)
-	(label "GND_A"
-		(at 36.83 170.18 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "28ca74d8-723e-493b-a2a4-739043fe7984")
 	)
 	(label "GND_A"
 		(at 246.38 72.39 0)
@@ -1544,6 +1838,16 @@
 			(justify left bottom)
 		)
 		(uuid "2f396956-4146-4157-88e3-0abcbccf9d7b")
+	)
+	(label "+24V_A"
+		(at 86.36 191.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "313247b1-e1a7-4852-8dfc-cef1dcbe76fa")
 	)
 	(label "VS_GND_Y"
 		(at 246.38 77.47 0)
@@ -1634,6 +1938,16 @@
 			(justify right bottom)
 		)
 		(uuid "5c8f12b9-6e58-4c85-af6b-2905e848f2ec")
+	)
+	(label "+24V_A"
+		(at 36.83 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6a59a990-dd7e-4a7c-ac8f-98ef8e8c435f")
 	)
 	(label "+12V_CANBUS_A"
 		(at 222.25 21.59 180)
@@ -1915,6 +2229,16 @@
 		)
 		(uuid "c2fce8a4-3ed5-46b3-94c6-45d25a9a7a53")
 	)
+	(label "AC_EARTH"
+		(at 40.64 200.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c3d0d396-f493-48a2-8e36-6036f252e983")
+	)
 	(label "+12V_SWITCHED_A"
 		(at 46.99 53.34 180)
 		(effects
@@ -1924,6 +2248,16 @@
 			(justify right bottom)
 		)
 		(uuid "c55d9e69-a6e5-4f90-8f7d-273a479901dc")
+	)
+	(label "AC_LINE1"
+		(at 40.64 193.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c6ae3dee-db83-425a-af62-0c8e695dacef")
 	)
 	(label "MAIN_CONTACTOR_OUT"
 		(at 36.83 129.54 0)
@@ -2025,6 +2359,16 @@
 		)
 		(uuid "f5787c0c-1ef1-4cc5-af12-8116cf4c57e9")
 	)
+	(label "AC_LINE1"
+		(at 133.35 189.23 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fc143394-5446-4292-b2bf-e043e4903578")
+	)
 	(label "GND_A"
 		(at 99.06 52.07 0)
 		(effects
@@ -2034,6 +2378,16 @@
 			(justify left bottom)
 		)
 		(uuid "fcda9b0f-5616-47d4-8273-340608e12506")
+	)
+	(label "AC_LINE2"
+		(at 133.35 191.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fdef38f2-16df-48f4-8853-0e5ee7241de6")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -2111,6 +2465,154 @@
 			(justify right)
 		)
 		(uuid "beef7707-57ed-4f2b-b2cb-3ef61191f566")
+	)
+	(symbol
+		(lib_id "InverterCom:TBP01R1-508-04BE")
+		(at 40.64 200.66 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "12c423cc-c040-46bc-a70a-0c798b82182d")
+		(property "Reference" "J4"
+			(at 30.48 185.42 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP01R1-508-04BE"
+			(at 30.48 187.96 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TBP01R150804BE"
+			(at 24.13 105.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/supplyframepdf/tbp01r1-508.pdf"
+			(at 24.13 5.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "2~24 Poles, Pluggable, Receptacle, Horizontal, 5.08 Pitch, Terminal Block Connector"
+			(at 40.64 200.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "8.9"
+			(at 24.13 -194.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP01R1-508-04BE"
+			(at 24.13 -294.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP01R1-508-04BE?qs=PzGy0jfpSMtbuigPwCNi2Q%3D%3D"
+			(at 24.13 -394.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 24.13 -494.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP01R1-508-04BE"
+			(at 24.13 -594.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "88d15fba-6aa4-4097-83bc-99ed486ba227")
+		)
+		(pin "3"
+			(uuid "b2dec7a0-c36e-460a-8e53-490acad57ba6")
+		)
+		(pin "4"
+			(uuid "30fe2809-520f-48f2-be0b-fc0219426a3a")
+		)
+		(pin "1"
+			(uuid "f99326e2-4141-4c74-9c84-ed46ca903a8c")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "J4")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "InverterCom:TS40-66-50-R-260-SMT-TR")
@@ -4313,6 +4815,66 @@
 				(justify left)
 			)
 		)
+		(pin "SPI1_INTERRUPT" input
+			(at 109.22 110.49 180)
+			(uuid "b5f3ecd1-86b4-458c-ac53-1f73e20decf6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "REDBEET-GPIO0" input
+			(at 109.22 127 180)
+			(uuid "ee2b4048-67a3-410d-92aa-c5e094281124")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "REDBEET-GPIO1" input
+			(at 109.22 124.46 180)
+			(uuid "efbf9d55-2cc7-42b2-a64c-0beec12b7536")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "REDBEET-GPIO2" input
+			(at 109.22 121.92 180)
+			(uuid "1e5555b1-daa2-4be7-9c88-47ec1852df26")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "REDBEET-GPIO3" input
+			(at 109.22 119.38 180)
+			(uuid "c8ae25fa-2c34-4da9-b25b-ffeeb72b16cb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "REDBEET-RESET" input
+			(at 109.22 115.57 180)
+			(uuid "d11b07fe-7ef1-4b2c-917e-4416f4ec3963")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
@@ -4827,9 +5389,9 @@
 				(justify left)
 			)
 		)
-		(pin "+3.3V_OUT_A" input
+		(pin "+3.3V_A" input
 			(at 90.17 186.69 180)
-			(uuid "1637c9eb-2d36-4fb6-9193-e2e35aa4fd3e")
+			(uuid "be5ff5e0-cf4e-4f6a-9e49-38065569c47b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4837,14 +5399,44 @@
 				(justify left)
 			)
 		)
-		(pin "+12V_OUT_A" input
+		(pin "+12V_A" input
 			(at 90.17 189.23 180)
-			(uuid "55fd8345-fc44-4e92-b725-40fd061d85e0")
+			(uuid "895eed5e-82c4-4cc9-98e2-d0c69a202b0f")
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(pin "+24V_A" input
+			(at 90.17 191.77 180)
+			(uuid "75e90939-ea1c-4eac-be66-ce5a86b96b95")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "AC_LINE1" input
+			(at 133.35 189.23 0)
+			(uuid "a74064cc-508b-4369-9e61-e6d94960d7c8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "AC_LINE2" input
+			(at 133.35 191.77 0)
+			(uuid "7115818b-9fe3-4a72-b463-4b089ad3da43")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
