@@ -9,10 +9,538 @@
 		(date "2026-08-30")
 		(rev "A")
 		(company "Corzine Lab, University of California, Santa Cruz")
-		(comment 1 "Prepared by Thomas Liao")
+		(comment 1 "Prepared by Thomas Liao, Aidan Dorfler")
 		(comment 2 "HW-SECC-PCB-CTRL")
 	)
 	(lib_symbols
+		(symbol "InverterCom:TBP02R2W-381-06BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP02R2W-381-06BE"
+				(at 16.51 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP02R2W38106BE"
+				(at 16.51 -94.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp02r2w-381.pdf"
+				(at 16.51 -194.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "TBP02R2W-381 Series - 2~24 Poles, Pluggable, Receptacle, Vertical, 3.81 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Height" "9.6"
+				(at 16.51 -394.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP02R2W-38106BE"
+				(at 16.51 -494.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R2W-381-06BE?qs=PzGy0jfpSMtr%2Ft0bFoapMQ%3D%3D"
+				(at 16.51 -594.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP02R2W-381-06BE"
+				(at 16.51 -794.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(symbol "TBP02R2W-381-06BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -15.24)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "InverterCom:TBP02R2W-381-08BE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 16.51 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "TBP02R2W-381-08BE"
+				(at 16.51 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "TBP02R2W38108BE"
+				(at 16.51 -94.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp02r2w-381.pdf"
+				(at 16.51 -194.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Description" "TBP02R2W-381 Series - 2~24 Poles, Pluggable, Receptacle, Vertical, 3.81 Pitch, Terminal Block Connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Height" "9.2"
+				(at 16.51 -394.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Part Number" "490-TBP02R2W-38108BE"
+				(at 16.51 -494.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP02R2W-381-08BE?qs=PzGy0jfpSMsy8Qrmxc%252Brhg%3D%3D"
+				(at 16.51 -594.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Name" "Same Sky"
+				(at 16.51 -694.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Manufacturer_Part_Number" "TBP02R2W-381-08BE"
+				(at 16.51 -794.92 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(symbol "TBP02R2W-381-08BE_1_1"
+				(rectangle
+					(start 5.08 2.54)
+					(end 15.24 -20.32)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 0)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -15.24 0)
+					(length 5.08)
+					(name "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -17.78 0)
+					(length 5.08)
+					(name "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "InverterCom:TS40-66-50-R-260-SMT-TR"
 			(pin_names
 				(hide yes)
@@ -297,252 +825,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "InverterCom:UJ2-B-HR-G-V"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J"
-				(at 21.59 15.24 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Value" "UJ2-B-HR-G-V"
-				(at 21.59 12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" "UJ2BHRGV"
-				(at 21.59 -87.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Datasheet" "https://www.sameskydevices.com/product/resource/uj2-b-hr-g-v.pdf"
-				(at 21.59 -187.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Description" "Type B, USB 2.0, 480 Mbps, 5 Vdc, 1.5 A, Vertical, Through Hole Mounting Style, Through Hole Contact Pin Type. Gold Flash, Board Lock, 4 Pin, USB Receptacle"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Height" "16.5"
-				(at 21.59 -387.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Part Number" "179-UJ2-B-HR-G-V"
-				(at 21.59 -487.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/UJ2-B-HR-G-V?qs=HoCaDK9Nz5fUWn12FBL%2Fqw%3D%3D"
-				(at 21.59 -587.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Name" "Same Sky"
-				(at 21.59 -687.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Part_Number" "UJ2-B-HR-G-V"
-				(at 21.59 -787.3 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(symbol "UJ2-B-HR-G-V_1_1"
-				(rectangle
-					(start 5.08 10.16)
-					(end 20.32 -10.16)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at 12.7 15.24 270)
-					(length 5.08)
-					(name "VBUS"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 15.24 270)
-					(length 5.08)
-					(name "D-"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 10.16 -15.24 90)
-					(length 5.08)
-					(name "D+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 12.7 -15.24 90)
-					(length 5.08)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 5.08)
-					(name "MH1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "MH1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 25.4 0 180)
-					(length 5.08)
-					(name "MH2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "MH2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Mechanical:MountingHole"
 			(pin_names
 				(offset 1.016)
@@ -653,6 +935,16 @@
 		)
 		(uuid "2302945b-fbd1-4d09-8d89-0f868bc22153")
 	)
+	(text "Connector to ccs/j1772 cable and contactors"
+		(exclude_from_sim no)
+		(at 14.732 134.62 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "48acd891-53b5-4ee6-9c04-45a1a888a76e")
+	)
 	(text "reset switch, push to reset"
 		(exclude_from_sim no)
 		(at 88.392 13.97 0)
@@ -673,13 +965,15 @@
 		)
 		(uuid "cbf04dbb-15f4-4294-9fcd-1e08c56b9b9d")
 	)
-	(no_connect
-		(at 246.38 96.52)
-		(uuid "681cda28-dd2c-4a12-9dde-942399a633e5")
-	)
-	(no_connect
-		(at 172.72 96.52)
-		(uuid "a6a811d5-25c4-4b70-a920-bf4d85547e2c")
+	(text "contactor/pwm driver power"
+		(exclude_from_sim no)
+		(at 13.97 175.26 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e45296ca-4688-4c40-9414-9d8b31f294f5")
 	)
 	(wire
 		(pts
@@ -743,16 +1037,6 @@
 	)
 	(wire
 		(pts
-			(xy 240.03 95.25) (xy 243.84 95.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "29b41b96-a186-4a99-aa38-d6752079d054")
-	)
-	(wire
-		(pts
 			(xy 172.72 80.01) (xy 214.63 80.01)
 		)
 		(stroke
@@ -763,13 +1047,23 @@
 	)
 	(wire
 		(pts
-			(xy 240.03 99.06) (xy 240.03 95.25)
+			(xy 172.72 116.84) (xy 176.53 116.84)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "429dad42-c795-42d2-9eef-2cab379b3c91")
+		(uuid "3842b6fa-a36e-4c35-a245-d687eeb4f7a4")
+	)
+	(wire
+		(pts
+			(xy 172.72 110.49) (xy 176.53 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "431876b4-79ae-4ebb-9ec0-3af900ddd263")
 	)
 	(wire
 		(pts
@@ -820,16 +1114,6 @@
 			(type default)
 		)
 		(uuid "5ab43327-70d6-4e8b-9bca-9cb8f42826f8")
-	)
-	(wire
-		(pts
-			(xy 243.84 127) (xy 226.06 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5ac12837-bbdb-4275-b908-19a3b21d21cd")
 	)
 	(wire
 		(pts
@@ -913,6 +1197,26 @@
 	)
 	(wire
 		(pts
+			(xy 172.72 119.38) (xy 176.53 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "95a701d3-f8e6-4258-9056-1f2963bfaaed")
+	)
+	(wire
+		(pts
+			(xy 102.87 100.33) (xy 109.22 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "95b00f52-bf44-4046-bff3-89be107a7174")
+	)
+	(wire
+		(pts
 			(xy 172.72 48.26) (xy 200.66 48.26)
 		)
 		(stroke
@@ -920,6 +1224,16 @@
 			(type default)
 		)
 		(uuid "a31fe420-8134-4e20-98e7-f11072fecaa6")
+	)
+	(wire
+		(pts
+			(xy 102.87 102.87) (xy 109.22 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5308a7b-3263-4ddd-aad6-3e190339d4e2")
 	)
 	(wire
 		(pts
@@ -933,6 +1247,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 107.95) (xy 109.22 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9f9252e-e801-4d38-b2a9-382bb4eae0a2")
+	)
+	(wire
+		(pts
 			(xy 198.12 55.88) (xy 222.25 55.88)
 		)
 		(stroke
@@ -940,6 +1264,26 @@
 			(type default)
 		)
 		(uuid "b34fb867-eda0-4154-9aac-7e117cbf845c")
+	)
+	(wire
+		(pts
+			(xy 172.72 113.03) (xy 176.53 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bdfb3bca-6ba5-4803-8f7e-c2ba7f92ca8c")
+	)
+	(wire
+		(pts
+			(xy 102.87 105.41) (xy 109.22 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c0d8aafa-be19-465d-8cf6-1cf36580876a")
 	)
 	(wire
 		(pts
@@ -1003,26 +1347,6 @@
 	)
 	(wire
 		(pts
-			(xy 172.72 99.06) (xy 240.03 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "db6a4501-fc6e-4b10-a421-d1cd141aa352")
-	)
-	(wire
-		(pts
-			(xy 226.06 127) (xy 226.06 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dddb6e87-142a-4d86-80fc-47ee9fc372d9")
-	)
-	(wire
-		(pts
 			(xy 102.87 81.28) (xy 109.22 81.28)
 		)
 		(stroke
@@ -1050,16 +1374,6 @@
 			(type default)
 		)
 		(uuid "e36f0c16-41f2-4334-a6c4-cdba5e6039da")
-	)
-	(wire
-		(pts
-			(xy 226.06 101.6) (xy 172.72 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ec9d249e-6e90-460f-8cce-b47dab85fa73")
 	)
 	(wire
 		(pts
@@ -1093,16 +1407,6 @@
 	)
 	(wire
 		(pts
-			(xy 243.84 95.25) (xy 243.84 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f90a887b-4bd0-41ee-bb19-70a603cc986e")
-	)
-	(wire
-		(pts
 			(xy 200.66 53.34) (xy 222.25 53.34)
 		)
 		(stroke
@@ -1110,6 +1414,16 @@
 			(type default)
 		)
 		(uuid "ff17d606-c348-412c-9ece-ca7c252b1319")
+	)
+	(label "PRECHARGE_CONTACTOR_OUT"
+		(at 226.06 119.38 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "062c5be9-db3a-4564-bf07-47b5e498f880")
 	)
 	(label "CAN2_JUMPER_A"
 		(at 248.92 46.99 0)
@@ -1121,6 +1435,26 @@
 		)
 		(uuid "07fc19de-f89f-4b71-953e-0dd48adbe7de")
 	)
+	(label "PUMP_PWM_OUT"
+		(at 36.83 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0886664b-c545-4187-aee6-550195734575")
+	)
+	(label "GND_A"
+		(at 76.2 102.87 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0a952451-a55c-4afa-809e-92ed0e3b4df8")
+	)
 	(label "CAN2_JUMPER_B"
 		(at 248.92 44.45 0)
 		(effects
@@ -1131,15 +1465,15 @@
 		)
 		(uuid "0f4900ed-2f8e-4526-a01d-362b71f5b5d2")
 	)
-	(label "GND_A"
-		(at 246.38 127 270)
+	(label "PE_PIN"
+		(at 36.83 137.16 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
-		(uuid "12e1d252-60b7-4841-92ca-51cad31bf498")
+		(uuid "150d9bbf-6a40-480f-aecd-723fe9408606")
 	)
 	(label "GND_A"
 		(at 76.2 73.66 180)
@@ -1150,6 +1484,16 @@
 			(justify right bottom)
 		)
 		(uuid "1ab30f1e-711b-4b52-b938-bcf2aa2dcaa5")
+	)
+	(label "+PWM_VBUS"
+		(at 36.83 175.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "20e73e50-60ac-4ddf-9d44-b7863836ec59")
 	)
 	(label "CAN2_+5V"
 		(at 248.92 50.8 0)
@@ -1162,6 +1506,26 @@
 		(uuid "216280a9-02de-415f-8f4f-e8c1376ac095")
 	)
 	(label "GND_A"
+		(at 36.83 142.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2525111e-31e0-41b1-b5ac-a9a05b68717e")
+	)
+	(label "GND_A"
+		(at 36.83 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "28ca74d8-723e-493b-a2a4-739043fe7984")
+	)
+	(label "GND_A"
 		(at 246.38 72.39 0)
 		(effects
 			(font
@@ -1170,6 +1534,16 @@
 			(justify left bottom)
 		)
 		(uuid "2c2df270-33a1-43b6-b42e-fa2a254ceedc")
+	)
+	(label "+CONTACTOR_VBUS"
+		(at 36.83 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f396956-4146-4157-88e3-0abcbccf9d7b")
 	)
 	(label "VS_GND_Y"
 		(at 246.38 77.47 0)
@@ -1190,6 +1564,36 @@
 			(justify right bottom)
 		)
 		(uuid "340d40c4-95ef-4592-85f9-e23a07e450f4")
+	)
+	(label "CP_PIN"
+		(at 76.2 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "3436368a-db2e-4e24-a7d5-0ae4f7a082ff")
+	)
+	(label "+12V_A"
+		(at 36.83 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "37c664ee-4b57-4a48-9865-992da98fc21e")
+	)
+	(label "PUMP_PWM_OUT"
+		(at 226.06 113.03 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "38bc238f-a2ce-4d3a-9d91-bfbf6cddf7b8")
 	)
 	(label "VS_PH_V_Y"
 		(at 246.38 82.55 0)
@@ -1241,6 +1645,26 @@
 		)
 		(uuid "6e2fb048-2420-4c66-89d5-d841e4d422ec")
 	)
+	(label "CABLE_THERMISTOR"
+		(at 226.06 110.49 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6e6ca891-570a-4776-8671-98d0f874999c")
+	)
+	(label "+12V_A"
+		(at 36.83 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "7062a308-7e17-4864-a54f-c7dc6101be81")
+	)
 	(label "CAN1_HIGH"
 		(at 248.92 31.75 0)
 		(effects
@@ -1250,16 +1674,6 @@
 			(justify left bottom)
 		)
 		(uuid "7207018f-71ec-43b4-9353-70a1c394abc6")
-	)
-	(label "GND_A"
-		(at 233.68 111.76 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "753ffc3e-3dd9-45aa-a509-d5bd5f721ca1")
 	)
 	(label "VS_DC_LINK_Y"
 		(at 246.38 87.63 0)
@@ -1281,6 +1695,16 @@
 		)
 		(uuid "7a834bac-4909-4494-98b6-15fc62115b12")
 	)
+	(label "+3.3V_A"
+		(at 226.06 99.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "80244fe7-a927-413e-a3a4-2e78c5a1d0e1")
+	)
 	(label "+12V_CANBUS_A"
 		(at 222.25 46.99 180)
 		(effects
@@ -1292,6 +1716,26 @@
 		(uuid "8330635f-54bf-45ce-b269-72759d3ffcd2")
 	)
 	(label "GND_A"
+		(at 226.06 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "83e684f0-856b-47fe-9ceb-a0a1abbc2756")
+	)
+	(label "PRECHARGE_CONTACTOR_OUT"
+		(at 36.83 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "88580ad5-8fa2-4e09-bc1c-32a4c10a7df4")
+	)
+	(label "GND_A"
 		(at 86.36 194.31 180)
 		(effects
 			(font
@@ -1300,6 +1744,26 @@
 			(justify right bottom)
 		)
 		(uuid "8c2e626f-4795-4f30-9c3b-ea34092087b3")
+	)
+	(label "CABLE_THERMISTOR"
+		(at 36.83 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "91bb9e3e-8560-47e3-92d2-4863a867b7c6")
+	)
+	(label "CP_PIN"
+		(at 76.2 115.57 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "96b1e92b-e7fc-49ac-8f5f-06fddacc7c30")
 	)
 	(label "VS_PH_W_Y"
 		(at 246.38 80.01 0)
@@ -1331,6 +1795,46 @@
 		)
 		(uuid "9f825a61-a80a-4d08-a6a3-0de0aabc54cc")
 	)
+	(label "CP_PIN"
+		(at 36.83 144.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a07e3cde-15c4-4924-9ea3-f52d06c305e1")
+	)
+	(label "GND_A"
+		(at 36.83 127 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a18c3657-7350-4f1b-9a23-33df12b5185e")
+	)
+	(label "MAIN_CONTACTOR_OUT"
+		(at 226.06 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a40068b1-16ea-42df-b3a5-31444116a700")
+	)
+	(label "+PWM_VBUS"
+		(at 226.06 106.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a8f2e098-bfb0-48af-9c94-83a01e348043")
+	)
 	(label "GND_A"
 		(at 222.25 49.53 180)
 		(effects
@@ -1340,16 +1844,6 @@
 			(justify right bottom)
 		)
 		(uuid "b0d3dd93-5e68-4dde-bbcf-a575118cf856")
-	)
-	(label "GND_A"
-		(at 259.08 111.76 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b25609d3-c9d3-41d4-8b05-fbeb4b76fae6")
 	)
 	(label "CAN2_LOW"
 		(at 248.92 59.69 0)
@@ -1402,6 +1896,16 @@
 		(uuid "bdd99bfb-0b7a-48f2-b11a-9ea90683f6cc")
 	)
 	(label "+3.3V_A"
+		(at 76.2 100.33 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "be62373b-2a3e-43bf-9ada-7e7e1f50840d")
+	)
+	(label "+3.3V_A"
 		(at 222.25 44.45 180)
 		(effects
 			(font
@@ -1420,6 +1924,16 @@
 			(justify right bottom)
 		)
 		(uuid "c55d9e69-a6e5-4f90-8f7d-273a479901dc")
+	)
+	(label "MAIN_CONTACTOR_OUT"
+		(at 36.83 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ce3a38be-37f1-490b-ab2a-bb063edaec15")
 	)
 	(label "CAN1_JUMPER_B"
 		(at 248.92 19.05 0)
@@ -1451,6 +1965,16 @@
 		)
 		(uuid "d4b8fa8d-a726-46b2-b9f5-2b676f2ed848")
 	)
+	(label "PE_PIN"
+		(at 76.2 118.11 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e02aa688-59c4-4862-8e42-32b077afd140")
+	)
 	(label "VS_PH_U_Y"
 		(at 246.38 85.09 0)
 		(effects
@@ -1461,6 +1985,16 @@
 		)
 		(uuid "e1c1486d-8fd7-4031-87ee-ea7face7ce44")
 	)
+	(label "GND_A"
+		(at 36.83 177.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e54886b6-a5bf-4e9f-8fcc-79a235e9c0b8")
+	)
 	(label "+3.3V_A"
 		(at 76.2 68.58 180)
 		(effects
@@ -1470,6 +2004,16 @@
 			(justify right bottom)
 		)
 		(uuid "f10d0e85-bed8-46e4-99aa-a6cf675970c2")
+	)
+	(label "+CONTACTOR_VBUS"
+		(at 226.06 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f4b321f5-9c41-4a4c-a619-e385f2209f23")
 	)
 	(label "CAN1_JUMPER_A"
 		(at 248.92 21.59 0)
@@ -1490,28 +2034,6 @@
 			(justify left bottom)
 		)
 		(uuid "fcda9b0f-5616-47d4-8273-340608e12506")
-	)
-	(hierarchical_label "MP_DEBUG_JTCK_SWCLK"
-		(shape input)
-		(at 172.72 27.94 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "07c3f1af-040e-4c5c-84f2-e95f906625ca")
-	)
-	(hierarchical_label "MP_DEBUG_TRGIO"
-		(shape input)
-		(at 172.72 33.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "14d5e85b-a6ed-45d1-8c40-868f6c649a96")
 	)
 	(hierarchical_label "+3.3V_A"
 		(shape input)
@@ -1546,17 +2068,6 @@
 		)
 		(uuid "62086576-cc23-4068-b0da-5b3c27f2b763")
 	)
-	(hierarchical_label "MP_RESET"
-		(shape input)
-		(at 109.22 34.29 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "6ad6bbeb-0d85-42ef-aa62-a584790a617d")
-	)
 	(hierarchical_label "GND_ANALOG_A"
 		(shape input)
 		(at 143.51 24.13 90)
@@ -1590,17 +2101,6 @@
 		)
 		(uuid "97680e42-9667-4551-8e26-0eff93623c9b")
 	)
-	(hierarchical_label "MP_DEBUG_JTCK_SWDIO"
-		(shape input)
-		(at 172.72 30.48 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b0b0e73b-095b-4c5a-a96b-18559ed9cde9")
-	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 81.28 24.13 180)
@@ -1611,17 +2111,6 @@
 			(justify right)
 		)
 		(uuid "beef7707-57ed-4f2b-b2cb-3ef61191f566")
-	)
-	(hierarchical_label "MP_BOOT_SEL"
-		(shape input)
-		(at 109.22 29.21 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "db73a4cf-6f15-412c-9fea-751657fcc799")
 	)
 	(symbol
 		(lib_id "InverterCom:TS40-66-50-R-260-SMT-TR")
@@ -1924,6 +2413,166 @@
 		)
 	)
 	(symbol
+		(lib_id "InverterCom:TBP02R2W-381-08BE")
+		(at 36.83 144.78 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3b2c4056-7dea-43ae-9273-8909eb35fcdb")
+		(property "Reference" "J1"
+			(at 26.67 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TBP02R2W-381-08BE"
+			(at 26.67 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TBP02R2W38108BE"
+			(at 20.32 49.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp02r2w-381.pdf"
+			(at 20.32 -50.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Description" "TBP02R2W-381 Series - 2~24 Poles, Pluggable, Receptacle, Vertical, 3.81 Pitch, Terminal Block Connector"
+			(at 36.83 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Height" "9.2"
+			(at 20.32 -250.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Part Number" "490-TBP02R2W-38108BE"
+			(at 20.32 -350.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Same-Sky/TBP02R2W-381-08BE?qs=PzGy0jfpSMsy8Qrmxc%252Brhg%3D%3D"
+			(at 20.32 -450.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Name" "Same Sky"
+			(at 20.32 -550.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Manufacturer_Part_Number" "TBP02R2W-381-08BE"
+			(at 20.32 -650.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "2"
+			(uuid "f8125e2a-77e1-4e1e-ae22-ad72888e2181")
+		)
+		(pin "8"
+			(uuid "487332a5-5322-416f-9a95-ca9f38687f7a")
+		)
+		(pin "1"
+			(uuid "709a4903-ebf6-4d3a-b3ef-17c970b3cbdf")
+		)
+		(pin "3"
+			(uuid "58ba4796-8a79-4bd3-95ab-ec616a2e8da8")
+		)
+		(pin "5"
+			(uuid "b8ee932f-869f-45e6-9021-a7fbfbcb9974")
+		)
+		(pin "6"
+			(uuid "d0c30f7f-ef25-47b2-9515-971d3a25b99e")
+		)
+		(pin "4"
+			(uuid "6925b2f9-c09a-4801-857a-42322b05613d")
+		)
+		(pin "7"
+			(uuid "4f96f2cf-31d2-40e2-a82f-4ca97ad154e7")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 15.24 16.51 0)
 		(unit 1)
@@ -2152,8 +2801,8 @@
 		)
 	)
 	(symbol
-		(lib_id "InverterCom:UJ2-B-HR-G-V")
-		(at 233.68 111.76 0)
+		(lib_id "InverterCom:TBP02R2W-381-06BE")
+		(at 36.83 177.8 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2161,9 +2810,10 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "a3d4d1a9-9ad3-46e7-84fd-3c6e8eb65821")
-		(property "Reference" "J1"
-			(at 258.318 120.904 90)
+		(fields_autoplaced yes)
+		(uuid "631cc58f-ae61-464c-8a6c-1b49ab8e0ae4")
+		(property "Reference" "J2"
+			(at 26.67 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2172,8 +2822,8 @@
 				)
 			)
 		)
-		(property "Value" "UJ2-B-HR-G-V"
-			(at 255.778 120.904 90)
+		(property "Value" "TBP02R2W-381-06BE"
+			(at 26.67 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2182,8 +2832,8 @@
 				)
 			)
 		)
-		(property "Footprint" "InverterCom:UJ2BHRGV"
-			(at 255.27 199.06 0)
+		(property "Footprint" "TBP02R2W38106BE"
+			(at 20.32 82.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2194,8 +2844,8 @@
 				(justify left top)
 			)
 		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/uj2-b-hr-g-v.pdf"
-			(at 255.27 299.06 0)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/tbp02r2w-381.pdf"
+			(at 20.32 -17.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2206,8 +2856,8 @@
 				(justify left top)
 			)
 		)
-		(property "Description" "Type B, USB 2.0, 480 Mbps, 5 Vdc, 1.5 A, Vertical, Through Hole Mounting Style, Through Hole Contact Pin Type. Gold Flash, Board Lock, 4 Pin, USB Receptacle"
-			(at 233.68 111.76 0)
+		(property "Description" "TBP02R2W-381 Series - 2~24 Poles, Pluggable, Receptacle, Vertical, 3.81 Pitch, Terminal Block Connector"
+			(at 36.83 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2217,20 +2867,8 @@
 				)
 			)
 		)
-		(property "Height" "16.5"
-			(at 255.27 499.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" "179-UJ2-B-HR-G-V"
-			(at 255.27 599.06 0)
+		(property "Height" "9.6"
+			(at 20.32 -217.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2241,8 +2879,20 @@
 				(justify left top)
 			)
 		)
-		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/UJ2-B-HR-G-V?qs=HoCaDK9Nz5fUWn12FBL%2Fqw%3D%3D"
-			(at 255.27 699.06 0)
+		(property "Mouser Part Number" "490-TBP02R2W-38106BE"
+			(at 20.32 -317.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/CUI-Devices/TBP02R2W-381-06BE?qs=PzGy0jfpSMtr%2Ft0bFoapMQ%3D%3D"
+			(at 20.32 -417.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2254,7 +2904,7 @@
 			)
 		)
 		(property "Manufacturer_Name" "Same Sky"
-			(at 255.27 799.06 0)
+			(at 20.32 -517.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2265,8 +2915,8 @@
 				(justify left top)
 			)
 		)
-		(property "Manufacturer_Part_Number" "UJ2-B-HR-G-V"
-			(at 255.27 899.06 0)
+		(property "Manufacturer_Part_Number" "TBP02R2W-381-06BE"
+			(at 20.32 -617.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2277,28 +2927,28 @@
 				(justify left top)
 			)
 		)
-		(pin "MH1"
-			(uuid "a72530fa-4e6a-4531-8d53-1ced1464b334")
+		(pin "5"
+			(uuid "46463073-e38a-4164-b43a-99e9e1f9e605")
 		)
-		(pin "MH2"
-			(uuid "29630566-ceed-4e58-8c19-2b8cca50f506")
+		(pin "6"
+			(uuid "0981432b-97d1-4fa1-b3fd-5fa75d73b799")
 		)
 		(pin "1"
-			(uuid "b6d28f9d-a0eb-4231-bbe6-8a68ab10b659")
+			(uuid "537039d3-8245-4e22-ae7d-6ce2005b7915")
 		)
 		(pin "2"
-			(uuid "5061c854-6f82-4f70-ab3d-22cb0f91aa02")
-		)
-		(pin "3"
-			(uuid "b7ecf13e-3ee3-4679-81f1-4fb2495a22ba")
+			(uuid "f3484614-a13b-4617-b9ff-55a45b7d6c82")
 		)
 		(pin "4"
-			(uuid "d41091f7-dfef-4de0-8a9f-125c9d7157fc")
+			(uuid "93944dc9-645c-4439-81c1-465108919ad5")
+		)
+		(pin "3"
+			(uuid "c6319c05-b4c1-42cc-91de-c314615278be")
 		)
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "J1")
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -2676,6 +3326,172 @@
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "H5")
 					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 176.53 96.52)
+		(size 49.53 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "03c0240e-9e2f-4eef-8f70-6870d6ac039e")
+		(property "Sheetname" "CableIO"
+			(at 176.53 95.8084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CableIO.kicad_sch"
+			(at 176.53 122.5046 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+3.3V_A" input
+			(at 226.06 99.06 0)
+			(uuid "7701c3eb-3241-4fb7-be32-1a24d87d7f39")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "+V_CONTACTOR_BUS_A" input
+			(at 226.06 104.14 0)
+			(uuid "0dc61e15-da39-43fb-b582-60accb0d0630")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "+V_PWM_A" input
+			(at 226.06 106.68 0)
+			(uuid "92d2bf31-0253-48dd-ba48-4c28dd285710")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GND_A" input
+			(at 226.06 101.6 0)
+			(uuid "9b2b8984-a592-4673-acfb-9f651d9e5779")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "MAIN_CONT_A" input
+			(at 226.06 116.84 0)
+			(uuid "c97792c8-edb8-4c6e-a17e-f89a19e69778")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "MAIN_CONT_LOGIC_A" input
+			(at 176.53 116.84 180)
+			(uuid "7e1c1cd2-fd61-4862-8170-acd2e39ed821")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PRECHARGE_CONT_A" input
+			(at 226.06 119.38 0)
+			(uuid "d37deff8-13c0-4db5-8514-864671d3ece6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "PRECHARGE_CONT_LOGIC_A" input
+			(at 176.53 119.38 180)
+			(uuid "0466906e-d49b-447e-a63e-3c58703840a3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PUMP_PWM_A" input
+			(at 226.06 113.03 0)
+			(uuid "5c75d4a1-262d-4c34-b4fb-4a1e2f5b890a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "PUMP_PWM_LOGIC_A" input
+			(at 176.53 113.03 180)
+			(uuid "18a87735-412f-4493-9447-bfa2ec98d051")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "TEMP_IN_A" input
+			(at 226.06 110.49 0)
+			(uuid "29ac5da5-02c1-4787-acd7-505f83a71fc9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TEMP_LOGIC_A" input
+			(at 176.53 110.49 180)
+			(uuid "b5b1331e-b5b8-4c00-8676-839b54834eb4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(page "13")
 				)
 			)
 		)
@@ -3207,26 +4023,6 @@
 				(justify right)
 			)
 		)
-		(pin "BOOT_SEL" input
-			(at 109.22 29.21 180)
-			(uuid "7b34de7d-b9d4-4502-b3cd-8ce465bb936f")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "DEBUG_TRGIO" input
-			(at 172.72 33.02 0)
-			(uuid "528cba87-dc80-4c61-83f3-f1680a8dce13")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
 		(pin "FDCAN2_RX" input
 			(at 172.72 48.26 0)
 			(uuid "83f75f96-9fc1-4e6f-9d65-95211cf887b7")
@@ -3295,16 +4091,6 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
-			)
-		)
-		(pin "NRST" input
-			(at 109.22 34.29 180)
-			(uuid "5d412759-65ed-4b3c-82aa-02634c021f40")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 			)
 		)
 		(pin "SPI2_MISO" input
@@ -3417,116 +4203,6 @@
 				(justify left)
 			)
 		)
-		(pin "DEBUG_SWCLK" input
-			(at 172.72 27.94 0)
-			(uuid "96eea459-e3b8-4fe3-ae0b-bb9d45a2d3d6")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "DEBUG_SWDIO" input
-			(at 172.72 30.48 0)
-			(uuid "66960646-6a45-42c3-b224-7357a28921b3")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "ETH_CRS_DV" input
-			(at 109.22 124.46 180)
-			(uuid "f9676926-f69a-466c-a416-6c89be02d854")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_MDC" input
-			(at 109.22 127 180)
-			(uuid "e7ef8699-2d85-4034-8457-6abdcca68371")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_MDIO" input
-			(at 109.22 129.54 180)
-			(uuid "76ec5e66-07e1-4413-9ca6-1a0081069f09")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_REF_CLK" input
-			(at 109.22 132.08 180)
-			(uuid "806a36c5-945d-4d4a-bc0a-5d2c3e587762")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_RXD0" input
-			(at 109.22 134.62 180)
-			(uuid "dbf060f9-c63c-4463-9751-ee1ce7b3f6c1")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_RXD1" input
-			(at 109.22 137.16 180)
-			(uuid "2f1a019e-fdda-4ed8-bd95-00d971b5e715")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_TXD0" input
-			(at 109.22 139.7 180)
-			(uuid "739b86e2-f7ce-42a6-93ec-7958569fec5c")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_TXD1" input
-			(at 109.22 142.24 180)
-			(uuid "43b9fd64-6f7c-49d2-885f-ac1e08012707")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "ETH_TX_EN" input
-			(at 109.22 144.78 180)
-			(uuid "bc9907c8-2f24-4e72-bce1-76e1ca4d13ee")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "FDCAN3_RX" input
 			(at 172.72 43.18 0)
 			(uuid "fb919ae0-55b6-4051-a8e8-7a8783611f63")
@@ -3598,7 +4274,7 @@
 			)
 		)
 		(pin "SPI1_MISO" input
-			(at 158.75 151.13 270)
+			(at 109.22 100.33 180)
 			(uuid "bd6dfeb0-12bb-4ba9-a687-68502e02182a")
 			(effects
 				(font
@@ -3608,7 +4284,7 @@
 			)
 		)
 		(pin "SPI1_MOSI" input
-			(at 156.21 151.13 270)
+			(at 109.22 102.87 180)
 			(uuid "ffe6f6f7-79fe-4e6a-bf10-8ed1ef4d85f6")
 			(effects
 				(font
@@ -3618,7 +4294,7 @@
 			)
 		)
 		(pin "SPI1_SCK" input
-			(at 153.67 151.13 270)
+			(at 109.22 105.41 180)
 			(uuid "ab9b2363-f8fa-4509-a0e3-adceaa82d6b2")
 			(effects
 				(font
@@ -3627,9 +4303,125 @@
 				(justify left)
 			)
 		)
-		(pin "USB_OTG_HS_DM" input
-			(at 172.72 99.06 0)
-			(uuid "5eefc038-262f-4187-9143-1b61da1d56fe")
+		(pin "SPI1_CS" input
+			(at 109.22 107.95 180)
+			(uuid "333a9cff-0268-46e3-8a95-4fec8f1bddf8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(page "10")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 76.2 97.79)
+		(size 26.67 31.75)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "8ee9cd29-64ac-4c64-994f-c08728c31c22")
+		(property "Sheetname" "CCS Greenphy Modem"
+			(at 76.2 97.0784 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "CCSModem.kicad_sch"
+			(at 76.2 130.1246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "+3.3V_A" input
+			(at 76.2 100.33 180)
+			(uuid "1277ea5c-348c-4f29-981a-55b05b721c18")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "AC_LINE" input
+			(at 76.2 109.22 180)
+			(uuid "91d67c46-36e1-49af-9ade-6904e1b52d1d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "AC_NEUTRAL" input
+			(at 76.2 111.76 180)
+			(uuid "81d59578-2b97-4bd8-b465-986fc1d54ac6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CP" input
+			(at 76.2 115.57 180)
+			(uuid "337e5820-332a-41eb-99d8-d963f906d62c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "GND_A" input
+			(at 76.2 102.87 180)
+			(uuid "62a7d2d8-7d02-4b77-9ddf-c8f4adae67f1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PE" input
+			(at 76.2 118.11 180)
+			(uuid "71ae56ea-975d-453e-82bd-827f388d7e5c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RED_BEET_GPIO_0" input
+			(at 102.87 127 0)
+			(uuid "d4842187-91db-48b5-a4fd-db6e90f07a3a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3637,9 +4429,9 @@
 				(justify right)
 			)
 		)
-		(pin "USB_OTG_HS_DP" input
-			(at 172.72 101.6 0)
-			(uuid "a1af3912-eeac-40bc-bca8-08a14461cc68")
+		(pin "RED_BEET_GPIO_1" input
+			(at 102.87 124.46 0)
+			(uuid "d0fe0af2-f497-4158-a52f-295c4e9ec1b5")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3647,9 +4439,79 @@
 				(justify right)
 			)
 		)
-		(pin "USB_OTG_HS_ID" input
-			(at 172.72 96.52 0)
-			(uuid "6f5ab587-1045-48b5-a5ea-f5fe97e8e5c9")
+		(pin "RED_BEET_GPIO_2" input
+			(at 102.87 121.92 0)
+			(uuid "e765bec4-a63e-4d21-b074-256a9815acb1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RED_BEET_GPIO_3" input
+			(at 102.87 119.38 0)
+			(uuid "8d05df62-3d7f-43bc-86e4-7cade5f9c026")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RESET_A" input
+			(at 102.87 115.57 0)
+			(uuid "021b51a5-1616-458d-93c9-024419d2ef31")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_CS_A" input
+			(at 102.87 107.95 0)
+			(uuid "17303195-bc0a-41b8-94b5-362243829493")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_INT_A" input
+			(at 102.87 110.49 0)
+			(uuid "9bb5a2bf-fa8b-4748-a3d2-8c652a53d234")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_MISO_A" input
+			(at 102.87 100.33 0)
+			(uuid "abef18b6-4d5d-4835-96d7-14bec66a33c6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_MOSI_A" input
+			(at 102.87 102.87 0)
+			(uuid "58d34868-95a3-4caf-b955-d5cf1d48bc52")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_SCK_A" input
+			(at 102.87 105.41 0)
+			(uuid "64e8a2c7-98d6-417c-802b-959b00e4e55d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3660,7 +4522,7 @@
 		(instances
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(page "10")
+					(page "14")
 				)
 			)
 		)
