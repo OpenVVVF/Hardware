@@ -30,7 +30,11 @@ def _export_bom(sch: Path, out_csv: Path) -> bool:
     r = _kicad([
         "sch", "export", "bom", str(sch), "-o", str(out_csv),
         "--fields", _BOM_FIELDS, "--labels", _BOM_LABELS,
-        "--group-by", "Value", "--exclude-dnp",
+        # Group by DNP too: KiCad marks an entire --group-by "Value" row as
+        # DNP if ANY symbol in the group is DNP, and the BOM parser drops such
+        # rows wholesale. (No output change while --exclude-dnp is set, but it
+        # guards the export if that flag is ever removed.)
+        "--group-by", "Value,DNP", "--exclude-dnp",
     ])
     return r.returncode == 0 and out_csv.is_file()
 
