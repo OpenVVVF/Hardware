@@ -1,0 +1,135 @@
+
+(EDIF
+  (rename &PJGBLC03C_AU_R1_000A1 "PJGBLC03C_AU_R1_000A1")
+  (EDIFVersion 2 0 0)
+  (EDIFLevel 0)
+  (keywordMap (keywordLevel 0))
+  (status
+    (written
+      (timestamp 2026 09 04 09 56 37)
+      (dataOrigin "14859768/1553794/2.50/2/3/TVS Diode (Bi-directional)")
+      (program "SamacSys ECAD Model PJGBLC03C_AU_R1_000A1"
+        (version "1.4"))))
+  (library
+  (rename &PJGBLC03C_AU_R1_000A1 "PJGBLC03C_AU_R1_000A1")
+    (EDIFLevel 0)
+    (technology
+      (numberDefinition (scale 1 (e 254 -6) (unit DISTANCE)))
+      (userData GRIDRESOLUTION (integer 50 50))
+      (figureGroup DEFAULT (pathWidth 10) (textHeight 100))
+      (figureGroup PROPERTY (pathWidth 10) (textHeight 90))
+      (figureGroup PINNUMBER (pathWidth 10) (textHeight 90))
+      (figureGroup PINNAME (pathWidth 10) (textHeight 90))
+      (figureGroup COMMENT (pathWidth 10) (textHeight 90))
+      (figureGroup PIN (pathWidth 10) (textHeight 90))
+      (figureGroup GRAPHIC (pathWidth 10) (textHeight 100))
+    )
+    (cell
+      (rename &PJGBLC03C_AU_R1_000A1 "PJGBLC03C_AU_R1_000A1")
+      (cellType GENERIC)
+      (view
+        (rename NORMAL "Normal")
+        (viewType SCHEMATIC)
+        (interface
+          (designator "D")
+          (property (rename PACKAGENAME "PackageName") (string "PJGBLC03C_AU_R1_000A1"))
+          (property (rename ISHETEROGENEOUS "IsHeterogeneous") (string "False"))
+          (property (rename DEVICESINVIEW "DevicesInView") (string "1"))
+          (property (rename DEVICESINPACKAGE "DevicesInPackage") (string "1"))
+          (property (rename DEVICEDESIGNATOR "DeviceDesignator") (string "A"))
+          (property (rename DEVICENUMBERING "DeviceNumbering") (string "Alpha"))
+          (property (rename PCB_32_FOOTPRINT "PCB Footprint") (string "PJGBLC03CAU_R1_000A1"))
+          (property (rename &Mouser_Part_Number "Mouser Part Number") (string "241-PJGBLC03CAUR1000"))
+          (property (rename &Mouser_Price_Stock "Mouser Price/Stock") (string "https://www.mouser.co.uk/ProductDetail/Panjit/PJGBLC03C-AU_R1_000A1?qs=sPbYRqrBIVma558P%2Few%252BiQ%3D%3D"))
+          (property (rename &Manufacturer_Name "Manufacturer_Name") (string "PANJIT"))
+          (property (rename &Manufacturer_Part_Number "Manufacturer_Part_Number") (string "PJGBLC03C-AU_R1_000A1"))
+          (property (rename &Description "Description") (string "ESD Suppressors / TVS Diodes 3V ESD Protection BI"))
+          (property (rename &Datasheet_Link "Datasheet Link") (string "https://www.panjit.com.tw/upload/datasheet/PJGBLC03-AU_C24C-AU_SERIES.pdf"))
+          (property (rename &Height "Height") (string "0.9 mm"))
+          (property (rename &_60__32_VALUE_32__62_ "Value") (string "PJGBLC03C_AU_R1_000A1"))
+          (property (rename VALUE "Value") (string "Value"))
+          (port
+            (rename &1 "1")
+            (designator "1")
+            (property (rename ORDER "Order") (string "0") (owner "OrCAD"))
+          )
+          (port
+            (rename &2 "2")
+            (designator "2")
+            (property (rename ORDER "Order") (string "1") (owner "OrCAD"))
+          )
+          (symbol
+            (portImplementation
+              (name &1)
+              (keywordDisplay DESIGNATOR (display PINNUMBER))
+              (figure PIN (path (pointList (pt -200 -100) (pt 0 -100))))
+              (connectLocation (figure GRAPHIC (dot (pt -200 -100))))
+            )
+            (portImplementation
+              (name &2)
+              (keywordDisplay DESIGNATOR (display PINNUMBER))
+              (figure PIN (path (pointList (pt 400 -100) (pt 600 -100))))
+              (connectLocation (figure GRAPHIC (dot (pt 600 -100))))
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 200 -100)
+                  (pt 0 -200)
+                  (pt 0 0)
+                  (pt 200 -100)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 200 -100)
+                  (pt 400 -200)
+                  (pt 400 0)
+                  (pt 200 -100)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 200 -180)
+                  (pt 200 -20)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 160 0)
+                  (pt 200 -20)
+                )
+              )
+            )
+            (figure GRAPHIC
+              (figureGroupOverride GRAPHIC
+                (pathWidth 10))
+              (path
+                (pointList
+                  (pt 200 -180)
+                  (pt 240 -200)
+                )
+              )
+            )
+            (keywordDisplay DESIGNATOR (display PROPERTY (justify LOWERLEFT) (orientation R0) (origin (pt 300 180))))
+            (propertyDisplay &_60__32_VALUE_32__62_ (display PROPERTY (justify LOWERLEFT) (orientation R0) (origin (pt 300 80))))
+          )
+        )
+      )
+    )
+  )
+)
