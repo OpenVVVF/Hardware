@@ -2634,7 +2634,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "we are not using ethernet mode, so ephy data are nc'd,\nephy vdd is tied to gnd"
+	(text "we are not using ethernet mode, so ephy data are nc'd,\nephy vdd is nc"
 		(exclude_from_sim no)
 		(at 188.722 29.21 0)
 		(effects
@@ -2821,6 +2821,10 @@
 	(no_connect
 		(at 212.09 68.58)
 		(uuid "1f8abc5f-89a7-40b8-93e1-1a70a9168096")
+	)
+	(no_connect
+		(at 182.88 44.45)
+		(uuid "20ab014d-24c8-48fc-9651-c6b5a845ff4e")
 	)
 	(no_connect
 		(at 212.09 71.12)
@@ -3581,17 +3585,6 @@
 			(justify right)
 		)
 		(uuid "46deb6b3-ab8c-4be8-959e-859c2d6b6345")
-	)
-	(hierarchical_label "GND_A"
-		(shape input)
-		(at 182.88 44.45 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "50800b28-01e9-4614-9376-5715cbabe75b")
 	)
 	(hierarchical_label "SPI_CS_A"
 		(shape input)
@@ -5076,7 +5069,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2nF"
+		(property "Value" "2.2nF,1kV"
 			(at 102.87 127 0)
 			(show_name no)
 			(do_not_autoplace no)

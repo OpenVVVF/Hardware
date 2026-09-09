@@ -2958,6 +2958,16 @@
 	)
 	(wire
 		(pts
+			(xy 107.95 60.96) (xy 107.95 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5249d0f8-7e36-4365-9c71-5e20fae501eb")
+	)
+	(wire
+		(pts
 			(xy 241.3 93.98) (xy 241.3 119.38)
 		)
 		(stroke
@@ -3228,13 +3238,13 @@
 	)
 	(wire
 		(pts
-			(xy 87.63 62.23) (xy 87.63 66.04)
+			(xy 196.85 132.08) (xy 196.85 135.89)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e0ac03d4-fd1b-4cad-949e-8463271750cd")
+		(uuid "e02c064a-bd8b-4cdd-b15f-3c734ac29d3d")
 	)
 	(wire
 		(pts
@@ -3255,6 +3265,16 @@
 			(type default)
 		)
 		(uuid "e642b1cb-a8eb-4460-951d-038fe690cc7c")
+	)
+	(wire
+		(pts
+			(xy 199.39 132.08) (xy 199.39 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ec2db2c7-a24c-451f-9756-3120d2a8556d")
 	)
 	(wire
 		(pts
@@ -3316,6 +3336,17 @@
 			(justify right)
 		)
 		(uuid "0086feb8-c2d3-4008-a574-a59116e40077")
+	)
+	(hierarchical_label "FDCAN1_RX"
+		(shape input)
+		(at 199.39 135.89 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "025bd8b5-f603-43e6-a583-fac0ed7c3fa4")
 	)
 	(hierarchical_label "SPI1_CS"
 		(shape input)
@@ -3592,6 +3623,17 @@
 		)
 		(uuid "c50af792-48e7-449d-a1ca-0955de23bae7")
 	)
+	(hierarchical_label "FDCAN1_TX"
+		(shape input)
+		(at 196.85 135.89 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c9e0c020-f37e-45d2-a4ef-5091a4adccad")
+	)
 	(hierarchical_label "REDBEET-GPIO1"
 		(shape input)
 		(at 90.17 132.08 270)
@@ -3682,7 +3724,7 @@
 	)
 	(hierarchical_label "CP_FEEDBACK"
 		(shape input)
-		(at 87.63 62.23 90)
+		(at 107.95 60.96 90)
 		(effects
 			(font
 				(size 1.27 1.27)

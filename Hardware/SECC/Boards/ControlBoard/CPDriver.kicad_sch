@@ -1227,7 +1227,7 @@
 	)
 	(text "each zener is 1.8v, 2 in series gives us 3.6v"
 		(exclude_from_sim no)
-		(at 152.146 137.414 0)
+		(at 152.146 139.7 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1247,7 +1247,7 @@
 	)
 	(text "for now these are not isolated"
 		(exclude_from_sim no)
-		(at 109.982 22.098 0)
+		(at 108.204 19.304 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1358,6 +1358,18 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d491e576-f114-4f2a-b108-a648f93adbff")
+	)
+	(junction
+		(at 214.63 68.58)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e8787a79-082a-4210-a371-6c2884573061")
+	)
+	(junction
+		(at 153.67 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f1512bc4-ba81-4ee7-a11e-75990320d67d")
 	)
 	(junction
 		(at 143.51 36.83)
@@ -1623,17 +1635,17 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 68.58) (xy 214.63 113.03)
+			(xy 153.67 121.92) (xy 176.53 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "965a8895-f8f2-4b40-8ca8-cbb396300581")
+		(uuid "97bc8ac9-1852-4d5f-ade4-fac81c4d9cc6")
 	)
 	(wire
 		(pts
-			(xy 139.7 121.92) (xy 176.53 121.92)
+			(xy 139.7 121.92) (xy 153.67 121.92)
 		)
 		(stroke
 			(width 0)
@@ -1663,7 +1675,7 @@
 	)
 	(wire
 		(pts
-			(xy 163.83 68.58) (xy 220.98 68.58)
+			(xy 163.83 68.58) (xy 214.63 68.58)
 		)
 		(stroke
 			(width 0)
@@ -1710,6 +1722,16 @@
 			(type default)
 		)
 		(uuid "befbaf5e-4180-446c-977c-a99b2c452f74")
+	)
+	(wire
+		(pts
+			(xy 214.63 68.58) (xy 220.98 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bf5d6cd2-98df-480f-8968-f5f7376b1664")
 	)
 	(wire
 		(pts
@@ -1780,6 +1802,16 @@
 			(type default)
 		)
 		(uuid "ed4eb8a2-ab9f-4a11-ac90-bb9eedb93e7c")
+	)
+	(wire
+		(pts
+			(xy 214.63 68.58) (xy 214.63 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee2bfd82-246d-4f2d-a3d9-78666a910588")
 	)
 	(wire
 		(pts
@@ -2124,6 +2156,17 @@
 			(justify right)
 		)
 		(uuid "9edda234-63af-455c-a036-aeaae0757902")
+	)
+	(hierarchical_label "GND_A"
+		(shape input)
+		(at 153.67 129.54 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b2cb970d-1d27-440d-af97-9b63375bb7af")
 	)
 	(hierarchical_label "FAULT"
 		(shape input)
@@ -2635,6 +2678,87 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/236d28bf-44e0-47fa-9f65-e55f840fbd5a"
 					(reference "R33")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 153.67 125.73 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4c92bddd-8bd4-4e3f-a4b0-ae26087dc68f")
+		(property "Reference" "C58"
+			(at 149.86 127.0001 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10nF"
+			(at 149.86 124.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 152.7048 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 153.67 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 153.67 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b7e53961-023a-4ba3-b5a0-e5c06575393f")
+		)
+		(pin "2"
+			(uuid "69e60c7e-13cc-4cc2-a101-a518a26eec02")
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8/236d28bf-44e0-47fa-9f65-e55f840fbd5a"
+					(reference "C58")
 					(unit 1)
 				)
 			)

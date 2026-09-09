@@ -997,290 +997,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "InverterCom:TS40-66-50-R-260-SMT-TR"
-			(pin_names
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "S"
-				(at 12.7 6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Value" "TS40-66-50-R-260-SMT-TR"
-				(at 12.7 3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Footprint" "TS406650R260SMTTR"
-				(at 12.7 -96.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Datasheet" "https://www.sameskydevices.com/product/resource/ts40.pdf"
-				(at 12.7 -196.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Description" "6 x 6 mm, 5 mm Actuator Height Off PCB, 260 gf, Red, Surface Mount, SPST, Tactile Switch"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Height" "5.1"
-				(at 12.7 -396.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Part Number" ""
-				(at 12.7 -496.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Mouser Price/Stock" ""
-				(at 12.7 -596.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Name" "Same Sky"
-				(at 12.7 -696.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(property "Manufacturer_Part_Number" "TS40-66-50-R-260-SMT-TR"
-				(at 12.7 -796.19 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left top)
-				)
-			)
-			(symbol "TS40-66-50-R-260-SMT-TR_1_1"
-				(polyline
-					(pts
-						(xy 2.54 -2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 -5.08) (xy 2.54 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 5.588 -2.54)
-					(radius 0.508)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 6.096 -2.286) (xy 8.382 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 9.652 -2.54)
-					(radius 0.508)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 10.16 -2.54) (xy 12.7 -2.54)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 12.7 -5.08) (xy 12.7 0)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at 0 0 0)
-					(length 2.54)
-					(name "COM_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -5.08 0)
-					(length 2.54)
-					(name "COM_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 0 180)
-					(length 2.54)
-					(name "NO_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 15.24 -5.08 180)
-					(length 2.54)
-					(name "NO_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Mechanical:MountingHole"
 			(pin_names
 				(offset 1.016)
@@ -1381,16 +1097,6 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "bootsel switch, push for bootloader"
-		(exclude_from_sim no)
-		(at 49.784 16.256 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "2302945b-fbd1-4d09-8d89-0f868bc22153")
-	)
 	(text "Connector to ccs/j1772 cable and contactors"
 		(exclude_from_sim no)
 		(at 14.732 134.62 90)
@@ -1400,16 +1106,6 @@
 			)
 		)
 		(uuid "48acd891-53b5-4ee6-9c04-45a1a888a76e")
-	)
-	(text "reset switch, push to reset"
-		(exclude_from_sim no)
-		(at 88.392 13.97 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "9a7007ba-cf51-46b8-8796-c87ebe1578e0")
 	)
 	(text "Line AC Power"
 		(exclude_from_sim no)
@@ -1491,6 +1187,16 @@
 	)
 	(wire
 		(pts
+			(xy 60.96 200.66) (xy 63.5 200.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d4a80e6-2fd5-4908-8cf6-ec6290bcae96")
+	)
+	(wire
+		(pts
 			(xy 102.87 124.46) (xy 109.22 124.46)
 		)
 		(stroke
@@ -1521,7 +1227,7 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 78.5263) (xy 109.22 78.5263)
+			(xy 102.87 78.74) (xy 109.22 78.74)
 		)
 		(stroke
 			(width 0)
@@ -1611,16 +1317,6 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 22.86) (xy 40.64 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5ab43327-70d6-4e8b-9bca-9cb8f42826f8")
-	)
-	(wire
-		(pts
 			(xy 102.87 73.66) (xy 109.22 73.66)
 		)
 		(stroke
@@ -1628,16 +1324,6 @@
 			(type default)
 		)
 		(uuid "623a5ffc-cb8f-4d9d-8002-9a1f724de8f7")
-	)
-	(wire
-		(pts
-			(xy 81.28 21.59) (xy 81.28 26.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "649299a4-4217-4b79-a6d4-d75388ef40e8")
 	)
 	(wire
 		(pts
@@ -2229,6 +1915,16 @@
 		)
 		(uuid "3c3bd105-d660-4aff-9941-db408d1bddd7")
 	)
+	(label "GND_A"
+		(at 63.5 200.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "40ed59cd-e6f3-4fcb-a61c-ef47221401d6")
+	)
 	(label "CAN1_JUMPER_B"
 		(at 186.69 166.37 180)
 		(effects
@@ -2259,6 +1955,16 @@
 		)
 		(uuid "5590466a-aec5-4ce9-92f0-b26f286fa512")
 	)
+	(label "AC_EARTH"
+		(at 60.96 200.66 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5a247442-3517-4c1e-a60e-77c2e3fef7ab")
+	)
 	(label "+3.3V_A"
 		(at 222.25 19.05 180)
 		(effects
@@ -2288,16 +1994,6 @@
 			(justify right bottom)
 		)
 		(uuid "698f655d-7ab4-4946-a15d-fc15bde536df")
-	)
-	(label "+12V_CANBUS_A"
-		(at 222.25 21.59 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "6e2fb048-2420-4c66-89d5-d841e4d422ec")
 	)
 	(label "CABLE_THERMISTOR"
 		(at 226.06 110.49 0)
@@ -2389,16 +2085,6 @@
 		)
 		(uuid "80244fe7-a927-413e-a3a4-2e78c5a1d0e1")
 	)
-	(label "+12V_CANBUS_A"
-		(at 222.25 46.99 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "8330635f-54bf-45ce-b269-72759d3ffcd2")
-	)
 	(label "GND_A"
 		(at 226.06 101.6 0)
 		(effects
@@ -2459,6 +2145,16 @@
 		)
 		(uuid "96b1e92b-e7fc-49ac-8f5f-06fddacc7c30")
 	)
+	(label "+12V_A"
+		(at 222.25 21.59 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "96b78c49-2dad-4a45-ab08-d7b13db7ad70")
+	)
 	(label "VS_PH_W_Y"
 		(at 246.38 80.01 0)
 		(effects
@@ -2498,6 +2194,16 @@
 			(justify left bottom)
 		)
 		(uuid "a07e3cde-15c4-4924-9ea3-f52d06c305e1")
+	)
+	(label "+12V_A"
+		(at 46.99 53.34 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a0ecdaa6-9255-459e-a53b-8708217b4b3d")
 	)
 	(label "GND_A"
 		(at 36.83 127 0)
@@ -2589,6 +2295,16 @@
 		)
 		(uuid "bc0e2c8c-af14-4f0b-8225-a7616369a930")
 	)
+	(label "+12V_A"
+		(at 222.25 46.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "bc9f71a5-ecbe-4a82-937f-40678b0c27e2")
+	)
 	(label "CAN2_HIGH"
 		(at 248.92 57.15 0)
 		(effects
@@ -2638,16 +2354,6 @@
 			(justify left bottom)
 		)
 		(uuid "c3d0d396-f493-48a2-8e36-6036f252e983")
-	)
-	(label "+12V_SWITCHED_A"
-		(at 46.99 53.34 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c55d9e69-a6e5-4f90-8f7d-273a479901dc")
 	)
 	(label "AC_LINE1"
 		(at 40.64 193.04 0)
@@ -2880,28 +2586,6 @@
 		)
 		(uuid "1836b513-0710-4e24-9dd9-4e6272d12ee1")
 	)
-	(hierarchical_label "MP_BOOT_SEL"
-		(shape input)
-		(at 55.88 22.86 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "4eb14874-23ae-44d3-a8d3-ec4fc676e996")
-	)
-	(hierarchical_label "MP_RESET"
-		(shape input)
-		(at 96.52 21.59 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "62086576-cc23-4068-b0da-5b3c27f2b763")
-	)
 	(hierarchical_label "GND_ANALOG_A"
 		(shape input)
 		(at 143.51 24.13 90)
@@ -2913,17 +2597,6 @@
 		)
 		(uuid "6c2c39dd-bcea-425b-8c13-7fdb1b31a5b4")
 	)
-	(hierarchical_label "+3.3V_A"
-		(shape input)
-		(at 40.64 25.4 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "8a6bcbf3-3cf3-471f-ad57-3b5fb7dcaec8")
-	)
 	(hierarchical_label "GND_A"
 		(shape input)
 		(at 140.97 24.13 90)
@@ -2934,165 +2607,6 @@
 			(justify left)
 		)
 		(uuid "97680e42-9667-4551-8e26-0eff93623c9b")
-	)
-	(hierarchical_label "GND_A"
-		(shape input)
-		(at 81.28 24.13 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "beef7707-57ed-4f2b-b2cb-3ef61191f566")
-	)
-	(symbol
-		(lib_id "InverterCom:TS40-66-50-R-260-SMT-TR")
-		(at 40.64 22.86 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "18d64345-5328-4fef-b3a7-644f5cdd747d")
-		(property "Reference" "S1"
-			(at 48.26 17.78 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TS40-66-50-R-260-SMT-TR"
-			(at 48.26 20.32 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "InverterCom:TS406650R260SMTTR"
-			(at 53.34 119.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/ts40.pdf"
-			(at 53.34 219.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "6 x 6 mm, 5 mm Actuator Height Off PCB, 260 gf, Red, Surface Mount, SPST, Tactile Switch"
-			(at 40.64 22.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "5.1"
-			(at 53.34 419.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 53.34 519.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" ""
-			(at 53.34 619.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "Same Sky"
-			(at 53.34 719.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "TS40-66-50-R-260-SMT-TR"
-			(at 53.34 819.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "4"
-			(uuid "2deb2898-c30e-4b27-8f83-827a3642369f")
-		)
-		(pin "1"
-			(uuid "e4330227-6cc3-4baa-82ba-f22a55e43caf")
-		)
-		(pin "2"
-			(uuid "0f124d03-73e8-4c38-b783-e58eb2559e2c")
-		)
-		(pin "3"
-			(uuid "a6d54320-f1a7-4f03-a5de-6dec276f4e85")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "S1")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "InverterCom:TBP02R2W-381-06BE")
@@ -3245,82 +2759,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "J7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 15.24 54.61 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2e66fe36-9e44-400c-94b1-d8c6bc0cadeb")
-		(property "Reference" "H7"
-			(at 17.78 53.3399 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 17.78 55.8799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "InverterCom:971350581"
-			(at 15.24 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 15.24 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole without connection"
-			(at 15.24 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "H7")
 					(unit 1)
 				)
 			)
@@ -4025,82 +3463,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 15.24 48.26 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6298a795-d81c-4da3-baae-9f1b7ef7950a")
-		(property "Reference" "H6"
-			(at 17.78 46.9899 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 17.78 49.5299 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "InverterCom:971350581"
-			(at 15.24 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 15.24 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole without connection"
-			(at 15.24 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "H6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "InverterCom:TBP02R2W-381-06BE")
 		(at 36.83 177.8 180)
 		(unit 1)
@@ -4404,82 +3766,6 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 15.24 60.96 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b9bcb462-155c-4a3d-ab0c-db068565091d")
-		(property "Reference" "H8"
-			(at 17.78 59.6899 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "971350581"
-			(at 17.78 62.2299 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "InverterCom:971350581"
-			(at 15.24 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 15.24 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Mounting Hole without connection"
-			(at 15.24 60.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "H8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Mechanical:MountingHole")
 		(at 15.24 29.21 0)
 		(unit 1)
 		(body_style 1)
@@ -4549,154 +3835,6 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(reference "H3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "InverterCom:TS40-66-50-R-260-SMT-TR")
-		(at 81.28 21.59 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "eb346e90-b076-4fcb-947c-c58b6e3c571b")
-		(property "Reference" "S2"
-			(at 88.9 16.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "TS40-66-50-R-260-SMT-TR"
-			(at 88.9 19.05 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "InverterCom:TS406650R260SMTTR"
-			(at 93.98 117.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Datasheet" "https://www.sameskydevices.com/product/resource/ts40.pdf"
-			(at 93.98 217.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Description" "6 x 6 mm, 5 mm Actuator Height Off PCB, 260 gf, Red, Surface Mount, SPST, Tactile Switch"
-			(at 81.28 21.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Height" "5.1"
-			(at 93.98 417.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 93.98 517.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Mouser Price/Stock" ""
-			(at 93.98 617.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Name" "Same Sky"
-			(at 93.98 717.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Manufacturer_Part_Number" "TS40-66-50-R-260-SMT-TR"
-			(at 93.98 817.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(pin "4"
-			(uuid "18aab4c4-b251-4ef4-aafc-93bc5a7249be")
-		)
-		(pin "1"
-			(uuid "98488730-0cb4-4eb1-b2d8-b50eedc569e8")
-		)
-		(pin "2"
-			(uuid "273e16a8-4d67-4d58-b1f2-8952bc131ca9")
-		)
-		(pin "3"
-			(uuid "696627fe-1777-43de-8dc0-0c6872f845fc")
-		)
-		(instances
-			(project "ControlBoard"
-				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
-					(reference "S2")
 					(unit 1)
 				)
 			)
@@ -4940,6 +4078,52 @@
 			(project "ControlBoard"
 				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
 					(page "13")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 53.34 102.87)
+		(size 12.7 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "04e52f17-5fba-4525-ba0f-14300afabd4b")
+		(property "Sheetname" "ESP32 CoProcessor"
+			(at 53.34 102.1584 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ESP32_COPROC.kicad_sch"
+			(at 53.34 118.6946 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ControlBoard"
+				(path "/66e49eb5-2741-49e2-b48a-baf482488ca8"
+					(page "15")
 				)
 			)
 		)

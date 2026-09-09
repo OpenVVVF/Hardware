@@ -60,10 +60,10 @@
           "hatch_smoothing_level": 0,
           "hatch_smoothing_value": 0.1,
           "hatch_thickness": 1.0,
-          "min_clearance": 0.35,
+          "min_clearance": 0.5,
           "min_island_area": 10.0,
           "min_thickness": 0.25,
-          "pad_connection": 1,
+          "pad_connection": 2,
           "remove_islands": 0,
           "thermal_relief_gap": 0.5,
           "thermal_relief_spoke_width": 0.5
@@ -745,7 +745,7 @@
         "uuid": "66e49eb5-2741-49e2-b48a-baf482488ca8"
       }
     ],
-    "used_designators": "F1,PS1,PS3,TP7,TP13,R13,R29-30,R32-36,R39-46,R55-63,R90-91,IC4,C1,C6-8,C13,C16,C21-24,C33,C42-57,C208,Z5-7,J1-2,J4-5,J7-9,CN14,L1,D1-2,D7-10,U1-2,U4-9,U15-17,X4,T1-2",
+    "used_designators": "X4,T1-2,F1,PS1,PS3,TP7,TP13,R12-13,R29-30,R32-36,R39-46,R55-63,R90-91,IC4,C1,C6-8,C13,C16,C21-24,C33,C42-58,C208,U1-2,U4-10,U15-17,D1-2,D7-10,Z5-7,J1-2,J4-5,J7-9,CN14,L1",
     "variants": []
   },
   "sheets": [
@@ -804,6 +804,10 @@
     [
       "8ee9cd29-64ac-4c64-994f-c08728c31c22",
       "CCS Greenphy Modem"
+    ],
+    [
+      "04e52f17-5fba-4525-ba0f-14300afabd4b",
+      "ESP32 CoProcessor"
     ],
     [
       "aecccc3c-ad40-4948-84a1-8bab0904bc92",
