@@ -51,7 +51,7 @@ Semiconductor ratings are selected with margin for the target DC bus: Chassis Si
 - **Power-stage agnostic control board**: The same inverter and firmware can be paired with alternative power stages with only gate-driver and sensing-divider scaling; higher voltage classes are achievable with straightforward adaptations, or the board can be interfaced to a user-supplied gate-drive stage.
 
 ### DC Link
-- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (e.g., 55 mm &rarr; 50 mm) to match the shorter capacitors. This is what gives Chassis Size 2 its 200–450 V class range.
+- **Capacitor bank (current build)**: 60&times; Nichicon UCS2D331MHD 330 &micro;F / 200 V aluminium electrolytics in parallel &rarr; 19.8 mF total, 200 V class. The 450 V capacitor-only upgrade is a single part-number swap to 60&times; Nichicon UCS2W680MHD 68 &micro;F / 450 V parts (4.08 mF total); the only mechanical change is 5 mm shorter standoffs (63 mm &rarr; 58 mm) to match the shorter capacitors. This is what gives Chassis Size 2 its 200–450 V class range.
 - **Filter board**: 6&times; 10 &micro;F / 1000 V metallized polypropylene film capacitors (absorb high-frequency ripple and clamp switching voltage spikes, reducing RMS ripple current in the electrolytics) + 12&times; 0.25 &micro;F / 900 V TDK CeraLink low-inductance ceramics at the module terminals + 18&times; 2.2 nF class-Y safety capacitors to chassis for common-mode / bearing-current (EDM) suppression
 - **Busbar-style construction**: all power connections are M6 bolted mounting holes; the mounting hardware sits at bus potential — observe high-voltage precautions during assembly
 - **No onboard bleeder**: the bank has no discharge resistor and remains at bus voltage for hours after power-down (discharge only via M&Omega;-scale parasitic paths). Verify bus voltage with a meter and discharge through a power resistor before any service.
@@ -135,7 +135,7 @@ Semiconductor ratings are selected with margin for the target DC bus: Chassis Si
 - 1oo2 gate drive power kill with independent feedback (GATE_DRIVE_PWR1_FB, GATE_DRIVE_PWR2_FB)
 - TPS389006-Q1 rail supervisor (Functional Safety-Compliant, up to SIL 3 / ASIL D per TI) — resets the gate drivers directly on brownout, independent of both MCUs
 - Dual independent watchdog timers (main MCU windowed WDT + coprocessor challenge/response)
-- HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (TODO on IO board schematic)
+- HVIL (High-Voltage Interlock Loop) presence signalling &mdash; planned (not yet implemented on the IO board; the HARA currently credits it as a mitigation, so entry is open until the input exists &mdash; see OpenVVVF/Documentation HARA)
 - All six NCV57100 FLT outputs OR'd — monitored by **both** MCUs
 - Overcurrent detection: ADC analog watchdogs in both MCUs (hardware threshold monitoring, no external comparators) + dual-MCU integrated monitoring — detection within 100 ms for regular overcurrent; SSO assertion within 1 PWM period (~100 µs) once detected — sufficient for safe torque off without hardware damage (DESAT handles hard shorts &lt;2 us) + Analog watchdog on main processor and coprocessor for overcurrent.
 - **Target: ASIL D** via ASIL B(D) + ASIL B(D) decomposition (DFA per ISO 26262-9 pending — LIMIT-08)
@@ -194,7 +194,7 @@ All safety documentation, user manuals, assembly guides, and software docs are m
 ### Safety Analysis
 | Deliverable | Status |
 |---|---|
-| HARA &mdash; Unified (Rev. 4.1, dual-MCU) | Complete |
+| HARA &mdash; Unified (Rev. 4.1, dual-MCU; superseded by HARA Core v5.10 + Motorcycle application profile in OpenVVVF/Documentation) | Complete |
 | TARA &mdash; Threat Analysis (Rev. 1.2, anti-OTP/user-sovereignty) | Complete |
 | SWAD &mdash; Software Architecture (Rev. 1.5, dual-MCU body update planned) | Complete |
 | Technical Safety Concept | Not started |
