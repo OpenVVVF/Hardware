@@ -124,7 +124,7 @@ Semiconductor ratings are selected with margin for the target DC bus: Chassis Si
 5. **1oo2 gate-drive power disable** — main MCU (`GATE_DRIVE_PWR1_ENABLE`) or coprocessor (`GATE_DRIVE_PWR2_ENABLE`) opens its BTS462T; either alone removes 12 V → gate-drive UVLO → SSO. Feedbacks: `GATE_DRIVE_PWR1_FB`, `GATE_DRIVE_PWR2_FB`
 6. **Coprocessor independent fault trigger** (<10 us) — coprocessor detects critical fault → `GATE_DRIVE_PWR2_ENABLE` low + RESET → SSO without main MCU
 
-> **Note:** HARA v4.1 numbers these as Path 1, Path 5, Path 3, Path 4, Paths 2a/2b, and Path 6, respectively. The TPS389006-Q1 rail supervisor is an additional actuator on the RESET pathway (Path 4), not a separate SSO path.
+> **Note:** The HARA (Core v5.10) numbers these as Path 1, Path 5, Path 3, Path 4, Paths 2a/2b, and Path 6, respectively. The TPS389006-Q1 rail supervisor is an additional actuator on the RESET pathway (Path 4), not a separate SSO path.
 
 ### Safety Protections (Hardware + Dual-MCU)
 
@@ -194,7 +194,7 @@ All safety documentation, user manuals, assembly guides, and software docs are m
 ### Safety Analysis
 | Deliverable | Status |
 |---|---|
-| HARA &mdash; Unified (Rev. 4.1, dual-MCU; superseded by HARA Core v5.10 + Motorcycle application profile in OpenVVVF/Documentation) | Complete |
+| HARA &mdash; Core (Rev. 5.10, dual-MCU) + Motorcycle application profile | Complete |
 | TARA &mdash; Threat Analysis (Rev. 1.2, anti-OTP/user-sovereignty) | Complete |
 | SWAD &mdash; Software Architecture (Rev. 1.5, dual-MCU body update planned) | Complete |
 | Technical Safety Concept | Not started |
